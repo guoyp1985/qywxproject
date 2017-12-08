@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="vux-demo">
-      <h1>efg</h1>
+      <h1>abc</h1>
     </div>
     <group title="cell demo">
-      <cell title="VUX" value="cool" link="/hw/"></cell>
+      <cell title="VUX" value="cool" link="/hw/de/"></cell>
     </group>
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
       // with hot-reload because the reloaded component
       // preserves its current state and we are modifying
       // its initial state.
-      msg: 'Hello World!'
+      msg: 'Hello List!'
     }
   }
 }
