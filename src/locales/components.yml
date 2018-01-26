@@ -1,0 +1,128 @@
+en:
+  Today: Today
+  This Week: This Week
+  This Month: This Month
+  Articles: Articles
+  Products: Products
+  Articles sync: Articles sync
+  Products sync: Products sync
+  All Messages: All Messages
+  New Messages: New Messages
+  Red Dot: Red Dot
+  Use v-model to set selected item: Use v-model to set selected item
+  Basic Usage: Basic Usage
+  Set value as TODAY: Set value as TODAY
+  Disable future: Disable future
+  Show popup header: Show popup header
+  Please select: Please select
+  Multiple dates: Multiple dates
+  Format multiple dates: Format multiple dates
+  Empty value: Empty value
+  Toggle readonly: Toggle readonly
+  Simple card with header and content: Simple card with header and content
+  My wallet: My wallet
+  Point: Point
+  Coupon: Coupon
+  Gift card: Gift card
+  Cash: Cash
+  With footer: With footer
+  Product details: Product details
+  More: More
+  Custom content: Custom content
+  Use header slot and content slot: Use header slot and content slot
+  My Account: My Account
+  Protected: Protected
+  Use is-link to show arrow: Use is-link to show arrow
+  Notifications: Notifications
+  Enabled: Enabled
+  Privacy: Privacy
+  General: General
+  Use slot for complicated content: Use slot for complicated content
+  Slot content: Slot content
+  'Hi, I''m Vux.': 'Hi, I''m Vux.'
+  is-link is set to true automatically when link exists: is-link is set to true automatically when link exists
+  Go to Radio Demo: Go to Radio Demo
+  Go to Demo: Go to Demo
+  Http link: Http link
+  Money: Money
+  Collapse: Collapse
+  Title 001: Title 001
+  Title 002: Title 002
+  Title 003: Title 003
+  Animated: Animated
+  Withdraw: Withdraw
+  Messages: Messages
+  Total: Total
+  $1024: $1024
+  Apple: Apple
+  Banana: Banana
+  Fish: Fish
+  Do you agree?: Do you agree?
+  Use in cell: Use in cell
+  Custom template: Custom template
+  'Date: 2018-08-01': 'Date: 2018-08-01'
+  A cell without title: A cell without title
+zh-CN:
+  Today: 今天
+  This Week: 本周
+  This Month: 本月
+  Articles: 文章
+  Products: 商品
+  Articles sync: 文章同步
+  Products sync: 商品同步
+  All Messages: 所有消息
+  New Messages: 新消息
+  Red Dot: 红点
+  Use v-model to set selected item: 使用 v-model 设置当前选中项
+  Basic Usage: 一般使用
+  Set value as TODAY: 设置时间为今天
+  Disable future: 禁止选择未来时间
+  Show popup header: 显示 popup 头部
+  Please select: 请选择日期
+  Multiple dates: 多选
+  Format multiple dates: 格式化表单值
+  Empty value: 清空值
+  Toggle readonly: 切换 readonly
+  Simple card with header and content: 带有标题和内容的简单卡片
+  My wallet: 我的钱包
+  Point: 京豆
+  Coupon: 京东券
+  Gift card: 京东卡/E卡
+  Cash: 七天待还
+  With footer: 带有 footer 的卡片
+  Product details: 商品详情
+  More: 查看更多
+  Custom content: 自定义内容
+  Use header slot and content slot: 使用 header slot 和 content slot
+  My Account: 我的账号
+  Protected: 保护中
+  Use is-link to show arrow: 使用 is-link 显示右边箭头
+  Notifications: 通知
+  Enabled: 已开启
+  Privacy: 隐私
+  General: 通用
+  Use slot for complicated content: 使用slot显示复杂内容
+  Slot content: slot 内容
+  'Hi, I''m Vux.': 你好哇，感谢关注 Vux
+  is-link is set to true automatically when link exists: 当设有 link 属性时，会自动产生箭头效果，无需再设置 is-link
+  Go to Radio Demo: 前往Radio页面
+  Go to Demo: 前往Demo页面
+  Http link: 站外链接
+  Money: 余额
+  Collapse: 折叠
+  Title 001: 标题一
+  Title 002: 标题二
+  Title 003: 标题三
+  Animated: 动画效果
+  Withdraw: 提现
+  Messages: 消息
+  Total: 合计
+  $1024: ￥1024
+  Apple: 苹果
+  Banana: 香蕉
+  Fish: 鱼肉
+  Do you agree?: 同意不？
+  Use in cell: 在 cell 中使用
+  Custom template: 自定义模版
+  'Date: 2018-08-01': 日期：2018-08-01
+  A cell without title: 不带标题的 cell

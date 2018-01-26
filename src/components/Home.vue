@@ -3,8 +3,8 @@
     <div class="vux-demo">
       <h1>efg</h1>
     </div>
-    <group title="cell demo">
-      <cell title="VUX" value="cool" link="/hw/"></cell>
+    <group title="demo">
+      <cell title="VUX" link="/components"></cell>
     </group>
   </div>
 </template>

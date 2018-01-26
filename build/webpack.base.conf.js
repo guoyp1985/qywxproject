@@ -24,8 +24,11 @@ let webpackConfig = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      'vue$': 'vue/dist/vue.common.js',
+      'src': resolve('src'),
+      'assets': resolve('src/assets'),
+      'components': resolve('src/components'),
+      '@': resolve('src')
     }
   },
   module: {
@@ -49,6 +52,11 @@ let webpackConfig = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
+      },
+      {
+        test: /\.yml$/,
+        loader: ['json-loader', 'yaml-loader'],
+        include: [resolve('src')]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -78,7 +86,9 @@ let webpackConfig = {
   }
 }
 
+// module.exports = vuxLoader.merge(webpackConfig, {
+//   plugins: ['vux-ui', 'progress-bar', 'duplicate-style']
+// })
 
-module.exports = vuxLoader.merge(webpackConfig, {
-  plugins: ['vux-ui', 'progress-bar', 'duplicate-style']
-})
+const vuxConfig = require('./vux-config')
+module.exports = vuxLoader.merge(webpackConfig, vuxConfig)
