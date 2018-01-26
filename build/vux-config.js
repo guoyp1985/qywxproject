@@ -9,7 +9,7 @@ argv.simulate = argv.simulate || false
 
 module.exports = {
   options: {
-    vuxDev: !argv.simulate, // true
+    // vuxDev: !argv.simulate, // true
     vuxSetBabel: argv.simulate, // false
     vuxWriteFile: false,
     env: 'dev'
