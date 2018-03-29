@@ -62,6 +62,42 @@ en:
   Custom template: Custom template
   'Date: 2018-08-01': 'Date: 2018-08-01'
   A cell without title: A cell without title
+  Operate: Operate
+  Sales: Sales
+  Service: Service
+  Sales center: Sales center
+  My tasks: My tasks
+  My logs: My logs
+  Month Sharing Goal: Month Sharing Goal
+  Had Shared: Had Shared
+  Had Contacted: Had Contacted
+  Sharing Material: Sharing Material
+  Sharing Qrcode: Sharing Qrcode
+  Gain Consumers: Gain Consumers
+  Grab Consumers: Grab Consumers
+  Contact Consumers: Contact Consumers
+  Sales opportunity: Sales opportunity
+  More Features: More Features
+  Operating Center: Operating Center
+  Operating Tools: Operating Tools
+  Monthly Activities: Monthly Activities
+  Monthly Articles: Monthly Articles
+  Monthly Follows: Monthly Follows
+  Activity Management: Activity Management
+  Article Management: Article Management
+  Approval Management: Approval Management
+  Easy Gathering: Easy Gathering
+  Shake: Shake
+  Service Center: Service Center
+  Answer Center: Answer Center
+  Messages Center: Messages Center
+  Arrival: Arrival
+  Consumer Service: Consumer Service
+  Consumer List: Consumer List
+  Accurate Push: Accurate Push
+  Consumer Show: Consumer Show
+  Coin Order: Coin Order
+  Sale Records: Sale Records
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -126,3 +162,39 @@ zh-CN:
   Custom template: 自定义模版
   'Date: 2018-08-01': 日期：2018-08-01
   A cell without title: 不带标题的 cell
+  Operate: 运营
+  Sales: 销售
+  Service: 服务
+  Sales center: 销售中心
+  My tasks: 我的任务
+  My logs: 我的日志
+  Month Sharing Goal: 月分享目标
+  Had Shared: 已分享
+  Had Contacted: 已联系
+  Sharing Material: 分享素材
+  Sharing Qrcode: 分享二维码
+  Gain Consumers: 获取客户
+  Grab Consumers: 抢客户
+  Contact Consumers: 联系客户
+  Sales opportunity: 销售机会
+  More Features: 更多功能
+  Operating Center: 运营中心
+  Operating Tools: 运营工具
+  Monthly Activities: 本月活动
+  Monthly Articles: 本月文章
+  Monthly Follows: 本月关注
+  Activity Management: 活动管理
+  Article Management: 文章管理
+  Approval Management: 审批管理
+  Easy Gathering: 易采集
+  Shake: 摇一摇
+  Service Center: 服务中心
+  Answer Center: 响应中心
+  Messages Center: 消息中心
+  Arrival: 到店
+  Consumer Service: 客户服务
+  Consumer List: 客户列表
+  Accurate Push: 精准推送
+  Consumer Show: 买家秀
+  Coin Order: 金币订单
+  Sale Records: 销售记录

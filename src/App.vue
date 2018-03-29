@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="height:100%;">
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
@@ -16,12 +16,37 @@
       :css="!!direction">
         <router-view class="router-view"></router-view>
       </transition>
+
+      <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
+        <tabbar-item :link="{path:'/centerOperating'}" :selected="route.path=='/centerOperating'">
+          <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+          <span slot="label">{{ $t('Operate') }}</span>
+        </tabbar-item>
+        <tabbar-item :link="{path:'/centerSales'}" :selected="route.path=='/centerSales'">
+          <span class="demo-icon-22" slot="icon">&#xe633;</span>
+          <span slot="label">{{ $t('Sales') }}</span>
+        </tabbar-item>
+        <tabbar-item :link="{path:'/centerService'}" :selected="route.path=='/centerService'">
+          <span class="demo-icon-22" slot="icon">&#xe634;</span>
+          <span slot="label">{{ $t('Service') }}</span>
+        </tabbar-item>
+      </tabbar>
+
     </view-box>
   </div>
 </template>
 
+<i18n>
+Operate:
+  zh-CN: 运营
+Sales:
+  zh-CN: 销售
+Service:
+  zh-CN: 服务
+</i18n>
+
 <script>
-import { ViewBox, XHeader, Loading, TransferDom } from 'vux'
+import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 
 export default {
@@ -32,7 +57,9 @@ export default {
   components: {
     ViewBox,
     XHeader,
-    Loading
+    Loading,
+    Tabbar,
+    TabbarItem
   },
   watch: {
     path (path) {
@@ -68,6 +95,24 @@ export default {
         if (/component/.test(this.route.path) && parts[2]) return parts[2]
       }
     },
+    isDemo () {
+      console.log(this.route.path)
+      // return /component|demo/.test(this.route.path)
+      switch (this.route.path) {
+        case '/centerOperating' :
+          break
+        case '/centerSales' :
+          break
+        case '/centerService' :
+          break
+        default:
+          return false
+      }
+      return true
+    },
+    isTabbarDemo () {
+      return /tabbar/.test(this.route.path)
+    },
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/components') return 'Demo list'
@@ -88,7 +133,7 @@ export default {
 @import '~vux/src/styles/tap.less';
 
 body {
-  background-color: #fbf9fe;
+  background-color: #ffffff;
 }
 html, body {
   height: 100%;

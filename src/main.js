@@ -3,19 +3,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-import VueRouter from 'vue-router'
+// import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import App from './App'
-import Home from './components/Home'
-import List from './components/DemoList'
+// import CenterSales from './components/CenterSales'
+// import CenterOperating from './components/CenterOperating'
+// import CenterService from './components/CenterService'
+// import List from './components/DemoList'
 // import Hello from './components/HelloWorld'
-import DemoList from './demo_list'
+import router from './router'
+// import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
 
 Vue.use(Vuex)
-Vue.use(VueRouter)
+// Vue.use(VueRouter)
 
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
@@ -52,25 +55,33 @@ Vue.use(vuexI18n.plugin, store)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
 
-let routes = [{
-  path: '/',
-  component: Home
-},
-{
-  path: '/components/',
-  component: List
-}
-]
+// let routes = [{
+//   path: '/centerSales',
+//   component: CenterSales
+// },
+// {
+//   path: '/centerOperating',
+//   component: CenterOperating
+// },
+// {
+//   path: '/centerService',
+//   component: CenterService
+// },
+// {
+//   path: '/components/',
+//   component: List
+// }
+// ]
 
-const demos = DemoList.map((com) => {
-  return {
-    path: `/components/${com.toLowerCase()}`,
-    component: Vue.component(
-    com,
-    // 该 `import` 函数返回一个 `Promise` 对象。
-    () => import('./demos/' + com))
-  }
-})
+// const demos = DemoList.map((com) => {
+//   return {
+//     path: `/components/${com.toLowerCase()}`,
+//     component: Vue.component(
+//     com,
+//     // 该 `import` 函数返回一个 `Promise` 对象。
+//     () => import('./demos/' + com))
+//   }
+// })
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -86,11 +97,11 @@ for (let i in finalLocales) {
 }
 Vue.i18n.set('zh-CN')
 
-routes = routes.concat(demos)
+// routes = routes.concat(demos)
 
-const router = new VueRouter({
-  routes
-})
+// const router = new VueRouter({
+//   routes
+// })
 
 FastClick.attach(document.body)
 
