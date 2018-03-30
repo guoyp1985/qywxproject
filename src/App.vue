@@ -3,20 +3,14 @@
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
-    <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
-      <x-header
-      style="width:100%;position:absolute;left:0;top:0;z-index:100;"
-      :left-options="leftOptions"
-      :right-options="rightOptions"
-      :title="title"
-      :transition="headerTransition">
-      </x-header>
+    <view-box ref="viewBox" body-padding-bottom="55px">
       <transition
       :name="viewTransition"
       :css="!!direction">
         <router-view class="router-view"></router-view>
       </transition>
 
+<!--
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
         <tabbar-item :link="{path:'/centerOperating'}" :selected="route.path=='/centerOperating'">
           <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
@@ -31,6 +25,7 @@
           <span slot="label">{{ $t('Service') }}</span>
         </tabbar-item>
       </tabbar>
+    -->
 
     </view-box>
   </div>
@@ -46,7 +41,7 @@ Service:
 </i18n>
 
 <script>
-import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
+import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 
 export default {
@@ -56,7 +51,6 @@ export default {
   },
   components: {
     ViewBox,
-    XHeader,
     Loading,
     Tabbar,
     TabbarItem
@@ -129,7 +123,6 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
-@import '~vux/src/styles/1px.less';
 @import '~vux/src/styles/tap.less';
 
 body {
@@ -197,7 +190,6 @@ html, body {
 }
 .router-view {
   width: 100%;
-  top: 46px;
 }
 .vux-out-enter-active,
 .vux-out-leave-active,

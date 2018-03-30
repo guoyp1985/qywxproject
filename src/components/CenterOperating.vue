@@ -5,11 +5,12 @@
       <span slot="title">{{ $t('Operating Center') }}</span>
       <x-button mini link="BACK">{{ $t('My tasks') }}</x-button>
       <x-button mini link="BACK">{{ $t('My logs') }}</x-button>
+      <!-- <button @click="a">test</button> -->
     </nameplate>
     <card style="margin-top: 0px">
       <div slot="content" class="card-demo-flex card-demo-content01">
         <div class="vux-1px-r">
-          <span>1130</span>
+          <span>{{ aa }}</span>
           <br/>
           {{ $t('Monthly Activities') }}
         </div>
@@ -26,26 +27,28 @@
       </div>
     </card>
     <div class="grid-title">{{ $t('Operating Tools') }}</div>
+    <!--
     <grid :cols="3">
       <grid-item :label="$t('Activity Management')">
-        <img slot="icon" src="../assets/icon-holiday04.png">
+        <img slot="icon" src="../assets/images/icon-holiday04.png">
       </grid-item>
       <grid-item :label="$t('Article Management')">
-        <img slot="icon" src="../assets/icon-newseon.png">
+        <img slot="icon" src="../assets/images/icon-newseon.png">
       </grid-item>
       <grid-item :label="$t('Approval Management')">
-        <img slot="icon" src="../assets/icon-shenpi.png">
+        <img slot="icon" src="../assets/images/icon-shenpi.png">
       </grid-item>
       <grid-item :label="$t('Easy Gathering')">
-        <img slot="icon" src="../assets/news.png">
+        <img slot="icon" src="../assets/images/news.png">
       </grid-item>
       <grid-item :label="$t('Shake')">
-        <img slot="icon" src="../assets/icon-yaoyiyao01.png">
+        <img slot="icon" src="../assets/images/icon-yaoyiyao01.png">
       </grid-item>
       <grid-item :label="$t('More Features')">
-        <img slot="icon" src="../assets/icon-share2.png">
+        <img slot="icon" src="../assets/images/icon-share2.png">
       </grid-item>
     </grid>
+  -->
   </div>
 </template>
 
@@ -81,7 +84,7 @@ More Features:
 <script>
 import { Group, Cell, XButton, Box, Card, Grid, GridItem } from 'vux'
 import Nameplate from './Nameplate'
-
+import { mapState } from 'vuex'
 export default {
   components: {
     Group,
@@ -92,13 +95,30 @@ export default {
     Grid,
     GridItem,
     Nameplate
+  },
+  data () {
+    return {
+      a1: 0
+    }
+  },
+  computed: {
+    ...mapState({
+      route: state => state.route
+    }),
+    aa: function () {
+      this.a1 += 1
+      return this.a1
+    }
   }
+  // methods: {
+  //   a: function () {
+  //     this.$router.push('/centerSales')
+  //   }
+  // }
 }
 </script>
 
 <style>
-@import '~vux/src/styles/1px.less'
-
 .vux-demo {
   text-align: center;
 }

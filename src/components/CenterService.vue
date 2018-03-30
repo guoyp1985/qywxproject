@@ -1,4 +1,5 @@
 <template>
+  <!--
   <div>
     <nameplate>
       <span class="demo-icon-22" slot="icon">&#xe633;</span>
@@ -9,37 +10,38 @@
     <div class="grid-title">{{ $t('Answer Center') }}</div>
     <grid>
       <grid-item :label="$t('Messages Center')">
-        <img slot="icon" src="../assets/icon-xxguanli.png">
+        <img slot="icon" src="../assets/images/icon-xxguanli.png">
       </grid-item>
       <grid-item :label="$t('Messages')">
-        <img slot="icon" src="../assets/icon-xxi.png">
+        <img slot="icon" src="../assets/images/icon-xxi.png">
       </grid-item>
       <grid-item :label="$t('Arrival')">
-        <img slot="icon" src="../assets/icon-arrival3.png">
+        <img slot="icon" src="../assets/images/icon-arrival3.png">
       </grid-item>
     </grid>
     <div class="grid-title">{{ $t('Consumer Service') }}</div>
     <grid :cols="3">
       <grid-item :label="$t('Consumer List')">
-        <img slot="icon" src="../assets/icon-holiday01.png">
+        <img slot="icon" src="../assets/images/icon-holiday01.png">
       </grid-item>
       <grid-item :label="$t('Accurate Push')">
-        <img slot="icon" src="../assets/icon-holiday02.png">
+        <img slot="icon" src="../assets/images/icon-holiday02.png">
       </grid-item>
       <grid-item :label="$t('Consumer Show')">
-        <img slot="icon" src="../assets/icon-holiday05.png">
+        <img slot="icon" src="../assets/images/icon-holiday05.png">
       </grid-item>
       <grid-item :label="$t('Coin Order')">
-        <img slot="icon" src="../assets/icon-djgl.png">
+        <img slot="icon" src="../assets/images/icon-djgl.png">
       </grid-item>
       <grid-item :label="$t('Sale Records')">
-        <img slot="icon" src="../assets/icon-xsjl.png">
+        <img slot="icon" src="../assets/images/icon-xsjl.png">
       </grid-item>
       <grid-item :label="$t('More Features')">
-        <img slot="icon" src="../assets/icon-share2.png">
+        <img slot="icon" src="../assets/images/icon-share2.png">
       </grid-item>
     </grid>
   </div>
+-->
 </template>
 
 <i18n>
@@ -92,8 +94,6 @@ export default {
 </script>
 
 <style>
-@import '~vux/src/styles/1px.less'
-
 .vux-demo {
   text-align: center;
 }

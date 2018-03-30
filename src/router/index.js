@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import CenterSales from '@/components/CenterSales'
 import CenterOperating from '@/components/CenterOperating'
 import CenterService from '@/components/CenterService'
+import RetailerSales from '@/components/RetailerSales'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 
@@ -14,6 +15,10 @@ let routes = [
   //   path: '/',
   //   component: HelloWorld
   // },
+  {
+    path: '/',
+    component: CenterSales
+  },
   {
     path: '/centerSales',
     component: CenterSales
@@ -29,6 +34,10 @@ let routes = [
   {
     path: '/components/',
     component: List
+  },
+  {
+    path: '/retailerSales',
+    component: RetailerSales
   }
 ]
 

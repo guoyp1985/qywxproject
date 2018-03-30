@@ -98,6 +98,19 @@ en:
   Consumer Show: Consumer Show
   Coin Order: Coin Order
   Sale Records: Sale Records
+  Content manage: Content manage
+  Activity: Activity
+  Product: Product
+  News: News
+  Customer mange: Customer mange
+  Rebate customer: Rebate customer
+  Sale chance: Sale chance
+  Contact customer: Contact customer
+  Order manage: Order manage
+  Order entry: Order entry
+  Order list: Order list
+  I have bottom line: I have bottom line
+  Divider text: Divider text
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -198,3 +211,16 @@ zh-CN:
   Consumer Show: 买家秀
   Coin Order: 金币订单
   Sale Records: 销售记录
+  Content manage: 内容管理
+  Activity: 活动
+  Product: 商品
+  News: 文章
+  Customer mange: 客户管理
+  Rebate customer: 返点客户
+  Sale chance: 销售机会
+  Contact customer: 联系客户
+  Order manage: 订单管理
+  Order entry: 订单录入
+  Order list: 订单列表
+  I have bottom line: 我是有底线的
+  Divider text: 如有其他疑问或建议，可联系客服
