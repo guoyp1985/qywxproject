@@ -111,6 +111,10 @@ en:
   Order list: Order list
   I have bottom line: I have bottom line
   Divider text: Divider text
+  Data text: Data text
+  View number: View number
+  Share number: Share number
+  Sale number: Sale number
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -224,3 +228,7 @@ zh-CN:
   Order list: 订单列表
   I have bottom line: 我是有底线的
   Divider text: 如有其他疑问或建议，可联系客服
+  Data text: 数据
+  View number: 访问量
+  Share number: 分享数
+  Sale number: 销售额
