@@ -1,131 +1,145 @@
 <template>
-  <div>
+  <div class="containerarea s-havebottom">
     <div class="s-topbanner">
       <div class="row">
+        <div class="bg"></div>
+        <div class="flex_center h_100">
+          <div class="flex_cell font18 pl20">{{$t('Rebate customer')}}</div>
+          <div class="pr10 align_right" style="width:150px;">
+            <div class="qbtn" style="border:#fff 1px solid;">{{$t('Share invite customer')}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        </tab>
       </div>
     </div>
-    <div class="grid-title">{{ $t('Content manage') }}</div>
-    <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Activity')">
-        <span slot="icon" class="al al-tianmaohaoquan icon-orange db-in" style="margin-top:-6px;"></span>
-      </grid-item>
-      <grid-item :label="$t('Product')">
-        <span slot="icon" class="al al-shangpin icon-red db-in" style="margin-top:-6px;font-size:26px;"></span>
-      </grid-item>
-      <grid-item :label="$t('News')">
-        <span slot="icon" class="al al-wenzhang3 icon-green db-in" style="margin-top:-6px;"></span>
-      </grid-item>
-    </grid>
-    <div class="grid-title">{{ $t('Customer mange') }}</div>
-    <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Rebate customer')"  :link="{path:'/RetailerSales'}">
-        <span slot="icon" class="al al-xiaoshou icon-blue db-in font30" style="margin-top:-6px;"></span>
-        <span class="al al-hot1 icon-red" style="position:absolute;font-size:34px;top:0;right:-1px;height:31px;line-height:31px;"></span>
-      </grid-item>
-      <grid-item :label="$t('Sale chance')">
-        <span slot="icon" class="al al-yewujihui icon-blue1 db-in" style="margin-top:-6px;"></span>
-      </grid-item>
-      <grid-item :label="$t('Contact customer')">
-        <span slot="icon" class="al al-lianxiren icon-orange db-in" style="margin-top:-6px;"></span>
-      </grid-item>
-    </grid>
-    <div class="grid-title">{{ $t('Order manage') }}</div>
-    <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Order entry')">
-        <span slot="icon" class="al al-xinzengdingdan icon-orange db-in" style="margin-top:-6px;"></span>
-      </grid-item>
-      <grid-item :label="$t('Order list')">
-        <span slot="icon" class="al al-dingdan icon-blue2 db-in" style="margin-top:-6px;"></span>
-      </grid-item>
-    </grid>
-    <a class="align_center pb20 pt20 db">
-      <div>
-        <span class="al al-kefu1 font24 color-blue3"></span>
-      </div>
-      <div class="font12 color-blue2">{{ $t('Divider text') }}</div>
-    </a>
+    <div class="s-container">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)">
+            <search
+              class="x-search"
+              position="absolute"
+              auto-scroll-to-top top="0px"
+              @on-focus="onFocus"
+              @on-cancel="onCancel"
+              @on-submit="onSubmit"
+              ref="search">
+            </search>
+            <div class="scroll_list pl10 pr10">
+              <Listplate v-for="(item,index) in customerdata" >
+                <img slot="pic" :src="item.avatar" class="avatarimg1" />
+                <div slot="title" class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
+                <div slot="title" class="clamp1 mt5 font12 color-gray">带来消费：￥{{item.sales}}</div>
+                <div class="qbtn bg-green color-white">联系</div>
+              </Listplate>
+            </div>
+          </div>
+          <div v-if="(index == 1)" class="textarea-outer">
+            <group>
+              <x-textarea class="x-textarea" :placeholder="$t('Message text')" :show-counter="false" :rows="1" autosize></x-textarea>
+            </group>
+            <div class="align_right">
+              <div class="qbtn bg-green color-white w100">发送</div>
+            </div>
+          </div>
+          <div v-if="(index == 2)">
+          <div class="scroll_list pl10 pr10 cols-2">
+            <Listplate v-for="(item,index) in customerdata" >
+              <img slot="pic" :src="item.avatar" class="avatarimg1" />
+              <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
+              <div slot="title" class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.sales}}</div>
+            </Listplate>
+          </div>
+          </div>
+        </swiper-item>
+      </swiper>
+    </div>
+    <div class="s-bottom flex_center bg-blue3 color-white font18">{{$t('Rebate manage')}}</div>
   </div>
 </template>
 
 <i18n>
-Sales center:
-  zh-CN: 销售中心
-Content manage:
-  zh-CN: 内容管理
-Activity:
-  zh-CN: 活动
-Product:
-  zh-CN: 商品
-News:
-  zh-CN: 文章
-Customer mange:
-  zh-CN: 客户管理
 Rebate customer:
   zh-CN: 返点客户
-Sale chance:
-  zh-CN: 销售机会
-Contact customer:
-  zh-CN: 联系客户
-Order manage:
-  zh-CN: 订单管理
-Order entry:
-  zh-CN: 订单录入
-Order list:
-  zh-CN: 订单列表
-Divider text:
-  zh-CN: 如有其他疑问或建议，可联系客服
+Share invite customer:
+  zh-CN: 分享邀请返点客户
+Rebate manage:
+  zh-CN: 返点管理
+Message text:
+  zh-CN: 早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。
 </i18n>
 
 <script>
-import { Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
+import Listplate from './Listplate'
+import Time from '../../libs/time'
 
 export default {
   components: {
-    Group,
-    Cell,
-    XButton,
-    Box,
-    Card,
-    Grid,
-    GridItem,
-    Marquee,
-    MarqueeItem,
-    CellBox
+    Tab,
+    TabItem,
+    Swiper,
+    SwiperItem,
+    Search,
+    Listplate,
+    XTextarea,
+    Group
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     return {
-      // note: changing this line won't causes changes
-      // with hot-reload because the reloaded component
-      // preserves its current state and we are modifying
-      // its initial state.
-      msg: 'Hello World!'
+      tabtxts: [ '返点客户', '发送消息', '返点记录' ],
+      tabmodel: 0,
+      customerdata : [
+        {
+          id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', username: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
+        },
+        {
+          id: '2', uid: '272', dateline: 1522221270, linkman: '周学江', username: 'zxj', sales: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
+        },
+        {
+          id: '3', uid: '29', dateline: 1522221270, linkman: '销售宝技术支持', username: '网络影响力', sales: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
+        },
+        {
+          id: '4', uid: '4', dateline: 1522221270, linkman: '销售宝技术支持', username: '楚风越韵  🏠', sales: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
+        },
+        {
+          id: '5', uid: '2', dateline: 1522221270, linkman: '销售宝技术支持', username: '仇红波', sales: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
+        }
+      ]
+    }
+  },
+  methods: {
+    setFocus () {
+    },
+    resultClick (item) {
+    },
+    getResult (val) {
+    },
+    onSubmit () {
+    },
+    onFocus () {
+    },
+    onCancel () {
     }
   }
 }
 </script>
 
 <style lang="less">
+@import '~vux/src/styles/center.less';
 @import '../assets/global.less';
-.bk-salestopplate .numicon{
-  position: absolute;
-  top: 0;
-  right: -15px;
-  background: #f06825;
-  padding: 0 1px;
-  border-radius: 16%;
-  color: #fff;
-  font-size: 10px;
-  min-width: 18px;
-  text-align: center;
-}
-.marqueeitem .weui-cells{margin-top:0;}
-.grid-title {
-  background-color: #efeff4;
-  color: #716f76;
-  padding: 10px 15px;
-  font-size: 14px;
-}
-.bk-grid .weui-grid__label{
-  color:#666;
-}
+
+.textarea-outer{padding:10px;}
+.textarea-outer .weui-cells{margin-top:0;}
+.textarea-outer .weui-cells:before{display:none;}
+.textarea-outer .weui-cells:after{display:none;}
 </style>

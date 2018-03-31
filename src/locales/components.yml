@@ -115,6 +115,9 @@ en:
   View number: View number
   Share number: Share number
   Sale number: Sale number
+  Share invite customer: Share invite customer
+  Rebate manage: Rebate manage
+  Message text: Message text
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -232,3 +235,6 @@ zh-CN:
   View number: 访问量
   Share number: 分享数
   Sale number: 销售额
+  Share invite customer: 分享邀请返点客户
+  Rebate manage: 返点管理
+  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。'

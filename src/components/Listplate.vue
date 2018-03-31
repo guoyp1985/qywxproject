@@ -26,6 +26,7 @@ export default {
   position:relative;
   border-bottom:@list-border-color 1px solid;
 }
+.scroll_list .scroll_item:last-child{border-bottom:none;}
 .bk-listplate .piccell{
   text-align:left;
   width:50px;
