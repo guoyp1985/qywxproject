@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Center from '@/components/Center'
 import CenterOperating from '@/components/CenterOperating'
 import CenterService from '@/components/CenterService'
+import RetailerSales from '@/components/RetailerSales'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 

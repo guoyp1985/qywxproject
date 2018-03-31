@@ -17,7 +17,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: 'Nameplate'
@@ -28,7 +27,7 @@ export default {
 .bk-nameplate {
   width: 100%;
   height: 100px;
-  background-image: url(../assets/bannerbg.png);
+  background-image: url(../assets/images/bannerbg.png);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
