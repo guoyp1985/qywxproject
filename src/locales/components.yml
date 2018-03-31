@@ -98,6 +98,18 @@ en:
   Consumer Show: Consumer Show
   Coin Order: Coin Order
   Sale Records: Sale Records
+  Home: Home
+  Message: Message
+  Favorite: Favorite
+  Center: Center
+  Personal Center: Personal Center
+  Search Orders: Search Orders
+  View Productions: View Productions
+  View Articles: View Articles
+  My Address: My Address
+  My Shares: My Shares
+  My Favorites: My Favorites
+  Exit: Exit
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -163,7 +175,7 @@ zh-CN:
   'Date: 2018-08-01': 日期：2018-08-01
   A cell without title: 不带标题的 cell
   Operate: 运营
-  Sales: 销售
+  Sales: 促销
   Service: 服务
   Sales center: 销售中心
   My tasks: 我的任务
@@ -198,3 +210,15 @@ zh-CN:
   Consumer Show: 买家秀
   Coin Order: 金币订单
   Sale Records: 销售记录
+  Home: 首页
+  Message: 消息
+  Favorite: 收藏
+  Center: 个人中心
+  Personal Center: 个人中心
+  Search Orders: 查订单
+  View Productions: 挑商品
+  View Articles: 看文章
+  My Address: 我的地址
+  My Shares: 我的分享
+  My Favorites: 我的收藏
+  Exit: 退出

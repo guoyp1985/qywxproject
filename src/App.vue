@@ -3,14 +3,7 @@
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
-    <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
-      <x-header
-      style="width:100%;position:absolute;left:0;top:0;z-index:100;"
-      :left-options="leftOptions"
-      :right-options="rightOptions"
-      :title="title"
-      :transition="headerTransition">
-      </x-header>
+    <view-box ref="viewBox" body-padding-bottom="55px">
       <transition
       :name="viewTransition"
       :css="!!direction">
@@ -18,17 +11,25 @@
       </transition>
 
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
-        <tabbar-item :link="{path:'/centerOperating'}" :selected="route.path=='/centerOperating'">
-          <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
-          <span slot="label">{{ $t('Operate') }}</span>
+        <tabbar-item :link="{path:'/home'}" :selected="route.path=='/home'">
+          <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;"><i class="fa-home"></i></span>
+          <span slot="label">{{ $t('Home') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/centerSales'}" :selected="route.path=='/centerSales'">
+        <tabbar-item :link="{path:'/sales'}" :selected="route.path=='/sales'">
           <span class="demo-icon-22" slot="icon">&#xe633;</span>
           <span slot="label">{{ $t('Sales') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/centerService'}" :selected="route.path=='/centerService'">
+        <tabbar-item :link="{path:'/message'}" :selected="route.path=='/message'">
           <span class="demo-icon-22" slot="icon">&#xe634;</span>
-          <span slot="label">{{ $t('Service') }}</span>
+          <span slot="label">{{ $t('Message') }}</span>
+        </tabbar-item>
+        <tabbar-item :link="{path:'/favorite'}" :selected="route.path=='/favorite'">
+          <span class="demo-icon-22" slot="icon">&#xe634;</span>
+          <span slot="label">{{ $t('Favorite') }}</span>
+        </tabbar-item>
+        <tabbar-item :link="{path:'/center'}" :selected="route.path=='/center'">
+          <span class="demo-icon-22" slot="icon">&#xe634;</span>
+          <span slot="label">{{ $t('Center') }}</span>
         </tabbar-item>
       </tabbar>
 
@@ -37,12 +38,16 @@
 </template>
 
 <i18n>
-Operate:
-  zh-CN: 运营
+Home:
+  zh-CN: 首页
 Sales:
-  zh-CN: 销售
-Service:
-  zh-CN: 服务
+  zh-CN: 促销
+Message:
+  zh-CN: 消息
+Favorite:
+  zh-CN: 收藏
+Center:
+  zh-CN: 个人中心
 </i18n>
 
 <script>
@@ -197,7 +202,6 @@ html, body {
 }
 .router-view {
   width: 100%;
-  top: 46px;
 }
 .vux-out-enter-active,
 .vux-out-leave-active,

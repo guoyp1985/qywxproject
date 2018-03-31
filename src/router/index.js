@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
-import CenterSales from '@/components/CenterSales'
+import Center from '@/components/Center'
 import CenterOperating from '@/components/CenterOperating'
 import CenterService from '@/components/CenterService'
 import List from '@/components/DemoList'
@@ -15,8 +15,8 @@ let routes = [
   //   component: HelloWorld
   // },
   {
-    path: '/centerSales',
-    component: CenterSales
+    path: '/center',
+    component: Center
   },
   {
     path: '/centerOperating',
@@ -29,6 +29,10 @@ let routes = [
   {
     path: '/components/',
     component: List
+  },
+  {
+    path: '/retailerSales',
+    component: RetailerSales
   }
 ]
 
