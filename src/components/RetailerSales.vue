@@ -38,12 +38,12 @@
               </Listplate>
             </div>
           </div>
-          <div v-if="(index == 1)" class="textarea-outer">
-            <group>
+          <div v-if="(index == 1)">
+            <group class="textarea-outer">
               <x-textarea class="x-textarea" :placeholder="$t('Message text')" :show-counter="false" :rows="1" autosize></x-textarea>
             </group>
-            <div class="align_right">
-              <div class="qbtn bg-green color-white w100">发送</div>
+            <div class="align_right pr10">
+              <div class="qbtn bg-green color-white w100" style="line-height:25px;">{{$t('Send text')}}</div>
             </div>
           </div>
           <div v-if="(index == 2)">
@@ -71,6 +71,8 @@ Rebate manage:
   zh-CN: 返点管理
 Message text:
   zh-CN: 早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。
+Send text:
+  zh-CN: 发送
 </i18n>
 
 <script>
@@ -98,7 +100,7 @@ export default {
     return {
       tabtxts: [ '返点客户', '发送消息', '返点记录' ],
       tabmodel: 0,
-      customerdata : [
+      customerdata: [
         {
           id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', username: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
         },
@@ -137,9 +139,4 @@ export default {
 <style lang="less">
 @import '~vux/src/styles/center.less';
 @import '../assets/global.less';
-
-.textarea-outer{padding:10px;}
-.textarea-outer .weui-cells{margin-top:0;}
-.textarea-outer .weui-cells:before{display:none;}
-.textarea-outer .weui-cells:after{display:none;}
 </style>

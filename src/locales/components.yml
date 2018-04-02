@@ -118,6 +118,31 @@ en:
   Share invite customer: Share invite customer
   Rebate manage: Rebate manage
   Message text: Message text
+  Send text: Send text
+  Sale chance txt: Sale chance txt
+  Contact: Contact
+  Customer text: Customer text
+  Percent: Percent
+  Buy user: Buy user
+  Buy product: Buy product
+  Select user: Select user
+  Order price: Order price
+  Visit date: Visit date
+  Select visit date: Select visit date
+  Submit order: Submit order
+  Receiver: Receiver
+  Receiver placeholder: Receiver placeholder
+  Mobile: Mobile
+  Mobile placeholder: Mobile placeholder
+  Buyer address: Buyer address
+  Buyer address placeholder: Buyer address placeholder
+  Detail address: Detail address
+  Detail address placeholder: Detail address placeholder
+  Receiver info: Receiver info
+  Deliver info: Deliver info
+  Deliver commpany: Deliver commpany
+  Cancel txt: Cancel txt
+  Confirm txt: Confirm txt
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -238,3 +263,28 @@ zh-CN:
   Share invite customer: 分享邀请返点客户
   Rebate manage: 返点管理
   Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。'
+  Send text: 发送
+  Sale chance txt: 销售机会
+  Contact: 联系
+  Customer text: 客户
+  Percent: 成交概率
+  Buy user: 购买用户
+  Buy product: 购买商品
+  Select user: 选择用户
+  Order price: 订单金额
+  Visit date: 回访时间
+  Select visit date: 选择回访时间
+  Submit order: 提交订单
+  Receiver: 收货人
+  Receiver placeholder: 收货人姓名
+  Mobile: 手机号
+  Mobile placeholder: 收货人手机号
+  Buyer address: 买家地址
+  Buyer address placeholder: 买家地址
+  Detail address: 详细地址
+  Detail address placeholder: 详细地址
+  Receiver info: 收货人信息
+  Deliver info: 物流信息
+  Deliver commpany: 物流公司
+  Cancel txt: 取消
+  Confirm txt: 提交

@@ -6,6 +6,8 @@ import CenterOperating from '@/components/CenterOperating'
 import CenterService from '@/components/CenterService'
 import RetailerSales from '@/components/RetailerSales'
 import RetailerSalechance from '@/components/RetailerSalechance'
+import RetailerCustomerlist from '@/components/RetailerCustomerlist'
+import RetailerAddorder from '@/components/RetailerAddorder'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 
@@ -43,6 +45,14 @@ let routes = [
   {
     path: '/retailerSalechance',
     component: RetailerSalechance
+  },
+  {
+    path: '/retailerCustomerlist',
+    component: RetailerCustomerlist
+  },
+  {
+    path: '/retailerAddorder',
+    component: RetailerAddorder
   }
 ]
 

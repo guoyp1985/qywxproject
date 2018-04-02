@@ -49,16 +49,16 @@
         <span slot="icon" class="al al-xiaoshou icon-blue db-in font30" style="margin-top:-6px;"></span>
         <span class="al al-hot1 icon-red" style="position:absolute;font-size:34px;top:0;right:-1px;height:31px;line-height:31px;"></span>
       </grid-item>
-      <grid-item :label="$t('Sale chance')">
+      <grid-item :label="$t('Sale chance')" :link="{path:'/retailerSalechance'}">
         <span slot="icon" class="al al-yewujihui icon-blue1 db-in" style="margin-top:-6px;"></span>
       </grid-item>
-      <grid-item :label="$t('Contact customer')">
+      <grid-item :label="$t('Contact customer')" :link="{path:'/retailerCustomerlist'}">
         <span slot="icon" class="al al-lianxiren icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
     </grid>
     <div class="grid-title">{{ $t('Order manage') }}</div>
     <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Order entry')">
+      <grid-item :label="$t('Order entry')" :link="{path:'/retailerAddorder'}">
         <span slot="icon" class="al al-xinzengdingdan icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
       <grid-item :label="$t('Order list')">
