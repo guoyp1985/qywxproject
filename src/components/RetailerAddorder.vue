@@ -35,7 +35,7 @@
           <span slot="title">{{ $t('Buy product') }}</span>
           <div>
             <div class="db-flex mb12" v-for="(row1,index1) in rowdata" :key="index1">
-              <select v-model="row1.productdata" class="w_100 flex_cell" @change="selectchange">
+              <select v-model="row1.productdata" class="w_100 flex_cell" @change="selectchange" value="-1">
                 <option value="-1" selected>请选择商品</option>
                 <option v-for="(item,index) in productdata" :key="index" :value="`${item.id}`">{{ item.title }}</option>
               </select>
@@ -50,7 +50,7 @@
         </Forminputplate>
         <Forminputplate>
           <span slot="title">{{ $t('Order price') }}</span>
-          <div class="color-orange">¥{{ totalprice }}</div>
+          <div class="color-orange">{{ $t('RMB') }}{{ totalprice }}</div>
         </Forminputplate>
         <Forminputplate>
           <span slot="title">{{ $t('Visit date') }}</span>
@@ -73,7 +73,20 @@
           </Forminputplate>
           <Forminputplate>
             <span slot="title">{{ $t('Buyer address') }}</span>
-            <input type="text" name="telephone" class="input border-box" :placeholder="$t('Buyer address placeholder')" />
+            <group>
+              <x-address
+                class="x-address font14"
+                @on-hide="addressHide"
+                @on-show="addressShow"
+                :title="defaultaddress"
+                v-model="addressvalue"
+                :list="addressData"
+                @on-shadow-change="onShadowChange"
+                :placeholder="$t('Buyer address placeholder')"
+                value-text-align="left"
+                :show.sync="showAddress">
+              </x-address>
+            </group>
           </Forminputplate>
           <Forminputplate>
             <span slot="title">{{ $t('Detail address') }}</span>
@@ -139,7 +152,7 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Group, XNumber, Datetime, XButton, XTextarea, XInput, TransferDom, Popup, Search, Radio } from 'vux'
+import { Group, XNumber, Datetime, XButton, XTextarea, XInput, TransferDom, Popup, Search, Radio, XAddress, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 import Forminputplate from './Forminputplate'
 
 export default {
@@ -157,7 +170,8 @@ export default {
     TransferDom,
     Popup,
     Search,
-    Radio
+    Radio,
+    XAddress
   },
   data () {
     return {
@@ -219,7 +233,11 @@ export default {
         { id: 'HTKY', value: '汇通快运' },
         { id: 'JD', value: '京东快递' },
         { id: 'DEPPON', value: '德邦物流' }
-      ]
+      ],
+      defaultaddress: '',
+      addressvalue: [ '110000', '110100', '110107' ],
+      addressData: ChinaAddressV4Data,
+      showAddress: false
     }
   },
   computed: {
@@ -299,6 +317,18 @@ export default {
         }
       }
       this.showpopup = false
+    },
+    onShadowChange (ids, names) {
+      console.log('onShadowChange')
+    },
+    getName (value) {
+      return value2name(value, ChinaAddressV4Data)
+    },
+    addressHide (str) {
+      console.log('on-hide', str)
+    },
+    addressShow (str) {
+      console.log('on-show')
     }
   }
 }

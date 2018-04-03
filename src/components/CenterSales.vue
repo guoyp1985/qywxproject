@@ -2,8 +2,8 @@
   <div>
     <Salestopplate>
       <img src="http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg" slot="img" />
-      <div slot="txtarea" style="font-size:18px;color:#fff;">YOUNG</div>
-      <a slot="txtarea" href="" style="padding-top:8px;font-size:14px;color:#fff;">我的店铺</a>
+      <div slot="txtarea" class="font18 color-white">YOUNG</div>
+      <router-link slot="txtarea" class="font14 color-white" style="padding-top:8px;" to="/retailerShop">{{$t('My shop')}}</router-link>
       <div style="position:absolute;top:10px;right:20px;height:35px;">
         <a style="color:#fff;" href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?action=changeinfo&from=setting"><span class="al al-set" style="font-size:20px;"></span></a>
         <a href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?module=retailer&action=messagelist" style="position:reltaive;color:#fff;margin-left:5px;">
@@ -39,7 +39,7 @@
       <grid-item :label="$t('Product')">
         <span slot="icon" class="al al-shangpin icon-red db-in" style="margin-top:-6px;font-size:26px;"></span>
       </grid-item>
-      <grid-item :label="$t('News')">
+      <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
         <span slot="icon" class="al al-wenzhang3 icon-green db-in" style="margin-top:-6px;"></span>
       </grid-item>
     </grid>
@@ -61,7 +61,7 @@
       <grid-item :label="$t('Order entry')" :link="{path:'/retailerAddorder'}">
         <span slot="icon" class="al al-xinzengdingdan icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
-      <grid-item :label="$t('Order list')">
+      <grid-item :label="$t('Order list')" :link="{path:'/retailerOrders'}">
         <span slot="icon" class="al al-dingdan icon-blue2 db-in" style="margin-top:-6px;"></span>
       </grid-item>
     </grid>
