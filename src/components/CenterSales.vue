@@ -13,7 +13,7 @@
       </div>
       <div class="flex_center" style="position:absolute;right:20px;bottom:10px;color:#fff;font-size:14px;">
         <span class="al al-trade-assurance font18"></span>
-        <span class="ml3">我的收入</span>
+        <router-link class="ml3" to="/retailerRevenue">{{$t('Myrevenue')}}</router-link>
       </div>
     </Salestopplate>
     <div class="vux-marquee" item-height=40 duration=2000>
@@ -33,10 +33,10 @@
     </div>
     <div class="grid-title">{{ $t('Content manage') }}</div>
     <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Activity')">
+      <grid-item :label="$t('Activity')" :link="{path:'/retailerActivitylist'}">
         <span slot="icon" class="al al-tianmaohaoquan icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
-      <grid-item :label="$t('Product')">
+      <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
         <span slot="icon" class="al al-shangpin icon-red db-in" style="margin-top:-6px;font-size:26px;"></span>
       </grid-item>
       <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">

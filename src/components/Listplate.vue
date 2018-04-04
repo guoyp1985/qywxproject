@@ -22,11 +22,19 @@ export default {
 <style lang="less">
 .bk-listplate{
   display: -webkit-box;
-  padding:10px;
+  padding-top:10px;
+  padding-bottom:10px;
   position:relative;
-  border-bottom:@list-border-color 1px solid;
 }
-.scroll_list .scroll_item:last-child{border-bottom:none;}
+.scroll_list .bk-listplate1:not(:last-child):after{
+  content:"";display:block;
+	background-color:@list-border-color;height:1px;overflow:hidden;
+	position: absolute;left: 0;right: 0;bottom:0px;
+	-webkit-transform: scaleY(0.5) translateY(0.5px);
+	transform: scaleY(0.5) translateY(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
+}
 .bk-listplate .piccell{
   text-align:left;
   width:50px;

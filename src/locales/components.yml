@@ -153,6 +153,13 @@ en:
   Another batch: Another batch
   Goodeazy: Goodeazy
   Create news: Create news
+  Control text: Control text
+  Are you sure up?: Are you sure up?
+  Are you sure down?: Are you sure down?
+  Are you sure stop?: Are you sure stop?
+  Min buy price: Min buy price
+  Limitbuy count: Limitbuy count
+  Get cash explain: Get cash explain
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -315,3 +322,15 @@ zh-CN:
   Another batch: 换一批
   Goodeazy: 易采集
   Create news: 创建文章
+  Control text: 操作
+  Add product: 添加商品
+  Are you sure up?: 确定要上架吗？
+  Are you sure down?: 确定要下架吗？
+  Groupprice: 团购价
+  Group numbers: 成团人数
+  Person: 人
+  Are you sure stop?: 确定要停止吗？
+  Min buy price: 最低成交价
+  Limitbuy count: 限购数量
+  Myrevenue: 我的收入
+  Get cash explain: 提现说明

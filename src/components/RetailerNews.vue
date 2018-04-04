@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14">
+  <div class="containerarea s-havebottom font14 rnews">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
@@ -17,30 +17,30 @@
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item v-for="(item, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <search
-              class="x-search"
-              position="absolute"
-              auto-scroll-to-top top="0px"
-              @on-focus="onFocus"
-              @on-cancel="onCancel"
-              @on-submit="onSubmit"
-              ref="search">
-            </search>
             <div class="scroll_list pl10 pr10">
               <Listplate1 v-for="(item,index) in tabdata1" >
-                <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                <div slot="title" class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
-                <div slot="title" class="clamp1 mt5 font12 color-gray">带来消费：￥{{item.sales}}</div>
-                <div class="qbtn bg-green color-white">联系</div>
+                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
+                <div slot="title" class="clamp1 font16">{{item.title}}</div>
+                <div slot="title" class="clamp1 font12 color-gray v_middle">
+                    <span class="v_middle">{{ item.dateline | dateformat }}</span>
+                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
+                    <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+                </div>
+                <div class="qbtn1 bg-green color-white" @click="controlpopup1(item)">{{ $t('Control text') }}</div>
               </Listplate1>
             </div>
           </template>
           <template v-if="(index == 1)">
-            <div class="scroll_list pl10 pr10 cols-2">
+            <div class="scroll_list pl10 pr10">
               <Listplate1 v-for="(item,index) in tabdata2" >
-                <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
-                <div slot="title" class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.sales}}</div>
+                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
+                <div slot="title" class="clamp1 font14">{{item.title}}</div>
+                <div slot="title" class="clamp1 mt5 font12 color-gray ">
+                    <span class="v_middle">{{ item.dateline | dateformat }}</span>
+                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
+                    <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+                </div>
+                <div class="qbtn1 bg-green color-white" @click="controlpopup2(item)">{{ $t('Control text') }}</div>
               </Listplate1>
             </div>
           </template>
@@ -51,6 +51,34 @@
       <div class="flex_cell bg-blue3 flex_center h_100" style="border-right:#fff 1px solid;">{{ $t('Goodeazy') }}</div>
       <div class="bg-blue3 flex_center h_100" style="width:30%;">{{ $t('Create news') }}</div>
     </div>
+    <div v-transfer-dom>
+      <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
+        <div class="popup0">
+          <div class="list">
+            <template v-for="(row,index1) in controldata1">
+              <div class="item flex_center" @click="clickpopup1(row.key,clickdata1)">
+                <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
+              </div>
+            </template>
+            <div class="item flex_center close mt10" @click="clickpopup1('row.key,clickdata1')">{{ $t('Cancel txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <popup class="menuwrap" v-model="showpopup2" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
+        <div class="popup0">
+          <div class="list">
+            <template v-for="(row,index1) in controldata2">
+              <div class="item flex_center" @click="clickpopup2(row.key,clickdata2)">
+                <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
+              </div>
+            </template>
+            <div class="item flex_center close mt10" @click="clickpopup2('row.key,clickdata2')">{{ $t('Cancel txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -59,33 +87,28 @@ Goodeazy:
   zh-CN: 易采集
 Create news:
   zh-CN: 创建文章
-Rebate customer:
-  zh-CN: 返点客户
-Share invite customer:
-  zh-CN: 分享邀请返点客户
-Rebate manage:
-  zh-CN: 返点管理
-Message text:
-  zh-CN: 早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。
-Send text:
-  zh-CN: 发送
+Control text:
+  zh-CN: 操作
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup } from 'vux'
 import Listplate1 from './Listplate1'
 import Time from '../../libs/time'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Tab,
     TabItem,
     Swiper,
     SwiperItem,
-    Search,
     Listplate1,
-    XTextarea,
-    Group
+    Group,
+    TransferDom,
+    Popup
   },
   filters: {
     dateformat: function (value) {
@@ -98,52 +121,69 @@ export default {
       tabmodel: 0,
       tabdata1: [
         {
-          id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', username: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
+          id: '1', dateline: 1522221270, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736'
         },
         {
-          id: '2', uid: '272', dateline: 1522221270, linkman: '周学江', username: 'zxj', sales: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
+          id: '2', dateline: 1522221270, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745'
         },
         {
-          id: '3', uid: '29', dateline: 1522221270, linkman: '销售宝技术支持', username: '网络影响力', sales: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
+          id: '3', dateline: 1522221270, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
         },
         {
-          id: '4', uid: '4', dateline: 1522221270, linkman: '销售宝技术支持', username: '楚风越韵  🏠', sales: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
+          id: '4', dateline: 1522221270, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
         },
         {
-          id: '5', uid: '2', dateline: 1522221270, linkman: '销售宝技术支持', username: '仇红波', sales: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
+          id: '5', dateline: 1522221270, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
         }
       ],
       tabdata2: [
         {
-          id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', username: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
+          id: '1', dateline: 1522221270, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15214273537848'
         },
         {
-          id: '2', uid: '272', dateline: 1522221270, linkman: '周学江', username: 'zxj', sales: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
+          id: '2', dateline: 1522221270, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15214253209099'
         },
         {
-          id: '3', uid: '29', dateline: 1522221270, linkman: '销售宝技术支持', username: '网络影响力', sales: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
+          id: '3', dateline: 1522221270, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
         },
         {
-          id: '4', uid: '4', dateline: 1522221270, linkman: '销售宝技术支持', username: '楚风越韵  🏠', sales: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
+          id: '4', dateline: 1522221270, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
         },
         {
-          id: '5', uid: '2', dateline: 1522221270, linkman: '销售宝技术支持', username: '仇红波', sales: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
+          id: '5', dateline: 1522221270, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
         }
-      ]
+      ],
+      controldata1: [
+        { key: 'set', title: '更多设置' },
+        { key: 'stat', title: '文章统计' },
+        { key: 'createposter', title: '生成海报' }
+      ],
+      controldata2: [
+        { key: 'set', title: '更多设置' }
+      ],
+      showpopup1: false,
+      showpopup2: false,
+      clickdata1: {},
+      clickdata2: {}
     }
   },
   methods: {
-    setFocus () {
+    controlpopup1 (item) {
+      this.showpopup1 = !this.showpopup1
+      this.clickdata1 = item
     },
-    resultClick (item) {
+    controlpopup2 (item) {
+      this.showpopup2 = !this.showpopup2
+      this.clickdata2 = item
     },
-    getResult (val) {
+    popupevent (status) {
+
     },
-    onSubmit () {
+    clickpopup1 (key, item) {
+      this.showpopup1 = false
     },
-    onFocus () {
-    },
-    onCancel () {
+    clickpopup2 (key, item) {
+      this.showpopup2 = false
     }
   }
 }
@@ -151,5 +191,10 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/center.less';
+@import '../assets/fonts.less';
 @import '../assets/global.less';
+.rnews .bk-listplate1 .iconcell{width:45px;}
+.vux-popup-dialog .weui-cell__bd{text-align:center;}
+.vux-popup-dialog .weui-cell__ft{display:none;}
+
 </style>

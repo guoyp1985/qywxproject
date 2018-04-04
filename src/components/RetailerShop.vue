@@ -10,7 +10,7 @@
         auto
         loop>
       </swiper>
-      <div class="shopkeeper pt12 pb12 bg-white pl10 pr10 b_bottom_after">
+      <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
     		<div class="t-table">
     			<div class="t-cell v_middle w50">
     				<img class="avatarimg1" src="http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg" onerror="javascript:this.src='/mobile/data/images/nopic.jpg';">
