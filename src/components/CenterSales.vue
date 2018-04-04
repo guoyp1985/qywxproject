@@ -7,61 +7,28 @@
       <div style="position:absolute;top:10px;right:20px;height:35px;">
         <a style="color:#fff;" href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?action=changeinfo&from=setting"><span class="al al-set" style="font-size:20px;"></span></a>
         <a href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?module=retailer&action=messagelist" style="position:reltaive;color:#fff;margin-left:5px;">
-          <span class="al al-pinglun" style="font-size:20px;"></span>
+          <span class="al al-pinglun font20"></span>
           <span class="numicon">0</span>
         </a>
       </div>
       <div class="flex_center" style="position:absolute;right:20px;bottom:10px;color:#fff;font-size:14px;">
-        <span class="al al-trade-assurance" style="font-size:18px;"></span>
-        <span style="margin-left:3px;">我的收入</span>
+        <span class="al al-trade-assurance font18"></span>
+        <span class="ml3">我的收入</span>
       </div>
     </Salestopplate>
     <div class="vux-marquee" item-height=40 duration=2000>
       <marquee>
-        <marquee-item>
+        <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
             <CellBox align-items="left" class="font12 db-flex">
               <span class="clamp1">
-                <span class="color-blue mr3">butจุ๊บ</span>
-                <span class="color-gray1">查看了《固始首家爱心粥屋揭牌运营》</span>
+                <span class="color-blue mr3">{{item.username}}</span>
+                <span class="color-gray1">查看了《{{item.title}}》</span>
               </span>
-              <span class="w80 align_right color-gray1">2018-03-26</span>
+              <span class="w80 align_right color-gray1">{{ item.dateline | dateformat }}</span>
             </CellBox>
           </group>
         </marquee-item>
-          <marquee-item>
-            <group class="marqueeitem">
-              <CellBox align-items="left" class="font12 db-flex">
-                <span class="clamp1">
-                  <span class="color-blue mr3">gyp</span>
-                  <span class="color-gray1">查看了《固始首家爱心粥屋揭牌运营》</span>
-                </span>
-                <span class="w80 align_right color-gray1">2018-03-26</span>
-              </CellBox>
-            </group>
-          </marquee-item>
-          <marquee-item>
-            <group class="marqueeitem">
-              <CellBox align-items="left" class="font12 db-flex">
-                <span class="clamp1">
-                  <span class="color-blue mr3">YOUNG</span>
-                  <span class="color-gray1">查看了《固始首家爱心粥屋揭牌运营》</span>
-                </span>
-                <span class="w80 align_right color-gray1">2018-03-26</span>
-              </CellBox>
-            </group>
-          </marquee-item>
-          <marquee-item>
-            <group class="marqueeitem">
-              <CellBox align-items="left" class="font12 db-flex">
-                <span class="clamp1">
-                  <span class="color-blue mr3">小松鼠</span>
-                  <span class="color-gray1">查看了《固始首家爱心粥屋揭牌运营》</span>
-                </span>
-                <span class="w80 align_right color-gray1">2018-03-26</span>
-              </CellBox>
-            </group>
-          </marquee-item>
       </marquee>
     </div>
     <div class="grid-title">{{ $t('Content manage') }}</div>
@@ -139,6 +106,7 @@ Divider text:
 <script>
 import { Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
 import Salestopplate from './Salestopplate'
+import Time from '../../libs/time'
 
 export default {
   components: {
@@ -154,13 +122,61 @@ export default {
     MarqueeItem,
     CellBox
   },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd')
+    }
+  },
   data () {
     return {
-      // note: changing this line won't causes changes
-      // with hot-reload because the reloaded component
-      // preserves its current state and we are modifying
-      // its initial state.
-      msg: 'Hello World!'
+      marquedata: [
+        {
+          'id': 510,
+          'uid': 51,
+          'moduleid': 66,
+          'username': '贪吃小松鼠',
+          'dateline': 1522051625,
+          'title': '固始首家爱心粥屋揭牌运营',
+          'wid': 187,
+          'module': 'news'
+        }, {
+          'id': 503,
+          'uid': 51,
+          'moduleid': 74,
+          'username': '贪吃小松鼠',
+          'dateline': 1522041015,
+          'title': '你会给我买名牌包包吗？',
+          'wid': 187,
+          'module': 'product'
+        }, {
+          'id': 504,
+          'uid': 31,
+          'moduleid': 74,
+          'username': '๓妖怪吧！',
+          'dateline': 1522041162,
+          'title': '你会给我买名牌包包吗？',
+          'wid': 187,
+          'module': 'product'
+        }, {
+          'id': 511,
+          'uid': 16,
+          'moduleid': 66,
+          'username': 'gyp',
+          'dateline': 1522051633,
+          'title': '固始首家爱心粥屋揭牌运营',
+          'wid': 187,
+          'module': 'news'
+        }, {
+          'id': 512,
+          'uid': 49,
+          'moduleid': 66,
+          'username': 'butจุ๊บ',
+          'dateline': 1522052013,
+          'title': '固始首家爱心粥屋揭牌运营',
+          'wid': 187,
+          'module': 'news'
+        }
+      ]
     }
   }
 }

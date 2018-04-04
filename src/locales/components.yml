@@ -110,6 +110,33 @@ en:
   My Shares: My Shares
   My Favorites: My Favorites
   Exit: Exit
+  Content manage: Content manage
+  Activity: Activity
+  Product: Product
+  News: News
+  Customer mange: Customer mange
+  Rebate customer: Rebate customer
+  Sale chance: Sale chance
+  Contact customer: Contact customer
+  Order manage: Order manage
+  Order entry: Order entry
+  Order list: Order list
+  Divider text: Divider text
+  Data text: Data text
+  View number: View number
+  Share number: Share number
+  Sale number: Sale number
+  Sync from wx: Sync from wx
+  Name: Name
+  Sync From Wx: Sync From Wx
+  Gendar: Gendar
+  Company Name: Company Name
+  Phone Number: Phone Number
+  Cell Phone Number: Cell Phone Number
+  Confirm: Confirm
+  Credits Details: Credits Details
+  Credit Details: Credit Details
+  Sharing Details: Sharing Details
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -222,3 +249,48 @@ zh-CN:
   My Shares: 我的分享
   My Favorites: 我的收藏
   Exit: 退出
+  Content manage: 内容管理
+  Activity: 活动
+  Product: 商品
+  News: 文章
+  Customer mange: 客户管理
+  Rebate customer: 返点客户
+  Sale chance: 销售机会
+  Contact customer: 联系客户
+  Order manage: 订单管理
+  Order entry: 订单录入
+  Order list: 订单列表
+  Divider text: 如有其他疑问或建议，可联系客服
+  Data text: 数据
+  View number: 访问量
+  Share number: 分享数
+  Sale number: 销售额
+  Sync from wx: 同步微信资料
+  Name: 姓名
+  Sync From Wx: 同步微信资料
+  Gendar: 性别
+  Company Name: 公司名
+  Phone Number: 手机
+  Cell Phone Number: 手机
+  Confirm: 确认
+  Credits Details: 个人中心
+  Credit Details: 金币明细
+  Edit: 编辑
+  Delete: 删除
+  Address: 地址
+  Addressee: 收货人
+  Select Address: 选择地址
+  Please Select Address: 请选择地址
+  Detailed Address: 详细地址
+  Default Address: 默认地址
+  New Address: 新建地址
+  Done: 完成
+  Cancel: 取消
+  Save: 保存
+  Necessary: (必填)
+  No Address: 还未添加地址
+  Sharing Details: 分享明细
+  Share To Friend: 分享给好友
+  Article: 文章
+  Goods: 商品
+  Store: 店铺

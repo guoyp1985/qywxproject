@@ -12,23 +12,23 @@
 
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
         <tabbar-item :link="{path:'/home'}" :selected="route.path=='/home'">
-          <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;"><i class="fa-home"></i></span>
+          <span class="al al-home1 font20" slot="icon" style="position:relative;top: -2px;"></span>
           <span slot="label">{{ $t('Home') }}</span>
         </tabbar-item>
         <tabbar-item :link="{path:'/sales'}" :selected="route.path=='/sales'">
-          <span class="demo-icon-22" slot="icon">&#xe633;</span>
+          <span class="al al-tag font20" slot="icon"></span>
           <span slot="label">{{ $t('Sales') }}</span>
         </tabbar-item>
         <tabbar-item :link="{path:'/message'}" :selected="route.path=='/message'">
-          <span class="demo-icon-22" slot="icon">&#xe634;</span>
+          <span class="al al-mark font20" slot="icon"></span>
           <span slot="label">{{ $t('Message') }}</span>
         </tabbar-item>
         <tabbar-item :link="{path:'/favorite'}" :selected="route.path=='/favorite'">
-          <span class="demo-icon-22" slot="icon">&#xe634;</span>
+          <span class="al al-favor font20" slot="icon"></span>
           <span slot="label">{{ $t('Favorite') }}</span>
         </tabbar-item>
         <tabbar-item :link="{path:'/center'}" :selected="route.path=='/center'">
-          <span class="demo-icon-22" slot="icon">&#xe634;</span>
+          <span class="al al-peoplefill font20" slot="icon"></span>
           <span slot="label">{{ $t('Center') }}</span>
         </tabbar-item>
       </tabbar>
@@ -136,6 +136,9 @@ export default {
 @import '~vux/src/styles/reset.less';
 @import '~vux/src/styles/1px.less';
 @import '~vux/src/styles/tap.less';
+@import './assets/global';
+@import './assets/fonts.less';
+@import './assets/hack.less';
 
 body {
   background-color: #ffffff;

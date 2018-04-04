@@ -1,31 +1,21 @@
 <template>
-  <div>
-    <c-title>
+  <div id="personal-center">
+    <c-title :link-info="{path:'/profile'}"
+            :link-credit="{path:'/credit'}">
     </c-title>
-    <grid :cols="3">
-      <grid-item :label="$t('Search Orders')">
-        <img slot="icon" src="../assets/icon-holiday04.png">
-      </grid-item>
-      <grid-item :label="$t('View Productions')">
-        <img slot="icon" src="../assets/icon-newseon.png">
-      </grid-item>
-      <grid-item :label="$t('View Articles')">
-        <img slot="icon" src="../assets/icon-shenpi.png">
-      </grid-item>
-    </grid>
     <div class="grid-title">{{ $t('Service') }}</div>
-    <grid :cols="4">
-      <grid-item :label="$t('My Address')">
-        <img slot="icon" src="../assets/icon-holiday04.png">
+    <grid :show-lr-borders="false" :show-vertical-dividers="false">
+      <grid-item :label="$t('My Address')" link="/address">
+        <span slot="icon" class="al al-wodedizhi" style="color:#8c93ff"></span>
       </grid-item>
-      <grid-item :label="$t('My Shares')">
-        <img slot="icon" src="../assets/icon-newseon.png">
+      <grid-item :label="$t('My Shares')" link="/share">
+        <span slot="icon" class="al al-ai-share" style="color:#00d1a4;"></span>
       </grid-item>
-      <grid-item :label="$t('My Favorites')">
-        <img slot="icon" src="../assets/icon-shenpi.png">
+      <grid-item :label="$t('My Favorites')" link="/favorite">
+        <span slot="icon" class="al al-qietu19" style="color:#fbb266;"></span>
       </grid-item>
       <grid-item :label="$t('Exit')">
-        <img slot="icon" src="../assets/news.png">
+        <span slot="icon" class="al al-tuichu3" style="color:#f05e4b"></span>
       </grid-item>
     </grid>
   </div>
@@ -34,12 +24,6 @@
 <i18n>
 Personal Center:
   zh-CN: 个人中心
-Search Orders:
-  zh-CN: 查订单
-View Productions:
-  zh-CN: 挑商品
-View Articles:
-  zh-CN: 看文章
 Service:
   zh-CN: 服务
 My Address:
@@ -65,33 +49,20 @@ export default {
 }
 </script>
 
-<style>
-@import '~vux/src/styles/1px.less'
+<style lang="less">
+/* weui css hack */
+#personal-center .weui-grid__icon {
+  height: auto;
+  width: auto;
+  text-align: center;
+}
 
-.vux-demo {
-  text-align: center;
+#personal-center .weui-grids::before {
+  border-top: none;
+  height: 0;
 }
-.logo {
-  width: 100px;
-  height: 100px
-}
-.card-demo-flex {
-  display: flex;
-}
-.card-demo-content01 {
-  padding: 10px 0;
-}
-.card-padding {
-  padding: 15px;
-}
-.card-demo-flex > div {
-  flex: 1;
-  text-align: center;
-  font-size: 12px;
-}
-.card-demo-flex span {
-  color: #67b8e1;
-}
+
+/* css extension */
 .grid-center {
   display: block;
   text-align: center;
