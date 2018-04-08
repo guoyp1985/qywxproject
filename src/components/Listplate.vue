@@ -26,7 +26,7 @@ export default {
   padding-bottom:10px;
   position:relative;
 }
-.scroll_list .bk-listplate1:not(:last-child):after{
+.scroll_list .bk-listplate:not(:last-child):after{
   content:"";display:block;
 	background-color:@list-border-color;height:1px;overflow:hidden;
 	position: absolute;left: 0;right: 0;bottom:0px;

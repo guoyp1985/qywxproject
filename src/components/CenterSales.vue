@@ -5,7 +5,7 @@
       <div slot="txtarea" class="font18 color-white">YOUNG</div>
       <router-link slot="txtarea" class="font14 color-white" style="padding-top:8px;" to="/retailerShop">{{$t('My shop')}}</router-link>
       <div style="position:absolute;top:10px;right:20px;height:35px;">
-        <a style="color:#fff;" href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?action=changeinfo&from=setting"><span class="al al-set" style="font-size:20px;"></span></a>
+        <router-link class="color-white" style="padding-top:8px;" to="/retailerSetting"><span class="al al-set font20"></span></router-link>
         <a href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?module=retailer&action=messagelist" style="position:reltaive;color:#fff;margin-left:5px;">
           <span class="al al-pinglun font20"></span>
           <span class="numicon">0</span>

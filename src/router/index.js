@@ -14,6 +14,7 @@ import RetailerNews from '@/components/RetailerNews'
 import RetailerProductlist from '@/components/RetailerProductlist'
 import RetailerActivitylist from '@/components/RetailerActivitylist'
 import RetailerRevenue from '@/components/RetailerRevenue'
+import RetailerSetting from '@/components/RetailerSetting'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 
@@ -83,6 +84,10 @@ let routes = [
   {
     path: '/retailerRevenue',
     component: RetailerRevenue
+  },
+  {
+    path: '/retailerSetting',
+    component: RetailerSetting
   }
 ]
 

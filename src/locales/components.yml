@@ -160,6 +160,18 @@ en:
   Min buy price: Min buy price
   Limitbuy count: Limitbuy count
   Get cash explain: Get cash explain
+  Know txt: Know txt
+  Seller info setting: Seller info setting
+  Shop name: Shop name
+  Wechat qrcode: Wechat qrcode
+  Pay type: Pay type
+  Shop description: Shop description
+  Auto reply: Auto reply
+  Auto reply placeholder: Auto reply placeholder
+  Epand text: Epand text
+  Up text: Up text
+  Upload qrcode text: Upload qrcode text
+  Upload wechat qrcode: Upload wechat qrcode
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -334,3 +346,15 @@ zh-CN:
   Limitbuy count: 限购数量
   Myrevenue: 我的收入
   Get cash explain: 提现说明
+  Know txt: 知道了
+  Seller info setting: 卖家信息设置
+  Shop name: 店铺名称
+  Wechat qrcode: 微信二维码
+  Pay type: 支付方式
+  Shop description: 店铺介绍
+  Auto reply: 自动回复
+  Auto reply placeholder: 用户在线咨询时自动回复的消息
+  Epand text: 展开更多设置
+  Up text: 收起更多设置
+  Upload qrcode text: 如何上传个人微信二维码?
+  Upload wechat qrcode: 上传个人微信二维码
