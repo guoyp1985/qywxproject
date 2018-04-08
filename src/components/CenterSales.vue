@@ -2,8 +2,8 @@
   <div>
     <Salestopplate>
       <img src="http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg" slot="img" />
-      <div slot="txtarea" style="font-size:18px;color:#fff;">YOUNG</div>
-      <a slot="txtarea" href="" style="padding-top:8px;font-size:14px;color:#fff;">我的店铺</a>
+      <div slot="txtarea" class="font18 color-white">YOUNG</div>
+      <router-link slot="txtarea" class="font14 color-white" style="padding-top:8px;" to="/retailerShop">{{$t('My shop')}}</router-link>
       <div style="position:absolute;top:10px;right:20px;height:35px;">
         <a style="color:#fff;" href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?action=changeinfo&from=setting"><span class="al al-set" style="font-size:20px;"></span></a>
         <a href="http://gongxiaoshe.qiyeplus.com/mobile/retailer.php?module=retailer&action=messagelist" style="position:reltaive;color:#fff;margin-left:5px;">
@@ -13,7 +13,7 @@
       </div>
       <div class="flex_center" style="position:absolute;right:20px;bottom:10px;color:#fff;font-size:14px;">
         <span class="al al-trade-assurance font18"></span>
-        <span class="ml3">我的收入</span>
+        <router-link class="ml3" to="/retailerRevenue">{{$t('Myrevenue')}}</router-link>
       </div>
     </Salestopplate>
     <div class="vux-marquee" item-height=40 duration=2000>
@@ -33,13 +33,13 @@
     </div>
     <div class="grid-title">{{ $t('Content manage') }}</div>
     <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Activity')">
+      <grid-item :label="$t('Activity')" :link="{path:'/retailerActivitylist'}">
         <span slot="icon" class="al al-tianmaohaoquan icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
-      <grid-item :label="$t('Product')">
+      <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
         <span slot="icon" class="al al-shangpin icon-red db-in" style="margin-top:-6px;font-size:26px;"></span>
       </grid-item>
-      <grid-item :label="$t('News')">
+      <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
         <span slot="icon" class="al al-wenzhang3 icon-green db-in" style="margin-top:-6px;"></span>
       </grid-item>
     </grid>
@@ -49,19 +49,19 @@
         <span slot="icon" class="al al-xiaoshou icon-blue db-in font30" style="margin-top:-6px;"></span>
         <span class="al al-hot1 icon-red" style="position:absolute;font-size:34px;top:0;right:-1px;height:31px;line-height:31px;"></span>
       </grid-item>
-      <grid-item :label="$t('Sale chance')">
+      <grid-item :label="$t('Sale chance')" :link="{path:'/retailerSalechance'}">
         <span slot="icon" class="al al-yewujihui icon-blue1 db-in" style="margin-top:-6px;"></span>
       </grid-item>
-      <grid-item :label="$t('Contact customer')">
+      <grid-item :label="$t('Contact customer')" :link="{path:'/retailerCustomerlist'}">
         <span slot="icon" class="al al-lianxiren icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
     </grid>
     <div class="grid-title">{{ $t('Order manage') }}</div>
     <grid :cols="3" class="bk-grid">
-      <grid-item :label="$t('Order entry')">
+      <grid-item :label="$t('Order entry')" :link="{path:'/retailerAddorder'}">
         <span slot="icon" class="al al-xinzengdingdan icon-orange db-in" style="margin-top:-6px;"></span>
       </grid-item>
-      <grid-item :label="$t('Order list')">
+      <grid-item :label="$t('Order list')" :link="{path:'/retailerOrders'}">
         <span slot="icon" class="al al-dingdan icon-blue2 db-in" style="margin-top:-6px;"></span>
       </grid-item>
     </grid>

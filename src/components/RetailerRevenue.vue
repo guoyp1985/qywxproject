@@ -4,9 +4,9 @@
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Rebate customer')}}</div>
+          <div class="flex_cell font18 pl20">{{$t('Myrevenue')}}</div>
           <div class="pr10 align_right" style="width:150px;">
-            <div class="qbtn" style="border:#fff 1px solid;">{{$t('Share invite customer')}}</div>
+            <div class="qbtn" style="border:#fff 1px solid;">{{$t('Get cash explain')}}</div>
           </div>
         </div>
       </div>
@@ -30,7 +30,7 @@
               ref="search">
             </search>
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in customerdata" :key="index">
+              <Listplate v-for="(item,index) in tabdata1" :key="index">
                 <img slot="pic" :src="item.avatar" class="avatarimg1" />
                 <div slot="title" class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
                 <div slot="title" class="clamp1 mt5 font12 color-gray">带来消费：￥{{item.sales}}</div>
@@ -39,21 +39,13 @@
             </div>
           </div>
           <div v-if="(index == 1)">
-            <group class="textarea-outer">
-              <x-textarea class="x-textarea" :placeholder="$t('Message text')" :show-counter="false" :rows="1" autosize></x-textarea>
-            </group>
-            <div class="align_right pr10">
-              <div class="qbtn bg-green color-white w100" style="line-height:25px;">{{$t('Send text')}}</div>
+            <div class="scroll_list pl10 pr10 cols-2">
+              <Listplate v-for="(item,index) in tabdata2" :key="index">
+                <img slot="pic" :src="item.avatar" class="avatarimg1" />
+                <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
+                <div slot="title" class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.sales}}</div>
+              </Listplate>
             </div>
-          </div>
-          <div v-if="(index == 2)">
-          <div class="scroll_list pl10 pr10 cols-2">
-            <Listplate v-for="(item,index) in customerdata" :key="index">
-              <img slot="pic" :src="item.avatar" class="avatarimg1" />
-              <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
-              <div slot="title" class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.sales}}</div>
-            </Listplate>
-          </div>
           </div>
         </swiper-item>
       </swiper>
@@ -63,6 +55,8 @@
 </template>
 
 <i18n>
+Get cash explain:
+  zh-CN: 提现说明
 Rebate customer:
   zh-CN: 返点客户
 Share invite customer:
@@ -98,9 +92,26 @@ export default {
   },
   data () {
     return {
-      tabtxts: [ '返点客户', '发送消息', '返点记录' ],
+      tabtxts: [ '未提现', '已提现' ],
       tabmodel: 0,
-      customerdata: [
+      tabdata1: [
+        {
+          id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', username: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
+        },
+        {
+          id: '2', uid: '272', dateline: 1522221270, linkman: '周学江', username: 'zxj', sales: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
+        },
+        {
+          id: '3', uid: '29', dateline: 1522221270, linkman: '销售宝技术支持', username: '网络影响力', sales: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
+        },
+        {
+          id: '4', uid: '4', dateline: 1522221270, linkman: '销售宝技术支持', username: '楚风越韵  🏠', sales: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
+        },
+        {
+          id: '5', uid: '2', dateline: 1522221270, linkman: '销售宝技术支持', username: '仇红波', sales: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
+        }
+      ],
+      tabdata2: [
         {
           id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', username: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
         },

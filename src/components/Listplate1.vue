@@ -1,5 +1,5 @@
 <template>
-  <div class="bk-listplate scroll_item">
+  <div class="bk-listplate1 scroll_item">
     <div class="piccell flex_left">
       <slot name="pic"></slot>
     </div>
@@ -15,12 +15,12 @@
 </template>
 <script>
 export default {
-  name: 'Listplate'
+  name: 'Listplate1'
 }
 </script>
 
 <style lang="less">
-.bk-listplate{
+.bk-listplate1{
   display: -webkit-box;
   padding-top:10px;
   padding-bottom:10px;
@@ -35,15 +35,15 @@ export default {
 	-webkit-transform-origin: 0% 0%;
 	transform-origin: 0% 0%;
 }
-.bk-listplate .piccell{
+.bk-listplate1 .piccell{
   text-align:left;
   width:50px;
 }
-.bk-listplate .titlecell{
+.bk-listplate1 .titlecell{
   flex:1;
   text-align:left;
 }
-.bk-listplate .iconcell{
+.bk-listplate1 .iconcell{
   text-align:right;
   width:60px;
 }

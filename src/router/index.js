@@ -2,10 +2,19 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Center from '@/components/Center'
+import CenterSales from '@/components/CenterSales'
 import CenterOperating from '@/components/CenterOperating'
 import CenterService from '@/components/CenterService'
 import RetailerSales from '@/components/RetailerSales'
 import RetailerSalechance from '@/components/RetailerSalechance'
+import RetailerCustomerlist from '@/components/RetailerCustomerlist'
+import RetailerAddorder from '@/components/RetailerAddorder'
+import RetailerOrders from '@/components/RetailerOrders'
+import RetailerShop from '@/components/RetailerShop'
+import RetailerNews from '@/components/RetailerNews'
+import RetailerProductlist from '@/components/RetailerProductlist'
+import RetailerActivitylist from '@/components/RetailerActivitylist'
+import RetailerRevenue from '@/components/RetailerRevenue'
 import Profile from '@/components/Profile'
 import Credit from '@/components/Credit'
 import Share from '@/components/Share'
@@ -27,12 +36,56 @@ let routes = [
     component: Center
   },
   {
+    path: '/centerSales',
+    component: CenterSales
+  },
+  {
     path: '/centerOperating',
     component: CenterOperating
   },
   {
     path: '/centerService',
     component: CenterService
+  },
+  {
+    path: '/retailerSales',
+    component: RetailerSales
+  },
+  {
+    path: '/retailerSalechance',
+    component: RetailerSalechance
+  },
+  {
+    path: '/retailerCustomerlist',
+    component: RetailerCustomerlist
+  },
+  {
+    path: '/retailerAddorder',
+    component: RetailerAddorder
+  },
+  {
+    path: '/retailerOrders',
+    component: RetailerOrders
+  },
+  {
+    path: '/retailerShop',
+    component: RetailerShop
+  },
+  {
+    path: '/retailerNews',
+    component: RetailerNews
+  },
+  {
+    path: '/retailerProductlist',
+    component: RetailerProductlist
+  },
+  {
+    path: '/retailerActivitylist',
+    component: RetailerActivitylist
+  },
+  {
+    path: '/retailerRevenue',
+    component: RetailerRevenue
   },
   {
     path: '/components/',

@@ -1,17 +1,25 @@
 <template>
-  <div id="personal-address">
-    <!-- <c-title :link-info="{path:'/profile'}"
-            :link-credit="{path:'/credit'}">
-    </c-title> -->
-    <group v-if="!getItems.length">
-      <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
-    </group>
-    <group v-else>
-      <cell v-for="(item, index) in getItems" :key="index" :title="`${item.name} ${item.phone}`" :link="{path:`/address/${item.id}`,query:{data:item}}" :inline-desc='item.address | addressFormat'></cell>
-    </group>
-    <box gap="20px 10px">
-      <x-button type="primary" :link="{path:'/address/0',query:{}}">{{$t('New Address')}}</x-button>
-    </box>
+  <div id="order-search">
+    <Tab>
+      <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('All') }}</tab-item>
+      <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('To Be Delivered') }}</tab-item>
+      <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Shipped') }}</tab-item>
+      <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Completed') }}</tab-item>
+    </Tab>
+    <swiper v-model="selectedIndex" height="100px" :show-dots="false">
+      <swiper-item :key="0">
+        
+      </swiper-item>
+      <swiper-item :key="1">
+
+      </swiper-item>
+      <swiper-item :key="2">
+
+      </swiper-item>
+      <swiper-item :key="3">
+
+      </swiper-item>
+    </swiper>
   </div>
 </template>
 
@@ -19,22 +27,14 @@
 </i18n>
 
 <script>
-import { Group, Cell, CellBox, Popup, PopupHeader, XInput, XAddress, XSwitch, XButton, Box } from 'vux'
-import CTitle from './CTitle'
+import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 
 export default {
   components: {
-    Group,
-    Cell,
-    CellBox,
-    Popup,
-    PopupHeader,
-    XInput,
-    XAddress,
-    XSwitch,
-    XButton,
-    Box,
-    CTitle
+    Tab,
+    TabItem,
+    Swiper,
+    SwiperItem
   },
   data () {
     return {

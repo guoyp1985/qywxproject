@@ -15,11 +15,82 @@
           </div>
         </div>
       </div>
-      <tab class="x-tab">
-        <tab-item selected class="" @on-item-click="onItemClick">{{ $t('Article') }}</tab-item>
-        <tab-item @on-item-click="onItemClick">{{ $t('Goods') }}</tab-item>
-        <tab-item @on-item-click="onItemClick">{{ $t('Store') }}</tab-item>
+      <tab class="x-tab" v-model="selectedIndex">
+        <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
+        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Goods') }}</tab-item>
+        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
       </tab>
+      <swipeout v-show="selectedIndex===0">
+        <swipeout-item transition-mode="follow" v-for="(article, index) in articles" :key="index">
+          <div slot="right-menu">
+            <swipeout-button @click.native="onCancelClick('fav')" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+          </div>
+          <div slot="content" class="item-content vux-1px-t">
+            <div class="img-cell">
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="article.src"></x-img>
+            </div>
+            <div class="info-cell">
+              <div class="font14">
+                {{article.title}}
+              </div>
+              <div class="font12 color-gray">
+                {{article.date | dateFormat}}
+              </div>
+            </div>
+          </div>
+        </swipeout-item>
+      </swipeout>
+      <swipeout v-show="selectedIndex===1">
+        <swipeout-item transition-mode="follow" v-for="(goods, index) in goodses" :key="index">
+          <div slot="right-menu">
+            <swipeout-button @click.native="onCancelClick('fav')" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+          </div>
+          <div slot="content" class="item-content vux-1px-t">
+            <div class="img-cell">
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="goods.src"></x-img>
+            </div>
+            <div class="info-cell">
+              <div class="font14">
+                {{goods.title}}
+              </div>
+              <div class="font12 color-gray">
+                {{goods.date | dateFormat}}
+              </div>
+            </div>
+          </div>
+        </swipeout-item>
+      </swipeout>
+      <swipeout v-show="selectedIndex===2">
+        <swipeout-item transition-mode="follow" v-for="(store, index) in stores" :key="index">
+          <div slot="right-menu">
+            <swipeout-button @click.native="onCancelClick('fav')" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+          </div>
+          <div slot="content" class="item-content vux-1px-t">
+            <div class="img-cell">
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.src"></x-img>
+            </div>
+            <div class="info-cell">
+              <div class="font14">
+                {{store.title}}
+              </div>
+              <div class="font12 color-gray">
+                {{store.date | dateFormat}}
+              </div>
+            </div>
+          </div>
+        </swipeout-item>
+      </swipeout>
+      <!-- <swiper v-model="selectedIndex" height="100px" :show-dots="false">
+        <swiper-item key="0">
+          12123
+        </swiper-item>
+        <swiper-item key="1">
+          2312
+        </swiper-item>
+        <swiper-item key="2">
+          233
+        </swiper-item>
+      </swiper> -->
     </div>
   </div>
 </template>
@@ -29,25 +100,83 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Tab, TabItem } from 'vux'
+import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg } from 'vux'
+import Time from '../../libs/time'
 
 export default {
   components: {
     Grid,
     GridItem,
     Tab,
-    TabItem
+    TabItem,
+    Swiper,
+    SwiperItem,
+    Swipeout,
+    SwipeoutItem,
+    SwipeoutButton,
+    XImg
   },
   data () {
     return {
+      selectedIndex: 0,
       avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
       name: '黄一萌',
-      coins: 50
+      coins: 50,
+      articles: [
+        {
+          src: 'http://somedomain.somdomain/x.jpg',
+          title: '文章一',
+          date: 1522659301220,
+          url: '/component/cell'
+        },
+        {
+          src: 'http://somedomain.somdomain/x.jpg',
+          title: '文章二',
+          date: 1522659301220,
+          url: '/component/cell'
+        }
+      ],
+      goodses: [
+        {
+          src: 'http://somedomain.somdomain/x.jpg',
+          title: '商品一',
+          date: 1522659301220,
+          url: '/component/cell'
+        },
+        {
+          src: 'http://somedomain.somdomain/x.jpg',
+          title: '商品二',
+          date: 1522659301220,
+          url: '/component/cell'
+        }
+      ],
+      stores: [
+        {
+          src: 'http://somedomain.somdomain/x.jpg',
+          title: '店铺一',
+          date: 1522659301220,
+          url: '/component/cell'
+        },
+        {
+          src: 'http://somedomain.somdomain/x.jpg',
+          title: '店铺二',
+          date: 1522659301220,
+          url: '/component/cell'
+        }
+      ]
     }
   },
   methods: {
-    onItemClick () {
+    onItemClick (index) {
 
+    },
+    onCancelClick () {
+
+    }
+  },
+  filters: {
+    dateFormat: function (isoDate) {
+      return `收藏时间: ${new Time(isoDate).dateFormat('yyyy-MM-dd hh:mm')}`
     }
   }
 }
@@ -61,7 +190,7 @@ export default {
   left: 0;
   top: 0;
   right: 0;
-  background-image: url(../assets/images/bannerbg1.png);
+  background-image: url(../assets/images/bannerbg2.png);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -120,8 +249,53 @@ export default {
   margin-top: 10px;
 }
 
+#personal-favorite .item-content {
+  padding: 10px;
+  display: flex;
+}
+
+// #personal-favorite .item-content:first-of-type:before {
+//   content: " ";
+//   position: absolute;
+//   left: 0;
+//   top: 0;
+//   right: 0;
+//   height: 1px;
+//   border-top: 1px solid #C7C7C7;
+//   color: #C7C7C7;
+//   -webkit-transform-origin: 0 0;
+//   transform-origin: 0 0;
+//   -webkit-transform: scaleY(0.5);
+//   transform: scaleY(0.5);
+// }
+
+#personal-favorite .vux-swipeout-item:first-of-type .item-content:before {
+  height: 0px;
+  border-top: none;
+}
+
+#personal-favorite .item-content .img-cell {
+  display: flex;
+}
+
+#personal-favorite .item-content .img-cell img {
+  width: 40px;
+  height: 40px;
+}
+
+#personal-favorite .item-content .info-cell {
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  margin: auto 10px;
+}
+
 /* vux css hack */
 #personal-favorite .vux-tab {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+#personal-favorite .vux-tab .vux-tab-item {
+  color: #ffffff;
 }
 </style>

@@ -126,7 +126,6 @@ en:
   View number: View number
   Share number: Share number
   Sale number: Sale number
-  Sync from wx: Sync from wx
   Name: Name
   Sync From Wx: Sync From Wx
   Gendar: Gendar
@@ -137,6 +136,50 @@ en:
   Credits Details: Credits Details
   Credit Details: Credit Details
   Sharing Details: Sharing Details
+  info: Receiver info
+  Deliver info: Deliver info
+  Deliver commpany: Deliver commpany
+  Cancel txt: Cancel txt
+  Confirm txt: Confirm txt
+  Add order1: Add order1
+  Selection promotion: Selection promotion
+  All products: All products
+  Saled txt: Saled txt
+  Online consulting: Online consulting
+  Wechat contact: Wechat contact
+  Shop topline: Shop topline
+  Another batch: Another batch
+  Goodeazy: Goodeazy
+  Create news: Create news
+  Control text: Control text
+  Are you sure up?: Are you sure up?
+  Are you sure down?: Are you sure down?
+  Are you sure stop?: Are you sure stop?
+  Min buy price: Min buy price
+  Limitbuy count: Limitbuy count
+  Get cash explain: Get cash explain
+  Share invite customer: Share invite customer
+  Rebate manage: Rebate manage
+  Message text: Message text
+  Send text: Send text
+  Customer text: Customer text
+  Percent: Percent
+  Buy user: Buy user
+  Select user: Select user
+  Buy product: Buy product
+  Order price: Order price
+  Visit date: Visit date
+  Submit order: Submit order
+  Receiver info: Receiver info
+  Receiver: Receiver
+  Receiver placeholder: Receiver placeholder
+  Mobile: Mobile
+  Mobile placeholder: Mobile placeholder
+  Buyer address: Buyer address
+  Buyer address placeholder: Buyer address placeholder
+  Detail address: Detail address
+  Detail address placeholder: Detail address placeholder
+  Contact: Contact
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -265,7 +308,6 @@ zh-CN:
   View number: 访问量
   Share number: 分享数
   Sale number: 销售额
-  Sync from wx: 同步微信资料
   Name: 姓名
   Sync From Wx: 同步微信资料
   Gendar: 性别
@@ -294,3 +336,50 @@ zh-CN:
   Article: 文章
   Goods: 商品
   Store: 店铺
+  Share invite customer: 分享邀请返点客户
+  Rebate manage: 返点管理
+  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。'
+  Send text: 发送
+  Customer text: 客户
+  Percent: 成交概率
+  Buy user: 购买用户
+  Select user: 选择用户
+  Buy product: 购买商品
+  Order price: 订单金额
+  Visit date: 回访时间
+  Submit order: 提交订单
+  Receiver info: 收货人信息
+  Receiver: 收货人
+  Receiver placeholder: 收货人姓名
+  Mobile: 手机号
+  Mobile placeholder: 收货人手机号
+  Buyer address: 买家地址
+  Buyer address placeholder: 买家地址
+  Detail address: 详细地址
+  Detail address placeholder: 详细地址
+  Deliver info: 物流信息
+  Deliver commpany: 物流公司
+  Cancel txt: 取消
+  Confirm txt: 提交
+  Add order1: 返点客户
+  Selection promotion: 精选促销
+  All products: 全部商品
+  Online consulting: 在线咨询
+  Wechat contact: 微信联系
+  Shop topline: 店铺头条
+  Another batch: 换一批
+  Goodeazy: 易采集
+  Create news: 创建文章
+  Control text: 操作
+  Are you sure up?: 确定要上架吗？
+  Are you sure down?: 确定要下架吗？
+  Are you sure stop?: 确定要停止吗？
+  Min buy price: 最低成交价
+  Limitbuy count: 限购数量
+  Get cash explain: 提现说明
+  Saled txt: 销量
+  Contact: 联系
+  All: 全部
+  To Be Delivered: 待发货
+  Shipped: 待收货
+  Completed: 已完成
