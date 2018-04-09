@@ -15,6 +15,11 @@ import RetailerProductlist from '@/components/RetailerProductlist'
 import RetailerActivitylist from '@/components/RetailerActivitylist'
 import RetailerRevenue from '@/components/RetailerRevenue'
 import RetailerSetting from '@/components/RetailerSetting'
+import Userproducts from '@/components/Userproducts'
+import AddActivity from '@/components/AddActivity'
+import AddProduct from '@/components/AddProduct'
+import RetailerGoodeazy from '@/components/RetailerGoodeazy'
+import ServiceAddnews from '@/components/ServiceAddnews'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 
@@ -88,6 +93,26 @@ let routes = [
   {
     path: '/retailerSetting',
     component: RetailerSetting
+  },
+  {
+    path: '/userproducts',
+    component: Userproducts
+  },
+  {
+    path: '/addActivity',
+    component: AddActivity
+  },
+  {
+    path: '/addProduct',
+    component: AddProduct
+  },
+  {
+    path: '/retailerGoodeazy',
+    component: RetailerGoodeazy
+  },
+  {
+    path: '/serviceAddnews',
+    component: ServiceAddnews
   }
 ]
 

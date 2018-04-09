@@ -17,7 +17,7 @@
         </Productitemplate1>
       </template>
     </div>
-    <div class="s-bottom flex_center bg-orange color-white">{{ $t('Add product') }}</div>
+    <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">

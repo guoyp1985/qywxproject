@@ -172,6 +172,37 @@ en:
   Up text: Up text
   Upload qrcode text: Upload qrcode text
   Upload wechat qrcode: Upload wechat qrcode
+  Groupbuy: Groupbuy
+  Bargainbuy: Bargainbuy
+  Discount: Discount
+  Groupbuy description: Groupbuy description
+  Bargainbuy description: Bargainbuy description
+  Discount description: Discount description
+  Eazy get customer: Eazy get customer
+  Eazy get order: Eazy get order
+  New products: New products
+  View more promotion: View more promotion
+  Close: Close
+  Go to create: Go to create
+  Select product: Select product
+  Activity product: Activity product
+  Storage: Storage
+  Please select product: Please select product
+  Starttime: Starttime
+  Endtime: Endtime
+  Title: Title
+  Outer show product title: Outer show product title
+  Price: Price
+  User buy price: User buy price
+  Commission: Commission
+  Rebate user provide commision: Rebate user provide commision
+  Product description: Product description
+  Share title: Share title
+  Share title placeholder: Share title placeholder
+  Share description: Share description
+  Share description placeholder: Share description placeholder
+  Save: Save
+  Save and up: Save and up
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -201,7 +232,7 @@ zh-CN:
   Cash: 七天待还
   With footer: 带有 footer 的卡片
   Product details: 商品详情
-  More: 查看更多
+  More: 更多
   Custom content: 自定义内容
   Use header slot and content slot: 使用 header slot 和 content slot
   My Account: 我的账号
@@ -355,6 +386,37 @@ zh-CN:
   Auto reply: 自动回复
   Auto reply placeholder: 用户在线咨询时自动回复的消息
   Epand text: 展开更多设置
-  Up text: 收起更多设置
+  Up text: 收起
   Upload qrcode text: 如何上传个人微信二维码?
   Upload wechat qrcode: 上传个人微信二维码
+  Groupbuy: 团购
+  Bargainbuy: 砍价
+  Discount: 限时抢购
+  Groupbuy description: 买家可拼团购买商品，有效提高销量
+  Bargainbuy description: 买家可邀请好友帮忙砍价，以优惠价格购买
+  Discount description: 商品限时促销，增强用户紧迫感及购买欲望
+  Eazy get customer: 易获客
+  Eazy get order: 易成单
+  New products: 精选新品
+  View more promotion: 查看更多促销
+  Close: 关闭
+  Go to create: 立即创建
+  Select product: 选择商品
+  Activity product: 活动商品
+  Storage: 库存
+  Please select product: 请选择商品
+  Starttime: 开始时间
+  Endtime: 结束时间
+  Title: 标题
+  Outer show product title: 对外展示的商品标题
+  Price: 价格
+  User buy price: 用户最终购买价格
+  Commission: 佣金
+  Rebate user provide commision: 返点客售出商品后给予的佣金
+  Product description: 商品介绍
+  Share title: 分享标题
+  Share title placeholder: 如不填写默认调用商品标题
+  Share description: 分享描述
+  Share description placeholder: 如不填写自动截取商品介绍
+  Save: 保存
+  Save and up: 保存并上架

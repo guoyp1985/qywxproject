@@ -48,8 +48,8 @@
       </swiper>
     </div>
     <div class="s-bottom flex_center bg-blue3 color-white">
-      <div class="flex_cell bg-blue3 flex_center h_100" style="border-right:#fff 1px solid;">{{ $t('Goodeazy') }}</div>
-      <div class="bg-blue3 flex_center h_100" style="width:30%;">{{ $t('Create news') }}</div>
+      <router-link class="flex_cell bg-blue3 flex_center h_100" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
+      <router-link class="bg-blue3 flex_center h_100" to="/serviceAddnews" style="width:30%;">{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
