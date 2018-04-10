@@ -13,7 +13,7 @@
     <div class="padding10 border bg-white bordertxt font14">{{$t('Sale chance')}}</div>
     <div>
       <timeline class="x-timeline">
-        <timeline-item v-for="(item, index) in chancedata" :key="index">
+        <timeline-item v-for="(item, index) in chancedata" :key="item.id">
           <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
           <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
           <div class="t-table">

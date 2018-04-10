@@ -2,7 +2,7 @@
   <div class="containerarea bg-page font14 s-havebottom">
     <div class="s-container" style="top:0px;">
       <template v-if="productdata.length > 0">
-        <Productitemplate1 v-for="(item,index) in productdata" class="bg-page">
+        <Productitemplate1 v-for="(item,index) in productdata" :key="item.id" class="bg-page">
           <div slot="icon" v-if="item.moderate == 0" class="icon down"></div>
 		      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
           <div slot="rightcell">
@@ -22,12 +22,15 @@
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <template v-for="(row,index1) in controldata1">
-              <div class="item flex_center" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
-              <div class="item flex_center" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
-              <div class="item flex_center" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down'">{{ row.title }}</div>
-            </template>
-            <div class="item flex_center close mt10" @click="clickpopup('row.key')">{{ $t('Cancel txt') }}</div>
+            <div class="item" v-for="(row,index1) in controldata1" :key="index1">
+              <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
+              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
+              <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
+              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
+            </div>
+            <div class="item close mt10" @click="clickpopup('row.key')">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
           </div>
         </div>
       </popup>

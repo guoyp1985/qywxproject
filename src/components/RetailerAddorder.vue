@@ -98,7 +98,7 @@
           <Forminputplate>
             <span slot="title">{{ $t('Deliver commpany') }}</span>
             <select class="w_100" style="height:27px;">
-              <option v-for="(item,index) in deliverdata" value="item.id">{{ item.value }}</option>
+              <option v-for="(item,index) in deliverdata" :key="index" value="item.id">{{ item.value }}</option>
             </select>
           </Forminputplate>
         </div>

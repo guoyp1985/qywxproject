@@ -203,6 +203,19 @@ en:
   Share description placeholder: Share description placeholder
   Save: Save
   Save and up: Save and up
+  News title: News title
+  Expand more options: Expand more options
+  Up more options: Up more options
+  Cover photo: Cover photo
+  Summary: Summary
+  Label: Label
+  Label can not empty: Label can not empty
+  Url paster here: Url paster here
+  Collect: Collect
+  Collect record: Collect record
+  My orders: My orders
+  Message: Message
+  Stat: Stat
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -417,6 +430,19 @@ zh-CN:
   Share title: 分享标题
   Share title placeholder: 如不填写默认调用商品标题
   Share description: 分享描述
-  Share description placeholder: 如不填写自动截取商品介绍
+  Share description placeholder: 如不填写自动截取文章内容
   Save: 保存
   Save and up: 保存并上架
+  News title: 文章标题
+  Expand more options: 展开更多选项
+  Up more options: 收起更多选项
+  Cover photo: 封面图像
+  Summary: 摘要
+  Label: 标签
+  Label can not empty: 标签不能为空
+  Url paster here: 链接粘贴在此处
+  Collect: 采集
+  Collect record: 采集记录
+  My orders: 我的订单
+  Message: 消息
+  Stat: 统计

@@ -15,10 +15,10 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="scroll_list pl10 pr10">
-              <Listplate1 v-for="(item,index) in tabdata1" >
+              <Listplate1 v-for="(item,index1) in tabdata1" :key="item.id">
                 <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
                 <div slot="title" class="clamp1 font16">{{item.title}}</div>
                 <div slot="title" class="clamp1 font12 color-gray v_middle">
@@ -32,7 +32,7 @@
           </template>
           <template v-if="(index == 1)">
             <div class="scroll_list pl10 pr10">
-              <Listplate1 v-for="(item,index) in tabdata2" >
+              <Listplate1 v-for="(item,index) in tabdata2" :key="item.id">
                 <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
                 <div slot="title" class="clamp1 font14">{{item.title}}</div>
                 <div slot="title" class="clamp1 mt5 font12 color-gray ">
@@ -48,19 +48,23 @@
       </swiper>
     </div>
     <div class="s-bottom flex_center bg-blue3 color-white">
-      <router-link class="flex_cell bg-blue3 flex_center h_100" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
+      <router-link class="flex_cell bg-blue3 flex_center h_100" to="/retailerGoodeazy" style="border-right:#fff 1px solid;">{{ $t('Goodeazy') }}</router-link>
       <router-link class="bg-blue3 flex_center h_100" to="/serviceAddnews" style="width:30%;">{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list">
-            <template v-for="(row,index1) in controldata1">
-              <div class="item flex_center" @click="clickpopup1(row.key,clickdata1)">
+            <div class="item" v-for="(row,index1) in controldata1" :key="index1">
+              <router-link class="inner" v-if="row.key == 'stat'" to="/newsStat">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/serviceAddnews',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
+              <div class="inner" v-else @click="clickpopup1(row.key,clickdata1)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
-            </template>
-            <div class="item flex_center close mt10" @click="clickpopup1('row.key,clickdata1')">{{ $t('Cancel txt') }}</div>
+            </div>
+            <div class="item close mt10" @click="clickpopup1('row.key,clickdata1')">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
           </div>
         </div>
       </popup>
@@ -69,12 +73,14 @@
       <popup class="menuwrap" v-model="showpopup2" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list">
-            <template v-for="(row,index1) in controldata2">
-              <div class="item flex_center" @click="clickpopup2(row.key,clickdata2)">
+            <div class="item" v-for="(row,index1) in controldata2" :key="index1">
+              <div class="inner" @click="clickpopup2(row.key,clickdata2)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
-            </template>
-            <div class="item flex_center close mt10" @click="clickpopup2('row.key,clickdata2')">{{ $t('Cancel txt') }}</div>
+            </div>
+            <div class="item close mt10" @click="clickpopup2('row.key,clickdata2')">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
           </div>
         </div>
       </popup>

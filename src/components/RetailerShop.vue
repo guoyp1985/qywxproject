@@ -19,7 +19,7 @@
     				<div class="clamp1 font16">{{ shopname }}</div>
     			</div>
   				<div class="t-cell v_middle align_right" style="width:160px;">
-            <router-link class="font12 color-gray5 mr5 v_middle" to="/retailerShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
+            <router-link class="font12 color-gray5 mr5 v_middle" :to="{path:'/retailerProductlist',query:{store:1}}"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
             <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Sales center')}}</router-link>
   				</div>
   			</div>
@@ -30,7 +30,7 @@
     		</div>
         <div class="b_top_after"></div>
         <div class="activitylist">
-          <div v-for="(item,index) in activitydata" class="bg-page">
+          <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
             <Groupbuyitemplate v-if="item.type == 'groupbuy'">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
               <span slot="title">{{ item.title }}</span>
@@ -55,7 +55,7 @@
     		</div>
         <div class="b_top_after"></div>
         <div class="productlist squarepic">
-          <Productitemplate v-for="(item,index) in productdata">
+          <Productitemplate v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" :src="item.photo" />
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
@@ -78,7 +78,7 @@
     		</div>
         <div class="b_top_after"></div>
         <div class="productlist">
-          <Newsitemplate v-for="(item,index) in toplinedata">
+          <Newsitemplate v-for="(item,index) in toplinedata" :key="item.id">
             <img slot="photo" :src="item.photo" class="v_middle" style="width: 70px; height: 50px;" />
             <span slot="title">{{ item.title }}</span>
             <span slot="date">{{ item.dateline | dateformat }}</span>

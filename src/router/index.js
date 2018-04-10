@@ -20,6 +20,13 @@ import AddActivity from '@/components/AddActivity'
 import AddProduct from '@/components/AddProduct'
 import RetailerGoodeazy from '@/components/RetailerGoodeazy'
 import ServiceAddnews from '@/components/ServiceAddnews'
+import RetailerMessagelist from '@/components/RetailerMessagelist'
+import DefaultStat from '@/components/DefaultStat'
+import GroupbuyStat from '@/components/GroupbuyStat'
+import BargainbuyStat from '@/components/BargainbuyStat'
+import ActivityStat from '@/components/ActivityStat'
+import NewsStat from '@/components/NewsStat'
+import ProductStat from '@/components/ProductStat'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 
@@ -113,6 +120,34 @@ let routes = [
   {
     path: '/serviceAddnews',
     component: ServiceAddnews
+  },
+  {
+    path: '/retailerMessagelist',
+    component: RetailerMessagelist
+  },
+  {
+    path: '/defaultStat',
+    component: DefaultStat
+  },
+  {
+    path: '/groupbuyStat',
+    component: GroupbuyStat
+  },
+  {
+    path: '/bargainbuyStat',
+    component: BargainbuyStat
+  },
+  {
+    path: '/activityStat',
+    component: ActivityStat
+  },
+  {
+    path: '/newsStat',
+    component: NewsStat
+  },
+  {
+    path: '/productStat',
+    component: ProductStat
   }
 ]
 

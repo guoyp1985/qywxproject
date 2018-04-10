@@ -13,7 +13,7 @@
       <template v-if="activitydata.length > 0">
         <div class="padding5 align_center color-red bold font16 bg-white" style="line-height: 37px;"><i class="al al-tagfill font18 mr10"></i>{{ $t('Selection promotion') }}</div>
         <div class="activitylist">
-          <div v-for="(item,index) in activitydata" class="bg-page">
+          <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
             <Groupbuyitemplate v-if="item.type == 'groupbuy'" style="background-color:#efeff4 !important;">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
               <span slot="title">{{ item.title }}</span>
@@ -38,7 +38,7 @@
         <div class="padding5 align_center color-red bold font16 bg-white" style="line-height: 37px;"><i class="al al-goodsnewfill font18 mr10"></i>{{ $t('New products') }}</div>
         <div class="b_top_after"></div>
         <div class="productlist squarepic mb12">
-          <Productitemplate v-for="(item,index) in productdata">
+          <Productitemplate v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" :src="item.photo" />
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>

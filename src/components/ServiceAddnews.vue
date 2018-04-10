@@ -1,49 +1,22 @@
 <template>
-  <div class="containerarea s-havebottom font14">
+  <div class="containerarea s-havebottom font14 addnews">
     <div class="s-container" style="top:0;">
       <form>
         <div class="form-item required">
           <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('News title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" name="title" :placeholder="$t('Outer show product title')" />
+              <input type="text" class="input" name="title" :placeholder="$t('News title')" />
             </div>
           </div>
         </div>
         <div class="form-item required">
-          <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" name="title" :placeholder="$t('User buy price')" />
-            </div>
-            <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
-          </div>
-        </div>
-        <div class="form-item">
-          <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Commission') }}</div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" name="rebate" :placeholder="$t('Rebate user provide commision')" />
-            </div>
-            <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
-          </div>
-        </div>
-        <div class="form-item required">
-          <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" name="storage" :placeholder="$t('Storage')" />
-            </div>
-            <div class="t-cell v_middle align_right font12" style="width:40px;">件</div>
-          </div>
-        </div>
-        <div class="form-item required">
-          <div class="pt10 pb5">封面图像 <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span> （图像最佳宽高比为1:1）</div>
+          <div class="pt10 pb5">{{ $t('Cover photo') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span> （图像最佳宽高比为9:5）</div>
           <div>
             <input type="hidden" name="qrcode" required="" value="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" class="no-fastclick">
             <div class="q_photolist align_left" uploadform=".uploadfileForm">
               <template v-if="photoarr.length > 0">
-                <div v-for="(item,index) in photoarr" class="photoitem">
+                <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                   <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
                     <div class="close" @click="deletephoto(item,index)">×</div>
                   </div>
@@ -65,44 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="pl10 pr10 pb5 pt10">商品介绍（图像宽高不受限制）</div>
-        <group class="textarea-outer">
-          <x-textarea class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
-        </group>
-        <div class="b_bottom_after">
-          <input type="hidden" name="qrcode" required="" value="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" class="no-fastclick">
-          <div class="q_photolist align_left" uploadform=".uploadfileForm">
-            <template v-if="photoarr1.length > 0">
-              <div v-for="(item,index) in photoarr1" class="photoitem">
-                <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
-                  <div class="close" @click="deletephoto1(item,index)">×</div>
-                </div>
-              </div>
-            </template>
-            <div v-if="photoarr1.length < maxnum1" class="photoitem add">
-              <div class="inner">
-                <input type="file" style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;" @change="filechange1">
-                <div class="t-table">
-                  <div class="t-cell">
-                    <div class="txt">
-                      <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                      <div><span class="havenum">{{ gethavenum1 }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div v-show="showmore">
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share title') }}</div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input type="text" class="input" name="title" :placeholder="$t('Outer show product title')" />
-              </div>
-            </div>
-          </div>
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share description') }}</div>
@@ -113,35 +49,58 @@
               </div>
             </div>
           </div>
+          <div class="form-item">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Summary') }}</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <group class="textarea-outer" style="padding:10px 0;">
+                  <x-textarea class="x-textarea" :placeholder="$t('Summary')" :show-counter="false" :rows="1" autosize></x-textarea>
+                </group>
+              </div>
+            </div>
+          </div>
+          <div class="form-item">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Label') }}</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div v-for="(item,index) in labelarr" :key="index" class="labelitem">
+                  <span>{{ item }}</span>
+                  <div class="close" @click="deletelabel(item,index)">×</div>
+                </div>
+                <div class="addbtn" @click="addlabel">+</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
-        <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('More') }}<i class="al al-jiantouyoushuang- font14"></i></div>
+        <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up more options') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
+        <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Expand more options') }}<i class="al al-jiantouyoushuang- font14"></i></div>
       </form>
     </div>
-    <div class="s-bottom flex_center bg-orange color-white">
-      <div class="flex_cell flex_center h_100 bg-orange color-white" style="border-right:#fff 1px solid;">{{ $t('Save') }}</div>
-      <div class="flex_cell flex_center h_100 bg-orange color-white">{{ $t('Save and up') }}</div>
+    <div class="s-bottom flex_center bg-green color-white">{{ $t('Save') }}</div>
+    <div v-transfer-dom>
+      <confirm v-model="showconfirm"
+      show-input
+      :title="confirmtitle"
+      :input-attrs="{type: 'text'}"
+      @on-cancel="onCancel"
+      @on-confirm="onConfirm">
+      </confirm>
+    </div>
+    <div v-transfer-dom>
+      <alert v-model="showalert">{{ $t('Label can not empty') }}</alert>
     </div>
   </div>
 </template>
 
 <i18n>
-Title:
-  zh-CN: 标题
-Outer show product title:
-  zh-CN: 对外展示的商品标题
-Price:
-  zh-CN: 价格
-User buy price:
-  zh-CN: 用户最终购买价格
-Commission:
-  zh-CN: 佣金
-Rebate user provide commision:
-  zh-CN: 返点客售出商品后给予的佣金
-Storage:
-  zh-CN: 库存
-Product description:
-  zh-CN: 商品介绍
+News title:
+  zh-CN: 文章标题
+Cover photo:
+  zh-CN: 封面图像
+Expand more options:
+  zh-CN: 展开更多选项
+Up more options:
+  zh-CN: 收起更多选项
 Share title:
   zh-CN: 分享标题
 Share title placeholder:
@@ -149,39 +108,41 @@ Share title placeholder:
 Share description:
   zh-CN: 分享描述
 Share description placeholder:
-  zh-CN: 如不填写自动截取商品介绍
+  zh-CN: 如不填写自动截取文章内容
+Label:
+  zh-CN: 标签
 Save:
   zh-CN: 保存
-Save and up:
-  zh-CN: 保存并上架
-More:
-  zh-CN: 更多
-Up text:
-  zh-CN: 收起
+Label can not empty:
+  zh-CN: 标签不能为空
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea } from 'vux'
+import { Group, XInput, XTextarea, Confirm, TransferDomDirective as TransferDom, Alert } from 'vux'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Group,
     XInput,
-    XTextarea
+    XTextarea,
+    Confirm,
+    Alert
   },
   data () {
     return {
-      photoarr: [ 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg' ],
-      maxnum: 9,
+      photoarr: [],
+      maxnum: 1,
       havenum: 0,
       showaddphoto: true,
       showphotoitem: false,
-      photoarr1: [ 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg' ],
-      maxnum1: 19,
-      havenum1: 0,
-      showaddphoto1: true,
-      showphotoitem1: false,
-      showmore: false
+      showmore: false,
+      labelarr: [],
+      confirmtitle: '标签',
+      showconfirm: false,
+      showalert: false
     }
   },
   watch: {
@@ -201,31 +162,14 @@ export default {
         ret = true
       }
       return ret
-    },
-    havenum1: function (val) {
-      this.havenum1 = this.photoarr1.length
-    },
-    showaddphoto1: function (val) {
-      let ret = false
-      if (this.photoarr1.length < this.maxnum1) {
-        ret = true
-      }
-      return ret
-    },
-    showphotoitem1: function (val) {
-      let ret = false
-      if (this.photoarr1.length > 0) {
-        ret = true
-      }
-      return ret
     }
   },
   computed: {
     gethavenum: function () {
       return this.photoarr.length
     },
-    gethavenum1: function () {
-      return this.photoarr1.length
+    getquery: function () {
+      return this.$route.query
     }
   },
   methods: {
@@ -251,30 +195,30 @@ export default {
         }
       }
     },
-    filechange1 (e) {
-      if (this.havenum1 < this.maxnum1) {
-        this.havenum1 += 1
-        this.photoarr1.push('http://ossgxs.boka.cn/month_201804/15231791164010.jpg')
-      } else {
-        this.showaddphoto1 = false
-      }
-      this.showphotoitem1 = true
+    addlabel () {
+      this.showconfirm = true
     },
-    deletephoto1 (item, index) {
-      for (var i = 0; i < this.photoarr1.length; i++) {
+    deletelabel (item, index) {
+      for (var i = 0; i < this.labelarr.length; i++) {
         if (i === index) {
-          this.photoarr1.splice(i, 1)
-          this.havenum1 -= 1
-          if (this.photoarr1.length === 0) {
-            this.showaddphoto1 = true
-            this.showphotoitem1 = false
-          }
+          this.labelarr.splice(i, 1)
           break
         }
       }
     },
     expandevent () {
       this.showmore = !this.showmore
+    },
+    onCancel () {
+      this.showconfirm = false
+    },
+    onConfirm (val) {
+      let str = val.replace(/\s+/g, '')
+      if (str === '') {
+        this.showalert = true
+      } else {
+        this.labelarr.push(val)
+      }
     }
   }
 }
@@ -293,5 +237,39 @@ export default {
 	transform: scaleY(0.5) translateY(0.5px);
 	-webkit-transform-origin: 0% 0%;
 	transform-origin: 0% 0%;
+}
+
+.addnews .addbtn{
+  display:inline-block;
+  width:30px;
+  height:20px;
+  line-height:20px;
+  border-radius:3px;
+  text-align:center;
+  border: 1px solid #17a8e0;
+  color: #17a8e0;
+}
+.addnews .labelitem{
+  display: inline-block;
+  border: 1px solid #ccc;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 3px;
+  position: relative;
+  padding: 0 3px;
+  margin: 0 10px 0 0px;
+}
+.addnews .close{
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #f00f0f;
+  color: #fff;
+  line-height: 14px;
+  text-align: center;
 }
 </style>

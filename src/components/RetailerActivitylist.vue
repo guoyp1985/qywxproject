@@ -8,7 +8,7 @@
         <swiper-item v-for="(item, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="scroll_list">
-              <Listplate2 v-for="(item,index) in tabdata1" :class="`${item.type}item bg-white mb5 pl10 pr10`">
+              <Listplate2 v-for="(item,index) in tabdata1" :key="item.id" :class="`${item.type}item bg-white mb5 pl10 pr10`">
                 <div v-if="item.isfinished === 1" class="icon finished"></div>
                 <img slot="pic" :src="item.photo" />
                 <div slot="title" class="clamp1 font12">{{item.title}}</div>
@@ -21,7 +21,9 @@
                     <div slot="title" class="clamp1 font12 color-gray mt5">{{ $t('Limitbuy count') }} {{ item.limitbuy }}</div>
                   </template>
                 <div slot="btn" class="w_100">
-                  <div class="qbtn1 bg-orange1 color-white">统计</div>
+                  <router-link class="qbtn1 bg-orange1 color-white" to="/groupbuyStat" v-if="item.type == 'groupbuy'">{{ $t('Stat') }}</router-link>
+                  <router-link class="qbtn1 bg-orange1 color-white" to="/bargainbuyStat" v-else-if="item.type == 'bargainbuy'">{{ $t('Stat') }}</router-link>
+                  <router-link class="qbtn1 bg-orange1 color-white" to="/activityStat" v-else>{{ $t('Stat') }}</router-link>
                   <div class="qbtn1 bg-orange1 color-white mt5" @click="stopevent(item)">停止</div>
                 </div>
                 <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -185,6 +187,8 @@ Close:
   zh-CN: 关闭
 Go to create:
   zh-CN: 立即创建
+Stat:
+  zh-CN: 统计
 </i18n>
 
 <script>

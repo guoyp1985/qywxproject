@@ -312,6 +312,13 @@ a{color:inherit;}
 
 .containerarea{width:100%;height:100%;position:relative;}
 
+.bannerbg{
+  width: 100%;
+  background-image: url(images/bannerbg2.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
 .s-topbanner{
 	width:100%;height:88px;position:absolute;left:0;top:0;right:0;
 	background-image:url(images/bannerbg2.png);background-repeat:no-repeat;background-position:center center;background-size:cover;
@@ -371,8 +378,9 @@ a{color:inherit;}
 .squarepic .desbox{width: 100%;padding: 5px;font-size:12px;color: #000;background-color:#fff;}
 
 .menuwrap .list{background-color: #efeff4;}
-.menuwrap .list .item{padding:12px 0;background-color:#fff;}
+.menuwrap .list .item{background-color:#fff;}
 .menuwrap .list .item:not(:last-child){margin-bottom:1px;}
+.menuwrap .list .item .inner{padding:12px 0;text-align:center;display:block;}
 
 .x-toptab,.x-toptab.vux-tab-warp{position:absolute;left:0;top:0;right:0;height:54px;padding-top:0;}
 .havetoptab .s-container{top:54px;}
@@ -504,3 +512,18 @@ a{color:inherit;}
 	display:flex;justify-content: center;align-items: center;
 }
 .q_photolist .photoitem .clip i{font-size:12px;font-weight:bold;}
+
+.scroll_list .scroll_item{position:relative;}
+.scroll_list .scroll_item:not(:last-child):after{
+  content:"";display:block;
+	background-color:@list-border-color;height:1px;overflow:hidden;
+	position: absolute;left: 0;right: 0;bottom:0px;
+	-webkit-transform: scaleY(0.5) translateY(0.5px);
+	transform: scaleY(0.5) translateY(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
+}
+
+.datestate{display:inline-block;background-color:#ff3b30;line-height:18px;color:#fff;padding:0 5px;border-radius:4px;}
+.datestate.today{background-color:#4cd964;}
+.datestate.yesterday{background-color:orange;}

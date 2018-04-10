@@ -18,11 +18,11 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
               <div class="scroll_list pl10 pr10">
-                <Checkboxitemplate v-for="(item,index) in getCheckdata" >
+                <Checkboxitemplate v-for="(item,index1) in getCheckdata" :key="item.id">
                   <input slot="checkbox" type="checkbox" :checked="item.checked" @click="checkboxclick(item)" />
                   <img slot="pic" :src="item.avatar" class="avatarimg1" />
                   <div slot="title" class="clamp1">{{item.buyername}}</div>
@@ -47,7 +47,7 @@
           </template>
           <template v-if="(index == 1)">
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in tabdata2" >
+              <Listplate v-for="(item,index1) in tabdata2" :key="item.id">
                 <img slot="pic" :src="item.avatar" class="avatarimg1" />
                 <div slot="title" class="clamp1">{{item.buyername}}</div>
                 <div slot="title" class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span>{{ item.products }}</span></div>

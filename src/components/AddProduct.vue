@@ -43,7 +43,7 @@
             <input type="hidden" name="qrcode" required="" value="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" class="no-fastclick">
             <div class="q_photolist align_left" uploadform=".uploadfileForm">
               <template v-if="photoarr.length > 0">
-                <div v-for="(item,index) in photoarr" class="photoitem">
+                <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                   <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
                     <div class="close" @click="deletephoto(item,index)">×</div>
                   </div>
@@ -73,7 +73,7 @@
           <input type="hidden" name="qrcode" required="" value="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" class="no-fastclick">
           <div class="q_photolist align_left" uploadform=".uploadfileForm">
             <template v-if="photoarr1.length > 0">
-              <div v-for="(item,index) in photoarr1" class="photoitem">
+              <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
                 <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
                   <div class="close" @click="deletephoto1(item,index)">×</div>
                 </div>

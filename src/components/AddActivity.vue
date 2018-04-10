@@ -37,17 +37,15 @@
           <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
         </Forminputplate>
         <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
-        <template v-for="(item,index) in formdata">
-          <div v-if="item.type === 'text'" class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{item.title}}<span v-if="item.required" class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input type="text" class="input" :name="item.name" :placeholder="item.title" />
-              </div>
-              <div v-if="item.unit && item.unit != ''" class="t-cell v_middle align_right font12" style="width:40px;">{{ item.unit }}</div>
+        <div class="form-item" v-for="(item,index) in formdata" :key="item.id">
+          <div class="t-table" v-if="item.type === 'text'">
+            <div class="t-cell title-cell w80 font14 v_middle">{{item.title}}<span v-if="item.required" class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <input type="text" class="input" :name="item.name" :placeholder="item.title" />
             </div>
+            <div v-if="item.unit && item.unit != ''" class="t-cell v_middle align_right font12" style="width:40px;">{{ item.unit }}</div>
           </div>
-        </template>
+        </div>
       </form>
     </div>
     <div class="s-bottom flex_center bg-orange color-white">{{ $t('Go to create') }}</div>
@@ -66,7 +64,7 @@
               ref="search">
             </search>
             <div class="scroll_list">
-              <Radioitemplate v-for="(item,index) in getRadiodata" class="pl10 pr10">
+              <Radioitemplate v-for="(item,index) in getRadiodata" :key="item.id" class="pl10 pr10">
                 <input slot="radio" type="radio" name="product" :checked="item.checked" @click="radioclick(item)" />
                 <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="v_middle" />
                 <div slot="title" class="clamp1">{{item.title}}</div>
