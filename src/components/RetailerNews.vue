@@ -74,7 +74,8 @@
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata2" :key="index1">
-              <div class="inner" @click="clickpopup2(row.key,clickdata2)">
+              <router-link class="inner" v-if="row.key == 'set'" :to="{path:'/serviceAddnews',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
+              <div v-else class="inner" @click="clickpopup2(row.key,clickdata2)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
             </div>
