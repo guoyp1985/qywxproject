@@ -18,13 +18,13 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index1) in orderdataall" :key="index1">
+              <Orderitemplate v-for="(item,index1) in orderdataall" :key="item.id">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,index2) in item.orderlist" :key="index2">
+                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
@@ -54,10 +54,10 @@
           </div>
           <div v-if="(index == 1)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index) in orderdata1" :key="index">
+              <Orderitemplate v-for="(item,index1) in orderdata1" :key="item.id">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,index2) in item.orderlist" :key="index2">
+                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
@@ -81,10 +81,10 @@
           </div>
           <div v-if="(index == 2)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index) in orderdata2" :key="index">
+              <Orderitemplate v-for="(item,index1) in orderdata2" :key="item.id">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,index2) in item.orderlist" :key="index2">
+                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
@@ -111,10 +111,10 @@
           </div>
           <div v-if="(index == 3)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index) in orderdata3" :key="index">
+              <Orderitemplate v-for="(item,index1) in orderdata3" :key="item.id">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,index2) in item.orderlist" :key="index2">
+                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
@@ -144,9 +144,9 @@
     </div>
     <div class="s-bottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
-        <router-link class="t-cell item" to="/retailerShop">{{$t('My shop')}}</router-link>
-        <router-link class="t-cell item" to="/centerSales">{{$t('Sales center')}}</router-link>
-        <div class="t-cell item active">我的订单</div>
+        <router-link class="t-cell item" to="/retailerShop">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
+        <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
     </div>
   </div>
@@ -155,6 +155,8 @@
 <i18n>
 Add order1:
   zh-CN: 返点客户
+My orders:
+  zh-CN: 我的订单
 </i18n>
 
 <script>

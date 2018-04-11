@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
               class="x-search"
@@ -33,7 +33,7 @@
               </div>
             </div>
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in customerdata1" :key="index">
+              <Listplate v-for="(item,index) in customerdata1" :key="item.id">
                 <img slot="pic" :src="item.avatar" class="avatarimg1" />
                 <div slot="title" class="flex_left" style="height:55px;">
                   <div class="t-table w_100 h_100">
@@ -72,7 +72,7 @@
               </div>
             </div>
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in customerdata5" :key="index">
+              <Listplate v-for="(item,index) in customerdata5" :key="item.id">
                 <img slot="pic" :src="item.avatar" class="avatarimg1" />
                 <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
                 <div slot="title" class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>

@@ -1,13 +1,10 @@
 <template>
-  <div class="containerarea s-havebottom">
+  <div class="containerarea">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100 toprow">
           <div class="flex_cell font18 pl20">{{$t('Rebate customer')}}</div>
-          <div class="pr10 align_right" style="width:150px;">
-            <div class="qbtn" style="border:#fff 1px solid;">{{$t('Share invite customer')}}</div>
-          </div>
         </div>
       </div>
       <div class="row">
@@ -18,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
               class="x-search"
@@ -30,7 +27,7 @@
               ref="search">
             </search>
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in customerdata" :key="index">
+              <Listplate v-for="(item,index1) in customerdata" :key="item.id">
                 <img slot="pic" :src="item.avatar" class="avatarimg1" />
                 <div slot="title" class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
                 <div slot="title" class="clamp1 mt5 font12 color-gray">带来消费：￥{{item.sales}}</div>
@@ -48,7 +45,7 @@
           </div>
           <div v-if="(index == 2)">
           <div class="scroll_list pl10 pr10 cols-2">
-            <Listplate v-for="(item,index) in customerdata" :key="index">
+            <Listplate v-for="(item,index1) in customerdata" :key="item.id">
               <img slot="pic" :src="item.avatar" class="avatarimg1" />
               <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
               <div slot="title" class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.sales}}</div>
@@ -58,7 +55,6 @@
         </swiper-item>
       </swiper>
     </div>
-    <div class="s-bottom flex_center bg-blue3 color-white font18">{{$t('Rebate manage')}}</div>
   </div>
 </template>
 

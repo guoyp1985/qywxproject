@@ -2,7 +2,7 @@
   <div class="containerarea bg-page font14 s-havebottom">
     <div class="s-container" style="top:0px;">
       <template v-if="productdata.length > 0">
-        <Productitemplate1 v-for="(item,index) in productdata" class="bg-page" :key="index">
+        <Productitemplate1 v-for="(item,index) in productdata" :key="item.id" class="bg-page">
           <div slot="icon" v-if="item.moderate == 0" class="icon down"></div>
 		      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
           <div slot="rightcell">
@@ -17,17 +17,20 @@
         </Productitemplate1>
       </template>
     </div>
-    <div class="s-bottom flex_center bg-orange color-white">{{ $t('Add product') }}</div>
+    <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div v-for="(row,index) in controldata1" :key="index">
-              <div class="item flex_center" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
-              <div class="item flex_center" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
-              <div class="item flex_center" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down'">{{ row.title }}</div>
+            <div class="item" v-for="(row,index1) in controldata1" :key="index1">
+              <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
+              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
+              <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
+              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
             </div>
-            <div class="item flex_center close mt10" @click="clickpopup('row.key')">{{ $t('Cancel txt') }}</div>
+            <div class="item close mt10" @click="clickpopup('row.key')">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
           </div>
         </div>
       </popup>
