@@ -21,6 +21,12 @@ import Share from '@/components/Share'
 import Address from '@/components/Address'
 import NewAddress from '@/components/NewAddress'
 import Favorite from '@/components/Favorite'
+import OrderSearch from '@/components/OrderSearch'
+import OrderDetail from '@/components/OrderDetail'
+import ShippingDetails from '@/components/ShippingDetails'
+import Recommend from '@/components/Recommend'
+import Articles from '@/components/Articles'
+import Article from '@/components/Article'
 import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -122,6 +128,30 @@ let routes = [
   {
     path: '/favorite',
     component: Favorite
+  },
+  {
+    path: '/orderSearch',
+    component: OrderSearch
+  },
+  {
+    path: '/orderDetail',
+    component: OrderDetail
+  },
+  {
+    path: '/shippingDetails',
+    component: ShippingDetails
+  },
+  {
+    path: '/recommend',
+    component: Recommend
+  },
+  {
+    path: '/articles',
+    component: Articles
+  },
+  {
+    path: '/articles/:id',
+    component: Article
   }
 ]
 

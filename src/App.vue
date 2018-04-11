@@ -141,7 +141,7 @@ export default {
 @import './assets/hack.less';
 
 body {
-  background-color: #ffffff;
+  background-color: #f7f7f7;
 }
 html, body {
   height: 100%;

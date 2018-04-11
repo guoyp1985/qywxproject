@@ -1,25 +1,53 @@
 <template>
   <div id="order-search">
-    <Tab>
-      <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('All') }}</tab-item>
-      <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('To Be Delivered') }}</tab-item>
-      <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Shipped') }}</tab-item>
-      <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Completed') }}</tab-item>
-    </Tab>
-    <swiper v-model="selectedIndex" height="100px" :show-dots="false">
-      <swiper-item :key="0">
-        
-      </swiper-item>
-      <swiper-item :key="1">
-
-      </swiper-item>
-      <swiper-item :key="2">
-
-      </swiper-item>
-      <swiper-item :key="3">
-
-      </swiper-item>
-    </swiper>
+    <sticky scroll-box="order-search">
+      <Tab v-model="selectedIndex">
+        <tab-item selected>{{ $t('All') }}</tab-item>
+        <tab-item>{{ $t('To Be Delivered') }}</tab-item>
+        <tab-item>{{ $t('Shipped') }}</tab-item>
+        <tab-item>{{ $t('Completed') }}</tab-item>
+      </Tab>
+    </sticky>
+    <view-box v-show="selectedIndex===0">
+      <template v-if="list.length">
+        <order-info v-for="(item, index) in list" :key="index"></order-info>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Orders')}}</span>
+        </div>
+      </template>
+    </view-box>
+    <view-box v-show="selectedIndex===1">
+      <template v-if="list1.length">
+        <order-info v-for="(item, index) in list1" :key="index"></order-info>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Orders')}}</span>
+        </div>
+      </template>
+    </view-box>
+    <view-box v-show="selectedIndex===2">
+      <template v-if="list2.length">
+        <order-info v-for="(item, index) in list2" :key="index"></order-info>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Orders')}}</span>
+        </div>
+      </template>
+    </view-box>
+    <view-box v-show="selectedIndex===3">
+      <template v-if="list3.length">
+        <order-info v-for="(item, index) in list3" :key="index"></order-info>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Orders')}}</span>
+        </div>
+      </template>
+    </view-box>
   </div>
 </template>
 
@@ -27,29 +55,38 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { Sticky, Tab, TabItem, ViewBox } from 'vux'
+import OrderInfo from './OrderInfo'
 
 export default {
   components: {
+    Sticky,
     Tab,
     TabItem,
-    Swiper,
-    SwiperItem
+    ViewBox,
+    OrderInfo
   },
   data () {
     return {
-      items: [
+      selectedIndex: 0,
+      list: [
         {
-          id: 1,
-          name: 'huang',
-          phone: '13613797907',
-          address: {
-            area: ['北京市', '市辖区', '丰台区'],
-            details: '金家村288号院5号楼A座2206'
-          },
-          default: false
+          id: '0',
+          type: 1,
+          name: 'unkown',
+          storeId: '0',
+          storeType: 1,
+          storeName: 'unkown',
+          status: 0,
+          imgs: ['../assets/_images/nopic.jpg'],
+          desc: undefined,
+          num: 0,
+          pay: 0
         }
-      ]
+      ],
+      list1: [],
+      list2: [],
+      list3: []
     }
   },
   computed: {
@@ -75,16 +112,11 @@ export default {
     addressFormat: function (address) {
       return `${address.area.join('')}${address.details}`
     }
+  },
+  methods: {
   }
 }
 </script>
 
 <style lang="less">
-#personal-address .top-gap {
-  margin-top: 20px;
-}
-#personal-address .address-item {
-  padding: 5px 15px;
-}
-/* weui css hack */
 </style>

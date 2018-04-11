@@ -3,37 +3,25 @@
     <c-title :link-info="{path:'/profile'}"
             :link-credit="{path:'/credit'}">
     </c-title>
+    <grid :show-lr-borders="false" :show-vertical-dividers="false">
+      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" :link="btn.link">
+        <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
+          <span :class="`fa ${btn.icon}`"></span>
+        </div>
+      </grid-item>
+    </grid>
     <div class="grid-title">{{ $t('Service') }}</div>
     <grid :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t('My Address')" link="/address">
-        <span slot="icon" class="al al-wodedizhi" style="color:#8c93ff"></span>
-      </grid-item>
-      <grid-item :label="$t('My Shares')" link="/share">
-        <span slot="icon" class="al al-ai-share" style="color:#00d1a4;"></span>
-      </grid-item>
-      <grid-item :label="$t('My Favorites')" link="/favorite">
-        <span slot="icon" class="al al-qietu19" style="color:#fbb266;"></span>
-      </grid-item>
-      <grid-item :label="$t('Exit')">
-        <span slot="icon" class="al al-tuichu3" style="color:#f05e4b"></span>
+      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" :link="btn.link">
+        <div slot="icon" :class="btn.color">
+          <span :class="`al ${btn.icon}`"></span>
+        </div>
       </grid-item>
     </grid>
   </div>
 </template>
 
 <i18n>
-Personal Center:
-  zh-CN: 个人中心
-Service:
-  zh-CN: 服务
-My Address:
-  zh-CN: 我的地址
-My Shares:
-  zh-CN: 我的分享
-My Favorites:
-  zh-CN: 我的收藏
-Exit:
-  zh-CN: 退出
 </i18n>
 
 <script>
@@ -45,6 +33,56 @@ export default {
     Grid,
     GridItem,
     CTitle
+  },
+  data () {
+    return {
+      btns: [
+        {
+          name: 'Search Orders',
+          icon: 'fa-file-text-o',
+          color: 'rgba02',
+          link: '/orderSearch'
+        },
+        {
+          name: 'View Productions',
+          icon: 'fa-shopping-bag',
+          color: 'rgba05',
+          link: '/orderSearch'
+        },
+        {
+          name: 'View Articles',
+          icon: 'fa-newspaper-o',
+          color: 'rgba04',
+          link: '/articles'
+        }
+      ],
+      btns1: [
+        {
+          name: 'My Address',
+          icon: 'al-wodedizhi',
+          color: 'color-address',
+          link: '/address'
+        },
+        {
+          name: 'My Shares',
+          icon: 'al-ai-share',
+          color: 'color-share',
+          link: '/share'
+        },
+        {
+          name: 'My Favorites',
+          icon: 'al-qietu19',
+          color: 'color-favorite',
+          link: '/favorite'
+        },
+        {
+          name: 'Exit',
+          icon: 'al-tuichu3',
+          color: 'color-exit',
+          link: '/exit'
+        }
+      ]
+    }
   }
 }
 </script>
@@ -60,6 +98,10 @@ export default {
 #personal-center .weui-grids::before {
   border-top: none;
   height: 0;
+}
+
+#personal-center .weui-grids {
+  background-color: #ffffff;
 }
 
 /* css extension */

@@ -20,33 +20,10 @@
         </div>
       </div>
     </div>
-    <grid :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t('Search Orders')">
-        <div slot="icon" class="circle-icon-bg rgba02 color-white">
-          <span class="fa fa-file-text-o"></span>
-        </div>
-      </grid-item>
-      <grid-item :label="$t('View Productions')">
-        <div slot="icon" class="circle-icon-bg rgba05 color-white">
-          <span class="fa fa-shopping-bag"></span>
-        </div>
-      </grid-item>
-      <grid-item :label="$t('View Articles')">
-        <div slot="icon" class="circle-icon-bg rgba04 color-white">
-          <span class="fa fa-newspaper-o"></span>
-        </div>
-      </grid-item>
-    </grid>
   </div>
 </template>
 
 <i18n>
-  Search Orders:
-    zh-CN: 查订单
-  View Productions:
-    zh-CN: 挑商品
-  View Articles:
-    zh-CN: 看文章
 </i18n>
 
 <script>
