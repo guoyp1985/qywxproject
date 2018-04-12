@@ -29,6 +29,7 @@ import NewsStat from '@/components/NewsStat'
 import ProductStat from '@/components/ProductStat'
 import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
+import Bargainbuyview from '@/components/Bargainbuyview'
 import List from '@/components/DemoList'
 import DemoList from '@/demo_list'
 
@@ -158,6 +159,10 @@ let routes = [
   {
     path: '/bargainbuy',
     component: Bargainbuy
+  },
+  {
+    path: '/bargainbuyview',
+    component: Bargainbuyview
   }
 ]
 
