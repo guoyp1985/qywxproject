@@ -180,6 +180,60 @@ en:
   Detail address: Detail address
   Detail address placeholder: Detail address placeholder
   Contact: Contact
+  News title: News title
+  Cover photo: Cover photo
+  Expand more options: Expand more options
+  Up more options: Up more options
+  Share title: Share title
+  Share title placeholder: Share title placeholder
+  Share description: Share description
+  Share description placeholder: Share description placeholder
+  Label: Label
+  Save: Save
+  Label can not empty: Label can not empty
+  Url paster here: Url paster here
+  Collect: Collect
+  Collect record: Collect record
+  My orders: My orders
+  Title: Title
+  Outer show product title: Outer show product title
+  Price: Price
+  User buy price: User buy price
+  Commission: Commission
+  Rebate user provide commision: Rebate user provide commision
+  Storage: Storage
+  Product description: Product description
+  Save and up: Save and up
+  Up text: Up text
+  Select product: Select product
+  Activity product: Activity product
+  Please select product: Please select product
+  Starttime: Starttime
+  Endtime: Endtime
+  Go to create: Go to create
+  New products: New products
+  View more promotion: View more promotion
+  Seller info setting: Seller info setting
+  Shop name: Shop name
+  Wechat qrcode: Wechat qrcode
+  Upload wechat qrcode: Upload wechat qrcode
+  Upload qrcode text: Upload qrcode text
+  Pay type: Pay type
+  Shop description: Shop description
+  Auto reply: Auto reply
+  Auto reply placeholder: Auto reply placeholder
+  Epand text: Epand text
+  Know txt: Know txt
+  Groupbuy: Groupbuy
+  Groupbuy description: Groupbuy description
+  Bargainbuy: Bargainbuy
+  Bargainbuy description: Bargainbuy description
+  Discount: Discount
+  Discount description: Discount description
+  Eazy get customer: Eazy get customer
+  Eazy get order: Eazy get order
+  Close: Close
+  Stat: Stat
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -209,7 +263,7 @@ zh-CN:
   Cash: 七天待还
   With footer: 带有 footer 的卡片
   Product details: 商品详情
-  More: 查看更多
+  More: 更多
   Custom content: 自定义内容
   Use header slot and content slot: 使用 header slot 和 content slot
   My Account: 我的账号
@@ -317,6 +371,7 @@ zh-CN:
   Confirm: 确认
   Credits Details: 个人中心
   Credit Details: 金币明细
+  Credit: 金币
   Edit: 编辑
   Delete: 删除
   Address: 地址
@@ -394,7 +449,7 @@ zh-CN:
   My Return Stores: 我的返点店铺
   Bought Stores: 购买过的店铺
   No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
-  No Bought Stores:  您还没有买过东西
+  No Bought Stores: 您还没有买过东西
   No Related Articles: 没有相关文章
   Reading: 阅读
   Dig: 点赞
@@ -404,3 +459,56 @@ zh-CN:
   Review: 审核
   Writing Discussion: 写留言
   Reply Discussion: 回复评论
+  News title: 文章标题
+  Cover photo: 封面图像
+  Expand more options: 展开更多选项
+  Up more options: 收起更多选项
+  Share title: 分享标题
+  Share title placeholder: 如不填写默认调用商品标题
+  Share description: 分享描述
+  Share description placeholder: 如不填写自动截取商品介绍
+  Label: 标签
+  Label can not empty: 标签不能为空
+  Url paster here: 链接粘贴在此处
+  Collect: 采集
+  Collect record: 采集记录
+  My orders: 我的订单
+  Title: 标题
+  Outer show product title: 对外展示的商品标题
+  Price: 价格
+  User buy price: 用户最终购买价格
+  Commission: 佣金
+  Rebate user provide commision: 返点客售出商品后给予的佣金
+  Storage: 库存
+  Product description: 商品介绍
+  Save and up: 保存并上架
+  Up text: 收起更多设置
+  Select product: 选择商品
+  Activity product: 活动商品
+  Please select product: 请选择商品
+  Starttime: 开始时间
+  Endtime: 结束时间
+  Go to create: 立即创建
+  New products: 精选新品
+  View more promotion: 查看更多促销
+  Seller info setting: 卖家信息设置
+  Shop name: 店铺名称
+  Wechat qrcode: 微信二维码
+  Upload wechat qrcode: 上传个人微信二维码
+  Upload qrcode text: 如何上传个人微信二维码?
+  Pay type: 支付方式
+  Shop description: 店铺介绍
+  Auto reply: 自动回复
+  Auto reply placeholder: 用户在线咨询时自动回复的消息
+  Epand text: 展开更多设置
+  Know txt: 知道了
+  Groupbuy: 团购
+  Groupbuy description: 买家可拼团购买商品，有效提高销量
+  Bargainbuy: 砍价
+  Bargainbuy description: 买家可邀请好友帮忙砍价，以优惠价格购买
+  Discount: 限时抢购
+  Discount description: 商品限时促销，增强用户紧迫感及购买欲望
+  Eazy get customer: 易获客
+  Eazy get order: 易成单
+  Close: 关闭
+  Stat: 统计

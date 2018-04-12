@@ -40,6 +40,8 @@ import BargainbuyStat from '@/components/BargainbuyStat'
 import ActivityStat from '@/components/ActivityStat'
 import NewsStat from '@/components/NewsStat'
 import ProductStat from '@/components/ProductStat'
+import Product from '@/components/Product'
+import Bargainbuy from '@/components/Bargainbuy'
 import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -217,6 +219,14 @@ let routes = [
   {
     path: '/productStat',
     component: ProductStat
+  },
+  {
+    path: '/product',
+    component: Product
+  },
+  {
+    path: '/bargainbuy',
+    component: Bargainbuy
   }
 ]
 

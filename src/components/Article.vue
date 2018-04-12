@@ -1,5 +1,6 @@
 <template>
   <div id="article-content">
+    <title-tip scroll-box="article-content" :avatar-href="reward.userAvatar" :user-name="reward.userName" :user-credit="reward.credit"></title-tip>
     <view-box>
       <div class="article-view">
         <div class="article-title">
@@ -59,14 +60,15 @@
         </comment>
       </div>
     </view-box>
-    <comment-popup :show="commentPopupShow" :title="article.title" @on-close="commentPopupClose"></comment-popup>
-    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')"  @on-close="replyPopupClose"></comment-popup>
+    <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-close="commentPopupClose"></comment-popup>
+    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-close="replyPopupClose"></comment-popup>
   </div>
 </template>
 <i18n>
 </i18n>
 <script>
 import { ViewBox, Popup, XButton, Divider } from 'vux'
+import TitleTip from './TitleTip'
 import Comment from './Comment'
 import Reply from './Reply'
 import CommentPopup from './CommentPopup'
@@ -78,6 +80,7 @@ export default {
     Popup,
     XButton,
     Divider,
+    TitleTip,
     Comment,
     Reply,
     CommentPopup
@@ -86,6 +89,11 @@ export default {
     return {
       commentPopupShow: false,
       replyPopupShow: false,
+      reward: {
+        userName: '黄一萌',
+        userAvatar: '',
+        credit: 50
+      },
       article: {
         title: '文章标题',
         viceTitle: '',
@@ -159,6 +167,20 @@ export default {
     },
     replyPopupClose () {
       this.replyPopupShow = false
+    },
+    commentSubmit (value) {
+      this.commentPopupShow = false
+      let comment = {
+        userName: 'simon',
+        userAvatar: '../assets/_images/nopic.jpg',
+        content: value,
+        date: new Date().getTime(),
+        diggCount: 0
+      }
+      this.article.comments.push(comment)
+    },
+    replySubmit () {
+
     }
   }
 }

@@ -1,33 +1,51 @@
 <template>
-  <div class="containerarea font14 havetoptab  bg-page">
+  <div class="containerarea font14 havetoptab bg-page">
     <tab v-model="tabmodel" class="x-toptab">
       <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
     </tab>
     <div class="s-container ractivitylist">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(item, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="scroll_list">
-              <Listplate2 v-for="(item,index) in tabdata1" :key="item.id" :class="`${item.type}item bg-white mb5 pl10 pr10`">
-                <div v-if="item.isfinished === 1" class="icon finished"></div>
-                <img slot="pic" :src="item.photo" />
-                <div slot="title" class="clamp1 font12">{{item.title}}</div>
-                  <template v-if="(item.type == 'groupbuy')">
-                    <div slot="title" class="clamp1 font12 color-gray mt5">{{ $t('Groupprice') }} {{ $t('RMB') }} {{ item.groupprice }}</div>
-                    <div slot="title" class="clamp1 font12 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
-                  </template>
-                  <template v-if="(item.type == 'bargainbuy')">
-                    <div slot="title" class="clamp1 font12 color-gray mt5">{{ $t('Min buy price') }} {{ $t('RMB') }} {{ item.minprice }}</div>
-                    <div slot="title" class="clamp1 font12 color-gray mt5">{{ $t('Limitbuy count') }} {{ item.limitbuy }}</div>
-                  </template>
-                <div slot="btn" class="w_100">
-                  <router-link class="qbtn1 bg-orange1 color-white" to="/groupbuyStat" v-if="item.type == 'groupbuy'">{{ $t('Stat') }}</router-link>
-                  <router-link class="qbtn1 bg-orange1 color-white" to="/bargainbuyStat" v-else-if="item.type == 'bargainbuy'">{{ $t('Stat') }}</router-link>
-                  <router-link class="qbtn1 bg-orange1 color-white" to="/activityStat" v-else>{{ $t('Stat') }}</router-link>
-                  <div class="qbtn1 bg-orange1 color-white mt5" @click="stopevent(item)">停止</div>
-                </div>
-                <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
-              </Listplate2>
+              <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl10 pr10 db`">
+                <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
+                  <div v-if="item.isfinished === 1" class="icon finished"></div>
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:80px;">
+                      <img :src="item.photo" class="v_middle" style="width:80px;height:80px;" />
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font12">{{item.title}}</div>
+                      <div class="clamp1 font12 color-gray mt5">{{ $t('Groupprice') }} {{ $t('RMB') }} {{ item.groupprice }}</div>
+                      <div class="clamp1 font12 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle" style="width:60px;">
+                      <router-link class="qbtn1 bg-orange1 color-white" to="groupbuyStat">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn1 bg-orange1 color-white mt5" @click="stopevent(item)">停止</div>
+                    </div>
+                  </div>
+                  <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
+                </router-link>
+                <router-link :to="{path:'/bargainbuy',query:{id:item.id}}" v-else-if="item.type == 'bargainbuy'" :key="item.id" class="db" style="position:relative;">
+                  <div v-if="item.isfinished === 1" class="icon finished"></div>
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:80px;">
+                      <img :src="item.photo" class="v_middle" style="width:80px;height:80px;" />
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font12">{{item.title}}</div>
+                      <div class="clamp1 font12 color-gray mt5">{{ $t('Min buy price') }} {{ $t('RMB') }} {{ item.minprice }}</div>
+                      <div class="clamp1 font12 color-gray mt5">{{ $t('Limitbuy count') }} {{ item.limitbuy }}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle" style="width:60px;">
+                      <router-link class="qbtn1 bg-orange1 color-white" to="/bargainbuyStat">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn1 bg-orange1 color-white mt5" @click="stopevent(item)">停止</div>
+                    </div>
+                  </div>
+                  <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
+                </router-link>
+              </div>
             </div>
           </template>
           <template v-if="(index == 1)">
@@ -193,7 +211,6 @@ Stat:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup } from 'vux'
-import Listplate2 from './Listplate2'
 import Time from '../../libs/time'
 
 export default {
@@ -205,7 +222,6 @@ export default {
     TabItem,
     Swiper,
     SwiperItem,
-    Listplate2,
     TransferDom,
     Confirm,
     Popup
@@ -221,19 +237,19 @@ export default {
       tabmodel: 0,
       tabdata1: [
         {
-          id: '1', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736'
+          id: '1', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736'
         },
         {
-          id: '2', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745'
+          id: '2', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745'
         },
         {
-          id: '3', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
+          id: '3', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
         },
         {
-          id: '4', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
+          id: '4', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
         },
         {
-          id: '5', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
+          id: '5', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
         }
       ],
       tabdata2: [
@@ -327,5 +343,15 @@ export default {
   left: -6px;
   background-color: #f89100;
   height: 100%;
+}
+.ractivitylist .scroll_item{
+  padding-top:10px;
+  padding-bottom:10px;
+  position:relative;
+  overflow:hidden;
+}
+.ractivitylist .scroll_item .row{
+  display: -webkit-box;
+  position:relative;
 }
 </style>

@@ -42,6 +42,8 @@ a{color:inherit;}
 .bg-orange{background-color:orange !important;}
 .bg-orange1{background-color:#ff9500 !important;}
 .bg-red{background-color:#ff3b30 !important;}
+.bg-red1{background-color:#f32a3d !important;}
+.bg-red2{background-color:#ff4a01 !important;}
 .bg-white{background-color:#fff !important;}
 .bg-page{background-color:@page-bg-color !important;}
 
@@ -64,6 +66,7 @@ a{color:inherit;}
 .color-gray4{color:#f6f6f6 !important;}
 .color-gray5{color:#333 !important;}
 .color-gray6{color:#efeff4 !important;}
+.color-gray7{color:#58595B !important;}
 .color-green{color:#4cd964 !important;}
 .color-green1{color:#64b532 !important;}
 .color-lightgray{color:#666666;}
@@ -79,6 +82,8 @@ a{color:inherit;}
 .color-yellow1{color: #ffe656 !important;}
 .color-red{color:#ff3b30 !important;}
 .color-red1{color:#f32a3d !important;}
+.color-red2{color:#ff4a01 !important;}
+.color-red3{color:#E02D24 !important;}
 .color-white{color:#fff !important;}
 .color-gold{color:#ffc430 !important;}
 .color-address{color:#8c93ff !important;}
@@ -360,9 +365,32 @@ a{color:inherit;}
   line-height: 34px;
 }
 
-.no-related-x {
-  text-align: center;
-  padding: 30px 0;
+.pagetop{position:absolute;left:0;top:0;right:0;height:48px;overflow-x:hidden;}
+.pagemiddle{position:absolute;left:0;top:48px;right:0;bottom:45px;overflow-y:auto;overflow-x:hidden;}
+.notop .pagemiddle{top:0;}
+.nobottom .pagemiddle{bottom:0;}
+.pagebottom{position:absolute;left:0;right:0;bottom:0;height:45px;overflow-x:hidden;}
+
+.bottomnaviarea{
+	font-size: 17px;background-color: #fff;
+	background-image: -webkit-gradient(linear,0% 0%,0% 100%, from(#fff),to(#e7e7e7),color-stop(1, #e7e7e7));
+	box-shadow: 0px 2px 9px rgba(0,0,0,0.2);
+}
+.bottomnaviarea .bottomnavi{height:100%;}
+.bottomnaviarea .bottomnavi .item{position:relative;height:100%;text-align:center;vertical-align: middle;}
+.bottomnaviarea .bottomnavi .item:not(:last-child):after{
+	content: "";
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	-webkit-transform: scaleX(0.5) translateX(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform: scaleX(0.5) translateX(0.5px);
+	transform-origin: 0% 0%;
+	border-color: transparent #f6f6f6 transparent #ddd;
+	border-style: solid;
+	border-width: 1px;
 }
 .bottomnaviarea .bottomnavi .item.active{background-color:#ebebeb;}
 
@@ -394,7 +422,6 @@ a{color:inherit;}
   margin-top: -3px;
 }
 .x-toptab .vux-tab div:nth-last-child(2):after{display:none;}
-
 
 .qradio,.qcheckbox {
 	text-align:left;
@@ -517,3 +544,51 @@ a{color:inherit;}
 .datestate{display:inline-block;background-color:#ff3b30;line-height:18px;color:#fff;padding:0 5px;border-radius:4px;}
 .datestate.today{background-color:#4cd964;}
 .datestate.yesterday{background-color:orange;}
+
+
+.form-item{position:relative;padding:10px;}
+.form-item:after{
+  content:"";display:block;
+	background-color:@list-border-color;height:1px;overflow:hidden;
+	position: absolute;left: 0;right: 0;bottom:0px;
+	-webkit-transform: scaleY(0.5) translateY(0.5px);
+	transform: scaleY(0.5) translateY(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
+}
+.form-item .ricon{display:none;}
+.form-item.required .ricon{display:inline-block;}
+.form-item .input{
+  box-sizing: border-box;
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+  height: auto;
+}
+.form-item .weui-cell{padding:0;}
+.form-item .weui-cells{margin-top:0 !important;}
+.form-item .weui-cells:before,.form-item .weui-cells:after{display:none;}
+.x-number{width:120px;}
+.x-number .vux-number-input{font-size:14px;width:35px !important;}
+.form-item .weui-cell_access .weui-cell__ft:after {display:none;}
+.form-item .weui-cell__ft{text-align:left;}
+
+.emptyitem{height:80px;}
+.emptyitem .t-table{height:100%;}
+.emptyitem .t-table .t-cell{height:100%;vertical-align:middle;text-align:center;font-size:14px;color:#999;}
+
+.scrollend{position:relative;padding-bottom:100px;}
+.scrollendarea.scrollend:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    text-align: center;
+    color: #D6D6D8;
+    background-image: url(images/copyright.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 136px 47px;
+}

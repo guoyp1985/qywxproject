@@ -128,6 +128,20 @@ export default {
       if (!this.direction) return ''
       return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
+  },
+  created () {
+    this.$http.get('list/news?uploader=1').then(response => {
+      // get status
+      console.log(response.status)
+      // get status text
+      console.log(response.statusText)
+      // get 'Expires' header
+      console.log(response.headers.get('Expires'))
+      // get body data
+      this.someData = response.body
+    }, response => {
+      // error callback
+    })
   }
 }
 </script>

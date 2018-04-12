@@ -16,7 +16,9 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
+import VueResource from 'vue-resource'
 
+Vue.use(VueResource)
 Vue.use(Vuex)
 // Vue.use(VueRouter)
 
@@ -163,6 +165,22 @@ router.beforeEach(function (to, from, next) {
 router.afterEach(function (to) {
   isPush = false
   store.commit('updateLoadingStatus', {isLoading: false})
+})
+
+Vue.http.options.root = 'https://laravel.boka.cn/api/'
+// Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk'
+Vue.http.interceptors.push((request, next) => {
+  console.log(request)
+  // modify method
+  // request.method = 'POST'
+  // modify headers
+  request.headers.set('X-CSRF-TOKEN', 'TOKEN')
+  request.headers.set('Authorization', 'Bearer TOKEN')
+  // continue to next interceptor
+  next(response => { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
+    response.body = '...'
+    return response
+  })
 })
 
 new Vue({

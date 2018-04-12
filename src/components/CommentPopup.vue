@@ -105,6 +105,7 @@ export default {
       type: Boolean,
       default: false
     },
+    id: String,
     title: String
   },
   data () {
@@ -120,7 +121,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$emit('on-submit')
+      this.$emit('on-submit', this.value)
     },
     onClose () {
       this.$emit('on-close')

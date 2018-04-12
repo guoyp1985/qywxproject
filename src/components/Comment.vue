@@ -15,9 +15,7 @@
           </a>
         </div>
       </div>
-      <div class="comment-content">
-        {{item.content}}
-      </div>
+      <div class="comment-content" v-html="item.content"></div>
       <div class="date-area">
         <div class="date-cell">
           {{item.date | dateFormat}}

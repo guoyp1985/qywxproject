@@ -1,21 +1,38 @@
 <template>
-  <div class="containerarea bg-page font14 s-havebottom">
+  <div class="containerarea bg-page font14 s-havebottom rproductlist">
     <div class="s-container" style="top:0px;">
-      <template v-if="productdata.length > 0">
-        <Productitemplate1 v-for="(item,index) in productdata" :key="item.id" class="bg-page">
-          <div slot="icon" v-if="item.moderate == 0" class="icon down"></div>
-		      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
-          <div slot="rightcell">
-            <div class="clamp2 font15 pr10">{{item.title}}</div>
-            <div class="mt5 dishref db">
-              <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
-            </div>
-            <div class="align_right pr10">
-              <div class="qbtn4" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+      <div class="scroll_list bg-page">
+        <template v-if="!productdata || productdata.length == 0">
+          <div class="emptyitem">
+            <div class="t-table" style="padding-top:20%;">
+              <div class="t-cell padding10">
+                <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                <div>还没有添加商品哦，及时添加商品可以：</div>
+                <div>1.创建促销活动 </div>
+                <div>2.分享商品获得客户</div>
+                <div>3.邀请返点客帮你赚钱</div>
+              </div>
             </div>
           </div>
-        </Productitemplate1>
-      </template>
+        </template>
+        <router-link :to="{path:'/product',query:{id:item.id,wid:187}}" v-else class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+          <div v-if="item.moderate == 0" class="icon down"></div>
+      		<div class="t-table bg-white pt10 pb10">
+      			<div class="t-cell pl10 v_middle" style="width:90px;">
+  		          <img style="width:80px;height:80px;" :src="item.photo" />
+      			</div>
+      			<div class="t-cell v_middle">
+              <div class="clamp2 font15 pr10">{{item.title}}</div>
+              <div class="mt5 dishref db">
+                <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+              </div>
+              <div class="align_right pr10">
+                <div class="btnicon" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+              </div>
+      			</div>
+      		</div>
+        </router-link>
+      </div>
     </div>
     <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     <div v-transfer-dom>
@@ -104,6 +121,7 @@ export default {
   },
   methods: {
     controlpopup1 (item, index) {
+      event.preventDefault()
       this.showpopup1 = !this.showpopup1
       this.clickdata = item
       this.clickindex = index
@@ -146,5 +164,23 @@ export default {
 @import '../assets/fonts.less';
 @import '../assets/global.less';
 
-
+.rproductlist .scroll_item{overflow:hidden;position:relative;}
+.rproductlist .scroll_item .icon{display:none;}
+.rproductlist .scroll_item .down.icon{
+        display:block;
+        position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
+        background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
+        -webkit-transform: translate(30px,5px) rotate(45deg);
+        transform: translate(30px,5px) rotate(45deg);
+}
+.rproductlist .scroll_item .down.icon:after{content:"已下架";}
+.rproductlist .btnicon{
+  display: inline-block;
+    color: #9c9c9c;
+    font-size: 14px;
+    border: 1px solid #9c9c9c;
+    text-align: center;
+    border-radius: 30px;
+    padding: 1px 8px;
+}
 </style>

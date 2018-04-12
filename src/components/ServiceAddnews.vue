@@ -6,14 +6,14 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">{{ $t('News title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" name="title" :placeholder="$t('News title')" />
+              <input type="text" class="input" name="title" :placeholder="$t('News title')" :value="getnews.title" />
             </div>
           </div>
         </div>
         <div class="form-item required">
           <div class="pt10 pb5">{{ $t('Cover photo') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span> （图像最佳宽高比为9:5）</div>
           <div>
-            <input type="hidden" name="qrcode" required="" value="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" class="no-fastclick">
+            <input type="hidden" name="qrcode" required="" :value="getnews.photo" class="no-fastclick">
             <div class="q_photolist align_left" uploadform=".uploadfileForm">
               <template v-if="photoarr.length > 0">
                 <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
@@ -44,7 +44,13 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share description') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:10px 0;">
-                  <x-textarea class="x-textarea" :placeholder="$t('Share description placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
+                  <x-textarea
+                    class="x-textarea"
+                    :value="getnews.seodescription"
+                    :placeholder="$t('Share description placeholder')"
+                    :show-counter="false"
+                    :rows="1" autosize>
+                  </x-textarea>
                 </group>
               </div>
             </div>
@@ -54,7 +60,13 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Summary') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:10px 0;">
-                  <x-textarea class="x-textarea" :placeholder="$t('Summary')" :show-counter="false" :rows="1" autosize></x-textarea>
+                  <x-textarea
+                    class="x-textarea"
+                    :value="getnews.summary"
+                    :placeholder="$t('Summary')"
+                    :show-counter="false"
+                    :rows="1" autosize>
+                  </x-textarea>
                 </group>
               </div>
             </div>
@@ -133,6 +145,7 @@ export default {
   },
   data () {
     return {
+      newsdata: {},
       photoarr: [],
       maxnum: 1,
       havenum: 0,
@@ -162,6 +175,9 @@ export default {
         ret = true
       }
       return ret
+    },
+    labelarr: function () {
+      return this.labelarr
     }
   },
   computed: {
@@ -170,6 +186,23 @@ export default {
     },
     getquery: function () {
       return this.$route.query
+    },
+    getnews: function () {
+      let query = this.$route.query
+      let curnews = { title: '', photo: '', seodescription: '', summary: '', keyword: [] }
+      if (query && query.id) {
+        curnews = {
+          title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~',
+          photo: 'http://gongxiaoshe.qiyeplus.com/data/upload/month_201713/15233286693638',
+          seodescription: '发给身边的朋友看看吧，从今完后，大家一起拼起来！',
+          summary: '发给身边的朋友看看吧，从今完后，大家一起拼起来！',
+          keyword: [ '老人', '吉普岛', '拼客' ]
+        }
+      }
+      this.photoarr = curnews.photo.split(',')
+      this.labelarr = curnews.keyword
+      this.newsdata = curnews
+      return curnews
     }
   },
   methods: {
