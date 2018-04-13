@@ -133,6 +133,4 @@ export default {
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/center.less';
-@import '../assets/global.less';
 </style>

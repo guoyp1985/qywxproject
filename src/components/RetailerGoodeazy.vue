@@ -177,9 +177,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/center.less';
-@import '../assets/global.less';
-
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
 </style>

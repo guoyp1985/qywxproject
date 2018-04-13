@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Center from '@/components/Center'
-// import CenterSales from '@/components/CenterSales'
+import CenterSales from '@/components/CenterSales'
 // import CenterOperating from '@/components/CenterOperating'
 // import CenterService from '@/components/CenterService'
 import RetailerSales from '@/components/RetailerSales'
@@ -57,10 +57,10 @@ let routes = [
     path: '/center',
     component: Center
   },
-  // {
-  //   path: '/centerSales',
-  //   component: CenterSales
-  // },
+  {
+    path: '/centerSales',
+    component: CenterSales
+  },
   // {
   //   path: '/centerOperating',
   //   component: CenterOperating
@@ -109,10 +109,10 @@ let routes = [
     path: '/retailerRevenue',
     component: RetailerRevenue
   },
-  {
-    path: '/components/',
-    component: List
-  },
+  // {
+  //   path: '/components/',
+  //   component: List
+  // },
   {
     path: '/retailerSales',
     component: RetailerSales

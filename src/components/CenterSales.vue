@@ -183,7 +183,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '../assets/global.less';
 .bk-salestopplate .numicon{
   position: absolute;
   top: 0;

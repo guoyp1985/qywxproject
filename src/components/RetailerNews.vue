@@ -197,9 +197,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/center.less';
-@import '../assets/fonts.less';
-@import '../assets/global.less';
 .rnews .bk-listplate1 .iconcell{width:45px;}
 .vux-popup-dialog .weui-cell__bd{text-align:center;}
 .vux-popup-dialog .weui-cell__ft{display:none;}

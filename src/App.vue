@@ -150,6 +150,8 @@ export default {
 @import '~vux/src/styles/reset.less';
 @import '~vux/src/styles/1px.less';
 @import '~vux/src/styles/tap.less';
+@import '~vux/src/styles/close.less';
+@import '~vux/src/styles/center.less';
 @import './assets/global';
 @import './assets/fonts.less';
 @import './assets/hack.less';

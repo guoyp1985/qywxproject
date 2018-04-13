@@ -161,9 +161,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '../assets/fonts.less';
-@import '../assets/global.less';
-
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
 .rproductlist .scroll_item .icon{display:none;}
 .rproductlist .scroll_item .down.icon{
