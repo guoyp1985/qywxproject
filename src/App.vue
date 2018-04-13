@@ -130,7 +130,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('list/news?uploader=1').then(response => {
+    this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {}).then(response => {
       // get status
       console.log(response.status)
       // get status text

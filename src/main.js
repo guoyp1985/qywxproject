@@ -167,18 +167,14 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-Vue.http.options.root = 'https://laravel.boka.cn/api/'
-// Vue.http.headers.common['Authorization'] = 'Basic YXBpOnBhc3N3b3Jk'
-Vue.http.interceptors.push((request, next) => {
-  console.log(request)
-  // modify method
-  // request.method = 'POST'
-  // modify headers
-  request.headers.set('X-CSRF-TOKEN', 'TOKEN')
-  request.headers.set('Authorization', 'Bearer TOKEN')
+// Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
+Vue.http.interceptors.push(function (request, next) {
+  // console.log(this)
+  request.method = 'GET'
+  request.headers.set('Authorization', 'Bearer  eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8')
   // continue to next interceptor
-  next(response => { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
-    response.body = '...'
+  next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
+    // response.body = '...'
     return response
   })
 })
@@ -186,5 +182,8 @@ Vue.http.interceptors.push((request, next) => {
 new Vue({
   store,
   router,
+  http: {
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+  },
   render: h => h(App)
 }).$mount('#app-box')
