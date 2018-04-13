@@ -85,8 +85,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '../assets/fonts.less';
-@import '../assets/global.less';
 .bargainbuy {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }

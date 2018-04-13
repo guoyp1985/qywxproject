@@ -234,9 +234,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/close.less';
-@import '../assets/fonts.less';
-@import '../assets/global.less';
 .form-item{position:relative;padding:10px;}
 .form-item:after{
   content:"";display:block;

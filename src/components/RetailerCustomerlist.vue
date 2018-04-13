@@ -170,9 +170,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '~vux/src/styles/center.less';
-@import '../assets/global.less';
-
 .textarea-outer{padding:10px;}
 .textarea-outer .weui-cells{margin-top:0;}
 .textarea-outer .weui-cells:before{display:none;}

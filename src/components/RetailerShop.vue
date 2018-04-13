@@ -190,9 +190,6 @@ export default {
 </script>
 
 <style lang="less">
-@import '../assets/fonts.less';
-@import '../assets/global.less';
-
 .vline{position:relative;}
 .vline:after {
   content: " ";

@@ -15,7 +15,6 @@ export default {
 }
 </script>
 <style lang="less">
-@import '../assets/fonts.less';
 .bk-salestopplate {
   width: 100%;
   height: 145px;
