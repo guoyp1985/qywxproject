@@ -511,4 +511,39 @@ zh-CN:
   Eazy get customer: 易获客
   Eazy get order: 易成单
   Close: 关闭
+<<<<<<< HEAD
+=======
+  Go to create: 立即创建
+  Select product: 选择商品
+  Activity product: 活动商品
+  Storage: 库存
+  Please select product: 请选择商品
+  Starttime: 开始时间
+  Endtime: 结束时间
+  Title: 标题
+  Outer show product title: 对外展示的商品标题
+  Price: 价格
+  User buy price: 用户最终购买价格
+  Commission: 佣金
+  Rebate user provide commision: 返点客售出商品后给予的佣金
+  Product description: 商品介绍
+  Share title: 分享标题
+  Share title placeholder: 如不填写默认调用商品标题
+  Share description: 分享描述
+  Share description placeholder: 如不填写自动截取商品介绍
+  Save: 保存
+  Save and up: 保存并上架
+  News title: 文章标题
+  Expand more options: 展开更多选项
+  Up more options: 收起更多选项
+  Cover photo: 封面图像
+  Summary: 摘要
+  Label: 标签
+  Label can not empty: 标签不能为空
+  Url paster here: 链接粘贴在此处
+  Collect: 采集
+  Collect record: 采集记录
+  My orders: 我的订单
+  Message: 消息
+>>>>>>> 21995e3749ca52f553bf92a3f603685da3583275
   Stat: 统计
