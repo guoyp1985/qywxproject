@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     joinin () {
-      this.$router.push('/retailerShop')
+      this.$router.push('/bargainbuyview')
     }
   }
 }

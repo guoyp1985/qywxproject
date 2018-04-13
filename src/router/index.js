@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import HelloWorld from '@/components/HelloWorld'
 import Center from '@/components/Center'
-import CenterSales from '@/components/CenterSales'
-import CenterOperating from '@/components/CenterOperating'
-import CenterService from '@/components/CenterService'
+// import CenterSales from '@/components/CenterSales'
+// import CenterOperating from '@/components/CenterOperating'
+// import CenterService from '@/components/CenterService'
 import RetailerSales from '@/components/RetailerSales'
 import RetailerSalechance from '@/components/RetailerSalechance'
 import RetailerCustomerlist from '@/components/RetailerCustomerlist'
@@ -42,7 +42,8 @@ import NewsStat from '@/components/NewsStat'
 import ProductStat from '@/components/ProductStat'
 import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
-import List from '@/components/DemoList'
+import Bargainbuyview from '@/components/Bargainbuyview'
+// import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
 Vue.use(Router)
@@ -56,18 +57,18 @@ let routes = [
     path: '/center',
     component: Center
   },
-  {
-    path: '/centerSales',
-    component: CenterSales
-  },
-  {
-    path: '/centerOperating',
-    component: CenterOperating
-  },
-  {
-    path: '/centerService',
-    component: CenterService
-  },
+  // {
+  //   path: '/centerSales',
+  //   component: CenterSales
+  // },
+  // {
+  //   path: '/centerOperating',
+  //   component: CenterOperating
+  // },
+  // {
+  //   path: '/centerService',
+  //   component: CenterService
+  // },
   {
     path: '/retailerSales',
     component: RetailerSales
@@ -227,6 +228,10 @@ let routes = [
   {
     path: '/bargainbuy',
     component: Bargainbuy
+  },
+  {
+    path: '/bargainbuyview',
+    component: Bargainbuyview
   }
 ]
 
