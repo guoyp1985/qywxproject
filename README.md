@@ -77,6 +77,7 @@ cat /home/.ssh/id_rsa.pub
 # 系统管理员在服务器上添加用户组权限(以下是系统管理员操作,非系统管理员可忽略):
 vi /home/git/.ssh/authorized_keys
 # 每行ssh key对应一个用户
+
 # 开发人员协同操作
 # 进入开发目录
 cd xsb
