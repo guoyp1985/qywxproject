@@ -17,6 +17,7 @@ import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
 import VueResource from 'vue-resource'
+import Login from '../libs/login'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -168,13 +169,26 @@ router.afterEach(function (to) {
 })
 
 // Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
+let token = ''
 Vue.http.interceptors.push(function (request, next) {
   // console.log(this)
   request.method = 'GET'
-  request.headers.set('Authorization', 'Bearer  eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8')
+  request.headers.set('Authorization', `Bearer ${token}`)
   // continue to next interceptor
   next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
     // response.body = '...'
+    Login.access(request, response, isPC => {
+      if (isPC) {
+        Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+        })
+      }
+    },
+    () => {
+      console.log('okokokok')
+    })
     return response
   })
 })
@@ -182,8 +196,5 @@ Vue.http.interceptors.push(function (request, next) {
 new Vue({
   store,
   router,
-  http: {
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-  },
   render: h => h(App)
 }).$mount('#app-box')
