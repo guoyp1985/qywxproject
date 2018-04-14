@@ -482,7 +482,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -513,3 +513,6 @@ zh-CN:
   Go to create: 立即创建
   Summary: 摘要
   Stat: 统计
+  Wx Login: 微信登录
+  Scan To Login: 请使用微信扫码登录
+  Boka Authorization Center: 博卡授权中心

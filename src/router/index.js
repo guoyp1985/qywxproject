@@ -43,6 +43,7 @@ import ProductStat from '@/components/ProductStat'
 import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
 import Bargainbuyview from '@/components/Bargainbuyview'
+import QrLogin from '@/components/QrLogin'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -53,6 +54,11 @@ let routes = [
   //   path: '/',
   //   component: HelloWorld
   // },
+  {
+    path: '/login',
+    name: 'login',
+    component: QrLogin
+  },
   {
     path: '/center',
     component: Center

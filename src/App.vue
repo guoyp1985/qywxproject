@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;">
+  <div id="app" style="height:100%;" v-cloak>
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
@@ -10,7 +10,7 @@
         <router-view class="router-view"></router-view>
       </transition>
 
-      <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
+      <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="toggleTabbar" slot="bottom">
         <tabbar-item :link="{path:'/home'}" :selected="route.path=='/home'">
           <span class="al al-home1 font20" slot="icon" style="position:relative;top: -2px;"></span>
           <span slot="label">{{ $t('Home') }}</span>
@@ -71,14 +71,16 @@ export default {
       if (path === '/component/demo') {
         this.$router.replace('/demo')
       }
-    }
+    },
+    '$route': 'getData'
   },
   computed: {
     ...mapState({
       route: state => state.route,
       path: state => state.route.path,
       isLoading: state => state.vux.isLoading,
-      direction: state => state.vux.direction
+      direction: state => state.vux.direction,
+      toggleTabbar: state => state.vux.toggleTabbar
     }),
     leftOptions () {
       return {
@@ -100,24 +102,24 @@ export default {
         if (/component/.test(this.route.path) && parts[2]) return parts[2]
       }
     },
-    isDemo () {
-      console.log(this.route.path)
-      // return /component|demo/.test(this.route.path)
-      switch (this.route.path) {
-        case '/centerOperating' :
-          break
-        case '/centerSales' :
-          break
-        case '/centerService' :
-          break
-        default:
-          return false
-      }
-      return true
-    },
-    isTabbarDemo () {
-      return /tabbar/.test(this.route.path)
-    },
+    // isDemo () {
+    //   console.log(this.route.path)
+    //   // return /component|demo/.test(this.route.path)
+    //   switch (this.route.path) {
+    //     case '/centerOperating' :
+    //       break
+    //     case '/centerSales' :
+    //       break
+    //     case '/centerService' :
+    //       break
+    //     default:
+    //       return false
+    //   }
+    //   return true
+    // },
+    // isTabbarDemo () {
+    //   return /tabbar/.test(this.route.path)
+    // },
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/components') return 'Demo list'
@@ -130,18 +132,23 @@ export default {
     }
   },
   created () {
-    this.$http.get('list/news?uploader=1').then(response => {
-      // get status
-      console.log(response.status)
-      // get status text
-      console.log(response.statusText)
-      // get 'Expires' header
-      console.log(response.headers.get('Expires'))
-      // get body data
-      this.someData = response.body
-    }, response => {
-      // error callback
-    })
+    this.getData()
+  },
+  methods: {
+    getData () {
+      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {}).then(response => {
+        // get status
+        console.log(response.status)
+        // get status text
+        console.log(response.statusText)
+        // get 'Expires' header
+        console.log(response.headers.get('Expires'))
+        // get body data
+        this.someData = response.body
+      }, response => {
+        // error callback
+      })
+    }
   }
 }
 </script>
