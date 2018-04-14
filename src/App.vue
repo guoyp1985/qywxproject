@@ -71,8 +71,8 @@ export default {
       if (path === '/component/demo') {
         this.$router.replace('/demo')
       }
-    }
-    // '$route': 'getData'
+    },
+    '$route': 'getData'
   },
   computed: {
     ...mapState({
