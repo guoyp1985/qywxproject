@@ -127,6 +127,9 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
     }
   },
+  created () {
+    this.$store.commit('updateToggleTabbar', { toggleBar: false })
+  },
   data () {
     return {
       marquedata: [
