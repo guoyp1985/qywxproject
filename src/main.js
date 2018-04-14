@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import FastClick from 'fastclick'
 // import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
+import urlParse from 'url-parse'
 import App from './App'
 // import CenterSales from './components/CenterSales'
 // import CenterOperating from './components/CenterOperating'
@@ -15,11 +16,11 @@ import router from './router'
 // import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin } from 'vux'
+import { BusPlugin, LoadingPlugin, querystring } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
 import { OpenId } from '../libs/storage'
-// import ENV from '../libs/env'
+import ENV from '../libs/env'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -200,11 +201,11 @@ Vue.http.interceptors.push(function (request, next) {
           })
         } else {
           const orginHref = encodeURIComponent(location.href)
-          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
-          Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
-          .then(res => {
-            console.log(res)
-          })
+          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+          // Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
+          // .then(res => {
+          //   console.log(res)
+          // })
         }
       }
     },
@@ -218,10 +219,13 @@ Vue.http.interceptors.push(function (request, next) {
 new Vue({
   store,
   router,
-  render: h => {
-    h(App)
-  },
-  created: () => alert(location.href)
+  render: h => h(App),
+  created: () => {
+    const url = urlParse(location.href, true)
+    if (url.query.state === 'fromWx') {
+      alert(url.query.state)
+    }
+  }
 }).$mount('#app-box')
 
 // onload = () => {

@@ -17,6 +17,7 @@
     "es6-promise": "^4.2.4",
     "fastclick": "^1.0.6",
     "lodash": "^4.17.5",
+    "url-parse": "^1.3.0",
     "vue": "^2.5.16",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
