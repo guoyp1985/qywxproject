@@ -179,7 +179,7 @@ router.afterEach(function (to) {
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href)
-  alert(lUrl.query.state)
+  alert(location.href)
   if (lUrl.query.state === 'fromWx') {
     next(function (response) {
       const code = lUrl.query.code
