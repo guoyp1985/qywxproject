@@ -227,7 +227,7 @@ Vue.http.interceptors.push(function (request, next) {
       () => {
         // console.log('okokokok')
       })
-      // return response
+      return response
     })
   }
 })
