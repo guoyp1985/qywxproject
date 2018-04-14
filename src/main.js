@@ -199,7 +199,7 @@ Vue.http.interceptors.push(function (request, next) {
           .then(data => {
           })
         } else {
-          const orginHref = encodeURIComponent('vue.boka.cn')
+          const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
           Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
           .then(res => {
