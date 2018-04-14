@@ -18,8 +18,8 @@ import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
-import { Token, OpenId } from '../libs/storage'
-import ENV from '../libs/env'
+import { OpenId } from '../libs/storage'
+// import ENV from '../libs/env'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
