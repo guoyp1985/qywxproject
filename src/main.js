@@ -188,7 +188,7 @@ Vue.http.interceptors.push(function (request, next) {
     // location.href = `${ENV.BokaCDN}${route}`
     alert(code)
     // next(function (response) {
-      Vue.http.post(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+      Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
       .then(res => {
         alert(res)
       }, res => {
@@ -218,7 +218,7 @@ Vue.http.interceptors.push(function (request, next) {
             .then(data => {
             })
           } else {
-            const orginHref = encodeURIComponent(location.hostname)
+            const orginHref = encodeURIComponent(location.href)
             location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
           }
         }
