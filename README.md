@@ -107,7 +107,4 @@ git merge xx
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
-=======
-# vui
->>>>>>> 8a909f8ad9d12fe50e4f0534e780e0e9ff541ace
 start up up up up
