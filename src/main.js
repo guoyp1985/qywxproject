@@ -220,8 +220,8 @@ new Vue({
   router,
   render: h => {
     h(App)
-    alert(location.href)
-  }
+  },
+  created: () => alert(location.href)
 }).$mount('#app-box')
 
 // onload = () => {
