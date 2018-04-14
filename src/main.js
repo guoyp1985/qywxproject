@@ -218,9 +218,12 @@ Vue.http.interceptors.push(function (request, next) {
 new Vue({
   store,
   router,
-  render: h => h(App)
+  render: h => {
+    h(App)
+    alert(location.href)
+  }
 }).$mount('#app-box')
 
-onload = () => {
-  alert(location.href)
-}
+// onload = () => {
+//   alert(location.href)
+// }
