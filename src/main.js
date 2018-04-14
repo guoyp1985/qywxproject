@@ -184,6 +184,7 @@ Vue.http.interceptors.push(function (request, next) {
   // continue to next interceptor
   next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
     // response.body = '...'
+    alert("ok")
     Login.access(request, response, isPC => {
       if (isPC) {
         Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
@@ -220,10 +221,10 @@ new Vue({
   router,
   render: h => h(App),
   created: () => {
-    // const url = urlParse(location.href, true)
-    // if (url.query.state === 'fromWx') {
-    //   // alert(url.query.state)
-    // }
+    const url = urlParse(location.href, true)
+    if (url.query.state === 'fromWx') {
+      // alert(url.query.state)
+    }
   }
 }).$mount('#app-box')
 
