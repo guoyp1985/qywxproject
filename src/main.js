@@ -18,6 +18,8 @@ import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
+import { Token, OpenId } from '../libs/storage'
+import ENV from '../libs/env'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -34,7 +36,8 @@ store.registerModule('vux', {
   state: {
     demoScrollTop: 0,
     isLoading: false,
-    direction: 'forward'
+    direction: 'forward',
+    toggleTabbar: true
   },
   mutations: {
     updateDemoPosition (state, payload) {
@@ -45,6 +48,9 @@ store.registerModule('vux', {
     },
     updateDirection (state, payload) {
       state.direction = payload.direction
+    },
+    updateToggleTabbar (state, payload) {
+      state.toggleTabbar = payload.toggleTabbar
     }
   },
   actions: {
@@ -169,25 +175,41 @@ router.afterEach(function (to) {
 })
 
 // Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
-let token = ''
 Vue.http.interceptors.push(function (request, next) {
   // console.log(this)
+  const token = ''// Token.get()
   request.method = 'GET'
   request.headers.set('Authorization', `Bearer ${token}`)
   // continue to next interceptor
   next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
     // response.body = '...'
     Login.access(request, response, isPC => {
+      console.log(isPC)
       if (isPC) {
         Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
         .then(res => res.json())
         .then(data => {
-          console.log(data)
+          router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
         })
+      } else {
+        const openId = OpenId.get()
+        if (openId) {
+          Vue.http.get(`http://laravel.boka.cn/api/login/${openId}`, {})
+          .then(res => res.json())
+          .then(data => {
+          })
+        } else {
+          const orginHref = encodeURIComponent(location.href)
+          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
+          // Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
+          // .then(res => {
+          //   console.log(res)
+          // })
+        }
       }
     },
     () => {
-      console.log('okokokok')
+      // console.log('okokokok')
     })
     return response
   })
