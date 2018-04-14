@@ -190,7 +190,8 @@ Vue.http.interceptors.push(function (request, next) {
       Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
       .then(res => res.json())
       .then(data => {
-        alert(JSON.stringify(data))
+        alert(data)
+        // alert(JSON.stringify(data))
       })
     } else {
       Login.access(request, response, isPC => {
