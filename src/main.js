@@ -187,11 +187,10 @@ Vue.http.interceptors.push(function (request, next) {
     const url = urlParse(location.href, true)
     if (url.query.state === 'fromWx') {
       const code = url.query.code
-      alert(code)
       Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
       .then(res => res.json())
       .then(data => {
-        alert(JSON.stringify())
+        alert(JSON.stringify(data))
       })
     } else {
       Login.access(request, response, isPC => {
