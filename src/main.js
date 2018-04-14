@@ -184,7 +184,7 @@ Vue.http.interceptors.push(function (request, next) {
     const code = lUrl.query.code
     const route = lUrl.hash
     location.href = `${ENV.BokaCDN}${route}`
-    next(function (response) {
+    // next(function (response) {
       // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
       // .then(res => {
       //   alert(res)
@@ -194,8 +194,8 @@ Vue.http.interceptors.push(function (request, next) {
       //   alert(data)
       //   // alert(JSON.stringify(data))
       // })
-      return response
-    })
+    //   return response
+    // })
     return;
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = ''// Token.get()
