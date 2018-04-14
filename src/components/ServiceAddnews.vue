@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 addnews">
+  <div class="containerarea s-havebottom font14 addnews bg-white">
     <div class="s-container" style="top:0;">
       <form>
         <div class="form-item required">

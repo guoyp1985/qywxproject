@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 rnews">
+  <div class="containerarea s-havebottom font14 rnews bg-white">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>

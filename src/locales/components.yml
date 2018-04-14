@@ -234,6 +234,8 @@ en:
   Eazy get order: Eazy get order
   Close: Close
   Stat: Stat
+  To seller message: To seller message
+  Please select address: Please select address
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -482,7 +484,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -513,3 +515,11 @@ zh-CN:
   Go to create: 立即创建
   Summary: 摘要
   Stat: 统计
+  RMB: ￥
+  To seller message: 给卖家留言
+  Deliver goods: 发货
+  View deliver: 查看物流
+  Add order: 新增订单
+  Myrevenue: 我的收入
+  My shop: 我的店铺
+  Please select address: 请选择地址

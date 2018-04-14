@@ -164,11 +164,11 @@
   				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
   					<i class="al font18 mr3"></i>
   				</div>
-  				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" >
+  				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
   					<div>{{ $t('RMB') }} {{ productdata.special }}</div>
   					<div>原价购买</div>
   				</div>
-  				<div class="t-cell color-white h_100 v_middle align_center bg-red2">
+  				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">
   					<div>{{ $t('RMB') }} {{ productdata.groupprice }}</div>
   					<div>一键拼团</div>
   				</div>
@@ -182,7 +182,7 @@
     				</div>
             <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
     				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-    				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买</div>
+    				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
     			</div>
     		</div>
         <div v-else class="pagebottom b_top_after">
@@ -294,6 +294,7 @@ export default {
   },
   created () {
     let self = this
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
     setTimeout(function () {
       self.isshowtop = false
       self.showtopcss = 'notop'
@@ -444,6 +445,10 @@ export default {
     },
     favoriteevent () {
       this.isfavorite = !this.isfavorite
+    },
+    buyevent () {
+      let self = this
+      self.$router.push('/addOrder')
     }
   }
 }

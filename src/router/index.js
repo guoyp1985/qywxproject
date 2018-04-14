@@ -42,7 +42,9 @@ import NewsStat from '@/components/NewsStat'
 import ProductStat from '@/components/ProductStat'
 import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
-import Bargainbuyview from '@/components/Bargainbuyview'
+import BargainbuyView from '@/components/BargainbuyView'
+import BargainbuyDetail from '@/components/BargainbuyDetail'
+import AddOrder from '@/components/AddOrder'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -230,8 +232,16 @@ let routes = [
     component: Bargainbuy
   },
   {
-    path: '/bargainbuyview',
-    component: Bargainbuyview
+    path: '/bargainbuyView',
+    component: BargainbuyView
+  },
+  {
+    path: '/bargainbuyDetail',
+    component: BargainbuyDetail
+  },
+  {
+    path: '/addOrder',
+    component: AddOrder
   }
 ]
 
