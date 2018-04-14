@@ -176,29 +176,26 @@ router.afterEach(function (to) {
 })
 
 // Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
+let once = true
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
   // alert(lUrl.query.state + ' ' + rUrl.origin)
-  // if (lUrl.query.state === 'fromWx') {
-  //   const code = lUrl.query.code
-  //   // const route = lUrl.hash
-  //   // location.href = `${ENV.BokaCDN}${route}`
-  //   next(function (response) {
-  //     Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-  //     .then(res => {
-  //       alert(res)
-  //       return res.json()
-  //     })
-  //     .then(data => {
-  //       alert(data)
-  //       // alert(JSON.stringify(data))
-  //     })
-  //     return response
-  //   })
-  // } else
-  alert(location.href)
-  if (lUrl.query.state !== 'fromWx' && rUrl.origin === ENV.BokaApi) {
+  if (lUrl.query.state === 'fromWx' && once) {
+    once = false
+    const code = lUrl.query.code
+    // const route = lUrl.hash
+    // location.href = `${ENV.BokaCDN}${route}`
+    next(function (response) {
+      Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+      .then(res => res.json())
+      .then(data => {
+        alert(data)
+        // alert(JSON.stringify(data))
+      })
+      return response
+    })
+  } else if (rUrl.origin === ENV.BokaApi) {
     const token = ''// Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
@@ -236,21 +233,5 @@ Vue.http.interceptors.push(function (request, next) {
 new Vue({
   store,
   router,
-  render: h => h(App),
-  created: () => {
-    const code = lUrl.query.code
-    // const route = lUrl.hash
-    // location.href = `${ENV.BokaCDN}${route}`
-    // next(function (response) {
-    alert(code)
-    Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-    .then(res => {
-      alert(res)
-      return res.json()
-    })
-    .then(data => {
-      alert(data)
-      // alert(JSON.stringify(data))
-    })
-  }
+  render: h => h(App)
 }).$mount('#app-box')
