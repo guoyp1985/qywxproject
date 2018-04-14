@@ -182,20 +182,20 @@ Vue.http.interceptors.push(function (request, next) {
   alert(lUrl.query.state + ' ' + rUrl.origin)
   if (lUrl.query.state === 'fromWx') {
     const code = lUrl.query.code
-    const route = lUrl.hash
+    // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
-    // next(function (response) {
-      // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-      // .then(res => {
-      //   alert(res)
-      //   return res.json()
-      // })
-      // .then(data => {
-      //   alert(data)
-      //   // alert(JSON.stringify(data))
-      // })
-    //   return response
-    // })
+    next(function (response) {
+      Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+      .then(res => {
+        alert(res)
+        return res.json()
+      })
+      .then(data => {
+        alert(data)
+        // alert(JSON.stringify(data))
+      })
+      return response
+    })
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = ''// Token.get()
     request.method = 'GET'
