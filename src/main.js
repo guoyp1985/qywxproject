@@ -184,34 +184,38 @@ Vue.http.interceptors.push(function (request, next) {
   // continue to next interceptor
   next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
     // response.body = '...'
-    alert("ok")
-    Login.access(request, response, isPC => {
-      if (isPC) {
-        Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
-        .then(res => res.json())
-        .then(data => {
-          router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-        })
-      } else {
-        const openId = OpenId.get()
-        if (openId) {
-          Vue.http.get(`http://laravel.boka.cn/api/login/${openId}`, {})
+    const url = urlParse(location.href, true)
+    if (url.query.state === 'fromWx') {
+      alert(url.query.state)
+    } else {
+      Login.access(request, response, isPC => {
+        if (isPC) {
+          Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
           .then(res => res.json())
           .then(data => {
+            router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
           })
         } else {
-          const orginHref = encodeURIComponent(location.href)
-          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-          // Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
-          // .then(res => {
-          //   console.log(res)
-          // })
+          const openId = OpenId.get()
+          if (openId) {
+            Vue.http.get(`http://laravel.boka.cn/api/login/${openId}`, {})
+            .then(res => res.json())
+            .then(data => {
+            })
+          } else {
+            const orginHref = encodeURIComponent(location.href)
+            location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+            // Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
+            // .then(res => {
+            //   console.log(res)
+            // })
+          }
         }
-      }
-    },
-    () => {
-      // console.log('okokokok')
-    })
+      },
+      () => {
+        // console.log('okokokok')
+      })
+    }
     return response
   })
 })
@@ -219,13 +223,7 @@ Vue.http.interceptors.push(function (request, next) {
 new Vue({
   store,
   router,
-  render: h => h(App),
-  created: () => {
-    const url = urlParse(location.href, true)
-    if (url.query.state === 'fromWx') {
-      // alert(url.query.state)
-    }
-  }
+  render: h => h(App)
 }).$mount('#app-box')
 
 // onload = () => {
