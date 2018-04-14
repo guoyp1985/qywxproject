@@ -191,7 +191,7 @@ Vue.http.interceptors.push(function (request, next) {
       Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
       .then(res => {
         alert(res)
-        res.json()
+        return res.json()
       })
       .then(data => {
         alert(data)
