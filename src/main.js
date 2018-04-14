@@ -243,7 +243,7 @@ onload = () => {
   // const route = lUrl.hash
   // location.href = `${ENV.BokaCDN}${route}`
   // next(function (response) {
-  alert("ok")
+  alert(code)
   Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
   .then(res => {
     alert(res)
