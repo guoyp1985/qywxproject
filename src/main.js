@@ -177,20 +177,23 @@ router.afterEach(function (to) {
 
 // Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
 Vue.http.interceptors.push(function (request, next) {
-  const url = urlParse(location.href, true)
-  if (url.query.state === 'fromWx') {
-    const code = url.query.code
-    alert(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`)
-    Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-    .then(res => {
-      alert(res)
-      return res.json()
+  const rUrl = urlParse(request.url)
+  const lUrl = urlParse(location.href)
+  if (lUrl.query.state === 'fromWx') {
+    next(function (response) {
+      const code = lUrl.query.code
+      Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+      .then(res => {
+        alert(res)
+        return res.json()
+      })
+      .then(data => {
+        alert(data)
+        // alert(JSON.stringify(data))
+      })
+      return response
     })
-    .then(data => {
-      alert(data)
-      // alert(JSON.stringify(data))
-    })
-  } else {
+  } else if (rUrl.origin === ENV.BokaApi) {
     const token = ''// Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
@@ -199,7 +202,7 @@ Vue.http.interceptors.push(function (request, next) {
       // response.body = '...'
       Login.access(request, response, isPC => {
         if (isPC) {
-          Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
+          Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
           .then(res => res.json())
           .then(data => {
             router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
@@ -207,7 +210,7 @@ Vue.http.interceptors.push(function (request, next) {
         } else {
           const openId = OpenId.get()
           if (openId) {
-            Vue.http.get(`http://laravel.boka.cn/api/login/${openId}`, {})
+            Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
             .then(res => res.json())
             .then(data => {
             })
