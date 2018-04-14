@@ -186,7 +186,12 @@ Vue.http.interceptors.push(function (request, next) {
     // response.body = '...'
     const url = urlParse(location.href, true)
     if (url.query.state === 'fromWx') {
-      alert(url.query.state)
+      const code = url.query.code
+      Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+      .then(res => res.json())
+      .then(data => {
+        alert(JSON.stringify())
+      })
     } else {
       Login.access(request, response, isPC => {
         if (isPC) {
@@ -205,10 +210,6 @@ Vue.http.interceptors.push(function (request, next) {
           } else {
             const orginHref = encodeURIComponent(location.href)
             location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-            // Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
-            // .then(res => {
-            //   console.log(res)
-            // })
           }
         }
       },
