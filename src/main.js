@@ -243,15 +243,16 @@ onload = () => {
   // const route = lUrl.hash
   // location.href = `${ENV.BokaCDN}${route}`
   // next(function (response) {
-    Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-    .then(res => {
-      alert(res)
-      return res.json()
-    })
-    .then(data => {
-      alert(data)
-      // alert(JSON.stringify(data))
-    })
+  alert("ok")
+  Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+  .then(res => {
+    alert(res)
+    return res.json()
+  })
+  .then(data => {
+    alert(data)
+    // alert(JSON.stringify(data))
+  })
   //   return response
   // })
 }
