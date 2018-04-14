@@ -196,7 +196,9 @@ Vue.http.interceptors.push(function (request, next) {
       // })
       return response
     })
-  } else if (rUrl.origin === ENV.BokaApi) {
+    return
+  }
+  if (rUrl.origin === ENV.BokaApi) {
     const token = ''// Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
@@ -228,6 +230,7 @@ Vue.http.interceptors.push(function (request, next) {
       })
       return response
     })
+    return
   }
 })
 
