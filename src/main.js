@@ -235,24 +235,21 @@ Vue.http.interceptors.push(function (request, next) {
 new Vue({
   store,
   router,
-  render: h => h(App)
+  render: h => h(App),
+  created: () => {
+    const code = lUrl.query.code
+    // const route = lUrl.hash
+    // location.href = `${ENV.BokaCDN}${route}`
+    // next(function (response) {
+    alert(code)
+    Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
+    .then(res => {
+      alert(res)
+      return res.json()
+    })
+    .then(data => {
+      alert(data)
+      // alert(JSON.stringify(data))
+    })
+  }
 }).$mount('#app-box')
-
-onload = () => {
-  const code = lUrl.query.code
-  // const route = lUrl.hash
-  // location.href = `${ENV.BokaCDN}${route}`
-  // next(function (response) {
-  alert(code)
-  Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-  .then(res => {
-    alert(res)
-    return res.json()
-  })
-  .then(data => {
-    alert(data)
-    // alert(JSON.stringify(data))
-  })
-  //   return response
-  // })
-}
