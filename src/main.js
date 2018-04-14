@@ -197,6 +197,7 @@ Vue.http.interceptors.push(function (request, next) {
   //     return response
   //   })
   // } else
+  alert(location.href)
   if (lUrl.query.state !== 'fromWx' && rUrl.origin === ENV.BokaApi) {
     const token = ''// Token.get()
     request.method = 'GET'
