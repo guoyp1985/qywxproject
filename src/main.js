@@ -183,7 +183,7 @@ Vue.http.interceptors.push(function (request, next) {
     const code = lUrl.query.code
     const route = lUrl.hash
     location.href = `${ENV.BokaCDN}${route}`
-    alert(location.href)
+    alert(route)
     next(function (response) {
       Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
       .then(res => {
