@@ -223,7 +223,7 @@ new Vue({
   created: () => {
     const url = urlParse(location.href, true)
     if (url.query.state === 'fromWx') {
-      alert(url.query.state)
+      // alert(url.query.state)
     }
   }
 }).$mount('#app-box')
