@@ -179,12 +179,11 @@ router.afterEach(function (to) {
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  // alert(lUrl.query.state + ' ' + rUrl.origin)
   if (lUrl.query.code) {
     const code = lUrl.query.code
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
-    alert(code)
+    // alert(code)
   } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
     // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
