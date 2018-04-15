@@ -193,6 +193,7 @@ Vue.http.interceptors.push(function (request, next) {
       },
       res => {
         // alert(JSON.stringify(res))
+        return res.json()
       }
     ).then(data => {
       alert(JSON.stringify(data))
