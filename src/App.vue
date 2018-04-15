@@ -136,17 +136,14 @@ export default {
   },
   methods: {
     getData () {
-      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {}).then(response => {
-        // get status
-        console.log(response.status)
-        // get status text
-        console.log(response.statusText)
-        // get 'Expires' header
-        console.log(response.headers.get('Expires'))
-        // get body data
-        this.someData = response.body
-      }, response => {
+      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
+      .then(res => {
+        return res.json()
+      }, res => {
         // error callback
+      })
+      .then(data => {
+        alert(data)
       })
     }
   }
