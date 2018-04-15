@@ -184,6 +184,14 @@ Vue.http.interceptors.push(function (request, next) {
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
     // alert(code)
+    Vue.http.get(`gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {}).then(
+      res => {
+        alert(res)
+      },
+      res => {
+        alert(res)
+      }
+    )
   } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
     // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
