@@ -176,10 +176,12 @@ router.afterEach(function (to) {
 })
 
 // Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
+let once = true
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  if (lUrl.query.code) {
+  if (lUrl.query.code && once) {
+    once = false
     const code = lUrl.query.code
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
