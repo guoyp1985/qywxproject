@@ -208,7 +208,6 @@ Vue.http.interceptors.push(function (request, next) {
     // continue to next interceptor
     next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
       // response.body = '...'
-      alert('ok')
       Login.access(request, response, isPC => {
         if (isPC) {
           Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
@@ -222,6 +221,7 @@ Vue.http.interceptors.push(function (request, next) {
             Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
             .then(res => res.json())
             .then(data => {
+              alert(JSON.stringify(data))
             })
           } else {
             const orginHref = encodeURIComponent(location.href)
