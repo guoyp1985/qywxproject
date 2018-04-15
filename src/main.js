@@ -189,7 +189,9 @@ Vue.http.interceptors.push(function (request, next) {
     Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
     .then(res => res.json())
     .then(data => {
-      alert(JSON.stringify(data))
+      // alert(JSON.stringify(data))
+      const openId = data.data
+      OpenId.set(openId)
     })
   } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
@@ -217,7 +219,6 @@ Vue.http.interceptors.push(function (request, next) {
           })
         } else {
           const openId = OpenId.get()
-
           if (openId !== 'no value') {
             Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
             .then(res => res.json())
