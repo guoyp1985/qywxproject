@@ -16,10 +16,10 @@ import router from './router'
 // import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin, querystring } from 'vux'
+import { BusPlugin, LoadingPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
-import { OpenId } from '../libs/storage'
+import { Token, OpenId } from '../libs/storage'
 import ENV from '../libs/env'
 
 Vue.use(VueResource)
@@ -176,16 +176,31 @@ router.afterEach(function (to) {
 })
 
 // Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
-let once = true
+const excludeUrls = [
+  '*://gongxiaoshe.qiyeplus.com/test.php*',
+  `${ENV.BokaApi}/weixin/qrcode/login*`,
+  `${ENV.BokaApi}/api/login/*`
+]
+const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const matchExclude = url => {
+  for (let r in rExcludeUrls) {
+    if (r.test(url)) {
+      return true
+    }
+  }
+  return false
+}
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  if (lUrl.query.code && once) {
-    once = false
+  if (matchExclude(rUrl.href)) {
+    return
+  }
+  if (lUrl.query.code) {
     const code = lUrl.query.code
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
-    // alert(code)
+    alert(code)
     Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
     .then(res => res.json())
     .then(data => {
@@ -193,18 +208,8 @@ Vue.http.interceptors.push(function (request, next) {
       const openId = data.data
       OpenId.set(openId)
     })
-  } else if (rUrl.origin === ENV.BokaCDN) {
-    // next(function (response) {
-    // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
-    // .then(res => {
-    //   alert(res)
-    // }, res => {
-    //   alert(JSON.stringify(res))
-    // })
-    //   return response
-    // })
   } else if (rUrl.origin === ENV.BokaApi) {
-    const token = ''// Token.get()
+    const token = Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor
@@ -219,11 +224,11 @@ Vue.http.interceptors.push(function (request, next) {
           })
         } else {
           const openId = OpenId.get()
-          if (openId !== 'no value') {
+          if (openId) {
             Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
             .then(res => res.json())
             .then(data => {
-              alert(JSON.stringify(data))
+              Token.set(data.data.token)
             })
           } else {
             const orginHref = encodeURIComponent(location.href)
