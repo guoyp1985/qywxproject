@@ -180,10 +180,10 @@ let once = true
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  alert('ok')
   if (lUrl.query.code && once) {
     once = false
     const code = lUrl.query.code
+    alert('ok')
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
     // alert(code)
