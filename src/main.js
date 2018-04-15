@@ -193,6 +193,7 @@ Vue.http.interceptors.push(function (request, next) {
       const openId = data.data
       OpenId.set(openId)
       switcher = false
+      alert(openId)
       Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
       .then(res => res.json())
       .then(data => {
