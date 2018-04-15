@@ -5,7 +5,7 @@
         <img class="avatar" slot="icon" :src="avatarHref"/>
       </cell>
       <x-input :title="$t('Name')" :placeholder="$t('Name')" v-model="value1"></x-input>
-      <popup-radio :title="$t('Gendar')" :options="gendar" v-model="gendar" :placeholder="$t('Gendar')"></popup-radio>
+      <popup-radio :title="$t('Gendar')" :options="options" v-model="option" :placeholder="$t('Gendar')"></popup-radio>
       <x-input :title="$t('Company Name')" :placeholder="$t('Company Name')" v-model="value3"></x-input>
       <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="value4"></x-input>
     </group>
@@ -45,7 +45,8 @@ export default {
   data () {
     return {
       avatarHref: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
-      gendar: [
+      option: '',
+      options: [
         {
           key: 1,
           value: '男'
