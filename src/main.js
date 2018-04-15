@@ -188,12 +188,15 @@ Vue.http.interceptors.push(function (request, next) {
     // alert(code)
     Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {}).then(
       res => {
-        alert(JSON.stringify(res))
+        // alert(JSON.stringify(res))
+        return res.json()
       },
       res => {
         alert(JSON.stringify(res))
       }
-    )
+    ).then(data => {
+      alert(data)
+    })
   } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
     // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
