@@ -1,6 +1,6 @@
 <template>
   <div id="user-profile">
-    <group label-width="5em" label-margin-right="2em">
+    <group label-width="5em" label-align="left" label-margin-right="2em">
       <cell :inline-desc="$t('Sync From Wx')">
         <img class="avatar" slot="icon" :src="avatarHref"/>
       </cell>
