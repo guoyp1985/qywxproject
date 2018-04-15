@@ -186,16 +186,9 @@ Vue.http.interceptors.push(function (request, next) {
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
     // alert(code)
-    Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {}).then(
-      res => {
-        // alert(JSON.stringify(res))
-        return res.json()
-      },
-      res => {
-        alert(JSON.stringify(res))
-        // return res.json()
-      }
-    ).then(data => {
+    Vue.http.get(`https://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
+    .then(res => res.json())
+    .then(data => {
       alert(JSON.stringify(data))
     })
   } else if (rUrl.origin === ENV.BokaCDN) {
