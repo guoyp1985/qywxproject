@@ -200,7 +200,7 @@ Vue.http.interceptors.push(function (request, next) {
         alert(JSON.stringify(data))
       })
     })
-  } else if (rUrl.origin === ENV.BokaCDN && switcher) {
+  } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
     // Vue.http.get(`${ENV.WxOAuthUrl}appid=${ENV.AppId}&secret=${ENV.AppSecret}&code=${code}&grant_type=authorization_code`, {})
     // .then(res => {
@@ -210,7 +210,7 @@ Vue.http.interceptors.push(function (request, next) {
     // })
     //   return response
     // })
-  } else if (rUrl.origin === ENV.BokaApi) {
+  } else if (rUrl.origin === ENV.BokaApi && switcher) {
     const token = ''// Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
