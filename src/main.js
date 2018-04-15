@@ -195,7 +195,7 @@ Vue.http.interceptors.push(function (request, next) {
         // alert(JSON.stringify(res))
       }
     ).then(data => {
-      alert(data)
+      alert(JSON.stringify(data))
     })
   } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
