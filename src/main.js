@@ -189,7 +189,13 @@ Vue.http.interceptors.push(function (request, next) {
     Vue.http.get(`https://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
     .then(res => res.json())
     .then(data => {
-      alert(JSON.stringify(data))
+      const openId = data.data
+      OpenId.set(openId)
+      Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
+      .then(res => res.json())
+      .then(data => {
+        alert(JSON.stringify(data))
+      })
     })
   } else if (rUrl.origin === ENV.BokaCDN) {
     // next(function (response) {
