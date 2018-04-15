@@ -180,13 +180,14 @@ let once = true
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
+  alert('ok')
   if (lUrl.query.code && once) {
     once = false
     const code = lUrl.query.code
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
     // alert(code)
-    Vue.http.jsonp(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
+    Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
     .then(res => res.json())
     .then(data => {
       alert(JSON.stringify(data))
