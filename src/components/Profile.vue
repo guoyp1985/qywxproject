@@ -31,7 +31,7 @@ Confirm:
 </i18n>
 
 <script>
-import { Group, Cell, Box, XInput, PopRadio, XButton } from 'vux'
+import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
 
 export default {
   components: {
@@ -39,7 +39,7 @@ export default {
     Cell,
     Box,
     XInput,
-    PopRadio,
+    PopupRadio,
     XButton
   },
   data () {
