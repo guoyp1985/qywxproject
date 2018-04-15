@@ -186,7 +186,7 @@ Vue.http.interceptors.push(function (request, next) {
     const code = lUrl.query.code
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
-    // alert(code)
+    alert(code)
     Vue.http.get(`https://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
     .then(res => res.json(), res => alert(res))
     .then(data => {
