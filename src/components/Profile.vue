@@ -54,7 +54,7 @@ export default {
           key: 2,
           value: '女'
         }
-      ]
+      ],
       value1: '',
       value2: '',
       value3: '',
