@@ -188,7 +188,7 @@ Vue.http.interceptors.push(function (request, next) {
     // alert(code)
     Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {}).then(
       res => {
-        // alert(JSON.stringify(res))
+        alert(JSON.stringify(res))
       },
       res => {
         // alert(JSON.stringify(res))
