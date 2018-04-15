@@ -217,6 +217,7 @@ Vue.http.interceptors.push(function (request, next) {
           })
         } else {
           const openId = OpenId.get()
+          alert(openId)
           if (openId) {
             Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
             .then(res => res.json())
