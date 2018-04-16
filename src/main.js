@@ -19,7 +19,7 @@ import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
-import { Token, OpenId } from '../libs/storage'
+import { Token } from '../libs/storage'
 import ENV from '../libs/env'
 
 Vue.use(VueResource)
@@ -178,7 +178,8 @@ router.afterEach(function (to) {
 const excludeUrls = [
   `${ENV.BokaApi}/weixin/userAuth/*`,
   `${ENV.BokaApi}/weixin/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`
+  `${ENV.BokaApi}/api/login/*`,
+  `${ENV.BokaApi}/api/scanlogin`
 ]
 
 // 排除全局请求过滤器中的请求url
@@ -196,6 +197,7 @@ const matchExclude = url => {
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
+  console.log(matchExclude(rUrl.href))
   if (matchExclude(rUrl.href)) {
     return
   }
@@ -209,17 +211,18 @@ Vue.http.interceptors.push(function (request, next) {
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       },
       error => {
-        alert(JSON.stringify(error))
+        // alert(JSON.stringify(error))
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
-    const token = Token.get()
+    const token = ''//Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor
     next(function (response) {
       Login.access(request, response, isPC => {
         if (isPC) {
+          console.log(isPC)
           Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
           .then(res => res.json())
           .then(data => {
