@@ -67,9 +67,9 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     Vue.http.post("",{
       data: {}
-    }).then(function(res){
+    }).then(function (res) {
       return res.json()
-    }).then(function(data){
+    }).then(function (data) {
 
     })
   },

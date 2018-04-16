@@ -206,11 +206,11 @@ Vue.http.interceptors.push(function (request, next) {
     Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
     .then(res => res.json())
     .then(
-      data => {
+      (data) => {
         Token.set(data.data.token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       },
-      error => {
+      (error) => {
         // alert(JSON.stringify(error))
       }
     )
@@ -223,11 +223,11 @@ Vue.http.interceptors.push(function (request, next) {
       Login.access(request, response, isPC => {
         if (isPC) {
           console.log(isPC)
-          Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
-          .then(res => res.json())
-          .then(data => {
-            router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-          })
+          // Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
+          // .then(res => res.json())
+          // .then(data => {
+          //   router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+          // })
         } else {
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
