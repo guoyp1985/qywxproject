@@ -143,7 +143,7 @@ export default {
           // alert(JSON.stringify(data))
         },
         error => {
-          alert(JSON.stringify(error))
+          // alert(JSON.stringify(error))
         }
       )
     }
