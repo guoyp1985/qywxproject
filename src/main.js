@@ -201,10 +201,11 @@ Vue.http.interceptors.push(function (request, next) {
     // const route = lUrl.hash
     // location.href = `${ENV.BokaCDN}${route}`
     alert(code)
-    Vue.http.get(`http://gongxiaoshe.qiyeplus.com/test.php?code=${code}`, {})
+    //http://laravel.boka.cn/weixin/userAuth
+    Vue.http.get(`http://laravel.boka.cn/weixin/userAuth?code=${code}`, {})
     .then(res => res.json())
     .then(data => {
-      // alert(JSON.stringify(data))
+      alert(JSON.stringify(data))
       const openId = data.data
       OpenId.set(openId)
     })
