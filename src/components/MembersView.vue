@@ -1,13 +1,15 @@
 <template>
-  <div class="containerarea bg-page membersview font14">
-    <div class="s-topbanner flex_center pl10 pr10 color-white">
-      <div class="t-table">
-        <div class="t-cell v_middle" style="width:80px;">
-          <img class="avatarimg4" :src="viewuser.avatar" />
-        </div>
-        <div class="t-cell v_middle">
-          <div class="font17">{{ viewuser.linkman }} <span class="color-yellow ml5" v-if="viewuser.memberslevel">{{ viewuser.vip }}</span></div>
-          <div class="font14" v-if="viewuser.retailerInfo && viewuser.uid">返点客：{{ viewuser.retailerInfo.linkman }}</div>
+  <div class="containerarea bg-page membersview font14 s-havebottom">
+    <div class="s-topbanner flex_center color-white">
+      <div class="pl10 pr10">
+        <div class="t-table">
+          <div class="t-cell v_middle" style="width:80px;">
+            <img class="avatarimg4" :src="viewuser.avatar" />
+          </div>
+          <div class="t-cell v_middle">
+            <div class="font17">{{ viewuser.linkman }} <span class="color-yellow ml5" v-if="viewuser.memberslevel">{{ viewuser.vip }}</span></div>
+            <div class="font14" v-if="viewuser.retailerInfo && viewuser.uid">返点客：{{ viewuser.retailerInfo.linkman }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -30,9 +32,9 @@
       </div>
       <div class="b_top_after padding10 flex_center bg-white">
         <div class="t-table align_center font15 itemtab">
-          <router-link to="/centerSales" class="t-cell item v_middle b_right_after">分享</router-link>
-          <router-link to="/centerSales" class="t-cell item v_middle b_right_after">订单</router-link>
-          <router-link to="/centerSales" class="t-cell item">行为</router-link>
+          <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Share') }}</router-link>
+          <router-link :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>
+          <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">{{ $t('Behavior') }}</router-link>
         </div>
       </div>
       <div class="b_bottom_after"></div>
@@ -72,23 +74,44 @@
         </div>
         <div class="item padding10 b_bottom_after">
           <div class="t-table">
-            <div class="t-cell align_left w100">真实姓名</div>
-            <div class="t-cell align_right color-gray">{{ viewuser.position }}</div>
-            <div class="t-cell align_right w50">
-              <span class="qbtn1 bg-green color-white">更新</span>
-            </div>
+            <div class="t-cell align_left w100">返点客</div>
+            <div class="t-cell align_right color-gray">{{ viewuser.retailerInfo.linkman }}</div>
           </div>
         </div>
+        <div class="item padding10 b_bottom_after">
+          <div class="t-table">
+            <div class="t-cell align_left w100">成为客户时间</div>
+            <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-bottom bottomnaviarea b_top_after">
+      <div class="t-table bottomnavi">
+        <router-link class="t-cell item" to="/retailerShop">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
+        <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
       </div>
     </div>
   </div>
 </template>
 
 <i18n>
+Behavior:
+  zh-CN: 行为
 </i18n>
 
 <script>
+import Time from '../../libs/time'
 export default {
+  created: function () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
+  },
   data () {
     return {
       viewuser: {
@@ -100,6 +123,7 @@ export default {
         city: '北京',
         sex: 1,
         avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
+        dateline: 1529694513,
         retailerInfo: { uid: 2, linkman: '仇红波' },
         memberslevel: 3,
         vip: '3星用户',

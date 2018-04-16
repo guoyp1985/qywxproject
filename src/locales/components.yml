@@ -236,6 +236,14 @@ en:
   Stat: Stat
   To seller message: To seller message
   Please select address: Please select address
+  Orders: Orders
+  Userinfo: Userinfo
+  Behavior: Behavior
+  Behavior analysis in the last month: Behavior analysis in the last month
+  Decoration shop: Decoration shop
+  Add product: Add product
+  Back go shop: Back go shop
+  Rolling show: Rolling show
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -523,3 +531,11 @@ zh-CN:
   Myrevenue: 我的收入
   My shop: 我的店铺
   Please select address: 请选择地址
+  Orders: 订单
+  Userinfo: 用户信息
+  Behavior: 行为
+  Behavior analysis in the last month: 最近一个月行为分析
+  Decoration shop: 装修店铺
+  Add product: 添加商品
+  Back go shop: 返回店铺
+  Rolling show: 滚动展示

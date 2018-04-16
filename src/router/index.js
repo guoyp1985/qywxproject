@@ -46,6 +46,9 @@ import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import AddOrder from '@/components/AddOrder'
 import MembersView from '@/components/MembersView'
+import ShareList from '@/components/ShareList'
+import SalesList from '@/components/SalesList'
+import Timeline from '@/components/Timeline'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -247,6 +250,18 @@ let routes = [
   {
     path: '/membersView',
     component: MembersView
+  },
+  {
+    path: '/shareList',
+    component: ShareList
+  },
+  {
+    path: '/salesList',
+    component: SalesList
+  },
+  {
+    path: '/timeline',
+    component: Timeline
   }
 ]
 

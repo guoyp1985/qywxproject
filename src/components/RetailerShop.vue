@@ -94,6 +94,8 @@
 </template>
 
 <i18n>
+Decoration shop:
+  zh-CN: 装修店铺
 Selection promotion:
   zh-CN: 精选促销
 All products:

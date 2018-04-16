@@ -1,75 +1,126 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container" style="top:0px;">
-      <div class="scroll_list bg-page">
-        <template v-if="!productdata || productdata.length == 0">
-          <div class="emptyitem">
-            <div class="t-table" style="padding-top:20%;">
-              <div class="t-cell padding10">
-                <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                <div>还没有添加商品哦，及时添加商品可以：</div>
-                <div>1.创建促销活动 </div>
-                <div>2.分享商品获得客户</div>
-                <div>3.邀请返点客帮你赚钱</div>
+    <template v-if="getquery.store">
+      <div class="s-container" style="top:0px;">
+        <div class="scroll_list bg-page">
+          <template v-if="!productdata || productdata.length == 0">
+            <div class="emptyitem">
+              <div class="t-table" style="padding-top:20%;">
+                <div class="t-cell padding10">
+                  <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                  <div>还没有可装修商品哦，及时添加商品可以：</div>
+                  <div>1.创建促销活动 </div>
+                  <div>2.分享商品获得客户</div>
+                  <div>3.邀请返点客帮你赚钱</div>
+                </div>
               </div>
             </div>
-          </div>
-        </template>
-        <router-link :to="{path:'/product',query:{id:item.id,wid:187}}" v-else class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-          <div v-if="item.moderate == 0" class="icon down"></div>
-      		<div class="t-table bg-white pt10 pb10">
-      			<div class="t-cell pl10 v_middle" style="width:90px;">
-  		          <img style="width:80px;height:80px;" :src="item.photo" />
-      			</div>
-      			<div class="t-cell v_middle">
-              <div class="clamp2 font15 pr10">{{item.title}}</div>
-              <div class="mt5 dishref db">
-                <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
-              </div>
-              <div class="align_right pr10">
-                <div class="btnicon" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
-              </div>
-      			</div>
-      		</div>
-        </router-link>
-      </div>
-    </div>
-    <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
-        <div class="popup0">
-          <div class="list" v-if="clickdata">
-            <div class="item" v-for="(row,index1) in controldata1" :key="index1">
-              <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
-              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
-              <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
-              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
-            </div>
-            <div class="item close mt10" @click="clickpopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
-            </div>
-          </div>
+          </template>
+          <template v-else v-for="(item,index) in productdata">
+            <router-link :to="{path:'/product',query:{id:item.id,wid:187}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
+              <div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl10 v_middle" style="width:90px;">
+      		          <img style="width:80px;height:80px;" :src="item.photo" />
+          			</div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp2 font15 pr10">{{item.title}}</div>
+                  <div class="mt5 dishref db">
+                    <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+                  </div>
+                  <div class="align_right pr10">
+                    <div class="btnicon" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Rolling show') }}</div>
+                  </div>
+          			</div>
+          		</div>
+            </router-link>
+          </template>
         </div>
-      </popup>
-    </div>
-    <div v-transfer-dom>
-      <confirm v-model="showupconfirm"
-      @on-cancel="cancelupConfirm"
-      @on-confirm="okupConfirm">
-        <p style="text-align:center;">{{ $t('Are you sure up?') }}</p>
-      </confirm>
-    </div>
-    <div v-transfer-dom>
-      <confirm v-model="showdownconfirm"
-      @on-cancel="canceldownConfirm"
-      @on-confirm="okdownConfirm">
-        <p style="text-align:center;">{{ $t('Are you sure down?') }}</p>
-      </confirm>
-    </div>
+      </div>
+      <div class="s-bottom">
+        <div class="t-table h_100 align_center">
+          <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/retailerShop', query: { wid: loginuser.uid}}">{{ $t('Back go shop') }}</router-link>
+          <router-link class="t-cell h_100 v_middle bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="s-container" style="top:0px;">
+        <div class="scroll_list bg-page">
+          <template v-if="!productdata || productdata.length == 0">
+            <div class="emptyitem">
+              <div class="t-table" style="padding-top:20%;">
+                <div class="t-cell padding10">
+                  <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                  <div>还没有添加商品哦，及时添加商品可以：</div>
+                  <div>1.创建促销活动 </div>
+                  <div>2.分享商品获得客户</div>
+                  <div>3.邀请返点客帮你赚钱</div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <router-link :to="{path:'/product',query:{id:item.id,wid:187}}" v-else class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <div v-if="item.moderate == 0" class="icon down"></div>
+        		<div class="t-table bg-white pt10 pb10">
+        			<div class="t-cell pl10 v_middle" style="width:90px;">
+    		          <img style="width:80px;height:80px;" :src="item.photo" />
+        			</div>
+        			<div class="t-cell v_middle">
+                <div class="clamp2 font15 pr10">{{item.title}}</div>
+                <div class="mt5 dishref db">
+                  <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+                </div>
+                <div class="align_right pr10">
+                  <div class="btnicon" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+                </div>
+        			</div>
+        		</div>
+          </router-link>
+        </div>
+      </div>
+      <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
+          <div class="popup0">
+            <div class="list" v-if="clickdata">
+              <div class="item" v-for="(row,index1) in controldata1" :key="index1">
+                <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
+                <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
+                <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
+                <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
+              </div>
+              <div class="item close mt10" @click="clickpopup('row.key')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom>
+        <confirm v-model="showupconfirm"
+        @on-cancel="cancelupConfirm"
+        @on-confirm="okupConfirm">
+          <p style="text-align:center;">{{ $t('Are you sure up?') }}</p>
+        </confirm>
+      </div>
+      <div v-transfer-dom>
+        <confirm v-model="showdownconfirm"
+        @on-cancel="canceldownConfirm"
+        @on-confirm="okdownConfirm">
+          <p style="text-align:center;">{{ $t('Are you sure down?') }}</p>
+        </confirm>
+      </div>
+    </template>
   </div>
 </template>
 
 <i18n>
+Rolling show:
+  zh-CN: 滚动展示
+Add product:
+  zh-CN: 添加商品
+Back go shop:
+  zh-CN: 返回店铺
 Are you sure up?:
   zh-CN: 确定要上架吗？
 Are you sure down?:
@@ -78,7 +129,6 @@ Are you sure down?:
 
 <script>
 import { TransferDom, Popup, Confirm } from 'vux'
-import Productitemplate1 from './Productitemplate1'
 
 export default {
   directives: {
@@ -86,11 +136,14 @@ export default {
   },
   components: {
     Popup,
-    Productitemplate1,
     Confirm
+  },
+  created: function () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   data () {
     return {
+      loginuser: { uid: 187 },
       productdata: [
         { 'id': 124, isfinished: 1, moderate: 0, 'title': '苹果手机', 'photo': 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', 'price': '8,000.00' },
         { 'id': 113, isfinished: 0, moderate: 1, 'title': '维生素B族片', 'photo': 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg', 'price': '1.00', 'saled': 1 },
@@ -118,6 +171,9 @@ export default {
     }
   },
   computed: {
+    getquery: function () {
+      return this.$route.query
+    }
   },
   methods: {
     controlpopup1 (item, index) {
