@@ -215,7 +215,7 @@ Vue.http.interceptors.push(function (request, next) {
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
-    const token = ''//Token.get()
+    const token = ''// Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor

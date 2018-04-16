@@ -65,7 +65,7 @@ import Time from '../../libs/time'
 export default {
   created: function () {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    Vue.http.post("",{
+    this.http.post('', {
       data: {}
     }).then(function (res) {
       return res.json()
