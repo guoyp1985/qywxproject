@@ -89,7 +89,7 @@
           <div class="popup-bottom flex_center">
             <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepopup">{{ $t('Close') }}</div>
             <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitaddress">提交</div>
-            <router-link :to="{ path: '/addAddress', params: {lasturl: 'addOrder'} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
+            <router-link :to="{ path: '/address/0', query: {lasturl: 'addOrder'} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
           </div>
         </div>
       </popup>
