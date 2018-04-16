@@ -476,7 +476,7 @@ zh-CN:
   Share title: 分享标题
   Share title placeholder: 如不填写默认调用商品标题
   Share description: 分享描述
-  Share description placeholder: 如不填写自动截取文章内容
+  Share description placeholder: 如不填写自动截取商品介绍
   Label: 标签
   Label can not empty: 标签不能为空
   Url paster here: 链接粘贴在此处
@@ -492,7 +492,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
