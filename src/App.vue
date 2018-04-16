@@ -137,14 +137,15 @@ export default {
   methods: {
     getData () {
       this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
-      .then(res => {
-        return res.json()
-      }, res => {
-        // error callback
-      })
-      .then(data => {
-        alert(data)
-      })
+      .then(res => res.json())
+      .then(
+        data => {
+          // alert(JSON.stringify(data))
+        },
+        error => {
+          alert(JSON.stringify(error))
+        }
+      )
     }
   }
 }

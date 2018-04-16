@@ -175,21 +175,24 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-// Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
 const excludeUrls = [
-  '*://gongxiaoshe.qiyeplus.com/test.php*',
+  `${ENV.BokaApi}/weixin/userAuth/*`,
   `${ENV.BokaApi}/weixin/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`
 ]
+
+// 排除全局请求过滤器中的请求url
 const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
-  for (let r in rExcludeUrls) {
-    if (r.test(url)) {
+  for (let r = 0; r < rExcludeUrls.length; r++) {
+    if (rExcludeUrls[r].test(url)) {
       return true
     }
   }
   return false
 }
+
+// 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
@@ -198,24 +201,23 @@ Vue.http.interceptors.push(function (request, next) {
   }
   if (lUrl.query.code) {
     const code = lUrl.query.code
-    // const route = lUrl.hash
-    // location.href = `${ENV.BokaCDN}${route}`
-    alert(code)
-    //http://laravel.boka.cn/weixin/userAuth
-    Vue.http.get(`http://laravel.boka.cn/weixin/userAuth?code=${code}`, {})
+    Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
     .then(res => res.json())
-    .then(data => {
-      alert(JSON.stringify(data))
-      const openId = data.data
-      OpenId.set(openId)
-    })
+    .then(
+      data => {
+        Token.set(data.data.token)
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+      },
+      error => {
+        alert(JSON.stringify(error))
+      }
+    )
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor
-    next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
-      // response.body = '...'
+    next(function (response) {
       Login.access(request, response, isPC => {
         if (isPC) {
           Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
@@ -224,17 +226,8 @@ Vue.http.interceptors.push(function (request, next) {
             router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
           })
         } else {
-          const openId = OpenId.get()
-          if (openId) {
-            Vue.http.get(`${ENV.BokaApi}/api/login/${openId}`, {})
-            .then(res => res.json())
-            .then(data => {
-              Token.set(data.data.token)
-            })
-          } else {
-            const orginHref = encodeURIComponent(location.href)
-            location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-          }
+          const orginHref = encodeURIComponent(location.href)
+          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
         }
       },
       () => {
