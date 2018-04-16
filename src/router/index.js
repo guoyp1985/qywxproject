@@ -49,6 +49,8 @@ import MembersView from '@/components/MembersView'
 import ShareList from '@/components/ShareList'
 import SalesList from '@/components/SalesList'
 import Timeline from '@/components/Timeline'
+import Bargainbuyview from '@/components/Bargainbuyview'
+import QrLogin from '@/components/QrLogin'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -59,6 +61,11 @@ let routes = [
   //   path: '/',
   //   component: HelloWorld
   // },
+  {
+    path: '/login',
+    name: 'login',
+    component: QrLogin
+  },
   {
     path: '/center',
     component: Center

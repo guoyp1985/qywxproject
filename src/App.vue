@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;">
+  <div id="app" style="height:100%;" v-cloak>
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
@@ -71,7 +71,8 @@ export default {
       if (path === '/component/demo') {
         this.$router.replace('/demo')
       }
-    }
+    },
+    '$route': 'getData'
   },
   computed: {
     ...mapState({
@@ -130,19 +131,22 @@ export default {
       return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
   },
-  activated () {
-    this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {}).then(response => {
-      // get status
-      console.log(response.status)
-      // get status text
-      console.log(response.statusText)
-      // get 'Expires' header
-      console.log(response.headers.get('Expires'))
-      // get body data
-      this.someData = response.body
-    }, response => {
-      // error callback
-    })
+  created () {
+    this.getData()
+  },
+  methods: {
+    getData () {
+      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
+      .then(res => res.json())
+      .then(
+        data => {
+          // alert(JSON.stringify(data))
+        },
+        error => {
+          alert(JSON.stringify(error))
+        }
+      )
+    }
   }
 }
 </script>
