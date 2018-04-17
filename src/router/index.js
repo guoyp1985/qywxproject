@@ -44,6 +44,7 @@ import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
 import Bargainbuyview from '@/components/Bargainbuyview'
 import QrLogin from '@/components/QrLogin'
+import Messages from '@/components/Messages'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
