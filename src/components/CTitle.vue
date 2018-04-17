@@ -20,6 +20,9 @@
         </div>
       </div>
     </div>
+    <div class="message-btn">
+      <router-link :to="{ name: 'messages', params: {} }"></router-link>
+    </div>
   </div>
 </template>
 

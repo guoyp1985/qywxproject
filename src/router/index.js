@@ -152,6 +152,11 @@ let routes = [
     component: Favorite
   },
   {
+    path: '/messages',
+    name: 'messages',
+    component: Messages
+  },
+  {
     path: '/orderSearch',
     component: OrderSearch
   },

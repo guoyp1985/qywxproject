@@ -179,7 +179,7 @@ const excludeUrls = [
   `${ENV.BokaApi}/weixin/userAuth/*`,
   `${ENV.BokaApi}/weixin/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`
+  `${ENV.BokaApi}/api/scanlogin/*`
 ]
 
 // 排除全局请求过滤器中的请求url
@@ -209,13 +209,10 @@ Vue.http.interceptors.push(function (request, next) {
       data => {
         Token.set(data.data.token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-      },
-      error => {
-        // alert(JSON.stringify(error))
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
-    const token = ''//Token.get()
+    const token = Token.get()
     request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor

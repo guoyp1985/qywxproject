@@ -141,9 +141,6 @@ export default {
       .then(
         data => {
           // alert(JSON.stringify(data))
-        },
-        error => {
-          // alert(JSON.stringify(error))
         }
       )
     }
