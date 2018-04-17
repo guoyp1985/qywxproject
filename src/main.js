@@ -16,7 +16,7 @@ import router from './router'
 // import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin } from 'vux'
+import { BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
 import { Token } from '../libs/storage'
@@ -64,7 +64,8 @@ store.registerModule('vux', {
 Vue.use(vuexI18n.plugin, store)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
-
+Vue.use(ToastPlugin)
+Vue.use(AlertPlugin)
 // let routes = [{
 //   path: '/centerSales',
 //   component: CenterSales
@@ -215,19 +216,21 @@ Vue.http.interceptors.push(function (request, next) {
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
-    const token = ''// Token.get()
-    request.method = 'GET'
+    // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzY3Nzk0MyIsImlhdCI6MTUyMzY3Nzk1MSwiZXhwIjoxNTI0NTQxOTUxLCJuYmYiOjE1MjM2Nzc5NTEsImp0aSI6IkI1QUJPOGpEdlVGQ3BhQngiLCJzdWIiOjQsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.LS7L_lYqNkWofYvc_F2dpbbSb_vatkbvTViROZlD9T4'
+    const token = Token.get()
+    // request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor
     next(function (response) {
       Login.access(request, response, isPC => {
         if (isPC) {
-          console.log(isPC)
-          // Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
-          // .then(res => res.json())
-          // .then(data => {
-          //   router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-          // })
+          console.log('isPC')
+          Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
+          .then(res => res.json())
+          .then(data => {
+            console.log(data)
+            router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+          })
         } else {
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`

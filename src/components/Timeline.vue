@@ -62,11 +62,15 @@ Behavior analysis in the last month:
 
 <script>
 import Time from '../../libs/time'
+import ENV from '../../libs/env'
 export default {
   created: function () {
+    let self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    this.http.post('', {
-      data: {}
+    let curquery = self.$route.query
+    console.log(curquery)
+    self.$http.post(`${ENV.BokaApi}/mobile/ajax/api.php?module=news&action=list&type=all&notclass0=1&pagestart=0&limit=20`, {
+      data: { uid: curquery.uid }
     }).then(function (res) {
       return res.json()
     }).then(function (data) {

@@ -19,7 +19,7 @@
     				<div class="clamp1 font16">{{ shopname }}</div>
     			</div>
   				<div class="t-cell v_middle align_right" style="width:160px;">
-            <router-link class="font12 color-gray5 mr5 v_middle" :to="{path:'/retailerProductlist',query:{store:1}}"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
+            <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
             <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Sales center')}}</router-link>
   				</div>
   			</div>

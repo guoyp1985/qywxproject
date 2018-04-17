@@ -244,6 +244,9 @@ en:
   Add product: Add product
   Back go shop: Back go shop
   Rolling show: Rolling show
+  Please upload rolling show photo: Please upload rolling show photo
+  Please input telphone: Please input telphone
+  Required item not empty: Required item not empty
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -542,3 +545,6 @@ zh-CN:
   Wx Login: 微信登录
   Scan To Login: 请使用微信扫码登录
   Boka Authorization Center: 博卡授权中心
+  Please upload rolling show photo: 请上传滚动展示图像
+  Please input telphone: 请输入手机号
+  Required item not empty: 必填项不能为空
