@@ -44,7 +44,7 @@ import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
 import Bargainbuyview from '@/components/Bargainbuyview'
 import QrLogin from '@/components/QrLogin'
-import Messages from '@/components/Messages'
+// import Messages from '@/components/Messages'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -152,11 +152,11 @@ let routes = [
     path: '/favorite',
     component: Favorite
   },
-  {
-    path: '/messages',
-    name: 'messages',
-    component: Messages
-  },
+  // {
+  //   path: '/messages',
+  //   name: 'messages',
+  //   component: Messages
+  // },
   {
     path: '/orderSearch',
     component: OrderSearch
