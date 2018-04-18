@@ -2,10 +2,10 @@
   <div id="message-list">
     <group>
       <group-title slot="title">{{$t('Message')}}</group-title>
-      <cell v-for="(item, index) in list" :key="index" :title="item.usename">
+      <cell v-for="(item, index) in list" :key="index" :title="item.userName" :value="item.date | dateFormat">
         <img class="user-avatar" slot="icon" style="display:block;margin-right:5px;" src="">
         <span slot="inline-desc">
-          {{item.message}}  {{item.date | dateFormat}}
+          {{item.message}}
         </span>
       </cell>
     </group>
@@ -13,12 +13,12 @@
 </template>
 <script>
 import { GroupTitle, Group, Cell } from 'vux'
-import Time from '../libs/time'
+import Time from '../../libs/time'
 export default {
   components: {
     GroupTitle,
     Group,
-    Cell,
+    Cell
   },
   data () {
     return {
@@ -32,7 +32,7 @@ export default {
       ]
     }
   },
-  filters : {
+  filters: {
     dateFormat (value) {
       return new Time(value).dateFormat('yyyy-MM-dd hh:mm')
     }

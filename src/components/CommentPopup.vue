@@ -44,7 +44,7 @@
         </div>
         <box gap="20px">
           <x-button type="primary" @click.native="onSubmit">{{$t('Comment')}}</x-button>
-          <x-button type="default" @click.native="onClose">{{$t('Cancel')}}</x-button>
+          <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
         </box>
       </div>
     </popup>
@@ -123,8 +123,8 @@ export default {
     onSubmit () {
       this.$emit('on-submit', this.value)
     },
-    onClose () {
-      this.$emit('on-close')
+    onCancel () {
+      this.$emit('on-cancel')
     },
     onTextFocus () {
       this.$emit('on-text-focus')

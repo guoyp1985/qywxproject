@@ -3,17 +3,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-// import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import urlParse from 'url-parse'
 import App from './App'
-// import CenterSales from './components/CenterSales'
-// import CenterOperating from './components/CenterOperating'
-// import CenterService from './components/CenterService'
-// import List from './components/DemoList'
-// import Hello from './components/HelloWorld'
 import router from './router'
-// import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
@@ -24,7 +17,6 @@ import ENV from '../libs/env'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
-// Vue.use(VueRouter)
 
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
@@ -64,34 +56,6 @@ store.registerModule('vux', {
 Vue.use(vuexI18n.plugin, store)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
-
-// let routes = [{
-//   path: '/centerSales',
-//   component: CenterSales
-// },
-// {
-//   path: '/centerOperating',
-//   component: CenterOperating
-// },
-// {
-//   path: '/centerService',
-//   component: CenterService
-// },
-// {
-//   path: '/components/',
-//   component: List
-// }
-// ]
-
-// const demos = DemoList.map((com) => {
-//   return {
-//     path: `/components/${com.toLowerCase()}`,
-//     component: Vue.component(
-//     com,
-//     // 该 `import` 函数返回一个 `Promise` 对象。
-//     () => import('./demos/' + com))
-//   }
-// })
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -177,8 +141,8 @@ router.afterEach(function (to) {
 
 const excludeUrls = [
   `${ENV.BokaApi}/weixin/userAuth/*`,
-  `${ENV.BokaApi}/weixin/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`,
+  `${ENV.BokaApi}/api/qrcode/login`,
+  `${ENV.BokaApi}/api/login`,
   `${ENV.BokaApi}/api/scanlogin/*`
 ]
 
@@ -192,6 +156,8 @@ const matchExclude = url => {
   }
   return false
 }
+
+// localStorage.clear()
 
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
@@ -213,18 +179,22 @@ Vue.http.interceptors.push(function (request, next) {
     )
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
-    request.method = 'GET'
+    // request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor
     next(function (response) {
       Login.access(request, response, isPC => {
         if (isPC) {
-          console.log(isPC)
-          Vue.http.get(`${ENV.BokaApi}/weixin/qrcode/login`, {})
+          Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
           .then(res => res.json())
-          .then(data => {
-            router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-          })
+          .then(
+            data => {
+              router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+            },
+            error => {
+              console.log(error)
+            }
+          )
         } else {
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`

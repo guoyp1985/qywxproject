@@ -4,11 +4,19 @@
             :link-credit="{path:'/credit'}">
     </c-title> -->
     <group>
-      <cell v-for="(item, index) in items" :key="index" class="share-item" align-items :title="item.title" :inline-desc="item.date | dateFormat">
+      <group-title slot="title">{{$t('Sharing Details')}}</group-title>
+      <cell v-for="(item, index) in items"
+      :key="index"
+      class="share-item font14"
+      align-items
+      :title="item.title"
+      :inline-desc="item.dateline | dateFormat"
+      :link="{name: 'sharingDetail', params: {id: item.id}}"
+      is-link="false">
         <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.src"></x-img>
-        <div slot="child">
+        <div>
           <span class="al al-jinbi color-gold"></span>
-          <span class="color-red">{{ item.value | valueFormat }}</span>
+          <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
         </div>
       </cell>
     </group>
@@ -21,14 +29,13 @@ Sharing Details:
 </i18n>
 
 <script>
-import { Group, Cell, XImg } from 'vux'
-import CTitle from './CTitle'
+import { Group, GroupTitle, Cell, XImg } from 'vux'
 import Time from '../../libs/time'
 
 export default {
   components: {
-    CTitle,
     Group,
+    GroupTitle,
     Cell,
     XImg
   },
@@ -39,14 +46,14 @@ export default {
         {
           src: 'http://somedomain.somdomain/x.jpg',
           title: '分享',
-          date: 1522659301220,
-          value: 50
+          dateline: 1522659301220,
+          credit: 50
         },
         {
           src: 'http://somedomain.somdomain/x.jpg',
           title: '分享',
-          date: 1522659301220,
-          value: -50
+          dateline: 1522659301220,
+          credit: -50
         }
       ]
     }
@@ -67,9 +74,15 @@ export default {
   width: 60px;
   float: left;
 }
+#personal-credit .credit-txt {
+  vertical-align: super;
+}
 
 /* weui css hack */
 #personal-credit .vux-cell-primary {
   margin-left: 10px;
+}
+#personal-credit .weui-cell__ft {
+  padding-right: 20px;
 }
 </style>

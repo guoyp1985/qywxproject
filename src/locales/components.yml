@@ -459,6 +459,7 @@ zh-CN:
   Review: 审核
   Writing Discussion: 写留言
   Reply Discussion: 回复评论
+  Writing Evaluation: 写评论
   News title: 文章标题
   Cover photo: 封面图像
   Expand more options: 展开更多选项
@@ -466,7 +467,7 @@ zh-CN:
   Share title: 分享标题
   Share title placeholder: 如不填写默认调用商品标题
   Share description: 分享描述
-  Share description placeholder: 如不填写自动截取商品介绍
+  Share description placeholder: 如不填写自动截取文章内容
   Label: 标签
   Label can not empty: 标签不能为空
   Url paster here: 链接粘贴在此处
@@ -482,7 +483,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -516,3 +517,10 @@ zh-CN:
   Wx Login: 微信登录
   Scan To Login: 请使用微信扫码登录
   Boka Authorization Center: 博卡授权中心
+  Product Rater: 商品评分
+  Evaluation Of Logistics: 物流评价
+  Express Package: 快递包装
+  Delivery Speed: 送货速度
+  Service Attitude: 配送员服务态度
+  To Give Five Stars: 满意请给5分
+  Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人

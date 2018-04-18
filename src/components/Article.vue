@@ -60,8 +60,8 @@
         </comment>
       </div>
     </view-box>
-    <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-close="commentPopupClose"></comment-popup>
-    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-close="replyPopupClose"></comment-popup>
+    <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
 </template>
 <i18n>
@@ -162,10 +162,10 @@ export default {
     onCommentShow () {
       this.commentPopupShow = true
     },
-    commentPopupClose () {
+    commentPopupCancel () {
       this.commentPopupShow = false
     },
-    replyPopupClose () {
+    replyPopupCancel () {
       this.replyPopupShow = false
     },
     commentSubmit (value) {

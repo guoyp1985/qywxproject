@@ -44,7 +44,9 @@ import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
 import Bargainbuyview from '@/components/Bargainbuyview'
 import QrLogin from '@/components/QrLogin'
-// import Messages from '@/components/Messages'
+import Messages from '@/components/Messages'
+import Evaluation from '@/components/Evaluation'
+import SharingDetail from '@/components/SharingDetail'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -130,15 +132,22 @@ let routes = [
   },
   {
     path: '/profile',
+    name: 'profile',
     component: Profile
   },
   {
     path: '/credit',
+    name: 'credit',
     component: Credit
   },
   {
     path: '/share',
     component: Share
+  },
+  {
+    path: '/sharingDetail',
+    name: 'sharingDetail',
+    component: SharingDetail
   },
   {
     path: '/address',
@@ -152,11 +161,11 @@ let routes = [
     path: '/favorite',
     component: Favorite
   },
-  // {
-  //   path: '/messages',
-  //   name: 'messages',
-  //   component: Messages
-  // },
+  {
+    path: '/messages',
+    name: 'messages',
+    component: Messages
+  },
   {
     path: '/orderSearch',
     component: OrderSearch
@@ -180,6 +189,11 @@ let routes = [
   {
     path: '/articles/:id',
     component: Article
+  },
+  {
+    path: '/evaluation',
+    name: 'evaluation',
+    component: Evaluation
   },
   {
     path: '/retailerSetting',
