@@ -234,6 +234,19 @@ en:
   Eazy get order: Eazy get order
   Close: Close
   Stat: Stat
+  To seller message: To seller message
+  Please select address: Please select address
+  Orders: Orders
+  Userinfo: Userinfo
+  Behavior: Behavior
+  Behavior analysis in the last month: Behavior analysis in the last month
+  Decoration shop: Decoration shop
+  Add product: Add product
+  Back go shop: Back go shop
+  Rolling show: Rolling show
+  Please upload rolling show photo: Please upload rolling show photo
+  Please input telphone: Please input telphone
+  Required item not empty: Required item not empty
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -514,6 +527,22 @@ zh-CN:
   Go to create: 立即创建
   Summary: 摘要
   Stat: 统计
+  RMB: ￥
+  To seller message: 给卖家留言
+  Deliver goods: 发货
+  View deliver: 查看物流
+  Add order: 新增订单
+  Myrevenue: 我的收入
+  My shop: 我的店铺
+  Please select address: 请选择地址
+  Orders: 订单
+  Userinfo: 用户信息
+  Behavior: 行为
+  Behavior analysis in the last month: 最近一个月行为分析
+  Decoration shop: 装修店铺
+  Add product: 添加商品
+  Back go shop: 返回店铺
+  Rolling show: 滚动展示
   Wx Login: 微信登录
   Scan To Login: 请使用微信扫码登录
   Boka Authorization Center: 博卡授权中心
@@ -524,3 +553,6 @@ zh-CN:
   Service Attitude: 配送员服务态度
   To Give Five Stars: 满意请给5分
   Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人
+  Please upload rolling show photo: 请上传滚动展示图像
+  Please input telphone: 请输入手机号
+  Required item not empty: 必填项不能为空

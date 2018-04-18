@@ -42,11 +42,19 @@ import NewsStat from '@/components/NewsStat'
 import ProductStat from '@/components/ProductStat'
 import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
-import Bargainbuyview from '@/components/Bargainbuyview'
+import BargainbuyView from '@/components/BargainbuyView'
+import BargainbuyDetail from '@/components/BargainbuyDetail'
+import AddOrder from '@/components/AddOrder'
+import MembersView from '@/components/MembersView'
+import ShareList from '@/components/ShareList'
+import SalesList from '@/components/SalesList'
+import Timeline from '@/components/Timeline'
 import QrLogin from '@/components/QrLogin'
 import Messages from '@/components/Messages'
 import Evaluation from '@/components/Evaluation'
 import SharingDetail from '@/components/SharingDetail'
+import DecorationShop from '@/components/DecorationShop'
+import RetailerApply from '@/components/RetailerApply'
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -256,8 +264,40 @@ let routes = [
     component: Bargainbuy
   },
   {
-    path: '/bargainbuyview',
-    component: Bargainbuyview
+    path: '/bargainbuyView',
+    component: BargainbuyView
+  },
+  {
+    path: '/bargainbuyDetail',
+    component: BargainbuyDetail
+  },
+  {
+    path: '/addOrder',
+    component: AddOrder
+  },
+  {
+    path: '/membersView',
+    component: MembersView
+  },
+  {
+    path: '/shareList',
+    component: ShareList
+  },
+  {
+    path: '/salesList',
+    component: SalesList
+  },
+  {
+    path: '/timeline',
+    component: Timeline
+  },
+  {
+    path: '/decorationShop',
+    component: DecorationShop
+  },
+  {
+    path: '/retailerApply',
+    component: RetailerApply
   }
 ]
 

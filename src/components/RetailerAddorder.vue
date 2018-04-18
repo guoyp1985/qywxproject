@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom">
+  <div class="containerarea s-havebottom bg-white">
     <div class="s-container" style="top:0;">
       <form>
         <Forminputplate class="required">
@@ -172,6 +172,9 @@ export default {
     Search,
     Radio,
     XAddress
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   data () {
     return {

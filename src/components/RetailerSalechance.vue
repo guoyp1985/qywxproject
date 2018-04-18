@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="containerarea bg-white">
     <div class="bg-gray4 padding10 border-box">
       <card :header="{title: $t('Data text')}" class="x-card">
         <div slot="content" class="card-demo-flex card-demo-content01">
@@ -57,6 +57,9 @@ export default {
     dateformat1: function (value) {
       return new Time(value * 1000).dateFormat('hh:mm')
     }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   data () {
     return {

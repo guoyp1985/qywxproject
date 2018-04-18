@@ -9,7 +9,7 @@ import App from './App'
 import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin } from 'vux'
+import { BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
 import { Token } from '../libs/storage'
@@ -56,6 +56,8 @@ store.registerModule('vux', {
 Vue.use(vuexI18n.plugin, store)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
+Vue.use(ToastPlugin)
+Vue.use(AlertPlugin)
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -172,7 +174,7 @@ Vue.http.interceptors.push(function (request, next) {
     Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
     .then(res => res.json())
     .then(
-      data => {
+      (data) => {
         Token.set(data.data.token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }

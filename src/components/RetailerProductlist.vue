@@ -70,6 +70,10 @@
 </template>
 
 <i18n>
+Add product:
+  zh-CN: 添加商品
+Back go shop:
+  zh-CN: 返回店铺
 Are you sure up?:
   zh-CN: 确定要上架吗？
 Are you sure down?:
@@ -78,7 +82,6 @@ Are you sure down?:
 
 <script>
 import { TransferDom, Popup, Confirm } from 'vux'
-import Productitemplate1 from './Productitemplate1'
 
 export default {
   directives: {
@@ -86,11 +89,14 @@ export default {
   },
   components: {
     Popup,
-    Productitemplate1,
     Confirm
+  },
+  created: function () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   data () {
     return {
+      loginuser: { uid: 187 },
       productdata: [
         { 'id': 124, isfinished: 1, moderate: 0, 'title': '苹果手机', 'photo': 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', 'price': '8,000.00' },
         { 'id': 113, isfinished: 0, moderate: 1, 'title': '维生素B族片', 'photo': 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg', 'price': '1.00', 'saled': 1 },
@@ -118,6 +124,9 @@ export default {
     }
   },
   computed: {
+    getquery: function () {
+      return this.$route.query
+    }
   },
   methods: {
     controlpopup1 (item, index) {

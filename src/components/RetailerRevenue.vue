@@ -132,6 +132,9 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+  },
   data () {
     return {
       tabtxts: [ '未提现', '已提现' ],

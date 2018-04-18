@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 rgoodeazy">
+  <div class="containerarea s-havebottom font14 rgoodeazy bg-white">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>

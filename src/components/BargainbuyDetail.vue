@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bargainbuyview" style="overflow-y:auto;">
+  <div class="containerarea font14 bargainbuydetail" style="overflow-y:auto;">
     <div class="topimg">
       <img src="../assets/images/bargainbuy_2.png">
     </div>
@@ -39,17 +39,37 @@
             <div class="t-cell align_right">最低价</div>
           </div>
           <div class="priceline">
-            <div class="line linepercent" style="width:0%;"></div>
+            <div class="line linepercent" :style="`width:${cutinfo.cutpercent}%;`"></div>
           </div>
           <div class="t-table">
-            <div class="t-cell align_left">￥<span>10.00</span></div>
-            <div class="t-cell align_center">￥<span>10.00</span></div>
-            <div class="t-cell align_right">￥<span>1.00</span></div>
+            <div class="t-cell align_left">￥{{ cutinfo.price }}</div>
+            <div class="t-cell align_center">￥{{ cutinfo.cutprice }}</div>
+            <div class="t-cell align_right">￥{{ cutinfo.minprice }}</div>
           </div>
         </div>
-        <div class="btn db btninvite shareBtn">邀请好友砍价</div>
-        <div class="padding10 align_center timeleftarea font13" style="color:#A87F35; ">
-          <span style="margin-right:3px;">还剩</span><span class="hour">00:</span><span class="minute">00:</span><span class="second">00</span><span style="margin-left:3px;">结束，快让好友帮忙砍价吧~</span>
+        <div class="t-table">
+          <div v-if="productdata.leftstorage <= 0" class="t-cell">
+            <div class="btn db">商品已售罄，本次活动结束</div>
+          </div>
+          <template v-else>
+            <div v-if="nowdateline > productdata.endtime && !isfull" class="t-cell">
+              <div class="btn db">砍价失败</div>
+            </div>
+            <template v-else>
+              <div v-if="isfull" class="t-cell">
+                <div class="btn db">已完成砍价</div>
+              </div>
+              <div v-else class="t-cell">
+                <div class="btn db" @click="cutevent">帮TA砍价</div>
+              </div>
+              <div v-if="currentuser.uid == activityuser.uid" class="t-cell">
+                <router-link to="/retailerActivitylist" class="btn db">我的活动</router-link>
+              </div>
+              <div v-else-if="productdata.endtime < nowdateline && canbuy" class="t-cell">
+                <div class="btn db">我要参与</div>
+              </div>
+            </template>
+          </template>
         </div>
       </div>
     </div>
@@ -90,17 +110,36 @@
 </i18n>
 
 <script>
+
+import { Countdown } from 'vux'
 import Time from '../../libs/time'
 
 export default {
   components: {
+    Countdown
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   data () {
     return {
+      nowdateline: new Date().getTime() / 1000,
+      isfull: false,
+      canbuy: true,
+      currentuser: {
+        uid: 187,
+        linkman: 'YOUNG'
+      },
       activityuser: {
         uid: 187,
         avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
         linkman: 'YOUNG'
+      },
+      cutinfo: {
+        price: '8,000.00',
+        minprice: '1000.00',
+        cutprice: '0.00',
+        cutpercent: 0
       },
       productdata: {
         id: 124,
@@ -116,9 +155,9 @@ export default {
         moderate: 1,
         buyonline: 0,
         storage: 10,
-        leftstorage: 3,
         currentnumbers: 0,
-        endtime: 1522221270,
+        endtime: 1529694513,
+        leftstorage: 3,
         content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
       },
       cutdata: [
@@ -131,29 +170,48 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
     }
   },
+  watch: {
+    cutinfo: function () {
+      let retdata = this.cutinfo
+      let cutprice = parseFloat(retdata.cutprice)
+      let minprice = parseFloat(retdata.minprice)
+      retdata.cutpercent = ((cutprice / minprice) * 100).toFixed(2)
+      return retdata
+    }
+  },
   methods: {
-    joinin () {
-      this.$router.push('/retailerShop')
+    cutevent () {
+      let self = this
+      let cutp = parseFloat((Math.random() * 100).toFixed(2))
+      let cutprice = (parseFloat(self.cutinfo.cutprice) + cutp).toFixed(2)
+      let cutpercent = ((parseFloat(self.cutinfo.cutprice) / parseFloat(self.cutinfo.minprice)) * 100).toFixed(2)
+      if (cutpercent >= 100) {
+        cutpercent = 100
+        cutprice = self.cutinfo.minprice
+        self.isfull = true
+      }
+      self.cutinfo.cutprice = cutprice
+      self.cutinfo.cutpercent = cutpercent
     }
   }
 }
 </script>
 
 <style lang="less">
-.bargainbuyview {
+.bargainbuydetail {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }
-.bargainbuyview .topimg img {
+.bargainbuydetail .topimg img {
     width: 100%;
     vertical-align: middle;
 }
-.bargainbuyview .b_header{
+.bargainbuydetail .b_header{
   position:absolute;
   height:90px;
   top:30px;
   width:100%;
 }
-.bargainbuyview .b_header .inner {
+.bargainbuydetail .b_header .inner {
     width: 168px;
     height: 168px;
     box-sizing:border-box;
@@ -163,9 +221,9 @@ export default {
     background: #FDC45D;
     margin:0 auto;
 }
-.bargainbuyview .b_header .pic{width:60px;margin:0 auto;}
-.bargainbuyview .b_header .pic img{width:60px;height:60px;border-radius:50%;vertical-align:middle;}
-.bargainbuyview .boxarea {
+.bargainbuydetail .b_header .pic{width:60px;margin:0 auto;}
+.bargainbuydetail .b_header .pic img{width:60px;height:60px;border-radius:50%;vertical-align:middle;}
+.bargainbuydetail .boxarea {
   width: 94%;
   box-sizing:border-box;
   position:relative;
@@ -174,7 +232,7 @@ export default {
   border-radius: 13px;
   padding: 16px 12px 16px 12px;
 }
-.bargainbuyview .boxarea .inner {
+.bargainbuydetail .boxarea .inner {
     border-radius: 8px;
     background: white;
     margin-top: 5px;
@@ -182,37 +240,37 @@ export default {
     position: relative;
     cursor: pointer;
 }
-.bargainbuyview .boxarea .innerbg {
+.bargainbuydetail .boxarea .innerbg {
     border-radius: 7px;
     background: #F7F7F7;
     padding: 6px;
 }
-.bargainbuyview .boxarea .pic{width:80px;}
-.bargainbuyview .boxarea .pic img{width:70px;height:70px;vertical-align:middle;}
+.bargainbuydetail .boxarea .pic{width:80px;}
+.bargainbuydetail .boxarea .pic img{width:70px;height:70px;vertical-align:middle;}
 
-.bargainbuyview .boxarea1{width:94%;margin:0 auto;}
-.bargainbuyview .boxarea1 .inner{
+.bargainbuydetail .boxarea1{width:94%;margin:0 auto;}
+.bargainbuydetail .boxarea1 .inner{
   background-color: #FDC45D;border-radius: 13px;padding:11px 15px 8px 15px;
 }
-.bargainbuyview .boxarea1 .pricearea{
+.bargainbuydetail .boxarea1 .pricearea{
   width: 90%;
   margin: 20px auto 0;
   color: #C93A3A;
 }
-.bargainbuyview .priceline {
+.bargainbuydetail .priceline {
   margin: 12px auto;
   background-color: rgba(255, 255, 255, 0.75);
   width: 100%;
   height: 10px;
   border-radius: 5px;
 }
-.bargainbuyview .line {
+.bargainbuydetail .line {
   width: 0%;
   height: 100%;
   background-image: linear-gradient(0deg, #EC3F57 0%, #FF8147 99%);
   border-radius: 5px;
 }
-.bargainbuyview .btn{
+.bargainbuydetail .btn{
   width: 90%;
   background-image: linear-gradient(90deg, #EC3F57 0%, #FF8147 99%);
   box-shadow: 0 5px 8px 0 #C13123;
@@ -225,7 +283,7 @@ export default {
   margin: 16px auto 10px auto;
   cursor: pointer;
 }
-.bargainbuyview .boxtitle {
+.bargainbuydetail .boxtitle {
     background: #C93A3A;
     border-radius: 6px 6px 0 0;
     width: 160px;
@@ -236,19 +294,19 @@ export default {
     text-align: center;
     margin: 20px auto 0px auto;
 }
-.bargainbuyview .titleline{
+.bargainbuydetail .titleline{
   width: 94%;padding-left: 24px;padding-right: 24px;margin:0 auto;
   box-sizing: border-box;
 }
-.bargainbuyview .titleline .inner{
+.bargainbuydetail .titleline .inner{
   background: #C93A3A;border-radius: 100px;height: 8px;width: 100%;
 }
-.bargainbuyview .listarea{
+.bargainbuydetail .listarea{
   background: #F8F8F8; border-radius: 24px;padding: 1px 12px 1px 12px;margin: -5px 5px 5px 5px;
   box-sizing: border-box;
 }
-.bargainbuyview .scroll_list{margin:20px auto;}
-.bargainbuyview .listarea .scroll_item {
+.bargainbuydetail .scroll_list{margin:20px auto;}
+.bargainbuydetail .listarea .scroll_item {
     border-radius: 6px;
     padding-left: 10px;
     height: 60px;

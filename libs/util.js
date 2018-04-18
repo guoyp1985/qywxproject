@@ -22,6 +22,19 @@ const Util = {
       if (rs === false) return false
     }
     return re;
+  },
+  delay: (text) => {
+    let ret = 1000
+    let len = text.length
+    if (len > 0) {
+      ret = len * 200
+      if (ret < 1000) {
+        ret = 1000
+      } else if (ret > 600000) {
+        ret = 600000
+      }
+    }
+    return ret
   }
 }
 export default Util
