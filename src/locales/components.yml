@@ -248,20 +248,6 @@ en:
   Please input telphone: Please input telphone
   Required item not empty: Required item not empty
   With the customer rebate money together!: With the customer rebate money together!
-  Product title: Product title
-  Placeholder1: Placeholder1
-  Title2: Title2
-  Placeholder2: Placeholder2
-  Title3: Title3
-  Placeholder3: Placeholder3
-  Title4: Title4
-  Placeholder4: Placeholder4
-  Title5: Title5
-  Placeholder5: Placeholder5
-  Title6: Title6
-  Placeholder6: Placeholder6
-  Title7: Title7
-  Placeholder7: Placeholder7
   Product name: Product name
   Product price: Product price
   User final purchase price: User final purchase price
@@ -494,6 +480,7 @@ zh-CN:
   Review: 审核
   Writing Discussion: 写留言
   Reply Discussion: 回复评论
+  Writing Evaluation: 写评论
   News title: 文章标题
   Cover photo: 封面图像
   Expand more options: 展开更多选项
@@ -571,20 +558,6 @@ zh-CN:
   Please input telphone: 请输入手机号
   Required item not empty: 必填项不能为空
   With the customer rebate money together!: 与返点客一起赚钱!
-  Product title: 商品名称
-  Placeholder1: 商品名称
-  Title2: 商品价格
-  Placeholder2: 用户最终购买价格
-  Title3: 商品库存
-  Placeholder3: 库存
-  Title4: 返点佣金
-  Placeholder4: 返点客售出商品后给予的佣金
-  Title5: 文字介绍
-  Placeholder5: 来描述下商品的特点吧~
-  Title6: 分享标题
-  Placeholder6: 如不填写默认调用商品标题
-  Title7: 分享描述
-  Placeholder7: 如不填写自动截取商品介绍
   Product name: 商品名称
   Product price: 商品价格
   User final purchase price: 用户最终购买价格
@@ -592,3 +565,10 @@ zh-CN:
   Goods sold to customer rebate Commission: 返点客售出商品后给予的佣金
   Product share title placeholder: 如不填写默认调用商品标题
   Product share description placeholder: 如不填写自动截取商品介绍
+  Product Rater: 商品评分
+  Evaluation Of Logistics: 物流评价
+  Express Package: 快递包装
+  Delivery Speed: 送货速度
+  Service Attitude: 配送员服务态度
+  To Give Five Stars: 满意请给5分
+  Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人

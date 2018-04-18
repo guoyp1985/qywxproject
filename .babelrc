@@ -1,0 +1,19 @@
+{
+  "presets": [
+    ["env", {
+      "modules": false
+    }],
+    "es2015",
+    "stage-2"
+  ],
+  "plugins": ["transform-runtime", "syntax-dynamic-import"],
+  "env": {
+    "production": {
+      "presets": ["minify"]
+    },
+    "test": {
+      "presets": ["env", "stage-2"],
+      "plugins": ["transform-es2015-modules-commonjs", "dynamic-import-node"]
+    }
+  }
+}

@@ -5,40 +5,40 @@
 */
 <template>
   <div class="order-info">
-    <router-link :to="`/retailerShop/${order.storeId}`">
+    <router-link :to="`/retailerShop/${item.storeId}`">
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
-          <span>{{order.storeName}}</span>
+          <span>{{item.storeName}}</span>
           <span class="al al-mjiantou-copy font16"></span>
         </div>
-        <div class="status-cell" v-if="order.status">
-          <span>{{order.status}}</span>
+        <div class="status-cell" v-if="item.status">
+          <span>{{item.status}}</span>
         </div>
       </div>
     </router-link>
-    <router-link :to="{path:'/orderDetail',query:{order:order}}">
-      <div class="products-info" v-if="order.imgs.length > 1">
+    <router-link :to="{path:'/orderDetail',query:{order:item}}">
+      <div class="products-info" v-if="item.imgs.length > 1">
       </div>
       <div class="product-info" v-else>
         <div class="product-img">
-          <x-img :src="order.imgs[0]"></x-img>
+          <x-img :src="item.imgs[0]"></x-img>
         </div>
         <div class="product-detail">
           <div class="product-name">
-            {{order.name}}
+            {{item.name}}
           </div>
-          <div class="product-desc" v-if="order.desc">
-            {{order.desc}}
+          <div class="product-desc" v-if="item.desc">
+            {{item.desc}}
           </div>
         </div>
       </div>
     </router-link>
     <div class="pay-info">
-      <span class="font12">共{{order.num}}件商品 实付款: </span><span class="font14">¥{{order.pay}}</span>
+      <span class="font12">共{{item.num}}件商品 实付款: </span><span class="font14">¥{{item.pay}}</span>
     </div>
     <div class="operate-area">
-      <x-button mini v-for="(button, index) in buttons[order.type]" :key="index" @click.native="buttonClick(button.id)">{{button.name}}</x-button>
+      <x-button mini v-for="(button, index) in buttons[item.type]" :key="index" @click.native="buttonClick(button.type)">{{button.name}}</x-button>
     </div>
   </div>
 </template>
@@ -53,7 +53,7 @@ export default {
     XButton
   },
   props: {
-    order: {
+    item: {
       type: Object,
       default: () => {
         return {
@@ -77,7 +77,7 @@ export default {
         [],
         [
           {
-            id: 1,
+            type: 1,
             name: '评价'
           }
         ]
@@ -87,7 +87,7 @@ export default {
   computed: {
     storeType () {
       let icon = ''
-      switch (this.order.storeType) {
+      switch (this.item.storeType) {
         case 1:
           icon = 'al-weidian1'
           break
@@ -95,6 +95,16 @@ export default {
           icon = 'al-weidian1'
       }
       return icon
+    }
+  },
+  methods: {
+    buttonClick (type) {
+      switch (type) {
+        case 1:
+          this.$emit('on-eval')
+          break
+        default:
+      }
     }
   }
 }

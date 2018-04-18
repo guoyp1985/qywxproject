@@ -102,24 +102,6 @@ export default {
         if (/component/.test(this.route.path) && parts[2]) return parts[2]
       }
     },
-    // isDemo () {
-    //   console.log(this.route.path)
-    //   // return /component|demo/.test(this.route.path)
-    //   switch (this.route.path) {
-    //     case '/centerOperating' :
-    //       break
-    //     case '/centerSales' :
-    //       break
-    //     case '/centerService' :
-    //       break
-    //     default:
-    //       return false
-    //   }
-    //   return true
-    // },
-    // isTabbarDemo () {
-    //   return /tabbar/.test(this.route.path)
-    // },
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/components') return 'Demo list'
@@ -140,10 +122,7 @@ export default {
       .then(res => res.json())
       .then(
         data => {
-          // alert(JSON.stringify(data))
-        },
-        error => {
-          // alert(JSON.stringify(error))
+          console.log(JSON.stringify(data))
         }
       )
     }

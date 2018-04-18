@@ -3,17 +3,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-// import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import urlParse from 'url-parse'
 import App from './App'
-// import CenterSales from './components/CenterSales'
-// import CenterOperating from './components/CenterOperating'
-// import CenterService from './components/CenterService'
-// import List from './components/DemoList'
-// import Hello from './components/HelloWorld'
 import router from './router'
-// import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
@@ -24,7 +17,6 @@ import ENV from '../libs/env'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
-// Vue.use(VueRouter)
 
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
@@ -66,33 +58,6 @@ Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
-// let routes = [{
-//   path: '/centerSales',
-//   component: CenterSales
-// },
-// {
-//   path: '/centerOperating',
-//   component: CenterOperating
-// },
-// {
-//   path: '/centerService',
-//   component: CenterService
-// },
-// {
-//   path: '/components/',
-//   component: List
-// }
-// ]
-
-// const demos = DemoList.map((com) => {
-//   return {
-//     path: `/components/${com.toLowerCase()}`,
-//     component: Vue.component(
-//     com,
-//     // 该 `import` 函数返回一个 `Promise` 对象。
-//     () => import('./demos/' + com))
-//   }
-// })
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -210,13 +175,9 @@ Vue.http.interceptors.push(function (request, next) {
       (data) => {
         Token.set(data.data.token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-      },
-      (error) => {
-        // alert(JSON.stringify(error))
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
-    // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzY3Nzk0MyIsImlhdCI6MTUyMzY3Nzk1MSwiZXhwIjoxNTI0NTQxOTUxLCJuYmYiOjE1MjM2Nzc5NTEsImp0aSI6IkI1QUJPOGpEdlVGQ3BhQngiLCJzdWIiOjQsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.LS7L_lYqNkWofYvc_F2dpbbSb_vatkbvTViROZlD9T4'
     const token = Token.get()
     // request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
@@ -224,13 +185,16 @@ Vue.http.interceptors.push(function (request, next) {
     next(function (response) {
       Login.access(request, response, isPC => {
         if (isPC) {
-          console.log('isPC')
           Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
           .then(res => res.json())
-          .then(data => {
-            console.log(data)
-            router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-          })
+          .then(
+            data => {
+              router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+            },
+            error => {
+              console.log(error)
+            }
+          )
         } else {
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
