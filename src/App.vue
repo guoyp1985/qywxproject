@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;" v-cloak>
+  <div id="app" style="height:100%;">
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
@@ -102,24 +102,6 @@ export default {
         if (/component/.test(this.route.path) && parts[2]) return parts[2]
       }
     },
-    // isDemo () {
-    //   console.log(this.route.path)
-    //   // return /component|demo/.test(this.route.path)
-    //   switch (this.route.path) {
-    //     case '/centerOperating' :
-    //       break
-    //     case '/centerSales' :
-    //       break
-    //     case '/centerService' :
-    //       break
-    //     default:
-    //       return false
-    //   }
-    //   return true
-    // },
-    // isTabbarDemo () {
-    //   return /tabbar/.test(this.route.path)
-    // },
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/components') return 'Demo list'
@@ -136,18 +118,13 @@ export default {
   },
   methods: {
     getData () {
-      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {}).then(response => {
-        // get status
-        console.log(response.status)
-        // get status text
-        console.log(response.statusText)
-        // get 'Expires' header
-        console.log(response.headers.get('Expires'))
-        // get body data
-        this.someData = response.body
-      }, response => {
-        // error callback
-      })
+      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
+      .then(res => res.json())
+      .then(
+        data => {
+          console.log(JSON.stringify(data))
+        }
+      )
     }
   }
 }

@@ -3,6 +3,7 @@
     ["env", {
       "modules": false
     }],
+    "es2015",
     "stage-2"
   ],
   "plugins": ["transform-runtime", "syntax-dynamic-import"],

@@ -1,11 +1,11 @@
 <template>
   <div id="user-profile">
-    <group label-width="3em" label-margin-right="2em">
-      <cell :inline-desc="$t('Sync From Wx')">
+    <group label-width="4em" label-align="left" label-margin-right="2em">
+      <cell :inline-desc="$t('Sync From Wx')" @click.native="syncWxProfile">
         <img class="avatar" slot="icon" :src="avatarHref"/>
       </cell>
       <x-input :title="$t('Name')" :placeholder="$t('Name')" v-model="value1"></x-input>
-      <x-input :title="$t('Gendar')" :placeholder="$t('Gendar')" v-model="value2"></x-input>
+      <popup-radio :title="$t('Gendar')" :options="options" v-model="option" :placeholder="$t('Gendar')"></popup-radio>
       <x-input :title="$t('Company Name')" :placeholder="$t('Company Name')" v-model="value3"></x-input>
       <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="value4"></x-input>
     </group>
@@ -31,7 +31,8 @@ Confirm:
 </i18n>
 
 <script>
-import { Group, Cell, Box, XInput, XButton } from 'vux'
+import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
+import ENV from '../../libs/env'
 
 export default {
   components: {
@@ -39,15 +40,32 @@ export default {
     Cell,
     Box,
     XInput,
+    PopupRadio,
     XButton
   },
   data () {
     return {
       avatarHref: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
+      option: '',
+      options: [
+        {
+          key: 1,
+          value: '男'
+        },
+        {
+          key: 2,
+          value: '女'
+        }
+      ],
       value1: '',
       value2: '',
       value3: '',
       value4: ''
+    }
+  },
+  methods: {
+    syncWxProfile () {
+      this.$http.get(``)
     }
   }
 }
@@ -59,7 +77,7 @@ export default {
   height: 60px;
 }
 /* weui css hack */
-#user-profile .weui-cell__hd {
+#user-profile .weui-cell__hd img {
   margin-right: 10px;
 }
 #user-profile .vux-no-group-title {

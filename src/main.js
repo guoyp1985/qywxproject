@@ -3,27 +3,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-// import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
+import urlParse from 'url-parse'
 import App from './App'
-// import CenterSales from './components/CenterSales'
-// import CenterOperating from './components/CenterOperating'
-// import CenterService from './components/CenterService'
-// import List from './components/DemoList'
-// import Hello from './components/HelloWorld'
 import router from './router'
-// import DemoList from './demo_list'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { BusPlugin, LoadingPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
-import { Token, OpenId } from '../libs/storage'
+import { Token } from '../libs/storage'
 import ENV from '../libs/env'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
-// Vue.use(VueRouter)
 
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
@@ -63,34 +56,6 @@ store.registerModule('vux', {
 Vue.use(vuexI18n.plugin, store)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
-
-// let routes = [{
-//   path: '/centerSales',
-//   component: CenterSales
-// },
-// {
-//   path: '/centerOperating',
-//   component: CenterOperating
-// },
-// {
-//   path: '/centerService',
-//   component: CenterService
-// },
-// {
-//   path: '/components/',
-//   component: List
-// }
-// ]
-
-// const demos = DemoList.map((com) => {
-//   return {
-//     path: `/components/${com.toLowerCase()}`,
-//     component: Vue.component(
-//     com,
-//     // 该 `import` 函数返回一个 `Promise` 对象。
-//     () => import('./demos/' + com))
-//   }
-// })
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -174,45 +139,73 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-// Vue.http.headers.common['Authorization'] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzUwNDEwOSIsImlhdCI6MTUyMzUwNDE0NywiZXhwIjoxNTI0MzY4MTQ3LCJuYmYiOjE1MjM1MDQxNDcsImp0aSI6IlFrRFRwOEd2WGlsd1lqR3kiLCJzdWIiOjEsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.bRfinjIiBjiFXXCZru1Nhw_0l8RD7Zf7FWOhv1Aw4W8'
+const excludeUrls = [
+  `${ENV.BokaApi}/weixin/userAuth/*`,
+  `${ENV.BokaApi}/api/qrcode/login`,
+  `${ENV.BokaApi}/api/login`,
+  `${ENV.BokaApi}/api/scanlogin/*`
+]
+
+// 排除全局请求过滤器中的请求url
+const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const matchExclude = url => {
+  for (let r = 0; r < rExcludeUrls.length; r++) {
+    if (rExcludeUrls[r].test(url)) {
+      return true
+    }
+  }
+  return false
+}
+
+// localStorage.clear()
+
+// 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
-  // console.log(this)
-  const token = ''// Token.get()
-  request.method = 'GET'
-  request.headers.set('Authorization', `Bearer ${token}`)
-  // continue to next interceptor
-  next(function (response) { // 在响应之后传给then之前对response进行修改和逻辑判断。对于token已过期的判断，就添加在此处，页面中任何一次http请求都会先调用此处方法
-    // response.body = '...'
-    Login.access(request, response, isPC => {
-      console.log(isPC)
-      if (isPC) {
-        Vue.http.get('http://laravel.boka.cn/weixin/qrcode/login', {})
-        .then(res => res.json())
-        .then(data => {
-          router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-        })
-      } else {
-        const openId = OpenId.get()
-        if (openId) {
-          Vue.http.get(`http://laravel.boka.cn/api/login/${openId}`, {})
+  const rUrl = urlParse(request.url)
+  const lUrl = urlParse(location.href, true)
+  console.log(matchExclude(rUrl.href))
+  if (matchExclude(rUrl.href)) {
+    return
+  }
+  if (lUrl.query.code) {
+    const code = lUrl.query.code
+    Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
+    .then(res => res.json())
+    .then(
+      data => {
+        Token.set(data.data.token)
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+      }
+    )
+  } else if (rUrl.origin === ENV.BokaApi) {
+    const token = Token.get()
+    // request.method = 'GET'
+    request.headers.set('Authorization', `Bearer ${token}`)
+    // continue to next interceptor
+    next(function (response) {
+      Login.access(request, response, isPC => {
+        if (isPC) {
+          Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
           .then(res => res.json())
-          .then(data => {
-          })
+          .then(
+            data => {
+              router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+            },
+            error => {
+              console.log(error)
+            }
+          )
         } else {
           const orginHref = encodeURIComponent(location.href)
-          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect`
-          // Vue.http.get('https://open.weixin.qq.com/connect/oauth2/authorize?redirect_uri=/', {})
-          // .then(res => {
-          //   console.log(res)
-          // })
+          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
         }
-      }
-    },
-    () => {
-      // console.log('okokokok')
+      },
+      () => {
+        // console.log('okokokok')
+      })
+      return response
     })
-    return response
-  })
+  }
 })
 
 new Vue({
