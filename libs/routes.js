@@ -27,7 +27,7 @@ import Userproducts from '@/pages/Userproducts'
 import AddActivity from '@/pages/AddActivity'
 import AddProduct from '@/pages/AddProduct'
 import RetailerGoodeazy from '@/pages/RetailerGoodeazy'
-import ServiceAddnews from '@/pages/ServiceAddnews'
+import AddNews from '@/pages/AddNews'
 import RetailerMessagelist from '@/pages/RetailerMessagelist'
 import DefaultStat from '@/pages/DefaultStat'
 import GroupbuyStat from '@/pages/GroupbuyStat'
@@ -237,9 +237,9 @@ export default [
     component: RetailerGoodeazy
   },
   {
-    path: '/serviceAddnews',
-    name: 'tServiceAddnews',
-    component: ServiceAddnews
+    path: '/AddNews',
+    name: 'tAddNews',
+    component: AddNews
   },
   {
     path: '/retailerMessagelist',
