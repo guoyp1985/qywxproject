@@ -38,6 +38,10 @@ export default {
   },
   computed: {
     getQrCode () {
+<<<<<<< HEAD
+=======
+      console.log(this.$route.params.qrCode)
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       this.qrCode = this.$route.params.qrCode
       return this.qrCode
     }
@@ -49,11 +53,22 @@ export default {
         self.$http.get(`http://laravel.boka.cn/api/scanlogin/${this.qrCode.verifycode}`, {})
         .then(res => res.json())
         .then(data => {
+<<<<<<< HEAD
           const token = data.data.token
           if (token) {
             Token.set(token)
             console.log(self.$route.params.fromPath)
             self.$router.push({path: self.$route.params.fromPath})
+=======
+          const token = data.data ? data.data.token : null
+          const error = data.error
+          if (error) {
+            console.error(error)
+          } else if (token) {
+            Token.set(token)
+            self.$router.push({path: self.$route.params.fromPath})
+            self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
             clearInterval(self.intervalId)
           }
         })

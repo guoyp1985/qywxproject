@@ -10,7 +10,11 @@
     </sticky>
     <view-box v-show="selectedIndex===0">
       <template v-if="list.length">
+<<<<<<< HEAD
         <order-info v-for="(item, index) in list" :key="index"></order-info>
+=======
+        <order-info v-for="(item, index) in list" :key="index" @on-eval="onEvaluate(item)"></order-info>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -20,7 +24,11 @@
     </view-box>
     <view-box v-show="selectedIndex===1">
       <template v-if="list1.length">
+<<<<<<< HEAD
         <order-info v-for="(item, index) in list1" :key="index"></order-info>
+=======
+        <order-info v-for="(item, index) in list1" :key="index" @on-eval="onEvaluate(item)"></order-info>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -30,7 +38,11 @@
     </view-box>
     <view-box v-show="selectedIndex===2">
       <template v-if="list2.length">
+<<<<<<< HEAD
         <order-info v-for="(item, index) in list2" :key="index"></order-info>
+=======
+        <order-info v-for="(item, index) in list2" :key="index" @on-eval="onEvaluate(item)"></order-info>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -40,7 +52,11 @@
     </view-box>
     <view-box v-show="selectedIndex===3">
       <template v-if="list3.length">
+<<<<<<< HEAD
         <order-info v-for="(item, index) in list3" :key="index"></order-info>
+=======
+        <order-info v-for="(item, index) in list3" :key="index" @on-eval="onEvaluate(item)"></order-info>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -114,6 +130,12 @@ export default {
     }
   },
   methods: {
+<<<<<<< HEAD
+=======
+    onEvaluate (order) {
+      this.$router.push({name: 'evaluation', params: {order: order}})
+    }
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 </script>

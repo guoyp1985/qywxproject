@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div class="containerarea s-havebottom font14 rgoodeazy bg-white">
+=======
+  <div class="containerarea s-havebottom font14 rgoodeazy">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>

@@ -1,5 +1,6 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
+<<<<<<< HEAD
     <template v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
@@ -9,6 +10,17 @@
           <router-link class="t-cell v_middle color-black" :to="{path:'centerService'}">
             <div>{{ loginUser.linkman }}</div>
             <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
+=======
+    <template v-if="currentuser.subscribe == 1 || currentuser.subscribe == 2">
+      <div v-if="isshowtop" class="pagetop">
+        <div class="t-table h_100">
+          <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'centerService'}">
+            <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="currentuser.avatar" />
+          </router-link>
+          <router-link class="t-cell v_middle color-black" :to="{path:'centerService'}">
+            <div>{{ currentuser.linkman }}</div>
+            <div class="font12 color-orange">金币：{{ currentuser.credits }}</div>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           </router-link>
           <div class="t-cell v_middle align_center" style="width:65px;">
             <router-link class="db-in" style="position:relative;" :to="{path:'retailerMessagelist'}">
@@ -42,6 +54,7 @@
           <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
           <span v-if="isadmin" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
         </div>
+<<<<<<< HEAD
         <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
         <div class="t-table font12 mt5 color-gray2">
           <template v-if="productdata.postage">
@@ -49,6 +62,12 @@
   					<div class="t-cell pl10 align_right">销量: {{ productdata.saled }}件</div>
           </template>
           <div v-else class="t-cell align_left">销量: {{ productdata.saled }}件</div>
+=======
+        <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.special }}</div>
+        <div class="t-table font12 mt5 color-gray2">
+					<div class="t-cell">快递: {{ productdata.postage }}元</div>
+					<div class="t-cell pl10 align_right">销量: {{ productdata.saled }}件</div>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 					<div v-if="productdata.buyonline != 1" class="t-cell align_right " @click="popupbuy">
 						<span class="help-icon">?</span>了解购买流程
 					</div>
@@ -167,11 +186,19 @@
   				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
   					<i class="al font18 mr3"></i>
   				</div>
+<<<<<<< HEAD
   				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
   					<div>{{ $t('RMB') }} {{ productdata.special }}</div>
   					<div>原价购买</div>
   				</div>
   				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">
+=======
+  				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" >
+  					<div>{{ $t('RMB') }} {{ productdata.special }}</div>
+  					<div>原价购买</div>
+  				</div>
+  				<div class="t-cell color-white h_100 v_middle align_center bg-red2">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   					<div>{{ $t('RMB') }} {{ productdata.groupprice }}</div>
   					<div>一键拼团</div>
   				</div>
@@ -185,7 +212,11 @@
     				</div>
             <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
     				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
+<<<<<<< HEAD
     				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
+=======
+    				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2">立即购买</div>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     			</div>
     		</div>
         <div v-else class="pagebottom b_top_after">
@@ -282,10 +313,13 @@ import { Swiper, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
 import Groupbuyitemplate from './Groupbuyitemplate'
 import Bargainbuyitemplate from './Bargainbuyitemplate'
 import Time from '../../libs/time'
+<<<<<<< HEAD
 import ENV from '../../libs/env'
 import Util from '../../libs/util'
 import { WxQrCode } from '../../libs/storage'
 
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 export default {
   directives: {
@@ -301,11 +335,15 @@ export default {
   },
   created () {
     let self = this
+<<<<<<< HEAD
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     setTimeout(function () {
       self.isshowtop = false
       self.showtopcss = 'notop'
     }, 5000)
+<<<<<<< HEAD
     let query = self.$route.query
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: { id: query.id, wid: query.wid, module: 'product' }
@@ -317,6 +355,8 @@ export default {
         self.photoarr = self.productdata.photo.split(',')
       }
     })
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   },
   filters: {
     dateformat: function (value) {
@@ -327,7 +367,11 @@ export default {
     return {
       isadmin: true,
       showtopcss: '',
+<<<<<<< HEAD
       loginUser: {
+=======
+      currentuser: {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         uid: 187,
         avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
         subscribe: 0,
@@ -344,10 +388,47 @@ export default {
       weixin_qrcode: 'http://gongxiaoshe.qiyeplus.com/data/upload/qrcode.jpg',
       favoritecss: 'none',
       isfavorite: false,
+<<<<<<< HEAD
       productflash: [],
       productdata: {},
       photoarr: [],
       contentphotoarr: [],
+=======
+      productflash: [{
+        url: 'javascript:',
+        img: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204043604042.jpg?x-oss-process=image/crop||x_78||y_-36||w_736||h_408',
+        photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204043604042.jpg?x-oss-process=image/crop||x_78||y_-36||w_736||h_408',
+        title1: '欧美宽松潮牌国潮复古加绒卫衣男连帽韩版外套男女oversize青少年'
+      }, {
+        url: 'javascript:',
+        img: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
+        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
+        title1: '苹果手机'
+      }, {
+        url: 'javascript:',
+        img: 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg',
+        photo: 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg',
+        title1: '维生素B族片'
+      }],
+      productdata: {
+        id: 124,
+        title: '苹果手机',
+        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
+        price: '8,000.00',
+        special: '8,000.00',
+        shares: 7,
+        saled: 1000,
+        crowdtype: 'groupbuy',
+        groupprice: '0.01',
+        numbers: 2,
+        havetuan: 3,
+        postage: '0.00',
+        moderate: 1,
+        buyonline: 0,
+        storage: 10,
+        content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
+      },
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       buyuserdata: [
         { uid: 2, username: '仇红波', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg' },
         { uid: 16, username: 'gyp', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/16.jpg' },
@@ -399,6 +480,7 @@ export default {
         this.favoritecss = 'none'
       }
       return this.isfavorite
+<<<<<<< HEAD
     },
     photoarr: function () {
       let self = this
@@ -412,6 +494,8 @@ export default {
     productflash: function () {
       console.log(self.productflash)
       return this.productflash
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     }
   },
   computed: {
@@ -446,10 +530,13 @@ export default {
     },
     favoriteevent () {
       this.isfavorite = !this.isfavorite
+<<<<<<< HEAD
     },
     buyevent () {
       let self = this
       self.$router.push('/addOrder')
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     }
   }
 }

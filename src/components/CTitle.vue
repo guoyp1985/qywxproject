@@ -4,6 +4,7 @@
       <div class="bg" style="width: 750px;height: 375px;margin-left: -375px;"></div>
       <div class="content">
         <div class="content-box">
+<<<<<<< HEAD
           <div class="user-info" @click="onClickUserInfo">
             <div>
               <img :src="avatar"/>
@@ -16,10 +17,36 @@
           <div class="user-credits" @click="onClickUserCredits">
             <img src="../assets/_images/jb_icon.png"/>
             <span class="u-credits color-yellow1">{{ credits }}</span>
+=======
+          <div class="user-info">
+            <router-link :to="{ name: 'profile', params: { profile: profile } }">
+              <div>
+                <img :src="avatar"/>
+              </div>
+              <div class="user-name">
+                <span class="color-white font16 u-name">{{ name }}</span>
+                <span class="al al-xing font13 u-star"></span>
+              </div>
+            </router-link>
+          </div>
+          <div class="user-credits">
+            <router-link :to="{ name: 'credit', params: { profile: profile } }">
+              <img src="../assets/_images/jb_icon.png"/>
+              <span class="u-credits color-yellow1">{{ credits }}</span>
+            </router-link>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           </div>
         </div>
       </div>
     </div>
+<<<<<<< HEAD
+=======
+    <div class="message-btn">
+      <router-link :to="{ name: 'messages', params: { profile: profile } }">
+        <span class="al al-pinglun color-white font24"></span>
+      </router-link>
+    </div>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   </div>
 </template>
 
@@ -28,7 +55,10 @@
 
 <script>
 import { Grid, GridItem } from 'vux'
+<<<<<<< HEAD
 import { go } from '../../libs/router'
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 export default {
   name: 'CTitle',
@@ -37,8 +67,14 @@ export default {
     GridItem
   },
   props: {
+<<<<<<< HEAD
     linkInfo: [String, Object],
     linkCredit: [String, Object],
+=======
+    // linkInfo: [String, Object],
+    // linkCredit: [String, Object],
+    profile: Object,
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     avatarHref: {
       type: String,
       default: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg'
@@ -62,6 +98,7 @@ export default {
     credits () {
       return this.userCredits
     }
+<<<<<<< HEAD
   },
   methods: {
     onClickUserInfo () {
@@ -71,6 +108,17 @@ export default {
       this.linkCredit && go(this.linkCredit, this.$router)
     }
   }
+=======
+  }
+  // methods: {
+  //   onClickUserInfo () {
+  //     this.linkInfo && go(this.linkInfo, this.$router)
+  //   },
+  //   onClickUserCredits () {
+  //     this.linkCredit && go(this.linkCredit, this.$router)
+  //   }
+  // }
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 }
 </script>
 
@@ -145,6 +193,15 @@ export default {
 .ctitle .content .user-credits .u-credits {
   vertical-align: top;
 }
+<<<<<<< HEAD
+=======
+.ctitle .message-btn {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  z-index: 3
+}
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 /* weui css hack */
 .ctitle .weui-grid__icon {

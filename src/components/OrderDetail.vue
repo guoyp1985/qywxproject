@@ -13,10 +13,17 @@
             </router-link>
           </div>
           <div class="wx-contact">
+<<<<<<< HEAD
             <router-link to="">
               <span class="al al-liaotian color-order-detail font18"></span>
               <span class="font13">{{$t('Weixin Contact')}}</span>
             </router-link>
+=======
+            <a @click="wxContact">
+              <span class="al al-liaotian color-order-detail font18"></span>
+              <span class="font13">{{$t('Weixin Contact')}}</span>
+            </a>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           </div>
         </div>
       </div>
@@ -26,6 +33,7 @@
       <cell class="font14" :title="$t('Receiver')+': '+receiver" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="$t('Shipping Address')+': '+shippingAddress"></cell>
     </group>
+<<<<<<< HEAD
     <order-info></order-info>
   </div>
 </template>
@@ -38,10 +46,40 @@ import { Group, Cell, Sticky } from 'vux'
 import OrderInfo from './OrderInfo'
 
 export default {
+=======
+    <order-info :item="order" @on-eval="evaluate"></order-info>
+    <div v-transfer-dom class="qrcode-dialog">
+      <x-dialog v-model="wxCardShow" class="dialog-demo">
+        <div class="img-box">
+          <img :src="userQrCode" style="max-width:100%">
+        </div>
+        <div>
+          <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
+        </div>
+        <div @click="wxCardShow=false">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
+  </div>
+</template>
+<script>
+import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom } from 'vux'
+import OrderInfo from './OrderInfo'
+
+export default {
+  directives: {
+    TransferDom
+  },
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   components: {
     Group,
     Cell,
     Sticky,
+<<<<<<< HEAD
+=======
+    XDialog,
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     OrderInfo
   },
   data () {
@@ -51,13 +89,44 @@ export default {
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
       expressNumber: '100000000000',
+<<<<<<< HEAD
       shippingAddress: '北京市市辖区'
+=======
+      shippingAddress: '北京市市辖区',
+      order: {
+        id: '0',
+        type: 1,
+        name: 'unkown',
+        storeId: '0',
+        storeType: 1,
+        storeName: 'unkown',
+        status: 0,
+        imgs: ['../assets/_images/nopic.jpg'],
+        desc: undefined,
+        num: 0,
+        pay: 0
+      },
+      userQrCode: '',
+      wxCardShow: false
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     }
   },
   computed: {
     expressInfo () {
       return `${this.expressCompany} ${this.expressNumber}`
     }
+<<<<<<< HEAD
+=======
+  },
+  methods: {
+    evaluate () {
+      this.$router.push({name: 'evaluation', params: {order: this.order}})
+    },
+    wxContact () {
+      console.log(false)
+      this.wxCardShow = true
+    }
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 </script>
@@ -114,6 +183,17 @@ export default {
   border-right: 1px solid #dfdfdf;
   color: #dfdfdf;
 }
+<<<<<<< HEAD
+=======
+.qrcode-dialog .img-box {
+  height: 350px;
+  overflow: hidden;
+}
+.qrcode-dialog .vux-close {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 /* vui css hack */
 #order-detail .shipping-address:before {

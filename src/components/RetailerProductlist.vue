@@ -1,8 +1,13 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
     <div class="s-container" style="top:0px;">
+<<<<<<< HEAD
       <template v-if="!productdata || productdata.length == 0">
         <div class="scroll_list bg-page">
+=======
+      <div class="scroll_list bg-page">
+        <template v-if="!productdata || productdata.length == 0">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           <div class="emptyitem">
             <div class="t-table" style="padding-top:20%;">
               <div class="t-cell padding10">
@@ -14,6 +19,7 @@
               </div>
             </div>
           </div>
+<<<<<<< HEAD
         </div>
       </template>
       <template v-else>
@@ -43,6 +49,27 @@
           </router-link>
         </div>
       </template>
+=======
+        </template>
+        <router-link :to="{path:'/product',query:{id:item.id,wid:187}}" v-else class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+          <div v-if="item.moderate == 0" class="icon down"></div>
+      		<div class="t-table bg-white pt10 pb10">
+      			<div class="t-cell pl10 v_middle" style="width:90px;">
+  		          <img style="width:80px;height:80px;" :src="item.photo" />
+      			</div>
+      			<div class="t-cell v_middle">
+              <div class="clamp2 font15 pr10">{{item.title}}</div>
+              <div class="mt5 dishref db">
+                <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+              </div>
+              <div class="align_right pr10">
+                <div class="btnicon" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+              </div>
+      			</div>
+      		</div>
+        </router-link>
+      </div>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     </div>
     <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     <div v-transfer-dom>
@@ -80,10 +107,13 @@
 </template>
 
 <i18n>
+<<<<<<< HEAD
 Add product:
   zh-CN: 添加商品
 Back go shop:
   zh-CN: 返回店铺
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 Are you sure up?:
   zh-CN: 确定要上架吗？
 Are you sure down?:
@@ -92,7 +122,11 @@ Are you sure down?:
 
 <script>
 import { TransferDom, Popup, Confirm } from 'vux'
+<<<<<<< HEAD
 import ENV from '../../libs/env'
+=======
+import Productitemplate1 from './Productitemplate1'
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 export default {
   directives: {
@@ -100,6 +134,7 @@ export default {
   },
   components: {
     Popup,
+<<<<<<< HEAD
     Confirm
   },
   created: function () {
@@ -115,6 +150,25 @@ export default {
     return {
       loginuser: { uid: 187 },
       productdata: [],
+=======
+    Productitemplate1,
+    Confirm
+  },
+  data () {
+    return {
+      productdata: [
+        { 'id': 124, isfinished: 1, moderate: 0, 'title': '苹果手机', 'photo': 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', 'price': '8,000.00' },
+        { 'id': 113, isfinished: 0, moderate: 1, 'title': '维生素B族片', 'photo': 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg', 'price': '1.00', 'saled': 1 },
+        { 'id': 107, isfinished: 1, moderate: 1, 'title': '大王卡', 'photo': 'http://ossgxs.boka.cn/month_201803/15222378479011.jpg', 'price': '12.00', 'saled': 0 },
+        { 'id': 106, isfinished: 0, moderate: 1, 'title': '测试分享商品通知', 'photo': 'http://ossgxs.boka.cn/month_201803/15222375843651.jpg', 'price': '1.00', 'saled': 0 },
+        { 'id': 105, isfinished: 1, moderate: 0, 'title': '测试商品分享', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'price': '1.00', 'saled': 0 },
+        { 'id': 103, isfinished: 1, moderate: 0, 'title': '测试商品图片', 'photo': 'http://ossgxs.boka.cn/month_201803/15222183428017.jpg?x-oss-process=image/crop,x_-109,y_-103,w_1086,h_1086', 'price': '10.00', 'saled': 2 },
+        { 'id': 98, isfinished: 0, moderate: 0, 'title': '111', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221287780438.jpg', 'price': '222.00', 'saled': 0 },
+        { 'id': 92, isfinished: 0, moderate: 0, 'title': '商品2', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220609241178.png', 'price': '12.00', 'saled': 0 },
+        { 'id': 91, isfinished: 0, moderate: 0, 'title': '商品1', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'price': '1.00', 'saled': 1 },
+        { 'id': 89, isfinished: 0, moderate: 0, 'title': '啊', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220603289333.jpg', 'price': '1.00', 'saled': 0 }
+      ],
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       controldata1: [
         { key: 'edit', title: '编辑' },
         { key: 'up', title: '上架' },
@@ -129,6 +183,7 @@ export default {
       showdownconfirm: false
     }
   },
+<<<<<<< HEAD
   watch: {
     productdata: function () {
       return this.productdata
@@ -138,6 +193,9 @@ export default {
     getquery: function () {
       return this.$route.query
     }
+=======
+  computed: {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   },
   methods: {
     controlpopup1 (item, index) {

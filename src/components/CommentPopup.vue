@@ -44,7 +44,11 @@
         </div>
         <box gap="20px">
           <x-button type="primary" @click.native="onSubmit">{{$t('Comment')}}</x-button>
+<<<<<<< HEAD
           <x-button type="default" @click.native="onClose">{{$t('Cancel')}}</x-button>
+=======
+          <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         </box>
       </div>
     </popup>
@@ -123,8 +127,13 @@ export default {
     onSubmit () {
       this.$emit('on-submit', this.value)
     },
+<<<<<<< HEAD
     onClose () {
       this.$emit('on-close')
+=======
+    onCancel () {
+      this.$emit('on-cancel')
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     },
     onTextFocus () {
       this.$emit('on-text-focus')

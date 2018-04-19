@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div class="containerarea s-havebottom bg-white">
+=======
+  <div class="containerarea s-havebottom">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     <div class="s-container" style="top:0;">
       <form>
         <Forminputplate class="required">
@@ -173,9 +177,12 @@ export default {
     Radio,
     XAddress
   },
+<<<<<<< HEAD
   created () {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   data () {
     return {
       showpopup: false,

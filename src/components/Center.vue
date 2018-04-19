@@ -1,9 +1,21 @@
 <template>
+<<<<<<< HEAD
   <div id="personal-center">
     <c-title :link-info="{path:'/profile'}"
             :link-credit="{path:'/credit'}">
     </c-title>
     <grid :show-lr-borders="false" :show-vertical-dividers="false">
+=======
+  <div id="personal-center" v-cloak>
+    <c-title :link-info="{path:'/profile'}"
+            :link-credit="{path:'/credit'}"
+            :avatar-href="getAvatar"
+            :user-name="getName"
+            :user-credits="getCredits"
+            :profile="profile">
+    </c-title>
+    <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" :link="btn.link">
         <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
           <span :class="`fa ${btn.icon}`"></span>
@@ -11,7 +23,11 @@
       </grid-item>
     </grid>
     <div class="grid-title">{{ $t('Service') }}</div>
+<<<<<<< HEAD
     <grid :show-lr-borders="false" :show-vertical-dividers="false">
+=======
+    <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" :link="btn.link">
         <div slot="icon" :class="btn.color">
           <span :class="`al ${btn.icon}`"></span>
@@ -27,6 +43,10 @@
 <script>
 import { Grid, GridItem } from 'vux'
 import CTitle from './CTitle'
+<<<<<<< HEAD
+=======
+import ENV from '../../libs/env'
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 export default {
   components: {
@@ -38,6 +58,15 @@ export default {
     return {
       btns: [
         {
+<<<<<<< HEAD
+=======
+          name: 'To Recommend',
+          icon: 'fa-users',
+          color: 'rgba01',
+          link: '/recommend'
+        },
+        {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           name: 'Search Orders',
           icon: 'fa-file-text-o',
           color: 'rgba02',
@@ -47,7 +76,11 @@ export default {
           name: 'View Productions',
           icon: 'fa-shopping-bag',
           color: 'rgba05',
+<<<<<<< HEAD
           link: '/orderSearch'
+=======
+          link: '/userproducts'
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         },
         {
           name: 'View Articles',
@@ -58,6 +91,15 @@ export default {
       ],
       btns1: [
         {
+<<<<<<< HEAD
+=======
+          name: 'Sales center',
+          icon: 'al-fuwu',
+          color: 'color-sales',
+          link: '/centerSales'
+        },
+        {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           name: 'My Address',
           icon: 'al-wodedizhi',
           color: 'color-address',
@@ -81,8 +123,40 @@ export default {
           color: 'color-exit',
           link: '/exit'
         }
+<<<<<<< HEAD
       ]
     }
+=======
+      ],
+      avatarHref: '',
+      userName: '',
+      userCredits: 0,
+      profile: {}
+    }
+  },
+  computed: {
+    getAvatar () {
+      return this.avatarHref
+    },
+    getName () {
+      return this.userName
+    },
+    getCredits () {
+      return this.userCredits
+    }
+  },
+  created () {
+    const self = this
+    this.$http.get(`${ENV.BokaApi}/api/user/home`, {})
+    .then(res => res.json())
+    .then(data => {
+      console.log(data)
+      self.avatarHref = data.avatar
+      self.userName = data.username
+      self.userCredits = data.credit
+      self.profile = {}
+    })
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 </script>
@@ -116,4 +190,13 @@ export default {
   padding: 5px 15px;
   font-size: 14px;
 }
+<<<<<<< HEAD
+=======
+
+/* vux css hack */
+#personal-center .weui-grid:after {
+  height: 0px;
+  border-bottom: none;
+}
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 </style>

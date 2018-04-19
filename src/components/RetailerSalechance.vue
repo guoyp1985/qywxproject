@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div class="containerarea bg-white">
+=======
+  <div>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     <div class="bg-gray4 padding10 border-box">
       <card :header="{title: $t('Data text')}" class="x-card">
         <div slot="content" class="card-demo-flex card-demo-content01">
@@ -58,9 +62,12 @@ export default {
       return new Time(value * 1000).dateFormat('hh:mm')
     }
   },
+<<<<<<< HEAD
   created () {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   data () {
     return {
       topdata: [

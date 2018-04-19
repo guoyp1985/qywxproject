@@ -42,24 +42,15 @@
             <div class="line linepercent" style="width:0%;"></div>
           </div>
           <div class="t-table">
-            <div class="t-cell align_left">￥{{ cutinfo.price }}</div>
-            <div class="t-cell align_center">￥{{ cutinfo.cutprice }}</div>
-            <div class="t-cell align_right">￥{{ cutinfo.minprice }}</div>
+            <div class="t-cell align_left">￥<span>10.00</span></div>
+            <div class="t-cell align_center">￥<span>10.00</span></div>
+            <div class="t-cell align_right">￥<span>1.00</span></div>
           </div>
         </div>
-        <div v-if="isfinish" class="btn db">指定时间内未完成砍价，砍价失败</div>
-        <template v-else>
-          <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-          <div class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
-            <span class="v_middle db-in">还剩</span>
-            <span class="v_middle db-in">{{ lefthour }}</span>
-            <span class="v_middle db-in">:</span>
-            <span class="v_middle db-in">{{ leftminute }}</span>
-            <span class="v_middle db-in">:</span>
-            <span class="v_middle db-in">{{ leftsecond }}</span>
-            <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
-          </div>
-        </template>
+        <div class="btn db btninvite shareBtn">邀请好友砍价</div>
+        <div class="padding10 align_center timeleftarea font13" style="color:#A87F35; ">
+          <span style="margin-right:3px;">还剩</span><span class="hour">00:</span><span class="minute">00:</span><span class="second">00</span><span style="margin-left:3px;">结束，快让好友帮忙砍价吧~</span>
+        </div>
       </div>
     </div>
     <div>
@@ -92,14 +83,6 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showpopup" height="100%">
-        <div class="popup1 invitelayer" @click="closeinvite">
-          <div class="iconarea" style="padding:15px 40px;"><i class="al al-feiji font60" style="color:rgba(255,255,255,0.9)"></i></div>
-          <div class="txtarea align_center color-fff font16" style="line-height:26px;text-shadow: -2px 0px 1px #000;">点击右上角“···”发送给微信好友<br>邀请对方帮你砍价！</div>
-        </div>
-      </popup>
-    </div>
   </div>
 </template>
 
@@ -107,71 +90,17 @@
 </i18n>
 
 <script>
-
-import { TransferDom, Popup } from 'vux'
 import Time from '../../libs/time'
 
 export default {
-  directives: {
-    TransferDom
-  },
   components: {
-    Popup
-  },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    let self = this
-    let cutdownInterval = setInterval(function () {
-      let h = parseInt(self.lefthour)
-      let m = parseInt(self.leftminute)
-      let s = parseInt(self.leftsecond)
-      if (s > 0) {
-        s--
-        if (s < 10) {
-          self.leftsecond = '0' + s
-        } else {
-          self.leftsecond = s
-        }
-      } else if (m > 0) {
-        m--
-        if (m < 10) {
-          self.leftminute = '0' + m
-        } else {
-          self.leftminute = m
-        }
-        self.leftsecond = '59'
-      } else if (h > 0) {
-        h--
-        if (h < 10) {
-          self.lefthour = '0' + h
-        } else {
-          self.lefthour = h
-        }
-        self.leftminute = '59'
-        self.leftsecond = '59'
-      }
-      if (h === 0 && m === 0 && s === 0) {
-        clearInterval(cutdownInterval)
-        self.isfinish = true
-      }
-    }, 1000)
   },
   data () {
     return {
-      showpopup: false,
-      isfinish: false,
-      lefthour: '00',
-      leftminute: '00',
-      leftsecond: '05',
       activityuser: {
         uid: 187,
         avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
         linkman: 'YOUNG'
-      },
-      cutinfo: {
-        price: '8,000.00',
-        minprice: '1000.00',
-        cutprice: '0.00'
       },
       productdata: {
         id: 124,
@@ -205,12 +134,6 @@ export default {
   methods: {
     joinin () {
       this.$router.push('/retailerShop')
-    },
-    inviteevent () {
-      this.showpopup = true
-    },
-    closeinvite () {
-      this.showpopup = false
     }
   }
 }
@@ -331,11 +254,5 @@ export default {
     height: 60px;
     margin-top: 10px;
     background-color: #E0E0E0;
-}
-.invitelayer{width:100%;height:100%;position:relative;background: rgba(0, 0, 0, 0.85);}
-.invitelayer .iconarea{text-align:right;padding:15px 40px;color:rgba(255,255,255,0.9);}
-.invitelayer .txtarea{
-  text-align:center;color:#fff;font-size:16px;
-  line-height:26px;text-shadow: -2px 0px 1px #000;
 }
 </style>

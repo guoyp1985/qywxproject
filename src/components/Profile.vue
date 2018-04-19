@@ -1,7 +1,11 @@
 <template>
   <div id="user-profile">
     <group label-width="4em" label-align="left" label-margin-right="2em">
+<<<<<<< HEAD
       <cell :inline-desc="$t('Sync From Wx')">
+=======
+      <cell :inline-desc="$t('Sync From Wx')" @click.native="syncWxProfile">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         <img class="avatar" slot="icon" :src="avatarHref"/>
       </cell>
       <x-input :title="$t('Name')" :placeholder="$t('Name')" v-model="value1"></x-input>
@@ -32,6 +36,10 @@ Confirm:
 
 <script>
 import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
+<<<<<<< HEAD
+=======
+import ENV from '../../libs/env'
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 export default {
   components: {
@@ -61,6 +69,14 @@ export default {
       value3: '',
       value4: ''
     }
+<<<<<<< HEAD
+=======
+  },
+  methods: {
+    syncWxProfile () {
+      this.$http.get(``)
+    }
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 </script>

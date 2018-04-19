@@ -22,6 +22,7 @@ const Util = {
       if (rs === false) return false
     }
     return re;
+<<<<<<< HEAD
   },
   delay: (text) => {
     let ret = 1000
@@ -35,6 +36,8 @@ const Util = {
       }
     }
     return ret
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 export default Util

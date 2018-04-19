@@ -234,6 +234,7 @@ en:
   Eazy get order: Eazy get order
   Close: Close
   Stat: Stat
+<<<<<<< HEAD
   To seller message: To seller message
   Please select address: Please select address
   Orders: Orders
@@ -269,6 +270,8 @@ en:
   Goods sold to customer rebate Commission: Goods sold to customer rebate Commission
   Product share title placeholder: Product share title placeholder
   Product share description placeholder: Product share description placeholder
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -494,6 +497,10 @@ zh-CN:
   Review: 审核
   Writing Discussion: 写留言
   Reply Discussion: 回复评论
+<<<<<<< HEAD
+=======
+  Writing Evaluation: 写评论
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   News title: 文章标题
   Cover photo: 封面图像
   Expand more options: 展开更多选项
@@ -501,7 +508,11 @@ zh-CN:
   Share title: 分享标题
   Share title placeholder: 如不填写默认调用商品标题
   Share description: 分享描述
+<<<<<<< HEAD
   Share description placeholder: 如不填写自动截取商品介绍
+=======
+  Share description placeholder: 如不填写自动截取文章内容
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   Label: 标签
   Label can not empty: 标签不能为空
   Url paster here: 链接粘贴在此处
@@ -548,6 +559,7 @@ zh-CN:
   Go to create: 立即创建
   Summary: 摘要
   Stat: 统计
+<<<<<<< HEAD
   RMB: ￥
   To seller message: 给卖家留言
   Deliver goods: 发货
@@ -592,3 +604,15 @@ zh-CN:
   Goods sold to customer rebate Commission: 返点客售出商品后给予的佣金
   Product share title placeholder: 如不填写默认调用商品标题
   Product share description placeholder: 如不填写自动截取商品介绍
+=======
+  Wx Login: 微信登录
+  Scan To Login: 请使用微信扫码登录
+  Boka Authorization Center: 博卡授权中心
+  Product Rater: 商品评分
+  Evaluation Of Logistics: 物流评价
+  Express Package: 快递包装
+  Delivery Speed: 送货速度
+  Service Attitude: 配送员服务态度
+  To Give Five Stars: 满意请给5分
+  Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827

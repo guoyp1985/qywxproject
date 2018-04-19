@@ -5,6 +5,7 @@
 */
 <template>
   <div class="order-info">
+<<<<<<< HEAD
     <router-link :to="`/retailerShop/${order.storeId}`">
       <div class="store-info">
         <div class="info-cell">
@@ -30,15 +31,49 @@
           </div>
           <div class="product-desc" v-if="order.desc">
             {{order.desc}}
+=======
+    <router-link :to="`/retailerShop/${item.storeId}`">
+      <div class="store-info">
+        <div class="info-cell">
+          <span :class="`al ${storeType} font22`"></span>
+          <span>{{item.storeName}}</span>
+          <span class="al al-mjiantou-copy font16"></span>
+        </div>
+        <div class="status-cell" v-if="item.status">
+          <span>{{item.status}}</span>
+        </div>
+      </div>
+    </router-link>
+    <router-link :to="{path:'/orderDetail',query:{order:item}}">
+      <div class="products-info" v-if="item.imgs.length > 1">
+      </div>
+      <div class="product-info" v-else>
+        <div class="product-img">
+          <x-img :src="item.imgs[0]"></x-img>
+        </div>
+        <div class="product-detail">
+          <div class="product-name">
+            {{item.name}}
+          </div>
+          <div class="product-desc" v-if="item.desc">
+            {{item.desc}}
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
           </div>
         </div>
       </div>
     </router-link>
     <div class="pay-info">
+<<<<<<< HEAD
       <span class="font12">共{{order.num}}件商品 实付款: </span><span class="font14">¥{{order.pay}}</span>
     </div>
     <div class="operate-area">
       <x-button mini v-for="(button, index) in buttons[order.type]" :key="index" @click.native="buttonClick(button.id)">{{button.name}}</x-button>
+=======
+      <span class="font12">共{{item.num}}件商品 实付款: </span><span class="font14">¥{{item.pay}}</span>
+    </div>
+    <div class="operate-area">
+      <x-button mini v-for="(button, index) in buttons[item.type]" :key="index" @click.native="buttonClick(button.type)">{{button.name}}</x-button>
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     </div>
   </div>
 </template>
@@ -53,7 +88,11 @@ export default {
     XButton
   },
   props: {
+<<<<<<< HEAD
     order: {
+=======
+    item: {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       type: Object,
       default: () => {
         return {
@@ -77,7 +116,11 @@ export default {
         [],
         [
           {
+<<<<<<< HEAD
             id: 1,
+=======
+            type: 1,
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
             name: '评价'
           }
         ]
@@ -87,7 +130,11 @@ export default {
   computed: {
     storeType () {
       let icon = ''
+<<<<<<< HEAD
       switch (this.order.storeType) {
+=======
+      switch (this.item.storeType) {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         case 1:
           icon = 'al-weidian1'
           break
@@ -96,6 +143,19 @@ export default {
       }
       return icon
     }
+<<<<<<< HEAD
+=======
+  },
+  methods: {
+    buttonClick (type) {
+      switch (type) {
+        case 1:
+          this.$emit('on-eval')
+          break
+        default:
+      }
+    }
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 </script>

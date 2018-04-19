@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div id="app" style="height:100%;" v-cloak>
+=======
+  <div id="app" style="height:100%;">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
@@ -102,6 +106,7 @@ export default {
         if (/component/.test(this.route.path) && parts[2]) return parts[2]
       }
     },
+<<<<<<< HEAD
     // isDemo () {
     //   console.log(this.route.path)
     //   // return /component|demo/.test(this.route.path)
@@ -120,6 +125,8 @@ export default {
     // isTabbarDemo () {
     //   return /tabbar/.test(this.route.path)
     // },
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     title () {
       if (this.route.path === '/') return 'Home'
       if (this.route.path === '/components') return 'Demo list'
@@ -140,10 +147,14 @@ export default {
       .then(res => res.json())
       .then(
         data => {
+<<<<<<< HEAD
           // alert(JSON.stringify(data))
         },
         error => {
           // alert(JSON.stringify(error))
+=======
+          console.log(JSON.stringify(data))
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         }
       )
     }

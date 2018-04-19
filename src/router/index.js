@@ -42,6 +42,7 @@ import NewsStat from '@/components/NewsStat'
 import ProductStat from '@/components/ProductStat'
 import Product from '@/components/Product'
 import Bargainbuy from '@/components/Bargainbuy'
+<<<<<<< HEAD
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import AddOrder from '@/components/AddOrder'
@@ -52,6 +53,13 @@ import Timeline from '@/components/Timeline'
 import QrLogin from '@/components/QrLogin'
 import DecorationShop from '@/components/DecorationShop'
 import RetailerApply from '@/components/RetailerApply'
+=======
+import Bargainbuyview from '@/components/Bargainbuyview'
+import QrLogin from '@/components/QrLogin'
+import Messages from '@/components/Messages'
+import Evaluation from '@/components/Evaluation'
+import SharingDetail from '@/components/SharingDetail'
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 // import List from '@/components/DemoList'
 // import DemoList from '@/demo_list'
 
@@ -137,10 +145,18 @@ let routes = [
   },
   {
     path: '/profile',
+<<<<<<< HEAD
+=======
+    name: 'profile',
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     component: Profile
   },
   {
     path: '/credit',
+<<<<<<< HEAD
+=======
+    name: 'credit',
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     component: Credit
   },
   {
@@ -148,6 +164,14 @@ let routes = [
     component: Share
   },
   {
+<<<<<<< HEAD
+=======
+    path: '/sharingDetail',
+    name: 'sharingDetail',
+    component: SharingDetail
+  },
+  {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     path: '/address',
     component: Address
   },
@@ -160,6 +184,14 @@ let routes = [
     component: Favorite
   },
   {
+<<<<<<< HEAD
+=======
+    path: '/messages',
+    name: 'messages',
+    component: Messages
+  },
+  {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     path: '/orderSearch',
     component: OrderSearch
   },
@@ -184,6 +216,14 @@ let routes = [
     component: Article
   },
   {
+<<<<<<< HEAD
+=======
+    path: '/evaluation',
+    name: 'evaluation',
+    component: Evaluation
+  },
+  {
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     path: '/retailerSetting',
     component: RetailerSetting
   },
@@ -244,6 +284,7 @@ let routes = [
     component: Bargainbuy
   },
   {
+<<<<<<< HEAD
     path: '/bargainbuyView',
     component: BargainbuyView
   },
@@ -278,6 +319,10 @@ let routes = [
   {
     path: '/retailerApply',
     component: RetailerApply
+=======
+    path: '/bargainbuyview',
+    component: Bargainbuyview
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 ]
 

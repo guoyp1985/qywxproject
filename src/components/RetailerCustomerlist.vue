@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div class="containerarea bg-white">
+=======
+  <div class="containerarea">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
@@ -110,9 +114,12 @@ export default {
     XTextarea,
     Group
   },
+<<<<<<< HEAD
   created () {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
+=======
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   data () {
     return {
       tabtxts: [ '潜在客户', '成交消息' ],

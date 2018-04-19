@@ -1,5 +1,9 @@
 <template>
+<<<<<<< HEAD
   <div class="containerarea s-havebottom font14 addnews bg-white">
+=======
+  <div class="containerarea s-havebottom font14 addnews">
+>>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
     <div class="s-container" style="top:0;">
       <form>
         <div class="form-item required">
