@@ -144,9 +144,9 @@ router.afterEach(function (to) {
 
 const excludeUrls = [
   `${ENV.BokaApi}/weixin/userAuth/*`,
-  `${ENV.BokaApi}/api/qrcode/login`,
-  `${ENV.BokaApi}/api/login`,
-  `${ENV.BokaApi}/api/scanlogin/*`
+  `${ENV.BokaApi}/weixin/qrcode/login*`,
+  `${ENV.BokaApi}/api/login/*`,
+  `${ENV.BokaApi}/api/scanlogin`
 ]
 
 // 排除全局请求过滤器中的请求url
@@ -159,8 +159,6 @@ const matchExclude = url => {
   }
   return false
 }
-
-// localStorage.clear()
 
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {

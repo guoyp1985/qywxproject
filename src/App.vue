@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;">
+  <div id="app" style="height:100%;" v-cloak>
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>

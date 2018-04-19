@@ -35,23 +35,15 @@
         <div class="form-item required" v-if="classdata.length > 0">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
           <div class="pt10">经营产品<span class="fong12 color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-          <div class="labellist">
-            <label class="labelitem db-in v_middle padding5" v-for="(item,index) in classdata" :key="item.id">
-              <div class="qcheckbox1 db-in v_middle">
-                <input type="checkbox" name="titles[]" @click="checkclass(item,index)" :checked="item.checked"/>{{ item.title }}
-                <i class="al"></i>
-              </div>
-            </label>
-          </div>
-          <!--
           <checker
-          v-model="classdata"
+          class="x-checker"
           type="checkbox"
+          v-model="submitdata.productclass"
+          :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-            <checker-item v-for="(item,index) in classdata" :key="item.id" :value="item.id">{{ item.title }}</checker-item>
+            <checker-item v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
           </checker>
-        -->
         </div>
         <div class="form-item padding10 font16">
           <div class="t-table">
@@ -135,8 +127,6 @@ export default {
       isagree: false,
       isshowpopup: false,
       classdata: [],
-      maxclassnum: 3,
-      selectclassdata: [],
       isShowLoading: false,
       allowsubmit: false,
       submitdata: {
@@ -145,22 +135,10 @@ export default {
         verifycode: '',
         productclass: ''
       },
-      requireddata: [ 'truename', 'mobile', 'verifycode', 'productclass' ]
+      requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' }
     }
   },
   watch: {
-    bottomcss: function () {
-      return this.bottomcss
-    },
-    selectclassdata: function () {
-      let arr = []
-      for (let i = 0; i < this.selectclassdata.length; i++) {
-        arr.push(this.selectclassdata[i].id)
-      }
-      this.submitdata.productclass = arr.join(',')
-      console.log(this.submitdata.productclass)
-      return this.selectclassdata
-    },
     submitdata: function () {
       return this.submitdata
     }
@@ -214,38 +192,13 @@ export default {
     closepopup () {
       this.isshowpopup = false
     },
-    checkclass (item, index) {
-      event.preventDefault()
-      let self = this
-      if (item.checked) {
-        self.classdata[index].checked = false
-        for (let i = 0; i < self.selectclassdata.length; i++) {
-          if (self.selectclassdata[i] === item) {
-            self.selectclassdata.splice(i, 1)
-            break
-          }
-        }
-      } else {
-        if (self.selectclassdata.length < self.maxclassnum) {
-          self.selectclassdata.push(item)
-          self.classdata[index].checked = true
-        } else {
-          self.classdata[index].checked = false
-        }
-      }
-    },
     submitevent () {
       let self = this
       if (self.allowsubmit) {
-        for (let i = 0; i < self.requireddata.length; i++) {
-          let curdata = self.requireddata[i]
-          console.log(curdata)
-          if (Util.isNull(self.submitdata[curdata])) {
-            console.log('in null')
-            self.allowsubmit = false
-            break
-          }
+        for (let key in self.requireddata) {
+          self.requireddata[key] = self.submitdata[key]
         }
+        self.allowsubmit = Util.validateQueue(self.requireddata)
         if (!self.allowsubmit) {
           self.$vux.alert.show({
             title: '',
@@ -266,7 +219,12 @@ export default {
           self.isShowLoading = false
           self.$vux.toast.show({
             text: data.error,
-            time: Util.delay(data.error)
+            time: Util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.$router.push('/centerSales')
+              }
+            }
           })
         })
       }
@@ -276,16 +234,6 @@ export default {
 </script>
 
 <style lang="less">
-.form-item{position:relative;padding:10px;}
-.form-item:after{
-  content:"";display:block;
-	background-color:@list-border-color;height:1px;overflow:hidden;
-	position: absolute;left: 0;right: 0;bottom:1px;
-	-webkit-transform: scaleY(0.5) translateY(0.5px);
-	transform: scaleY(0.5) translateY(0.5px);
-	-webkit-transform-origin: 0% 0%;
-	transform-origin: 0% 0%;
-}
 .retailerapply .pagebottom{
   background-color:#f2f2f2;
 }
@@ -295,19 +243,5 @@ export default {
 .retailerapply .pagebottom.active{
   background-color: #1c90fe;
   color: #fff;
-}
-.ck-item {
-  width: 100px;
-  height: 26px;
-  line-height: 26px;
-  text-align: center;
-  border-radius: 3px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  margin-right: 6px;
-}
-.ck-item-selected {
-  background: #ffffff url(../assets/images/checker.png) no-repeat right bottom;
-  border-color: #ff4a00;
 }
 </style>

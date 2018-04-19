@@ -1,14 +1,14 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
-    <template v-if="currentuser.subscribe == 1 || currentuser.subscribe == 2">
+    <template v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
           <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'centerService'}">
-            <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="currentuser.avatar" />
+            <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
           </router-link>
           <router-link class="t-cell v_middle color-black" :to="{path:'centerService'}">
-            <div>{{ currentuser.linkman }}</div>
-            <div class="font12 color-orange">金币：{{ currentuser.credits }}</div>
+            <div>{{ loginUser.linkman }}</div>
+            <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
           </router-link>
           <div class="t-cell v_middle align_center" style="width:65px;">
             <router-link class="db-in" style="position:relative;" :to="{path:'retailerMessagelist'}">
@@ -24,13 +24,15 @@
     </template>
     <div class="pagemiddle">
       <swiper
-        :list="productflash"
         dots-position="center"
         :interval=6000
         :show-dots="isshowdot"
         :aspect-ratio="1/1"
         auto
         loop>
+        <swiper-item v-for="(item,index) in photoarr">
+          <img :src="item" class="imgcover" style="width:100%;height:100%;" />
+        </swiper-item>
       </swiper>
       <div class="grouptitle flex_left" v-if="productdata.crowdtype == 'groupbuy'">
 				<div class="col1"><span>￥</span><span class="font20 bold">{{ productdata.groupprice }}</span></div>
@@ -42,10 +44,13 @@
           <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
           <span v-if="isadmin" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
         </div>
-        <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.special }}</div>
+        <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
         <div class="t-table font12 mt5 color-gray2">
-					<div class="t-cell">快递: {{ productdata.postage }}元</div>
-					<div class="t-cell pl10 align_right">销量: {{ productdata.saled }}件</div>
+          <template v-if="productdata.postage">
+  					<div class="t-cell">快递: {{ productdata.postage }}元</div>
+  					<div class="t-cell pl10 align_right">销量: {{ productdata.saled }}件</div>
+          </template>
+          <div v-else class="t-cell align_left">销量: {{ productdata.saled }}件</div>
 					<div v-if="productdata.buyonline != 1" class="t-cell align_right " @click="popupbuy">
 						<span class="help-icon">?</span>了解购买流程
 					</div>
@@ -140,7 +145,7 @@
       </router-link>
       <div class="productcontent">
         <template v-if="productdata.content == ''">
-          <img v-for="(item,index) in productflash" :key="index" :src="item.photo" />
+          <img v-for="(item,index) in photoarr" :key="index" :src="item" />
         </template>
         <div v-else v-html="productdata.content"></div>
       </div>
@@ -275,10 +280,13 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
+import { Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Time from '../../libs/time'
+import ENV from '../../libs/env'
+import Util from '../../libs/util'
+import { WxQrCode } from '../../libs/storage'
 
 export default {
   directives: {
@@ -286,6 +294,7 @@ export default {
   },
   components: {
     Swiper,
+    SwiperItem,
     Groupbuyitemplate,
     Bargainbuyitemplate,
     Popup,
@@ -294,11 +303,22 @@ export default {
   },
   created () {
     let self = this
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
     setTimeout(function () {
       self.isshowtop = false
       self.showtopcss = 'notop'
     }, 5000)
+    let query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+      params: { id: query.id, wid: query.wid, module: 'product' }
+    }).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.productdata = data.data ? data.data : data
+      if (!Util.isNull(self.productdata.photo)) {
+        self.photoarr = self.productdata.photo.split(',')
+      }
+    })
   },
   filters: {
     dateformat: function (value) {
@@ -309,7 +329,7 @@ export default {
     return {
       isadmin: true,
       showtopcss: '',
-      currentuser: {
+      loginUser: {
         uid: 187,
         avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
         subscribe: 0,
@@ -326,40 +346,9 @@ export default {
       weixin_qrcode: 'http://gongxiaoshe.qiyeplus.com/data/upload/qrcode.jpg',
       favoritecss: 'none',
       isfavorite: false,
-      productflash: [{
-        url: 'javascript:',
-        img: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204043604042.jpg?x-oss-process=image/crop||x_78||y_-36||w_736||h_408',
-        photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204043604042.jpg?x-oss-process=image/crop||x_78||y_-36||w_736||h_408',
-        title1: '欧美宽松潮牌国潮复古加绒卫衣男连帽韩版外套男女oversize青少年'
-      }, {
-        url: 'javascript:',
-        img: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        title1: '苹果手机'
-      }, {
-        url: 'javascript:',
-        img: 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg',
-        photo: 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg',
-        title1: '维生素B族片'
-      }],
-      productdata: {
-        id: 124,
-        title: '苹果手机',
-        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        price: '8,000.00',
-        special: '8,000.00',
-        shares: 7,
-        saled: 1000,
-        crowdtype: 'groupbuy',
-        groupprice: '0.01',
-        numbers: 2,
-        havetuan: 3,
-        postage: '0.00',
-        moderate: 1,
-        buyonline: 0,
-        storage: 10,
-        content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
-      },
+      productdata: {},
+      photoarr: [],
+      contentphotoarr: [],
       buyuserdata: [
         { uid: 2, username: '仇红波', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg' },
         { uid: 16, username: 'gyp', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/16.jpg' },
@@ -411,11 +400,14 @@ export default {
         this.favoritecss = 'none'
       }
       return this.isfavorite
+    },
+    photoarr: function () {
+      return this.photoarr
     }
   },
   computed: {
     isshowdot: function () {
-      if (this.productflash.length > 1) {
+      if (this.photoarr.length > 1) {
         this.showdot = true
       } else {
         this.showdot = false

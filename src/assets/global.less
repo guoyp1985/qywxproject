@@ -8,6 +8,7 @@ a{color:inherit;}
 .fl{float:left;}
 .fr{float:right;}
 .bold{font-weight:bold;}
+.imgcover{object-fit: cover;}
 
 .clamp1{overflow:hidden;display:block;white-space:nowrap;text-overflow:ellipsis;}
 .clamp2{overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;display:-webkit-box;white-space:normal;-webkit-line-clamp:2;}
@@ -599,6 +600,7 @@ a{color:inherit;}
 	display:flex;justify-content: center;align-items: center;
 }
 .q_photolist .photoitem .clip i{font-size:12px;font-weight:bold;}
+.q_photolist .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;}
 
 .scroll_list .scroll_item{position:relative;}
 .scroll_list .scroll_item:not(:last-child):after{
@@ -660,4 +662,22 @@ a{color:inherit;}
     background-repeat: no-repeat;
     background-position: center;
     background-size: 136px 47px;
+}
+
+.x-checker .ck-item {
+  display:inline-block;
+  padding:0 10px;
+  height: 26px;
+  line-height: 26px;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-right: 6px;
+  margin-top:3px;
+  margin-bottom:3px;
+}
+.x-checker .ck-item-selected {
+  background: #ffffff url(images/checker.png) no-repeat right bottom;
+  border-color: #ff4a00;
 }

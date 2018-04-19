@@ -13,6 +13,10 @@
       </div>
   </div>
 </template>
+
+<i18n>
+</i18n>
+
 <script>
 export default {
   name: 'Newsitemplate'
