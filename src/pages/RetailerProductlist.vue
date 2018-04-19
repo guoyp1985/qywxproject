@@ -102,15 +102,6 @@ export default {
     Popup,
     Confirm
   },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.productdata = data.data ? data.data : data
-    })
-  },
   data () {
     return {
       loginuser: { uid: 187 },
@@ -128,6 +119,15 @@ export default {
       showupconfirm: false,
       showdownconfirm: false
     }
+  },
+  created: function () {
+    let self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.productdata = data.data ? data.data : data
+    })
   },
   watch: {
     productdata: function () {

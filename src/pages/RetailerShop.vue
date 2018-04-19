@@ -13,10 +13,10 @@
       <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
     		<div class="t-table">
     			<div class="t-cell v_middle w50">
-    				<img class="avatarimg1" src="http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg" onerror="javascript:this.src='/mobile/data/images/nopic.jpg';">
+    				<img class="avatarimg1" :src="retailerInfo.avatar"/>
     			</div>
     			<div class="t-cell v_middle shopkeeper_txt">
-    				<div class="clamp1 font16">{{ shopname }}</div>
+    				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
     			</div>
   				<div class="t-cell v_middle align_right" style="width:160px;">
             <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
@@ -56,7 +56,7 @@
         <div class="b_top_after"></div>
         <div class="productlist squarepic">
           <Productitemplate v-for="(item,index) in productdata" :key="item.id">
-            <img slot="photo" :src="item.photo" />
+            <img slot="photo" class="imgcover" :src="item.photo" />
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
@@ -117,6 +117,7 @@ import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
 import Time from '../../libs/time'
+import ENV from '../../libs/env'
 
 export default {
   components: {
@@ -133,6 +134,7 @@ export default {
   },
   data () {
     return {
+      retailerInfo: {},
       shopname: '潮优小铺',
       showdot: true,
       addata: [{
@@ -157,24 +159,27 @@ export default {
         { 'id': 212, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214217886785.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
         { 'id': 211, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 3 }
       ],
-      productdata: [
-        { 'id': 124, 'title': '苹果手机', 'photo': 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', 'price': '8,000.00' },
-        { 'id': 113, 'title': '维生素B族片', 'photo': 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg', 'price': '1.00', 'saled': 1 },
-        { 'id': 107, 'title': '大王卡', 'photo': 'http://ossgxs.boka.cn/month_201803/15222378479011.jpg', 'price': '12.00', 'saled': 0 },
-        { 'id': 106, 'title': '测试分享商品通知', 'photo': 'http://ossgxs.boka.cn/month_201803/15222375843651.jpg', 'price': '1.00', 'saled': 0 },
-        { 'id': 105, 'title': '测试商品分享', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'price': '1.00', 'saled': 0 },
-        { 'id': 103, 'title': '测试商品图片', 'photo': 'http://ossgxs.boka.cn/month_201803/15222183428017.jpg?x-oss-process=image/crop,x_-109,y_-103,w_1086,h_1086', 'price': '10.00', 'saled': 2 },
-        { 'id': 98, 'title': '111', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221287780438.jpg', 'price': '222.00', 'saled': 0 },
-        { 'id': 92, 'title': '商品2', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220609241178.png', 'price': '12.00', 'saled': 0 },
-        { 'id': 91, 'title': '商品1', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'price': '1.00', 'saled': 1 },
-        { 'id': 89, 'title': '啊', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220603289333.jpg', 'price': '1.00', 'saled': 0 }
-      ],
+      productdata: [],
       toplinedata: [
         { 'id': 96, 'title': '沈阳市毽球协会经验介绍 | 专题', 'dateline': 1522299789, 'photo': 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736' },
         { 'id': 93, 'title': '『销售电子商务』最新职位推荐', 'dateline': 1522237185, 'photo': 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745' },
         { 'id': 90, 'title': '【渠道运营】销售≠只说话！80％的销售员都错了', 'dateline': 1522218127, 'photo': 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017' }
       ]
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.retailerInfo = data.data ? data.data : data
+    })
+    self.$http.get(`${ENV.BokaApi}/api/list/product`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.productdata = data.data ? data.data : data
+    })
   },
   computed: {
     isshowdot: function () {

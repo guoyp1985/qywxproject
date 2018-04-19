@@ -1,6 +1,6 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
-    <template v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2">
+    <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
           <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'centerService'}">
@@ -13,13 +13,13 @@
           <div class="t-cell v_middle align_center" style="width:65px;">
             <router-link class="db-in" style="position:relative;" :to="{path:'retailerMessagelist'}">
               <i class="al al-pinglun color-black" style="font-size:24px;"></i>
-              <span v-if="messagecount > 0" class="numicon">{{ messagecount }}</span>
+              <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
             </router-link>
           </div>
         </div>
       </div>
     </template>
-    <template v-else>
+    <template v-else-if="loginUser">
       <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'centerService'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
     </template>
     <div class="pagemiddle">
@@ -42,7 +42,7 @@
       <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
     		<div class="clamp2">
           <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
-          <span v-if="isadmin" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
+          <span v-if="loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
         </div>
         <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
         <div class="t-table font12 mt5 color-gray2">
@@ -135,14 +135,23 @@
           </div>
         </div>
       </template>
-      <div class="flex_center pt10 pb10" style="background-color:#f6f6f6;color:#a5a5a5;">------ 详情 ------</div>
+      <div class="bg-page" style="height:10px;"></div>
       <div class="b_top_after"></div>
-      <router-link class="db b_bottom_after" style="padding:8px 15px;" :to="{path:'/retailerShop',query:{wid:retailerinfo.wid}}">
-        <div class="flex_left">
-          <i class="al al-dianpu1 icon-red" style="font-size:22px;"></i>
-          <div class="pl10 bold">{{ retailerinfo.title }}</div>
-        </div>
-      </router-link>
+      <div class="padding10 b_bottom_after">
+        <router-link class="t-table" :to="{path:'/retailerShop',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
+  				<div class="t-cell v_middle" style="width:70px;">
+  					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
+  				</div>
+  				<div class="t-cell v_middle">
+  					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
+  					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerinfo.productcount }}件</div>
+  				</div>
+  				<div class="t-cell v_middle align_right">
+  					<div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
+  				</div>
+        </router-link>
+      </div>
+      <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
       <div class="productcontent">
         <template v-if="productdata.content == ''">
           <img v-for="(item,index) in photoarr" :key="index" :src="item" />
@@ -200,7 +209,7 @@
     		</div>
       </template>
     </template>
-    <div v-transfer-dom class="x-popup">
+    <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">购买流程</div>
@@ -280,13 +289,13 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
+import { Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, Loading } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Time from '../../libs/time'
 import ENV from '../../libs/env'
 import Util from '../../libs/util'
-import { WxQrCode } from '../../libs/storage'
+import { User } from '../../libs/storage'
 
 export default {
   directives: {
@@ -299,26 +308,8 @@ export default {
     Bargainbuyitemplate,
     Popup,
     Marquee,
-    MarqueeItem
-  },
-  created () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    setTimeout(function () {
-      self.isshowtop = false
-      self.showtopcss = 'notop'
-    }, 5000)
-    let query = self.$route.query
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-      params: { id: query.id, wid: query.wid, module: 'product' }
-    }).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.productdata = data.data ? data.data : data
-      if (!Util.isNull(self.productdata.photo)) {
-        self.photoarr = self.productdata.photo.split(',')
-      }
-    })
+    MarqueeItem,
+    Loading
   },
   filters: {
     dateformat: function (value) {
@@ -327,35 +318,23 @@ export default {
   },
   data () {
     return {
-      isadmin: true,
+      module: 'product',
       showtopcss: '',
-      loginUser: {
-        uid: 187,
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-        subscribe: 0,
-        linkman: 'YOUNG',
-        credits: 350
-      },
-      messagecount: 5,
-      isshowtop: true,
+      loginUser: {},
+      isshowtop: false,
       waitgetcredit: 100,
-      retailerinfo: { wid: 187, title: '潮优小铺' },
       showdot: true,
       showpopup: false,
       showevluate: false,
-      weixin_qrcode: 'http://gongxiaoshe.qiyeplus.com/data/upload/qrcode.jpg',
+      weixin_qrcode: ENV.WeixinQrcode,
       favoritecss: 'none',
       isfavorite: false,
       productdata: {},
+      retailerinfo: {},
       photoarr: [],
       contentphotoarr: [],
-      buyuserdata: [
-        { uid: 2, username: '仇红波', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg' },
-        { uid: 16, username: 'gyp', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/16.jpg' },
-        { uid: 31, username: '๓妖怪吧！', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/31.jpg' },
-        { uid: 32, username: '有点小坏i', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/32.jpg' },
-        { uid: 51, username: '贪吃小松鼠', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg' }
-      ],
+      buyuserdata: [],
+      evluatedata: [],
       activitydata: [
         { 'id': 227, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'price': '1.00', 'havetuan': 0 },
         { 'id': 217, 'title': '团购:测试商品分享', 'type': 'groupbuy', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
@@ -363,26 +342,111 @@ export default {
         { 'id': 215, 'title': '团购:欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 2 },
         { 'id': 212, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214217886785.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
         { 'id': 211, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 3 }
-      ],
-      evluatedata: [
-        {
-          id: 1,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          username: 'YOUNG',
-          dateline: 1522223051,
-          message: '商品还行，还会打算买，还是会打算买的，你们看到了吗？？？？？',
-          comment: [
-            { id: 1, username: 'YOUNG', message: '感谢你的评论' }
-          ]
-        }
       ]
     }
   },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    /*
+    let getuser = User.get()
+    if (getuser) {
+      self.loginUser = getuser
+      self.isshowtop = true
+      setTimeout(function () {
+        self.isshowtop = false
+      }, 5000)
+    } else {
+      */
+    self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      if (data) {
+        self.loginUser = data
+        User.set(data)
+        self.isshowtop = true
+        setTimeout(function () {
+          self.isshowtop = false
+        }, 5000)
+      } else {
+        self.isshowtop = false
+      }
+    })
+    // }
+    let query = self.$route.query
+    let infoparams = { id: query.id, module: 'product' }
+    if (query.wid) {
+      infoparams['wid'] = query.wid
+    }
+    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+      params: infoparams
+    }).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.productdata = data.data ? data.data : data
+      self.retailerinfo = self.productdata.retailerinfo
+      if (!Util.isNull(self.productdata.photo)) {
+        self.photoarr = self.productdata.photo.split(',')
+      }
+    })
+    let buyparams = {}
+    if (query.wid) {
+      buyparams['wid'] = query.wid
+    } else {
+      buyparams['productid'] = query.id
+    }
+    self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+      params: buyparams
+    }).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      if (data.flag === 1) {
+        self.buyuserdata = (data.data ? data.data : data)
+      }
+    })
+    self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+      { params: { module: self.module, id: query.id } }
+    ).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      if (data.flag === 1) {
+        self.isfavorite = true
+      } else {
+        self.isfavorite = false
+      }
+    })
+    self.$http.get(`${ENV.BokaApi}/api/comment/list`,
+      { params: { module: self.module, nid: query.id } }
+    ).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      if (data.flag === 1) {
+        self.evluatedata = (data.data ? data.data : data)
+      }
+    })
+  },
   watch: {
+    loginUser: function () {
+      return this.loginUser
+    },
+    productdata: function () {
+      return this.productdata
+    },
+    retailerinfo: function () {
+      return this.retailerinfo
+    },
+    buyuserdata: function () {
+      return this.buyuserdata
+    },
     showtopcss: function () {
       return this.showtopcss
     },
     isshowtop: function () {
+      let css = 'notop'
+      if (this.isshowtop) {
+        css = ''
+      }
+      this.showtopcss = css
       return this.isshowtop
     },
     favoritecss: function () {
@@ -403,6 +467,9 @@ export default {
     },
     photoarr: function () {
       return this.photoarr
+    },
+    evluatedata: function () {
+      return this.evluatedata
     }
   },
   computed: {
@@ -436,10 +503,51 @@ export default {
       this.showevluate = false
     },
     favoriteevent () {
+      const self = this
+      const query = self.$route.query
+      if (self.isfavorite) {
+        self.isShowLoading = true
+        self.$http.get(`${ENV.BokaApi}/api/user/favorite/delete`,
+          { params: { module: self.module, id: query.id } }
+        ).then(function (res) {
+          return res.json()
+        }).then(function (data) {
+          self.isShowLoading = false
+          if (data.flag === 1) {
+            self.isfavorite = false
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: Util.delay(data.error)
+            })
+          }
+        })
+      } else {
+        let cururl = `/product?id=${query.id}`
+        if (query.wid) {
+          cururl = `${cururl}&wid=${query.wid}`
+        }
+        self.isShowLoading = true
+        self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
+          { params: { module: self.module, id: query.id, currenturl: encodeURIComponent(cururl) } }
+        ).then(function (res) {
+          return res.json()
+        }).then(function (data) {
+          self.isShowLoading = false
+          if (data.flag === 1) {
+            self.isfavorite = true
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: Util.delay(data.error)
+            })
+          }
+        })
+      }
       this.isfavorite = !this.isfavorite
     },
     buyevent () {
-      let self = this
+      const self = this
       self.$router.push('/addOrder')
     }
   }

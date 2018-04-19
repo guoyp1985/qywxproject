@@ -187,8 +187,14 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
     }
   },
+  data () {
+    return {
+      retailerInfo: {},
+      marquedata: []
+    }
+  },
   created () {
-    let self = this
+    const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
       return res.json()
@@ -200,12 +206,6 @@ export default {
     }).then(function (data) {
       self.marquedata = data.data ? data.data : data
     })
-  },
-  data () {
-    return {
-      retailerInfo: {},
-      marquedata: []
-    }
   },
   watch: {
     retailerInfo () {

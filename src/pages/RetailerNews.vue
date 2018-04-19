@@ -49,7 +49,7 @@
     </div>
     <div class="s-bottom flex_center bg-blue3 color-white">
       <router-link class="flex_cell bg-blue3 flex_center h_100" to="/retailerGoodeazy" style="border-right:#fff 1px solid;">{{ $t('Goodeazy') }}</router-link>
-      <router-link class="bg-blue3 flex_center h_100" to="/serviceAddnews" style="width:30%;">{{ $t('Create news') }}</router-link>
+      <router-link class="bg-blue3 flex_center h_100" to="/addNews" style="width:30%;">{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
@@ -57,7 +57,7 @@
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata1" :key="index1">
               <router-link class="inner" v-if="row.key == 'stat'" to="/newsStat">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/serviceAddnews',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
               <div class="inner" v-else @click="clickpopup1(row.key,clickdata1)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
@@ -74,7 +74,7 @@
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata2" :key="index1">
-              <router-link class="inner" v-if="row.key == 'set'" :to="{path:'/serviceAddnews',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
               <div v-else class="inner" @click="clickpopup2(row.key,clickdata2)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
@@ -173,6 +173,10 @@ export default {
       clickdata1: {},
       clickdata2: {}
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   methods: {
     controlpopup1 (item) {

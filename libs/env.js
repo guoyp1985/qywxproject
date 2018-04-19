@@ -4,7 +4,8 @@ const ENV = {
   WxAuthUrl: 'https://open.weixin.qq.com/connect/oauth2/authorize?',
   WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
   BokaApi: 'https://laravel.boka.cn',
-  BokaCDN: 'http://vue.boka.cn/'
+  BokaCDN: 'http://vue.boka.cn/',
+  WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg'
 }
 
 export default ENV
