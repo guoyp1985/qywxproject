@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom">
+  <div class="containerarea s-havebottom bg-white font14">
     <div class="s-container" style="top:0;">
       <div class="padding10 font16 bg-gray4">{{ $t('Seller info setting') }}</div>
       <form>
@@ -126,6 +126,10 @@ export default {
       havenum: 0,
       maxnum: 1
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   computed: {
   },

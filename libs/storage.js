@@ -28,4 +28,12 @@ const WxQrCode = {
     return localStorage.getItem('wxQrCode')
   }
 }
-export { Token, OpenId, WxQrCode }
+const User = {
+  set (user) {
+    localStorage.setItem('user', JSON.stringify(user))
+  },
+  get () {
+    return JSON.parse(localStorage.getItem('user'))
+  }
+}
+export { Token, OpenId, WxQrCode, User }

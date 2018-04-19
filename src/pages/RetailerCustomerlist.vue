@@ -110,9 +110,6 @@ export default {
     XTextarea,
     Group
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   data () {
     return {
       tabtxts: [ '潜在客户', '成交消息' ],
@@ -154,6 +151,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   methods: {
     setFocus () {

@@ -76,7 +76,7 @@
         <div class="q_photolist align_left">
           <template v-if="photoarr1.length > 0">
             <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-              <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
+              <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
                 <div class="close" @click="deletephoto1(item,index)">×</div>
               </div>
             </div>
@@ -202,6 +202,10 @@ export default {
       requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' }
     }
   },
+  created: function () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+  },
   watch: {
     submitdata: function () {
       return this.submitdata
@@ -249,13 +253,9 @@ export default {
       return this.photoarr1.length
     }
   },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   methods: {
     filechange (e) {
-      let self = this
+      const self = this
       let files = e.target.files
       if (files.length > 0 && !self.isShowLoading) {
         let fileform = document.querySelector('.fileform1')
@@ -282,7 +282,7 @@ export default {
       }
     },
     deletephoto (item, index) {
-      let self = this
+      const self = this
       for (let i = 0; i < self.photoarr.length; i++) {
         if (i === index) {
           self.photoarr.splice(i, 1)
@@ -296,7 +296,7 @@ export default {
       }
     },
     filechange1 (e) {
-      let self = this
+      const self = this
       let files = e.target.files
       if (files.length > 0 && !self.isShowLoading) {
         let fileform = document.querySelector('.fileform2')
@@ -323,7 +323,7 @@ export default {
       }
     },
     deletephoto1 (item, index) {
-      let self = this
+      const self = this
       for (let i = 0; i < self.photoarr1.length; i++) {
         if (i === index) {
           self.photoarr1.splice(i, 1)
@@ -340,7 +340,7 @@ export default {
       this.showmore = !this.showmore
     },
     saveevent () {
-      let self = this
+      const self = this
       for (let key in self.requireddata) {
         self.requireddata[key] = self.submitdata[key]
       }
@@ -374,7 +374,7 @@ export default {
       })
     },
     saveupevent () {
-      let self = this
+      const self = this
       for (let key in self.requireddata) {
         self.requireddata[key] = self.submitdata[key]
       }

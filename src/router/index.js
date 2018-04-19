@@ -32,7 +32,7 @@ import Userproducts from '@/pages/Userproducts'
 import AddActivity from '@/pages/AddActivity'
 import AddProduct from '@/pages/AddProduct'
 import RetailerGoodeazy from '@/pages/RetailerGoodeazy'
-import ServiceAddnews from '@/pages/ServiceAddnews'
+import AddNews from '@/pages/AddNews'
 import RetailerMessagelist from '@/pages/RetailerMessagelist'
 import DefaultStat from '@/pages/DefaultStat'
 import GroupbuyStat from '@/pages/GroupbuyStat'
@@ -224,8 +224,8 @@ let routes = [
     component: RetailerGoodeazy
   },
   {
-    path: '/serviceAddnews',
-    component: ServiceAddnews
+    path: '/addNews',
+    component: AddNews
   },
   {
     path: '/retailerMessagelist',

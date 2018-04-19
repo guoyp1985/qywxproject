@@ -6,30 +6,33 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">{{ $t('News title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" name="title" :placeholder="$t('News title')" :value="getnews.title" />
+              <input v-model="submitdata.title" type="text" class="input" name="title" :placeholder="$t('News title')" />
             </div>
           </div>
         </div>
         <div class="form-item required">
-          <div class="pt10 pb5">{{ $t('Cover photo') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span> （图像最佳宽高比为9:5）</div>
+          <div class="pt10 pb5">{{ $t('Cover photo') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span> （图像最佳宽高比为9:5,上传图像后可点击图像左上角"<i class="al al-set font12"></i>"进行剪裁,本图片不会显示在文章内容里）</div>
           <div>
-            <input type="hidden" name="qrcode" required="" :value="getnews.photo" class="no-fastclick">
-            <div class="q_photolist align_left" uploadform=".uploadfileForm">
+            <input v-model="submitdata.photo" type="hidden" name="photo" />
+            <div class="q_photolist align_left">
               <template v-if="photoarr.length > 0">
                 <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                  <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
                     <div class="close" @click="deletephoto(item,index)">×</div>
+                    <div class="clip"><i class="al al-set"></i></div>
                   </div>
                 </div>
               </template>
               <div v-if="photoarr.length < maxnum" class="photoitem add">
                 <div class="inner">
-                  <input type="file" style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;" @change="filechange">
+                  <form class="fileform" enctype="multipart/form-data">
+                    <input class="fileinput" type="file" name="files" @change="filechange" />
+                  </form>
                   <div class="t-table">
                     <div class="t-cell">
                       <div class="txt">
                         <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                        <div><span class="havenum">{{ gethavenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                        <div><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
                       </div>
                     </div>
                   </div>
@@ -45,8 +48,9 @@
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:10px 0;">
                   <x-textarea
-                    class="x-textarea"
-                    :value="getnews.seodescription"
+                    class="x-textarea noborder"
+                    v-model="submitdata.seodescription"
+                    name="seodescription"
                     :placeholder="$t('Share description placeholder')"
                     :show-counter="false"
                     :rows="1" autosize>
@@ -61,8 +65,9 @@
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:10px 0;">
                   <x-textarea
-                    class="x-textarea"
-                    :value="getnews.summary"
+                    class="x-textarea noborder"
+                    v-model="submitdata.summary"
+                    name="summary"
                     :placeholder="$t('Summary')"
                     :show-counter="false"
                     :rows="1" autosize>
@@ -71,7 +76,8 @@
               </div>
             </div>
           </div>
-          <div class="form-item">
+          <!--
+          <div class="form-item labelarea">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Label') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -83,12 +89,13 @@
               </div>
             </div>
           </div>
+        -->
         </div>
         <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up more options') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
         <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Expand more options') }}<i class="al al-jiantouyoushuang- font14"></i></div>
       </form>
     </div>
-    <div class="s-bottom flex_center bg-green color-white">{{ $t('Save') }}</div>
+    <div class="s-bottom flex_center bg-green color-white" @click="saveevent">{{ $t('Save') }}</div>
     <div v-transfer-dom>
       <confirm v-model="showconfirm"
       show-input
@@ -100,6 +107,9 @@
     </div>
     <div v-transfer-dom>
       <alert v-model="showalert">{{ $t('Label can not empty') }}</alert>
+    </div>
+    <div v-transfer-dom>
+      <loading :show="isShowLoading" text=""></loading>
     </div>
   </div>
 </template>
@@ -130,7 +140,9 @@ Label can not empty:
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea, Confirm, TransferDomDirective as TransferDom, Alert } from 'vux'
+import { Group, XInput, XTextarea, Confirm, TransferDomDirective as TransferDom, Alert, Loading } from 'vux'
+import ENV from '../../libs/env'
+import Util from '../../libs/util'
 
 export default {
   directives: {
@@ -141,11 +153,12 @@ export default {
     XInput,
     XTextarea,
     Confirm,
-    Alert
+    Alert,
+    Loading
   },
   data () {
     return {
-      newsdata: {},
+      isShowLoading: false,
       photoarr: [],
       maxnum: 1,
       havenum: 0,
@@ -155,12 +168,40 @@ export default {
       labelarr: [],
       confirmtitle: '标签',
       showconfirm: false,
-      showalert: false
+      showalert: false,
+      submitdata: { title: '', photo: '', seodescription: '', summary: '' },
+      requireddata: { title: '', 'photo': '' }
+    }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    const query = self.$route.query
+    if (query.id) {
+      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+        params: { id: query.id, module: 'news' }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        let retdata = data.data ? data.data : data
+        if (retdata) {
+          for (let key in self.submitdata) {
+            self.submitdata[key] = retdata[key]
+          }
+          if (!Util.isNull(self.submitdata.photo)) {
+            self.photoarr = self.submitdata.photo.split(',')
+          }
+        }
+      })
     }
   },
   watch: {
+    submitdata: function () {
+      return this.submitdata
+    },
     havenum: function (val) {
       this.havenum = this.photoarr.length
+      return this.havenum
     },
     showaddphoto: function (val) {
       let ret = false
@@ -181,39 +222,34 @@ export default {
     }
   },
   computed: {
-    gethavenum: function () {
-      return this.photoarr.length
-    },
-    getquery: function () {
-      return this.$route.query
-    },
-    getnews: function () {
-      let query = this.$route.query
-      let curnews = { title: '', photo: '', seodescription: '', summary: '', keyword: [] }
-      if (query && query.id) {
-        curnews = {
-          title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~',
-          photo: 'http://gongxiaoshe.qiyeplus.com/data/upload/month_201713/15233286693638',
-          seodescription: '发给身边的朋友看看吧，从今完后，大家一起拼起来！',
-          summary: '发给身边的朋友看看吧，从今完后，大家一起拼起来！',
-          keyword: [ '老人', '吉普岛', '拼客' ]
-        }
-      }
-      this.photoarr = curnews.photo.split(',')
-      this.labelarr = curnews.keyword
-      this.newsdata = curnews
-      return curnews
-    }
   },
   methods: {
     filechange (e) {
-      if (this.havenum < this.maxnum) {
-        this.havenum += 1
-        this.photoarr.push('http://ossgxs.boka.cn/month_201804/15231791164010.jpg')
-      } else {
-        this.showaddphoto = false
+      const self = this
+      let files = e.target.files
+      if (files.length > 0 && !self.isShowLoading) {
+        let fileform = document.querySelector('.fileform')
+        let filedata = new FormData(fileform)
+        self.isShowLoading = true
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          return res.json()
+        }).then(function (data) {
+          self.isShowLoading = false
+          if (data.flag === 1) {
+            self.photoarr.push(data.data)
+            self.submitdata.photo = self.photoarr.join(',')
+            if (self.photoarr.length >= self.maxnum) {
+              this.showaddphoto = false
+            }
+            this.showphotoitem = true
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: Util.delay(data.error)
+            })
+          }
+        })
       }
-      this.showphotoitem = true
     },
     deletephoto (item, index) {
       for (var i = 0; i < this.photoarr.length; i++) {
@@ -252,23 +288,52 @@ export default {
       } else {
         this.labelarr.push(val)
       }
+    },
+    saveevent () {
+      const self = this
+      const query = self.$route.query
+      for (let key in self.requireddata) {
+        self.requireddata[key] = self.submitdata[key]
+      }
+      self.allowsubmit = Util.validateQueue(self.requireddata)
+      if (!self.allowsubmit) {
+        self.$vux.alert.show({
+          title: '',
+          content: '必填项不能为空',
+          onShow () {
+          },
+          onHide () {
+            self.allowsubmit = true
+          }
+        })
+        return false
+      }
+      self.isShowLoading = true
+      if (query.id) {
+        self.submitdata['id'] = query.id
+      } else {
+        delete self.submitdata['id']
+      }
+      self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: Util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.$router.push({name: '/article', params: { id: data.data }})
+            }
+          }
+        })
+      })
     }
   }
 }
 </script>
 
 <style lang="less">
-.form-item{position:relative;padding:10px;}
-.form-item:after{
-  content:"";display:block;
-	background-color:@list-border-color;height:1px;overflow:hidden;
-	position: absolute;left: 0;right: 0;bottom:1px;
-	-webkit-transform: scaleY(0.5) translateY(0.5px);
-	transform: scaleY(0.5) translateY(0.5px);
-	-webkit-transform-origin: 0% 0%;
-	transform-origin: 0% 0%;
-}
-
 .addnews .addbtn{
   display:inline-block;
   width:30px;
@@ -290,7 +355,7 @@ export default {
   padding: 0 3px;
   margin: 0 10px 0 0px;
 }
-.addnews .close{
+.addnews .labelitem .close{
   position: absolute;
   top: -6px;
   left: -6px;
