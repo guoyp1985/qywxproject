@@ -2,15 +2,16 @@
   <div id="user-profile">
     <group label-width="4em" label-align="left" label-margin-right="2em">
       <cell :inline-desc="$t('Sync From Wx')" @click.native="syncWxProfile">
-        <img class="avatar" slot="icon" :src="avatarHref"/>
+        <img class="avatar" slot="icon" :src="getProfile.avatar"/>
       </cell>
-      <x-input :title="$t('Name')" :placeholder="$t('Name')" v-model="value1"></x-input>
-      <popup-radio :title="$t('Gendar')" :options="options" v-model="option" :placeholder="$t('Gendar')"></popup-radio>
-      <x-input :title="$t('Company Name')" :placeholder="$t('Company Name')" v-model="value3"></x-input>
-      <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="value4"></x-input>
+      <x-input :title="$t('Name')" :placeholder="$t('Name')" v-model="getProfile.linkman"></x-input>
+      <popup-radio :title="$t('Gendar')" :options="options" v-model="getProfile.sex" :placeholder="$t('Gendar')"></popup-radio>
+      <x-input :title="$t('Company Name')" :placeholder="$t('Company Name')" v-model="getProfile.company"></x-input>
+      <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="getProfile.mobile"></x-input>
     </group>
     <box gap="15px 15px">
-      <x-button type="primary">{{ $t('Confirm') }}</x-button>
+      <x-button type="primary" @click.native="onConfirm">{{ $t('Confirm') }}</x-button>
+      <x-button type="default" @click.native="onCancel">{{ $t('Cancel') }}</x-button>
     </box>
   </div>
 </template>
@@ -33,6 +34,7 @@ Confirm:
 <script>
 import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
 import ENV from '../../libs/env'
+import Util from '../../libs/util'
 
 export default {
   components: {
@@ -57,15 +59,58 @@ export default {
           value: '女'
         }
       ],
-      value1: '',
-      value2: '',
-      value3: '',
-      value4: ''
+      profile: {
+        avatar: '',
+        linkman: '',
+        sex: 1,
+        company: '',
+        mobile: ''
+      }
     }
+  },
+  computed: {
+    getProfile: {
+      get: function () {
+        return this.profile
+      },
+      set: function (profile) {
+        this.profile = {
+          ...this.profile,
+          ...profile
+        }
+      }
+    }
+  },
+  created () {
+    this.getProfile = this.$route.params.profile
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
     syncWxProfile () {
-      this.$http.get(``)
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/user/refresh/0`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.flag) {
+          self.getProfile = data.data
+          self.$vux.toast.text(data.error, 'middle')
+        }
+      })
+    },
+    onConfirm () {
+      const self = this
+      if (Util.validateQueue({linkman: this.getProfile.linkman})) {
+        this.$http.post(`${ENV.BokaApi}/api/user/update/0`, this.getProfile)
+        .then(res => res.json())
+        .then(data => {
+          self.$vux.toast.text(data.error, 'middle')
+        })
+      } else {
+        self.$vux.toast.text('未填必选项', 'middle')
+      }
+    },
+    onCancel () {
+      this.$router.go(-1)
     }
   }
 }

@@ -11,7 +11,7 @@
       </transition>
 
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="toggleTabbar" slot="bottom">
-        <tabbar-item :link="{path:'/home'}" :selected="route.path=='/home'">
+        <tabbar-item :link="{path:'/'}" :selected="route.path=='/home'">
           <span class="al al-home1 font20" slot="icon" style="position:relative;top: -2px;"></span>
           <span slot="label">{{ $t('Home') }}</span>
         </tabbar-item>
@@ -53,7 +53,7 @@ Center:
 <script>
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-
+import routes from '../libs/routes'
 export default {
   name: 'app',
   directives: {
@@ -72,7 +72,10 @@ export default {
         this.$router.replace('/demo')
       }
     },
-    '$route': 'getData'
+    '$route' (to, from) {
+      document.title = this.getTitle(to.path)
+      this.getData()
+    }
   },
   computed: {
     ...mapState({
@@ -92,21 +95,21 @@ export default {
         showMore: true
       }
     },
-    headerTransition () {
-      if (!this.direction) return ''
-      return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
-    },
-    componentName () {
-      if (this.route.path) {
-        const parts = this.route.path.split('/')
-        if (/component/.test(this.route.path) && parts[2]) return parts[2]
-      }
-    },
-    title () {
-      if (this.route.path === '/') return 'Home'
-      if (this.route.path === '/components') return 'Demo list'
-      return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
-    },
+    // headerTransition () {
+    //   if (!this.direction) return ''
+    //   return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
+    // },
+    // componentName () {
+    //   if (this.route.path) {
+    //     const parts = this.route.path.split('/')
+    //     if (/component/.test(this.route.path) && parts[2]) return parts[2]
+    //   }
+    // },
+    // title () {
+    //   if (this.route.path === '/') return 'Home'
+    //   if (this.route.path === '/components') return 'Demo list'
+    //   return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
+    // },
     viewTransition () {
       console.log(this.direction)
       if (!this.direction) return ''
@@ -114,15 +117,24 @@ export default {
     }
   },
   created () {
+    document.title = this.$t('tIndex')
     this.getData()
   },
   methods: {
+    getTitle (path) {
+      for (let route of routes) {
+        if (path === route.path) {
+          let title = this.$t(route.name)
+          return title || '$$'
+        }
+      }
+    },
     getData () {
       this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
       .then(res => res.json())
       .then(
         data => {
-          console.log(JSON.stringify(data))
+          // console.log(JSON.stringify(data))
         }
       )
     }

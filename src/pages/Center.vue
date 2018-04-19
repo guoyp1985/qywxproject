@@ -1,11 +1,11 @@
 <template>
   <div id="personal-center" v-cloak>
-    <c-title :link-info="{path:'/profile'}"
-            :link-credit="{path:'/credit'}"
-            :avatar-href="getAvatar"
+    <c-title :avatar-href="getAvatar"
             :user-name="getName"
             :user-credits="getCredits"
-            :profile="profile">
+            :user-level="getLevel"
+            :profile="profile"
+            :messages="getMessages">
     </c-title>
     <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
       <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" :link="btn.link">
@@ -100,20 +100,41 @@ export default {
         }
       ],
       avatarHref: '',
-      userName: '',
+      linkMan: '',
       userCredits: 0,
-      profile: {}
+      userLevels: 0,
+      profile: {},
+      messages: 0,
+      direct: ''
     }
   },
   computed: {
+    direction: {
+      get () {
+        return this.direct
+      },
+      set (direct) {
+        this.direct = direct
+      }
+    },
     getAvatar () {
       return this.avatarHref
     },
     getName () {
-      return this.userName
+      return this.linkMan
     },
     getCredits () {
       return this.userCredits
+    },
+    getLevel () {
+      return this.userLevels
+    },
+    getMessages () {
+      return this.messages
+    },
+    viewTransition () {
+      if (!this.direction) return ''
+      return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
   },
   created () {
@@ -123,10 +144,19 @@ export default {
     .then(data => {
       console.log(data)
       self.avatarHref = data.avatar
-      self.userName = data.username
+      self.linkMan = data.linkman
       self.userCredits = data.credit
-      self.profile = {}
+      self.userLevels = data.levels
+      self.messages = data.messages
+      self.profile = {
+        linkman: data.linkman,
+        avatar: data.avatar,
+        sex: data.sex,
+        mobile: data.mobile,
+        company: data.company
+      }
     })
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
   }
 }
 </script>

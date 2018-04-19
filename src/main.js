@@ -9,7 +9,7 @@ import App from './App'
 import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
+import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
 import { Token } from '../libs/storage'
@@ -54,6 +54,7 @@ store.registerModule('vux', {
 })
 
 Vue.use(vuexI18n.plugin, store)
+Vue.use(WechatPlugin)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
@@ -194,7 +195,7 @@ Vue.http.interceptors.push(function (request, next) {
               router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
             },
             error => {
-              console.log(error)
+              console.error(error)
             }
           )
         } else {

@@ -5,18 +5,18 @@
       <div class="content">
         <div class="content-box">
           <div class="user-info">
-            <router-link :to="{ name: 'profile', params: { profile: profile } }">
+            <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
               <div>
                 <img :src="avatar"/>
               </div>
               <div class="user-name">
                 <span class="color-white font16 u-name">{{ name }}</span>
-                <span class="al al-xing font13 u-star"></span>
+                <span v-for="i in userLevel + 1" class="al al-xing font13 u-star" :key="i"></span>
               </div>
             </router-link>
           </div>
           <div class="user-credits">
-            <router-link :to="{ name: 'credit', params: { profile: profile } }">
+            <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
               <img src="../assets/_images/jb_icon.png"/>
               <span class="u-credits color-yellow1">{{ credits }}</span>
             </router-link>
@@ -27,6 +27,7 @@
     <div class="message-btn">
       <router-link :to="{ name: 'messages', params: { profile: profile } }">
         <span class="al al-pinglun color-white font24"></span>
+        <badge class="msg-badge" v-if="messages > 0" :text="messages"></badge>
       </router-link>
     </div>
   </div>
@@ -36,13 +37,14 @@
 </i18n>
 
 <script>
-import { Grid, GridItem } from 'vux'
+import { Grid, GridItem, Badge } from 'vux'
 
 export default {
   name: 'CTitle',
   components: {
     Grid,
-    GridItem
+    GridItem,
+    Badge
   },
   props: {
     // linkInfo: [String, Object],
@@ -57,6 +59,14 @@ export default {
       default: 'unkown'
     },
     userCredits: {
+      type: Number,
+      default: 0
+    },
+    userLevel: {
+      type: Number,
+      default: 0
+    },
+    messages: {
       type: Number,
       default: 0
     }
@@ -158,6 +168,12 @@ export default {
   position: absolute;
   right: 20px;
   top: 10px;
+  z-index: 3
+}
+.ctitle .message-btn .msg-badge {
+  position: absolute;
+  top: 2px;
+  right: -6px;
   z-index: 3
 }
 
