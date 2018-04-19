@@ -30,7 +30,7 @@
         :aspect-ratio="1/1"
         auto
         loop>
-        <swiper-item v-for="(item,index) in photoarr">
+        <swiper-item v-for="(item, index) in photoarr" :key="index">
           <img :src="item" class="imgcover" style="width:100%;height:100%;" />
         </swiper-item>
       </swiper>
