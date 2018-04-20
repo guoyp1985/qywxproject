@@ -178,7 +178,7 @@ Vue.http.interceptors.push(function (request, next) {
     .then(
       data => {
         Token.set(data.data.token)
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       },
       error => {
         alert(JSON.stringify(error))
@@ -206,7 +206,6 @@ Vue.http.interceptors.push(function (request, next) {
         } else {
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-          alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
         }
       },
       () => {
