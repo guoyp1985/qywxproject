@@ -96,7 +96,7 @@ export default {
       const timeStamp = this.$util.timeStamp()
       const randomStr = this.$util.randomStr()
       const signStr = this.$util.wxSign(ENV.AppId, randomStr, timeStamp)
-      alert(`${timeStamp} ${randomStr} ${signStr}`)
+      alert(location.href)
       WeixinJSBridge.invoke('editAddress', {
         appId: ENV.AppId,
         scope: 'jsapi_address',
