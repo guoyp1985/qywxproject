@@ -178,7 +178,7 @@ Vue.http.interceptors.push(function (request, next) {
     .then(
       data => {
         Token.set(data.data.token)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       },
       error => {
         alert(JSON.stringify(error))
