@@ -87,7 +87,6 @@ export default {
         if (data.length) {
 
         } else {
-          alert('here')
           self.getWxAddress()
         }
       })
@@ -97,6 +96,7 @@ export default {
       const timeStamp = this.$util.timeStamp()
       const randomStr = this.$util.randomStr()
       const signStr = this.$util.wxSign()
+      alert(WeixinJSBridge)
       WeixinJSBridge.invoke('editAddress', {
         appId: ENV.AppId,
         scope: 'jsapi_address',
