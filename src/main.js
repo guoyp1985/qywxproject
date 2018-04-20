@@ -203,7 +203,7 @@ Vue.http.interceptors.push(function (request, next) {
         } else {
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-          alert(location.href)
+          alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
         }
       },
       () => {
