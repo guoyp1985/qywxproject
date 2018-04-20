@@ -171,7 +171,7 @@ Vue.http.interceptors.push(function (request, next) {
     return
   }
   if (lUrl.query.code) {
-    console.log(lUrl.query.code)
+    alert(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
     .then(res => res.json())
@@ -184,7 +184,7 @@ Vue.http.interceptors.push(function (request, next) {
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
     // request.method = 'GET'
-    alert(token)
+    // alert(token)
     request.headers.set('Authorization', `Bearer ${token}`)
     // continue to next interceptor
     next(function (response) {
