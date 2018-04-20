@@ -181,7 +181,7 @@ Vue.http.interceptors.push(function (request, next) {
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       },
       error => {
-        alert(error)
+        alert(JSON.stringify(error))
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
