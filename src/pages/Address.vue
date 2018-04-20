@@ -96,7 +96,6 @@ export default {
       const timeStamp = this.$util.timeStamp()
       const randomStr = this.$util.randomStr()
       const signStr = this.$util.wxSign()
-      alert(WeixinJSBridge)
       WeixinJSBridge.invoke('editAddress', {
         appId: ENV.AppId,
         scope: 'jsapi_address',
@@ -106,6 +105,7 @@ export default {
         nonceStr: randomStr
       },
       res => {
+        alert(res)
         if (res.err_msg === 'edit_address:ok') {
           const param = {
             linkman: res.userName,
