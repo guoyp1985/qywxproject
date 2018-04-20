@@ -32,7 +32,7 @@ let webpackConfig = {
       '#': resolve('libs'),
       '@': resolve('src')
     }
-  }
+  },
   module: {
     rules: [
       ...(config.dev.useEslint? [{
