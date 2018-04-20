@@ -105,7 +105,7 @@ export default {
         nonceStr: randomStr
       },
       res => {
-        alert(res)
+        alert(res.err_msg)
         if (res.err_msg === 'edit_address:ok') {
           const param = {
             linkman: res.userName,
