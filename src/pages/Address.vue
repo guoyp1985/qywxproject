@@ -87,6 +87,7 @@ export default {
         if (data.length) {
 
         } else {
+          alert('here')
           self.getWxAddress()
         }
       })

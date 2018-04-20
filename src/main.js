@@ -146,7 +146,7 @@ router.afterEach(function (to) {
 
 const excludeUrls = [
   `${ENV.BokaApi}/api/authLogin/*`,
-  `${ENV.BokaApi}/weixin/qrcode/login*`,
+  `${ENV.BokaApi}/api/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
   `${ENV.BokaApi}/api/scanlogin`
 ]
@@ -171,7 +171,7 @@ Vue.http.interceptors.push(function (request, next) {
     return
   }
   if (lUrl.query.code) {
-    alert(lUrl.query.code)
+    // alert(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`, {})
     .then(res => res.json())
