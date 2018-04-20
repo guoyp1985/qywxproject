@@ -176,9 +176,12 @@ Vue.http.interceptors.push(function (request, next) {
     Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
     .then(res => res.json())
     .then(
-      (data) => {
+      data => {
         Token.set(data.data.token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+      },
+      error => {
+        alert(error)
       }
     )
   } else if (rUrl.origin === ENV.BokaApi) {
