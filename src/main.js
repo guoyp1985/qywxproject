@@ -171,6 +171,7 @@ Vue.http.interceptors.push(function (request, next) {
     return
   }
   if (lUrl.query.code) {
+    console.log(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
     .then(res => res.json())
