@@ -11,7 +11,7 @@
       align-items
       :title="item.title"
       :inline-desc="item.dateline | dateFormat"
-      :link="{name: 'sharingDetail', params: {id: item.id}}"
+      :link="{name: 'tSharingDetail', params: {id: item.id}}"
       is-link="false">
         <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.src"></x-img>
         <div>

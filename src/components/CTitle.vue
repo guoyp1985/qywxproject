@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="message-btn">
-      <router-link :to="{ name: 'messages', params: { profile: profile } }">
+      <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
         <span class="al al-pinglun color-white font24"></span>
         <badge class="msg-badge" v-if="messages > 0" :text="messages"></badge>
       </router-link>

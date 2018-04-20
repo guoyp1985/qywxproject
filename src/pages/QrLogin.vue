@@ -4,7 +4,7 @@
       <span>{{$t('Wx Login')}}</span>
     </div>
     <div class="qrcode-img">
-      <img :src="getQrCode.url"/>
+      <img v-if="qrCode" :src="qrCode.url"/>
     </div>
     <div class="qrcode-footer font16 color-gray">
       <div>
@@ -18,9 +18,19 @@
 </template>
 <script>
 import { Token } from '../../libs/storage'
+import ENV from '../../libs/env'
+let intervalId = 0
 export default {
   created () {
-    this.polling()
+    const token = Token.get()
+    if (token) {
+
+    }
+    this.qrCode = this.$route.params.qrCode
+    if (!this.qrCode) {
+      this.requestLogin()
+      this.polling()
+    }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   data () {
@@ -28,22 +38,14 @@ export default {
       qrCode: {
         url: '',
         verifycode: 0
-      },
-      intervalId: 0
-    }
-  },
-  computed: {
-    getQrCode () {
-      console.log(this.$route.params.qrCode)
-      this.qrCode = this.$route.params.qrCode
-      return this.qrCode
+      }
     }
   },
   methods: {
     polling () {
       const self = this
-      this.intervalId = setInterval(() => {
-        self.$http.get(`http://laravel.boka.cn/api/scanlogin/${this.qrCode.verifycode}`, {})
+      intervalId = setInterval(() => {
+        self.$http.get(`${ENV.BokaApi}/api/scanlogin/${this.qrCode.verifycode}`, {})
         .then(res => res.json())
         .then(data => {
           const token = data.data ? data.data.token : null
@@ -52,12 +54,29 @@ export default {
             console.error(error)
           } else if (token) {
             Token.set(token)
-            self.$router.push({path: self.$route.params.fromPath})
+            if (self.$route.params.fromPath) {
+              self.$router.push({path: self.$route.params.fromPath})
+            } else {
+              self.$router.push({path: '/'})
+            }
             self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-            clearInterval(self.intervalId)
+            clearInterval(intervalId)
           }
         })
       }, 5000)
+    },
+    requestLogin () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/qrcode/login`)
+      .then(res => res.json())
+      .then(
+        data => {
+          self.qrCode = data
+        },
+        error => {
+          console.error(error)
+        }
+      )
     }
   }
 }

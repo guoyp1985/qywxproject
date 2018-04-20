@@ -21,6 +21,8 @@
 <script>
 import { Group, Cell, CellBox, Popup, PopupHeader, XInput, XAddress, XSwitch, XButton, Box } from 'vux'
 import CTitle from '@/components/CTitle'
+import ENV from '#/env'
+// import WeixinJSBridge from 'WeixinJSBridge'
 
 export default {
   components: {
@@ -75,6 +77,50 @@ export default {
     addressFormat: function (address) {
       return `${address.area.join('')}${address.details}`
     }
+  },
+  methods: {
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.length) {
+
+        } else {
+          self.getWxAddress()
+        }
+      })
+    },
+    getWxAddress () {
+      // const self = this
+      const timeStamp = this.$util.timeStamp()
+      const randomStr = this.$util.randomStr()
+      const signStr = this.$util.wxSign()
+      WeixinJSBridge.invoke('editAddress', {
+        appId: ENV.AppId,
+        scope: 'jsapi_address',
+        signType: 'sha1',
+        addrSign: signStr,
+        timeStamp: timeStamp,
+        nonceStr: randomStr
+      },
+      res => {
+        if (res.err_msg === 'edit_address:ok') {
+          const param = {
+            linkman: res.userName,
+            telephone: res.telNumber,
+            province: res.proviceFirstStageName,
+            city: res.addressCitySecondStageName,
+            counties: res.addressCountiesThirdStageName,
+            address: res.addressDetailInfo
+          }
+          alert(param)
+        }
+      })
+    }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

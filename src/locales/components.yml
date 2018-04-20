@@ -572,6 +572,16 @@ zh-CN:
   Service Attitude: 配送员服务态度
   To Give Five Stars: 满意请给5分
   Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人
+  Shop Owner: 店主
+  To Write Application Info: 填写申请信息
+  Get Verify Code: 获取验证码
+  Verify Code: 验证码
+  Real Name: 真实姓名
+  Application Reason: 申请理由
+  Must: 必填
+  Agree: 同意
+  Disagree: 不同意
+  Rebate Agreement: 返点客协议
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心
@@ -611,3 +621,4 @@ zh-CN:
   tSalesList: 返点客
   tDecorationShop: 滚动展示
   tRetailerApply: 申请入驻
+  tRebateApply: 返点客申请

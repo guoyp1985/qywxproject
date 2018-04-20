@@ -11,9 +11,10 @@ import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
 import VueResource from 'vue-resource'
-import Login from '../libs/login'
-import { Token } from '../libs/storage'
-import ENV from '../libs/env'
+import Login from '#/login'
+import { Token } from '#/storage'
+import ENV from '#/env'
+import Util from '#/util'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -55,6 +56,7 @@ store.registerModule('vux', {
 
 Vue.use(vuexI18n.plugin, store)
 Vue.use(WechatPlugin)
+Vue.use(Util)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
@@ -159,12 +161,12 @@ const matchExclude = url => {
   }
   return false
 }
-
+localStorage.clear()
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  console.log(matchExclude(rUrl.href))
+  // console.log(matchExclude(rUrl.href))
   if (matchExclude(rUrl.href)) {
     return
   }
@@ -190,7 +192,7 @@ Vue.http.interceptors.push(function (request, next) {
           .then(res => res.json())
           .then(
             data => {
-              router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+              router.push({name: 'tLogin', params: {qrCode: data, fromPath: router.currentRoute.path}})
             },
             error => {
               console.error(error)

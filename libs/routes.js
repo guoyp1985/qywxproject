@@ -50,6 +50,7 @@ import Evaluation from '@/pages/Evaluation'
 import SharingDetail from '@/pages/SharingDetail'
 import DecorationShop from '@/pages/DecorationShop'
 import RetailerApply from '@/pages/RetailerApply'
+import RebateApply from '@/pages/RebateApply'
 
 export default [
   {
@@ -330,5 +331,10 @@ export default [
     path: '/retailerApply',
     name: 'tRetailerApply',
     component: RetailerApply
+  },
+  {
+    path: '/rebateApply',
+    name: 'tRebateApply',
+    component: RebateApply
   }
 ]
