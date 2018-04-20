@@ -200,7 +200,7 @@ Vue.http.interceptors.push(function (request, next) {
             }
           )
         } else {
-          alert(location.href)
+          alert('location.href')
           const orginHref = encodeURIComponent(location.href)
           location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
         }
