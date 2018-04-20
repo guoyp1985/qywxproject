@@ -14,6 +14,7 @@ import VueResource from 'vue-resource'
 import Login from '../libs/login'
 import { Token } from '../libs/storage'
 import ENV from '../libs/env'
+import Util from '../libs/util'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -55,6 +56,7 @@ store.registerModule('vux', {
 
 Vue.use(vuexI18n.plugin, store)
 Vue.use(WechatPlugin)
+Vue.use(Util)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
@@ -190,7 +192,7 @@ Vue.http.interceptors.push(function (request, next) {
           .then(res => res.json())
           .then(
             data => {
-              router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
+              router.push({name: 'tLogin', params: {qrCode: data, fromPath: router.currentRoute.path}})
             },
             error => {
               console.error(error)

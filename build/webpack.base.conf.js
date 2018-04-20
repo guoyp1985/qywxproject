@@ -29,6 +29,7 @@ let webpackConfig = {
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
       'pages': resolve('src/pages'),
+      '#': resolve('libs'),
       '@': resolve('src')
     }
   },

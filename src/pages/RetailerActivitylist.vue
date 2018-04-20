@@ -1,14 +1,25 @@
 <template>
-  <div class="containerarea font14 havetoptab bg-page">
+  <div class="containerarea font14 havetoptab bg-page ractivitylist">
     <tab v-model="tabmodel" class="x-toptab">
       <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
     </tab>
-    <div class="s-container ractivitylist">
+    <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="(index == 0)">
+          <template v-if="index == 0">
             <div class="scroll_list">
-              <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl10 pr10 db`">
+              <div v-if="activitydata.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
+                <div class="t-table">
+                  <div class="t-cell">
+                    <div><i class="al al-cuxiaohuodong font60"></i></div>
+                    <div>还没有创建活动哦，创建活动可以：</div>
+                    <div>1.增加商品的销售量</div>
+                    <div>2.分享活动快速获得客户</div>
+                    <div>3.邀请返点客帮你赚钱</div>
+                  </div>
+                </div>
+              </div>
+              <div v-else v-for="(item,index1) in activitydata" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl10 pr10 db`">
                 <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
@@ -48,7 +59,7 @@
               </div>
             </div>
           </template>
-          <template v-if="(index == 1)">
+          <template v-if="index == 1">
             <div class="db-flex padding10 mb5 bg-white" @click="clickadd('groupbuy')">
               <div class="flex_left" style="width:90px;">
                 <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="/src/assets/images/groupbuy.jpg">
@@ -128,7 +139,7 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup1">{{ $t('Close') }}</div>
-            <router-link class="flex_cell flex_center h_100 bg-orange color-white" to="/addActivity">{{ $t('Go to create') }}</router-link>
+            <router-link class="flex_cell flex_center h_100 bg-orange color-white" :to="{path: '/addActivity', query: {type: 'groupbuy'}}">{{ $t('Go to create') }}</router-link>
           </div>
         </div>
       </popup>
@@ -149,7 +160,7 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup2">{{ $t('Close') }}</div>
-            <router-link class="flex_cell flex_center h_100 bg-orange color-white" to="/addActivity">{{ $t('Go to create') }}</router-link>
+            <router-link class="flex_cell flex_center h_100 bg-orange color-white" :to="{path: '/addActivity', query: {type: 'bargainbuy'}}">{{ $t('Go to create') }}</router-link>
           </div>
         </div>
       </popup>
@@ -170,7 +181,7 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup3">{{ $t('Close') }}</div>
-            <router-link class="flex_cell flex_center h_100 bg-orange color-white" to="/addActivity">{{ $t('Go to create') }}</router-link>
+            <router-link class="flex_cell flex_center h_100 bg-orange color-white" :to="{path: '/addActivity', query: {type: 'discount'}}">{{ $t('Go to create') }}</router-link>
           </div>
         </div>
       </popup>
@@ -212,6 +223,7 @@ Stat:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup } from 'vux'
 import Time from '../../libs/time'
+import ENV from '../../libs/env'
 
 export default {
   directives: {
@@ -235,46 +247,24 @@ export default {
     return {
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
-      tabdata1: [
-        {
-          id: '1', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736'
-        },
-        {
-          id: '2', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745'
-        },
-        {
-          id: '3', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
-        },
-        {
-          id: '4', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
-        },
-        {
-          id: '5', wid: 187, dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
-        }
-      ],
-      tabdata2: [
-        {
-          id: '1', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15214273537848'
-        },
-        {
-          id: '2', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15214253209099'
-        },
-        {
-          id: '3', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'bargainbuy', minprice: '0.50', limitbuy: 3, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
-        },
-        {
-          id: '4', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 1, type: 'groupbuy', groupprice: '0.50', numbers: 3, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
-        },
-        {
-          id: '5', dateline: 1522221270, starttime: 1522825984, endtime: 1524121984, isfinished: 0, type: 'groupbuy', groupprice: '0.50', title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
-        }
-      ],
+      activitydata: [],
       clickdata: {},
       showconfirm: false,
       showgroupbuy: false,
       showbargainbuy: false,
       showdiscount: false
     }
+  },
+  created: function () {
+    let self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/list/activity`
+    ).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      data = data.data ? data.data : data
+      self.activitydata = data
+    })
   },
   methods: {
     stopevent (item) {

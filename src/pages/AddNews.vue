@@ -141,8 +141,7 @@ Label can not empty:
 
 <script>
 import { Group, XInput, XTextarea, Confirm, TransferDomDirective as TransferDom, Alert, Loading } from 'vux'
-import ENV from '../../libs/env'
-import Util from '../../libs/util'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -158,6 +157,7 @@ export default {
   },
   data () {
     return {
+      allowsubmit: true,
       isShowLoading: false,
       photoarr: [],
       maxnum: 1,
@@ -188,7 +188,7 @@ export default {
           for (let key in self.submitdata) {
             self.submitdata[key] = retdata[key]
           }
-          if (!Util.isNull(self.submitdata.photo)) {
+          if (!self.$util.isNull(self.submitdata.photo)) {
             self.photoarr = self.submitdata.photo.split(',')
           }
         }
@@ -245,7 +245,7 @@ export default {
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
-              time: Util.delay(data.error)
+              time: self.$util.delay(data.error)
             })
           }
         })
@@ -295,7 +295,7 @@ export default {
       for (let key in self.requireddata) {
         self.requireddata[key] = self.submitdata[key]
       }
-      self.allowsubmit = Util.validateQueue(self.requireddata)
+      self.allowsubmit = self.$util.validateQueue(self.requireddata)
       if (!self.allowsubmit) {
         self.$vux.alert.show({
           title: '',
@@ -320,7 +320,7 @@ export default {
         self.isShowLoading = false
         self.$vux.toast.show({
           text: data.error,
-          time: Util.delay(data.error),
+          time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
               self.$router.push({name: '/article', params: { id: data.data }})

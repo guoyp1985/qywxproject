@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14">
+  <div class="containerarea s-havebottom bg-white font14">
     <div class="s-container" style="top:0;">
       <form>
         <Forminputplate class="required">
@@ -25,30 +25,30 @@
         <Forminputplate class="required">
           <span slot="title">{{ $t('Starttime') }}</span>
           <group class="x-datetime">
-            <datetime :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1" v-model='starttime'></datetime>
+            <datetime v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
           </group>
           <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
         </Forminputplate>
         <Forminputplate class="required">
           <span slot="title">{{ $t('Endtime') }}</span>
           <group class="x-datetime">
-            <datetime :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2" v-model='endtime'></datetime>
+            <datetime v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
           </group>
           <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
         </Forminputplate>
         <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
-        <div class="form-item" v-for="(item,index) in formdata" :key="item.id">
-          <div class="t-table" v-if="item.type === 'text'">
-            <div class="t-cell title-cell w80 font14 v_middle">{{item.title}}<span v-if="item.required" class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input type="text" class="input" :name="item.name" :placeholder="item.title" />
-            </div>
-            <div v-if="item.unit && item.unit != ''" class="t-cell v_middle align_right font12" style="width:40px;">{{ item.unit }}</div>
-          </div>
-        </div>
+        <template v-if="query.type == 'groupbuy'">
+          <FormGroupbuy :submitdata="submitdata"></FormGroupbuy>
+        </template>
+        <template v-if="query.type == 'bargainbuy'">
+          <FormBargainbuy :submitdata="submitdata"></FormBargainbuy>
+        </template>
+        <template v-if="query.type == 'discount'">
+          <FormDiscount :submitdata="submitdata"></FormDiscount>
+        </template>
       </form>
     </div>
-    <div class="s-bottom flex_center bg-orange color-white">{{ $t('Go to create') }}</div>
+    <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
@@ -65,8 +65,8 @@
             </search>
             <div class="scroll_list">
               <Radioitemplate v-for="(item,index) in getRadiodata" :key="item.id" class="pl10 pr10">
-                <input slot="radio" type="radio" name="product" :checked="item.checked" @click="radioclick(item)" />
-                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="v_middle" />
+                <input v-model="submitdata.productid" :value="item.id" slot="radio" type="radio" name="product" :checked="item.checked" @click="radioclick(item)" />
+                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
                 <div slot="title" class="clamp1">{{item.title}}</div>
                 <div slot="title" class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
               </Radioitemplate>
@@ -81,6 +81,9 @@
     </div>
     <div v-transfer-dom>
       <alert v-model="showalert">{{ $t('Please select product') }}</alert>
+    </div>
+    <div v-transfer-dom>
+      <loading :show="isShowLoading" text=""></loading>
     </div>
   </div>
 </template>
@@ -107,9 +110,13 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search } from 'vux'
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import Radioitemplate from '@/components/Radioitemplate'
+import FormGroupbuy from '@/components/FormGroupbuy'
+import FormBargainbuy from '@/components/FormBargainbuy'
+import FormDiscount from '@/components/FormDiscount'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -123,43 +130,99 @@ export default {
     Popup,
     Radioitemplate,
     Alert,
+    Loading,
     Datetime,
-    Search
+    Search,
+    FormGroupbuy,
+    FormBargainbuy,
+    FormDiscount
   },
   data () {
     return {
+      query: {},
+      allowsubmit: true,
       showalert: false,
+      isShowLoading: false,
       showselectproduct: true,
       showproductitem: false,
       selectproduct: {},
       selectpopupdata: {},
       showpopup: false,
-      productdata: [
-        { 'id': 124, 'title': '苹果手机', 'photo': 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', 'price': '8,000.00', storage: 1 },
-        { 'id': 113, 'title': '维生素B族片', 'photo': 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg', 'price': '1.00', 'saled': 1, storage: 11 },
-        { 'id': 107, 'title': '大王卡', 'photo': 'http://ossgxs.boka.cn/month_201803/15222378479011.jpg', 'price': '12.00', 'saled': 0, storage: 13 },
-        { 'id': 106, 'title': '测试分享商品通知', 'photo': 'http://ossgxs.boka.cn/month_201803/15222375843651.jpg', 'price': '1.00', 'saled': 0, storage: 154 },
-        { 'id': 105, 'title': '测试商品分享', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'price': '1.00', 'saled': 0, storage: 14 },
-        { 'id': 103, 'title': '测试商品图片', 'photo': 'http://ossgxs.boka.cn/month_201803/15222183428017.jpg?x-oss-process=image/crop,x_-109,y_-103,w_1086,h_1086', 'price': '10.00', 'saled': 2, storage: 123 },
-        { 'id': 98, 'title': '111', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221287780438.jpg', 'price': '222.00', 'saled': 0, storage: 113 },
-        { 'id': 92, 'title': '商品2', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220609241178.png', 'price': '12.00', 'saled': 0, storage: 13 },
-        { 'id': 91, 'title': '商品1', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'price': '1.00', 'saled': 1, storage: 12 },
-        { 'id': 89, 'title': '啊', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220603289333.jpg', 'price': '1.00', 'saled': 0, storage: 11 }
-      ],
+      productdata: [],
       radiodata: [],
-      starttime: '',
-      endtime: '',
       visibility1: false,
       visibility2: false,
       selectdatetxt1: '选择开始时间',
       selectdatetxt2: '选择结束时间',
-      formdata: [
-        { id: 1, name: 'groupprice', title: '团购价', type: 'text', required: true, unit: '元' },
-        { id: 2, name: 'numbers', title: '成团人数', type: 'text', required: true, unit: '人' },
-        { id: 3, name: 'limitbuy', title: '投放商品数量', type: 'text', required: true, unit: '件' },
-        { id: 4, name: 'finishtime', title: '成团时间', type: 'text', required: true, unit: '小时' },
-        { id: 5, name: 'everybuy', title: '限购件数', type: 'text', required: true, unit: '件' }
-      ]
+      submitdata: {},
+      requireddata: {}
+    }
+  },
+  created: function () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$util.share({
+      data: {
+        link: location.href,
+        title: '分享标题',
+        desc: '分享描述',
+        photo: ''
+      }
+    })
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/list/product`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      data = data.data ? data.data : data
+      self.productdata = data
+    })
+    if (self.query.type === 'groupbuy') {
+      self.submitdata = {
+        productid: '',
+        starttime: '',
+        endtime: '',
+        groupprice: '',
+        numbers: '',
+        limitbuy: '',
+        finishtime: '',
+        everybuy: ''
+      }
+    } else if (self.query.type === 'bargainbuy') {
+      self.submitdata = {
+        productid: '',
+        starttime: '',
+        endtime: '',
+        minprice: '',
+        limitbuy: '',
+        finishtime: '',
+        everymin: '',
+        everymax: ''
+      }
+    } else if (self.query.type === 'discount') {
+      self.submitdata = {
+        productid: '',
+        starttime: '',
+        endtime: '',
+        price: '',
+        limitcount: '',
+        storage: ''
+      }
+    }
+    self.submitdata['type'] = self.query.type
+    self.requireddata = self.submitdata
+  },
+  watch: {
+    query: function () {
+      return this.query
+    },
+    productdata: function () {
+      return this.productdata
+    },
+    submitdata: function () {
+      return this.submitdata
+    },
+    requireddata: function () {
+      return this.requireddata
     }
   },
   computed: {
@@ -207,10 +270,9 @@ export default {
       this.visibility1 = true
     },
     datechange1 (val) {
-      this.starttime = val
     },
     datecancel1 () {
-      this.starttime = ''
+      this.submitdata.starttime = ''
       this.selectdatetxt1 = '选择开始时间'
     },
     dateconfirm1 () {
@@ -220,14 +282,45 @@ export default {
       this.visibility2 = true
     },
     datechange2 (val) {
-      this.endtime = val
     },
     datecancel2 () {
-      this.endtime = ''
+      this.submitdata.endtime = ''
       this.selectdatetxt2 = '选择结束时间'
     },
     dateconfirm2 () {
       this.selectdatetxt2 = ''
+    },
+    saveevent () {
+      const self = this
+      for (let key in self.requireddata) {
+        self.requireddata[key] = self.submitdata[key]
+      }
+      self.allowsubmit = self.$util.validateQueue(self.requireddata)
+      console.log(self.submitdata)
+      if (!self.allowsubmit) {
+        self.$vux.alert.show({
+          title: '',
+          content: '必填项不能为空',
+          onShow () {
+          },
+          onHide () {
+            self.allowsubmit = true
+          }
+        })
+        return false
+      }
+      self.isShowLoading = true
+      self.$http.post(`${ENV.BokaApi}/api/add/activity`, self.submitdata).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+          }
+        })
+      })
     }
   }
 }
