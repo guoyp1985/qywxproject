@@ -134,13 +134,13 @@ export default {
       }
     },
     wxRedirect () {
-      const lUrl = urlParse(location.href, true)
-      if (lUrl.query.code) return
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
   },
   created () {
+    const lUrl = urlParse(location.href, true)
+    if (lUrl.query.code) return
     this.getData()
     this.getWxAddress()
   }
