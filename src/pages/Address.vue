@@ -90,6 +90,7 @@ export default {
     },
     getWxAddress () {
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      alert(location.href)
       this.$http.get(`${ENV.BokaApi}/testRedis`)
       .then(res => res.json())
       .then(data => {
