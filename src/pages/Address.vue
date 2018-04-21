@@ -90,10 +90,10 @@ export default {
     },
     getWxAddress () {
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       this.$http.get(`${ENV.BokaApi}/testRedis`)
       .then(res => res.json())
       .then(data => {
-        alert(location.href)
         const accessToken = data.access_token
         const nonceStr = this.$util.randomStr()
         const timeStamp = this.$uitl.timeStamp()
