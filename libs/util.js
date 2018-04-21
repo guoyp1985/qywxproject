@@ -55,7 +55,10 @@ Util.install = function (Vue, options) {
       }
       return ret;
     },
-    wxSign: (accessToken, appId, nonceStr, timeStamp, url) => SHA1(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
+    wxSign: (accessToken, appId, nonceStr, timeStamp, url) => {
+      alert(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
+      SHA1(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
+    }
   }
 }
 
