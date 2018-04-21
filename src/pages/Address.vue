@@ -79,8 +79,6 @@ export default {
   methods: {
     getData () {
       const self = this
-      const lUrl = urlParse(location.href, true)
-      if (lUrl.query.code) return
       this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
       .then(res => res.json())
       .then(data => {
@@ -136,6 +134,8 @@ export default {
       }
     },
     wxRedirect () {
+      const lUrl = urlParse(location.href, true)
+      if (lUrl.query.code) return
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
