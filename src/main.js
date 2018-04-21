@@ -153,9 +153,12 @@ let excludeUrls = [
 ]
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const rExcludeUrls = excludeUrls.map(item => {
+  item.url = RegExp(item.url.replace(/\*/g, '.*').replace(/\?/g, '\\?'))
+  return item
+})
 const matchExclude = url => {
-  for (let item in excludeUrls) {
+  for (let item in rExcludeUrls) {
     if (item.url.test(url) && --item.reqMax) {
       return true
     }
