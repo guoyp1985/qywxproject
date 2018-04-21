@@ -93,7 +93,7 @@ export default {
     getWxAddress () {
       const lUrl = urlParse(location.href, true)
       const self = this
-      alert(lUrl.query.code)
+      alert(lUrl.path)
       if (lUrl.query.code) {
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
         this.$http.get(`${ENV.BokaApi}/api/weixin/token`)
