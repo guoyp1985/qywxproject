@@ -163,6 +163,7 @@ const matchExclude = url => {
     // alert(`${item.url} ${item.reqMax}`)
     if (item.url.test(url) && item.reqMax <= 0) {
       item.reqMax -= 1
+      alert(`${item.url} ${item.reqMax}`)
       return true
     }
   }
