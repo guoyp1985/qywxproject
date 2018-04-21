@@ -89,32 +89,34 @@ export default {
       })
     },
     getWxAddress () {
-      // const self = this
-      // const timeStamp = this.$util.timeStamp()
-      // const randomStr = this.$util.randomStr()
-      // const signStr = this.$util.wxSign(ENV.AppId, randomStr, timeStamp)
-      // WeixinJSBridge.invoke('editAddress', {
-      //   appId: ENV.AppId,
-      //   scope: 'jsapi_address',
-      //   signType: 'sha1',
-      //   addrSign: signStr,
-      //   timeStamp: timeStamp,
-      //   nonceStr: randomStr
-      // },
-      // res => {
-      //   // alert(res.err_msg)
-      //   if (res.err_msg === 'edit_address:ok') {
-      //     const param = {
-      //       linkman: res.userName,
-      //       telephone: res.telNumber,
-      //       province: res.proviceFirstStageName,
-      //       city: res.addressCitySecondStageName,
-      //       counties: res.addressCountiesThirdStageName,
-      //       address: res.addressDetailInfo
-      //     }
-      //     alert(param)
-      //   }
-      // })
+      this.$http.get(`${ENV.BokaApi}/api/jsconfig`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.appId) {
+          WeixinJSBridge.invoke('editAddress', {
+            appId: data.appId,
+            scope: 'jsapi_address',
+            signType: 'sha1',
+            addrSign: data.signature,
+            timeStamp: data.timestamp,
+            nonceStr: data.nonceStr
+          },
+          res => {
+            // alert(res.err_msg)
+            if (res.err_msg === 'edit_address:ok') {
+              const param = {
+                linkman: res.userName,
+                telephone: res.telNumber,
+                province: res.proviceFirstStageName,
+                city: res.addressCitySecondStageName,
+                counties: res.addressCountiesThirdStageName,
+                address: res.addressDetailInfo
+              }
+              alert(param)
+            }
+          })
+        }
+      })
     }
   },
   created () {

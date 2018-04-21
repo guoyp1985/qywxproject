@@ -131,13 +131,13 @@ export default {
       }
     },
     getData () {
-      this.$http.get('https://laravel.boka.cn/weixin/jsconfig')
-      .then(res => res.json())
-      .then(
-        data => {
-          console.log(data)
-        }
-      )
+      // this.$http.get('https://laravel.boka.cn/weixin/jsconfig')
+      // .then(res => res.json())
+      // .then(
+      //   data => {
+      //     console.log(data)
+      //   }
+      // )
       this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
       .then(res => res.json())
       .then(
