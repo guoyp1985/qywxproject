@@ -182,7 +182,7 @@ Vue.http.interceptors.push(function (request, next) {
       data => {
         Token.set(data.data.token)
         token = data.data.token
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         return Vue.http.get(`${ENV.BokaApi}/api/weixin/token`)
       },
       error => {
@@ -226,7 +226,7 @@ Vue.http.interceptors.push(function (request, next) {
   } else if (rUrl.origin === ENV.BokaApi) {
     // const token = Token.get()
     // request.method = 'GET'
-    // alert(token)
+    alert(token)
     request.headers.set('Authorization', `Bearer ${token}`)
     // request.headers.set('X-CSRF-Token', 'plugin')
     // continue to next interceptor
