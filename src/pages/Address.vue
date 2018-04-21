@@ -130,7 +130,7 @@ export default {
         error => {
           alert(JSON.stringify(error))
         })
-      }, 2000)
+      }, 5000)
     }
   },
   created () {
