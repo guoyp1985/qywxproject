@@ -91,12 +91,12 @@ export default {
       })
     },
     getWxAddress () {
-      const lUrl = urlParse(location.href, true)
-      const self = this
-      if (lUrl.query.code) {
+      // const lUrl = urlParse(location.href, true)
+      // const self = this
+      // if (lUrl.query.code) {
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
 
-      }
+      // }
     },
     wxRedirect () {
       const orginHref = encodeURIComponent(location.href)
