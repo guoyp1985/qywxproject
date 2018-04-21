@@ -4,7 +4,7 @@
       <cell class="font14" :title="`${$t('Shop name')}: ${shopName}`" :inline-desc="`${$t('Shop Owner')}: ${owner}`">
         <img class="avatar" slot="icon" :src="avatar"/>
         <div slot="child">
-          <x-button mini type="default">{{$t('Contact')}}</x-button>
+          <x-button mini type="default" @click.native="onContact">{{$t('Contact')}}</x-button>
         </div>
       </cell>
     </group>
@@ -40,6 +40,19 @@
         </flexbox>
       </popup>
     </div>
+    <div v-transfer-dom class="qrcode-dialog">
+      <x-dialog v-model="wxCardShow" class="dialog-demo">
+        <div class="img-box">
+          <img :src="userQrCode" style="max-width:100%">
+        </div>
+        <div>
+          <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
+        </div>
+        <div @click="wxCardShow=false">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -56,6 +69,7 @@ import {
   ViewBox,
   Popup,
   PopupHeader,
+  XDialog,
   TransferDom
 } from 'vux'
 export default {
@@ -74,7 +88,8 @@ export default {
     FlexboxItem,
     ViewBox,
     Popup,
-    PopupHeader
+    PopupHeader,
+    XDialog
   },
   data () {
     return {
@@ -86,7 +101,9 @@ export default {
       verifyCode: '',
       reason: '',
       agree: false,
-      popShow: false
+      popShow: false,
+      userQrCode: '',
+      wxCardShow: false
     }
   },
   methods: {
@@ -101,6 +118,9 @@ export default {
     onDisagree () {
       this.agree = false
       this.popShow = false
+    },
+    onContact () {
+      this.wxCardShow = true
     }
   }
 }
@@ -126,6 +146,14 @@ export default {
   bottom: 0;
   height: 42px;
   padding: 2px 0;
+}
+.qrcode-dialog .img-box {
+  height: 350px;
+  overflow: hidden;
+}
+.qrcode-dialog .vux-close {
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 /* vux css hack */
 #rebate-apply .weui-cell__hd {

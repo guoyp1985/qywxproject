@@ -7,10 +7,10 @@
       <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
     </group>
     <group v-else>
-      <cell v-for="(item, index) in getItems" :key="index" :title="`${item.name} ${item.phone}`" :link="{path:`/address/${item.id}`,query:{data:item}}" :inline-desc='item.address | addressFormat'></cell>
+      <cell v-for="(item, index) in getItems" :key="index" :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell>
     </group>
     <box gap="20px 10px">
-      <x-button type="primary" :link="{path:'/address/0',query:{}}">{{$t('New Address')}}</x-button>
+      <x-button type="primary" :link="{name:'tNewAddress'}">{{$t('New Address')}}</x-button>
     </box>
   </div>
 </template>
@@ -41,22 +41,19 @@ export default {
   data () {
     return {
       items: [
-        {
-          id: 1,
-          name: 'huang',
-          phone: '13613797907',
-          address: {
-            area: ['北京市', '市辖区', '丰台区'],
-            details: '金家村288号院5号楼A座2206'
-          },
-          default: false
-        }
+        // {
+        //   linkman: 'huang',
+        //   telephone: '13613797907',
+        //   address: '金家村288号院5号楼A座2206',
+        //   area: ['北京市', '市辖区', '丰台区'],
+        //   isdefault: 0
+        // }
       ]
     }
   },
   computed: {
     getItems () {
-      let data = this.$route.query.data
+      let data = this.$route.params.data
       if (typeof data === 'object') {
         let match = false
         this.items = this.items.map(item => {
@@ -74,8 +71,8 @@ export default {
     }
   },
   filters: {
-    addressFormat: function (address) {
-      return `${address.area.join('')}${address.details}`
+    addressFormat: function (item) {
+      return `${item.area.join('')}${item.address}`
     }
   },
   methods: {
@@ -85,7 +82,7 @@ export default {
       .then(res => res.json())
       .then(data => {
         if (data.length) {
-
+          console.log(data)
         } else {
           self.getWxAddress()
         }
@@ -93,32 +90,31 @@ export default {
     },
     getWxAddress () {
       // const self = this
-      const timeStamp = this.$util.timeStamp()
-      const randomStr = this.$util.randomStr()
-      const signStr = this.$util.wxSign(ENV.AppId, randomStr, timeStamp)
-      alert(location.href)
-      WeixinJSBridge.invoke('editAddress', {
-        appId: ENV.AppId,
-        scope: 'jsapi_address',
-        signType: 'sha1',
-        addrSign: signStr,
-        timeStamp: timeStamp,
-        nonceStr: randomStr
-      },
-      res => {
-        alert(res.err_msg)
-        if (res.err_msg === 'edit_address:ok') {
-          const param = {
-            linkman: res.userName,
-            telephone: res.telNumber,
-            province: res.proviceFirstStageName,
-            city: res.addressCitySecondStageName,
-            counties: res.addressCountiesThirdStageName,
-            address: res.addressDetailInfo
-          }
-          alert(param)
-        }
-      })
+      // const timeStamp = this.$util.timeStamp()
+      // const randomStr = this.$util.randomStr()
+      // const signStr = this.$util.wxSign(ENV.AppId, randomStr, timeStamp)
+      // WeixinJSBridge.invoke('editAddress', {
+      //   appId: ENV.AppId,
+      //   scope: 'jsapi_address',
+      //   signType: 'sha1',
+      //   addrSign: signStr,
+      //   timeStamp: timeStamp,
+      //   nonceStr: randomStr
+      // },
+      // res => {
+      //   // alert(res.err_msg)
+      //   if (res.err_msg === 'edit_address:ok') {
+      //     const param = {
+      //       linkman: res.userName,
+      //       telephone: res.telNumber,
+      //       province: res.proviceFirstStageName,
+      //       city: res.addressCitySecondStageName,
+      //       counties: res.addressCountiesThirdStageName,
+      //       address: res.addressDetailInfo
+      //     }
+      //     alert(param)
+      //   }
+      // })
     }
   },
   created () {

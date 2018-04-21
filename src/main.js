@@ -189,6 +189,7 @@ Vue.http.interceptors.push(function (request, next) {
     // request.method = 'GET'
     // alert(token)
     request.headers.set('Authorization', `Bearer ${token}`)
+    // request.headers.set('X-CSRF-Token', 'plugin')
     // continue to next interceptor
     next(function (response) {
       Login.access(request, response, isPC => {

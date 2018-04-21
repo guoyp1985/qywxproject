@@ -163,7 +163,7 @@ export default [
     component: Address
   },
   {
-    path: '/address/:id',
+    path: '/newAddress',
     name: 'tNewAddress',
     component: NewAddress
   },
