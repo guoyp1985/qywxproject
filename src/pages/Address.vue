@@ -22,6 +22,7 @@
 import { Group, Cell, CellBox, Popup, PopupHeader, XInput, XAddress, XSwitch, XButton, Box } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from '#/env'
+import urlParse from 'url-parse'
 // import WeixinJSBridge from 'WeixinJSBridge'
 
 export default {
@@ -83,20 +84,18 @@ export default {
       .then(data => {
         if (data.length) {
           console.log(data)
-          self.getWxAddress()
+          self.wxRedirect()
         } else {
-          self.getWxAddress()
+          self.wxRedirect()
         }
       })
     },
     getWxAddress () {
+      const lUrl = urlParse(location.href, true)
       const self = this
-      const orginHref = encodeURIComponent(location.href)
-      location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      if (lUrl.query.code) {
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
-      setTimeout(() => {
-        alert('ok')
-        self.$http.get(`${ENV.BokaApi}/api/weixin/token`)
+        this.$http.get(`${ENV.BokaApi}/api/weixin/token`)
         .then(res => res.json())
         .then(data => {
           const accessToken = data.access_token
@@ -131,11 +130,16 @@ export default {
         error => {
           alert(JSON.stringify(error))
         })
-      }, 3000)
+      }
+    },
+    wxRedirect () {
+      const orginHref = encodeURIComponent(location.href)
+      location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
   },
   created () {
     this.getData()
+    this.getWxAddress()
   }
 }
 </script>

@@ -145,25 +145,23 @@ router.afterEach(function (to) {
 })
 
 let excludeUrls = [
-  { url: `${ENV.BokaApi}/api/authLogin/*`, reqMax: 1 },
-  { url: `${ENV.BokaApi}/api/qrcode/login*`, reqMax: 1 },
-  { url: `${ENV.BokaApi}/api/login/*`, reqMax: 1 },
-  { url: `${ENV.BokaApi}/api/scanlogin`, reqMax: 1 }
+  // { url: `${ENV.BokaApi}/api/authLogin/*`, reqMax: 1 },
+  // { url: `${ENV.BokaApi}/api/qrcode/login*`, reqMax: 1 },
+  // { url: `${ENV.BokaApi}/api/login/*`, reqMax: 1 },
+  // { url: `${ENV.BokaApi}/api/scanlogin`, reqMax: 1 }
   // { url: `${ENV.BokaApi}/api/user/address/list`, reqMax: 2 }
+  `${ENV.BokaApi}/api/authLogin/*`,
+  `${ENV.BokaApi}/api/qrcode/login*`,
+  `${ENV.BokaApi}/api/login/*`,
+  `${ENV.BokaApi}/api/scanlogin`
 ]
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = excludeUrls.map(item => {
-  item.url = RegExp(item.url.replace(/\*/g, '.*').replace(/\?/g, '\\?'))
-  return item
-})
-
+const rExcludeUrls = excludeUrls.map(url =>  RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
-  for (let item of rExcludeUrls) {
+  for (let i = 0; i < rExcludeUrls.length; i++) {
     // alert(`${item.url} ${item.reqMax}`)
-    if (item.url.test(url) && item.reqMax <= 0) {
-      item.reqMax -= 1
-      alert(`${item.url} ${item.reqMax}`)
+    if (rExcludeUrls[i].test(url)) {
       return true
     }
   }
