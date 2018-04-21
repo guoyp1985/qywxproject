@@ -192,7 +192,7 @@ Vue.http.interceptors.push(function (request, next) {
     .then(res => res.json())
     .then(data => {
       const accessToken = data.access_token
-      const nonceStr = $vue.$util.randomStr()
+      const nonceStr = $vue.$util.randomStr(6)
       const timeStamp = $vue.$util.timeStamp()
       const currentUrl = urlParse(location.href, true)
       const url = currentUrl.href.replace(/#\/\w*/g, '')
