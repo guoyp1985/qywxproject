@@ -93,6 +93,7 @@ export default {
       .then(res => res.json())
       .then(data => {
         if (data.appId) {
+          alert(data.appId)
           WeixinJSBridge.invoke('editAddress', {
             appId: data.appId,
             scope: 'jsapi_address',
@@ -102,7 +103,7 @@ export default {
             nonceStr: data.nonceStr
           },
           res => {
-            // alert(res.err_msg)
+            alert(res.err_msg)
             if (res.err_msg === 'edit_address:ok') {
               const param = {
                 linkman: res.userName,
