@@ -160,8 +160,8 @@ const rExcludeUrls = excludeUrls.map(item => {
 
 const matchExclude = url => {
   for (let item of rExcludeUrls) {
-    alert(item.url)
-    if (item.url.test(url) && --item.reqMax) {
+    item.reqMax--
+    if (item.url.test(url) && !item.reqMax) {
       return true
     }
   }
