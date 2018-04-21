@@ -148,7 +148,8 @@ let excludeUrls = [
   `${ENV.BokaApi}/api/authLogin/*`,
   `${ENV.BokaApi}/api/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`
+  `${ENV.BokaApi}/api/scanlogin`,
+  `${ENV.BokaApi}/api/weixin/token`
 ]
 
 // 排除全局请求过滤器中的请求url
@@ -185,6 +186,41 @@ Vue.http.interceptors.push(function (request, next) {
         alert(JSON.stringify(error))
       }
     )
+    Vue.http.get(`${ENV.BokaApi}/api/weixin/token`)
+    .then(res => res.json())
+    .then(data => {
+      const accessToken = data.access_token
+      const nonceStr = $vue.$util.randomStr()
+      const timeStamp = $vue.$util.timeStamp()
+      const url = location.href.replace(/#\/\w+/g, '')
+      alert(url)
+      const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+      WeixinJSBridge.invoke('editAddress', {
+        appId: ENV.AppId,
+        scope: 'jsapi_address',
+        signType: 'sha1',
+        addrSign: addrSign,
+        timeStamp: timeStamp,
+        nonceStr: nonceStr
+      },
+      res => {
+        alert(res.err_msg)
+        if (res.err_msg === 'edit_address:ok') {
+          const param = {
+            linkman: res.userName,
+            telephone: res.telNumber,
+            province: res.proviceFirstStageName,
+            city: res.addressCitySecondStageName,
+            counties: res.addressCountiesThirdStageName,
+            address: res.addressDetailInfo
+          }
+          alert(param)
+        }
+      })
+    },
+    error => {
+      alert(JSON.stringify(error))
+    })
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
     // request.method = 'GET'
@@ -218,7 +254,7 @@ Vue.http.interceptors.push(function (request, next) {
   }
 })
 
-new Vue({
+const $vue = new Vue({
   store,
   router,
   render: h => h(App)

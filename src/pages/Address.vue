@@ -84,53 +84,18 @@ export default {
       .then(data => {
         if (data.length) {
           console.log(data)
-          self.wxRedirect()
+          // self.wxRedirect()
         } else {
-          self.wxRedirect()
+          // self.wxRedirect()
         }
       })
     },
     getWxAddress () {
       const lUrl = urlParse(location.href, true)
       const self = this
-      alert(lUrl.href)
       if (lUrl.query.code) {
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
-        this.$http.get(`${ENV.BokaApi}/api/weixin/token`)
-        .then(res => res.json())
-        .then(data => {
-          const accessToken = data.access_token
-          const nonceStr = self.$util.randomStr()
-          const timeStamp = self.$util.timeStamp()
-          const url = location.href.replace(/#\/\w+/g, '')
-          alert(url)
-          const addrSign = self.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
-          WeixinJSBridge.invoke('editAddress', {
-            appId: ENV.AppId,
-            scope: 'jsapi_address',
-            signType: 'sha1',
-            addrSign: addrSign,
-            timeStamp: timeStamp,
-            nonceStr: nonceStr
-          },
-          res => {
-            alert(res.err_msg)
-            if (res.err_msg === 'edit_address:ok') {
-              const param = {
-                linkman: res.userName,
-                telephone: res.telNumber,
-                province: res.proviceFirstStageName,
-                city: res.addressCitySecondStageName,
-                counties: res.addressCountiesThirdStageName,
-                address: res.addressDetailInfo
-              }
-              alert(param)
-            }
-          })
-        },
-        error => {
-          alert(JSON.stringify(error))
-        })
+
       }
     },
     wxRedirect () {
@@ -139,10 +104,8 @@ export default {
     }
   },
   created () {
-    const lUrl = urlParse(location.href, true)
-    if (lUrl.query.code) return
     this.getData()
-    this.getWxAddress()
+    // this.getWxAddress()
   }
 }
 </script>
