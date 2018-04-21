@@ -176,7 +176,6 @@ Vue.http.interceptors.push(function (request, next) {
   if (lUrl.query.code) {
     // alert(lUrl.query.code)
     const code = lUrl.query.code
-    let accessToken = null
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`, {})
     .then(res => res.json())
     .then(
@@ -185,7 +184,7 @@ Vue.http.interceptors.push(function (request, next) {
         token = data.data.token
         const accessToken = data.data.weixin_token
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        alert()
+        alert(data.data.weixin_token)
         const nonceStr = $vue.$util.randomStr(6)
         const timeStamp = $vue.$util.timeStamp()
         const currentUrl = urlParse(location.href, true)
