@@ -96,6 +96,7 @@ export default {
       .then(res => res.json())
       .then(data => {
         const accessToken = data.access_token
+        alert(accessToken)
         const nonceStr = this.$util.randomStr()
         const timeStamp = this.$uitl.timeStamp()
         const url = location.href.replace(/#\//g, '')
