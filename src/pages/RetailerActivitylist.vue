@@ -24,7 +24,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <img :src="item.photo" class="v_middle" style="width:80px;height:80px;" />
+                      <img :src="item.photo" class="v_middle imgcover" style="width:80px;height:80px;" />
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="t-cell align_right v_middle" style="width:60px;">
                       <router-link class="qbtn1 bg-orange1 color-white" to="groupbuyStat">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn1 bg-orange1 color-white mt5" @click="stopevent(item)">停止</div>
+                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -42,7 +42,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <img :src="item.photo" class="v_middle" style="width:80px;height:80px;" />
+                      <img :src="item.photo" class="v_middle imgcover" style="width:80px;height:80px;" />
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="t-cell align_right v_middle" style="width:60px;">
                       <router-link class="qbtn1 bg-orange1 color-white" to="/bargainbuyStat">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn1 bg-orange1 color-white mt5" @click="stopevent(item)">停止</div>
+                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -95,6 +95,7 @@
                 <i class="al al-mjiantou-copy font14"></i>
               </div>
             </div>
+            <!--
             <div class="db-flex padding10 mb5 bg-white" @click="clickadd('discount')">
               <div class="flex_left" style="width:90px;">
                 <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="/src/assets/images/discount.jpg">
@@ -112,6 +113,7 @@
                 <i class="al al-mjiantou-copy font14"></i>
               </div>
             </div>
+          -->
           </template>
         </swiper-item>
       </swiper>
@@ -190,6 +192,12 @@
 </template>
 
 <i18n>
+Groupprice:
+  zh-CN: 团购价
+Group numbers:
+  zh-CN: 成团人数
+Person:
+  zh-CN: 人
 Are you sure stop?:
   zh-CN: 确定要停止吗？
 Min buy price:
@@ -248,17 +256,19 @@ export default {
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
       activitydata: [],
-      clickdata: {},
+      clickdata: null,
+      clickindex: 0,
       showconfirm: false,
       showgroupbuy: false,
       showbargainbuy: false,
-      showdiscount: false
+      showdiscount: false,
+      isShowLoading: false
     }
   },
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/list/activity`
+    self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`
     ).then(function (res) {
       return res.json()
     }).then(function (data) {
@@ -266,16 +276,47 @@ export default {
       self.activitydata = data
     })
   },
+  watch: {
+    activitydata: function () {
+      return this.activitydata
+    },
+    clickdata: function () {
+      return this.clickdata
+    },
+    clickindex: function () {
+      return this.clickindex
+    }
+  },
   methods: {
-    stopevent (item) {
+    stopevent (item, index) {
+      event.preventDefault()
       this.showconfirm = true
       this.clickdata = item
+      this.clickindex = index
     },
     canceldownConfirm () {
       this.showconfirm = false
+      this.clickdata = null
+      this.clickindex = 0
     },
     okdownConfirm () {
-      this.showconfirm = false
+      const self = this
+      self.showconfirm = false
+      self.isShowLoading = true
+      self.$http.post(`${ENV.BokaApi}/api/retailer/stopActivity`, { id: self.clickdata.id }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.activitydata[self.clickindex].isfinished = 1
+            }
+          }
+        })
+      })
     },
     clickadd (type) {
       if (type === 'groupbuy') {

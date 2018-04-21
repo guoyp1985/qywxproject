@@ -178,13 +178,9 @@ export default {
       photoarr: [],
       maxnum: 9,
       havenum: 0,
-      showaddphoto: true,
-      showphotoitem: false,
       photoarr1: [],
       maxnum1: 19,
       havenum1: 0,
-      showaddphoto1: true,
-      showphotoitem1: false,
       showmore: false,
       submitdata: {
         title: '',
@@ -211,37 +207,11 @@ export default {
     },
     havenum: function (val) {
       this.havenum = this.photoarr.length
-    },
-    showaddphoto: function (val) {
-      let ret = false
-      if (this.photoarr.length < this.maxnum) {
-        ret = true
-      }
-      return ret
-    },
-    showphotoitem: function (val) {
-      let ret = false
-      if (this.photoarr.length > 0) {
-        ret = true
-      }
-      return ret
+      return this.havenum
     },
     havenum1: function (val) {
       this.havenum1 = this.photoarr1.length
-    },
-    showaddphoto1: function (val) {
-      let ret = false
-      if (this.photoarr1.length < this.maxnum1) {
-        ret = true
-      }
-      return ret
-    },
-    showphotoitem1: function (val) {
-      let ret = false
-      if (this.photoarr1.length > 0) {
-        ret = true
-      }
-      return ret
+      return this.havenum1
     }
   },
   computed: {
@@ -267,10 +237,6 @@ export default {
           if (data.flag === 1) {
             self.photoarr.push(data.data)
             self.submitdata.photo = self.photoarr.join(',')
-            if (self.photoarr.length >= self.maxnum) {
-              this.showaddphoto = false
-            }
-            this.showphotoitem = true
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
@@ -282,17 +248,8 @@ export default {
     },
     deletephoto (item, index) {
       const self = this
-      for (let i = 0; i < self.photoarr.length; i++) {
-        if (i === index) {
-          self.photoarr.splice(i, 1)
-          if (self.photoarr.length === 0) {
-            self.showaddphoto = true
-            self.showphotoitem = false
-          }
-          self.submitdata.photo = self.photoarr.join(',')
-          break
-        }
-      }
+      self.photoarr.splice(index, 1)
+      self.submitdata.photo = self.photoarr.join(',')
     },
     filechange1 (e) {
       const self = this
@@ -308,10 +265,6 @@ export default {
           if (data.flag === 1) {
             self.photoarr1.push(data.data)
             self.submitdata.contentphoto = self.photoarr1.join(',')
-            if (self.photoarr1.length >= self.maxnum1) {
-              this.showaddphoto1 = false
-            }
-            this.showphotoitem1 = true
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
@@ -323,17 +276,8 @@ export default {
     },
     deletephoto1 (item, index) {
       const self = this
-      for (let i = 0; i < self.photoarr1.length; i++) {
-        if (i === index) {
-          self.photoarr1.splice(i, 1)
-          if (self.photoarr1.length === 0) {
-            self.showaddphoto1 = true
-            self.showphotoitem1 = false
-          }
-          self.submitdata.contentphoto = self.photoarr1.join(',')
-          break
-        }
-      }
+      self.photoarr1.splice(index, 1)
+      self.submitdata.contentphoto = self.photoarr1.join(',')
     },
     expandevent () {
       this.showmore = !this.showmore

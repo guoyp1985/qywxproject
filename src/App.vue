@@ -52,7 +52,6 @@ Center:
 
 <script>
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
-import Util from '../libs/util'
 import { mapState } from 'vuex'
 import routes from '../libs/routes'
 

@@ -162,8 +162,6 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      showaddphoto: true,
-      showphotoitem: false,
       showmore: false,
       labelarr: [],
       confirmtitle: '标签',
@@ -203,20 +201,6 @@ export default {
       this.havenum = this.photoarr.length
       return this.havenum
     },
-    showaddphoto: function (val) {
-      let ret = false
-      if (this.photoarr.length < this.maxnum) {
-        ret = true
-      }
-      return ret
-    },
-    showphotoitem: function (val) {
-      let ret = false
-      if (this.photoarr.length > 0) {
-        ret = true
-      }
-      return ret
-    },
     labelarr: function () {
       return this.labelarr
     }
@@ -238,10 +222,6 @@ export default {
           if (data.flag === 1) {
             self.photoarr.push(data.data)
             self.submitdata.photo = self.photoarr.join(',')
-            if (self.photoarr.length >= self.maxnum) {
-              this.showaddphoto = false
-            }
-            this.showphotoitem = true
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
@@ -252,17 +232,8 @@ export default {
       }
     },
     deletephoto (item, index) {
-      for (var i = 0; i < this.photoarr.length; i++) {
-        if (i === index) {
-          this.photoarr.splice(i, 1)
-          this.havenum -= 1
-          if (this.photoarr.length === 0) {
-            this.showaddphoto = true
-            this.showphotoitem = false
-          }
-          break
-        }
-      }
+      this.photoarr.splice(index, 1)
+      this.submitdata.photo = this.photoarr.join(',')
     },
     addlabel () {
       this.showconfirm = true

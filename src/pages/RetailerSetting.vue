@@ -5,25 +5,30 @@
       <form>
         <Forminputplate class="required">
           <span slot="title">{{ $t('Shop name') }}</span>
-          <input type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
+          <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
         </Forminputplate>
-        <Forminputplate>
-          <span slot="title">{{ $t('Wechat qrcode') }}</span>
+        <div class="form-item required">
+          <div class="pt10 pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
           <div>
-            <input type="hidden" name="qrcode" required="" value="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" class="no-fastclick">
-            <div class="q_photolist align_left" uploadform=".uploadfileForm">
-              <div v-if="showphotoitem" class="photoitem">
-                <div class="inner photo" photo="http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg" style="background-image: url('http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204030611795.jpg');">
-                  <div class="close" @click="deletephoto">×</div>
+            <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
+            <div class="q_photolist align_left">
+              <template v-if="photoarr.length > 0">
+                <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                    <div class="close" @click="deletephoto(item,index)">×</div>
+                    <div class="clip"><i class="al al-set"></i></div>
+                  </div>
                 </div>
-              </div>
-              <div v-if="showaddphoto" class="photoitem add">
+              </template>
+              <div v-if="photoarr.length < maxnum" class="photoitem add">
                 <div class="inner">
-                  <input type="file" style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;" @change="filechange">
+                  <form class="fileform" enctype="multipart/form-data">
+                    <input class="fileinput" type="file" name="files" @change="filechange" />
+                  </form>
                   <div class="t-table">
                     <div class="t-cell">
                       <div class="txt">
-                        <i class="fa fa-photo" style="color:#c6c5c5;"></i>
+                        <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
                         <div class="mt5">{{ $t('Upload wechat qrcode') }}</div>
                       </div>
                     </div>
@@ -33,19 +38,19 @@
             </div>
             <div class="font12 color-blue3 mt5">{{ $t('Upload qrcode text') }}</div>
           </div>
-        </Forminputplate>
-        <Forminputplate>
+        </div>
+        <Forminputplate class="required">
           <span slot="title">{{ $t('Pay type') }}</span>
           <div>
             <label style="display:inline-block;" class="btnbuyonline" template=".template4">
               <div class="qradio">
-                <input type="radio" name="buyonline" value="1" required="" checked="" class="no-fastclick">
+                <input v-model="submitdata.buyonline" type="radio" name="buyonline" value="1" @click="online" >
                 <i></i><span style="vertical-align:-3px;">在线支付</span>
               </div>
             </label>
             <label style="display:inline-block;margin-left:5px;" class="btnbuyonline" template=".template5">
               <div class="qradio">
-                <input type="radio" name="buyonline" value="0" required="" class="no-fastclick">
+                <input v-model="submitdata.buyonline" type="radio" name="buyonline" value="0" @click="offline" >
                 <i></i><span style="vertical-align:-3px;">线下支付</span>
               </div>
             </label>
@@ -55,13 +60,13 @@
           <Forminputplate>
             <span slot="title">{{ $t('Shop description') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Shop description')" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea v-model="submitdata.content" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Shop description')" :show-counter="false" :rows="1" autosize></x-textarea>
             </group>
           </Forminputplate>
           <Forminputplate>
             <span slot="title">{{ $t('Auto reply') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Shop description')" :value="replyvalue" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea v-model="submitdata.fastreply" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Auto reply')" :show-counter="false" :rows="1" autosize></x-textarea>
             </group>
           </Forminputplate>
         </div>
@@ -69,7 +74,55 @@
         <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
       </form>
     </div>
-    <div class="s-bottom flex_center bg-green color-white">{{ $t('Submit order') }}</div>
+    <div class="s-bottom flex_center bg-green color-white" @click="submitevent">{{ $t('Save') }}</div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showonline" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">在线支付使用须知</div>
+          <div class="popup-middle">
+            <div class="padding10">
+              <div class="bold">第一条 定义</div>
+              <div>在线支付，是指买家查看商品信息时，可通过微信支付在线购买商品，卖家负责审核订单并对订单进行发货。</div>
+              <div class="bold mt5">第二条 提现</div>
+              <div>买家通过线上支付购买商品，需待买家确认收货后，卖家才可以通过“我的收入”提现收益。</div>
+              <div class="bold mt5">第三条 手续费</div>
+              <div>共销宝卖家需按订单交易额（含运费）的1%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+              <div class="bold mt5">退款订单处理规则：</div>
+              <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，共销宝将整单全额退款，不收取手续费。</div>
+              <div>（2）当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可通过“申请维权”与卖家互加好友，线下协商解决，手续费不予退还。</div>
+              <div class="bold mt5">第四条 交易规则</div>
+              <div>（1）除买卖双方协商一致的，共销宝平台卖家需在买家付款后的72小时内操作发货。</div>
+              <div>（2）卖家应当将商品通过物流配送至买家订单收货地址，并由收件人本人签收，需买家至指定地点提取的，应当事先予以显著明示或征得买家同意。</div>
+              <div>（3）卖家优先选择有签收凭证的物流公司发货，若买卖双方使用当面交易交付货物，交易风险由买卖双方自行承担。</div>
+              <div>（4）卖家违反发货规范导致买家未收到商品或拒收商品的，由此产生的相关费用及商品损毁或灭失风险，由卖家自行承担。</div>
+              <div class="bold mt5">第五条 交易纠纷</div>
+              <div>共销宝平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
+              <div class="bold mt5">第六条 信息完善</div>
+              <div>开通在线支付后，请及时对已有商品设置“库存”及“运费”，在商品列表中，点击“操作”-->点击“编辑”，即可设置商品的“库存”及“运费”。</div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center bg-orange color-white" @click="closeOnPopup">知道了</div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showoffline" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">线下支付使用须知</div>
+          <div class="popup-middle">
+            <div class="padding10">
+              <div class="bold">第一条 定义</div>
+              <div>线下支付，是指买家可通过商品页面与卖家互加好友，以传统微商（线下聊天转账）的交易方式进行交易。</div>
+              <div class="bold mt5">第二条 交易纠纷</div>
+              <div>共销宝平台仅提供商品展示，不做任何担保交易，买卖双方在交易过程中出现的任何问题，由买卖双方协商解决。</div>
+              <div class="bold mt5">第三条 功能变更</div>
+              <div>由“在线支付”模式更改为“线下支付”时，所有正在进行的促销活动将全部失效，再次更改为"在线支付"模式时，原有促销活动需重新创建，请谨慎更改。</div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center bg-orange color-white" @click="closeOffPopup">知道了</div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -103,8 +156,9 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Group, XTextarea, XInput, TransferDom } from 'vux'
+import { Group, XTextarea, XInput, TransferDom, Loading, Popup } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -115,21 +169,47 @@ export default {
     Forminputplate,
     XTextarea,
     XInput,
-    TransferDom
+    TransferDom,
+    Loading,
+    Popup
   },
   data () {
     return {
       showmore: false,
-      replyvalue: '你好，请稍等，一会为你服务',
-      showaddphoto: true,
-      showphotoitem: false,
       havenum: 0,
-      maxnum: 1
+      maxnum: 1,
+      photoarr: [],
+      submitdata: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      requireddata: { title: '', 'qrcode': '' },
+      showonline: false,
+      showoffline: false
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      let retailerInfo = data.data ? data.data : data
+      for (let key in self.submitdata) {
+        self.submitdata[key] = retailerInfo[key]
+      }
+      let qrcode = self.submitdata.qrcode
+      if (!self.$util.isNull(qrcode)) {
+        self.photoarr = qrcode.split(',')
+      }
+      self.havenum = self.photoarr.length
+    })
+  },
+  watch: {
+    photoarr: function () {
+      this.havenum = this.photoarr.length
+      return this.photoarr
+    },
+    submitdata: function () {
+      return this.submitdata
+    }
   },
   computed: {
   },
@@ -138,12 +218,77 @@ export default {
       this.showmore = !this.showmore
     },
     filechange (e) {
-      this.showaddphoto = false
-      this.showphotoitem = true
+      const self = this
+      let files = e.target.files
+      if (files.length > 0 && !self.isShowLoading) {
+        let fileform = document.querySelector('.fileform')
+        let filedata = new FormData(fileform)
+        self.isShowLoading = true
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          return res.json()
+        }).then(function (data) {
+          self.isShowLoading = false
+          if (data.flag === 1) {
+            self.photoarr.push(data.data)
+            self.submitdata.qrcode = self.photoarr.join(',')
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
-    deletephoto () {
-      this.showaddphoto = true
-      this.showphotoitem = false
+    deletephoto (item, index) {
+      this.photoarr.splice(index, 1)
+      this.submitdata.qrcode = this.photoarr.join(',')
+    },
+    online () {
+      this.showonline = true
+    },
+    offline () {
+      this.showoffline = true
+    },
+    closeOnPopup () {
+      this.showonline = false
+    },
+    closeOffPopup () {
+      this.showoffline = false
+    },
+    submitevent () {
+      const self = this
+      for (let key in self.requireddata) {
+        self.requireddata[key] = self.submitdata[key]
+      }
+      self.allowsubmit = self.$util.validateQueue(self.requireddata)
+      if (!self.allowsubmit) {
+        self.$vux.alert.show({
+          title: '',
+          content: '必填项不能为空',
+          onShow () {
+          },
+          onHide () {
+            self.allowsubmit = true
+          }
+        })
+        return false
+      }
+      self.isShowLoading = true
+      self.$http.post(`${ENV.BokaApi}/api/retailer/changeInfo`, self.submitdata).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.$router.push('/centerSales')
+            }
+          }
+        })
+      })
     }
   }
 }

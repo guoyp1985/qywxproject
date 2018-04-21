@@ -181,31 +181,31 @@ export default {
         productid: '',
         starttime: '',
         endtime: '',
-        groupprice: '',
-        numbers: '',
-        limitbuy: '',
-        finishtime: '',
-        everybuy: ''
+        param_groupprice: '',
+        param_numbers: '',
+        param_limitbuy: '',
+        param_finishtime: '',
+        param_everybuy: ''
       }
     } else if (self.query.type === 'bargainbuy') {
       self.submitdata = {
         productid: '',
         starttime: '',
         endtime: '',
-        minprice: '',
-        limitbuy: '',
-        finishtime: '',
-        everymin: '',
-        everymax: ''
+        param_minprice: '',
+        param_limitbuy: '',
+        param_finishtime: '',
+        param_everymin: '',
+        param_everymax: ''
       }
     } else if (self.query.type === 'discount') {
       self.submitdata = {
         productid: '',
         starttime: '',
         endtime: '',
-        price: '',
-        limitcount: '',
-        storage: ''
+        param_price: '',
+        param_limitcount: '',
+        param_storage: ''
       }
     }
     self.submitdata['type'] = self.query.type
@@ -310,7 +310,7 @@ export default {
         return false
       }
       self.isShowLoading = true
-      self.$http.post(`${ENV.BokaApi}/api/add/activity`, self.submitdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.isShowLoading = false
@@ -318,6 +318,9 @@ export default {
           text: data.error,
           time: self.$util.delay(data.error),
           onHide: function () {
+            if (data.flag === 1) {
+              self.$router.push('/retailerActivitylist')
+            }
           }
         })
       })

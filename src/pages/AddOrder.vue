@@ -273,6 +273,16 @@ export default {
     submitOrder () {
       const self = this
       console.log(self.submitdata.postdata)
+      self.isShowLoading = true
+      self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      })
     }
   }
 }
