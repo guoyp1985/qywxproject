@@ -43,7 +43,7 @@ Util.install = function (Vue, options) {
     wxShare: function() {
       console.log(this)
     },
-    timeStamp : () => Math.floor(new Date().getTime()/1000),
+    timeStamp : () => Math.floor(new Date().getTime()/1000).toString(),
     randomStr: (len) => {
       if (!len) {
         len = 16
