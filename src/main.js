@@ -152,8 +152,6 @@ let excludeUrls = [
   `${ENV.BokaApi}/api/weixin/token`
 ]
 
-localStorage.clear()
-
 // 排除全局请求过滤器中的请求url
 const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
