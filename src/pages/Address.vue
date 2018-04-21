@@ -83,6 +83,7 @@ export default {
       .then(data => {
         if (data.length) {
           console.log(data)
+          self.getWxAddress()
         } else {
           self.getWxAddress()
         }
@@ -92,7 +93,6 @@ export default {
       // const orginHref = encodeURIComponent(location.href)
       // location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
-      alert('ok')
       this.$http.get(`${ENV.BokaApi}/testRedis`)
       .then(res => res.json())
       .then(data => {
