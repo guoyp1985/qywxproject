@@ -145,17 +145,10 @@ router.afterEach(function (to) {
 })
 
 let excludeUrls = [
-  // { url: `${ENV.BokaApi}/api/authLogin/*`, reqMax: 1 },
-  // { url: `${ENV.BokaApi}/api/qrcode/login*`, reqMax: 1 },
-  // { url: `${ENV.BokaApi}/api/login/*`, reqMax: 1 },
-  // { url: `${ENV.BokaApi}/api/scanlogin`, reqMax: 1 }
-  // { url: `${ENV.BokaApi}/api/user/address/list`, reqMax: 2 }
   `${ENV.BokaApi}/api/authLogin/*`,
   `${ENV.BokaApi}/api/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`,
-  `${ENV.BokaApi}/api/user/address/list`,
-  `${ENV.BokaApi}/api/weixin/token`
+  `${ENV.BokaApi}/api/scanlogin`
 ]
 
 // 排除全局请求过滤器中的请求url
