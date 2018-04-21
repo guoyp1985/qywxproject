@@ -89,34 +89,37 @@ export default {
       })
     },
     getWxAddress () {
-      this.$http.get(`${ENV.BokaApi}/api/jsconfig`)
+      location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      this.$http.get(`${ENV.BokaApi}/testRedis`)
       .then(res => res.json())
       .then(data => {
-        if (data.appId) {
-          alert(data.signature)
-          WeixinJSBridge.invoke('editAddress', {
-            appId: data.appId,
-            scope: 'jsapi_address',
-            signType: 'sha1',
-            addrSign: data.signature,
-            timeStamp: data.timestamp,
-            nonceStr: data.nonceStr
-          },
-          res => {
-            alert(res.err_msg)
-            if (res.err_msg === 'edit_address:ok') {
-              const param = {
-                linkman: res.userName,
-                telephone: res.telNumber,
-                province: res.proviceFirstStageName,
-                city: res.addressCitySecondStageName,
-                counties: res.addressCountiesThirdStageName,
-                address: res.addressDetailInfo
-              }
-              alert(param)
+        const accessToken = data.access_token
+        const nonceStr = this.$util.randomStr()
+        const timeStamp = this.$uitl.timeStamp()
+        alert(location.href)
+        const addrSign = this.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, location.href)
+        WeixinJSBridge.invoke('editAddress', {
+          appId: ENV.AppId,
+          scope: 'jsapi_address',
+          signType: 'sha1',
+          addrSign: addrSign,
+          timeStamp: timeStamp,
+          nonceStr: nonceStr
+        },
+        res => {
+          alert(res.err_msg)
+          if (res.err_msg === 'edit_address:ok') {
+            const param = {
+              linkman: res.userName,
+              telephone: res.telNumber,
+              province: res.proviceFirstStageName,
+              city: res.addressCitySecondStageName,
+              counties: res.addressCountiesThirdStageName,
+              address: res.addressDetailInfo
             }
-          })
-        }
+            alert(param)
+          }
+        })
       })
     }
   },
