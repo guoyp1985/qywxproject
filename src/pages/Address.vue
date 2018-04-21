@@ -79,6 +79,8 @@ export default {
   methods: {
     getData () {
       const self = this
+      const lUrl = urlParse(location.href, true)
+      if (lUrl.query.code) return
       this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
       .then(res => res.json())
       .then(data => {
