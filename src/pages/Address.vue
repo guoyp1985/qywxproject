@@ -90,6 +90,7 @@ export default {
       })
     },
     getWxAddress () {
+      const self = this
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
@@ -97,12 +98,11 @@ export default {
       .then(res => res.json())
       .then(data => {
         const accessToken = data.access_token
-        const nonceStr = this.$util.randomStr()
-        const timeStamp = this.$uitl.timeStamp()
-        alert('ok')
+        const nonceStr = self.$util.randomStr()
+        const timeStamp = self.$uitl.timeStamp()
         const url = location.href.replace(/#\//g, '')
         alert(url)
-        const addrSign = this.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+        const addrSign = self.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
         WeixinJSBridge.invoke('editAddress', {
           appId: ENV.AppId,
           scope: 'jsapi_address',
