@@ -83,11 +83,12 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
       .then(res => res.json)
       .then(data => {
-        this.$router.push({ name: 'tAddress',
-          params: {
-            data: address
-          }
-        })
+        this.$router.go(-1)
+        // this.$router.push({ name: 'tAddress',
+        //   params: {
+        //     data: address
+        //   }
+        // })
       })
     }
   }
