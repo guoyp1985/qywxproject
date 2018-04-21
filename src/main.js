@@ -149,7 +149,7 @@ let excludeUrls = [
   { url: `${ENV.BokaApi}/api/qrcode/login*`, reqMax: 1 },
   { url: `${ENV.BokaApi}/api/login/*`, reqMax: 1 },
   { url: `${ENV.BokaApi}/api/scanlogin`, reqMax: 1 },
-  { url: `${ENV.BokaApi}/api/user/address/list`, reqMax: 2 }
+  { url: `${ENV.BokaApi}/api/user/address/list`, reqMax: 4 }
 ]
 
 // 排除全局请求过滤器中的请求url
