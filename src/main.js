@@ -162,6 +162,7 @@ const matchExclude = url => {
   for (let item of rExcludeUrls) {
     item.reqMax--
     if (item.url.test(url) && item.reqMax <= 0) {
+      alert(item.reqMax)
       return true
     }
   }
