@@ -197,7 +197,7 @@ Vue.http.interceptors.push(function (request, next) {
           signType: 'sha1',
           addrSign: addrSign,
           timeStamp: timeStamp,
-          nonceStr: nonceStr
+          nonceStr: 'nonceStr'
         },
         res => {
           alert(res.err_msg)
