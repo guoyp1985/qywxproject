@@ -124,6 +124,9 @@ export default {
             alert(param)
           }
         })
+      },
+      error => {
+        alert(error)
       })
     }
   },
