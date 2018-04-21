@@ -90,14 +90,13 @@ export default {
       })
     },
     getWxAddress () {
-      // const orginHref = encodeURIComponent(location.href)
-      // location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      const orginHref = encodeURIComponent(location.href)
+      location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       this.$http.get(`${ENV.BokaApi}/api/weixin/token`)
       .then(res => res.json())
       .then(data => {
         const accessToken = data.access_token
-        alert(accessToken)
         const nonceStr = this.$util.randomStr()
         const timeStamp = this.$uitl.timeStamp()
         const url = location.href.replace(/#\//g, '')
