@@ -126,7 +126,7 @@ export default {
         })
       },
       error => {
-        alert(error)
+        alert(JSON.stringify(error))
       })
     }
   },
