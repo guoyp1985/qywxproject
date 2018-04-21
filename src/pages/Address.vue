@@ -1,14 +1,31 @@
 <template>
-  <div id="personal-address">
+  <div id="personal-address" v-cloak>
     <!-- <c-title :link-info="{path:'/profile'}"
             :link-credit="{path:'/credit'}">
     </c-title> -->
-    <group v-if="!getItems.length">
+    <group v-if="!items.length">
       <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
     </group>
-    <group v-else>
-      <cell v-for="(item, index) in getItems" :key="index" :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell>
-    </group>
+    <swipeout v-else>
+      <!-- <cell  :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell> -->
+      <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native="onNav(item)" transition-mode="follow">
+        <div slot="right-menu">
+          <swipeout-button @click.native.stop="onDelete(item)" type="warn">{{$t('Delete')}}</swipeout-button>
+        </div>
+        <div slot="content" class="flex-box">
+          <div class="content-box vux-1px-t">
+            <div class="name-cell font16">
+              {{item.linkman}} {{item.telephone}}
+            </div>
+            <div class="addr-cell font14 color-gray">
+              {{item | addressFormat}}
+            </div>
+          </div>
+          <div class="link-cell"></div>
+        </div>
+      </swipeout-item>
+    </swipeout>
+
     <box gap="20px 10px">
       <x-button type="primary" :link="{name:'tNewAddress'}">{{$t('New Address')}}</x-button>
     </box>
@@ -19,10 +36,24 @@
 </i18n>
 
 <script>
-import { Group, Cell, CellBox, Popup, PopupHeader, XInput, XAddress, XSwitch, XButton, Box } from 'vux'
+import {
+  Group,
+  Cell,
+  CellBox,
+  // Popup,
+  // PopupHeader,
+  // XInput,
+  // XAddress,
+  XSwitch,
+  XButton,
+  Box,
+  Swipeout,
+  SwipeoutItem,
+  SwipeoutButton
+} from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from '#/env'
-import urlParse from 'url-parse'
+// import _ from 'lodash'
 // import WeixinJSBridge from 'WeixinJSBridge'
 
 export default {
@@ -30,13 +61,16 @@ export default {
     Group,
     Cell,
     CellBox,
-    Popup,
-    PopupHeader,
-    XInput,
-    XAddress,
+    // Popup,
+    // PopupHeader,
+    // XInput,
+    // XAddress,
     XSwitch,
     XButton,
     Box,
+    Swipeout,
+    SwipeoutItem,
+    SwipeoutButton,
     CTitle
   },
   data () {
@@ -52,28 +86,28 @@ export default {
       ]
     }
   },
-  computed: {
-    getItems () {
-      let data = this.$route.params.data
-      if (typeof data === 'object') {
-        let match = false
-        this.items = this.items.map(item => {
-          if (item.id === data.id) {
-            match = true
-            return data
-          }
-          return item
-        })
-        if (!match) {
-          this.items.push(data)
-        }
-      }
-      return this.items
-    }
-  },
+  // computed: {
+  //   getItems () {
+  //     let data = this.$route.params.data
+  //     if (typeof data === 'object') {
+  //       let match = false
+  //       this.items = this.items.map(item => {
+  //         if (item.id === data.id) {
+  //           match = true
+  //           return data
+  //         }
+  //         return item
+  //       })
+  //       if (!match) {
+  //         this.items.push(data)
+  //       }
+  //     }
+  //     return this.items
+  //   }
+  // },
   filters: {
     addressFormat: function (item) {
-      return `${item.area.join('')}${item.address}`
+      return `${item.province}${item.city}${item.counties} ${item.address}`
     }
   },
   methods: {
@@ -83,11 +117,25 @@ export default {
       .then(res => res.json())
       .then(data => {
         if (data.length) {
-          console.log(data)
-          self.item = data
-          // self.wxRedirect()
+          self.items = data
         }
       })
+    },
+    onDelete (item) {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/user/address/delete`, {id: item.id})
+      .then(res => res.json())
+      .then(data => {
+        for (let i = 0; i < self.items.length; i++) {
+          if (self.items[i].id === item.id) {
+            self.items.splice(i, 1)
+            break
+          }
+        }
+      })
+    },
+    onNav (item) {
+      this.$router.push({name: 'tNewAddress', params: {data: item}})
     }
   },
   created () {
@@ -103,6 +151,35 @@ export default {
 }
 #personal-address .address-item {
   padding: 5px 15px;
+}
+#personal-address .flex-box {
+  display: flex;
+}
+#personal-address .content-box {
+  flex: 1;
+  padding: 10px;
+}
+#personal-address .link-cell {
+  position: relative;
+  text-align: right;
+  color: #999;
+}
+#personal-address .link-cell:after {
+  content: " ";
+  display: inline-block;
+  height: 6px;
+  width: 6px;
+  border-width: 2px 2px 0 0;
+  border-color: #c8c8cd;
+  border-style: solid;
+  -webkit-transform: matrix(.71,.71,-.71,.71,0,0);
+  transform: matrix(.71,.71,-.71,.71,0,0);
+  position: relative;
+  top: -2px;
+  position: absolute;
+  top: 50%;
+  margin-top: -4px;
+  right: 10px;
 }
 /* weui css hack */
 </style>

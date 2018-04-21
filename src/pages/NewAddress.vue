@@ -12,7 +12,7 @@
         </template>
       </x-address>
       <x-input :title="$t('Detailed Address')" :placeholder="`${$t('Necessary')}${$t('Detailed Address')}`" v-model="item.address"></x-input>
-      <x-switch :title="$t('Default Address')" v-model="item.isdefault"></x-switch>
+      <x-switch :title="$t('Default Address')" v-model="getSwitcher"></x-switch>
     </group>
     <box gap="20px 10px">
       <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
@@ -36,44 +36,56 @@ export default {
     return {
       addressData: ChinaAddressV4Data,
       initItem: {
+        id: 0,
         linkman: '',
         telephone: '',
         address: '',
         isdefault: 0,
         area: []
-      }
+      },
+      switcher: false
     }
   },
   computed: {
     item () {
-      this.initItem = { ...this.initItem, ...this.$route.params.data }
+      const routeData = this.$route.params.data
+      if (routeData) {
+        this.initItem = { ...this.initItem, ...routeData, area: [routeData.province, routeData.city, routeData.counties] }
+      }
       return this.initItem
+    },
+    getSwitcher : {
+      get () {
+        return this.initItem.isdefault !== 0
+      },
+      set (value) {
+        this.switcher = value
+      }
     }
   },
   methods: {
     save () {
       this.initItem.area = value2name(this.initItem.area, ChinaAddressV4Data).split(' ')
+      console.log(this.switcher)
+      this.initItem.isdefault = this.switcher ? 1 : 0
+      console.log(this.initItem.isdefault)
       const address = {
+        id: this.initItem.id,
         linkman: this.initItem.linkman,
         telephone: this.initItem.telephone,
         address: this.initItem.address,
         isdefault: this.initItem.isdefault,
         province: this.initItem.area[0],
         city: this.initItem.area[1],
-        counties: this.initItem.area[2]
+        counties: this.initItem.area[2],
+        do: this.initItem.id ? 'update' : 'add'
       }
       this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
       .then(res => res.json)
       .then(data => {
         this.$router.push({ name: 'tAddress',
           params: {
-            data: {
-              linkman: address.linkman,
-              telephone: address.telephone,
-              address: address.address,
-              isdefault: address.isdefault,
-              area: [address.counties, address.province, address.city]
-            }
+            data: address
           }
         })
       })
