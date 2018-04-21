@@ -157,10 +157,10 @@ const rExcludeUrls = excludeUrls.map(item => {
   item.url = RegExp(item.url.replace(/\*/g, '.*').replace(/\?/g, '\\?'))
   return item
 })
-alert(rExcludeUrls)
+
 const matchExclude = url => {
   for (let item in rExcludeUrls) {
-    console.log(item.reqMax)
+    alert(item.reqMax)
     if (item.url.test(url) && --item.reqMax) {
       return true
     }
