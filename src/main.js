@@ -176,54 +176,48 @@ Vue.http.interceptors.push(function (request, next) {
   if (lUrl.query.code) {
     // alert(lUrl.query.code)
     const code = lUrl.query.code
+    let accessToken = null
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`, {})
     .then(res => res.json())
     .then(
       data => {
         Token.set(data.data.token)
         token = data.data.token
+        const accessToken = data.data.weixin_token
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        return Vue.http.get(`${ENV.BokaApi}/api/weixin/token`)
+        const nonceStr = $vue.$util.randomStr(6)
+        const timeStamp = $vue.$util.timeStamp()
+        const currentUrl = urlParse(location.href, true)
+        const url = currentUrl.href.replace(/#\/\w*/g, '')
+        alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+        const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+        WeixinJSBridge.invoke('editAddress', {
+          appId: ENV.AppId,
+          scope: 'jsapi_address',
+          signType: 'sha1',
+          addrSign: addrSign,
+          timeStamp: timeStamp,
+          nonceStr: nonceStr
+        },
+        res => {
+          alert(res.err_msg)
+          if (res.err_msg === 'edit_address:ok') {
+            const param = {
+              linkman: res.userName,
+              telephone: res.telNumber,
+              province: res.proviceFirstStageName,
+              city: res.addressCitySecondStageName,
+              counties: res.addressCountiesThirdStageName,
+              address: res.addressDetailInfo
+            }
+            alert(param)
+          }
+        })
       },
       error => {
         alert(JSON.stringify(error))
       }
     )
-    .then(res => res.json())
-    .then(data => {
-      const accessToken = data.access_token
-      const nonceStr = $vue.$util.randomStr(6)
-      const timeStamp = $vue.$util.timeStamp()
-      const currentUrl = urlParse(location.href, true)
-      const url = currentUrl.href.replace(/#\/\w*/g, '')
-      alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
-      const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
-      WeixinJSBridge.invoke('editAddress', {
-        appId: ENV.AppId,
-        scope: 'jsapi_address',
-        signType: 'sha1',
-        addrSign: addrSign,
-        timeStamp: timeStamp,
-        nonceStr: nonceStr
-      },
-      res => {
-        alert(res.err_msg)
-        if (res.err_msg === 'edit_address:ok') {
-          const param = {
-            linkman: res.userName,
-            telephone: res.telNumber,
-            province: res.proviceFirstStageName,
-            city: res.addressCitySecondStageName,
-            counties: res.addressCountiesThirdStageName,
-            address: res.addressDetailInfo
-          }
-          alert(param)
-        }
-      })
-    },
-    error => {
-      alert(JSON.stringify(error))
-    })
   } else if (rUrl.origin === ENV.BokaApi) {
     // const token = Token.get()
     // request.method = 'GET'
