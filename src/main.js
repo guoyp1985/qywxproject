@@ -153,7 +153,8 @@ let excludeUrls = [
   `${ENV.BokaApi}/api/authLogin/*`,
   `${ENV.BokaApi}/api/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`
+  `${ENV.BokaApi}/api/scanlogin`,
+  `${ENV.BokaApi}/api/weixin/token`
 ]
 
 // 排除全局请求过滤器中的请求url
