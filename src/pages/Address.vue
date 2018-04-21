@@ -100,7 +100,7 @@ export default {
         const accessToken = data.access_token
         const nonceStr = self.$util.randomStr()
         const timeStamp = self.$util.timeStamp()
-        const url = location.href.replace(/#\/b+$/g, '')
+        const url = location.href.replace(/#\/\b+$/g, '')
         alert(url)
         const addrSign = self.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
         WeixinJSBridge.invoke('editAddress', {
