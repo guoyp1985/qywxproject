@@ -195,7 +195,7 @@ Vue.http.interceptors.push(function (request, next) {
       const nonceStr = $vue.$util.randomStr()
       const timeStamp = $vue.$util.timeStamp()
       const url = location.href.replace(/#\/\w+/g, '')
-      alert(url)
+      alert('aaa:'+url)
       const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
       WeixinJSBridge.invoke('editAddress', {
         appId: ENV.AppId,
