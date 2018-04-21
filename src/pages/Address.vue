@@ -94,41 +94,43 @@ export default {
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
-      this.$http.get(`${ENV.BokaApi}/api/weixin/token`)
-      .then(res => res.json())
-      .then(data => {
-        const accessToken = data.access_token
-        const nonceStr = self.$util.randomStr()
-        const timeStamp = self.$util.timeStamp()
-        const url = location.href.replace(/#\/\w+/g, '')
-        alert(url)
-        const addrSign = self.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
-        WeixinJSBridge.invoke('editAddress', {
-          appId: ENV.AppId,
-          scope: 'jsapi_address',
-          signType: 'sha1',
-          addrSign: addrSign,
-          timeStamp: timeStamp,
-          nonceStr: nonceStr
-        },
-        res => {
-          alert(res.err_msg)
-          if (res.err_msg === 'edit_address:ok') {
-            const param = {
-              linkman: res.userName,
-              telephone: res.telNumber,
-              province: res.proviceFirstStageName,
-              city: res.addressCitySecondStageName,
-              counties: res.addressCountiesThirdStageName,
-              address: res.addressDetailInfo
+      setTimeout(() => {
+        this.$http.get(`${ENV.BokaApi}/api/weixin/token`)
+        .then(res => res.json())
+        .then(data => {
+          const accessToken = data.access_token
+          const nonceStr = self.$util.randomStr()
+          const timeStamp = self.$util.timeStamp()
+          const url = location.href.replace(/#\/\w+/g, '')
+          alert(url)
+          const addrSign = self.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+          WeixinJSBridge.invoke('editAddress', {
+            appId: ENV.AppId,
+            scope: 'jsapi_address',
+            signType: 'sha1',
+            addrSign: addrSign,
+            timeStamp: timeStamp,
+            nonceStr: nonceStr
+          },
+          res => {
+            alert(res.err_msg)
+            if (res.err_msg === 'edit_address:ok') {
+              const param = {
+                linkman: res.userName,
+                telephone: res.telNumber,
+                province: res.proviceFirstStageName,
+                city: res.addressCitySecondStageName,
+                counties: res.addressCountiesThirdStageName,
+                address: res.addressDetailInfo
+              }
+              alert(param)
             }
-            alert(param)
-          }
+          })
+        },
+        error => {
+          alert(JSON.stringify(error))
         })
-      },
-      error => {
-        alert(JSON.stringify(error))
-      })
+      }, 2000)
     }
   },
   created () {
