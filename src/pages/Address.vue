@@ -93,7 +93,7 @@ export default {
       .then(res => res.json())
       .then(data => {
         if (data.appId) {
-          alert(data.appId)
+          alert(data.signature)
           WeixinJSBridge.invoke('editAddress', {
             appId: data.appId,
             scope: 'jsapi_address',
