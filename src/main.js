@@ -163,7 +163,8 @@ const matchExclude = url => {
   }
   return false
 }
-// localStorage.clear()
+
+let token = null
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
@@ -180,13 +181,14 @@ Vue.http.interceptors.push(function (request, next) {
     .then(
       data => {
         Token.set(data.data.token)
+        token = data.data.token
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        return Vue.http.get(`${ENV.BokaApi}/api/weixin/token`)
       },
       error => {
         alert(JSON.stringify(error))
       }
     )
-    Vue.http.get(`${ENV.BokaApi}/api/weixin/token`)
     .then(res => res.json())
     .then(data => {
       const accessToken = data.access_token
@@ -222,7 +224,7 @@ Vue.http.interceptors.push(function (request, next) {
       alert(JSON.stringify(error))
     })
   } else if (rUrl.origin === ENV.BokaApi) {
-    const token = Token.get()
+    // const token = Token.get()
     // request.method = 'GET'
     // alert(token)
     request.headers.set('Authorization', `Bearer ${token}`)
