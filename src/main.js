@@ -149,6 +149,7 @@ const excludeUrls = [
   `${ENV.BokaApi}/api/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
   `${ENV.BokaApi}/api/scanlogin`,
+  `${ENV.BokaApi}/api/user/address/list`,
   `${ENV.BokaApi}/testRedis`
 ]
 
