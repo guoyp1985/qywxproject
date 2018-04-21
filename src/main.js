@@ -144,20 +144,19 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-const excludeUrls = [
-  `${ENV.BokaApi}/api/authLogin/*`,
-  `${ENV.BokaApi}/api/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`,
-  `${ENV.BokaApi}/api/user/address/list`,
-  `${ENV.BokaApi}/testRedis`
+let excludeUrls = [
+  { url: `${ENV.BokaApi}/api/authLogin/*`, reqMax: 1 },
+  { url: `${ENV.BokaApi}/api/qrcode/login*`, reqMax: 1 },
+  { url: `${ENV.BokaApi}/api/login/*`, reqMax: 1 },
+  { url: `${ENV.BokaApi}/api/scanlogin`, reqMax: 1 },
+  { url: `${ENV.BokaApi}/api/user/address/list`, reqMax: 2 }
 ]
 
 // 排除全局请求过滤器中的请求url
 const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
-  for (let r = 0; r < rExcludeUrls.length; r++) {
-    if (rExcludeUrls[r].test(url)) {
+  for (let item in excludeUrls) {
+    if (item.url.test(url) && --item.reqMax) {
       return true
     }
   }
