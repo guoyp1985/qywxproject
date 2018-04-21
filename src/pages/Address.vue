@@ -95,6 +95,7 @@ export default {
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       // alert(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${location.href}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       setTimeout(() => {
+        alert('ok')
         self.$http.get(`${ENV.BokaApi}/api/weixin/token`)
         .then(res => res.json())
         .then(data => {
@@ -130,7 +131,7 @@ export default {
         error => {
           alert(JSON.stringify(error))
         })
-      }, 5000)
+      }, 3000)
     }
   },
   created () {
