@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="padding10">
-      <div class="btn bg-green color-white align_center">微信安全支付</div>
+      <div class="btn bg-green color-white align_center" @click="payevent">微信安全支付</div>
     </div>
   </div>
 </template>
@@ -24,6 +24,10 @@ export default {
   data () {
     return {
       payprice: '1.00'
+    }
+  },
+  methods: {
+    payevent () {
     }
   }
 }
