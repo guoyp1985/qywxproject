@@ -7,7 +7,7 @@ Util.install = function (Vue, options) {
   Vue.prototype.$util = {
     trim: (str) => str.replace(Reg.rSpace, ''),
     isNull: function (str){
-      !Reg.rNoSpace.test(this.trim(str))
+      return !Reg.rNoSpace.test(this.trim(str))
     },
     validate: (model, reg, failHandle) => {
       let re = null

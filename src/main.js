@@ -9,7 +9,7 @@ import App from './App'
 import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
+import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 import VueResource from 'vue-resource'
 import Login from '../libs/login'
 import { Token } from '../libs/storage'
@@ -61,6 +61,7 @@ Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')

@@ -108,9 +108,6 @@
     <div v-transfer-dom>
       <alert v-model="showalert">{{ $t('Label can not empty') }}</alert>
     </div>
-    <div v-transfer-dom>
-      <loading :show="isShowLoading" text=""></loading>
-    </div>
   </div>
 </template>
 
@@ -158,7 +155,6 @@ export default {
   data () {
     return {
       allowsubmit: true,
-      isShowLoading: false,
       photoarr: [],
       maxnum: 1,
       havenum: 0,
@@ -211,14 +207,14 @@ export default {
     filechange (e) {
       const self = this
       let files = e.target.files
-      if (files.length > 0 && !self.isShowLoading) {
+      if (files.length > 0) {
         let fileform = document.querySelector('.fileform')
         let filedata = new FormData(fileform)
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           return res.json()
         }).then(function (data) {
-          self.isShowLoading = false
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.photoarr.push(data.data)
             self.submitdata.photo = self.photoarr.join(',')
@@ -279,7 +275,7 @@ export default {
         })
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       if (query.id) {
         self.submitdata['id'] = query.id
       } else {
@@ -288,13 +284,13 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
         return res.json()
       }).then(function (data) {
-        self.isShowLoading = false
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({name: '/article', params: { id: data.data }})
+              self.$router.push({name: '/article', query: { id: data.data }})
             }
           }
         })

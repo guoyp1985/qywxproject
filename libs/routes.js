@@ -51,6 +51,8 @@ import SharingDetail from '@/pages/SharingDetail'
 import DecorationShop from '@/pages/DecorationShop'
 import RetailerApply from '@/pages/RetailerApply'
 import Pay from '@/pages/Pay'
+import RetailerSaleview from '@/pages/RetailerSaleview'
+import AccountDetail from '@/pages/AccountDetail'
 
 export default [
   {
@@ -304,7 +306,7 @@ export default [
   },
   {
     path: '/membersView',
-    name: 'tMemberSView',
+    name: 'tMembersView',
     component: MembersView
   },
   {
@@ -336,5 +338,15 @@ export default [
     path: '/pay',
     name: 'tPay',
     component: Pay
+  },
+  {
+    path: '/retailerSaleview',
+    name: 'tRetailerSaleview',
+    component: RetailerSaleview
+  },
+  {
+    path: '/accountDetail',
+    name: 'tAccountDetail',
+    component: AccountDetail
   }
 ]
