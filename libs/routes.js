@@ -54,6 +54,7 @@ import RebateApply from '@/pages/RebateApply'
 import RebateStore from '@/pages/RebateStore'
 import UserRebateInfo from '@/pages/UserRebateInfo'
 import BringCustomer from '@/pages/BringCustomer'
+import Chat from '@/pages/Chat'
 
 export default [
   {
@@ -354,5 +355,10 @@ export default [
     path: '/bringCustomer',
     name: 'tBringCustomer',
     component: BringCustomer
+  },
+  {
+    path: '/chat',
+    name: 'tChat',
+    component: Chat
   }
 ]
