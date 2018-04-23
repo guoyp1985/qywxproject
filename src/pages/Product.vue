@@ -294,7 +294,6 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Time from '../../libs/time'
 import ENV from '../../libs/env'
-import Util from '../../libs/util'
 import { User } from '../../libs/storage'
 
 export default {
@@ -318,6 +317,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       module: 'product',
       showtopcss: '',
       loginUser: {},
@@ -342,7 +342,8 @@ export default {
         { 'id': 215, 'title': '团购:欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 2 },
         { 'id': 212, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214217886785.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
         { 'id': 211, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 3 }
-      ]
+      ],
+      submitdata: { flag: 1, quantity: 1 }
     }
   },
   created () {
@@ -373,10 +374,10 @@ export default {
       }
     })
     // }
-    let query = self.$route.query
-    let infoparams = { id: query.id, module: 'product' }
-    if (query.wid) {
-      infoparams['wid'] = query.wid
+    self.query = self.$route.query
+    let infoparams = { id: self.query.id, module: 'product' }
+    if (self.query.wid) {
+      infoparams['wid'] = self.query.wid
     }
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
@@ -385,15 +386,17 @@ export default {
     }).then(function (data) {
       self.productdata = data.data ? data.data : data
       self.retailerinfo = self.productdata.retailerinfo
-      if (!Util.isNull(self.productdata.photo)) {
+      if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
       }
+      self.submitdata.id = self.productdata.id
+      self.submitdata.wid = self.retailerinfo.uid
     })
     let buyparams = {}
-    if (query.wid) {
-      buyparams['wid'] = query.wid
+    if (self.query.wid) {
+      buyparams['wid'] = self.query.wid
     } else {
-      buyparams['productid'] = query.id
+      buyparams['productid'] = self.query.id
     }
     self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
       params: buyparams
@@ -405,7 +408,7 @@ export default {
       }
     })
     self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
-      { params: { module: self.module, id: query.id } }
+      { params: { module: self.module, id: self.query.id } }
     ).then(function (res) {
       return res.json()
     }).then(function (data) {
@@ -416,7 +419,7 @@ export default {
       }
     })
     self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-      { params: { module: self.module, nid: query.id } }
+      { params: { module: self.module, nid: self.query.id } }
     ).then(function (res) {
       return res.json()
     }).then(function (data) {
@@ -426,6 +429,9 @@ export default {
     })
   },
   watch: {
+    query: function () {
+      return this.query
+    },
     loginUser: function () {
       return this.loginUser
     },
@@ -504,11 +510,10 @@ export default {
     },
     favoriteevent () {
       const self = this
-      const query = self.$route.query
       if (self.isfavorite) {
         self.isShowLoading = true
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/delete`,
-          { params: { module: self.module, id: query.id } }
+          { params: { module: self.module, id: self.query.id } }
         ).then(function (res) {
           return res.json()
         }).then(function (data) {
@@ -518,18 +523,18 @@ export default {
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
-              time: Util.delay(data.error)
+              time: self.$util.delay(data.error)
             })
           }
         })
       } else {
-        let cururl = `/product?id=${query.id}`
-        if (query.wid) {
-          cururl = `${cururl}&wid=${query.wid}`
+        let cururl = `/product?id=${self.query.id}`
+        if (self.query.wid) {
+          cururl = `${cururl}&wid=${self.query.wid}`
         }
         self.isShowLoading = true
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
-          { params: { module: self.module, id: query.id, currenturl: encodeURIComponent(cururl) } }
+          { params: { module: self.module, id: self.query.id, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
           return res.json()
         }).then(function (data) {
@@ -539,7 +544,7 @@ export default {
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
-              time: Util.delay(data.error)
+              time: self.$util.delay(data.error)
             })
           }
         })
@@ -548,7 +553,20 @@ export default {
     },
     buyevent () {
       const self = this
-      self.$router.push('/addOrder')
+      self.isShowLoading = true
+      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        if (data.flag === 1) {
+          self.$router.push({ path: '/addOrder', query: { id: self.query.id } })
+        } else if (data.error) {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   }
 }

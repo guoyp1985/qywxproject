@@ -1,3 +1,8 @@
+/*
+* @description: 地址新建页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="new-address">
     <group label-width="6em">

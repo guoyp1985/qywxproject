@@ -9,7 +9,7 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -18,7 +18,16 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="scroll_list pl10 pr10">
-              <Listplate1 v-for="(item,index1) in tabdata1" :key="item.id">
+              <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
+                <div class="t-table">
+                  <div class="t-cell v_middle">
+                    <div><i class="al al-wushuju font60 pt20"></i></div>
+                    <div class="mt5">空空如也~</div>
+                    <div class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
+                  </div>
+                </div>
+              </div>
+              <Listplate1 v-else v-for="(item,index1) in tabdata1" :key="item.id">
                 <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
                 <div slot="title" class="clamp1 font16">{{item.title}}</div>
                 <div slot="title" class="clamp1 font12 color-gray v_middle">
@@ -32,7 +41,17 @@
           </template>
           <template v-if="(index == 1)">
             <div class="scroll_list pl10 pr10">
-              <Listplate1 v-for="(item,index) in tabdata2" :key="item.id">
+              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
+                <div class="t-table">
+                  <div class="t-cell v_middle">
+                    <div><i class="al al-wushuju font60 pt20"></i></div>
+                    <div class="mt5">空空如也~</div>
+                    <div class="align_left mt5">问：原创或采集的文章有什么作用？</div>
+                    <div class="align_left">答：将文章分享给好友，好友查看文章后就会成为你的客户，且文章中内置了店铺链接，也可向文章内插入商品，有效提高品牌曝光率！</div>
+                  </div>
+                </div>
+              </div>
+              <Listplate1 v-else v-for="(item,index) in tabdata2" :key="item.id">
                 <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
                 <div slot="title" class="clamp1 font14">{{item.title}}</div>
                 <div slot="title" class="clamp1 mt5 font12 color-gray ">
@@ -55,7 +74,7 @@
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list">
-            <div class="item" v-for="(row,index1) in controldata1" :key="index1">
+            <div class="item" v-for="(row,index1) in controldata" :key="index1">
               <router-link class="inner" v-if="row.key == 'stat'" to="/newsStat">{{ row.title }}</router-link>
               <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
               <div class="inner" v-else @click="clickpopup1(row.key,clickdata1)">
@@ -73,7 +92,7 @@
       <popup class="menuwrap" v-model="showpopup2" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list">
-            <div class="item" v-for="(row,index1) in controldata2" :key="index1">
+            <div class="item" v-for="(row,index1) in controldata" :key="index1">
               <router-link class="inner" v-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
               <div v-else class="inner" @click="clickpopup2(row.key,clickdata2)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
@@ -101,7 +120,8 @@ Control text:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup } from 'vux'
 import Listplate1 from '@/components/Listplate1'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -126,47 +146,13 @@ export default {
     return {
       tabtxts: [ '我的文章', '采集记录' ],
       tabmodel: 0,
-      tabdata1: [
-        {
-          id: '1', dateline: 1522221270, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736'
-        },
-        {
-          id: '2', dateline: 1522221270, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745'
-        },
-        {
-          id: '3', dateline: 1522221270, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
-        },
-        {
-          id: '4', dateline: 1522221270, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
-        },
-        {
-          id: '5', dateline: 1522221270, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
-        }
-      ],
-      tabdata2: [
-        {
-          id: '1', dateline: 1522221270, title: '沈阳市毽球协会经验介绍 | 专题', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15214273537848'
-        },
-        {
-          id: '2', dateline: 1522221270, title: '『销售电子商务』最新职位推荐', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15214253209099'
-        },
-        {
-          id: '3', dateline: 1522221270, title: '【渠道运营】销售≠只说话！80％的销售员都错了', shares: 3, views: 5, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017'
-        },
-        {
-          id: '4', dateline: 1522221270, title: '固始首家爱心粥屋揭牌运营', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221433494852.jpg'
-        },
-        {
-          id: '5', dateline: 1522221270, title: '董明珠：格力不能更好运营，绝对不交班;揭电商大数据杀熟套路：算法投放，大V投诉更快处理', shares: 3, views: 5, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221255851634.jpg'
-        }
-      ],
-      controldata1: [
+      tabdata1: [],
+      tabdata2: [],
+      controldata: [
+        { key: 'push', title: '推送给返点客' },
         { key: 'set', title: '更多设置' },
         { key: 'stat', title: '文章统计' },
         { key: 'createposter', title: '生成海报' }
-      ],
-      controldata2: [
-        { key: 'set', title: '更多设置' }
       ],
       showpopup1: false,
       showpopup2: false,
@@ -177,6 +163,13 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+      params: { from: 'retailer' }
+    }).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.tabdata1 = data.data ? data.data : data
+    })
   },
   methods: {
     controlpopup1 (item) {
@@ -195,6 +188,16 @@ export default {
     },
     clickpopup2 (key, item) {
       this.showpopup2 = false
+    },
+    tabitemclick (index) {
+      const self = this
+      if (index === 1) {
+        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, { do: 'list' }).then(function (res) {
+          return res.json()
+        }).then(function (data) {
+          self.tabdata2 = data.data ? data.data : data
+        })
+      }
     }
   }
 }

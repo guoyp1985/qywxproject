@@ -1,3 +1,8 @@
+/*
+* @description: 订单详情页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="order-detail">
     <sticky scroll-box="order-detail">

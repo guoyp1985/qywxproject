@@ -1,3 +1,8 @@
+/*
+* @description: 返点客页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="to-recommend">
     <sticky scroll-box="to-recommend">

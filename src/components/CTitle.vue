@@ -1,3 +1,8 @@
+/*
+* @description: 个人中心头部组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div class="ctitle">
     <div class="info-area">

@@ -19,12 +19,12 @@
     					<div class="b_bottom_after padding10">
     						<div class="t-table">
     							<div class="t-cell v_middle" style="width:65px;">
-    								<img style="width:45px;height:45px;" :src="product.photo">
+    								<img class="imgcover" style="width:45px;height:45px;" :src="product.photo">
     							</div>
     							<div class="t-cell v_middle">
     								<div class="name color-black font15">{{ product.name }}</div>
     							</div>
-    							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ product.quantity }}</div>
+    							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ submitdata.postdata[index].shopinfo[index1].quantity }}</div>
     						</div>
     					</div>
     					<div class="b_bottom_after padding10 form-item">
@@ -32,29 +32,29 @@
     							<div class="t-cell v_middle" style="width:80px;">购买数量</div>
     							<div class="t-cell v_middle align_right">
                     <group class="x-number db-in">
-                      <x-number v-model="product.quantity" :min="1" @on-change="changenumber()"></x-number>
+                      <x-number v-model="submitdata.postdata[index].shopinfo[index1].quantity" :min="1" @on-change="changenumber()"></x-number>
                     </group>
     							</div>
     						</div>
     					</div>
-              <div class="b_bottom_after padding10">
-                <div class="t-table">
-  								<div class="t-cell v_middle" style="width:40px;">留言</div>
-  								<div class="t-cell v_middle">
-                    <group class="textarea-outer" style="padding:0;">
-                      <x-textarea style="padding:5px;" class="x-textarea" :placeholder="$t('To seller message')" :show-counter="false" :rows="1" autosize></x-textarea>
-                    </group>
-  								</div>
-  							</div>
+          </div>
+          <div class="b_bottom_after padding10">
+            <div class="t-table">
+              <div class="t-cell v_middle" style="width:40px;">留言</div>
+              <div class="t-cell v_middle">
+                <group class="textarea-outer" style="padding:0;">
+                  <x-textarea v-model="submitdata.postdata[index].content" style="padding:5px;" class="x-textarea" :placeholder="$t('To seller message')" :show-counter="false" :rows="1" autosize></x-textarea>
+                </group>
               </div>
+            </div>
           </div>
         </div>
       </form>
     </div>
     <div class="s-bottom toolbar_bg">
       <div class="t-table h_100 align_center">
-				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ getpayprice }}</span></div>
-				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white">确认订单</div>
+				<div class="t-cell h_100 v_middle">需付：<span class="color-orange1">{{ $t('RMB') }}{{ payPrice }}</span></div>
+				<div class="t-cell h_100 v_middle w100 bg-orange1 color-white" @click="submitOrder">确认订单</div>
 			</div>
     </div>
     <div v-transfer-dom class="x-popup">
@@ -147,6 +147,7 @@ Please select address:
 
 <script>
 import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert } from 'vux'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -160,11 +161,10 @@ export default {
     Popup,
     Alert
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   data () {
     return {
+      query: {},
+      payPrice: '0.00',
       receiveuser: {
         uid: 187,
         linkman: 'YOUNG',
@@ -172,51 +172,84 @@ export default {
         address: '北京市东城区市辖区金家村'
       },
       selectaddress: {},
-      orderdata: [
-        {
-          id: 1,
-          wid: 187,
-          name: '潮优小铺',
-          info: [
-            {
-              id: 1, name: '商品1', photo: 'http://ossgxs.boka.cn/month_201804/15236874335018.jpg', quantity: 1, special: '2.00'
-            }
-          ]
-        }
-      ],
+      orderdata: [],
       payprice: '0.00',
       showpopup: false,
       showalert: false,
       addressdata: [
         { id: 1, fulladdress: '北京市东城区金家村', linkman: '于国旺', telphone: '13051687651', uid: '187' },
         { id: 2, fulladdress: '东北小伙', linkman: '于国旺', telphone: '13051687651', uid: '187' }
-      ]
+      ],
+      submitdata: {
+        addressid: 1,
+        postdata: []
+      }
     }
   },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/user/address/list`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      let retdata = data.data ? data.data : data
+      if (retdata) {
+        self.addressdata = retdata
+      }
+    })
+    self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      self.orderdata = data
+      let total = 0
+      for (let i = 0; i < self.orderdata.length; i++) {
+        let order = self.orderdata[i]
+        let postd = { shopinfo: [], content: '' }
+        let productinfos = order.info
+        for (let j = 0; j < productinfos.length; j++) {
+          let info = productinfos[j]
+          let p = { shopid: info.id, quantity: info.quantity }
+          postd.shopinfo.push(p)
+          total += parseFloat(info.special) * info.quantity
+        }
+        self.submitdata.postdata.push(postd)
+      }
+      self.payPrice = total.toFixed(2)
+    })
+  },
   watch: {
+    query: function () {
+      return this.query
+    },
     payprice: function () {
       return this.payprice
+    },
+    orderdata: function () {
+      return this.orderdata
+    },
+    submitdata: function () {
+      return this.submitdata
+    },
+    payPrice: function () {
+      return this.payPrice
     }
   },
   computed: {
-    getpayprice: function () {
-      let self = this
-      let totalprice = 0
-      for (let i = 0; i < self.orderdata.length; i++) {
-        let curorder = self.orderdata[i]
-        let curinfo = curorder.info
-        for (let j = 0; j < curinfo.length; j++) {
-          let curproduct = curinfo[j]
-          let curtotalprice = (parseFloat(curproduct.special) * curproduct.quantity).toFixed(2)
-          totalprice = parseFloat(totalprice) + parseFloat(curtotalprice)
-        }
-      }
-      self.payprice = totalprice.toFixed(2)
-      return self.payprice
-    }
   },
   methods: {
     changenumber () {
+      const self = this
+      let total = 0
+      for (let i = 0; i < self.orderdata.length; i++) {
+        let order = self.orderdata[i]
+        let productinfos = order.info
+        for (let j = 0; j < productinfos.length; j++) {
+          let pd = productinfos[j]
+          total += parseFloat(pd.special) * self.submitdata.postdata[i].shopinfo[j].quantity
+        }
+      }
+      self.payPrice = total.toFixed(2)
     },
     showaddress () {
       this.showpopup = true
@@ -236,6 +269,20 @@ export default {
         this.receiveuser.telphone = this.selectaddress.telphone
         this.receiveuser.address = this.selectaddress.fulladdress
       }
+    },
+    submitOrder () {
+      const self = this
+      console.log(self.submitdata.postdata)
+      self.isShowLoading = true
+      self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.isShowLoading = false
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      })
     }
   }
 }

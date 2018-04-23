@@ -255,6 +255,23 @@ en:
   Goods sold to customer rebate Commission: Goods sold to customer rebate Commission
   Product share title placeholder: Product share title placeholder
   Product share description placeholder: Product share description placeholder
+  cancel_text: cancel
+  confirm_text: done
+  loading: loading
+  week_day_0: Su
+  week_day_1: Mo
+  week_day_2: Tu
+  week_day_3: We
+  week_day_4: Th
+  week_day_5: Fr
+  week_day_6: Sa
+  cancel: cancel
+  button_text: OK
+  back_text: Back
+  placeholder: Search
+  Groupprice: Groupprice
+  Group numbers: Group numbers
+  Person: Person
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -506,7 +523,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -638,3 +655,21 @@ zh-CN:
   tDecorationShop: 滚动展示
   tRetailerApply: 申请入驻
   tRebateApply: 返点客申请
+  cancel_text: 取消
+  confirm_text: 确定
+  loading: 加载中
+  week_day_0: 日
+  week_day_1: 一
+  week_day_2: 二
+  week_day_3: 三
+  week_day_4: 四
+  week_day_5: 五
+  week_day_6: 六
+  cancel: 取消
+  button_text: 确定
+  back_text: 返回
+  placeholder: 搜索
+  Groupprice: 团购价
+  Group numbers: 成团人数
+  Person: 人
+  tPay: 微信安全支付

@@ -1,3 +1,8 @@
+/*
+* @description: 聊天室页
+* @auther: simon
+* @created_date: 2018-4-23
+*/
 <template>
   <div id="chat-room">
     <view-box body-padding-bottom="0">

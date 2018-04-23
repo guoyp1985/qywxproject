@@ -1,3 +1,8 @@
+/*
+* @description: 扫码登录页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div v-cloak class="qrcode-box">
     <div class="qrcode-title font16 color-gray">

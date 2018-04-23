@@ -89,7 +89,6 @@ Required item not empty:
 <script>
 import { Group, XInput, TransferDomDirective as TransferDom, Alert, Popup, Loading, Checker, CheckerItem } from 'vux'
 import ENV from '../../libs/env'
-import Util from '../../libs/util'
 
 export default {
   directives: {
@@ -105,7 +104,7 @@ export default {
     CheckerItem
   },
   created: function () {
-    let self = this
+    const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`
     ).then(function (res) {
@@ -148,9 +147,9 @@ export default {
   methods: {
     getcode () {
       event.preventDefault()
-      let self = this
+      const self = this
       if (!self.isShowLoading) {
-        if (Util.isNull(self.submitdata.mobile)) {
+        if (self.$util.isNull(self.submitdata.mobile)) {
           self.$vux.alert.show({
             title: '',
             content: '请输入手机号'
@@ -159,14 +158,14 @@ export default {
           self.showalert = false
           self.isShowLoading = true
           self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
-            params: { phone: Util.trim(self.submitdata.mobile) }
+            params: { phone: self.$util.trim(self.submitdata.mobile) }
           }).then(function (res) {
             return res.json()
           }).then(function (data) {
             self.isShowLoading = false
             self.$vux.toast.show({
               text: data.error,
-              time: Util.delay(data.error)
+              time: self.$util.delay(data.error)
             })
             if (data.flag === 1) {
               self.verifyCode = data.data
@@ -176,7 +175,7 @@ export default {
       }
     },
     clickagree () {
-      let self = this
+      const self = this
       self.isagree = !self.isagree
       if (self.isagree) {
         self.bottomcss = 'active'
@@ -193,12 +192,12 @@ export default {
       this.isshowpopup = false
     },
     submitevent () {
-      let self = this
+      const self = this
       if (self.allowsubmit) {
         for (let key in self.requireddata) {
           self.requireddata[key] = self.submitdata[key]
         }
-        self.allowsubmit = Util.validateQueue(self.requireddata)
+        self.allowsubmit = self.$util.validateQueue(self.requireddata)
         if (!self.allowsubmit) {
           self.$vux.alert.show({
             title: '',
@@ -212,16 +211,16 @@ export default {
           return false
         }
         self.isShowLoading = true
-        self.submitdata.mobile = Util.trim(self.submitdata.mobile)
+        self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           return res.json()
         }).then(function (data) {
           self.isShowLoading = false
           self.$vux.toast.show({
             text: data.error,
-            time: Util.delay(data.error),
+            time: self.$util.delay(data.error),
             onHide: function () {
-              if (data.flag === 1) {
+              if (data.flag === 1 || data.flag === 2) {
                 self.$router.push('/centerSales')
               }
             }

@@ -1,3 +1,8 @@
+/*
+* @description: 带来客户页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="bring-customer">
     <sticky scroll-box="bring-customer">

@@ -9,7 +9,7 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -30,15 +30,20 @@
                 @on-change="onChange"
                 ref="search">
               </search>
-              <div class="scroll_list pl10 pr10" style="position:absolute;top:45px;">
-                <div v-for="(item,index) in searchdata" :key="item.id" class="scroll_item b_bottom_after pt10 pb10">
+              <div class="scroll_list pl10 pr10 mb12" style="position:absolute;top:45px;">
+                <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
+                  <div class="t-table">
+                    <div class="t-cell">暂无搜索结果</div>
+                  </div>
+                </div>
+                <div v-else v-for="(item,index) in searchdata" :key="item.id" class="scroll_item pt10 pb10">
                   <div class="t-table">
                     <div class="t-cell v_middle">
                       <div class="clamp1">{{ item.title }}</div>
                       <div class="clamp2 font12 color-gray mt5">{{ item.summary }}</div>
                     </div>
                     <div class="t-cell align_right v_middle" style="width:60px;">
-                      <span class="qbtn bg-green color-white font12" @click="collect">{{ $t('Collect') }}</span>
+                      <span class="qbtn bg-green color-white font12" @click="collect(item,index)">{{ $t('Collect') }}</span>
                     </div>
                   </div>
                 </div>
@@ -53,21 +58,32 @@
                 <div class="t-table mt12">
                   <div class="t-cell v_middle" style="height:100%;background-color: #fafafa;">
                     <group class="textarea-outer">
-                      <x-textarea class="x-textarea noborder" name="url" :placeholder="$t('Url paster here')" :show-counter="false" :rows="1" autosize></x-textarea>
+                      <x-textarea v-model="collecturl" class="x-textarea noborder" name="url" :placeholder="$t('Url paster here')" :show-counter="false" :rows="1" autosize></x-textarea>
                     </group>
                   </div>
-                  <div class="t-cell v_middle align_center bg-green color-white font15" style="width:80px;">{{ $t('Collect') }}</div>
+                  <div class="t-cell v_middle align_center bg-green color-white font15" style="width:80px;" @click="collect1">{{ $t('Collect') }}</div>
                 </div>
               </form>
             </div>
             <div class="bg-page" style="height:12px;"></div>
             <div class="padding15 font15 b_bottom_after">{{ $t('Collect record') }}</div>
-            <div class="scroll_list pl10 pr10 pb10 cols-2">
-              <Listplate v-for="(item,index) in newsdata" :key="item.id">
-                <img slot="pic" :src="item.photo" style="width:30px;height:30px;" />
-                <div slot="title" class="clamp1 font14">{{item.title}}</div>
-                <div slot="title" class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-              </Listplate>
+            <div class="scroll_list pl10 pr10 pb10">
+              <div v-if="!newsdata || newsdata.length == 0" class="scroll_item emptyitem">
+                <div class="t-table">
+                  <div class="t-cell">您还没有采集过文章</div>
+                </div>
+              </div>
+              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: 'article', query: {id: item.id}}">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:40px;">
+                    <img class="imgcover v_middle" :src="item.photo" style="width:30px;height:30px;" />
+                  </div>
+                  <div class="t-cell">
+                    <div class="clamp1 font14">{{item.title}}</div>
+                    <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                  </div>
+                </div>
+              </router-link>
             </div>
           </div>
         </swiper-item>
@@ -106,8 +122,8 @@ My orders:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
-import Listplate from '@/components/Listplate'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
@@ -116,7 +132,6 @@ export default {
     Swiper,
     SwiperItem,
     Search,
-    Listplate,
     XTextarea,
     Group
   },
@@ -129,26 +144,16 @@ export default {
     return {
       tabtxts: [ '关键词', '链接' ],
       tabmodel: 0,
-      newsdata: [
-        {
-          id: '1', dateline: 1522221270, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736', title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~', summary: '简而言之就是,一群人通过AA制,花更少的钱,消耗更少的精力,做成想做的事情,获得更多的快乐,享受更好的生活.以前,拼客...'
-        },
-        {
-          id: '2', dateline: 1522221270, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736', title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~', summary: '简而言之就是,一群人通过AA制,花更少的钱,消耗更少的精力,做成想做的事情,获得更多的快乐,享受更好的生活.以前,拼客...'
-        },
-        {
-          id: '3', dateline: 1522221270, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736', title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~', summary: '简而言之就是,一群人通过AA制,花更少的钱,消耗更少的精力,做成想做的事情,获得更多的快乐,享受更好的生活.以前,拼客...'
-        },
-        {
-          id: '4', dateline: 1522221270, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736', title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~', summary: '简而言之就是,一群人通过AA制,花更少的钱,消耗更少的精力,做成想做的事情,获得更多的快乐,享受更好的生活.以前,拼客...'
-        },
-        {
-          id: '5', dateline: 1522221270, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736', title: '老年人AA制吃饭 游玩 住一起,这种AA出来的幸福和快乐!太潮了~', summary: '简而言之就是,一群人通过AA制,花更少的钱,消耗更少的精力,做成想做的事情,获得更多的快乐,享受更好的生活.以前,拼客...'
-        }
-      ],
+      newsdata: [],
       searchdata: [],
-      searchword: ''
+      searchword: '',
+      showSearchEmpty: false,
+      collecturl: ''
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   methods: {
     setFocus () {
@@ -161,16 +166,93 @@ export default {
       this.searchword = val
     },
     onSubmit () {
+      const self = this
       let kw = this.searchword.replace(/\s+/g, '')
-      if (kw !== '') {
-        this.searchdata = this.newsdata
+      if (self.$util.isNull(kw)) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请输入搜索内容'
+        })
+        return false
       }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+        { do: 'get_sogou_list', keyword: kw }
+      ).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        self.searchdata = (data.data ? data.data : data)
+        self.showSearchEmpty = true
+      })
     },
     onFocus () {
     },
     onCancel () {
     },
-    collect () {
+    tabitemclick (index) {
+      const self = this
+      if (index === 1) {
+        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+          { do: 'list' }
+        ).then(function (res) {
+          return res.json()
+        }).then(function (data) {
+          self.newsdata = data.data ? data.data : data
+        })
+      }
+    },
+    collect (item, index) {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要采集该文章吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+            { do: 'download', url: item.url }
+          ).then(function (res) {
+            return res.json()
+          }).then(function (data) {
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.searchdata.splice(index, 1)
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    collect1 () {
+      const self = this
+      if (self.$util.isNull(self.collecturl)) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请输入采集链接'
+        })
+        return false
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+        { do: 'download', url: self.collecturl }
+      ).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.newsdata.push(data.data)
+            }
+          }
+        })
+      })
     }
   }
 }

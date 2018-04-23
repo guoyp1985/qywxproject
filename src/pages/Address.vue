@@ -1,3 +1,8 @@
+/*
+* @description: 地址页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="personal-address" v-cloak>
     <!-- <c-title :link-info="{path:'/profile'}"

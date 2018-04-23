@@ -1,3 +1,8 @@
+/*
+* @description: 文章列表页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="view-articles">
     <sticky scroll-box="view-articles">

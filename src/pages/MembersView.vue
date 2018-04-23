@@ -3,12 +3,12 @@
     <div class="s-topbanner flex_center color-white">
       <div class="pl10 pr10">
         <div class="t-table">
-          <div class="t-cell v_middle" style="width:80px;">
+          <div class="t-cell v_middle w80">
             <img class="avatarimg4" :src="viewuser.avatar" />
           </div>
           <div class="t-cell v_middle">
-            <div class="font17">{{ viewuser.linkman }} <span class="color-yellow ml5" v-if="viewuser.memberslevel">{{ viewuser.vip }}</span></div>
-            <div class="font14" v-if="viewuser.retailerInfo && viewuser.uid">返点客：{{ viewuser.retailerInfo.linkman }}</div>
+            <div class="font17">{{ viewuser.linkman }}</div>
+            <div class="font14" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
           </div>
         </div>
       </div>
@@ -20,12 +20,12 @@
             <div class="btn bg-orange color-white">联系</div>
           </div>
           <div class="t-cell v_middle" v-if="!viewuser.isseller">
-            <div class="btn bg-orange color-white">返点客</div>
+            <div class="btn bg-orange color-white" @click="inviteevent">返点客</div>
           </div>
           <div class="t-cell v_middle" v-else>
-            <div class="btn bg-orange color-white">返点管理</div>
+            <router-link :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="btn bg-orange color-white">返点管理</router-link>
           </div>
-          <div class="t-cell v_middle" v-if="viewuser.iscustomer">
+          <div class="t-cell v_middle">
             <div :class="`btn bg-red color-white priority ${getprioritycss}`" @click="priorityevent"></div>
           </div>
         </div>
@@ -44,7 +44,7 @@
             <div class="t-cell align_left w100">真实姓名</div>
             <div class="t-cell align_right color-gray">{{ viewuser.position }}</div>
             <div class="t-cell align_right w50">
-              <span class="qbtn1 bg-green color-white">更新</span>
+              <span class="qbtn1 bg-green color-white" @click="updatechar('position')">更新</span>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
             <div class="t-cell align_left w100">手机号</div>
             <div class="t-cell align_right color-gray">{{ viewuser.mobile }}</div>
             <div class="t-cell align_right w50">
-              <span class="qbtn1 bg-green color-white">更新</span>
+              <span class="qbtn1 bg-green color-white" @click="updatechar('mobile')">更新</span>
             </div>
           </div>
         </div>
@@ -75,7 +75,7 @@
         <div class="item padding10 b_bottom_after">
           <div class="t-table">
             <div class="t-cell align_left w100">返点客</div>
-            <div class="t-cell align_right color-gray">{{ viewuser.retailerInfo.linkman }}</div>
+            <div class="t-cell align_right color-gray">{{ viewuser.linkman }}</div>
           </div>
         </div>
         <div class="item padding10 b_bottom_after">
@@ -102,11 +102,10 @@ Behavior:
 </i18n>
 
 <script>
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
+
 export default {
-  created: function () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -114,24 +113,24 @@ export default {
   },
   data () {
     return {
-      viewuser: {
-        uid: 187,
-        linkman: 'YOUNG',
-        position: '于国旺',
-        mobile: '18512341234',
-        province: '北京',
-        city: '北京',
-        sex: 1,
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-        dateline: 1529694513,
-        retailerInfo: { uid: 2, linkman: '仇红波' },
-        memberslevel: 3,
-        vip: '3星用户',
-        isseller: false,
-        iscustomer: true,
-        priority: true
-      }
+      query: {},
+      viewuser: { avatar: '/src/assets/images/user.jpg' }
     }
+  },
+  created: function () {
+    const self = this
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+      { params: { customeruid: self.query.uid } }
+    ).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      if (data) {
+        self.viewuser = data.data ? data.data : data
+        document.title = self.viewuser.linkman
+      }
+    })
   },
   computed: {
     getprioritycss: function () {
@@ -155,7 +154,96 @@ export default {
   },
   methods: {
     priorityevent () {
-      this.viewuser.priority = !this.viewuser.priority
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
+        { action: 'stickcustomer', customeruid: self.query.uid }
+      ).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.viewuser.priority = !self.viewuser.priority
+            }
+          }
+        })
+      })
+    },
+    inviteevent () {
+      const self = this
+      let content = `<div class="font14">邀请成功后，返点客在本店购买以及带来客户购买，均可获得佣金奖励</div>`
+      self.$vux.confirm.show({
+        content: content,
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
+            { inviteuid: self.query.uid }
+          ).then(function (res) {
+            return res.json()
+          }).then(function (data) {
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.viewuser.isseller = true
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    updatechar (char) {
+      const self = this
+      let showtitle = ''
+      let inputval = ''
+      if (char === 'position') {
+        showtitle = '请输入真实姓名'
+        inputval = self.viewuser.position
+      } else if (char === 'mobile') {
+        showtitle = '请输入手机号'
+        inputval = self.viewuser.mobile
+      }
+      self.$vux.confirm.prompt(inputval, {
+        title: showtitle,
+        onShow () {
+          self.$vux.confirm.setInputValue(inputval)
+        },
+        onConfirm (val) {
+          /*
+          if (self.$util.isNull(val)) {
+            self.$vux.alert.show({
+              title: '',
+              content: '更新值不能为空'
+            })
+            return false
+          }
+          */
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
+            { action: 'update', customeruid: self.query.uid, char: char, value: val }
+          ).then(function (res) {
+            return res.json()
+          }).then(function (data) {
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.viewuser[char] = val
+                }
+              }
+            })
+          })
+        }
+      })
     }
   }
 }

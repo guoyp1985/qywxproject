@@ -1,3 +1,8 @@
+/*
+* @description: 回复组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div class="reply">
     <div class="header-area">

@@ -54,6 +54,9 @@ Center:
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import routes from '../libs/routes'
+
+// Util.share()
+
 export default {
   name: 'app',
   directives: {

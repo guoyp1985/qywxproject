@@ -1,3 +1,8 @@
+/*
+* @description: 用户返点信息页面
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="user-rebate">
     <view-box>

@@ -1,3 +1,8 @@
+/*
+* @description: 分享明细页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="personal-credit">
     <!-- <c-title :link-info="{path:'/profile'}"

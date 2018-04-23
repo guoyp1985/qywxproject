@@ -25,7 +25,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
+                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -58,7 +58,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
+                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -85,7 +85,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
+                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -115,7 +115,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" />
+                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>

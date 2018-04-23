@@ -1,3 +1,8 @@
+/*
+* @description: 文章详情页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="article-content">
     <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>

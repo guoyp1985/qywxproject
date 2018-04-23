@@ -1,3 +1,8 @@
+/*
+* @description: 返点商铺页面
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="rebate-store">
     <sticky scroll-box="rebate-store">

@@ -1,3 +1,8 @@
+/*
+* @description: 订单查询页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="order-search">
     <sticky scroll-box="order-search">

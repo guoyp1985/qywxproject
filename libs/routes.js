@@ -55,6 +55,9 @@ import RebateStore from '@/pages/RebateStore'
 import UserRebateInfo from '@/pages/UserRebateInfo'
 import BringCustomer from '@/pages/BringCustomer'
 import Chat from '@/pages/Chat'
+import Pay from '@/pages/Pay'
+import RetailerSaleview from '@/pages/RetailerSaleview'
+import AccountDetail from '@/pages/AccountDetail'
 
 export default [
   {
@@ -308,7 +311,7 @@ export default [
   },
   {
     path: '/membersView',
-    name: 'tMemberSView',
+    name: 'tMembersView',
     component: MembersView
   },
   {
@@ -360,5 +363,20 @@ export default [
     path: '/chat',
     name: 'tChat',
     component: Chat
+  },
+  {
+    path: '/pay',
+    name: 'tPay',
+    component: Pay
+  },
+  {
+    path: '/retailerSaleview',
+    name: 'tRetailerSaleview',
+    component: RetailerSaleview
+  },
+  {
+    path: '/accountDetail',
+    name: 'tAccountDetail',
+    component: AccountDetail
   }
 ]

@@ -1,3 +1,8 @@
+/*
+* @description: 文章浏览头部组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
     <div class="title-tip">

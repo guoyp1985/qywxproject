@@ -1,3 +1,8 @@
+/*
+* @description: 用户信息页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="user-profile">
     <group label-width="4em" label-align="left" label-margin-right="2em">

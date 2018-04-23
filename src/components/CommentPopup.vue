@@ -1,3 +1,8 @@
+/*
+* @description: 评论窗口组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div v-transfer-dom>
     <popup v-show="show" height="100%">

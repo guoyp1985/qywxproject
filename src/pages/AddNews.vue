@@ -108,9 +108,6 @@
     <div v-transfer-dom>
       <alert v-model="showalert">{{ $t('Label can not empty') }}</alert>
     </div>
-    <div v-transfer-dom>
-      <loading :show="isShowLoading" text=""></loading>
-    </div>
   </div>
 </template>
 
@@ -141,8 +138,7 @@ Label can not empty:
 
 <script>
 import { Group, XInput, XTextarea, Confirm, TransferDomDirective as TransferDom, Alert, Loading } from 'vux'
-import ENV from '../../libs/env'
-import Util from '../../libs/util'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -158,12 +154,10 @@ export default {
   },
   data () {
     return {
-      isShowLoading: false,
+      allowsubmit: true,
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      showaddphoto: true,
-      showphotoitem: false,
       showmore: false,
       labelarr: [],
       confirmtitle: '标签',
@@ -188,7 +182,7 @@ export default {
           for (let key in self.submitdata) {
             self.submitdata[key] = retdata[key]
           }
-          if (!Util.isNull(self.submitdata.photo)) {
+          if (!self.$util.isNull(self.submitdata.photo)) {
             self.photoarr = self.submitdata.photo.split(',')
           }
         }
@@ -203,20 +197,6 @@ export default {
       this.havenum = this.photoarr.length
       return this.havenum
     },
-    showaddphoto: function (val) {
-      let ret = false
-      if (this.photoarr.length < this.maxnum) {
-        ret = true
-      }
-      return ret
-    },
-    showphotoitem: function (val) {
-      let ret = false
-      if (this.photoarr.length > 0) {
-        ret = true
-      }
-      return ret
-    },
     labelarr: function () {
       return this.labelarr
     }
@@ -227,42 +207,29 @@ export default {
     filechange (e) {
       const self = this
       let files = e.target.files
-      if (files.length > 0 && !self.isShowLoading) {
+      if (files.length > 0) {
         let fileform = document.querySelector('.fileform')
         let filedata = new FormData(fileform)
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           return res.json()
         }).then(function (data) {
-          self.isShowLoading = false
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.photoarr.push(data.data)
             self.submitdata.photo = self.photoarr.join(',')
-            if (self.photoarr.length >= self.maxnum) {
-              this.showaddphoto = false
-            }
-            this.showphotoitem = true
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
-              time: Util.delay(data.error)
+              time: self.$util.delay(data.error)
             })
           }
         })
       }
     },
     deletephoto (item, index) {
-      for (var i = 0; i < this.photoarr.length; i++) {
-        if (i === index) {
-          this.photoarr.splice(i, 1)
-          this.havenum -= 1
-          if (this.photoarr.length === 0) {
-            this.showaddphoto = true
-            this.showphotoitem = false
-          }
-          break
-        }
-      }
+      this.photoarr.splice(index, 1)
+      this.submitdata.photo = this.photoarr.join(',')
     },
     addlabel () {
       this.showconfirm = true
@@ -295,7 +262,7 @@ export default {
       for (let key in self.requireddata) {
         self.requireddata[key] = self.submitdata[key]
       }
-      self.allowsubmit = Util.validateQueue(self.requireddata)
+      self.allowsubmit = self.$util.validateQueue(self.requireddata)
       if (!self.allowsubmit) {
         self.$vux.alert.show({
           title: '',
@@ -308,7 +275,7 @@ export default {
         })
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       if (query.id) {
         self.submitdata['id'] = query.id
       } else {
@@ -317,13 +284,13 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
         return res.json()
       }).then(function (data) {
-        self.isShowLoading = false
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
-          time: Util.delay(data.error),
+          time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({name: '/article', params: { id: data.data }})
+              self.$router.push({name: '/article', query: { id: data.data }})
             }
           }
         })

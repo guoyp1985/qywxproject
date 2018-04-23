@@ -1,3 +1,8 @@
+/*
+* @description: 收藏页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="personal-favorite">
     <div class="top-banner">

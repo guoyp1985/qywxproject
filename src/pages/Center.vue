@@ -1,3 +1,8 @@
+/*
+* @description: 个人中心页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="personal-center" v-cloak>
     <c-title :avatar-href="getAvatar"

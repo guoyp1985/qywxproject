@@ -1,3 +1,8 @@
+/*
+* @description: 评论组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div class="comment">
     <div class="avatar-cell">
