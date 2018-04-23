@@ -58,7 +58,7 @@ export default {
 
     },
     onCancel () {
-
+      this.$router.go(-1)
     }
   }
 }

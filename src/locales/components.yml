@@ -393,6 +393,7 @@ zh-CN:
   Credits Details: 个人中心
   Credit Details: 金币明细
   Credit: 金币
+  Gain Credit: 获取金币
   Edit: 编辑
   Delete: 删除
   Address: 地址
@@ -466,12 +467,13 @@ zh-CN:
   View Details: 查看详情
   Shipping Address: 收货地址
   No Related Orders: 您还没有相关订单
+  No Related Data: 没有相关数据
+  No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
+  No Related Articles: 没有相关文章
   To Recommend: 去推荐
   My Return Stores: 我的返点店铺
   Bought Stores: 购买过的店铺
-  No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
   No Bought Stores: 您还没有买过东西
-  No Related Articles: 没有相关文章
   Reading: 阅读
   Dig: 点赞
   Comment: 留言
@@ -582,6 +584,20 @@ zh-CN:
   Agree: 同意
   Disagree: 不同意
   Rebate Agreement: 返点客协议
+  Total Sales: 销售总额
+  Rebate Amount: 待返点金额
+  Waiting To Rebate: 待返点
+  Waiting To Return Money: 待提现
+  Already Return Money: 已提现
+  Coming Customer: 带来客户
+  Make Money By Sharing: 分享赚佣金
+  Current Store: 当前店铺
+  To Recommend Store: 推荐店铺
+  Total Income: 累计收入
+  Bring Customer: 带来客户
+  Save Picture To Sharing: 保存图片分享给好友
+  All Checked: 全选
+  Setting Default Success For Address: 默认地址设置成功
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心

@@ -6,22 +6,21 @@
       </tab>
     </sticky>
     <swiper :list="headlines" v-model="swiperIndex" @on-index-change="onIndexChange"></swiper>
-    <view-box v-for="(tab, index) in tabs" :key="index" v-show="selectedIndex===index">
-      <panel v-if="aritcles.length" :list="aritcles" type="5" @on-img-error="onImgError"></panel>
+    <div v-for="(tab, index) in tabs" :key="index" v-show="selectedIndex===index">
+      <panel v-if="oArticles.length" :list="oArticles | convert" type="5" @on-img-error="onImgError" @on-click-item="clickArticle"></panel>
       <div v-else class="no-related-x color-gray">
         <span>{{$t('No Related Articles')}}</span>
       </div>
-    </view-box>
+    </div>
   </div>
 </template>
 <script>
-import { ViewBox, Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
-import Time from '../../libs/time'
-import ENV from '../../libs/env'
+import { Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
-    ViewBox,
     Tab,
     TabItem,
     Sticky,
@@ -48,23 +47,39 @@ export default {
           title: '送你一次旅行'
         }
       ],
-      data: [],
       oArticles: [],
       selectedIndex: 0,
       swiperIndex: 0
     }
   },
-  computed: {
-    aritcles: {
-      get () {
-        return this.data.map((article) => {
-          article.meta.date = new Time(article.meta.date).dateFormat('yyyy-MM-dd hh:mm')
-          return article
-        })
-      },
-      set (data) {
-        this.data = data
-      }
+  // computed: {
+  //   aritcles: {
+  //     get () {
+  //       return this.oArticles.map((article) => {
+  //         article.meta.date = new Time(article.meta.date).dateFormat('yyyy-MM-dd hh:mm')
+  //         return article
+  //       })
+  //     },
+  //     set (data) {
+  //       this.oArticles = data
+  //     }
+  //   }
+  // },
+  filters: {
+    convert (articles) {
+      return articles.map((article) => {
+        return {
+          id: article.id,
+          title: article.title,
+          desc: article.summary,
+          src: article.photo,
+          module: article.module,
+          meta: {
+            source: article.author,
+            date: new Time(article.dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
+          }
+        }
+      })
     }
   },
   methods: {
@@ -77,6 +92,9 @@ export default {
     onImgError () {
 
     },
+    clickArticle (item) {
+      this.$router.push({path: `/articles/${item.id}`})
+    },
     getInitData () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
@@ -87,15 +105,18 @@ export default {
       })
     },
     getAritcles (index) {
-      this.$http.get(`${ENV.BokaApi}/api/list/news?classid=${this.tabs[index].id}`)
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/list/news?classid=0`) // ${this.tabs[index].id}
       .then(res => res.json())
       .then(data => {
-        self.articles = data
+        console.log(data)
+        self.oArticles = data
       })
     }
   },
   created () {
     this.getInitData()
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>

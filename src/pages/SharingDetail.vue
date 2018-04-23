@@ -17,7 +17,8 @@
 </template>
 <script>
 import { Group, GroupTitle, Cell, XImg } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 export default {
   components: {
     Group,
@@ -43,6 +44,15 @@ export default {
     },
     valueFormat: function (value) {
       return Number(value) < 0 ? `${value}` : `+${value}`
+    }
+  },
+  methods: {
+    getData () {
+      this.$http.get(`${ENV.BokaApi}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
     }
   }
 }

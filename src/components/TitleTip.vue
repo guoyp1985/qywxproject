@@ -9,7 +9,7 @@
           {{userName}}
         </div>
         <div class="user-credit">
-          {{$t('Credit')}}: {{userCredit}}
+          {{$t('Gain Credit')}}: {{userCredit}}
         </div>
       </div>
       <div class="op-cell">

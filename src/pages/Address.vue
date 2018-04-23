@@ -8,12 +8,15 @@
     </group>
     <swipeout v-else>
       <!-- <cell  :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell> -->
-      <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native="onNav(item)" transition-mode="follow">
+      <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native.stop="onNav(item)" transition-mode="follow">
         <div slot="right-menu">
           <swipeout-button @click.native.stop="onDelete(item)" type="warn">{{$t('Delete')}}</swipeout-button>
         </div>
-        <div slot="content" class="flex-box">
-          <div class="content-box vux-1px-t">
+        <div slot="content" class="flex-box vux-1px-t">
+          <div class="check-cell">
+            <check-icon :value.sync="item.isdefault === 1" @click.native.stop="setDefault(item)"></check-icon>
+          </div>
+          <div class="content-cell">
             <div class="name-cell font16">
               {{item.linkman}} {{item.telephone}}
             </div>
@@ -44,6 +47,7 @@ import {
   // PopupHeader,
   // XInput,
   // XAddress,
+  CheckIcon,
   XSwitch,
   XButton,
   Box,
@@ -65,6 +69,7 @@ export default {
     // PopupHeader,
     // XInput,
     // XAddress,
+    CheckIcon,
     XSwitch,
     XButton,
     Box,
@@ -108,6 +113,9 @@ export default {
   filters: {
     addressFormat: function (item) {
       return `${item.province}${item.city}${item.counties} ${item.address}`
+    },
+    checkedFormat: function (checked) {
+
     }
   },
   methods: {
@@ -136,6 +144,19 @@ export default {
     },
     onNav (item) {
       this.$router.push({name: 'tNewAddress', params: {data: item}})
+    },
+    setDefault (item) {
+      const self = this
+      for (let i of this.items) {
+        i.isdefault = 0
+      }
+      item.isdefault = 1
+      item.do = 'update'
+      this.$http.post(`${ENV.BokaApi}/api/user/address/add`, item)
+      .then(res => res.json)
+      .then(data => {
+        self.$vux.toast.text(self.$t('Setting Default Success For Address'))
+      })
     }
   },
   created () {
@@ -155,7 +176,11 @@ export default {
 #personal-address .flex-box {
   display: flex;
 }
-#personal-address .content-box {
+#personal-address .check-cell {
+  display: flex;
+  align-items: center;
+}
+#personal-address .content-cell {
   flex: 1;
   padding: 10px;
 }

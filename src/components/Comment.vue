@@ -38,7 +38,7 @@
 
 <script>
 import { XImg } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
 
 export default {
   name: 'Comment',

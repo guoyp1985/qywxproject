@@ -115,7 +115,7 @@ export default {
   },
   methods: {
     onEvaluate (order) {
-      this.$router.push({name: 'evaluation', params: {order: order}})
+      this.$router.push({name: 'tEvaluation', params: {order: order}})
     }
   }
 }

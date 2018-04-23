@@ -178,6 +178,10 @@ html, body {
   background-color: none;
   background: rgba(247, 247, 250, 0.5);**/
 }
+#app .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon,
+#app .weui-tabbar__item.weui-bar__item_on .weui-tabbar__label {
+  color: #1aad19
+}
 .vux-demo-tabbar .weui-bar__item_on .demo-icon-22 {
   color: #F70968;
 }

@@ -54,7 +54,7 @@ export default {
       }
       return this.initItem
     },
-    getSwitcher : {
+    getSwitcher: {
       get () {
         return this.initItem.isdefault !== 0
       },

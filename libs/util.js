@@ -15,13 +15,13 @@ Util.install = function (Vue, options) {
       }
       return re ? re : (stop = failHandle(model))
     },
-    validateQueue: (maps, failHandle) => {
+    validateQueue: function (maps, failHandle) {
       let re = true
       failHandle = failHandle ? failHandle : () => false
       for(let i in maps) {
         const k = i
         const v = maps[i]
-        let rs = this.$validate({key: k, value: v}, Reg.rHas, failHandle)
+        let rs = this.validate({key: k, value: v}, Reg.rHas, failHandle)
         !rs && (re = false)
         if (rs === false) return false
       }

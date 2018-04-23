@@ -27,14 +27,14 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="article.src"></x-img>
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="article.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
                 {{article.title}}
               </div>
               <div class="font12 color-gray">
-                {{article.date | dateFormat}}
+                {{article.dateline | dateFormat}}
               </div>
             </div>
           </div>
@@ -47,14 +47,14 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="goods.src"></x-img>
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="goods.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
                 {{goods.title}}
               </div>
               <div class="font12 color-gray">
-                {{goods.date | dateFormat}}
+                {{goods.dateline | dateFormat}}
               </div>
             </div>
           </div>
@@ -67,14 +67,14 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.src"></x-img>
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
                 {{store.title}}
               </div>
               <div class="font12 color-gray">
-                {{store.date | dateFormat}}
+                {{store.dateline | dateFormat}}
               </div>
             </div>
           </div>
@@ -101,8 +101,8 @@
 
 <script>
 import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg } from 'vux'
-import Time from '../../libs/time'
-
+import Time from '#/time'
+import ENV from '#/env'
 export default {
   components: {
     Grid,
@@ -172,12 +172,22 @@ export default {
     },
     onCancelClick () {
 
+    },
+    getData () {
+      this.$http.get(`${ENV.BokaApi}/api/user/favorite`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
     }
   },
   filters: {
     dateFormat: function (isoDate) {
       return `收藏时间: ${new Time(isoDate).dateFormat('yyyy-MM-dd hh:mm')}`
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

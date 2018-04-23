@@ -51,6 +51,9 @@ import SharingDetail from '@/pages/SharingDetail'
 import DecorationShop from '@/pages/DecorationShop'
 import RetailerApply from '@/pages/RetailerApply'
 import RebateApply from '@/pages/RebateApply'
+import RebateStore from '@/pages/RebateStore'
+import UserRebateInfo from '@/pages/UserRebateInfo'
+import BringCustomer from '@/pages/BringCustomer'
 
 export default [
   {
@@ -336,5 +339,20 @@ export default [
     path: '/rebateApply',
     name: 'tRebateApply',
     component: RebateApply
+  },
+  {
+    path: '/rebateStore',
+    name: 'tRebateStore',
+    component: RebateStore
+  },
+  {
+    path: '/userRebateInfo',
+    name: 'tUserRebateInfo',
+    component: UserRebateInfo
+  },
+  {
+    path: '/bringCustomer',
+    name: 'tBringCustomer',
+    component: BringCustomer
   }
 ]

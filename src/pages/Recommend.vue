@@ -8,7 +8,7 @@
     </sticky>
     <view-box v-show="selectedIndex===0">
       <group v-if="list.length">
-        <cell-box is-link v-for="(item, index) in list" :key="index">
+        <cell-box v-for="(item, index) in list" :key="index" :link="{name: 'tRebateStore', params: {id: item.id}}">
           <div class="store-img">
             <x-img :src="item.img"></x-img>
           </div>
@@ -64,12 +64,14 @@ export default {
       selectedIndex: 0,
       list: [
         {
+          id: '1',
           img: '../../assets/_images/nopic.jpg',
           name: 'adidas'
         }
       ],
       list1: [
         {
+          id: '1',
           img: '../../assets/_images/nopic.jpg',
           name: 'adidas'
         }
@@ -84,6 +86,9 @@ export default {
     applyClick (id) {
       this.$router.push({name: 'tRebateApply'})
     }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>

@@ -9,11 +9,11 @@
       </cell>
     </group>
     <group label-width="5em" :title="$t('To Write Application Info')">
-      <x-input class="font14" :title="$t('Real Name')" v-model="realName" :placeholder="`${$t('Must')}${$t('Real Name')}`"></x-input>
-      <x-input class="font14" :title="$t('Mobile')" v-model="mobile" :placeholder="`${$t('Must')}${$t('Mobile')}`">
+      <x-input class="font14" :title="$t('Real Name')" v-model="realName" :placeholder="`${$t('Necessary')}${$t('Real Name')}`"></x-input>
+      <x-input class="font14" :title="$t('Mobile')" v-model="mobile" :placeholder="`${$t('Necessary')}${$t('Mobile')}`">
         <x-button slot="right" type="primary" mini>{{$t('Get Verify Code')}}</x-button>
       </x-input>
-      <x-input class="font14" :title="$t('Verify Code')" v-model="verifyCode" :placeholder="`${$t('Must')}${$t('Verify Code')}`"></x-input>
+      <x-input class="font14" :title="$t('Verify Code')" v-model="verifyCode" :placeholder="`${$t('Necessary')}${$t('Verify Code')}`"></x-input>
     </group>
     <group :title="$t('Application Reason')">
       <x-textarea class="font14" :max="100" v-model="reason" :placeholder="$t('Application Reason')"></x-textarea>
@@ -41,7 +41,7 @@
       </popup>
     </div>
     <div v-transfer-dom class="qrcode-dialog">
-      <x-dialog v-model="wxCardShow" class="dialog-demo">
+      <x-dialog v-model="wxCardShow">
         <div class="img-box">
           <img :src="userQrCode" style="max-width:100%">
         </div>
