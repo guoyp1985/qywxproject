@@ -36,7 +36,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="article.photo"></x-img>
+              <x-img :src="article.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -63,7 +63,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="commodity.photo"></x-img>
+              <x-img :src="commodity.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
