@@ -30,7 +30,8 @@ export default {
   },
   methods: {
     wxPayApi (data) {
-      const params = data.data
+      const params = data
+      console.log(params)
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           appId: params.appid,     // 公众号名称，由商户传入
@@ -59,11 +60,12 @@ export default {
       }
     },
     pay () {
+      const self = this
       const orderId = this.$route.query.id
       this.$http.post(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
-        this.wxPayApi(data)
+        self.wxPayApi(data.data)
       })
     }
   }
