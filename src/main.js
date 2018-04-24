@@ -165,7 +165,7 @@ const matchExclude = url => {
   return false
 }
 
-let token = null // test
+// let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
