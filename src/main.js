@@ -164,8 +164,8 @@ const matchExclude = url => {
   }
   return false
 }
-localStorage.clear()
-let token = null // test
+// localStorage.clear()
+// let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
@@ -180,8 +180,8 @@ Vue.http.interceptors.push(function (request, next) {
     .then(res => res.json())
     .then(
       data => {
-        // Token.set(data.data.token)
-        token = data.data.token // test
+        Token.set(data.data.token)
+        // token = data.data.token // test
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         // alert(data.data.weixin_token)
         // const accessToken = data.data.weixin_token
