@@ -165,7 +165,6 @@ const matchExclude = url => {
   return false
 }
 
-// localStorage.clear()
 // let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
@@ -184,37 +183,36 @@ Vue.http.interceptors.push(function (request, next) {
       data => {
         Token.set(data.data.token)
         // token = data.data.token // test
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        alert('ok')
-        const accessToken = data.data.weixin_token
-        const nonceStr = $vue.$util.randomStr(6)
-        const timeStamp = $vue.$util.timeStamp()
-        const currentUrl = urlParse(location.href, true)
-        const url = currentUrl.href.replace(/#\/\w*/g, '')
-        alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
-        const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
-        WeixinJSBridge.invoke('editAddress', {
-          appId: ENV.AppId,
-          scope: 'jsapi_address',
-          signType: 'sha1',
-          addrSign: addrSign,
-          timeStamp: timeStamp,
-          nonceStr: nonceStr
-        },
-        res => {
-          alert(res.err_msg)
-          if (res.err_msg === 'edit_address:ok') {
-            const param = {
-              linkman: res.userName,
-              telephone: res.telNumber,
-              province: res.proviceFirstStageName,
-              city: res.addressCitySecondStageName,
-              counties: res.addressCountiesThirdStageName,
-              address: res.addressDetailInfo
-            }
-            alert(param)
-          }
-        })
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // const accessToken = data.data.weixin_token
+        // const nonceStr = $vue.$util.randomStr(6)
+        // const timeStamp = $vue.$util.timeStamp()
+        // const currentUrl = urlParse(location.href, true)
+        // const url = currentUrl.href.replace(/#\/\w*/g, '')
+        // alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+        // const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+        // WeixinJSBridge.invoke('editAddress', {
+        //   appId: ENV.AppId,
+        //   scope: 'jsapi_address',
+        //   signType: 'sha1',
+        //   addrSign: addrSign,
+        //   timeStamp: timeStamp,
+        //   nonceStr: nonceStr
+        // },
+        // res => {
+        //   alert(res.err_msg)
+        //   if (res.err_msg === 'edit_address:ok') {
+        //     const param = {
+        //       linkman: res.userName,
+        //       telephone: res.telNumber,
+        //       province: res.proviceFirstStageName,
+        //       city: res.addressCitySecondStageName,
+        //       counties: res.addressCountiesThirdStageName,
+        //       address: res.addressDetailInfo
+        //     }
+        //     alert(param)
+        //   }
+        // })
       },
       error => {
         alert(JSON.stringify(error))
