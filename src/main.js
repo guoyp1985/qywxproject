@@ -219,6 +219,7 @@ Vue.http.interceptors.push(function (request, next) {
         alert(JSON.stringify(error))
       }
     )
+    alert('ok')
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
     // request.method = 'GET'
