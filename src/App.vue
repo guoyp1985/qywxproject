@@ -122,7 +122,7 @@ export default {
     }
   },
   created () {
-    this.$util.wxShare()
+    // this.$util.wxShare()
     document.title = this.$t('tIndex')
     this.getData()
   },
