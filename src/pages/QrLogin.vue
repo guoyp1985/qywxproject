@@ -60,7 +60,7 @@ export default {
           } else if (token) {
             Token.set(token)
             if (self.$route.params.fromPath) {
-              self.$router.push({path: self.$route.params.fromPath})
+              self.$router.push({path: self.$route.params.fromPath, query: self.$route.params.query})
             } else {
               self.$router.push({path: '/'})
             }

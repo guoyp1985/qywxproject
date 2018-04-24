@@ -236,6 +236,12 @@ export default {
     },
     cancelStore (item) {
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+    },
+    getData () {
+      const user = User.get()
+      this.avatar = user.avatar
+      this.name = user.linkman
+      this.coins = user.credit
     }
   },
   filters: {
@@ -244,6 +250,7 @@ export default {
     }
   },
   created () {
+    this.getData()
     this.getArticles()
   }
 }

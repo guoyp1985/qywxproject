@@ -282,6 +282,7 @@ export default {
           text: data.error,
           time: self.$util.delay(data.error)
         })
+        self.$router.push({path: '/pay', query: {id: data.id}})
       })
     }
   }
