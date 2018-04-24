@@ -94,19 +94,19 @@
           </div>
         </template>
       </div>
+      <div class="footer-bar" slot="bottom" v-show="selectedIndex===0">
+        <div class="checker-cell">
+          <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}</check-icon>
+        </div>
+        <div class="count-cell">
+          <span>{{$t('Total')}}:</span>
+          <span class="color-orange6">¥{{total}}</span>
+        </div>
+        <div class="button-cell">
+          <x-button class="withdraw-btn">{{$t('Withdraw')}}</x-button>
+        </div>
+      </div>
     </view-box>
-    <div class="footer-bar" slot="bottom" v-show="selectedIndex===0">
-      <div class="checker-cell">
-        <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}</check-icon>
-      </div>
-      <div class="count-cell">
-        <span>{{$t('Total')}}:</span>
-        <span class="color-orange6">¥{{total}}</span>
-      </div>
-      <div class="button-cell">
-        <x-button class="withdraw-btn">{{$t('Withdraw')}}</x-button>
-      </div>
-    </div>
   </div>
 </template>
 <script>

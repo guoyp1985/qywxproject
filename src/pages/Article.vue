@@ -21,22 +21,22 @@
         </div>
         <div class="article-content" v-html="article.content"></div>
         <div class="operate-area">
-          <x-button mini plain type="primary">
+          <x-button mini plain type="primary" @click.native="onFavorite">
             <span class="fa fa-star-o"></span>
             <span>{{$t('Favorite')}}</span>
           </x-button>
-          <x-button mini plain type="primary">
+          <x-button mini plain type="primary" @click.native="onAdvisory">
             <span class="fa fa-user"></span>
             <span>{{$t('Advisory')}}</span>
           </x-button>
-          <x-button mini plain type="primary">
+          <x-button mini plain type="primary" @click.native="onStore">
             <span class="fa fa-user"></span>
             <span>{{$t('Store')}}</span>
           </x-button>
-          <x-button mini plain type="primary">
+          <!-- <x-button mini plain type="primary" @click.native="onShare">
             <span class="fa fa-share"></span>
             <span>{{$t('Share')}}</span>
-          </x-button>
+          </x-button> -->
         </div>
         <div class="reading-info">
           <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
@@ -57,7 +57,7 @@
         <div class="comment-op font14">
           <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
         </div>
-        <template v-if="article.comments.length">
+        <template v-if="article.comments">
           <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
         </template>
         <comment v-for="(comment, index) in article.comments" :item="comment" :key="index" @on-reply="onReplyShow">
@@ -135,7 +135,7 @@ export default {
     getData () {
       const self = this
       const id = this.$route.params.id
-      this.$http.get(`${ENV.BokaApi}/api/moduleInfo?id=${id}&module=news`)
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'})
       .then(res => res.json())
       .then(data => {
         self.article = data.data
@@ -146,6 +146,23 @@ export default {
         console.log(data)
         self.reward = data
       })
+    },
+    onFavorite () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
+      .then(res => res.json())
+      .then(data => {
+        self.$vux.toast.text(self.$t('Favorite Success'))
+      })
+    },
+    onAdvisory () {
+
+    },
+    onStore () {
+
+    },
+    onShare () {
+
     }
   },
   created () {

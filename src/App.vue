@@ -53,7 +53,9 @@ Center:
 <script>
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import routes from '../libs/routes'
+import routes from '#/routes'
+import ENV from '#/env'
+import { User } from '#/storage'
 
 // Util.share()
 
@@ -134,18 +136,12 @@ export default {
       }
     },
     getData () {
-      // this.$http.get('https://laravel.boka.cn/weixin/jsconfig')
-      // .then(res => res.json())
-      // .then(
-      //   data => {
-      //     console.log(data)
-      //   }
-      // )
-      this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {})
+      this.$http.get(`${ENV.BokaApi}/api/user/show`)
       .then(res => res.json())
       .then(
         data => {
-          // console.log(JSON.stringify(data))
+          User.set(data)
+          console.log(User.get())
         }
       )
     }

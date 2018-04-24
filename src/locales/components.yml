@@ -428,7 +428,7 @@ zh-CN:
   Sharing Details: 分享明细
   Share To Friend: 分享给好友
   Article: 文章
-  Goods: 商品
+  Commodity: 商品
   Store: 店铺
   Share invite customer: 分享邀请返点客户
   Rebate manage: 返点管理
@@ -615,6 +615,7 @@ zh-CN:
   Save Picture To Sharing: 保存图片分享给好友
   All Checked: 全选
   Setting Default Success For Address: 默认地址设置成功
+  Favorite Success: 收藏成功
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心

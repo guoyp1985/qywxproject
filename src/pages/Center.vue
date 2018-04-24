@@ -36,7 +36,8 @@
 <script>
 import { Grid, GridItem } from 'vux'
 import CTitle from '@/components/CTitle'
-import ENV from '../../libs/env'
+import ENV from '#/env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -144,23 +145,36 @@ export default {
   },
   created () {
     const self = this
-    this.$http.get(`${ENV.BokaApi}/api/user/home`, {})
-    .then(res => res.json())
-    .then(data => {
-      console.log(data)
-      self.avatarHref = data.avatar
-      self.linkMan = data.linkman
-      self.userCredits = data.credit
-      self.userLevels = data.levels
-      self.messages = data.messages
-      self.profile = {
-        linkman: data.linkman,
-        avatar: data.avatar,
-        sex: data.sex,
-        mobile: data.mobile,
-        company: data.company
-      }
-    })
+    // this.$http.get(`${ENV.BokaApi}/api/user/home`, {})
+    // .then(res => res.json())
+    // .then(data => {
+    //   console.log(data)
+    //   self.avatarHref = data.avatar
+    //   self.linkMan = data.linkman
+    //   self.userCredits = data.credit
+    //   self.userLevels = data.levels
+    //   self.messages = data.messages
+    //   self.profile = {
+    //     linkman: data.linkman,
+    //     avatar: data.avatar,
+    //     sex: data.sex,
+    //     mobile: data.mobile,
+    //     company: data.company
+    //   }
+    // })
+    const user = User.get()
+    this.avatarHref = user.avatar
+    this.linkMan = user.linkman
+    this.userCredits = user.credit
+    this.userLevels = user.levels
+    this.messages = user.messages
+    this.profile = {
+      linkman: user.linkman,
+      avatar: user.avatar,
+      sex: user.sex,
+      mobile: user.mobile,
+      company: user.company
+    }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
   }
 }

@@ -30,19 +30,22 @@
     </div>
     <div v-transfer-dom>
       <popup class="agreement-popup" v-model="popShow" position="right" width="100%">
-        <popup-header
-        :title="$t('Rebate Agreement')"
-        :show-bottom-border="false"></popup-header>
         <view-box class="agreement-box">
+          <popup-header
+          :title="$t('Rebate Agreement')"
+          :show-bottom-border="false"></popup-header>
+          <div class="agreement-content font14">
+          -->协议在此
+          </div>
+          <flexbox slot="bottom" class="button-area">
+            <flexbox-item>
+              <x-button  type="primary" @click.native="onAgree">{{$t('Agree')}}</x-button>
+            </flexbox-item>
+            <flexbox-item>
+              <x-button type="warn" @click.native="onDisagree">{{$t('Disagree')}}</x-button>
+            </flexbox-item>
+          </flexbox>
         </view-box>
-        <flexbox class="button-area">
-          <flexbox-item>
-            <x-button  type="primary" @click.native="onAgree">{{$t('Agree')}}</x-button>
-          </flexbox-item>
-          <flexbox-item>
-            <x-button type="warn" @click.native="onDisagree">{{$t('Disagree')}}</x-button>
-          </flexbox-item>
-        </flexbox>
       </popup>
     </div>
     <div v-transfer-dom class="qrcode-dialog">
@@ -144,13 +147,16 @@ export default {
 }
 .agreement-popup .agreement-box {
   position: relative;
-  height: calc(~"100% - 46px");
+  height: 100%;
 }
 .agreement-popup .button-area {
   position: absolute;
   bottom: 0;
   height: 42px;
   padding: 2px 0;
+}
+.agreement-popup .agreement-content {
+  padding: 10px;
 }
 .qrcode-dialog .img-box {
   height: 350px;

@@ -8,35 +8,36 @@
     <!-- <c-title :link-info="{path:'/profile'}"
             :link-credit="{path:'/credit'}">
     </c-title> -->
-    <group v-if="!items.length">
-      <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
-    </group>
-    <swipeout v-else>
-      <!-- <cell  :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell> -->
-      <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native.stop="onNav(item)" transition-mode="follow">
-        <div slot="right-menu">
-          <swipeout-button @click.native.stop="onDelete(item)" type="warn">{{$t('Delete')}}</swipeout-button>
-        </div>
-        <div slot="content" class="flex-box vux-1px-t">
-          <div class="check-cell">
-            <check-icon :value.sync="item.isdefault === 1" @click.native.stop="setDefault(item)"></check-icon>
+    <view-box class="view-box" body-padding-bottom="0">
+      <group v-if="!items.length">
+        <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
+      </group>
+      <swipeout v-else>
+        <!-- <cell  :title="`${item.linkman} ${item.telephone}`" :link="{name:'tNewAddress',params:{data:item}}" :inline-desc='item | addressFormat'></cell> -->
+        <swipeout-item v-for="(item, index) in items" :key="item.id" @click.native.stop="onNav(item)" transition-mode="follow">
+          <div slot="right-menu">
+            <swipeout-button @click.native.stop="onDelete(item)" type="warn">{{$t('Delete')}}</swipeout-button>
           </div>
-          <div class="content-cell">
-            <div class="name-cell font16">
-              {{item.linkman}} {{item.telephone}}
+          <div slot="content" class="flex-box vux-1px-t">
+            <div class="check-cell">
+              <check-icon :value.sync="item.isdefault === 1" @click.native.stop="setDefault(item)"></check-icon>
             </div>
-            <div class="addr-cell font14 color-gray">
-              {{item | addressFormat}}
+            <div class="content-cell">
+              <div class="name-cell font16">
+                {{item.linkman}} {{item.telephone}}
+              </div>
+              <div class="addr-cell font14 color-gray">
+                {{item | addressFormat}}
+              </div>
             </div>
+            <div class="link-cell"></div>
           </div>
-          <div class="link-cell"></div>
-        </div>
-      </swipeout-item>
-    </swipeout>
-
-    <box gap="20px 10px">
-      <x-button type="primary" :link="{name:'tNewAddress'}">{{$t('New Address')}}</x-button>
-    </box>
+        </swipeout-item>
+      </swipeout>
+      <box slot="bottom" class="bottom-area">
+        <x-button type="primary" :link="{name:'tNewAddress'}">{{$t('New Address')}}</x-button>
+      </box>
+    </view-box>
   </div>
 </template>
 
@@ -48,6 +49,7 @@ import {
   Group,
   Cell,
   CellBox,
+  ViewBox,
   // Popup,
   // PopupHeader,
   // XInput,
@@ -70,6 +72,7 @@ export default {
     Group,
     Cell,
     CellBox,
+    ViewBox,
     // Popup,
     // PopupHeader,
     // XInput,
@@ -166,12 +169,16 @@ export default {
   },
   created () {
     this.getData()
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     // this.getWxAddress()
   }
 }
 </script>
 
 <style lang="less">
+#personal-address {
+  height: 100%;
+}
 #personal-address .top-gap {
   margin-top: 20px;
 }
@@ -210,6 +217,14 @@ export default {
   top: 50%;
   margin-top: -4px;
   right: 10px;
+}
+#personal-address .bottom-area {
+  position: absolute;
+  z-index: 500;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
 }
 /* weui css hack */
 </style>
