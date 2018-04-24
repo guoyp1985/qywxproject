@@ -176,7 +176,7 @@ Vue.http.interceptors.push(function (request, next) {
   }
   if (lUrl.query.code) {
     const code = lUrl.query.code
-    alert(`${ENV.BokaApi}/api/authLogin/${code}`)
+    alert(Vue.http.get)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(res => res.json())
     .then(
