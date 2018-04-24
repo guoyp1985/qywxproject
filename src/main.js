@@ -179,7 +179,6 @@ Vue.http.interceptors.push(function (request, next) {
     setTimeout(function () {
       alert(code)
       Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-      .then(res => res.json())
       .then(
         (data) => {
           alert(data.data.token)
