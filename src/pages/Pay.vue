@@ -32,10 +32,11 @@ export default {
     wxPayApi (data) {
       const params = data
       console.log(params)
+      console.log(this.$util.timeStamp())
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           appId: params.appid,     // 公众号名称，由商户传入
-          timeStamp: params.mch_id,         // 时间戳，自1970年以来的秒数
+          timeStamp: this.$util.timeStamp(),         // 时间戳，自1970年以来的秒数
           nonceStr: params.nonce_str, // 随机串
           package: `prepay_id=${params.prepay_id}`,
           signType: 'MD5',         // 微信签名方式：

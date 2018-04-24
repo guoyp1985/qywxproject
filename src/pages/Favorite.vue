@@ -29,64 +29,85 @@
       </div>
     </sticky>
     <swipeout v-show="selectedIndex===0">
-      <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
-        <div slot="right-menu">
-          <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-        </div>
-        <div slot="content" class="item-content vux-1px-t">
-          <div class="img-cell">
-            <x-img  default-src="../assets/_images/nopic.jpg" :src="article.photo"></x-img>
+      <template v-if="articles.length">
+        <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
+          <div slot="right-menu">
+            <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
           </div>
-          <div class="info-cell">
-            <div class="font14">
-              {{article.title}}
+          <div slot="content" class="item-content vux-1px-t">
+            <div class="img-cell">
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="article.photo"></x-img>
             </div>
-            <div class="font12 color-gray">
-              {{article.dateline | dateFormat}}
+            <div class="info-cell">
+              <div class="font14">
+                {{article.title}}
+              </div>
+              <div class="font12 color-gray">
+                {{article.dateline | dateFormat}}
+              </div>
             </div>
           </div>
+        </swipeout-item>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
         </div>
-      </swipeout-item>
+      </template>
     </swipeout>
     <swipeout v-show="selectedIndex===1">
-      <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
-        <div slot="right-menu">
-          <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-        </div>
-        <div slot="content" class="item-content vux-1px-t">
-          <div class="img-cell">
-            <x-img  default-src="../assets/_images/nopic.jpg" :src="commodity.photo"></x-img>
+      <template v-if="commodities.length">
+        <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
+          <div slot="right-menu">
+            <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
           </div>
-          <div class="info-cell">
-            <div class="font14">
-              {{commodity.title}}
+          <div slot="content" class="item-content vux-1px-t">
+            <div class="img-cell">
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="commodity.photo"></x-img>
             </div>
-            <div class="font12 color-gray">
-              {{commodity.dateline | dateFormat}}
+            <div class="info-cell">
+              <div class="font14">
+                {{commodity.title}}
+              </div>
+              <div class="font12 color-gray">
+                {{commodity.dateline | dateFormat}}
+              </div>
             </div>
           </div>
+        </swipeout-item>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
         </div>
-      </swipeout-item>
+      </template>
     </swipeout>
     <swipeout v-show="selectedIndex===2">
-      <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
-        <div slot="right-menu">
-          <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-        </div>
-        <div slot="content" class="item-content vux-1px-t">
-          <div class="img-cell">
-            <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo"></x-img>
+      <template v-if="stores.length">
+        <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
+          <div slot="right-menu">
+            <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
           </div>
-          <div class="info-cell">
-            <div class="font14">
-              {{store.title}}
+          <div slot="content" class="item-content vux-1px-t">
+            <div class="img-cell">
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo"></x-img>
             </div>
-            <div class="font12 color-gray">
-              {{store.dateline | dateFormat}}
+            <div class="info-cell">
+              <div class="font14">
+                {{store.title}}
+              </div>
+              <div class="font12 color-gray">
+                {{store.dateline | dateFormat}}
+              </div>
             </div>
           </div>
+        </swipeout-item>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
         </div>
-      </swipeout-item>
+      </template>
     </swipeout>
       <!-- <swiper v-model="selectedIndex" height="100px" :show-dots="false">
         <swiper-item key="0">
@@ -131,48 +152,9 @@ export default {
       avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
       name: '黄一萌',
       coins: 50,
-      articles: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '文章一',
-          date: 1522659301220,
-          url: '/component/cell'
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '文章二',
-          date: 1522659301220,
-          url: '/component/cell'
-        }
-      ],
-      commodities: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '商品一',
-          date: 1522659301220,
-          url: '/component/cell'
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '商品二',
-          date: 1522659301220,
-          url: '/component/cell'
-        }
-      ],
-      stores: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '店铺一',
-          date: 1522659301220,
-          url: '/component/cell'
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '店铺二',
-          date: 1522659301220,
-          url: '/component/cell'
-        }
-      ]
+      articles: [],
+      commodities: [],
+      stores: []
     }
   },
   methods: {
@@ -195,7 +177,7 @@ export default {
     getArticles () {
       const self = this
       const user = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/list/favorites`, {uploader: user.uid, type: 'news'})
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'news'})
       .then(res => res.json())
       .then(data => {
         self.articles = data
@@ -204,7 +186,7 @@ export default {
     getCommodities () {
       const self = this
       const user = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/list/favorites`, {uploader: user.uid, type: 'product'})
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'product'})
       .then(res => res.json())
       .then(data => {
         self.commodities = data
@@ -213,7 +195,7 @@ export default {
     getStores () {
       const self = this
       const user = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/list/favorites`, {uploader: user.uid, type: 'retailer'})
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'retailer'})
       .then(res => res.json())
       .then(data => {
         self.stores = data
