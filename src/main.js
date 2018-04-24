@@ -165,7 +165,7 @@ const matchExclude = url => {
   return false
 }
 
-// let token = null // test
+let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
@@ -181,8 +181,8 @@ Vue.http.interceptors.push(function (request, next) {
     .then(res => res.json())
     .then(
       data => {
-        Token.set(data.data.token)
-        // token = data.data.token // test
+        // Token.set(data.data.token)
+        token = data.data.token // test
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         // const accessToken = data.data.weixin_token
         // const nonceStr = $vue.$util.randomStr(6)
