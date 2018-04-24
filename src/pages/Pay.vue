@@ -31,7 +31,7 @@ export default {
   methods: {
     wxPayApi (data) {
       const params = data
-      console.log(params)
+      alert(JSON.stringify(params))
       console.log(this.$util.timeStamp())
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
