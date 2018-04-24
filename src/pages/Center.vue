@@ -36,7 +36,7 @@
 <script>
 import { Grid, GridItem } from 'vux'
 import CTitle from '@/components/CTitle'
-import ENV from '#/env'
+// import ENV from '#/env'
 import { User } from '#/storage'
 
 export default {
@@ -144,7 +144,7 @@ export default {
     }
   },
   created () {
-    const self = this
+    // const self = this
     // this.$http.get(`${ENV.BokaApi}/api/user/home`, {})
     // .then(res => res.json())
     // .then(data => {
