@@ -165,6 +165,7 @@ const matchExclude = url => {
   return false
 }
 
+// localStorage.clear()
 // let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
