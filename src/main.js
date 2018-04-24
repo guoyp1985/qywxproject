@@ -181,7 +181,7 @@ Vue.http.interceptors.push(function (request, next) {
       Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
       .then(res => res.json())
       .then(
-        data => {
+        (data) => {
           alert(data.data.token)
           Token.set(data.data.token)
           // token = data.data.token // test
@@ -215,9 +215,6 @@ Vue.http.interceptors.push(function (request, next) {
           //     alert(param)
           //   }
           // })
-        },
-        error => {
-          alert(JSON.stringify(error))
         }
       )
     }, 2000)
