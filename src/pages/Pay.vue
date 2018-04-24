@@ -33,21 +33,21 @@ export default {
       const params = data
       console.log(params)
       console.log(this.$util.timeStamp())
-      // WeixinJSBridge.invoke(
-      //   'getBrandWCPayRequest', {
-      //     appId: params.appid,
-      //     timeStamp: this.$util.timeStamp(),
-      //     nonceStr: params.nonce_str,
-      //     package: `prepay_id=${params.prepay_id}`,
-      //     signType: 'MD5',
-      //     paySign: params.sign
-      //   },
-      //   function (res) {
-      //     alert(JSON.stringify(res))
-      //     if (res.err_msg === 'get_brand_wcpay_request:ok' ) {
-      //     }
-      //   }
-      // )
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', {
+          appId: params.appid,
+          timeStamp: this.$util.timeStamp(),
+          nonceStr: params.nonce_str,
+          package: `prepay_id=${params.prepay_id}`,
+          signType: 'MD5',
+          paySign: params.sign
+        },
+        function (res) {
+          alert(JSON.stringify(res))
+          if (res.err_msg === 'get_brand_wcpay_request:ok' ) {
+          }
+        }
+      )
     },
     payLoad () {
       if (typeof WeixinJSBridge === 'undefined') {
