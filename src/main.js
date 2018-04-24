@@ -251,7 +251,7 @@ Vue.http.interceptors.push(function (request, next) {
   }
 })
 
-new Vue({
+const $vue = new Vue({
   store,
   router,
   render: h => h(App)
