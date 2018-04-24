@@ -211,6 +211,8 @@ Util.install = function (Vue, options) {
           });
         })
       })
+    },
+    wxShare: function () {
     }
   }
 }

@@ -4,17 +4,19 @@
       <form>
 				<div class="padding10 b_bottom_after bg-white" @click="showaddress">
 					<div class="t-table">
-						<div class="t-cell v_middle">
-							<div>收货人：{{ receiveuser.linkman }} {{ receiveuser.telphone}}</div>
-							<div>收货地址：{{ receiveuser.address }}</div>
+						<div v-if="selectaddress" class="t-cell v_middle">
+							<div>收货人：{{ selectaddress.linkman }} {{ selectaddress.telephone}}</div>
+							<div>收货地址：{{ selectaddress.address }}</div>
 						</div>
+						<div v-else class="t-cell v_middle color-red">请选择地址</div>
 						<div class="t-cell v_middle" style="width:30px;">
 							<i class="al al-mjiantou-copy2"></i>
 						</div>
 					</div>
 				</div>
         <div style="height:12px;"></div>
-        <div v-for="(item,index) in orderdata" :key="item.id" class="orderitem bg-white">
+        <div v-if="!orderdata || orderdata.length === 0" class="padding10 bg-white align_center color-orange font18">无效订单</div>
+        <div v-else v-for="(item,index) in orderdata" :key="item.id" class="orderitem bg-white">
           <div v-for="(product,index1) in item.info" :key="product.id" class="productitem">
     					<div class="b_bottom_after padding10">
     						<div class="t-table">
@@ -70,20 +72,20 @@
         					</div>
         				</div>
               </template>
-              <div v-else v-for="(item,index) in addressdata" :key="item.id" class="scroll_item padding10">
-      					<label class="t-table">
-      						<div class="t-cell v_middle" style="width:30px;">
+              <label v-else v-for="(item,index) in addressdata" :key="item.id" class="scroll_item padding10 db" style="position:relative;">
+                <div class="t-table">
+                  <div class="t-cell v_middle w30">
                     <div class="qradio">
                       <input type="radio" name="address" @click="radioclick(item)" />
                       <i class="al"></i>
                     </div>
                   </div>
-      						<div class="t-cell v_middle">
-                    <div>{{ item.linkman }} {{ item.telphone}}</div>
+                  <div class="t-cell pic v_middle">
+                    <div>{{ item.linkman }} {{ item.telephone}}</div>
                     <div>{{ item.fulladdress }}</div>
                   </div>
-      					</label>
-      				</div>
+                </div>
+      				</label>
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -146,7 +148,7 @@ Please select address:
 </i18n>
 
 <script>
-import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert } from 'vux'
+import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, Checklist } from 'vux'
 import ENV from '#/env'
 
 export default {
@@ -159,29 +161,23 @@ export default {
     XTextarea,
     XInput,
     Popup,
-    Alert
+    Alert,
+    Checklist
   },
   data () {
     return {
+      checkvalue: ['b'],
+      checkarr: [ 'a', 'b', 'c' ],
       query: {},
       payPrice: '0.00',
-      receiveuser: {
-        uid: 187,
-        linkman: 'YOUNG',
-        telphone: 13051687651,
-        address: '北京市东城区市辖区金家村'
-      },
-      selectaddress: {},
+      selectaddress: null,
       orderdata: [],
       payprice: '0.00',
       showpopup: false,
       showalert: false,
-      addressdata: [
-        { id: 1, fulladdress: '北京市东城区金家村', linkman: '于国旺', telphone: '13051687651', uid: '187' },
-        { id: 2, fulladdress: '东北小伙', linkman: '于国旺', telphone: '13051687651', uid: '187' }
-      ],
+      addressdata: [],
       submitdata: {
-        addressid: 1,
+        addressid: '',
         postdata: []
       }
     }
@@ -196,6 +192,19 @@ export default {
       let retdata = data.data ? data.data : data
       if (retdata) {
         self.addressdata = retdata
+        for (let i = 0; i < self.addressdata.length; i++) {
+          let a = self.addressdata[i]
+          if (a.isdefault) {
+            self.selectaddress = a
+            break
+          }
+        }
+        if (!self.selectaddress && self.addressdata.length > 0) {
+          self.selectaddress = self.addressdata[0]
+        }
+        if (self.selectaddress) {
+          self.submitdata.addressid = self.selectaddress.id
+        }
       }
     })
     self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then(function (res) {
@@ -258,6 +267,7 @@ export default {
       this.showpopup = false
     },
     radioclick (data) {
+      console.log(111)
       this.selectaddress = data
     },
     submitaddress () {
@@ -265,14 +275,18 @@ export default {
         this.showalert = true
       } else {
         this.showpopup = false
-        this.receiveuser.linkman = this.selectaddress.linkman
-        this.receiveuser.telphone = this.selectaddress.telphone
-        this.receiveuser.address = this.selectaddress.fulladdress
       }
     },
     submitOrder () {
       const self = this
       console.log(self.submitdata.postdata)
+      if (self.$util.isNull(self.submitdata.addressid)) {
+        self.$vux.toast.show({
+          text: '请选择地址'
+        })
+        return false
+      }
+      /*
       self.isShowLoading = true
       self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
         return res.json()
@@ -280,9 +294,15 @@ export default {
         self.isShowLoading = false
         self.$vux.toast.show({
           text: data.error,
-          time: self.$util.delay(data.error)
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.$router.push({ path: '/pay', query: { orderid: data.id } })
+            }
+          }
         })
       })
+      */
     }
   }
 }

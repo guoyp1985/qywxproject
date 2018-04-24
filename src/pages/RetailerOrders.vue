@@ -1,13 +1,15 @@
 <template>
-  <div class="containerarea s-havebottom bg-page">
+  <div class="containerarea s-havebottom bg-page font14">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100 toprow">
           <div class="flex_cell font18 pl20">{{$t('Order list')}}</div>
+          <!--
           <div class="pr10 align_right" style="width:100px;">
             <router-link class="qbtn color-white" style="border:#fff 1px solid;" to="/retailerAddorder">{{$t('Add order')}}</router-link>
           </div>
+        -->
         </div>
       </div>
       <div class="row">
@@ -21,7 +23,12 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index1) in orderdataall" :key="item.id">
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
+                <div><i class="al al-wushuju font60 pt20"></i></div>
+                <div class="mt5">暂无相关订单！</div>
+                <div>积极分享商品或活动，客户才会购买哦~</div>
+              </div>
+              <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
@@ -54,7 +61,12 @@
           </div>
           <div v-if="(index == 1)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index1) in orderdata1" :key="item.id">
+              <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
+                <div><i class="al al-wushuju font60 pt20"></i></div>
+                <div class="mt5">暂无相关订单！</div>
+                <div>积极分享商品或活动，客户才会购买哦~</div>
+              </div>
+              <Orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
@@ -81,7 +93,12 @@
           </div>
           <div v-if="(index == 2)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index1) in orderdata2" :key="item.id">
+              <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
+                <div><i class="al al-wushuju font60 pt20"></i></div>
+                <div class="mt5">暂无相关订单！</div>
+                <div>积极分享商品或活动，客户才会购买哦~</div>
+              </div>
+              <Orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
@@ -111,7 +128,12 @@
           </div>
           <div v-if="(index == 3)">
             <div class="scroll_list">
-              <Orderitemplate v-for="(item,index1) in orderdata3" :key="item.id">
+              <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
+                <div><i class="al al-wushuju font60 pt20"></i></div>
+                <div class="mt5">暂无相关订单！</div>
+                <div>积极分享商品或活动，客户才会购买哦~</div>
+              </div>
+              <Orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
@@ -163,7 +185,8 @@ My orders:
 import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
@@ -186,6 +209,10 @@ export default {
     return {
       tabtxts: [ '全部', '待付款', '待发货', '已发货' ],
       tabmodel: 0,
+      tabdata1: [],
+      tabdata2: [],
+      tabdata3: [],
+      tabdata4: [],
       orderdataall: [
         {
           id: 315,
@@ -436,7 +463,71 @@ export default {
       ]
     }
   },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.getdata1()
+  },
   methods: {
+    getdata1 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.tabdata1 = data.data ? data.data : data
+        }
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { params: { flag: 1 } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.tabdata2 = data.data ? data.data : data
+        }
+      })
+    },
+    getdata3 () {
+      const self = this
+      let params = { params: { flag: 2 } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.tabdata3 = data.data ? data.data : data
+        }
+      })
+    },
+    getdata4 () {
+      const self = this
+      let params = { params: { flag: 3 } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.tabdata4 = data.data ? data.data : data
+        }
+      })
+    },
+    tabclick (index) {
+      const self = this
+      if (index === 0) {
+        self.getdata1()
+      } else if (index === 1) {
+        self.getdata2()
+      } else if (index === 2) {
+        self.getdata3()
+      } else if (index === 3) {
+        self.getdata4()
+      }
+    }
   }
 }
 </script>

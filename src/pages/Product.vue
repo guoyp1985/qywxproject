@@ -105,7 +105,7 @@
     					</div>
     					<div class="mt5">{{ item.message }}</div>
     					<div class="mt5 align_right">
-                <router-link class="bg-orange color-white qbtn" to="/retailerShop" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+                <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
     					</div>
     					<div class="mt5" v-if="item.comment && item.comment.length > 0">
         				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
@@ -138,7 +138,7 @@
       <div class="bg-page" style="height:10px;"></div>
       <div class="b_top_after"></div>
       <div class="padding10 b_bottom_after">
-        <router-link class="t-table" :to="{path:'/retailerShop',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
+        <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
   				<div class="t-cell v_middle" style="width:70px;">
   					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
   				</div>
@@ -251,7 +251,7 @@
       					</div>
       					<div class="mt5">{{ item.message }}</div>
       					<div class="mt5 align_right">
-                  <router-link class="bg-orange color-white qbtn" to="/retailerShop" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+                  <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
       					</div>
       					<div class="mt5" v-if="item.comment && item.comment.length > 0">
           				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">

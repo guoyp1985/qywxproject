@@ -5,7 +5,7 @@ import RetailerSalechance from '@/pages/RetailerSalechance'
 import RetailerCustomerlist from '@/pages/RetailerCustomerlist'
 import RetailerAddorder from '@/pages/RetailerAddorder'
 import RetailerOrders from '@/pages/RetailerOrders'
-import RetailerShop from '@/pages/RetailerShop'
+import Store from '@/pages/Store'
 import RetailerNews from '@/pages/RetailerNews'
 import RetailerProductlist from '@/pages/RetailerProductlist'
 import RetailerActivitylist from '@/pages/RetailerActivitylist'
@@ -101,9 +101,9 @@ export default [
     component: RetailerOrders
   },
   {
-    path: '/retailerShop',
-    name: 'tRetailerShop',
-    component: RetailerShop
+    path: '/store',
+    name: 'tStore',
+    component: Store
   },
   {
     path: '/retailerNews',
