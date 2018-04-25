@@ -12,15 +12,15 @@
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
               <img src="../assets/images/icon-voice.png"/>
             </a>
-            <a v-else class="emotion-btn" @click="toggleKeyboard1">
+            <a v-else class="emotion-btn" @click="toggleKeyboard">
               <img src="../assets/images/icon-keyboard.png"/>
             </a>
           </div>
           <div class="input-cell">
-            <group class="textarea-box" v-show="!showVoiceCom">
+            <group class="textarea-box">
               <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
             </group>
-            <x-button class="talk-btn" v-show="showVoiceCom">{{$t('Press And Talk')}}</x-button>
+            <x-button class="talk-btn no-select" v-show="showVoiceCom">{{$t('Press And Talk')}}</x-button>
           </div>
           <div class="emotion-cell">
             <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
@@ -131,25 +131,7 @@ export default {
       if (this.showVoiceCom) {
         this.showVoiceCom = false
       }
-      this.$nextTick(function () {
-        // alert(this.$refs.text.$refs.textarea)
-        this.$refs.text.$refs.textarea.focus()
-      })
-    },
-    toggleKeyboard1 () {
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      this.$nextTick(function () {
-        // alert(this.$refs.text.$refs.textarea)
-        this.$refs.text.$refs.textarea.focus()
-      })
+      this.$refs.text.$refs.textarea.focus()
     },
     toggleFeatureBoard () {
       if (this.showVoiceCom) {
@@ -209,7 +191,8 @@ export default {
 }
 #chat-room .input-box .input-cell {
   flex: 1;
-  padding: 8px;
+  margin: 8px;
+  position: relative;
 }
 #chat-room .input-box .input-cell textarea{
   width: 100%;
@@ -268,8 +251,13 @@ export default {
   opacity: 0;
 }
 #chat-room .talk-btn {
-  height: 36px;
   font-size: 16px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1
 }
 
 /* vux css hack */
