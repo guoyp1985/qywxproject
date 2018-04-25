@@ -1,32 +1,85 @@
 <template>
-  <div class="containerarea bg-white">
-    <div class="bg-gray4 padding10 border-box">
-      <card :header="{title: $t('Data text')}" class="x-card">
-        <div slot="content" class="card-demo-flex card-demo-content01">
-          <div class="vux-1px-r" v-for="(item,index) in topdata" :key="index">
-            <div class="color-gray font14">{{item.title}}</div>
-            <div class="color-blue9 font17 mt5">{{item.value}}</div>
+  <div class="containerarea bg-white salechance nobottom font14">
+    <div class="pagetop">
+      <div class="bg-gray4 padding10 border-box">
+        <card :header="{title: $t('Data text')}" class="x-card">
+          <div slot="content" class="card-demo-flex card-demo-content01">
+            <div class="vux-1px-r">
+              <div class="color-gray font14">访问量</div>
+              <div class="color-blue9 font17 mt5">{{ viewdata.views }}</div>
+            </div>
+            <div class="vux-1px-r">
+              <div class="color-gray font14">分享数</div>
+              <div class="color-blue9 font17 mt5">{{ viewdata.share }}</div>
+            </div>
+            <div class="vux-1px-r">
+              <div class="color-gray font14">销售额</div>
+              <div class="color-blue9 font17 mt5">{{ viewdata.orders }}</div>
+            </div>
           </div>
-        </div>
-      </card>
+        </card>
+      </div>
+      <tab v-model="tabmodel" class="x-toptab">
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
+      </tab>
     </div>
-    <div class="padding10 border bg-white bordertxt font14">{{$t('Sale chance')}}</div>
-    <div>
-      <timeline class="x-timeline">
-        <timeline-item v-for="(item, index) in chancedata" :key="item.id">
-          <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
-          <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-          <div class="t-table">
-            <div class="t-cell">
-              <div class="color-blue9 font14">{{ item.linkman }}</div>
-              <div class="color-gray font12">{{ item.content }}</div>
-            </div>
-            <div class="t-cell w50 align_right v_middle">
-              <div class="qbtn1 bg-blue10 color-white">{{ $t('Contact') }}</div>
-            </div>
-          </div>
-        </timeline-item>
-      </timeline>
+    <div class="pagemiddle">
+      <view-box ref="viewBox" body-padding-top="0px" body-padding-bottom="0px">
+        <swiper v-model="tabmodel" class="x-swiper no-indicator">
+          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+            <template v-if="index === 0">
+              <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
+                <div class="t-table">
+                  <div class="t-cell">
+                    <div><i class="al al-yulan3 font70 pt20"></i></div>
+                    <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                  </div>
+                </div>
+              </div>
+              <timeline v-else class="x-timeline">
+                <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
+                  <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
+                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                  <div class="t-table">
+                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                      <div class="color-blue font14">{{ item.linkman }}</div>
+                      <div class="color-gray font12">{{ item.content }}</div>
+                    </router-link>
+                    <div class="t-cell w50 align_right v_middle">
+                      <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
+                    </div>
+                  </div>
+                </timeline-item>
+              </timeline>
+            </template>
+            <template v-else-if="index === 1">
+              <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
+                <div class="t-table">
+                  <div class="t-cell">
+                    <div><i class="al al-yulan3 font70 pt20"></i></div>
+                    <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                  </div>
+                </div>
+              </div>
+              <timeline v-else class="x-timeline">
+                <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
+                  <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
+                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                  <div class="t-table">
+                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                      <div class="color-blue font14">{{ item.linkman }}</div>
+                      <div class="color-gray font12">{{ item.content }}</div>
+                    </router-link>
+                    <div class="t-cell w50 align_right v_middle">
+                      <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
+                    </div>
+                  </div>
+                </timeline-item>
+              </timeline>
+            </template>
+          </swiper-item>
+        </swiper>
+      </view-box>
     </div>
   </div>
 </template>
@@ -41,40 +94,107 @@ Contact:
 </i18n>
 
 <script>
-import { Card, Timeline, TimelineItem } from 'vux'
-import Time from '../../libs/time'
+import { ViewBox, Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from 'vux'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
+    ViewBox,
+    Tab,
+    TabItem,
+    Swiper,
+    SwiperItem,
     Card,
     Timeline,
     TimelineItem
   },
   filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('MM-dd')
+    dateformat: function (dt) {
+      let newtime = new Time(dt * 1000)
+      let year = newtime.year()
+      let month = newtime.month()
+      let date = newtime.date()
+      let nowtime = new Time(new Date())
+      let nowyear = nowtime.year()
+      let nowmonth = nowtime.month()
+      let nowdate = nowtime.date()
+      let state = ''
+      if (year === nowyear && month === nowmonth) {
+        if (date === nowdate) {
+          state = '今天'
+        } else if (date + 1 === nowdate) {
+          state = '昨天'
+        } else if (date + 2 === nowdate) {
+          state = '前天'
+        }
+      } else {
+        state = new Time(dt * 1000).dateFormat('MM-dd')
+      }
+      return state
     },
     dateformat1: function (value) {
       return new Time(value * 1000).dateFormat('hh:mm')
     }
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   data () {
     return {
-      topdata: [
-        { title: '访问量', value: '1130' },
-        { title: '分享数', value: '15' },
-        { title: '销售额', value: '0.00' }
-      ],
-      chancedata: [
-        { id: 1, content: '浏览了《维生素B族片》,共浏览1次,合计浏览时间为10秒', dateline: 1522377357, linkman: 'SMART', number: 1, staytime: 0, title: '维生素B族片', type: 'views', uid: 281 },
-        { id: 2, content: '浏览了《砍价:商品1》,共浏览3次,合计浏览时间为10秒', dateline: 1522377357, linkman: 'zxj', number: 1, staytime: 0, title: '维生素B族片', type: 'views', uid: 281 },
-        { id: 3, content: '浏览了《砍价:商品1》,共浏览2次,合计浏览时间为10秒', dateline: 1522377357, linkman: '贪吃小松鼠', number: 1, staytime: 0, title: '维生素B族片', type: 'views', uid: 281 },
-        { id: 4, content: '浏览了《砍价:商品1》,共浏览1次,合计浏览时间为10秒', dateline: 1522377357, linkman: '๓妖怪吧！', number: 1, staytime: 0, title: '维生素B族片', type: 'views', uid: 281 },
-        { id: 5, content: '浏览了《砍价:你会给我买名牌包包吗？》,共浏览4次,合计浏览时间为10秒', dateline: 1522377357, linkman: '小小于', number: 1, staytime: 0, title: '维生素B族片', type: 'views', uid: 281 }
-      ]
+      tabmodel: 0,
+      tabtxts: [ '分享', '浏览' ],
+      viewdata: { orders: '0.00', share: 0, views: 0 },
+      data: [[], []],
+      tabdata1: [],
+      tabdata2: []
+    }
+  },
+  watch: {
+    tabdata1: function () {
+      return this.tabdata1
+    },
+    tabdata2: function () {
+      return this.tabdata2
+    }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`).then(function (res) {
+      return res.json()
+    }).then(function (data) {
+      if (data && data.flag === 1) {
+        self.viewdata = data.data
+      }
+    })
+    self.getShares()
+  },
+  methods: {
+    getShares () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, {
+        params: { action: 'shares' }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.tabdata1 = data.data ? data.data : data
+      })
+    },
+    getViews () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, {
+        params: { action: 'views' }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.tabdata2 = data.data ? data.data : data
+      })
+    },
+    tabclick (index) {
+      const self = this
+      if (index === 0) {
+        self.getShares()
+      } else if (index === 1) {
+        self.getViews()
+      }
     }
   }
 }
@@ -120,5 +240,8 @@ export default {
 .x-timeline .vux-timeline-item-content{padding:0 0 10px 50px;}
 .x-timeline .ddate{position:absolute;left:-10px;}
 .x-timeline .dtime{position:absolute;left:-10px;top:17px;}
+
+.salechance .pagetop{height:202px;}
+.salechance .pagemiddle{top:202px;}
 
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white">
+  <div class="containerarea bg-white font14">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
@@ -9,7 +9,7 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -19,69 +19,126 @@
           <div v-if="(index == 0)">
             <search
               class="x-search"
-              position="absolute"
-              auto-scroll-to-top top="0px"
-              @on-focus="onFocus"
-              @on-cancel="onCancel"
-              @on-submit="onSubmit"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit1"
+              @on-change="onChange1"
               ref="search">
             </search>
             <div class="font12 padding10 b_bottom">
               <div class="t-table w_100">
-                <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ levelcount1 }}人)</div>
+                <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
                 <div class="t-cell align_right pr10">{{ $t('Percent') }}</div>
               </div>
             </div>
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in customerdata1" :key="item.id">
-                <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                <div slot="title" class="flex_left" style="height:55px;">
-                  <div class="t-table w_100 h_100">
-                    <div class="t-cell align_left h_100">
-                      <div class="clamp1 font14">{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
-                    </div>
-                    <div class="t-cell w60 h_100">
-                      <div class="w_100 h_100 flex_right">
-                        <div class="percentarea db-in">
-                          <div class="inner" :style="`width:${item.percent}%`"></div>
-                          <div class="txt font12">{{ item.percent }}%</div>
-                        </div>
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+                <template v-if="searchresult1">
+                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                </template>
+                <template v-else>
+                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                  <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                </template>
+              </div>
+              <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10">
+                <div class="t-table">
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                    <img :src="item.avatar" class="avatarimg1" />
+                  </router-link>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14">{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
+                  </router-link>
+                  <div class="t-cell v_middle w60 h_100 align_right">
+                      <div class="percentarea db-in v_middle" @click="percentclick">
+                        <div class="inner" :style="`width:${item.percent}%`"></div>
+                        <div class="txt font12">{{ item.percent }}%</div>
                       </div>
-                    </div>
+                  </div>
+                  <div class="t-cell v_middle w60 align_right">
+                    <div class="qbtn bg-green color-white">联系</div>
                   </div>
                 </div>
-                <div class="qbtn bg-green color-white">联系</div>
-              </Listplate>
+              </div>
             </div>
           </div>
           <div v-if="(index == 1)">
             <search
               class="x-search"
-              position="absolute"
-              auto-scroll-to-top top="0px"
-              @on-focus="onFocus"
-              @on-cancel="onCancel"
-              @on-submit="onSubmit"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
               ref="search">
             </search>
             <div class="font12 padding10 b_bottom">
               <div class="t-table w_100">
-                <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ levelcount5 }}人)</div>
+                <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount2 }}人)</div>
                 <div class="t-cell align_right pr10">{{ $t('Contact customer') }}</div>
               </div>
             </div>
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index) in customerdata5" :key="item.id">
-                <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                <div slot="title" class="clamp1 font14">{{item.linkman}}</div>
-                <div slot="title" class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
-                <div class="qbtn bg-green color-white">联系</div>
-              </Listplate>
+              <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
+                <template v-if="searchresult2">
+                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                </template>
+                <template v-else>
+                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                  <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                </template>
+              </div>
+              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10">
+                <div class="t-table">
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                    <img :src="item.avatar" class="avatarimg1" />
+                  </router-link>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14">{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
+                  </router-link>
+                  <div class="t-cell v_middle w60 align_right">
+                    <div class="qbtn bg-green color-white">联系</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </swiper-item>
       </swiper>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="isshowpopup" height="100%">
+        <div class="popup1 font14">
+          <div class="percentlayer">
+            <div class="bg"></div>
+            <div class="w_100 h_100 flex_center">
+              <div class="layerinner align_left probability">
+                <div class="inner">
+                  <div class="pro" >
+                    <div class="pro-sucess">
+                      <div class="flex_left">
+                        <img class="v_middle" src="../assets/images/infor.png"/>
+                        <div class="color-blue">什么是成交概率</div>
+                      </div>
+                      <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为购买客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
+                    </div>
+                    <div class="pro-push">
+                      <div class="flex_left">
+                        <img class="v_middle" src="../assets/images/infor.png"/>
+                        <div class="color-blue">如何提升成交概率</div>
+                      </div>
+                      <div class="font12">1、推送客户感兴趣的文章;</div>
+                      <div class="font12">2、发展更多的返点客。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pro-know">
+                  <span class="close" @click="closepopup">知道了</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
@@ -96,85 +153,134 @@ Percent:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
-import Listplate from '@/components/Listplate'
+import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDomDirective as TransferDom } from 'vux'
+import ENV from '#/env'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Tab,
     TabItem,
     Swiper,
     SwiperItem,
     Search,
-    Listplate,
-    XTextarea,
-    Group
+    Group,
+    Popup
   },
   data () {
     return {
-      tabtxts: [ '潜在客户', '成交消息' ],
-      levelcount1: 15,
-      levelcount5: 10,
+      autofixed: false,
+      tabtxts: [ '潜在客户', '成交客户' ],
+      tabcount1: 0,
+      tabcount2: 0,
       tabmodel: 0,
-      customerdata1: [
-        {
-          id: '1', uid: '51', percent: 80.02, dateline: 1522221270, linkman: '艳绝天下', uploadname: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
-        },
-        {
-          id: '2', uid: '272', percent: 80.16, dateline: 1522221270, linkman: '周学江', uploadname: 'zxj', sales: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
-        },
-        {
-          id: '3', uid: '29', percent: 80.13, dateline: 1522221270, linkman: '销售宝技术支持', uploadname: '网络影响力', sales: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
-        },
-        {
-          id: '4', uid: '4', percent: 60.02, dateline: 1522221270, linkman: '销售宝技术支持', uploadname: '楚风越韵  🏠', sales: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
-        },
-        {
-          id: '5', uid: '2', percent: 50.02, dateline: 1522221270, linkman: '销售宝技术支持', uploadname: '仇红波', sales: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
-        }
-      ],
-      customerdata5: [
-        {
-          id: '1', uid: '51', dateline: 1522221270, linkman: '艳绝天下', uploadname: '贪吃小松鼠', sales: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
-        },
-        {
-          id: '2', uid: '272', dateline: 1522221270, linkman: '周学江', uploadname: 'zxj', sales: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
-        },
-        {
-          id: '3', uid: '29', dateline: 1522221270, linkman: '销售宝技术支持', uploadname: '网络影响力', sales: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
-        },
-        {
-          id: '4', uid: '4', dateline: 1522221270, linkman: '销售宝技术支持', uploadname: '楚风越韵  🏠', sales: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
-        },
-        {
-          id: '5', uid: '2', dateline: 1522221270, linkman: '销售宝技术支持', uploadname: '仇红波', sales: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
-        }
-      ]
+      tabdata1: [],
+      tabdata2: [],
+      isshowpopup: false,
+      searchword1: '',
+      searchword2: '',
+      searchresult1: false,
+      searchresult2: false
     }
   },
   created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.getdata1()
   },
   methods: {
-    setFocus () {
+    onChange1 (val) {
+      this.searchword1 = val
     },
-    resultClick (item) {
+    onChange2 (val) {
+      this.searchword2 = val
     },
-    getResult (val) {
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.getdata1(self.searchword1)
     },
-    onSubmit () {
+    onSubmit2 () {
+      const self = this
+      self.$vux.loading.show()
+      self.getdata2(self.searchword2)
     },
-    onFocus () {
+    getdata1 (keyword) {
+      const self = this
+      let params = { params: { tolevel: -1 } }
+      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        params.params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+          self.searchresult1 = true
+        } else {
+          self.tabcount1 = data.count
+          self.searchresult1 = false
+        }
+        self.tabdata1 = data.data ? data.data : data
+      })
     },
-    onCancel () {
+    getdata2 (keyword) {
+      const self = this
+      let params = { params: { tolevel: 5 } }
+      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        params.params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+          self.searchresult2 = true
+        } else {
+          self.tabcount2 = data.count
+          self.searchresult2 = false
+        }
+        self.tabdata2 = data.data ? data.data : data
+      })
+    },
+    tabclick (index) {
+      const self = this
+      if (index === 0) {
+        self.getdata1()
+      } else if (index === 1) {
+        self.getdata2()
+      }
+    },
+    percentclick () {
+      this.isshowpopup = true
+    },
+    closepopup () {
+      this.isshowpopup = false
     }
   }
 }
 </script>
 
 <style lang="less">
-.textarea-outer{padding:10px;}
-.textarea-outer .weui-cells{margin-top:0;}
-.textarea-outer .weui-cells:before{display:none;}
-.textarea-outer .weui-cells:after{display:none;}
+.percentlayer{z-index:10;position:absolute;left:0;right:0;bottom:0;top:0;}
+.percentlayer .bg{position:absolute;left:0;right:0;bottom:0;top:0;background:rgba(0,0,0,0.6);}
+.percentlayer .layerinner{
+	width:80%;padding-bottom:100%;position:relative;
+}
+.percentlayer .layerinner .inner{
+	z-index:10;position:absolute;left:0;top:0;right:0;bottom:0;
+	padding:10px;box-sizing: border-box;
+}
+.percentlayer .probability{background:url(../assets/images/bgletter.png) center center no-repeat;background-size:85% 100%; margin: 0 auto;}
+.percentlayer .pro-sucess{ width: 90%; margin: 0 auto; text-align: left; padding-left: 5px;  }
+.percentlayer .pro-sucess p{margin-top: 1px;margin-bottom: 5px;}
+.percentlayer .span1{vertical-align:middle;color:#1e98f9;}
+.percentlayer .pro{width: 70%; margin: 0 auto; vertical-align:middle;  height: 60%; }
+.percentlayer .pro-push{width: 90%; margin: 0 auto; text-align: left; padding-left: 5px;}
+
+.percentlayer .encourade{width:80%;  color: #00a0e9;text-align: center;  position: absolute; left:10%; top: 85%; }
+.percentlayer .pro-know{position: absolute;width:100%;text-align: center;bottom: -40px;}
+.percentlayer .pro-know span{color:#fff;background:#00a0e9;padding: 5px 10px;border-radius: 5px;}
 </style>

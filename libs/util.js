@@ -58,6 +58,16 @@ Util.install = function (Vue, options) {
         }
       }
     },
+    checkMobile : function(mobile) {
+      if (isNaN(mobile)) return false;
+      if (!mobile || mobile=="" || mobile.length!=11) {
+      	return false;
+      }
+      if (/^13\d{9}$/g.test(mobile) || (/^15[0-35-9]\d{8}$/g.test(mobile)) || (/^18[012345-9]\d{8}$/g.test(mobile)) || (/^17[06578]\d{8}$/g.test(mobile)) || (/^16[6]\d{8}$/g.test(mobile)) || (/^19[89]\d{8}$/g.test(mobile)) || (/^14[57]\d{8}$/g.test(mobile))) {
+      	return true;
+      }
+      return false;
+    },
     delay: (text) => {
       let ret = 1000
       let len = text.length
@@ -258,7 +268,33 @@ Util.install = function (Vue, options) {
           })
         })
       })
-    }
+    },
+    wxShare: function () {
+    },
+    deleteItem: function (list, id) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          list.splice(i, 1)
+          break
+        }
+      }
+    },
+    scrollEvent : function(os){
+      let _ele = os.element
+      let scrollTop = _ele.scrollTop
+      let scrollHeight = _ele.scrollHeight
+			let height = _ele.offsetHeight;
+      let distance = os.distance ? os.distance : 50
+      if (typeof distance === 'string' && distance.indexOf('%') >= 0) {
+				distance = parseInt(distance, 10) / 100 * height;
+			}
+			if (distance > height){
+        distance = height
+      }
+			if (scrollTop + height >= scrollHeight - distance) {
+				os.callback && os.callback()
+			}
+		}
   }
 }
 

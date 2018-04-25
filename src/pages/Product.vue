@@ -3,10 +3,10 @@
     <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
-          <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'centerService'}">
+          <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
             <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
           </router-link>
-          <router-link class="t-cell v_middle color-black" :to="{path:'centerService'}">
+          <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
             <div>{{ loginUser.linkman }}</div>
             <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
           </router-link>
@@ -20,7 +20,7 @@
       </div>
     </template>
     <template v-else-if="loginUser">
-      <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'centerService'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
+      <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
     </template>
     <div class="pagemiddle">
       <swiper
@@ -105,7 +105,7 @@
     					</div>
     					<div class="mt5">{{ item.message }}</div>
     					<div class="mt5 align_right">
-                <router-link class="bg-orange color-white qbtn" to="/retailerShop" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+                <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
     					</div>
     					<div class="mt5" v-if="item.comment && item.comment.length > 0">
         				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
@@ -138,7 +138,7 @@
       <div class="bg-page" style="height:10px;"></div>
       <div class="b_top_after"></div>
       <div class="padding10 b_bottom_after">
-        <router-link class="t-table" :to="{path:'/retailerShop',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
+        <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
   				<div class="t-cell v_middle" style="width:70px;">
   					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
   				</div>
@@ -251,7 +251,7 @@
       					</div>
       					<div class="mt5">{{ item.message }}</div>
       					<div class="mt5 align_right">
-                  <router-link class="bg-orange color-white qbtn" to="/retailerShop" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+                  <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
       					</div>
       					<div class="mt5" v-if="item.comment && item.comment.length > 0">
           				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
@@ -349,32 +349,14 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    /*
-    let getuser = User.get()
-    if (getuser) {
-      self.loginUser = getuser
+    self.query = self.$route.query
+    self.loginUser = User.get()
+    if (self.loginUser) {
       self.isshowtop = true
       setTimeout(function () {
         self.isshowtop = false
       }, 5000)
-    } else {
-      */
-    self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      if (data) {
-        self.loginUser = data
-        User.set(data)
-        self.isshowtop = true
-        setTimeout(function () {
-          self.isshowtop = false
-        }, 5000)
-      } else {
-        self.isshowtop = false
-      }
-    })
-    // }
-    self.query = self.$route.query
+    }
     let infoparams = { id: self.query.id, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -391,37 +373,37 @@ export default {
       }
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
-    })
-    let buyparams = {}
-    if (self.query.wid) {
-      buyparams['wid'] = self.query.wid
-    } else {
-      buyparams['productid'] = self.query.id
-    }
-    self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-      params: buyparams
-    }).then(function (res) {
-      return res.json()
+      let buyparams = {}
+      if (self.query.wid) {
+        buyparams['wid'] = self.query.wid
+      } else {
+        buyparams['productid'] = self.query.id
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+        params: buyparams
+      }).then(function (res) {
+        return res.json()
+      })
     }).then(function (data) {
       if (data.flag === 1) {
         self.buyuserdata = (data.data ? data.data : data)
       }
-    })
-    self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
-      { params: { module: self.module, id: self.query.id } }
-    ).then(function (res) {
-      return res.json()
+      return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+        { params: { module: self.module, id: self.query.id } }
+      ).then(function (res) {
+        return res.json()
+      })
     }).then(function (data) {
       if (data.flag === 1) {
         self.isfavorite = true
       } else {
         self.isfavorite = false
       }
-    })
-    self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-      { params: { module: self.module, nid: self.query.id } }
-    ).then(function (res) {
-      return res.json()
+      return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
+        { params: { module: self.module, nid: self.query.id } }
+      ).then(function (res) {
+        return res.json()
+      })
     }).then(function (data) {
       if (data.flag === 1) {
         self.evluatedata = (data.data ? data.data : data)

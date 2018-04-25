@@ -616,6 +616,8 @@ zh-CN:
   All Checked: 全选
   Setting Default Success For Address: 默认地址设置成功
   Favorite Success: 收藏成功
+  Receivables: 收款方
+  Wechat Safe Payment: 微信安全支付
   Photo: 照片
   Image Text: 图文
   User Info: 用户信息
@@ -630,7 +632,7 @@ zh-CN:
   tRetialerCustomerList: 联系客户
   tRetailerAddorder: 订单录入
   tRetailerOrder: 订单列表
-  tRetailerShop: 我的店铺
+  tStore: 我的店铺
   tRetailerNews: 文章
   tRetailerProductlist: 商品
   tRetailerActivitylist: 活动

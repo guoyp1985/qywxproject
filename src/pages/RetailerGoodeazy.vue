@@ -22,10 +22,7 @@
             <div class="mb15" style="position:relative;">
               <search
                 class="x-search"
-                position="absolute"
-                auto-scroll-to-top top="0px"
-                @on-focus="onFocus"
-                @on-cancel="onCancel"
+                :auto-fixed="autofixed"
                 @on-submit="onSubmit"
                 @on-change="onChange"
                 ref="search">
@@ -38,10 +35,10 @@
                 </div>
                 <div v-else v-for="(item,index) in searchdata" :key="item.id" class="scroll_item pt10 pb10">
                   <div class="t-table">
-                    <div class="t-cell v_middle">
+                    <a :href="item.url" class="t-cell v_middle">
                       <div class="clamp1">{{ item.title }}</div>
                       <div class="clamp2 font12 color-gray mt5">{{ item.summary }}</div>
-                    </div>
+                    </a>
                     <div class="t-cell align_right v_middle" style="width:60px;">
                       <span class="qbtn bg-green color-white font12" @click="collect(item,index)">{{ $t('Collect') }}</span>
                     </div>
@@ -142,6 +139,7 @@ export default {
   },
   data () {
     return {
+      autofixed: false,
       tabtxts: [ '关键词', '链接' ],
       tabmodel: 0,
       newsdata: [],
@@ -156,12 +154,6 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   methods: {
-    setFocus () {
-    },
-    resultClick (item) {
-    },
-    getResult (val) {
-    },
     onChange (val) {
       this.searchword = val
     },
@@ -219,7 +211,8 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.searchdata.splice(index, 1)
+                  // self.searchdata.splice(index, 1)
+                  self.$router.push(`/articles/${data.data.id}`)
                 }
               }
             })
@@ -248,7 +241,8 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.newsdata.push(data.data)
+              // self.newsdata.push(data.data)
+              self.$router.push(`/articles/${data.data.id}`)
             }
           }
         })

@@ -11,7 +11,7 @@
           <span class="numicon" v-if="retailerInfo.newmessage > 0">{{ retailerInfo.newmessage }}</span>
         </router-link>
       </div>
-      <router-link class="flex_center color-white" :to="{path: '/retailerShop', query: {wid:retailerInfo.uid}}" style="position:absolute;right:110px;bottom:10px;">
+      <router-link class="flex_center color-white" :to="{path: '/store', query: {wid:retailerInfo.uid}}" style="position:absolute;right:110px;bottom:10px;">
         <span class="al al-weidian1 font18"></span>
         <span class="ml3" to="/retailerRevenue">{{$t('My shop')}}</span>
       </router-link>

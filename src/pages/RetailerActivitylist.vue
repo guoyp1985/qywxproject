@@ -1,14 +1,17 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
-    <tab v-model="tabmodel" class="x-toptab">
+    <tab v-if="tabdata1.length > 0" v-model="tabmodel" class="x-toptab">
       <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+    </tab>
+    <tab v-else v-model="tabmodel" class="x-toptab">
+      <tab-item :selected="true">{{ tabtxts[1] }}</tab-item>
     </tab>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="index == 0">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+          <template v-if="tabdata1.length > 0 && index === 0">
             <div class="scroll_list">
-              <div v-if="activitydata.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
+              <div v-if="tabdata1.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
                 <div class="t-table">
                   <div class="t-cell">
                     <div><i class="al al-cuxiaohuodong font60"></i></div>
@@ -19,7 +22,28 @@
                   </div>
                 </div>
               </div>
-              <div v-else v-for="(item,index1) in activitydata" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl10 pr10 db`">
+              <div v-else v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl10 pr10 db`">
+                <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
+                  <div v-if="item.isfinished === 1" class="icon finished"></div>
+                  <div class="t-table">
+                    <div class="t-cell align_left pr10 v_middle" style="width:80px;">
+                      <img :src="item.photo" class="v_middle imgcover" style="width:80px;height:80px;" />
+                    </div>
+                    <div class="t-cell align_left v_middle">
+                      <div class="clamp1 font12">{{item.title}}</div>
+                      <div class="clamp1 color-999 middle-cell mt5">总金额:{{ $t('RMB') }}{{ item.budget }}</div>
+                      <div class="clamp1 color-999 middle-cell">已领取:{{ item.getcount }}人/{{ $t('RMB') }}{{ item.getmoney }}</div>
+                      <div class="clamp1 color-999 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle" style="width:60px;">
+                      <router-link v-if="item.moderate == 0" class="qbtn1 bg-orange1 color-white" :to="`/pay/${item.orderid}`">支支付</router-link>
+                      <router-link class="qbtn1 bg-orange1 color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.moderate != 0">补钱</div>
+                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                    </div>
+                  </div>
+                  <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
+                </router-link>
                 <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
@@ -59,7 +83,7 @@
               </div>
             </div>
           </template>
-          <template v-if="index == 1">
+          <template v-if="tabdata1.length == 0 || index == 1">
             <div class="db-flex padding10 mb5 bg-white" @click="clickadd('groupbuy')">
               <div class="flex_left" style="width:90px;">
                 <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="/src/assets/images/groupbuy.jpg">
@@ -128,7 +152,14 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showgroupbuy" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Groupbuy') }}</div>
+          <div class="popup-top">
+            <div class="t-table h_100">
+              <div class="t-cell h_100 align_center v_middle w70">{{ $t('Groupbuy') }}</div>
+              <div class="t-cell h_100 v_middle pr20 align_right">
+                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'groupbuy'}}">{{ $t('Go to create') }}</router-link>
+              </div>
+            </div>
+          </div>
           <div class="popup-middle font14">
             <div class="pl15 pr15">
               <p class="mt20 title-popup">活动规则</p>
@@ -149,7 +180,14 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showbargainbuy" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Bargainbuy') }}</div>
+          <div class="popup-top flex_center">
+            <div class="t-table h_100">
+              <div class="t-cell h_100 align_center v_middle w70">{{ $t('Bargainbuy') }}</div>
+              <div class="t-cell h_100 v_middle pr20 align_right">
+                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'bargainbuy'}}">{{ $t('Go to create') }}</router-link>
+              </div>
+            </div>
+          </div>
           <div class="popup-middle font14">
             <div class="pl15 pr15">
               <p class="mt20 title-popup">活动规则</p>
@@ -170,7 +208,14 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showdiscount" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Discount') }}</div>
+          <div class="popup-top flex_center">
+            <div class="t-table h_100">
+              <div class="t-cell h_100 align_center v_middle w70">{{ $t('Discount') }}</div>
+              <div class="t-cell h_100 v_middle pr20 align_right">
+                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'discount'}}">{{ $t('Go to create') }}</router-link>
+              </div>
+            </div>
+          </div>
           <div class="popup-middle font14">
             <div class="pl15 pr15">
               <p class="mt20 title-popup">活动规则</p>
@@ -255,30 +300,29 @@ export default {
     return {
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
-      activitydata: [],
+      tabdata1: [],
       clickdata: null,
       clickindex: 0,
       showconfirm: false,
       showgroupbuy: false,
       showbargainbuy: false,
       showdiscount: false,
-      isShowLoading: false
+      isShowLoading: false,
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`
-    ).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      data = data.data ? data.data : data
-      self.activitydata = data
-    })
+    self.$vux.loading.hide()
+    self.getdata1()
   },
   watch: {
-    activitydata: function () {
-      return this.activitydata
+    tabdata1: function () {
+      return this.tabdata1
     },
     clickdata: function () {
       return this.clickdata
@@ -288,6 +332,40 @@ export default {
     }
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
+        params: { pagestart: self.pagestart1, limit: self.limit }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.ractivitylist .swiperitem')
+          if (items.length > 1) {
+            self.scrollArea1 = items[0]
+            self.isBindScroll1 = true
+            self.scrollArea1.removeEventListener('scroll', self.scroll1)
+            self.scrollArea1.addEventListener('scroll', self.scroll1)
+          }
+        }
+      })
+    },
     stopevent (item, index) {
       event.preventDefault()
       this.showconfirm = true
@@ -312,7 +390,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.activitydata[self.clickindex].isfinished = 1
+              self.tabdata1[self.clickindex].isfinished = 1
             }
           }
         })
