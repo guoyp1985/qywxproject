@@ -217,6 +217,7 @@ Vue.http.interceptors.push(function (request, next) {
         // })
         request.headers.set('Authorization', `Bearer ${token}`)
         next(function (response) {
+          alert(response)
           return response
         })
       },
