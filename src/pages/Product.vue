@@ -375,7 +375,6 @@ export default {
     })
     // }
     self.query = self.$route.query
-    alert(JSON.stringify(self.query))
     let infoparams = { id: self.query.id, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -386,6 +385,7 @@ export default {
       return res.json()
     }).then(function (data) {
       self.productdata = data.data ? data.data : data
+      alert(self.productdata)
       self.retailerinfo = self.productdata.retailerinfo
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
