@@ -16,7 +16,7 @@
           <div class="input-cell">
             <group class="textarea-box">
               <!-- <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea> -->
-              <input ref="text"/>
+              <textarea  v-focus></textarea>
             </group>
           </div>
           <div class="emotion-cell">
@@ -41,6 +41,13 @@
 import { ViewBox, Group, XTextarea } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
 export default {
+  directives : {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
+    }
+  },
   components: {
     ViewBox,
     Group,
@@ -59,9 +66,7 @@ export default {
   },
   mounted () {
     // this.textarea = this.$refs.text.$refs.textarea
-    this.textarea = this.$refs.text
-    // alert(this.textarea)
-    this.textarea.focus()
+    // this.textarea.focus()
   },
   methods: {
     onTextClick () {
