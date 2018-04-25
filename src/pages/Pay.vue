@@ -51,17 +51,17 @@ export default {
       )
     },
     payLoad (data) {
-      if (typeof WeixinJSBridge === 'undefined') {
-        alet('here')
-        if (document.addEventListener) {
-          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
-        } else if (document.attachEvent) {
-          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(data))
-          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(data))
-        }
-      } else {
+      // if (typeof WeixinJSBridge === 'undefined') {
+      //   alert('here')
+      //   if (document.addEventListener) {
+      //     document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
+      //   } else if (document.attachEvent) {
+      //     document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(data))
+      //     document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(data))
+      //   }
+      // } else {
         this.wxPayApi(data)
-      }
+      // }
     },
     pay () {
       const self = this
