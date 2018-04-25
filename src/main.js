@@ -83,7 +83,7 @@ Vue.i18n.set('zh-CN')
 //   routes
 // })
 
-FastClick.attach(document.body)
+// FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
