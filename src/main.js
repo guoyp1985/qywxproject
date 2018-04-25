@@ -216,7 +216,7 @@ Vue.http.interceptors.push(function (request, next) {
         // })
       },
       error => {
-        alert(JSON.stringify(error))
+        console.log(JSON.stringify(error))
       }
     )
     // alert('ok')
