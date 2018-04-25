@@ -183,9 +183,7 @@ Vue.http.interceptors.push(function (request, next) {
         const token = data.data.token
         Token.set(token)
         // token = data.data.token // test
-        alert(token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        alert(location.href)
         // alert(data.data.weixin_token)
         // const accessToken = data.data.weixin_token
         // const nonceStr = $vue.$util.randomStr(6)
