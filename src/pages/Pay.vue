@@ -41,7 +41,7 @@ export default {
         }
       )
     },
-    payLoad (data) {
+    pay () {
       if (typeof WeixinJSBridge === 'undefined') {
         alert('here')
         if (document.addEventListener) {
@@ -54,7 +54,7 @@ export default {
         this.wxPayApi(data)
       }
     },
-    pay () {
+    initPay () {
       const self = this
       const orderId = this.$route.params.id
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
@@ -62,12 +62,13 @@ export default {
       .then(data => {
         self.payprice = data.money
         self.receivables = data.weixinname
-        self.payLoad(data)
+        // self.payLoad(data)
       })
     }
   },
   created () {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    this.initPay()
   }
 }
 </script>
