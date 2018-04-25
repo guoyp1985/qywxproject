@@ -16,8 +16,8 @@
           <div class="input-cell">
             <group class="textarea-box">
               <!-- <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea> -->
+              <input ref="text"/>
             </group>
-            <textarea ref="text"></textarea>
           </div>
           <div class="emotion-cell">
             <label class="emotion-btn" @click.prevent.stop="toggleEmotion">
@@ -31,6 +31,8 @@
             </a>
           </div>
         </div>
+        <emotion-box v-show="showEmotBox" v-model="showEmotBox" bind-textarea="chat-textarea">
+        </emotion-box>
       </div>
     </view-box>
   </div>
@@ -56,8 +58,9 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   mounted () {
-    this.textarea = this.$refs.text //this.$refs.text.$refs.textarea
-    alert(this.textarea)
+    // this.textarea = this.$refs.text.$refs.textarea
+    this.textarea = this.$refs.text
+    // alert(this.textarea)
     this.textarea.focus()
   },
   methods: {
