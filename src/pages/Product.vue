@@ -385,7 +385,6 @@ export default {
       return res.json()
     }).then(function (data) {
       self.productdata = data.data ? data.data : data
-      alert(self.productdata)
       self.retailerinfo = self.productdata.retailerinfo
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
