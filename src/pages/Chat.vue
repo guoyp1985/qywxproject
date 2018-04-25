@@ -16,8 +16,8 @@
           <div class="input-cell">
             <group class="textarea-box">
               <!-- <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea> -->
-              <textarea ref="text"></textarea>
             </group>
+            <textarea ref="text"></textarea>
           </div>
           <div class="emotion-cell">
             <label class="emotion-btn" @click.prevent.stop="toggleEmotion">
@@ -57,6 +57,7 @@ export default {
   },
   mounted () {
     this.textarea = this.$refs.text.$refs.textarea
+    console.log(this.textarea)
     this.textarea.focus()
   },
   methods: {
