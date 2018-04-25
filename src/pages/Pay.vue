@@ -71,6 +71,9 @@ export default {
         self.payLoad(data.data)
       })
     }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>
