@@ -375,6 +375,7 @@ export default {
     })
     // }
     self.query = self.$route.query
+    alert(JSON.stringify(self.query))
     let infoparams = { id: self.query.id, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
