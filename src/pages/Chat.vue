@@ -19,13 +19,13 @@
             </group>
           </div>
           <div class="emotion-cell">
-            <label class="emotion-btn" @touchstart.prevent.stop="toggleEmotion">
+            <label class="emotion-btn" @click.prevent.stop="toggleEmotion">
               <img v-if="!showEmotBox" src="../assets/images/icon-face.png"/>
               <img v-else src="../assets/images/icon-keyboard.png"/>
             </label>
           </div>
           <div class="feature-cell">
-            <a class="feature-btn" @touchstart.prevent.stop="toggleFeatureBoard">
+            <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
               <img src="../assets/images/icon-add.png"/>
             </a>
           </div>
@@ -54,9 +54,11 @@ export default {
     }
   },
   created () {
-    this.textarea = this.$refs.text.$refs.textarea
-    alert(this.textarea)
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+  },
+  mounted () {
+    this.textarea = this.$refs.text.$refs.textarea
+    this.textarea.focus()
   },
   methods: {
     onTextClick () {
@@ -85,12 +87,6 @@ export default {
     },
     toggleFeatureBoard () {
 
-    },
-    mounted () {
-      alert('ok')
-      this.textarea = this.$refs.text.$refs.textarea
-      alert(this.textarea)
-      this.textarea.focus()
     }
   }
 }
