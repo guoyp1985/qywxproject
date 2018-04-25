@@ -181,7 +181,7 @@ Vue.http.interceptors.push(function (request, next) {
     .then(
       data => {
         const token = data.data.token
-        Token.set(token)
+        // Token.set(token)
         // token = data.data.token // test
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         // alert(data.data.weixin_token)
