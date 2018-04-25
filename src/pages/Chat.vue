@@ -54,6 +54,7 @@ export default {
     }
   },
   created () {
+    alert('aaa')
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
