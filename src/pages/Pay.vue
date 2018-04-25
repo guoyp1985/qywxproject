@@ -36,7 +36,7 @@ export default {
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           appId: params.appid,
-          timeStamp: this.$util.timeStamp(),
+          timeStamp: param.timestamp,
           nonceStr: params.nonce_str,
           package: `prepay_id=${params.prepay_id}`,
           signType: 'HMAC-SHA256',
