@@ -222,7 +222,6 @@ Vue.http.interceptors.push(function (request, next) {
   } else if (rUrl.origin === ENV.BokaApi) {
     // const token = Token.get()
     // request.method = 'GET'
-    alert(token)
     request.headers.set('Authorization', `Bearer ${token}`)
     // request.headers.set('X-CSRF-Token', 'plugin')
     // continue to next interceptor
