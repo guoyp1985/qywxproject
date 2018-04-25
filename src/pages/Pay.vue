@@ -30,13 +30,14 @@ export default {
   },
   methods: {
     wxPayApi (data) {
-      const params = data
-      alert(JSON.stringify(params))
+      const params = data.data
+      const timeStamp = data.timestamp
+      alert(JSON.stringify(data))
       console.log(this.$util.timeStamp())
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', {
           appId: params.appid,
-          timeStamp: param.timestamp,
+          timeStamp: timeStamp,
           nonceStr: params.nonce_str,
           package: `prepay_id=${params.prepay_id}`,
           signType: 'HMAC-SHA256',
@@ -68,7 +69,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
-        self.payLoad(data.data)
+        self.payLoad(data)
       })
     }
   },
