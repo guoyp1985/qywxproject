@@ -160,6 +160,7 @@ export default {
     }
   },
   mounted () {
+    alert('m')
     this.textarea = document.getElementById(this.bindTextarea).querySelector('textarea')
     this.textareaEventBind()
   }
