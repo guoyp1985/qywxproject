@@ -185,6 +185,7 @@ Vue.http.interceptors.push(function (request, next) {
         // token = data.data.token // test
         // alert(token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        alert(location.href)
         // alert(data.data.weixin_token)
         // const accessToken = data.data.weixin_token
         // const nonceStr = $vue.$util.randomStr(6)

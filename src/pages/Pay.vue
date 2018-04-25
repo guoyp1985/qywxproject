@@ -49,16 +49,16 @@ export default {
         }
       )
     },
-    payLoad () {
+    payLoad (data) {
       if (typeof WeixinJSBridge === 'undefined') {
         if (document.addEventListener) {
-          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi, false)
+          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
         } else if (document.attachEvent) {
-          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi)
-          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi)
+          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(data))
+          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(data))
         }
       } else {
-        this.wxPayApi()
+        this.wxPayApi(data)
       }
     },
     pay () {
@@ -67,7 +67,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
-        self.wxPayApi(data.data)
+        self.payLoad(data.data)
       })
     }
   }
