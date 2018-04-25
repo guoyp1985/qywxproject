@@ -54,7 +54,8 @@ export default {
     }
   },
   created () {
-    alert('aaa')
+    this.textarea = this.$refs.text.$refs.textarea
+    alert(this.textarea)
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
