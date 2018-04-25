@@ -180,7 +180,7 @@ Vue.http.interceptors.push(function (request, next) {
     .then(res => res.json())
     .then(
       data => {
-        // const token = data.data.token
+        const token = data.data.token
         Token.set(token)
         // token = data.data.token // test
         alert(token)
