@@ -1,12 +1,15 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
-    <tab v-model="tabmodel" class="x-toptab">
+    <tab v-if="activitydata.length > 0" v-model="tabmodel" class="x-toptab">
       <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+    </tab>
+    <tab v-else v-model="tabmodel" class="x-toptab">
+      <tab-item :selected="true">{{ tabtxts[1] }}</tab-item>
     </tab>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="index == 0">
+          <template v-if="activitydata.length > 0 && index === 0">
             <div class="scroll_list">
               <div v-if="activitydata.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
                 <div class="t-table">
@@ -59,7 +62,7 @@
               </div>
             </div>
           </template>
-          <template v-if="index == 1">
+          <template v-if="activitydata.length == 0 || index == 1">
             <div class="db-flex padding10 mb5 bg-white" @click="clickadd('groupbuy')">
               <div class="flex_left" style="width:90px;">
                 <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="/src/assets/images/groupbuy.jpg">
@@ -128,7 +131,14 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showgroupbuy" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Groupbuy') }}</div>
+          <div class="popup-top">
+            <div class="t-table h_100">
+              <div class="t-cell h_100 align_center v_middle w70">{{ $t('Groupbuy') }}</div>
+              <div class="t-cell h_100 v_middle pr20 align_right">
+                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'groupbuy'}}">{{ $t('Go to create') }}</router-link>
+              </div>
+            </div>
+          </div>
           <div class="popup-middle font14">
             <div class="pl15 pr15">
               <p class="mt20 title-popup">活动规则</p>
@@ -149,7 +159,14 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showbargainbuy" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Bargainbuy') }}</div>
+          <div class="popup-top flex_center">
+            <div class="t-table h_100">
+              <div class="t-cell h_100 align_center v_middle w70">{{ $t('Bargainbuy') }}</div>
+              <div class="t-cell h_100 v_middle pr20 align_right">
+                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'bargainbuy'}}">{{ $t('Go to create') }}</router-link>
+              </div>
+            </div>
+          </div>
           <div class="popup-middle font14">
             <div class="pl15 pr15">
               <p class="mt20 title-popup">活动规则</p>
@@ -170,7 +187,14 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showdiscount" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Discount') }}</div>
+          <div class="popup-top flex_center">
+            <div class="t-table h_100">
+              <div class="t-cell h_100 align_center v_middle w70">{{ $t('Discount') }}</div>
+              <div class="t-cell h_100 v_middle pr20 align_right">
+                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'discount'}}">{{ $t('Go to create') }}</router-link>
+              </div>
+            </div>
+          </div>
           <div class="popup-middle font14">
             <div class="pl15 pr15">
               <p class="mt20 title-popup">活动规则</p>

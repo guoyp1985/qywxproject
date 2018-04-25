@@ -3,10 +3,10 @@
     <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
-          <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'centerService'}">
+          <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
             <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
           </router-link>
-          <router-link class="t-cell v_middle color-black" :to="{path:'centerService'}">
+          <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
             <div>{{ loginUser.linkman }}</div>
             <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
           </router-link>
@@ -20,7 +20,7 @@
       </div>
     </template>
     <template v-else-if="loginUser">
-      <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'centerService'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
+      <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
     </template>
     <div class="pagemiddle">
       <swiper

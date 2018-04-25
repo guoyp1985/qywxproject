@@ -38,10 +38,10 @@
                 </div>
                 <div v-else v-for="(item,index) in searchdata" :key="item.id" class="scroll_item pt10 pb10">
                   <div class="t-table">
-                    <div class="t-cell v_middle">
+                    <a :href="item.url" class="t-cell v_middle">
                       <div class="clamp1">{{ item.title }}</div>
                       <div class="clamp2 font12 color-gray mt5">{{ item.summary }}</div>
-                    </div>
+                    </a>
                     <div class="t-cell align_right v_middle" style="width:60px;">
                       <span class="qbtn bg-green color-white font12" @click="collect(item,index)">{{ $t('Collect') }}</span>
                     </div>
