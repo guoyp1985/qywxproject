@@ -30,20 +30,13 @@ export default {
   },
   methods: {
     wxPayApi (data) {
-      console.log(data)
+      // console.log(data)
       const params = data.data
-      const timeStamp = data.timestamp.toString()
-      alert(timeStamp)
+      // const timeStamp = data.timestamp.toString()
+      alert(JSON.stringify(params))
       // console.log(this.$util.timeStamp())
       WeixinJSBridge.invoke(
-        'getBrandWCPayRequest', {
-          appId: params.appid,
-          timeStamp: timeStamp,
-          nonceStr: params.nonce_str,
-          package: `prepay_id=${params.prepay_id}`,
-          signType: 'MD5',
-          paySign: params.sign
-        },
+        'getBrandWCPayRequest', params,
         function (res) {
           alert(JSON.stringify(res))
           if (res.err_msg === 'get_brand_wcpay_request:ok' ) {
