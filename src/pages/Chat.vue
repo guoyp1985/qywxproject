@@ -85,6 +85,7 @@ export default {
 
     },
     mounted () {
+      alert('ok')
       this.textarea = this.$refs.text.$refs.textarea
       alert(this.textarea)
       this.textarea.focus()
