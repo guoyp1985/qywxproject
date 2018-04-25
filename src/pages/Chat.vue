@@ -56,7 +56,7 @@ export default {
   },
   mounted () {
     this.textarea = this.$refs.text.$refs.textarea
-    this.textarea.focus()
+    this.textarea.setFocus(true)
   },
   methods: {
     onTextClick () {
