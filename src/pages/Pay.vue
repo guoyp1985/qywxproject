@@ -51,6 +51,7 @@ export default {
     },
     payLoad (data) {
       if (typeof WeixinJSBridge === 'undefined') {
+        alet('here')
         if (document.addEventListener) {
           document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
         } else if (document.attachEvent) {
