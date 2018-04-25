@@ -6,9 +6,28 @@ import Base64 from './base64'
 const Util = {}
 Util.install = function (Vue, options) {
   Vue.prototype.$util = {
+    // 去空格
     trim: (str) => str.replace(Reg.rSpace, ''),
-    isNull: function (str){
+    // 判空
+    isNull: function (str) {
       return !Reg.rNoSpace.test(this.trim(str))
+    },
+    // 判终端
+    isPC: function () {
+      const userAgentInfo = navigator.userAgent
+      if (Reg.rPlatfrom.test(userAgentInfo)) {
+        return false
+      }
+      return true
+    },
+    // 判授权
+    access: function (request, response, authorization, next) {
+      const isPC = this.isPC()
+      if (response.status === 401) {
+        authorization(isPC)
+      } else {
+        next()
+      }
     },
     validate: (model, reg, failHandle) => {
       let re = null
@@ -30,6 +49,14 @@ Util.install = function (Vue, options) {
         if (rs === false) return false
       }
       return re;
+    },
+    deleteItem: function (list, id) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          list.splice(i, 1)
+          break
+        }
+      }
     },
     delay: (text) => {
       let ret = 1000

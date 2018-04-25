@@ -6,81 +6,79 @@
 <template>
   <div id="article-content">
     <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
-    <view-box>
-      <div class="article-view">
-        <div class="article-title">
-          <h2>{{article.title}}</h2>
-        </div>
-        <div class="article-vice-title">
-          <h4>{{article.vicetitle}}</h4>
-        </div>
-        <div class="article-info font14">
-          <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-          <span class="article-ex"></span>
-          <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
-        </div>
-        <div class="article-content" v-html="article.content"></div>
-        <div class="operate-area">
-          <x-button mini plain type="primary" @click.native="onFavorite">
-            <span class="fa fa-star-o"></span>
-            <span>{{$t('Favorite')}}</span>
-          </x-button>
-          <x-button mini plain type="primary" @click.native="onAdvisory">
-            <span class="fa fa-user"></span>
-            <span>{{$t('Advisory')}}</span>
-          </x-button>
-          <x-button mini plain type="primary" @click.native="onStore">
-            <span class="fa fa-user"></span>
-            <span>{{$t('Store')}}</span>
-          </x-button>
-          <!-- <x-button mini plain type="primary" @click.native="onShare">
-            <span class="fa fa-share"></span>
-            <span>{{$t('Share')}}</span>
-          </x-button> -->
-        </div>
-        <div class="reading-info">
-          <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-          <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
-        </div>
-        <div class="qrcode-area">
-          <div class="qrcode-bg">
-            <div class="qrcode">
-              <img src="../assets/_images/fingerprint.gif"/>
-              <div class="scan-area">
-                <img :src="article.qrcode"/>
-              </div>
+    <div class="article-view">
+      <div class="article-title">
+        <h2>{{article.title}}</h2>
+      </div>
+      <div class="article-vice-title">
+        <h4>{{article.vicetitle}}</h4>
+      </div>
+      <div class="article-info font14">
+        <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
+        <span class="article-ex"></span>
+        <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+      </div>
+      <div class="article-content" v-html="article.content"></div>
+      <div class="operate-area">
+        <x-button mini plain type="primary" @click.native="onFavorite">
+          <span class="fa fa-star-o"></span>
+          <span>{{$t('Favorite')}}</span>
+        </x-button>
+        <x-button mini plain type="primary" @click.native="onAdvisory">
+          <span class="fa fa-user"></span>
+          <span>{{$t('Advisory')}}</span>
+        </x-button>
+        <x-button mini plain type="primary" @click.native="onStore">
+          <span class="fa fa-user"></span>
+          <span>{{$t('Store')}}</span>
+        </x-button>
+        <!-- <x-button mini plain type="primary" @click.native="onShare">
+          <span class="fa fa-share"></span>
+          <span>{{$t('Share')}}</span>
+        </x-button> -->
+      </div>
+      <div class="reading-info">
+        <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+        <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
+      </div>
+      <div class="qrcode-area">
+        <div class="qrcode-bg">
+          <div class="qrcode">
+            <img src="../assets/_images/fingerprint.gif"/>
+            <div class="scan-area">
+              <img :src="article.qrcode"/>
             </div>
           </div>
         </div>
       </div>
-      <div class="comment-area">
-        <div class="comment-op font14">
-          <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
-        </div>
-        <template v-if="article.comments">
-          <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
-        </template>
-        <comment v-for="(comment, index) in article.comments" :item="comment" :key="index" @on-reply="onReplyShow">
-          <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
-        </comment>
+    </div>
+    <div class="comment-area">
+      <div class="comment-op font14">
+        <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
       </div>
-    </view-box>
+      <template v-if="article.comments">
+        <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
+      </template>
+      <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
+        <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
+      </comment>
+    </div>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
 </template>
 <script>
-import { ViewBox, Popup, XButton, Divider } from 'vux'
+import { Popup, XButton, Divider } from 'vux'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
 import Time from '#/time'
 import ENV from '#/env'
+import { User } from '#/storage'
 
 export default {
   components: {
-    ViewBox,
     Popup,
     XButton,
     Divider,
@@ -94,7 +92,8 @@ export default {
       commentPopupShow: false,
       replyPopupShow: false,
       reward: {},
-      article: {}
+      article: {},
+      comments: []
     }
   },
   filters: {
@@ -112,6 +111,17 @@ export default {
     onCommentShow () {
       this.commentPopupShow = true
     },
+    onCommentDelete (comment) {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
+      .then(res => res.json())
+      .then(data => {
+        if (data.flag) {
+          self.$util.deleteItem(self.comments, comment.id)
+          self.$vux.toast.text(self.$t('Delete Success'))
+        }
+      })
+    },
     commentPopupCancel () {
       this.commentPopupShow = false
     },
@@ -120,14 +130,22 @@ export default {
     },
     commentSubmit (value) {
       this.commentPopupShow = false
-      let comment = {
-        userName: 'simon',
-        userAvatar: '../assets/_images/nopic.jpg',
-        content: value,
-        date: new Date().getTime(),
-        diggCount: 0
-      }
-      this.article.comments.push(comment)
+      // let comment = {
+      //   userName: 'simon',
+      //   userAvatar: '../assets/_images/nopic.jpg',
+      //   content: value,
+      //   date: new Date().getTime(),
+      //   diggCount: 0
+      // }
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'news', message: value})
+      .then(res => res.json())
+      .then(data => {
+        if (data.flag) {
+          self.comments.push(data.data)
+        }
+      })
+      // this.comments.push(comment)
     },
     replySubmit () {
 
@@ -135,16 +153,17 @@ export default {
     getData () {
       const self = this
       const id = this.$route.params.id
-      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'})
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'}) // 获取文章
       .then(res => res.json())
       .then(data => {
         self.article = data.data
-        return self.$http.get(`${ENV.BokaApi}/api/getUser/${self.article.uploader}`)
+        self.reward = User.get()
+        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        self.reward = data
+        self.comments = data
       })
     },
     onFavorite () {
@@ -166,6 +185,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.getData()
   }
 }

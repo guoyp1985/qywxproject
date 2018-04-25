@@ -6,29 +6,29 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
-      <x-img :src="item.userAvatar"></x-img>
+      <x-img :src="item.avatar" container="#vux_view_box_body"></x-img>
     </div>
     <div class="detail-cell">
       <div class="header-area">
         <div class="name-cell">
-          {{item.userName}}
+          {{item.username}}
         </div>
         <div class="digg-cell color-gray">
-          <a @click="diggClick(item.diggUrl)">
+          <a @click="diggClick(item.dig)">
             <span class="digicon"></span>
-            <span class="digg-count">{{item.diggCount}}</span>
+            <span class="digg-count">{{item.dig}}</span>
           </a>
         </div>
       </div>
-      <div class="comment-content" v-html="item.content"></div>
+      <div class="comment-content" v-html="item.message"></div>
       <div class="date-area">
         <div class="date-cell">
-          {{item.date | dateFormat}}
+          {{item.dateline | dateFormat}}
         </div>
         <div class="btns-cell">
-          <a v-if="item.authority>1" @click="onReply">{{$t('Reply')}}</a>
-          <a v-if="item.authority>2" @click="onReview">{{$t('Review')}}</a>
-          <a v-if="item.authority>2" @click="onDelete">{{$t('Delete')}}</a>
+          <a v-if="params.uploader == item.uid" @click="onReply">{{$t('Reply')}}</a>
+          <!-- <a v-if="uid === item.authority" @click="onReview">{{$t('Review')}}</a> -->
+          <a v-if="params.uid == item.uid" @click="onDelete">{{$t('Delete')}}</a>
         </div>
       </div>
       <div class="reply-area">
@@ -63,13 +63,14 @@ export default {
           replies: []
         }
       }
-    }
+    },
+    params: Object
   },
   computed: {
   },
   filters: {
     dateFormat (date) {
-      return new Time(date).format()
+      return new Time(date * 1000).format()
     }
   },
   methods: {

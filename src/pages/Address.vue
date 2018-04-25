@@ -142,11 +142,8 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/user/address/delete`, {id: item.id})
       .then(res => res.json())
       .then(data => {
-        for (let i = 0; i < self.items.length; i++) {
-          if (self.items[i].id === item.id) {
-            self.items.splice(i, 1)
-            break
-          }
+        if (data.flag) {
+          self.$util.deleteItem(self.items, item.id)
         }
       })
     },

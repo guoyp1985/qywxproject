@@ -97,4 +97,7 @@ export default {
   width: 50px;
   text-align: right;
 }
+.title-tip .user-credit {
+  color: @keywords-color;
+}
 </style>

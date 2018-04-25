@@ -211,7 +211,14 @@ export default {
       this.$router.push({path: `/store`, query: {wid: item.wid}})
     },
     cancelArticel (item) {
-      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.moduleid, module: item.type})
+      .then(res => res.json())
+      .then(data => {
+        if (data.flag) {
+          self.$util.deleteItem(self.articles, item.id)
+        }
+      })
     },
     cancelCommodity (item) {
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})

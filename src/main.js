@@ -11,7 +11,7 @@ import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 import VueResource from 'vue-resource'
-import Login from '#/login'
+// import Login from '#/login'
 import { Token } from '#/storage'
 import ENV from '#/env'
 import Util from '#/util'
@@ -227,7 +227,7 @@ Vue.http.interceptors.push(function (request, next) {
     // request.headers.set('X-CSRF-Token', 'plugin')
     // continue to next interceptor
     next(function (response) {
-      Login.access(request, response, isPC => {
+      $vue.$util.access(request, response, isPC => {
         if (isPC) {
           Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
           .then(res => res.json())

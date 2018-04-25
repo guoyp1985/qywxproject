@@ -75,8 +75,8 @@ export default {
     Emotion
   },
   props: {
-    bindTextarea: String,
-    value: Boolean
+    bindTextarea: String
+    // value: Boolean
   },
   data () {
     return {
@@ -91,16 +91,16 @@ export default {
       // value: ''
     }
   },
-  watch: {
-    value (val) {
-      if (!val) {
-        this.onTextFocus()
-        this.textarea.focus()
-      } else {
-        this.textarea.blur()
-      }
-    }
-  },
+  // watch: {
+  //   value (val) {
+  //     if (!val) {
+  //       this.onTextFocus()
+  //       this.textarea.focus()
+  //     } else {
+  //       this.textarea.blur()
+  //     }
+  //   }
+  // },
   methods: {
     onClick (emot) {
       this.onClickEmotion(emot)
