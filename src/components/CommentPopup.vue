@@ -188,9 +188,4 @@ export default {
 .comment-popup .weui-cells {
   margin-top: 0;
 }
-.emotion-delete,
-.vux-emotion {
-  margin: 5px 10px;
-  float: left;
-}
 </style>

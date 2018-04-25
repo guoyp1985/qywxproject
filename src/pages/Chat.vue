@@ -6,58 +6,88 @@
 <template>
   <div id="chat-room">
     <view-box ref="chatBox" body-padding-bottom="0">
-      <div slot="bottom" class="input-box">
-        <div class="voice-cell">
-          <a class="voice-btn" @click.native.stop="inputVoice">
-            <img src="../assets/images/icon-voice.png"/>
-          </a>
+      <div slot="bottom" class="bottom-area">
+        <div class="input-box">
+          <div class="voice-cell">
+            <a class="voice-btn" @click.stop="toggleVoice">
+              <img src="../assets/images/icon-voice.png"/>
+            </a>
+          </div>
+          <div class="input-cell">
+            <group class="textarea-box">
+              <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+            </group>
+          </div>
+          <div class="emotion-cell">
+            <label class="emotion-btn" @touchstart.prevent.stop="toggleEmotion">
+              <img v-if="!showEmotBox" src="../assets/images/icon-face.png"/>
+              <img v-else src="../assets/images/icon-keyboard.png"/>
+            </label>
+          </div>
+          <div class="feature-cell">
+            <a class="feature-btn" @touchstart.prevent.stop="toggleFeatureBoard">
+              <img src="../assets/images/icon-add.png"/>
+            </a>
+          </div>
         </div>
-        <div class="input-cell">
-          <group class="textarea-box">
-            <x-textarea @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
-          </group>
-        </div>
-        <div class="emotion-cell">
-          <a v-if="true" class="emotion-btn" @click.native.stop="inputEmotion">
-            <img src="../assets/images/icon-face.png"/>
-          </a>
-          <a v-else class="keyboard-btn" @click.native.stop="switchKeyboard">
-            <img src="../assets/images/icon-keyboard.png"/>
-          </a>
-        </div>
-        <div class="feature-cell">
-          <a class="feature-btn" @click.native.stop="switchFeatureBoard">
-            <img src="../assets/images/icon-add.png"/>
-          </a>
-        </div>
+        <emotion-box v-show="showEmotBox" v-model="showEmotBox" bind-textarea="chat-textarea">
+        </emotion-box>
       </div>
     </view-box>
   </div>
 </template>
 <script>
 import { ViewBox, Group, XTextarea } from 'vux'
+import EmotionBox from '@/components/EmotionBox'
 export default {
   components: {
     ViewBox,
     Group,
-    XTextarea
+    XTextarea,
+    EmotionBox
   },
   data () {
     return {
-      intervalId: null
+      intervalId: null,
+      showEmotBox: false,
+      textarea: null
     }
   },
   created () {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
+    onTextClick () {
+      this.showEmotBox = false
+    },
     onFocus () {
       this.intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-      }, 300)
+      }, 100)
     },
     onBlur () {
       clearInterval(this.intervalId)
+    },
+    toggleVoice () {
+
+    },
+    toggleEmotion () {
+      if (this.showEmotBox) {
+        this.showEmotBox = false
+      } else {
+        this.showEmotBox = true
+      }
+    },
+    toggleKeyboard () {
+
+    },
+    toggleFeatureBoard () {
+
+    },
+    mounted () {
+      this.textarea = this.$refs.text.$refs.textarea
+      console.log(this.textarea)
+      this.textarea.focus()
     }
   }
 }
@@ -66,14 +96,16 @@ export default {
 #chat-room {
   height: 100%
 }
-#chat-room .input-box {
-  padding: 0 8px;
-  display: flex;
+#chat-room .bottom-area {
   position: absolute;
   z-index: 500;
   bottom: 0;
   width: 100%;
   box-sizing: border-box;
+}
+#chat-room .input-box {
+  padding: 0 8px;
+  display: flex;
 }
 #chat-room .input-box,
 #chat-room .textarea-box {

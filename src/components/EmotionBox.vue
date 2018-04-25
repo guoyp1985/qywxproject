@@ -2,31 +2,31 @@
   <div class="emotion-box">
     <swiper :show-desc-mask="false" dots-position="center" height="160px">
       <swiper-item class="swiper-page">
-        <emotion v-for="(item, index) in emotions1" :key="index" is-gif @click.native="onClick(item)">{{item}}</emotion>
+        <emotion v-for="(item, index) in emotions1" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
           <img src="../assets/_images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
-        <emotion v-for="(item, index) in emotions2" :key="index" is-gif @click.native="onClick(item)">{{item}}</emotion>
+        <emotion v-for="(item, index) in emotions2" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
           <img src="../assets/_images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
-        <emotion v-for="(item, index) in emotions3" :key="index" is-gif @click.native="onClick(item)">{{item}}</emotion>
+        <emotion v-for="(item, index) in emotions3" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
           <img src="../assets/_images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
-        <emotion v-for="(item, index) in emotions4" :key="index" is-gif @click.native="onClick(item)">{{item}}</emotion>
+        <emotion v-for="(item, index) in emotions4" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
           <img src="../assets/_images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
-        <emotion v-for="(item, index) in emotions5" :key="index" is-gif @click.native="onClick(item)">{{item}}</emotion>
+        <emotion v-for="(item, index) in emotions5" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="deleteEmotion">
           <img src="../assets/_images/delete.png"/>
         </div>
@@ -75,7 +75,8 @@ export default {
     Emotion
   },
   props: {
-    bindTextarea: String
+    bindTextarea: String,
+    value: Boolean
   },
   data () {
     return {
@@ -86,7 +87,18 @@ export default {
       emotions5: emotions[4],
       textarea: null,
       rangeData: undefined,
-      value: ''
+      show: false
+      // value: ''
+    }
+  },
+  watch: {
+    value (val) {
+      if (!val) {
+        this.onTextFocus()
+        this.textarea.focus()
+      } else {
+        this.textarea.blur()
+      }
     }
   },
   methods: {
@@ -96,6 +108,11 @@ export default {
     onDelete () {
       this.deleteEmotion()
     },
+    onTextFocus () {
+      if (this.rangeData) {
+        Cursor.set(this.textarea, this.rangeData)
+      }
+    },
     onTextBlur () {
       this.rangeData = Cursor.get(this.textarea)
     },
@@ -103,12 +120,17 @@ export default {
       emot = `[${emot}]`
       if (this.rangeData) {
         Cursor.add(this.textarea, this.rangeData, emot)
+        this.rangeData = Cursor.get(this.textarea)
+        this.textarea.blur()
+        // alert(JSON.stringify(this.rangeData))
       } else {
+        this.rangeData = {
+          start: emot.length,
+          end: emot.length,
+          text: emot
+        }
         this.textarea.value = emot
       }
-      this.value = this.textarea.value
-      this.rangeData = Cursor.get(this.textarea)
-      this.textarea.blur()
     },
     onInput () {
       this.rangeData = Cursor.get(this.textarea)
@@ -127,9 +149,12 @@ export default {
       this.rangeData.start = str.length
       this.rangeData.end = str.length
       Cursor.set(this.textarea, this.rangeData)
-      this.value = this.textarea.value
+      this.textarea.blur()
+      // this.value = this.textarea.value
     },
     textareaEventBind () {
+      this.textarea.focus()
+      this.textarea.blur()
       this.textarea.addEventListener('blur', this.onTextBlur, false)
       this.textarea.addEventListener('input', this.onInput, false)
     }
@@ -153,5 +178,10 @@ export default {
 .emotion-box .swiper-page {
   box-sizing: border-box;
   padding: 10px;
+}
+.emotion-delete,
+.vux-emotion {
+  margin: 5px 10px;
+  float: left;
 }
 </style>
