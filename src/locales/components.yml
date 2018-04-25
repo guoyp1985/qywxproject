@@ -410,6 +410,7 @@ zh-CN:
   Credits Details: 个人中心
   Credit Details: 金币明细
   Credit: 金币
+  Gain Credit: 获取金币
   Edit: 编辑
   Delete: 删除
   Address: 地址
@@ -427,7 +428,7 @@ zh-CN:
   Sharing Details: 分享明细
   Share To Friend: 分享给好友
   Article: 文章
-  Goods: 商品
+  Commodity: 商品
   Store: 店铺
   Share invite customer: 分享邀请返点客户
   Rebate manage: 返点管理
@@ -483,12 +484,13 @@ zh-CN:
   View Details: 查看详情
   Shipping Address: 收货地址
   No Related Orders: 您还没有相关订单
+  No Related Data: 没有相关数据
+  No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
+  No Related Articles: 没有相关文章
   To Recommend: 去推荐
   My Return Stores: 我的返点店铺
   Bought Stores: 购买过的店铺
-  No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
   No Bought Stores: 您还没有买过东西
-  No Related Articles: 没有相关文章
   Reading: 阅读
   Dig: 点赞
   Comment: 留言
@@ -589,6 +591,31 @@ zh-CN:
   Service Attitude: 配送员服务态度
   To Give Five Stars: 满意请给5分
   Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人
+  Shop Owner: 店主
+  To Write Application Info: 填写申请信息
+  Get Verify Code: 获取验证码
+  Verify Code: 验证码
+  Real Name: 真实姓名
+  Application Reason: 申请理由
+  Must: 必填
+  Agree: 同意
+  Disagree: 不同意
+  Rebate Agreement: 返点客协议
+  Total Sales: 销售总额
+  Rebate Amount: 待返点金额
+  Waiting To Rebate: 待返点
+  Waiting To Return Money: 待提现
+  Already Return Money: 已提现
+  Coming Customer: 带来客户
+  Make Money By Sharing: 分享赚佣金
+  Current Store: 当前店铺
+  To Recommend Store: 推荐店铺
+  Total Income: 累计收入
+  Bring Customer: 带来客户
+  Save Picture To Sharing: 保存图片分享给好友
+  All Checked: 全选
+  Setting Default Success For Address: 默认地址设置成功
+  Favorite Success: 收藏成功
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心
@@ -628,6 +655,7 @@ zh-CN:
   tSalesList: 返点客
   tDecorationShop: 滚动展示
   tRetailerApply: 申请入驻
+  tRebateApply: 返点客申请
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中

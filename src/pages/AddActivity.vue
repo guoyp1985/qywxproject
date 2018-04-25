@@ -25,14 +25,14 @@
         <Forminputplate class="required">
           <span slot="title">{{ $t('Starttime') }}</span>
           <group class="x-datetime">
-            <datetime v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
+            <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
           </group>
           <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
         </Forminputplate>
         <Forminputplate class="required">
           <span slot="title">{{ $t('Endtime') }}</span>
           <group class="x-datetime">
-            <datetime v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
+            <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
           </group>
           <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
         </Forminputplate>
@@ -56,20 +56,31 @@
           <div class="popup-middle">
             <search
               class="x-search"
-              position="absolute"
-              auto-scroll-to-top top="0px"
-              @on-focus="onFocus"
-              @on-cancel="onCancel"
+              :auto-fixed="autofixed"
               @on-submit="onSubmit"
+              @on-change="onChange"
               ref="search">
             </search>
             <div class="scroll_list">
-              <Radioitemplate v-for="(item,index) in getRadiodata" :key="item.id" class="pl10 pr10">
-                <input v-model="submitdata.productid" :value="item.id" slot="radio" type="radio" name="product" :checked="item.checked" @click="radioclick(item)" />
-                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
-                <div slot="title" class="clamp1">{{item.title}}</div>
-                <div slot="title" class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-              </Radioitemplate>
+              <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                <template v-if="searchresult">
+                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                </template>
+                <template v-else>
+                  <div class="flex_center" style="height:80px;">暂无商品</div>
+                </template>
+              </div>
+              <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                <div class="t-table">
+                  <div class="t-cell pic v_middle w50">
+                    <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div slot="title" class="clamp1">{{item.title}}</div>
+                    <div slot="title" class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                  </div>
+                </div>
+              </check-icon>
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -110,12 +121,13 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading } from 'vux'
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon, Radio } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import Radioitemplate from '@/components/Radioitemplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
 import FormDiscount from '@/components/FormDiscount'
+import Time from '#/time'
 import ENV from '#/env'
 
 export default {
@@ -135,10 +147,13 @@ export default {
     Search,
     FormGroupbuy,
     FormBargainbuy,
-    FormDiscount
+    FormDiscount,
+    CheckIcon,
+    Radio
   },
   data () {
     return {
+      autofixed: false,
       query: {},
       allowsubmit: true,
       showalert: false,
@@ -146,7 +161,7 @@ export default {
       showselectproduct: true,
       showproductitem: false,
       selectproduct: {},
-      selectpopupdata: {},
+      selectpopupdata: null,
       showpopup: false,
       productdata: [],
       radiodata: [],
@@ -155,7 +170,9 @@ export default {
       selectdatetxt1: '选择开始时间',
       selectdatetxt2: '选择结束时间',
       submitdata: {},
-      requireddata: {}
+      requireddata: {},
+      searchword: '',
+      searchresult: false
     }
   },
   created: function () {
@@ -170,17 +187,17 @@ export default {
       }
     })
     self.query = self.$route.query
-    self.$http.get(`${ENV.BokaApi}/api/list/product`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      data = data.data ? data.data : data
-      self.productdata = data
-    })
+    self.getProductData()
+    let nowdate = new Date().getTime()
+    let startime = self.dateformat(parseInt(nowdate / 1000))
+    let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
+    self.selectdatetxt1 = ''
+    self.selectdatetxt2 = ''
     if (self.query.type === 'groupbuy') {
       self.submitdata = {
         productid: '',
-        starttime: '',
-        endtime: '',
+        starttime: startime,
+        endtime: endtime,
         param_groupprice: '',
         param_numbers: '',
         param_limitbuy: '',
@@ -190,8 +207,8 @@ export default {
     } else if (self.query.type === 'bargainbuy') {
       self.submitdata = {
         productid: '',
-        starttime: '',
-        endtime: '',
+        starttime: startime,
+        endtime: endtime,
         param_minprice: '',
         param_limitbuy: '',
         param_finishtime: '',
@@ -201,8 +218,8 @@ export default {
     } else if (self.query.type === 'discount') {
       self.submitdata = {
         productid: '',
-        starttime: '',
-        endtime: '',
+        starttime: startime,
+        endtime: endtime,
         param_price: '',
         param_limitcount: '',
         param_storage: ''
@@ -226,26 +243,50 @@ export default {
     }
   },
   computed: {
-    getRadiodata: function () {
-      let curdata = this.productdata
-      for (var i = 0; i < curdata.length; i++) {
-        let d = curdata[i]
-        d.checked = false
-      }
-      this.radiodata = curdata
-      return curdata
-    }
   },
   methods: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    },
+    getProductData (keyword) {
+      const self = this
+      let params = { params: { from: 'activity' } }
+      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        params.params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+          self.searchresult = true
+        } else {
+          self.searchresult = false
+        }
+        data = data.data ? data.data : data
+        self.productdata = data
+      })
+    },
+    onChange (val) {
+      this.searchword = val
+    },
     onSubmit () {
+      const self = this
+      self.getProductData(self.searchword)
     },
-    onFocus () {
-    },
-    onCancel () {
-    },
-    radioclick (d) {
-      this.selectpopupdata = d
-      d.checked = !d.checked
+    radioclick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectpopupdata = data
+      } else {
+        self.selectpopupdata = null
+      }
+      for (let d of self.productdata) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
     },
     radiochange (val) {
       this.checkeduid = val
@@ -296,7 +337,6 @@ export default {
         self.requireddata[key] = self.submitdata[key]
       }
       self.allowsubmit = self.$util.validateQueue(self.requireddata)
-      console.log(self.submitdata)
       if (!self.allowsubmit) {
         self.$vux.alert.show({
           title: '',
@@ -330,14 +370,4 @@ export default {
 </script>
 
 <style lang="less">
-.form-item{position:relative;padding:10px;}
-.form-item:after{
-  content:"";display:block;
-	background-color:@list-border-color;height:1px;overflow:hidden;
-	position: absolute;left: 0;right: 0;bottom:1px;
-	-webkit-transform: scaleY(0.5) translateY(0.5px);
-	transform: scaleY(0.5) translateY(0.5px);
-	-webkit-transform-origin: 0% 0%;
-	transform-origin: 0% 0%;
-}
 </style>

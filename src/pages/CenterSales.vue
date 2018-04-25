@@ -165,8 +165,8 @@ With the customer rebate money together!:
 <script>
 import { Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
 import Salestopplate from '@/components/Salestopplate'
-import Time from '../../libs/time'
-import ENV from '../../libs/env'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {

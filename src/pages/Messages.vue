@@ -1,3 +1,8 @@
+/*
+* @description: 消息页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="message-list">
     <group>

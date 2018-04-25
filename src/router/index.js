@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import routes from '../../libs/routes'
+import routes from '#/routes'
 Vue.use(Router)
 
 // const demos = DemoList.map((com) => {

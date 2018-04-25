@@ -1,10 +1,15 @@
+/*
+* @description: 用户信息页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="user-profile">
     <group label-width="4em" label-align="left" label-margin-right="2em">
       <cell :inline-desc="$t('Sync From Wx')" @click.native="syncWxProfile">
         <img class="avatar" slot="icon" :src="getProfile.avatar"/>
       </cell>
-      <x-input :title="$t('Name')" :placeholder="$t('Name')" v-model="getProfile.linkman"></x-input>
+      <x-input :title="$t('Name')" :placeholder="`${$t('Necessary')}${$t('Name')}`" v-model="getProfile.linkman"></x-input>
       <popup-radio :title="$t('Gendar')" :options="options" v-model="getProfile.sex" :placeholder="$t('Gendar')"></popup-radio>
       <x-input :title="$t('Company Name')" :placeholder="$t('Company Name')" v-model="getProfile.company"></x-input>
       <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="getProfile.mobile"></x-input>
@@ -34,7 +39,6 @@ Confirm:
 <script>
 import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
 import ENV from '../../libs/env'
-import Util from '../../libs/util'
 
 export default {
   components: {
@@ -99,11 +103,14 @@ export default {
     },
     onConfirm () {
       const self = this
-      if (Util.validateQueue({linkman: this.getProfile.linkman})) {
+      if (this.$util.validateQueue({linkman: this.getProfile.linkman})) {
         this.$http.post(`${ENV.BokaApi}/api/user/update/0`, this.getProfile)
         .then(res => res.json())
         .then(data => {
           self.$vux.toast.text(data.error, 'middle')
+          setTimeout(() => {
+            self.$router.go(-1)
+          }, 3000)
         })
       } else {
         self.$vux.toast.text('未填必选项', 'middle')

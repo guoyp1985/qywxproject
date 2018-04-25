@@ -50,6 +50,11 @@ import Evaluation from '@/pages/Evaluation'
 import SharingDetail from '@/pages/SharingDetail'
 import DecorationShop from '@/pages/DecorationShop'
 import RetailerApply from '@/pages/RetailerApply'
+import RebateApply from '@/pages/RebateApply'
+import RebateStore from '@/pages/RebateStore'
+import UserRebateInfo from '@/pages/UserRebateInfo'
+import BringCustomer from '@/pages/BringCustomer'
+import Chat from '@/pages/Chat'
 import Pay from '@/pages/Pay'
 import RetailerSaleview from '@/pages/RetailerSaleview'
 import AccountDetail from '@/pages/AccountDetail'
@@ -165,7 +170,7 @@ export default [
     component: Address
   },
   {
-    path: '/address/:id',
+    path: '/newAddress',
     name: 'tNewAddress',
     component: NewAddress
   },
@@ -333,6 +338,31 @@ export default [
     path: '/retailerApply',
     name: 'tRetailerApply',
     component: RetailerApply
+  },
+  {
+    path: '/rebateApply',
+    name: 'tRebateApply',
+    component: RebateApply
+  },
+  {
+    path: '/rebateStore',
+    name: 'tRebateStore',
+    component: RebateStore
+  },
+  {
+    path: '/userRebateInfo',
+    name: 'tUserRebateInfo',
+    component: UserRebateInfo
+  },
+  {
+    path: '/bringCustomer',
+    name: 'tBringCustomer',
+    component: BringCustomer
+  },
+  {
+    path: '/chat',
+    name: 'tChat',
+    component: Chat
   },
   {
     path: '/pay',

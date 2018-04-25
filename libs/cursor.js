@@ -9,30 +9,30 @@
 
 export default {
 	get: function (textarea) {
-		var rangeData = {text: "", start: 0, end: 0 };
+		var rangeData = {text: '', start: 0, end: 0 };
 
 		if (textarea.setSelectionRange) { // W3C
-			textarea.focus();
+			// textarea.focus();
 			rangeData.start= textarea.selectionStart;
 			rangeData.end = textarea.selectionEnd;
-			rangeData.text = (rangeData.start != rangeData.end) ? textarea.value.substring(rangeData.start, rangeData.end): "";
+			rangeData.text = (rangeData.start != rangeData.end) ? textarea.value.substring(rangeData.start, rangeData.end): '';
 		} else if (document.selection) { // IE
-			textarea.focus();
-			var i,
-				oS = document.selection.createRange(),
+			// textarea.focus();
+			let i = 0
+			let oS = document.selection.createRange()
 				// Don't: oR = textarea.createTextRange()
-				oR = document.body.createTextRange();
+			let oR = document.body.createTextRange()
 			oR.moveToElementText(textarea);
 
 			rangeData.text = oS.text;
-			rangeData.bookmark = oS.getBookmark();
+			rangeData.bookmark = oS.getBookmark()
 
 			// object.moveStart(sUnit [, iCount])
 			// Return Value: Integer that returns the number of units moved.
-			for (i = 0; oR.compareEndPoints('StartToStart', oS) < 0 && oS.moveStart("character", -1) !== 0; i ++) {
+			for (i = 0; oR.compareEndPoints('StartToStart', oS) < 0 && oS.moveStart('character', -1) !== 0; i ++) {
 				// Why? You can alert(textarea.value.length)
 				if (textarea.value.charAt(i) == '\r' ) {
-					i ++;
+					i++
 				}
 			}
 			rangeData.start = i;
@@ -43,15 +43,17 @@ export default {
 	},
 
 	set: function (textarea, rangeData) {
-		var oR, start, end;
+		let oR = null
+		let start = null
+		let end = null
 		if(!rangeData) {
 			Error("You must get cursor position first.")
 		}
-		textarea.focus();
+		// textarea.focus();
 		if (textarea.setSelectionRange) { // W3C
-			textarea.setSelectionRange(rangeData.start, rangeData.end);
+			textarea.setSelectionRange(rangeData.start, rangeData.end)
 		} else if (textarea.createTextRange) { // IE
-			oR = textarea.createTextRange();
+			oR = textarea.createTextRange()
 
 			// Fixbug : ues moveToBookmark()
 			// In IE, if cursor position at the end of textarea, the set function don't work

@@ -9,25 +9,66 @@
         <div class="t-cell align_right">博卡授权中心</div>
       </div>
     </div>
-    <div class="padding10">
-      <div class="btn bg-green color-white align_center" @click="payevent">微信安全支付</div>
-    </div>
+    <box gap="10px">
+      <x-button type="primary" @click.native="pay">微信安全支付</x-button>
+    </box>
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
-
+import { Box, XButton } from 'vux'
+import ENV from '#/env'
 export default {
+  components: {
+    Box,
+    XButton
+  },
   data () {
     return {
       payprice: '1.00'
     }
   },
   methods: {
-    payevent () {
+    wxPayApi (data) {
+      const params = data
+      alert(JSON.stringify(params))
+      console.log(this.$util.timeStamp())
+      window.WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', {
+          appId: params.appid,
+          timeStamp: this.$util.timeStamp(),
+          nonceStr: params.nonce_str,
+          package: `prepay_id=${params.prepay_id}`,
+          signType: 'MD5',
+          paySign: params.sign
+        },
+        function (res) {
+          alert(JSON.stringify(res))
+          if (res.err_msg === 'get_brand_wcpay_request:ok') {
+          }
+        }
+      )
+    },
+    payLoad () {
+      if (typeof WeixinJSBridge === 'undefined') {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi, false)
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi)
+          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi)
+        }
+      } else {
+        this.wxPayApi()
+      }
+    },
+    pay () {
+      const self = this
+      const orderId = this.$route.query.id
+      this.$http.post(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
+      .then(res => res.json())
+      .then(data => {
+        self.wxPayApi(data.data)
+      })
     }
   }
 }

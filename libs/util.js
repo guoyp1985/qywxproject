@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Reg from './reg'
 import ENV from './env'
+import SHA1 from 'js-sha1'
 import Base64 from './base64'
 const Util = {}
 Util.install = function (Vue, options) {
@@ -43,10 +44,29 @@ Util.install = function (Vue, options) {
       }
       return ret
     },
+    wxShare: function() {
+      console.log(this)
+    },
+    timeStamp : () => Math.floor(new Date().getTime()/1000).toString(),
+    randomStr: (len) => {
+      if (!len) {
+        len = 16
+      }
+      const strLen = ENV.FeedChars.length;
+      let ret = '';
+      for (let i = 0; i < len; i++) {
+        ret += ENV.FeedChars.charAt(Math.floor(Math.random() * strLen));
+      }
+      return ret;
+    },
+    wxSign: (accessToken, appId, nonceStr, timeStamp, url) => {
+      alert(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
+      SHA1(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
+    },
     query : (url) => {
-  		if (!url) {
-  			url = location.href
-  		}
+      if (!url) {
+        url = location.href
+      }
       let query = {}
       let lastindex = url.lastIndexOf('?')
       if (lastindex >= 0) {
@@ -60,7 +80,7 @@ Util.install = function (Vue, options) {
         query[p[0]] = p[1]
       }
       return query
-  	},
+    },
     shareSuccess: (options) => {
       let wxData = options.data
       Vue.http.get(`${ENV.BokaApi}/api/credit`,{
@@ -86,11 +106,11 @@ Util.install = function (Vue, options) {
         return res.json()
       }).then(function (data) {
         Vue.wechat.config(data)
-        Vue.wechat.error(function(){
-      		//alert("微信还没有准备好，请刷新页面");
-      	});
-        Vue.wechat.ready(function(){
-          options.readyCallback && options.readyCallback();
+        Vue.wechat.error(function () {
+          //alert("微信还没有准备好，请刷新页面");
+        });
+        Vue.wechat.ready(function () {
+          options.readyCallback && options.readyCallback()
           Vue.wechat.showMenuItems({
             menuList: [
               'menuItem:profile',
@@ -111,7 +131,7 @@ Util.install = function (Vue, options) {
           let wxshareurl = wxData.link
           let query = self.query(wxshareurl)
           if (query.openid) {
-              wxshareurl = wxshareurl.replace('&openid=' + query.openid, '').replace('openid=' + query.openid, '')
+              wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
           }
           Vue.wechat.checkJsApi({
             jsApiList: ['onMenuShareAppMessage'],
@@ -143,8 +163,8 @@ Util.install = function (Vue, options) {
               }
             },
             success: function (resp) {
-              if(isUpdate){
-                alert("微信版本太低，请先升级微信客户端!");
+              if (isUpdate) {
+                alert("微信版本太低，请先升级微信客户端!")
               }
               Util.shareSuccess({
                 data: wxData,
@@ -166,7 +186,7 @@ Util.install = function (Vue, options) {
               //分享之前执行
               //	alert('用户点击发送给朋友');
               options.beforeShare && options.beforeShare()
-              if(wxData.desc == "undefined" || wxData.desc == undefined){
+              if (wxData.desc === "undefined" || wxData.desc === undefined) {
                 alert("微信还没准备好分享，请稍后再试");
               }
             },
@@ -192,7 +212,7 @@ Util.install = function (Vue, options) {
               //分享之前执行
               //	alert('用户点击发送给朋友');
               options.beforeShare && options.beforeShare()
-              if(wxData.desc == "undefined" || wxData.desc == undefined){
+              if (wxData.desc === "undefined" || wxData.desc === undefined) {
                 alert("微信还没准备好分享，请稍后再试");
               }
             },
@@ -208,7 +228,7 @@ Util.install = function (Vue, options) {
                 type: 'qq'
               })
             }
-          });
+          })
         })
       })
     },
@@ -216,4 +236,5 @@ Util.install = function (Vue, options) {
     }
   }
 }
+
 export default Util

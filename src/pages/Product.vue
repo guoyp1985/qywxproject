@@ -349,32 +349,14 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    /*
-    let getuser = User.get()
-    if (getuser) {
-      self.loginUser = getuser
+    self.query = self.$route.query
+    self.loginUser = User.get()
+    if (self.loginUser) {
       self.isshowtop = true
       setTimeout(function () {
         self.isshowtop = false
       }, 5000)
-    } else {
-      */
-    self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      if (data) {
-        self.loginUser = data
-        User.set(data)
-        self.isshowtop = true
-        setTimeout(function () {
-          self.isshowtop = false
-        }, 5000)
-      } else {
-        self.isshowtop = false
-      }
-    })
-    // }
-    self.query = self.$route.query
+    }
     let infoparams = { id: self.query.id, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -391,37 +373,37 @@ export default {
       }
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
-    })
-    let buyparams = {}
-    if (self.query.wid) {
-      buyparams['wid'] = self.query.wid
-    } else {
-      buyparams['productid'] = self.query.id
-    }
-    self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-      params: buyparams
-    }).then(function (res) {
-      return res.json()
+      let buyparams = {}
+      if (self.query.wid) {
+        buyparams['wid'] = self.query.wid
+      } else {
+        buyparams['productid'] = self.query.id
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+        params: buyparams
+      }).then(function (res) {
+        return res.json()
+      })
     }).then(function (data) {
       if (data.flag === 1) {
         self.buyuserdata = (data.data ? data.data : data)
       }
-    })
-    self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
-      { params: { module: self.module, id: self.query.id } }
-    ).then(function (res) {
-      return res.json()
+      return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+        { params: { module: self.module, id: self.query.id } }
+      ).then(function (res) {
+        return res.json()
+      })
     }).then(function (data) {
       if (data.flag === 1) {
         self.isfavorite = true
       } else {
         self.isfavorite = false
       }
-    })
-    self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-      { params: { module: self.module, nid: self.query.id } }
-    ).then(function (res) {
-      return res.json()
+      return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
+        { params: { module: self.module, nid: self.query.id } }
+      ).then(function (res) {
+        return res.json()
+      })
     }).then(function (data) {
       if (data.flag === 1) {
         self.evluatedata = (data.data ? data.data : data)

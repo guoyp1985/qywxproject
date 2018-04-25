@@ -1,85 +1,114 @@
+/*
+* @description: 收藏页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="personal-favorite">
-    <div class="top-banner">
-      <div class="f-title">
-        <div class="user-avatar">
-          <img :src="avatar"/>
-        </div>
-        <div class="user-info">
-          <div class="font16 color-white">{{ name }}</div>
-          <div class="coin-row">
-            <span class="user-coin">
-              <i class="al al-jinbi3 font20"></i>
-              <span class="font13 color-white">{{ coins }}</span>
-            </span>
+    <sticky scroll-box="personal-favorite">
+      <div class="top-banner">
+        <div class="f-title">
+          <div class="user-avatar">
+            <img :src="avatar"/>
+          </div>
+          <div class="user-info">
+            <div class="font16 color-white">{{ name }}</div>
+            <div class="coin-row">
+              <span class="user-coin">
+                <i class="al al-jinbi3 font20"></i>
+                <span class="font13 color-white">{{ coins }}</span>
+              </span>
+            </div>
           </div>
         </div>
+        <tab class="x-tab" v-model="selectedIndex">
+          <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
+          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
+          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
+        </tab>
       </div>
-      <tab class="x-tab" v-model="selectedIndex">
-        <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
-        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Goods') }}</tab-item>
-        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
-      </tab>
-      <swipeout v-show="selectedIndex===0">
-        <swipeout-item transition-mode="follow" v-for="(article, index) in articles" :key="index">
+    </sticky>
+    <swipeout v-show="selectedIndex===0">
+      <template v-if="articles.length">
+        <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
           <div slot="right-menu">
-            <swipeout-button @click.native="onCancelClick('fav')" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+            <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="article.src"></x-img>
+              <x-img :src="article.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
                 {{article.title}}
               </div>
               <div class="font12 color-gray">
-                {{article.date | dateFormat}}
+                {{article.dateline | dateFormat}}
               </div>
             </div>
           </div>
         </swipeout-item>
-      </swipeout>
-      <swipeout v-show="selectedIndex===1">
-        <swipeout-item transition-mode="follow" v-for="(goods, index) in goodses" :key="index">
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
+        </div>
+      </template>
+    </swipeout>
+    <swipeout v-show="selectedIndex===1">
+      <template v-if="commodities.length">
+        <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
           <div slot="right-menu">
-            <swipeout-button @click.native="onCancelClick('fav')" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+            <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="goods.src"></x-img>
+              <x-img :src="commodity.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
-                {{goods.title}}
+                {{commodity.title}}
               </div>
               <div class="font12 color-gray">
-                {{goods.date | dateFormat}}
+                {{commodity.dateline | dateFormat}}
               </div>
             </div>
           </div>
         </swipeout-item>
-      </swipeout>
-      <swipeout v-show="selectedIndex===2">
-        <swipeout-item transition-mode="follow" v-for="(store, index) in stores" :key="index">
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
+        </div>
+      </template>
+    </swipeout>
+    <swipeout v-show="selectedIndex===2">
+      <template v-if="stores.length">
+        <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
           <div slot="right-menu">
-            <swipeout-button @click.native="onCancelClick('fav')" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+            <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.src"></x-img>
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
                 {{store.title}}
               </div>
               <div class="font12 color-gray">
-                {{store.date | dateFormat}}
+                {{store.dateline | dateFormat}}
               </div>
             </div>
           </div>
         </swipeout-item>
-      </swipeout>
+      </template>
+      <template v-else>
+        <div class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
+        </div>
+      </template>
+    </swipeout>
       <!-- <swiper v-model="selectedIndex" height="100px" :show-dots="false">
         <swiper-item key="0">
           12123
@@ -91,7 +120,6 @@
           233
         </swiper-item>
       </swiper> -->
-    </div>
   </div>
 </template>
 
@@ -100,9 +128,10 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg } from 'vux'
-import Time from '../../libs/time'
-
+import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky } from 'vux'
+import Time from '#/time'
+import ENV from '#/env'
+import { User } from '#/storage'
 export default {
   components: {
     Grid,
@@ -114,7 +143,8 @@ export default {
     Swipeout,
     SwipeoutItem,
     SwipeoutButton,
-    XImg
+    XImg,
+    Sticky
   },
   data () {
     return {
@@ -122,62 +152,88 @@ export default {
       avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
       name: '黄一萌',
       coins: 50,
-      articles: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '文章一',
-          date: 1522659301220,
-          url: '/component/cell'
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '文章二',
-          date: 1522659301220,
-          url: '/component/cell'
-        }
-      ],
-      goodses: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '商品一',
-          date: 1522659301220,
-          url: '/component/cell'
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '商品二',
-          date: 1522659301220,
-          url: '/component/cell'
-        }
-      ],
-      stores: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '店铺一',
-          date: 1522659301220,
-          url: '/component/cell'
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '店铺二',
-          date: 1522659301220,
-          url: '/component/cell'
-        }
-      ]
+      articles: [],
+      commodities: [],
+      stores: []
     }
   },
   methods: {
     onItemClick (index) {
-
+      switch (index) {
+        case 0:
+          this.getArticles()
+          break
+        case 1:
+          this.getCommodities()
+          break
+        case 2:
+          this.getStores()
+          break
+      }
     },
     onCancelClick () {
 
+    },
+    getArticles () {
+      const self = this
+      const user = User.get()
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'news'})
+      .then(res => res.json())
+      .then(data => {
+        self.articles = data
+      })
+    },
+    getCommodities () {
+      const self = this
+      const user = User.get()
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'product'})
+      .then(res => res.json())
+      .then(data => {
+        self.commodities = data
+      })
+    },
+    getStores () {
+      const self = this
+      const user = User.get()
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'retailer'})
+      .then(res => res.json())
+      .then(data => {
+        self.stores = data
+      })
+    },
+    articleItemClick (item) {
+      this.$router.push({path: `/articles/${item.id}`})
+    },
+    commodityItemClick (item) {
+      this.$router.push({path: `/product`, query: {id: item.id, wid: item.wid}})
+    },
+    storeItemClick (item) {
+      this.$router.push({path: `/store`, query: {wid: item.wid}})
+    },
+    cancelArticel (item) {
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+    },
+    cancelCommodity (item) {
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+    },
+    cancelStore (item) {
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+    },
+    getData () {
+      const user = User.get()
+      this.avatar = user.avatar
+      this.name = user.linkman
+      this.coins = user.credit
     }
   },
   filters: {
     dateFormat: function (isoDate) {
-      return `收藏时间: ${new Time(isoDate).dateFormat('yyyy-MM-dd hh:mm')}`
+      return `收藏时间: ${new Time(isoDate * 1000).dateFormat('yyyy-MM-dd hh:mm')}`
     }
+  },
+  created () {
+    this.getData()
+    this.getArticles()
   }
 }
 </script>
@@ -185,11 +241,11 @@ export default {
 <style lang="less">
 #personal-favorite .top-banner {
   width: 100%;
-  height: 154px;
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
+  // height: 154px;
+  // position: absolute;
+  // left: 0;
+  // top: 0;
+  // right: 0;
   background-image: url(../assets/images/bannerbg2.png);
   background-repeat: no-repeat;
   background-position: center center;

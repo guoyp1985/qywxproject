@@ -1,41 +1,46 @@
+/*
+* @description: 文章详情页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="article-content">
-    <title-tip scroll-box="article-content" :avatar-href="reward.userAvatar" :user-name="reward.userName" :user-credit="reward.credit"></title-tip>
+    <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
     <view-box>
       <div class="article-view">
         <div class="article-title">
           <h2>{{article.title}}</h2>
         </div>
         <div class="article-vice-title">
-          <h4>{{article.viceTitle}}</h4>
+          <h4>{{article.vicetitle}}</h4>
         </div>
         <div class="article-info font14">
-          <span class="article-date">{{article.date | dateFormat}}</span>
+          <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
           <span class="article-ex"></span>
           <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
         </div>
-        <div class="article-content" v-html="article.contentHtml"></div>
+        <div class="article-content" v-html="article.content"></div>
         <div class="operate-area">
-          <x-button mini plain type="primary">
+          <x-button mini plain type="primary" @click.native="onFavorite">
             <span class="fa fa-star-o"></span>
             <span>{{$t('Favorite')}}</span>
           </x-button>
-          <x-button mini plain type="primary">
+          <x-button mini plain type="primary" @click.native="onAdvisory">
             <span class="fa fa-user"></span>
             <span>{{$t('Advisory')}}</span>
           </x-button>
-          <x-button mini plain type="primary">
+          <x-button mini plain type="primary" @click.native="onStore">
             <span class="fa fa-user"></span>
             <span>{{$t('Store')}}</span>
           </x-button>
-          <x-button mini plain type="primary">
+          <!-- <x-button mini plain type="primary" @click.native="onShare">
             <span class="fa fa-share"></span>
             <span>{{$t('Share')}}</span>
-          </x-button>
+          </x-button> -->
         </div>
         <div class="reading-info">
-          <span class="font14 color-gray">{{$t('Reading')}} {{article.readingCount}}</span>
-          <span class="font14 color-gray"><span class="digicon"></span> {{article.digCount}}</span>
+          <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+          <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
         </div>
         <div class="qrcode-area">
           <div class="qrcode-bg">
@@ -52,7 +57,7 @@
         <div class="comment-op font14">
           <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
         </div>
-        <template v-if="article.comments.length">
+        <template v-if="article.comments">
           <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
         </template>
         <comment v-for="(comment, index) in article.comments" :item="comment" :key="index" @on-reply="onReplyShow">
@@ -70,7 +75,8 @@ import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
@@ -87,70 +93,16 @@ export default {
     return {
       commentPopupShow: false,
       replyPopupShow: false,
-      reward: {
-        userName: '黄一萌',
-        userAvatar: '',
-        credit: 50
-      },
-      article: {
-        title: '文章标题',
-        viceTitle: '',
-        author: '博卡软件',
-        date: 1522659301220,
-        contentHtml: '',
-        readingCount: 0,
-        digCount: 0,
-        qrcode: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15207609289091.jpg',
-        comments: [
-          {
-            userName: 'a',
-            userAvatar: '../assets/_images/nopic.jpg',
-            content: 'okokok',
-            date: 1523360988272,
-            diggCount: 0,
-            replies: [
-              {
-                userName: 'unkown',
-                date: 1523446874216,
-                diggCount: 0,
-                content: '我是内容',
-                authority: 3
-              },
-              {
-                userName: 'unkown',
-                date: 1523446874216,
-                diggCount: 0,
-                content: '我是内容',
-                authority: 3
-              }
-            ],
-            authority: 3
-          },
-          {
-            userName: 'nnn',
-            userAvatar: '../assets/_images/nopic.jpg',
-            content: 'afasfklajlfjsfjas;jfasdlkjfa;fja;fja;fjadqorewrojwqoejrwoqerjo;f',
-            date: 1522659301220,
-            diggCount: 0,
-            replies: [],
-            authority: 3
-          },
-          {
-            userName: 'hhh',
-            userAvatar: '../assets/_images/nopic.jpg',
-            content: '你好！',
-            date: 1522659301220,
-            diggCount: 0,
-            replies: [],
-            authority: 3
-          }
-        ]
-      }
+      reward: {},
+      article: {}
     }
   },
   filters: {
     dateFormat: function (date) {
-      return new Time(date).dateFormat('yyyy-MM-dd hh:mm')
+      return new Time(date * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    },
+    readingCountFormat: function (count) {
+      return count > 100000 ? '100000+' : count
     }
   },
   methods: {
@@ -179,7 +131,42 @@ export default {
     },
     replySubmit () {
 
+    },
+    getData () {
+      const self = this
+      const id = this.$route.params.id
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'})
+      .then(res => res.json())
+      .then(data => {
+        self.article = data.data
+        return self.$http.get(`${ENV.BokaApi}/api/getUser/${self.article.uploader}`)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        self.reward = data
+      })
+    },
+    onFavorite () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
+      .then(res => res.json())
+      .then(data => {
+        self.$vux.toast.text(self.$t('Favorite Success'))
+      })
+    },
+    onAdvisory () {
+
+    },
+    onStore () {
+
+    },
+    onShare () {
+
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

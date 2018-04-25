@@ -301,6 +301,7 @@ export default {
             }
           }
         })
+        self.$router.push({path: '/pay', query: {id: data.id}})
       })
       */
     }

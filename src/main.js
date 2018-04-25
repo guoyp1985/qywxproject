@@ -11,10 +11,10 @@ import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 import VueResource from 'vue-resource'
-import Login from '../libs/login'
-import { Token } from '../libs/storage'
-import ENV from '../libs/env'
-import Util from '../libs/util'
+import Login from '#/login'
+import { Token } from '#/storage'
+import ENV from '#/env'
+import Util from '#/util'
 
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -83,7 +83,7 @@ Vue.i18n.set('zh-CN')
 //   routes
 // })
 
-FastClick.attach(document.body)
+// FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
@@ -145,46 +145,85 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-const excludeUrls = [
-  `${ENV.BokaApi}/weixin/userAuth/*`,
-  `${ENV.BokaApi}/weixin/qrcode/login*`,
+let excludeUrls = [
+  `${ENV.BokaApi}/api/authLogin/*`,
+  `${ENV.BokaApi}/api/qrcode/login*`,
   `${ENV.BokaApi}/api/login/*`,
   `${ENV.BokaApi}/api/scanlogin`
+  // `${ENV.BokaApi}/api/weixin/token`
 ]
 
 // 排除全局请求过滤器中的请求url
 const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
-  for (let r = 0; r < rExcludeUrls.length; r++) {
-    if (rExcludeUrls[r].test(url)) {
+  for (let i = 0; i < rExcludeUrls.length; i++) {
+    // alert(`${item.url} ${item.reqMax}`)
+    if (rExcludeUrls[i].test(url)) {
       return true
     }
   }
   return false
 }
-
+// localStorage.clear()
+// let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  console.log(matchExclude(rUrl.href))
+  // console.log(matchExclude(rUrl.href))
   if (matchExclude(rUrl.href)) {
     return
   }
   if (lUrl.query.code) {
     const code = lUrl.query.code
-    Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
+    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(res => res.json())
     .then(
-      (data) => {
+      data => {
         Token.set(data.data.token)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        token = data.data.token // test
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // alert(data.data.weixin_token)
+        // const accessToken = data.data.weixin_token
+        // const nonceStr = $vue.$util.randomStr(6)
+        // const timeStamp = $vue.$util.timeStamp()
+        // const currentUrl = urlParse(location.href, true)
+        // const url = currentUrl.href.replace(/#\/\w*/g, '')
+        // alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+        // const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+        // WeixinJSBridge.invoke('editAddress', {
+        //   appId: ENV.AppId,
+        //   scope: 'jsapi_address',
+        //   signType: 'sha1',
+        //   addrSign: addrSign,
+        //   timeStamp: timeStamp,
+        //   nonceStr: nonceStr
+        // },
+        // res => {
+        //   alert(res.err_msg)
+        //   if (res.err_msg === 'edit_address:ok') {
+        //     const param = {
+        //       linkman: res.userName,
+        //       telephone: res.telNumber,
+        //       province: res.proviceFirstStageName,
+        //       city: res.addressCitySecondStageName,
+        //       counties: res.addressCountiesThirdStageName,
+        //       address: res.addressDetailInfo
+        //     }
+        //     alert(param)
+        //   }
+        // })
+      },
+      error => {
+        alert(JSON.stringify(error))
       }
     )
+    // alert('ok')
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
     // request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
+    // request.headers.set('X-CSRF-Token', 'plugin')
     // continue to next interceptor
     next(function (response) {
       Login.access(request, response, isPC => {
@@ -212,7 +251,7 @@ Vue.http.interceptors.push(function (request, next) {
   }
 })
 
-new Vue({
+const $vue = new Vue({
   store,
   router,
   render: h => h(App)

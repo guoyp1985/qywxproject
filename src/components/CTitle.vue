@@ -1,3 +1,8 @@
+/*
+* @description: 个人中心头部组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div class="ctitle">
     <div class="info-area">
@@ -25,7 +30,7 @@
       </div>
     </div>
     <div class="message-btn">
-      <router-link :to="{ name: 'messages', params: { profile: profile } }">
+      <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
         <span class="al al-pinglun color-white font24"></span>
         <badge class="msg-badge" v-if="messages > 0" :text="messages"></badge>
       </router-link>

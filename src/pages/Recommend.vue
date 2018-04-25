@@ -1,3 +1,8 @@
+/*
+* @description: 返点客页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="to-recommend">
     <sticky scroll-box="to-recommend">
@@ -8,7 +13,7 @@
     </sticky>
     <view-box v-show="selectedIndex===0">
       <group v-if="list.length">
-        <cell-box is-link v-for="(item, index) in list" :key="index">
+        <cell-box v-for="(item, index) in list" :key="index" :link="{name: 'tRebateStore', params: {id: item.id}}">
           <div class="store-img">
             <x-img :src="item.img"></x-img>
           </div>
@@ -35,8 +40,7 @@
             </div>
           </div>
           <div class="operate-cell">
-            <x-button class="font12" v-if="item.applyStatus === 1" mini type="primary" @click.native="applyClick">申请返点客</x-button>
-            <x-button class="font12" v-else mimi disabled>正在处理</x-button>
+            <x-button class="font12" mini type="primary" @click.native="applyClick">申请返点客</x-button>
           </div>
         </cell-box>
       </group>
@@ -63,12 +67,18 @@ export default {
   data () {
     return {
       selectedIndex: 0,
-      list: [],
+      list: [
+        {
+          id: '1',
+          img: '../../assets/_images/nopic.jpg',
+          name: 'adidas'
+        }
+      ],
       list1: [
         {
+          id: '1',
           img: '../../assets/_images/nopic.jpg',
-          name: 'adidas',
-          applyStatus: 2
+          name: 'adidas'
         }
       ]
     }
@@ -79,8 +89,11 @@ export default {
   },
   methods: {
     applyClick (id) {
-
+      this.$router.push({name: 'tRebateApply'})
     }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>

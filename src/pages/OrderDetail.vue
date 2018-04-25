@@ -1,3 +1,8 @@
+/*
+* @description: 订单详情页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="order-detail">
     <sticky scroll-box="order-detail">
@@ -23,8 +28,8 @@
     </sticky>
     <group class="shipping-card">
       <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link link="/shippingDetails"></cell>
-      <cell class="font14" :title="$t('Receiver')+': '+receiver" :value="receiverPhone"></cell>
-      <cell class="shipping-address font12 color-gray" :title="$t('Shipping Address')+': '+shippingAddress"></cell>
+      <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
+      <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
     </group>
     <order-info :item="order" @on-eval="evaluate"></order-info>
     <div v-transfer-dom class="qrcode-dialog">

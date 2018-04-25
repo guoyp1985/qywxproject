@@ -1,3 +1,8 @@
+/*
+* @description: 分享明细页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <div id="personal-credit">
     <!-- <c-title :link-info="{path:'/profile'}"
@@ -5,18 +10,19 @@
     </c-title> -->
     <group>
       <group-title slot="title">{{$t('Sharing Details')}}</group-title>
-      <cell v-for="(item, index) in items"
-      :key="index"
+      <cell v-for="(item, index) in list"
+      :key="item.id"
       class="share-item font14"
       align-items
       :title="item.title"
-      :inline-desc="item.dateline | dateFormat"
-      :link="{name: 'sharingDetail', params: {id: item.id}}"
-      is-link="false">
-        <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.src"></x-img>
-        <div>
+      :link="{name: 'tSharingDetail', params: {id: item.id}}">
+        <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.photo"></x-img>
+        <div slot="inline-desc">
+          {{item.dateline | dateFormat}} {{item.typestr}}
+        </div>
+        <div slot="child">
           <span class="al al-jinbi color-gold"></span>
-          <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+          <span class="color-red credit-txt">{{ item.credits | valueFormat }}</span>
         </div>
       </cell>
     </group>
@@ -30,8 +36,8 @@ Sharing Details:
 
 <script>
 import { Group, GroupTitle, Cell, XImg } from 'vux'
-import Time from '../../libs/time'
-
+import Time from '#/time'
+import ENV from '#/env'
 export default {
   components: {
     Group,
@@ -42,20 +48,7 @@ export default {
   data () {
     return {
       type: '1',
-      items: [
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '分享',
-          dateline: 1522659301220,
-          credit: 50
-        },
-        {
-          src: 'http://somedomain.somdomain/x.jpg',
-          title: '分享',
-          dateline: 1522659301220,
-          credit: -50
-        }
-      ]
+      list: []
     }
   },
   filters: {
@@ -65,6 +58,19 @@ export default {
     valueFormat: function (value) {
       return Number(value) < 0 ? `${value}` : `+${value}`
     }
+  },
+  methods: {
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/list/share`)
+      .then(res => res.json())
+      .then(data => {
+        self.list = data
+      })
+    }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>
