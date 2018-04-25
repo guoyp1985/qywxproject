@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea paypage bg-white" v-cloak>
+  <div class="containerarea paypage bg-white">
     <div class="flex_center inner">
       <div>{{ $t('RMB') }}{{ payPrice }}</div>
   	</div>
