@@ -30,8 +30,6 @@
             </a>
           </div>
         </div>
-        <emotion-box v-show="showEmotBox" v-model="showEmotBox" bind-textarea="chat-textarea">
-        </emotion-box>
       </div>
     </view-box>
   </div>
