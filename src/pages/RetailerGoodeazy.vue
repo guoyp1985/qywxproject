@@ -22,10 +22,7 @@
             <div class="mb15" style="position:relative;">
               <search
                 class="x-search"
-                position="absolute"
-                auto-scroll-to-top top="0px"
-                @on-focus="onFocus"
-                @on-cancel="onCancel"
+                :auto-fixed="autofixed"
                 @on-submit="onSubmit"
                 @on-change="onChange"
                 ref="search">
@@ -142,6 +139,7 @@ export default {
   },
   data () {
     return {
+      autofixed: false,
       tabtxts: [ '关键词', '链接' ],
       tabmodel: 0,
       newsdata: [],
@@ -156,12 +154,6 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   methods: {
-    setFocus () {
-    },
-    resultClick (item) {
-    },
-    getResult (val) {
-    },
     onChange (val) {
       this.searchword = val
     },
@@ -219,7 +211,8 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.searchdata.splice(index, 1)
+                  // self.searchdata.splice(index, 1)
+                  self.$router.push(`/articles/${data.data.id}`)
                 }
               }
             })
@@ -248,7 +241,8 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.newsdata.push(data.data)
+              // self.newsdata.push(data.data)
+              self.$router.push(`/articles/${data.data.id}`)
             }
           }
         })

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14">
+  <div class="containerarea font14 retailerrevenue">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
@@ -12,17 +12,22 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tablink">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
               <div class="scroll_list pl10 pr10">
-                <Checkboxitemplate v-for="(item,index1) in getCheckdata" :key="item.id">
+                <div v-if="!getCheckdata || getCheckdata.length == 0" class="scroll_item color-gray padding10 align_center">
+                  <div><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5">暂无待提现金额记录！</div>
+                  <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
+                </div>
+                <Checkboxitemplate v-else v-for="(item,index1) in getCheckdata" :key="item.id">
                   <input slot="checkbox" type="checkbox" :checked="item.checked" @click="checkboxclick(item)" />
                   <img slot="pic" :src="item.avatar" class="avatarimg1" />
                   <div slot="title" class="clamp1">{{item.buyername}}</div>
@@ -47,7 +52,28 @@
           </template>
           <template v-if="(index == 1)">
             <div class="scroll_list pl10 pr10">
-              <Listplate v-for="(item,index1) in tabdata2" :key="item.id">
+              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+                <div><i class="al al-wushuju font60" ></i></div>
+                <div class="mt5">暂无待提现金额记录！</div>
+                <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
+              </div>
+              <Listplate v-else v-for="(item,index1) in tabdata2" :key="item.id">
+                <img slot="pic" :src="item.avatar" class="avatarimg1" />
+                <div slot="title" class="clamp1">{{item.buyername}}</div>
+                <div slot="title" class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span>{{ item.products }}</span></div>
+                <div slot="title" class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+              </Listplate>
+            </div>
+          </template>
+          <template v-if="(index == 2)">
+            <div class="scroll_list pl10 pr10">
+              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+                <div><i class="al al-wushuju font60" ></i></div>
+                <div class="mt5">暂无待结算订单记录！</div>
+                <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
+              </div>
+              <Listplate v-else v-for="(item,index1) in tabdata3" :key="item.id">
                 <img slot="pic" :src="item.avatar" class="avatarimg1" />
                 <div slot="title" class="clamp1">{{item.buyername}}</div>
                 <div slot="title" class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span>{{ item.products }}</span></div>
@@ -112,7 +138,8 @@ Know txt:
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup } from 'vux'
 import Checkboxitemplate from '@/components/Checkboxitemplate'
 import Listplate from '@/components/Listplate'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -132,52 +159,33 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   data () {
     return {
-      tabtxts: [ '未提现', '已提现' ],
+      tabtxts: [ '未提现', '待结算', '已提现' ],
       tabmodel: 0,
-      tabdata1: [
-        {
-          id: '1', uid: '51', dateline: 1522221270, content: '订单收入', buyername: '艳绝天下', username: '贪吃小松鼠', products: '欧美宽松潮牌国潮复古加绒卫衣男连帽韩版外套男女oversize青少年', money: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
-        },
-        {
-          id: '2', uid: '272', dateline: 1522221270, content: '订单收入', buyername: '周学江', username: 'zxj', products: '苹果手机', money: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
-        },
-        {
-          id: '3', uid: '29', dateline: 1522221270, content: '订单收入', buyername: '销售宝技术支持', username: '网络影响力', products: '苹果手机', money: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
-        },
-        {
-          id: '4', uid: '4', dateline: 1522221270, content: '订单收入', buyername: '销售宝技术支持', username: '楚风越韵  🏠', products: '苹果手机', money: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
-        },
-        {
-          id: '5', uid: '2', dateline: 1522221270, content: '订单收入', buyername: '销售宝技术支持', username: '仇红波', products: '苹果手机', money: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
-        }
-      ],
-      tabdata2: [
-        {
-          id: '1', uid: '51', dateline: 1522221270, content: '订单收入', buyername: '艳绝天下', username: '贪吃小松鼠', products: '苹果手机', money: '1.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
-        },
-        {
-          id: '2', uid: '272', dateline: 1522221270, content: '订单收入', buyername: '周学江', username: 'zxj', products: '苹果手机', money: '0.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
-        },
-        {
-          id: '3', uid: '29', dateline: 1522221270, content: '订单收入', buyername: '销售宝技术支持', username: '网络影响力', products: '苹果手机', money: '1214.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
-        },
-        {
-          id: '4', uid: '4', dateline: 1522221270, content: '订单收入', buyername: '销售宝技术支持', username: '楚风越韵  🏠', products: '苹果手机', money: '89.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
-        },
-        {
-          id: '5', uid: '2', dateline: 1522221270, content: '订单收入', buyername: '销售宝技术支持', username: '仇红波', products: '苹果手机', money: '840.00', avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
-        }
-      ],
+      tabdata1: [],
+      tabdata2: [],
+      tabdata3: [],
       totalPrice: '0.00',
       checkdata: this.tabdata1,
       checkedAll: true,
-      showpopup: false
+      showpopup: false,
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      isBindScroll3: false,
+      scrollArea1: null,
+      scrollArea2: null,
+      scrollArea3: null
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.getdata1()
   },
   computed: {
     getCheckdata: function () {
@@ -202,6 +210,103 @@ export default {
     }
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    scroll3: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea3,
+        callback: function () {
+          if (self.tabdata3.length === self.pagestart3 + self.limit) {
+            self.pagestart3 += self.limit
+            self.getdata3()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, {
+        params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let retdata = data.data ? data.data : data
+          self.tabdata1 = self.tabdata1.concat(retdata)
+        }
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.retailerrevenue .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[0]
+          self.scrollArea3 = items[0]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let retdata = data.data ? data.data : data
+          self.tabdata2 = self.tabdata2.concat(retdata)
+        }
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
+      })
+    },
+    getdata3 () {
+      const self = this
+      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let retdata = data.data ? data.data : data
+          self.tabdata3 = self.tabdata3.concat(retdata)
+        }
+        if (!self.isBindScroll3) {
+          self.isBindScroll3 = true
+          self.scrollArea3.removeEventListener('scroll', self.scroll3)
+          self.scrollArea3.addEventListener('scroll', self.scroll3)
+        }
+      })
+    },
     checkboxclick (d) {
       d.checked = !d.checked
       this.totalPrice = 0
@@ -232,6 +337,17 @@ export default {
     },
     closepopup () {
       this.showpopup = false
+    },
+    tabclick (index) {
+      const self = this
+      self.$vux.loading.hide()
+      if (index === 0) {
+        self.getdata1()
+      } else if (index === 1) {
+        self.getdata2()
+      } else if (index === 2) {
+        self.getdata3()
+      }
     }
   }
 }

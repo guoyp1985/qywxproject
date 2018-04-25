@@ -117,17 +117,18 @@ export default {
       clickdata: {},
       clickindex: 0,
       showupconfirm: false,
-      showdownconfirm: false
+      showdownconfirm: false,
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.productdata = data.data ? data.data : data
-    })
+    self.$vux.loading.show()
+    self.getdata1()
   },
   watch: {
     productdata: function () {
@@ -140,6 +141,36 @@ export default {
     }
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
+        params: { pagestart: self.pagestart1, limit: self.limit }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        self.productdata = self.productdata.concat(data)
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('.rproductlist .s-container')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
     controlpopup1 (item, index) {
       event.preventDefault()
       this.showpopup1 = !this.showpopup1
@@ -147,7 +178,6 @@ export default {
       this.clickindex = index
     },
     popupevent (status) {
-
     },
     clickpopup (key) {
       if (key === 'up') {

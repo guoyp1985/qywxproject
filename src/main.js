@@ -83,7 +83,7 @@ Vue.i18n.set('zh-CN')
 //   routes
 // })
 
-// FastClick.attach(document.body)
+FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
@@ -164,14 +164,14 @@ const matchExclude = url => {
   }
   return false
 }
-// localStorage.clear()
+// localStorage.removeItem('token')
 // let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  // console.log(matchExclude(rUrl.href))
   if (matchExclude(rUrl.href)) {
+    // alert(`${rUrl.href}`)
     return
   }
   if (lUrl.query.code) {
@@ -180,9 +180,10 @@ Vue.http.interceptors.push(function (request, next) {
     .then(res => res.json())
     .then(
       data => {
-        Token.set(data.data.token)
-        token = data.data.token // test
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        const token = data.data.token
+        Token.set(token)
+        // token = data.data.token // test
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         // alert(data.data.weixin_token)
         // const accessToken = data.data.weixin_token
         // const nonceStr = $vue.$util.randomStr(6)
@@ -215,7 +216,7 @@ Vue.http.interceptors.push(function (request, next) {
         // })
       },
       error => {
-        alert(JSON.stringify(error))
+        console.log(JSON.stringify(error))
       }
     )
     // alert('ok')

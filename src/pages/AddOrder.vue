@@ -280,13 +280,12 @@ export default {
     submitOrder () {
       const self = this
       console.log(self.submitdata.postdata)
-      if (self.$util.isNull(self.submitdata.addressid)) {
+      if (!self.submitdata.addressid) {
         self.$vux.toast.show({
           text: '请选择地址'
         })
         return false
       }
-      /*
       self.isShowLoading = true
       self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
         return res.json()
@@ -297,13 +296,11 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: '/pay', query: { orderid: data.id } })
+              self.$router.push(`/pay/${data.id}`)
             }
           }
         })
-        self.$router.push({path: '/pay', query: {id: data.id}})
       })
-      */
     }
   }
 }

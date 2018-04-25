@@ -20,7 +20,8 @@
               </group>
             </div>
             <div class="t-cell align_center w100">
-              <div class="qbtn bg-blue3 color-white" style="line-height:25px;" @click="getcode">获取验证码</div>
+              <div v-if="showGetcode" class="qbtn bg-blue3 color-white w90" style="line-height:25px;box-sizing:border-box;" @click="getcode">获取验证码</div>
+              <div v-else class="qbtn bg-gray8 color-white w90" style="line-height:25px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
           </div>
         </div>
@@ -194,12 +195,6 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom>
-      <alert v-model="showalert">{{ $t('Please input telphone') }}</alert>
-    </div>
-    <div v-transfer-dom>
-      <loading :show="isShowLoading" text=""></loading>
-    </div>
   </div>
 </template>
 
@@ -229,13 +224,14 @@ export default {
   data () {
     return {
       showcontainer: false,
+      showGetcode: true,
+      timer: null,
+      timenum: 60,
       loginUser: {},
-      showalert: false,
       bottomcss: '',
       isagree: false,
       isshowpopup: false,
       classdata: [],
-      isShowLoading: false,
       allowsubmit: false,
       submitdata: {
         truename: '',
@@ -271,7 +267,8 @@ export default {
     } else {
       self.$vux.loading.hide()
       self.showcontainer = true
-      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`
+      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+        { params: { limit: 100 } }
       ).then(function (res) {
         return res.json()
       }).then(function (data) {
@@ -295,31 +292,45 @@ export default {
     getcode () {
       event.preventDefault()
       const self = this
-      if (!self.isShowLoading) {
-        if (self.$util.isNull(self.submitdata.mobile)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入手机号'
-          })
-        } else {
-          self.showalert = false
-          self.isShowLoading = true
-          self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
-            params: { phone: self.$util.trim(self.submitdata.mobile) }
-          }).then(function (res) {
-            return res.json()
-          }).then(function (data) {
-            self.isShowLoading = false
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-            if (data.flag === 1) {
-              self.verifyCode = data.data
-            }
-          })
-        }
+      if (self.$util.isNull(self.submitdata.mobile)) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请输入手机号'
+        })
+        return false
       }
+      let mobile = self.$util.trim(self.submitdata.mobile)
+      if (!self.$util.checkMobile(mobile)) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请输入正确的手机号'
+        })
+        return false
+      }
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
+        params: { phone: self.$util.trim(self.submitdata.mobile) }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+        if (data.flag === 1) {
+          self.verifyCode = data.data
+        }
+        self.showGetcode = false
+        self.timer = setInterval(function () {
+          self.timenum--
+          if (self.timenum === 0) {
+            clearInterval(self.timer)
+            self.showGetcode = true
+            self.timenum = 60
+          }
+        }, 1000)
+      })
     },
     clickagree () {
       const self = this
@@ -357,12 +368,20 @@ export default {
           })
           return false
         }
-        self.isShowLoading = true
+        let mobile = self.$util.trim(self.submitdata.mobile)
+        if (!self.$util.checkMobile(mobile)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的手机号'
+          })
+          return false
+        }
+        self.$vux.loading.show()
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           return res.json()
         }).then(function (data) {
-          self.isShowLoading = false
+          self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             time: self.$util.delay(data.error),

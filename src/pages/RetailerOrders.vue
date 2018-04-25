@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-page font14">
+  <div class="containerarea s-havebottom bg-page font14 retailerordes">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
@@ -14,13 +14,13 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
@@ -37,7 +37,7 @@
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
                 </Orderproductplate>
-                <img slot="avatar" :src="item.avatar" class="avatarimg" />
+                <img slot="avatar" :src="item.avatar" class="avatarimg imgcover" />
                 <span slot="username">{{ item.username }}</span>
                 <div v-if="(item.seller && item.seller.length > 0)" slot="seller">
                   <div class="fr sellerarea">{{ $t('Rebate customer') }} <span>{{ item.seller.username }}</span></div>
@@ -213,319 +213,177 @@ export default {
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
-      orderdataall: [
-        {
-          id: 315,
-          uid: '187',
-          dateline: 1522724948,
-          flagstr: '待付款',
-          flag: 1,
-          username: 'YOUNG',
-          linkman: '于国旺',
-          telephone: '13051687651',
-          address: '北京市东城区金家村',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          orderlist: [
-            {
-              id: 327, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', name: '苹果手机', special: '8,000.00', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 308,
-          uid: '31',
-          dateline: 1522664603,
-          flagstr: '订单取消',
-          flag: 0,
-          username: '๓妖怪吧！',
-          linkman: '余鹏',
-          telephone: '13777777777',
-          address: '北京市石景山区博卡先锋',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/31.jpg',
-          orderlist: [
-            {
-              id: 319, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', name: '欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', special: '0.01', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 307,
-          uid: '187',
-          dateline: 1522663437,
-          flagstr: '正在拼团',
-          flag: 2,
-          username: 'YOUNG',
-          linkman: '于国旺',
-          telephone: '13051687651',
-          address: '北京市东城区金家村',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          orderlist: [
-            {
-              id: 320, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', name: '欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', special: '0.01', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 304,
-          uid: '281',
-          dateline: 1522662385,
-          flagstr: '组团成功,待发货',
-          flag: 2,
-          username: 'SMART',
-          linkman: '于',
-          telephone: '13051687951',
-          address: '北京市东城区于',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/281.jpg',
-          orderlist: [
-            {
-              id: 316, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', name: '商品1', special: '0.01', quantity: 1
-            }
-          ],
-          seller: { dateline: 1522221270, id: 223, linkman: '艳绝天下', username: '贪吃小松鼠', wid: 187 }
-        },
-        {
-          id: 262,
-          uid: 281,
-          dateline: 1522224522,
-          flagstr: '待发货',
-          flag: 2,
-          username: 'SMART',
-          linkman: '于',
-          telephone: '13051687951',
-          address: '北京市东城区于',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/281.jpg',
-          orderlist: [
-            {
-              id: 274, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.jpg', name: '欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', special: '0.01', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 288,
-          uid: '16',
-          dateline: 1522304138,
-          flagstr: '已发货',
-          flag: 3,
-          username: 'gyp',
-          linkman: '暂无',
-          telephone: '13051687951',
-          address: '北京市东城区于',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/16.jpg',
-          orderlist: [
-            {
-              id: 300, photo: 'http://ossgxs.boka.cn/month_201803/15223015399153.jpg?x-oss-process=image/crop||x_352||y_532||w_315||h_315', name: '维生素B族片', special: '1.00', quantity: 1
-            }
-          ]
-        }
-      ],
-      orderdata1: [
-        {
-          id: 315,
-          uid: '187',
-          dateline: 1522724948,
-          flagstr: '待付款',
-          flag: 1,
-          username: 'YOUNG',
-          linkman: '于国旺',
-          telephone: '13051687651',
-          address: '北京市东城区金家村',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          orderlist: [
-            {
-              id: 327, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', name: '苹果手机', special: '8,000.00', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 308,
-          uid: '31',
-          dateline: 1522664603,
-          flagstr: '待付款',
-          flag: 1,
-          username: '๓妖怪吧！',
-          linkman: '余鹏',
-          telephone: '13777777777',
-          address: '北京市石景山区博卡先锋',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/31.jpg',
-          orderlist: [
-            {
-              id: 319, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', name: '欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', special: '0.01', quantity: 1
-            }
-          ]
-        }
-      ],
-      orderdata2: [
-        {
-          id: 315,
-          uid: '187',
-          dateline: 1522724948,
-          flagstr: '待发货',
-          flag: 2,
-          username: 'YOUNG',
-          linkman: '于国旺',
-          telephone: '13051687651',
-          address: '北京市东城区金家村',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          orderlist: [
-            {
-              id: 327, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', name: '苹果手机', special: '8,000.00', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 307,
-          uid: '187',
-          dateline: 1522663437,
-          flagstr: '正在拼团',
-          flag: 2,
-          username: 'YOUNG',
-          linkman: '于国旺',
-          telephone: '13051687651',
-          address: '北京市东城区金家村',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          orderlist: [
-            {
-              id: 320, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', name: '欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', special: '0.01', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 304,
-          uid: '281',
-          dateline: 1522662385,
-          flagstr: '组团成功,待发货',
-          flag: 2,
-          username: 'SMART',
-          linkman: '于',
-          telephone: '13051687951',
-          address: '北京市东城区于',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/281.jpg',
-          orderlist: [
-            {
-              id: 316, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', name: '商品1', special: '0.01', quantity: 1
-            }
-          ],
-          seller: { dateline: 1522221270, id: 223, linkman: '艳绝天下', username: '贪吃小松鼠', wid: 187 }
-        },
-        {
-          id: 262,
-          uid: 281,
-          dateline: 1522224522,
-          flagstr: '待发货',
-          flag: 2,
-          username: 'SMART',
-          linkman: '于',
-          telephone: '13051687951',
-          address: '北京市东城区于',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/281.jpg',
-          orderlist: [
-            {
-              id: 274, photo: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.jpg', name: '欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', special: '0.01', quantity: 1
-            }
-          ]
-        }
-      ],
-      orderdata3: [
-        {
-          id: 315,
-          uid: '187',
-          dateline: 1522724948,
-          flagstr: '已发货',
-          flag: 3,
-          username: 'YOUNG',
-          linkman: '于国旺',
-          telephone: '13051687651',
-          address: '北京市东城区金家村',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          orderlist: [
-            {
-              id: 327, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', name: '苹果手机', special: '8,000.00', quantity: 1
-            }
-          ]
-        },
-        {
-          id: 288,
-          uid: '16',
-          dateline: 1522304138,
-          flagstr: '已发货',
-          flag: 3,
-          username: 'gyp',
-          linkman: '暂无',
-          telephone: '13051687951',
-          address: '北京市东城区于',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/16.jpg',
-          orderlist: [
-            {
-              id: 300, photo: 'http://ossgxs.boka.cn/month_201803/15223015399153.jpg?x-oss-process=image/crop||x_352||y_532||w_315||h_315', name: '维生素B族片', special: '1.00', quantity: 1
-            }
-          ]
-        }
-      ]
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      pagestart4: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      isBindScroll3: false,
+      isBindScroll4: false,
+      scrollArea1: null,
+      scrollArea2: null,
+      scrollArea3: null,
+      scrollArea4: null
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.getdata1()
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    scroll3: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea3,
+        callback: function () {
+          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.pagestart3++
+            self.$vux.loading.show()
+            self.getdata3()
+          }
+        }
+      })
+    },
+    scroll4: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea4,
+        callback: function () {
+          if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
+            self.pagestart4++
+            self.$vux.loading.show()
+            self.getdata4()
+          }
+        }
+      })
+    },
     getdata1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
+        params: { pagestart: self.pagestart1, limit: self.limit }
+      }).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.tabdata1 = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          self.tabdata1 = self.tabdata1.concat(retdata)
+        }
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.retailerordes .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
+          self.scrollArea3 = items[2]
+          self.scrollArea4 = items[3]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
         }
       })
     },
     getdata2 () {
       const self = this
-      let params = { params: { flag: 1 } }
+      let params = { params: { flag: 1, pagestart: self.pagestart2, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.tabdata2 = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          self.tabdata2 = self.tabdata2.concat(retdata)
+        }
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
         }
       })
     },
     getdata3 () {
       const self = this
-      let params = { params: { flag: 2 } }
+      let params = { params: { flag: 2, pagestart: self.pagestart3, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.tabdata3 = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          self.tabdata3 = self.tabdata3.concat(retdata)
+        }
+        if (!self.isBindScroll3) {
+          self.isBindScroll3 = true
+          self.scrollArea3.removeEventListener('scroll', self.scroll3)
+          self.scrollArea3.addEventListener('scroll', self.scroll3)
         }
       })
     },
     getdata4 () {
       const self = this
-      let params = { params: { flag: 3 } }
+      let params = { params: { flag: 3, pagestart: self.pagestart4, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.tabdata4 = data.data ? data.data : data
+          let retdata = data.data ? data.data : data
+          self.tabdata4 = self.tabdata4.concat(retdata)
+        }
+        if (!self.isBindScroll4) {
+          self.isBindScroll4 = true
+          self.scrollArea4.removeEventListener('scroll', self.scroll4)
+          self.scrollArea4.addEventListener('scroll', self.scroll4)
         }
       })
     },
     tabclick (index) {
       const self = this
+      self.$vux.loading.hide()
       if (index === 0) {
-        self.getdata1()
+        if (self.pagestart1 > 0) {
+          self.getdata1()
+        }
       } else if (index === 1) {
-        self.getdata2()
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.getdata2()
+        }
       } else if (index === 2) {
-        self.getdata3()
+        if (self.pagestart3 === 0 && !self.isBindScroll3) {
+          self.getdata3()
+        }
       } else if (index === 3) {
-        self.getdata4()
+        if (self.pagestart4 === 0 && !self.isBindScroll4) {
+          self.getdata4()
+        }
       }
     }
   }

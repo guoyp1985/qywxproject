@@ -83,7 +83,7 @@
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.linkman}}</div>
-                  <div class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.sales}}</div>
+                  <div class="clamp1 mt5 font12 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.money}}</div>
                 </div>
               </div>
             </router-link>

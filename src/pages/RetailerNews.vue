@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
@@ -28,7 +28,7 @@
                 </div>
               </div>
               <Listplate1 v-else v-for="(item,index1) in tabdata1" :key="item.id">
-                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
+                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
                 <div slot="title" class="clamp1 font16">{{item.title}}</div>
                 <div slot="title" class="clamp1 font12 color-gray v_middle">
                     <span class="v_middle">{{ item.dateline | dateformat }}</span>
@@ -52,7 +52,7 @@
                 </div>
               </div>
               <Listplate1 v-else v-for="(item,index) in tabdata2" :key="item.id">
-                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" />
+                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
                 <div slot="title" class="clamp1 font14">{{item.title}}</div>
                 <div slot="title" class="clamp1 mt5 font12 color-gray ">
                     <span class="v_middle">{{ item.dateline | dateformat }}</span>
@@ -157,21 +157,84 @@ export default {
       showpopup1: false,
       showpopup2: false,
       clickdata1: {},
-      clickdata2: {}
+      clickdata2: {},
+      limit: 10,
+      pagestart1: 0,
+      pagestart2: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      scrollArea1: null,
+      scrollArea2: null
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/list/news`, {
-      params: { from: 'retailer' }
-    }).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.tabdata1 = data.data ? data.data : data
-    })
+    self.getdata1()
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+        params: { pagestart: self.pagestart1, limit: self.limit }
+      }).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rnews .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { do: 'list', pagestart: self.pagestart2, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
+      })
+    },
     controlpopup1 (item) {
       this.showpopup1 = !this.showpopup1
       this.clickdata1 = item
@@ -191,12 +254,15 @@ export default {
     },
     tabitemclick (index) {
       const self = this
-      if (index === 1) {
-        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, { do: 'list' }).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.tabdata2 = data.data ? data.data : data
-        })
+      self.$vux.loading.hide()
+      if (index === 0) {
+        if (self.pagestart1 > 0) {
+          self.getdata1()
+        }
+      } else if (index === 1) {
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.getdata2()
+        }
       }
     }
   }

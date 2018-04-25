@@ -1,12 +1,12 @@
 <template>
   <div class="containerarea paypage bg-white">
     <div class="flex_center inner">
-      <div>{{ $t('RMB') }}{{ payprice }}</div>
+      <div>{{ $t('RMB') }}{{ payPrice }}</div>
   	</div>
     <div class="pt10 pb10 pl5 pr5 b_bottom_after">
       <div class="t-table">
         <div class="t-cell align_left">收款方</div>
-        <div class="t-cell align_right">博卡授权中心</div>
+        <div class="t-cell align_right">{{receivables}}</div>
       </div>
     </div>
     <box gap="10px">
@@ -25,51 +25,49 @@ export default {
   },
   data () {
     return {
-      payprice: '1.00'
+      payPrice: 0,
+      receivables: '',
+      payParams: null
     }
   },
   methods: {
-    wxPayApi (data) {
-      const params = data
-      alert(JSON.stringify(params))
-      console.log(this.$util.timeStamp())
-      window.WeixinJSBridge.invoke(
-        'getBrandWCPayRequest', {
-          appId: params.appid,
-          timeStamp: this.$util.timeStamp(),
-          nonceStr: params.nonce_str,
-          package: `prepay_id=${params.prepay_id}`,
-          signType: 'MD5',
-          paySign: params.sign
-        },
+    pay () {
+      const params = this.payParams
+      if (typeof WeixinJSBridge === 'undefined') {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
+          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
+        }
+      } else {
+        this.wxPayApi(params)
+      }
+    },
+    wxPayApi (params) {
+      WeixinJSBridge.invoke(
+        'getBrandWCPayRequest', params,
         function (res) {
-          alert(JSON.stringify(res))
-          if (res.err_msg === 'get_brand_wcpay_request:ok') {
+          if (res.err_msg === 'get_brand_wcpay_request:ok' ) {
           }
         }
       )
     },
-    payLoad () {
-      if (typeof WeixinJSBridge === 'undefined') {
-        if (document.addEventListener) {
-          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi, false)
-        } else if (document.attachEvent) {
-          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi)
-          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi)
-        }
-      } else {
-        this.wxPayApi()
-      }
-    },
-    pay () {
+    initPay () {
       const self = this
-      const orderId = this.$route.query.id
-      this.$http.post(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
+      const orderId = this.$route.params.id
+      this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
-        self.wxPayApi(data.data)
+        self.payPrice = data.money
+        self.receivables = data.weixinname
+        self.payParams = data.data
       })
     }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    this.initPay()
   }
 }
 </script>

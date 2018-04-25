@@ -122,7 +122,7 @@ export default {
       this.commentPopupShow = false
       let comment = {
         userName: 'simon',
-        userAvatar: '../assets/_images/nopic.jpg',
+        userAvatar: '../assets/images/nopic.jpg',
         content: value,
         date: new Date().getTime(),
         diggCount: 0
