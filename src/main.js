@@ -164,8 +164,8 @@ const matchExclude = url => {
   }
   return false
 }
-localStorage.clear()
-let token = null // test
+// localStorage.clear()
+// let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
@@ -181,7 +181,7 @@ Vue.http.interceptors.push(function (request, next) {
     .then(
       data => {
         // const token = data.data.token
-        // Token.set(token)
+        Token.set(token)
         // token = data.data.token // test
         // alert(token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
@@ -222,7 +222,7 @@ Vue.http.interceptors.push(function (request, next) {
     )
     // alert('ok')
   } else if (rUrl.origin === ENV.BokaApi) {
-    // const token = Token.get()
+    const token = Token.get()
     // request.method = 'GET'
     request.headers.set('Authorization', `Bearer ${token}`)
     // request.headers.set('X-CSRF-Token', 'plugin')
