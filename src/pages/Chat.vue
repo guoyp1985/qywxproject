@@ -15,15 +15,14 @@
           </div>
           <div class="input-cell">
             <group class="textarea-box">
-              <!-- <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea> -->
-              <textarea  v-focus></textarea>
+              <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
             </group>
           </div>
           <div class="emotion-cell">
-            <label class="emotion-btn" @click.prevent.stop="toggleEmotion">
+            <button class="emotion-btn" @click.prevent.stop="toggleEmotion">
               <img v-if="!showEmotBox" src="../assets/images/icon-face.png"/>
               <img v-else src="../assets/images/icon-keyboard.png"/>
-            </label>
+            </button>
           </div>
           <div class="feature-cell">
             <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
@@ -41,13 +40,6 @@
 import { ViewBox, Group, XTextarea } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
 export default {
-  directives : {
-    focus: {
-      inserted: function (el) {
-        el.focus()
-      }
-    }
-  },
   components: {
     ViewBox,
     Group,
@@ -63,10 +55,6 @@ export default {
   },
   created () {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-  },
-  mounted () {
-    // this.textarea = this.$refs.text.$refs.textarea
-    // this.textarea.focus()
   },
   methods: {
     onTextClick () {

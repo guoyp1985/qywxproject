@@ -6,7 +6,7 @@
     <div class="pt10 pb10 pl5 pr5 b_bottom_after">
       <div class="t-table">
         <div class="t-cell align_left">收款方</div>
-        <div class="t-cell align_right">博卡授权中心</div>
+        <div class="t-cell align_right">{{receivables}}</div>
       </div>
     </div>
     <box gap="10px">
@@ -25,16 +25,13 @@ export default {
   },
   data () {
     return {
-      payprice: '1.00'
+      payprice: 0,
+      receivables: ''
     }
   },
   methods: {
     wxPayApi (data) {
-      // console.log(data)
       const params = data.data
-      // const timeStamp = data.timestamp.toString()
-      alert(JSON.stringify(params))
-      // console.log(this.$util.timeStamp())
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
@@ -45,17 +42,17 @@ export default {
       )
     },
     payLoad (data) {
-      // if (typeof WeixinJSBridge === 'undefined') {
-      //   alert('here')
-      //   if (document.addEventListener) {
-      //     document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
-      //   } else if (document.attachEvent) {
-      //     document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(data))
-      //     document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(data))
-      //   }
-      // } else {
+      if (typeof WeixinJSBridge === 'undefined') {
+        alert('here')
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(data))
+          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(data))
+        }
+      } else {
         this.wxPayApi(data)
-      // }
+      }
     },
     pay () {
       const self = this
@@ -63,6 +60,8 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
+        self.payprice = data.money
+        self.receivables = data.weixinname
         self.payLoad(data)
       })
     }
