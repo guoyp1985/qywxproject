@@ -183,8 +183,8 @@ Vue.http.interceptors.push(function (request, next) {
         // const token = data.data.token
         // Token.set(token)
         token = data.data.token // test
-        // alert(token)
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        alert(token)
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         // alert(data.data.weixin_token)
         // const accessToken = data.data.weixin_token
         // const nonceStr = $vue.$util.randomStr(6)
@@ -215,12 +215,6 @@ Vue.http.interceptors.push(function (request, next) {
         //     alert(param)
         //   }
         // })
-        request.headers.set('Authorization', `Bearer ${token}`)
-        alert(token)
-        next(function (response) {
-          alert(response)
-          return response
-        })
       },
       error => {
         alert(JSON.stringify(error))
