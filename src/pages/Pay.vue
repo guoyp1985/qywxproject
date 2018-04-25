@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     wxPayApi (data) {
+      console.log(data)
       const params = data.data
       const timeStamp = data.timestamp.toString()
       alert(timeStamp)
