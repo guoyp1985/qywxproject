@@ -15,7 +15,7 @@
           </div>
           <div class="input-cell">
             <group class="textarea-box">
-              <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+              <x-textarea ref="text" id="chat-textarea" @click.native="onTextClick" :max="2000" :rows="1" :show-counter="false"></x-textarea>
             </group>
           </div>
           <div class="emotion-cell">
