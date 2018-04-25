@@ -171,7 +171,7 @@ Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
   if (matchExclude(rUrl.href)) {
-    alert(`${rUrl.href}`)
+    // alert(`${rUrl.href}`)
     return
   }
   if (lUrl.query.code) {
@@ -182,6 +182,7 @@ Vue.http.interceptors.push(function (request, next) {
       data => {
         // Token.set(data.data.token)
         token = data.data.token // test
+        alert(token)
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         // alert(data.data.weixin_token)
         // const accessToken = data.data.weixin_token

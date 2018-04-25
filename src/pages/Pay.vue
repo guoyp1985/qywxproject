@@ -64,7 +64,7 @@ export default {
     pay () {
       const self = this
       const orderId = this.$route.query.id
-      this.$http.post(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
+      this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
         self.wxPayApi(data.data)
