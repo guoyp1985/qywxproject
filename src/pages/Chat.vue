@@ -208,6 +208,7 @@ export default {
   box-shadow: none;
   line-height: 18px;
   resize: none;
+  -webkit-appearance: none;
 }
 #chat-room .input-box .voice-cell,
 #chat-room .input-box .emotion-cell,
