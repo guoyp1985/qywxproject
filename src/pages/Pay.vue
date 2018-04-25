@@ -40,7 +40,7 @@ export default {
           timeStamp: timeStamp,
           nonceStr: params.nonce_str,
           package: `prepay_id=${params.prepay_id}`,
-          signType: 'HMAC-SHA256',
+          signType: 'MD5',
           paySign: params.sign
         },
         function (res) {
