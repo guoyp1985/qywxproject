@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea paypage bg-white">
     <div class="flex_center inner">
-      <div>{{ $t('RMB') }}{{ payprice }}</div>
+      <div>{{ $t('RMB') }}{{ payPrice }}</div>
   	</div>
     <div class="pt10 pb10 pl5 pr5 b_bottom_after">
       <div class="t-table">
@@ -25,13 +25,26 @@ export default {
   },
   data () {
     return {
-      payprice: 0,
-      receivables: ''
+      payPrice: 0,
+      receivables: '',
+      payParams: null
     }
   },
   methods: {
-    wxPayApi (data) {
-      const params = data.data
+    pay () {
+      const params = this.payParams
+      if (typeof WeixinJSBridge === 'undefined') {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
+          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
+        }
+      } else {
+        this.wxPayApi(params)
+      }
+    },
+    wxPayApi (params) {
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
@@ -41,28 +54,15 @@ export default {
         }
       )
     },
-    pay () {
-      if (typeof WeixinJSBridge === 'undefined') {
-        alert('here')
-        if (document.addEventListener) {
-          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(data), false)
-        } else if (document.attachEvent) {
-          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(data))
-          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(data))
-        }
-      } else {
-        this.wxPayApi(data)
-      }
-    },
     initPay () {
       const self = this
       const orderId = this.$route.params.id
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => res.json())
       .then(data => {
-        self.payprice = data.money
+        self.payPrice = data.money
         self.receivables = data.weixinname
-        // self.payLoad(data)
+        self.payParams = data.data
       })
     }
   },
