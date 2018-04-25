@@ -56,8 +56,8 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   mounted () {
-    console.log(this.$refs.text)
     this.textarea = this.$refs.text //this.$refs.text.$refs.textarea
+    alert(this.textarea)
     this.textarea.focus()
   },
   methods: {
