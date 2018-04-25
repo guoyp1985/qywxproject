@@ -170,8 +170,8 @@ let token = null // test
 Vue.http.interceptors.push(function (request, next) {
   const rUrl = urlParse(request.url)
   const lUrl = urlParse(location.href, true)
-  alert(matchExclude(rUrl.href))
   if (matchExclude(rUrl.href)) {
+    alert(`${rUrl.href}`)
     return
   }
   if (lUrl.query.code) {
