@@ -314,17 +314,19 @@ Vue.http.interceptors.response.use(response => {
   removePending(response.config)
   return response
 }, error => {
-  // const rUrl = urlParse(config.url)
+  // const rUrl = urlParse(error.config.url)
   const lUrl = urlParse(location.href, true)
-  if (lUrl.query.code && flag) {
-    alert(flag)
-    flag = false
+  // if (matchExclude(rUrl.href)) {
+  //   // alert(matchExclude(rUrl.href))
+  //   return error
+  // }
+  if (lUrl.query.code) {
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         Token.set(res.data.token)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
   } else {
