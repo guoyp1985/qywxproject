@@ -59,20 +59,15 @@ export default {
             console.error(error)
           } else if (token) {
             Token.set(token)
-            // if (self.$route.params.fromPath) {
-            //   self.$router.push({path: self.$route.params.fromPath, query: self.$route.params.query})
-            // } else {
-            //   self.$router.push({path: '/'})
-            // }
-            self.$router.go(-1)
-            self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-            clearInterval(intervalId)
-            return self.$http.get(`${ENV.BokaApi}/api/user/show`)
           }
+          return self.$http.get(`${ENV.BokaApi}/api/user/show`)
         })
         .then(res => {
           console.log(res)
           User.set(res.data)
+          self.$router.go(-1)
+          self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+          clearInterval(intervalId)
         })
       }, 5000)
     },
