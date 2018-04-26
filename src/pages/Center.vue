@@ -13,7 +13,7 @@
             :messages="getMessages">
     </c-title>
     <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" :link="btn.link">
+      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
         <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
           <span :class="`fa ${btn.icon}`"></span>
         </div>
@@ -21,7 +21,7 @@
     </grid>
     <div class="grid-title">{{ $t('Service') }}</div>
     <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" :link="btn.link">
+      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
         <div slot="icon" :class="btn.color">
           <span :class="`al ${btn.icon}`"></span>
         </div>
@@ -102,7 +102,9 @@ export default {
           name: 'Exit',
           icon: 'al-tuichu3',
           color: 'color-exit',
-          link: '/exit'
+          react: () => {
+            Token.remove()
+          }
         }
       ],
       avatarHref: '',
@@ -141,6 +143,16 @@ export default {
     viewTransition () {
       if (!this.direction) return ''
       return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
+    }
+  },
+  methods : {
+    buttonClick (btn) {
+      if (btn.link) {
+        this.$router.push({path: btn.link})
+      }
+      else {
+        btn.react()
+      }
     }
   },
   created () {

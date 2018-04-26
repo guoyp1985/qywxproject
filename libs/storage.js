@@ -7,6 +7,9 @@ const Token = {
   get () {
     return localStorage.getItem('token')
   },
+  remove () {
+    localStorage.removeItem('token')
+  },
   isExpried (time) {
     const tokenExpried = localStorage.getItem('tokenExpried')
     return Number(tokenExpried) > new Date().getTime() ? false : true
