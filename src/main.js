@@ -281,10 +281,8 @@ let removePending = (config) => {
     }
   }
 }
-// console.log(new CancelToken(c => {}))
-// localStorage.removeItem('token')
-// let token = null
-// alert(token)
+
+Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   // removePending(config)
@@ -309,13 +307,7 @@ Vue.http.interceptors.response.use(response => {
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
-        // token = res.data.data.token
-        // alert(lUrl.hash.replace(/#/g, ''))
         Token.set(res.data.data.token)
-        // const to = lUrl.hash.replace(/#/g, '')
-        // router.push({path: to, query: {access: true}})
-        // alert(JSON.stringify(res.data))
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
@@ -323,7 +315,6 @@ Vue.http.interceptors.response.use(response => {
       res => {
         User.set(res.data)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        // console.log(User.get())
       }
     )
   } else {
@@ -331,6 +322,7 @@ Vue.http.interceptors.response.use(response => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
+        alert('ok')
         const orginHref = encodeURIComponent(location.href)
         location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       }
