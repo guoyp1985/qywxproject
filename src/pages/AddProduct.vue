@@ -174,6 +174,8 @@ export default {
   },
   data () {
     return {
+      query: {},
+      data: {},
       isShowLoading: false,
       photoarr: [],
       maxnum: 9,
@@ -200,6 +202,21 @@ export default {
   created: function () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    if (self.query.id) {
+      let params = { params: { id: self.query.id, module: 'product' } }
+      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.data = data.data ? data.data : data
+        for (let key in self.submitdata) {
+          self.submitdata[key] = self.data[key]
+        }
+        self.photoarr = self.submitdata.photo.split(',')
+        self.photoarr1 = self.submitdata.contentphoto.split(',')
+        document.title = self.data.title
+      })
+    }
   },
   watch: {
     submitdata: function () {
@@ -301,6 +318,9 @@ export default {
         return false
       }
       self.isShowLoading = true
+      if (self.query.id) {
+        self.submitdata.id = self.query.id
+      }
       self.$http.post(`${ENV.BokaApi}/api/add/product`, self.submitdata).then(function (res) {
         return res.json()
       }).then(function (data) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14">
+  <div class="containerarea bg-white font14 rcustomerlist">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
               class="x-search"
@@ -182,34 +182,53 @@ export default {
       searchword1: '',
       searchword2: '',
       searchresult1: false,
-      searchresult2: false
+      searchresult2: false,
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      scrollArea1: null,
+      scrollArea2: null
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.getdata1()
   },
   methods: {
-    onChange1 (val) {
-      this.searchword1 = val
-    },
-    onChange2 (val) {
-      this.searchword2 = val
-    },
-    onSubmit1 () {
+    scroll1: function () {
       const self = this
-      self.$vux.loading.show()
-      self.getdata1(self.searchword1)
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
     },
-    onSubmit2 () {
+    scroll2: function () {
       const self = this
-      self.$vux.loading.show()
-      self.getdata2(self.searchword2)
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
     },
-    getdata1 (keyword) {
+    getdata1 () {
       const self = this
-      let params = { params: { tolevel: -1 } }
+      let params = { params: { tolevel: -1, pagestart: self.pagestart1, limit: self.limit } }
+      let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
         params.params.keyword = keyword
       }
@@ -223,12 +242,22 @@ export default {
           self.tabcount1 = data.count
           self.searchresult1 = false
         }
-        self.tabdata1 = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rcustomerlist .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
       })
     },
-    getdata2 (keyword) {
+    getdata2 () {
       const self = this
-      let params = { params: { tolevel: 5 } }
+      let keyword = self.searchword2
+      let params = { params: { tolevel: 5, pagestart: self.pagestart2, limit: self.limit } }
       if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
         params.params.keyword = keyword
       }
@@ -242,15 +271,47 @@ export default {
           self.tabcount2 = data.count
           self.searchresult2 = false
         }
-        self.tabdata2 = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
       })
+    },
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onChange2 (val) {
+      this.searchword2 = val
+    },
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
+    },
+    onSubmit2 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     },
     tabclick (index) {
       const self = this
       if (index === 0) {
-        self.getdata1()
+        if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
       } else if (index === 1) {
-        self.getdata2()
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
       }
     },
     percentclick () {

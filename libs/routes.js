@@ -58,6 +58,7 @@ import Chat from '@/pages/Chat'
 import Pay from '@/pages/Pay'
 import RetailerSaleview from '@/pages/RetailerSaleview'
 import AccountDetail from '@/pages/AccountDetail'
+import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
 
 export default [
   {
@@ -378,5 +379,10 @@ export default [
     path: '/accountDetail',
     name: 'tAccountDetail',
     component: AccountDetail
+  },
+  {
+    path: '/retailerOrderDetail',
+    name: 'tRetailerOrderDetail',
+    component: RetailerOrderDetail
   }
 ]

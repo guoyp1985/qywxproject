@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white salechance nobottom font14">
+  <div class="containerarea bg-white rsalechance nobottom font14">
     <div class="pagetop">
       <div class="bg-gray4 padding10 border-box">
         <card :header="{title: $t('Data text')}" class="x-card">
@@ -24,62 +24,60 @@
       </tab>
     </div>
     <div class="pagemiddle">
-      <view-box ref="viewBox" body-padding-top="0px" body-padding-bottom="0px">
-        <swiper v-model="tabmodel" class="x-swiper no-indicator">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <template v-if="index === 0">
-              <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
-                <div class="t-table">
-                  <div class="t-cell">
-                    <div><i class="al al-yulan3 font70 pt20"></i></div>
-                    <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
-                  </div>
+      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+          <template v-if="index === 0">
+            <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
+              <div class="t-table">
+                <div class="t-cell">
+                  <div><i class="al al-yulan3 font70 pt20"></i></div>
+                  <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
                 </div>
               </div>
-              <timeline v-else class="x-timeline">
-                <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
-                  <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
-                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                  <div class="t-table">
-                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
-                      <div class="color-blue font14">{{ item.linkman }}</div>
-                      <div class="color-gray font12">{{ item.content }}</div>
-                    </router-link>
-                    <div class="t-cell w50 align_right v_middle">
-                      <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
-                    </div>
-                  </div>
-                </timeline-item>
-              </timeline>
-            </template>
-            <template v-else-if="index === 1">
-              <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
+            </div>
+            <timeline v-else class="x-timeline">
+              <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
+                <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
+                <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
                 <div class="t-table">
-                  <div class="t-cell">
-                    <div><i class="al al-yulan3 font70 pt20"></i></div>
-                    <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                  <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                    <div class="color-blue font14">{{ item.linkman }}</div>
+                    <div class="color-gray font12">{{ item.content }}</div>
+                  </router-link>
+                  <div class="t-cell w50 align_right v_middle">
+                    <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
                   </div>
                 </div>
+              </timeline-item>
+            </timeline>
+          </template>
+          <template v-else-if="index === 1">
+            <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
+              <div class="t-table">
+                <div class="t-cell">
+                  <div><i class="al al-yulan3 font70 pt20"></i></div>
+                  <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                </div>
               </div>
-              <timeline v-else class="x-timeline">
-                <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
-                  <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
-                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                  <div class="t-table">
-                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
-                      <div class="color-blue font14">{{ item.linkman }}</div>
-                      <div class="color-gray font12">{{ item.content }}</div>
-                    </router-link>
-                    <div class="t-cell w50 align_right v_middle">
-                      <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
-                    </div>
+            </div>
+            <timeline v-else class="x-timeline">
+              <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
+                <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
+                <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                <div class="t-table">
+                  <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                    <div class="color-blue font14">{{ item.linkman }}</div>
+                    <div class="color-gray font12">{{ item.content }}</div>
+                  </router-link>
+                  <div class="t-cell w50 align_right v_middle">
+                    <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
                   </div>
-                </timeline-item>
-              </timeline>
-            </template>
-          </swiper-item>
-        </swiper>
-      </view-box>
+                </div>
+              </timeline-item>
+            </timeline>
+          </template>
+        </swiper-item>
+      </swiper>
     </div>
   </div>
 </template>
@@ -94,13 +92,12 @@ Contact:
 </i18n>
 
 <script>
-import { ViewBox, Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
 import ENV from '#/env'
 
 export default {
   components: {
-    ViewBox,
     Tab,
     TabItem,
     Swiper,
@@ -142,9 +139,15 @@ export default {
       tabmodel: 0,
       tabtxts: [ '分享', '浏览' ],
       viewdata: { orders: '0.00', share: 0, views: 0 },
-      data: [[], []],
       tabdata1: [],
-      tabdata2: []
+      tabdata2: [],
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      scrollArea1: null,
+      scrollArea2: null
     }
   },
   watch: {
@@ -158,42 +161,105 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`).then(function (res) {
       return res.json()
     }).then(function (data) {
       if (data && data.flag === 1) {
         self.viewdata = data.data
       }
+      let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
+        return res.json()
+      })
+    }).then(function (data) {
+      self.$vux.loading.hide()
+      let retdata = data.data ? data.data : data
+      self.tabdata1 = self.tabdata1.concat(retdata)
+      if (!self.isBindScroll1) {
+        let items = document.querySelectorAll('.rsalechance .swiperitem')
+        self.scrollArea1 = items[0]
+        self.scrollArea2 = items[1]
+        self.isBindScroll1 = true
+        self.scrollArea1.removeEventListener('scroll', self.scroll1)
+        self.scrollArea1.addEventListener('scroll', self.scroll1)
+      }
     })
-    self.getShares()
   },
   methods: {
-    getShares () {
+    scroll1: function () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, {
-        params: { action: 'shares' }
-      }).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        self.tabdata1 = data.data ? data.data : data
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
       })
     },
-    getViews () {
+    scroll2: function () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, {
-        params: { action: 'views' }
-      }).then(function (res) {
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
-        self.tabdata2 = data.data ? data.data : data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rsalechance .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { params: { action: 'views', pagestart: self.pagestart2, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
       })
     },
     tabclick (index) {
       const self = this
       if (index === 0) {
-        self.getShares()
+        if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
       } else if (index === 1) {
-        self.getViews()
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
       }
     }
   }
@@ -241,7 +307,7 @@ export default {
 .x-timeline .ddate{position:absolute;left:-10px;}
 .x-timeline .dtime{position:absolute;left:-10px;top:17px;}
 
-.salechance .pagetop{height:202px;}
-.salechance .pagemiddle{top:202px;}
+.rsalechance .pagetop{height:202px;}
+.rsalechance .pagemiddle{top:202px;}
 
 </style>
