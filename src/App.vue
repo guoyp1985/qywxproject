@@ -54,8 +54,8 @@ Center:
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import routes from '#/routes'
-import ENV from '#/env'
-import { User } from '#/storage'
+// import ENV from '#/env'
+// import { User } from '#/storage'
 
 // Util.share()
 
