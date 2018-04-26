@@ -140,7 +140,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'news', message: value})
       .then(res => {
         if (res.data.flag) {
-          self.comments.push(res.data)
+          self.comments.push(res.data.data)
         }
       })
       // this.comments.push(comment)
@@ -148,7 +148,12 @@ export default {
     replySubmit (value) { // 回复提交
       this.replyPopupShow = false
       const self = this
-      // this.$http.
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'comments', message: value})
+      .then(res => {
+        if(res.data.flag) {
+          self.comments.replies.push(res.data.data)
+        }
+      })
     },
     getData () {
       const self = this
@@ -168,7 +173,7 @@ export default {
         return self.$http.post(`${ENV.BokaApi}/api/share/news`, {id: self.article.id, title: self.article.title})
       })
       .then(res => {
-        if(res.data.flag) {
+        if (res.data.flag) {
           console.log(self.article)
           self.$util.wxShare({
             data: {
