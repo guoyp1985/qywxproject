@@ -9,14 +9,16 @@ import App from './App'
 import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import VueResource from 'vue-resource'
+import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
+// import VueResource from 'vue-resource'
 // import Login from '#/login'
 import { Token } from '#/storage'
 import ENV from '#/env'
 import Util from '#/util'
 
-Vue.use(VueResource)
+// Vue.use(VueResource)
+const CancelToken = AjaxPlugin.$http.CancelToken
+Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
 require('es6-promise').polyfill()
@@ -164,23 +166,22 @@ const matchExclude = url => {
   }
   return false
 }
-// localStorage.removeItem('token')
+localStorage.removeItem('token')
 // let token = null // test
 // 全局请求过滤器
-Vue.http.interceptors.push(function (request, next) {
-  const rUrl = urlParse(request.url)
+Vue.http.interceptors.request.use(function (config) {
+  const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   if (matchExclude(rUrl.href)) {
     // alert(`${rUrl.href}`)
-    return
+    return config
   }
   if (lUrl.query.code) {
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-    .then(res => res.json())
     .then(
-      data => {
-        const token = data.data.token
+      res => {
+        const token = res.data.token
         Token.set(token)
         // token = data.data.token // test
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
@@ -223,33 +224,45 @@ Vue.http.interceptors.push(function (request, next) {
   } else if (rUrl.origin === ENV.BokaApi) {
     const token = Token.get()
     // request.method = 'GET'
-    request.headers.set('Authorization', `Bearer ${token}`)
+    // request.headers.set('Authorization', `Bearer ${token}`)
+    config.headers['Authorization'] = `Bearer ${token}`
     // request.headers.set('X-CSRF-Token', 'plugin')
     // continue to next interceptor
-    next(function (response) {
-      $vue.$util.access(request, response, isPC => {
-        if (isPC) {
-          Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
-          .then(res => res.json())
-          .then(
-            data => {
-              router.push({name: 'tLogin', params: {qrCode: data, fromPath: router.currentRoute.path}})
-            },
-            error => {
-              console.error(error)
-            }
-          )
-        } else {
-          const orginHref = encodeURIComponent(location.href)
-          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-        }
-      },
-      () => {
-        // console.log('okokokok')
-      })
-      return response
-    })
+    // next(function (response) {
+
+    //   return response
+    // })
   }
+  return config
+},
+function (error) {
+  console.log(error)
+  return Promise.reject(error)
+})
+
+Vue.http.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  $vue.$util.access(error.response, isPC => {
+    if (isPC) {
+      Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
+      .then(
+        res => {
+          router.push({name: 'tLogin', params: {qrCode: res.data, fromPath: router.currentRoute.path}})
+        },
+        error => {
+          console.error(error)
+        }
+      )
+    } else {
+      const orginHref = encodeURIComponent(location.href)
+      location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+    }
+  },
+  () => {
+    // console.log('okokokok')
+  })
+  return Promise.reject(error)
 })
 
 const $vue = new Vue({

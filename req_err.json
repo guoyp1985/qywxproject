@@ -1,0 +1,43 @@
+{
+  "config": {
+    "transformRequest": {},
+    "transformResponse": {},
+    "timeout": 0,
+    "xsrfCookieName": "XSRF-TOKEN",
+    "xsrfHeaderName": "X-XSRF-TOKEN",
+    "maxContentLength": -1,
+    "headers": {
+      "Accept": "application/json, text/plain, */*",
+      "Authorization": "Bearer null"
+    },
+    "method": "get",
+    "url": "https://laravel.boka.cn/api/user/show"
+  },
+  "response": {
+    "data": {
+      "message": "Wrong number of segments",
+      "status_code": 401
+    },
+    "status": 401,
+    "statusText": "Unauthorized",
+    "headers": {
+      "content-type": "application/json",
+      "cache-control": "no-cache, private"
+    },
+    "config": {
+      "transformRequest": {},
+      "transformResponse": {},
+      "timeout": 0,
+      "xsrfCookieName": "XSRF-TOKEN",
+      "xsrfHeaderName": "X-XSRF-TOKEN",
+      "maxContentLength": -1,
+      "headers": {
+        "Accept": "application/json, text/plain, */*",
+        "Authorization": "Bearer null"
+      },
+      "method": "get",
+      "url": "https://laravel.boka.cn/api/user/show"
+    },
+    "request": {}
+  }
+}

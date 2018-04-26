@@ -114,9 +114,8 @@ export default {
     onCommentDelete (comment) {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
-      .then(res => res.json())
-      .then(data => {
-        if (data.flag) {
+      .then(res => {
+        if (res.data.flag) {
           self.$util.deleteItem(self.comments, comment.id)
           self.$vux.toast.text(self.$t('Delete Success'))
         }
@@ -139,10 +138,9 @@ export default {
       // }
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'news', message: value})
-      .then(res => res.json())
-      .then(data => {
-        if (data.flag) {
-          self.comments.push(data.data)
+      .then(res => {
+        if (res.data.flag) {
+          self.comments.push(res.data)
         }
       })
       // this.comments.push(comment)
@@ -154,23 +152,23 @@ export default {
       const self = this
       const id = this.$route.params.id
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'}) // 获取文章
-      .then(res => res.json())
-      .then(data => {
-        self.article = data.data
-        self.reward = User.get()
+      .then(res => {
+        if (res.data.flag) {
+          self.article = res.data.data
+          self.reward = User.get()
+        }
         return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        self.comments = data
+      .then(res => {
+        if(res.data) {
+          self.comments = res.data
+        }
       })
     },
     onFavorite () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
-      .then(res => res.json())
-      .then(data => {
+      .then(res => {
         self.$vux.toast.text(self.$t('Favorite Success'))
       })
     },

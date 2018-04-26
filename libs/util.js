@@ -21,12 +21,10 @@ Util.install = function (Vue, options) {
       return true
     },
     // 判授权
-    access: function (request, response, authorization, next) {
+    access: function (response, authorization) {
       const isPC = this.isPC()
       if (response.status === 401) {
         authorization(isPC)
-      } else {
-        next()
       }
     },
     validate: (model, reg, failHandle) => {
