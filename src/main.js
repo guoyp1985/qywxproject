@@ -282,7 +282,7 @@ let removePending = (config) => {
   }
 }
 
-Token.remove()
+// Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   // removePending(config)
@@ -290,6 +290,7 @@ Vue.http.interceptors.request.use(config => {
   //   pending.push({ u: config.url + '&' + config.method, f: c })
   // })
   const token = Token.get()
+  alert(token)
   config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, error => {
