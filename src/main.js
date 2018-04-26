@@ -317,14 +317,14 @@ Vue.http.interceptors.response.use(response => {
         // router.push({path: to, query: {access: true}})
         // alert(JSON.stringify(res.data))
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        return this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      }
-    )
-    .then(
-      res => {
-        User.set(res.data)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        // console.log(User.get())
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        .then(
+          res => {
+            User.set(res.data)
+            location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+            // console.log(User.get())
+          }
+        )
       }
     )
   } else {
