@@ -12,8 +12,8 @@
         </div>
         <div style="height:10px;"></div>
       </div>
-      <div class="bg-white b_bottom_after flex_left padding10">
-        <div>买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
+      <div class="bg-white b_bottom_after padding10">
+        <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
       </div>
       <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
         <div v-if="data.delivercompany != '-1' && (data.delivercode && data.delivercode != '' && data.delivercompanyname && data.delivercompanyname != '')" class="t-table mb10">
