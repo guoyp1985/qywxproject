@@ -54,8 +54,7 @@ export default {
         self.$http.get(`${ENV.BokaApi}/api/scanlogin/${this.qrCode.verifycode}`)
         .then(res => {
           const token = res.data.data ? res.data.data.token : null
-          const error = res.data.data.error
-          console.log(res)
+          const error = res.data.data ? res.data.data.error : null
           if (error) {
             console.error(error)
           } else if (token) {
