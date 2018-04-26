@@ -67,7 +67,7 @@ export default {
             self.$router.go(-1)
             self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
             clearInterval(intervalId)
-            return his.$http.get(`${ENV.BokaApi}/api/user/show`)
+            return this.$http.get(`${ENV.BokaApi}/api/user/show`)
           }
         })
         .then(res => {
