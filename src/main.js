@@ -12,7 +12,7 @@ import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 // import VueResource from 'vue-resource'
 // import Login from '#/login'
-import { Token } from '#/storage'
+import { Token, User } from '#/storage'
 import ENV from '#/env'
 import Util from '#/util'
 
@@ -315,7 +315,14 @@ Vue.http.interceptors.response.use(response => {
         // const to = lUrl.hash.replace(/#/g, '')
         // router.push({path: to, query: {access: true}})
         // alert(JSON.stringify(res.data))
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        return this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    )
+    .then(
+      res => {
+        User.set(res.data)
+        // console.log(User.get())
       }
     )
   } else {
