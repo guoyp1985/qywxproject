@@ -311,6 +311,7 @@ Vue.http.interceptors.response.use(response => {
       res => {
         // token = res.data.data.token
         // alert(lUrl.hash.replace(/#/g, ''))
+        alert('ok')
         Token.set(res.data.data.token)
         // const to = lUrl.hash.replace(/#/g, '')
         // router.push({path: to, query: {access: true}})
