@@ -108,7 +108,7 @@ export default {
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
-              alert(Token.get())
+              location.reload()
             }
           }
         }
