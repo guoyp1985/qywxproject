@@ -79,7 +79,7 @@ export default {
     },
     '$route' (to, from) {
       document.title = this.getTitle(to.path)
-      this.getData()
+      // this.getData()
     }
   },
   computed: {
@@ -134,16 +134,17 @@ export default {
           return title || '$$'
         }
       }
-    },
-    getData () {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      .then(
-        res => {
-          User.set(res.data)
-          console.log(User.get())
-        }
-      )
     }
+    // getData () {
+    //   this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    //   .then(
+    //     res => {
+    //       console.log()
+    //       User.set(res.data)
+    //       console.log(User.get())
+    //     }
+    //   )
+    // }
   }
 }
 </script>
