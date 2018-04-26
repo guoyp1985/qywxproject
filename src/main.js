@@ -282,7 +282,7 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
-localStorage.removeItem('token')
+// localStorage.removeItem('token')
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   // removePending(config)
@@ -317,7 +317,7 @@ Vue.http.interceptors.response.use(response => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
-        alert('lUrl.query.code')
+        // alert('lUrl.query.code')
         const orginHref = encodeURIComponent(location.href)
         location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       }
