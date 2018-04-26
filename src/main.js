@@ -275,7 +275,7 @@ let pending = []
 // let cancelToken = axios.CancelToken
 let removePending = (config) => {
   for (let p in pending) {
-    if(pending[p].u === config.url + '&' + config.method) {
+    if (pending[p].u === config.url + '&' + config.method) {
       pending[p].f()
       pending.splice(p, 1)
     }
@@ -286,7 +286,7 @@ let flag = false
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   removePending(config)
-  config.cancelToken = new CancelToken (c => {
+  config.cancelToken = new CancelToken(c => {
     pending.push({ u: config.url + '&' + config.method, f: c })
   })
   // const rUrl = urlParse(config.url)
@@ -314,6 +314,19 @@ Vue.http.interceptors.response.use(response => {
   removePending(response.config)
   return response
 }, error => {
+  // const rUrl = urlParse(config.url)
+  const lUrl = urlParse(location.href, true)
+  if (lUrl.query.code && flag) {
+    flag = false
+    const code = lUrl.query.code
+    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+    .then(
+      res => {
+        Token.set(res.data.token)
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+      }
+    )
+  }
   $vue.$util.access(error.response, isPC => {
     if (isPC) {
       router.push({name: 'tLogin'})
