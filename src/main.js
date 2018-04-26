@@ -166,7 +166,7 @@ const matchExclude = url => {
   }
   return false
 }
-localStorage.removeItem('token')
+// localStorage.removeItem('token')
 // let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.request.use(function (config) {
