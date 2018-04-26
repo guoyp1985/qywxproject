@@ -17,7 +17,6 @@ import ENV from '#/env'
 import Util from '#/util'
 
 // Vue.use(VueResource)
-const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
@@ -173,7 +172,7 @@ Vue.http.interceptors.request.use(function (config) {
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   if (matchExclude(rUrl.href)) {
-    return Promise.reject()
+    return
   }
   if (lUrl.query.code) {
     const code = lUrl.query.code
