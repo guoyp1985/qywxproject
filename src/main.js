@@ -282,7 +282,7 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
-let flag = true
+let flag = false
 //请求拦截器
 Vue.http.interceptors.request.use(config => {
   removePending(config)
@@ -292,7 +292,7 @@ Vue.http.interceptors.request.use(config => {
   // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   if (lUrl.query.code && flag) {
-    flag = false
+    // flag = false
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
