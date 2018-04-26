@@ -234,7 +234,7 @@ Vue.http.interceptors.request.use(function (config) {
       //   return response
       // })
     // }
-    return
+    return Promise.reject()
   }
   else {
     config.headers['Authorization'] = `Bearer ${token}`
@@ -248,7 +248,7 @@ function (error) {
 Vue.http.interceptors.response.use(function (response) {
   return response
 }, function (error) {
-  alert(error.config.url)
+  // alert(error.config.url)
   $vue.$util.access(error.response, isPC => {
     if (isPC) {
       // Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
