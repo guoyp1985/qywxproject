@@ -150,7 +150,7 @@ router.afterEach(function (to) {
 let excludeUrls = [
   `${ENV.BokaApi}/api/authLogin/*`,
   `${ENV.BokaApi}/api/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`,
+  `${ENV.BokaApi}/api/login/*`
   `${ENV.BokaApi}/api/scanlogin`
   // `${ENV.BokaApi}/api/weixin/token`
 ]
@@ -172,67 +172,66 @@ localStorage.removeItem('token')
 Vue.http.interceptors.request.use(function (config) {
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
-  if (matchExclude(rUrl.href)) {
+  if (!matchExclude(rUrl.href)) {
     // alert(`${rUrl.href}`)
-    return config
-  }
-  alert(lUrl.query.code)
-  if (lUrl.query.code) {
-    const code = lUrl.query.code
-    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-    .then(
-      res => {
-        const token = res.data.token
-        Token.set(token)
-        // token = data.data.token // test
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        // alert(data.data.weixin_token)
-        // const accessToken = data.data.weixin_token
-        // const nonceStr = $vue.$util.randomStr(6)
-        // const timeStamp = $vue.$util.timeStamp()
-        // const currentUrl = urlParse(location.href, true)
-        // const url = currentUrl.href.replace(/#\/\w*/g, '')
-        // alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
-        // const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
-        // WeixinJSBridge.invoke('editAddress', {
-        //   appId: ENV.AppId,
-        //   scope: 'jsapi_address',
-        //   signType: 'sha1',
-        //   addrSign: addrSign,
-        //   timeStamp: timeStamp,
-        //   nonceStr: nonceStr
-        // },
-        // res => {
-        //   alert(res.err_msg)
-        //   if (res.err_msg === 'edit_address:ok') {
-        //     const param = {
-        //       linkman: res.userName,
-        //       telephone: res.telNumber,
-        //       province: res.proviceFirstStageName,
-        //       city: res.addressCitySecondStageName,
-        //       counties: res.addressCountiesThirdStageName,
-        //       address: res.addressDetailInfo
-        //     }
-        //     alert(param)
-        //   }
-        // })
-      },
-      error => {
-        console.log(JSON.stringify(error))
-      }
-    )
-    // alert('ok')
-  } else if (rUrl.origin === ENV.BokaApi) {
-    const token = Token.get()
-    // request.method = 'GET'
-    // request.headers.set('Authorization', `Bearer ${token}`)
-    config.headers['Authorization'] = `Bearer ${token}`
-    // request.headers.set('X-CSRF-Token', 'plugin')
-    // continue to next interceptor
-    // next(function (response) {
+    // return config
+    if (lUrl.query.code) {
+      const code = lUrl.query.code
+      Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+      .then(
+        res => {
+          const token = res.data.token
+          Token.set(token)
+          // token = data.data.token // test
+          location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+          // alert(data.data.weixin_token)
+          // const accessToken = data.data.weixin_token
+          // const nonceStr = $vue.$util.randomStr(6)
+          // const timeStamp = $vue.$util.timeStamp()
+          // const currentUrl = urlParse(location.href, true)
+          // const url = currentUrl.href.replace(/#\/\w*/g, '')
+          // alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+          // const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+          // WeixinJSBridge.invoke('editAddress', {
+          //   appId: ENV.AppId,
+          //   scope: 'jsapi_address',
+          //   signType: 'sha1',
+          //   addrSign: addrSign,
+          //   timeStamp: timeStamp,
+          //   nonceStr: nonceStr
+          // },
+          // res => {
+          //   alert(res.err_msg)
+          //   if (res.err_msg === 'edit_address:ok') {
+          //     const param = {
+          //       linkman: res.userName,
+          //       telephone: res.telNumber,
+          //       province: res.proviceFirstStageName,
+          //       city: res.addressCitySecondStageName,
+          //       counties: res.addressCountiesThirdStageName,
+          //       address: res.addressDetailInfo
+          //     }
+          //     alert(param)
+          //   }
+          // })
+        },
+        error => {
+          console.log(JSON.stringify(error))
+        }
+      )
+      // alert('ok')
+    } else if (rUrl.origin === ENV.BokaApi) {
+      const token = Token.get()
+      // request.method = 'GET'
+      // request.headers.set('Authorization', `Bearer ${token}`)
+      config.headers['Authorization'] = `Bearer ${token}`
+      // request.headers.set('X-CSRF-Token', 'plugin')
+      // continue to next interceptor
+      // next(function (response) {
 
-    //   return response
-    // })
+      //   return response
+      // })
+    }
   }
   return config
 },
