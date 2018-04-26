@@ -282,16 +282,16 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
-// localStorage.removeItem('token')
-let token = null
-alert(token)
+localStorage.removeItem('token')
+// let token = null
+// alert(token)
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   // removePending(config)
   // config.cancelToken = new CancelToken(c => {
   //   pending.push({ u: config.url + '&' + config.method, f: c })
   // })
-  // const token = Token.get()
+  const token = Token.get()
   config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, error => {
@@ -309,10 +309,12 @@ Vue.http.interceptors.response.use(response => {
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
-        token = res.data.data.token
-        // Token.set(res.data.data.token)
+        // token = res.data.data.token
+        Token.set(res.data.data.token)
+        alert(lUrl.hash)
+        router.push({path: lUrl.hash})
         // alert(JSON.stringify(res.data))
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
   } else {
