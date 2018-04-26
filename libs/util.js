@@ -113,24 +113,24 @@ Util.install = function (Vue, options) {
       }
       return query
     },
-    wxShareSuccess: (options) => {
-      let wxData = options.data
+    wxShareSuccess: (params) => {
+      let wxData = params.data
       Vue.http.get(`${ENV.BokaApi}/api/credit`,{
         params: {
           do: 'add',
-          type: options.type,
+          type: params.type,
           shareurl:wxData.link,
           title:Base64.encode(wxData.title)
         }
       }).then(function (res) {
         return res.json()
       }).then(function (data) {
-        options.wxData.successCallback && options.wxData.successCallback(data);
+        params.wxData.successCallback && params.wxData.successCallback(data);
       })
     },
-    wxShare: function (options) {
+    wxShare: function (params) {
       const self = this
-      let wxData = options.data
+      let wxData = params.data
       let isUpdate = false
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
         { params: { url: encodeURIComponent(location.href) } }
@@ -140,7 +140,7 @@ Util.install = function (Vue, options) {
           //alert("微信还没有准备好，请刷新页面");
         });
         Vue.wechat.ready(function () {
-          options.readyCallback && options.readyCallback()
+          params.readyCallback && params.readyCallback()
           Vue.wechat.showMenuItems({
             menuList: [
               'menuItem:profile',
@@ -181,7 +181,7 @@ Util.install = function (Vue, options) {
             trigger: function (res) {
               //分享之前执行
               //	alert('用户点击发送给朋友');
-              options.beforeShare && options.beforeShare()
+              params.beforeShare && params.beforeShare()
               if (wxData.desc == "undefined" || wxData.desc == undefined) {
                 alert("微信还没准备好分享，请稍后再试");
               }
@@ -215,7 +215,7 @@ Util.install = function (Vue, options) {
             trigger: function (res) {
               //分享之前执行
               //	alert('用户点击发送给朋友');
-              options.beforeShare && options.beforeShare()
+              params.beforeShare && params.beforeShare()
               if (wxData.desc === "undefined" || wxData.desc === undefined) {
                 alert("微信还没准备好分享，请稍后再试");
               }
@@ -241,7 +241,7 @@ Util.install = function (Vue, options) {
             trigger: function (res) {
               //分享之前执行
               //	alert('用户点击发送给朋友');
-              options.beforeShare && options.beforeShare()
+              params.beforeShare && params.beforeShare()
               if (wxData.desc === "undefined" || wxData.desc === undefined) {
                 alert("微信还没准备好分享，请稍后再试");
               }

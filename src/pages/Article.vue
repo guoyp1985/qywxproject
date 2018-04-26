@@ -127,7 +127,7 @@ export default {
     replyPopupCancel () {
       this.replyPopupShow = false
     },
-    commentSubmit (value) {
+    commentSubmit (value) { // 留言提交
       this.commentPopupShow = false
       // let comment = {
       //   userName: 'simon',
@@ -145,8 +145,10 @@ export default {
       })
       // this.comments.push(comment)
     },
-    replySubmit () {
-
+    replySubmit (value) { // 回复提交
+      this.replyPopupShow = false
+      const self = this
+      // this.$http.
     },
     getData () {
       const self = this
@@ -162,6 +164,20 @@ export default {
       .then(res => {
         if (res.data) {
           self.comments = res.data
+        }
+        return self.$http.post(`${ENV.BokaApi}/api/share/news`, {id: self.article.id, title: self.article.title})
+      })
+      .then(res => {
+        if(res.data.flag) {
+          console.log(self.article)
+          self.$util.wxShare({
+            data: {
+              link: location.href,
+              title: self.article.seotitle || self.article.title,
+              desc: self.articel.seodescription,
+              photo: self.article.sharephoto
+            }
+          })
         }
       })
     },
