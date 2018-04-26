@@ -108,7 +108,7 @@ export default {
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
-              
+
             }
           }
         }
@@ -180,8 +180,8 @@ export default {
     //     company: data.company
     //   }
     // })
-    alert('user')
     const user = User.get()
+    console.log(user)
     this.avatarHref = user.avatar
     this.linkMan = user.linkman
     this.userCredits = user.credit
