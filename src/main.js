@@ -326,16 +326,17 @@ Vue.http.interceptors.response.use(response => {
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
+  } else {
+    $vue.$util.access(error.response, isPC => {
+      if (isPC) {
+        router.push({name: 'tLogin'})
+      } else {
+        alert('lUrl.query.code')
+        const orginHref = encodeURIComponent(location.href)
+        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      }
+    })
   }
-  $vue.$util.access(error.response, isPC => {
-    if (isPC) {
-      router.push({name: 'tLogin'})
-    } else {
-      alert('lUrl.query.code')
-      const orginHref = encodeURIComponent(location.href)
-      location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-    }
-  })
   return { data: { } }
 })
 
