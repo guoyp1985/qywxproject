@@ -46,6 +46,7 @@ export default {
     CTitle
   },
   data () {
+    const self = this
     return {
       btns: [
         {
@@ -104,7 +105,7 @@ export default {
           color: 'color-exit',
           react: function () {
             Token.remove()
-            this.$router.push({name: 'tLogin'})
+            self.$router.push({name: 'tLogin'})
           }
         }
       ],
