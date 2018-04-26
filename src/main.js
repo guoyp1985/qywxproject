@@ -176,7 +176,6 @@ Vue.http.interceptors.request.use(function (config) {
     return new Error()
   }
   if (lUrl.query.code) {
-    alert('ok')
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -256,6 +255,7 @@ Vue.http.interceptors.response.use(function (response) {
       router.push({name: 'tLogin'})
       // )
     } else {
+      alert('ok')
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
