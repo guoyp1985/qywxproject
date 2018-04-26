@@ -242,7 +242,7 @@ function (error) {
 Vue.http.interceptors.response.use(function (response) {
   return response
 }, function (error) {
-  alert(error.request)
+  alert(error.config.url)
   $vue.$util.access(error.response, isPC => {
     if (isPC) {
       // Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
