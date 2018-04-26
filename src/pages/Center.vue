@@ -102,8 +102,9 @@ export default {
           name: 'Exit',
           icon: 'al-tuichu3',
           color: 'color-exit',
-          react: () => {
+          react: function () {
             Token.remove()
+            this.$router.push({name: 'tLogin'})
           }
         }
       ],
