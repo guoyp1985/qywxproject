@@ -31,7 +31,18 @@
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
     </group>
-    <order-info :item="order" @on-eval="evaluate"></order-info>
+    <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
+    <group>
+      <cell class="order-list" v-for="(order, index) in orders" :title="order.name" :key="index">
+        <img slot="icon" :src="order.photo"/>
+        <div slot="after-title">
+          数量: {{orders.length}}
+        </div>
+        <div slot="inline-desc">
+          ¥{{order.special}}
+        </div>
+      </cell>
+    </group>
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
@@ -50,7 +61,7 @@
 <script>
 import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
-
+import ENV from '#/env'
 export default {
   directives: {
     TransferDom
@@ -70,19 +81,7 @@ export default {
       expressCompany: '未知快递',
       expressNumber: '100000000000',
       shippingAddress: '北京市市辖区',
-      order: {
-        id: '0',
-        type: 1,
-        name: 'unkown',
-        storeId: '0',
-        storeType: 1,
-        storeName: 'unkown',
-        status: 0,
-        imgs: ['../assets/images/nopic.jpg'],
-        desc: undefined,
-        num: 0,
-        pay: 0
-      },
+      orders: [],
       userQrCode: '',
       wxCardShow: false
     }
@@ -97,9 +96,21 @@ export default {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
     },
     wxContact () {
-      console.log(false)
       this.wxCardShow = true
+    },
+    getData () {
+      const self = this
+      const id = this.$route.query.id
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${id}`)
+      .then(res => {
+        if (res.data.flag) {
+          self.orders = res.data.data.orderlist
+        }
+      })
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

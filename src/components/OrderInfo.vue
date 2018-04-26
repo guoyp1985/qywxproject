@@ -9,7 +9,7 @@
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
-          <span>{{item.storeName}}</span>
+          <span class="font14">{{item.retailertitle}}</span>
           <span class="al al-mjiantou-copy font16"></span>
         </div>
         <div class="status-cell font12 color-orange6" v-if="item.flagstr">
@@ -17,10 +17,10 @@
         </div>
       </div>
     </router-link>
-    <router-link :to="{path:'/orderDetail',query:{order:item}}">
+    <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
-          <x-img v-for="(order, index) in item.orderlist" :src="order.photo"></x-img>
+          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" :key="index"></x-img>
         </div>
       </div>
       <div class="product-info" v-else>
