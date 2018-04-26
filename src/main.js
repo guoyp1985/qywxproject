@@ -282,7 +282,7 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
-// localStorage.removeItem('token')
+localStorage.removeItem('token')
 // let token = null
 // alert(token)
 // 请求拦截器
