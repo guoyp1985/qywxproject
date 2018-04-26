@@ -310,7 +310,7 @@ Vue.http.interceptors.response.use(response => {
     .then(
       res => {
         // token = res.data.data.token
-        alert(lUrl.hash.replace(/#/g, ''))
+        // alert(lUrl.hash.replace(/#/g, ''))
         Token.set(res.data.data.token)
         // const to = lUrl.hash.replace(/#/g, '')
         // router.push({path: to, query: {access: true}})
