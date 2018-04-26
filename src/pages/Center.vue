@@ -181,7 +181,7 @@ export default {
     //   }
     // })
     const user = User.get()
-    // console.log(user)
+    console.log(user)
     this.avatarHref = user.avatar
     this.linkMan = user.linkman
     this.userCredits = user.credit
