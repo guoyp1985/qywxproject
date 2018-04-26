@@ -130,19 +130,17 @@ export default {
     getData () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.length) {
-          self.items = data
+      .then(res => {
+        if (res.data.length) {
+          self.items = res.data
         }
       })
     },
     onDelete (item) {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/user/address/delete`, {id: item.id})
-      .then(res => res.json())
-      .then(data => {
-        if (data.flag) {
+      .then(res => {
+        if (res.data.flag) {
           self.$util.deleteItem(self.items, item.id)
         }
       })
@@ -158,8 +156,7 @@ export default {
       item.isdefault = 1
       item.do = 'update'
       this.$http.post(`${ENV.BokaApi}/api/user/address/add`, item)
-      .then(res => res.json)
-      .then(data => {
+      .then(res => {
         self.$vux.toast.text(self.$t('Setting Default Success For Address'))
       })
     }

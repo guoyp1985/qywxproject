@@ -86,8 +86,7 @@ export default {
         do: this.initItem.id ? 'update' : 'add'
       }
       this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
-      .then(res => res.json)
-      .then(data => {
+      .then(res => {
         this.$router.go(-1)
         // this.$router.push({ name: 'tAddress',
         //   params: {

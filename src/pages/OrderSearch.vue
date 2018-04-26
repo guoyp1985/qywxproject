@@ -15,7 +15,7 @@
     </sticky>
     <view-box v-show="selectedIndex===0">
       <template v-if="list.length">
-        <order-info v-for="(item, index) in list" :key="index" @on-eval="onEvaluate(item)"></order-info>
+        <order-info v-for="(item, index) in list" :item="item" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -62,6 +62,7 @@
 <script>
 import { Sticky, Tab, TabItem, ViewBox } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import ENV from '#/env'
 
 export default {
   components: {
@@ -74,21 +75,7 @@ export default {
   data () {
     return {
       selectedIndex: 0,
-      list: [
-        {
-          id: '0',
-          type: 1,
-          name: 'unkown',
-          storeId: '0',
-          storeType: 1,
-          storeName: 'unkown',
-          status: 0,
-          imgs: ['../assets/_images/nopic.jpg'],
-          desc: undefined,
-          num: 0,
-          pay: 0
-        }
-      ],
+      list: [],
       list1: [],
       list2: [],
       list3: []
@@ -121,7 +108,19 @@ export default {
   methods: {
     onEvaluate (order) {
       this.$router.push({name: 'tEvaluation', params: {order: order}})
+    },
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
+      .then(res => {
+        if (res.data.flag) {
+          self.list = res.data.data
+        }
+      })
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

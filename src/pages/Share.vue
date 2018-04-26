@@ -63,9 +63,8 @@ export default {
     getData () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/list/share`)
-      .then(res => res.json())
-      .then(data => {
-        self.list = data
+      .then(res => {
+        self.list = res.data
       })
     }
   },

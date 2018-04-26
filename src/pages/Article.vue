@@ -204,8 +204,8 @@ export default {
     }
   },
   created () {
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.getData()
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>

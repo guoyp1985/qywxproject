@@ -93,11 +93,10 @@ export default {
     syncWxProfile () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/user/refresh/0`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.flag) {
-          self.getProfile = data.data
-          self.$vux.toast.text(data.error, 'middle')
+      .then(res => {
+        if (res.data.flag) {
+          self.getProfile = res.data.data
+          self.$vux.toast.text(res.data.error, 'middle')
         }
       })
     },
@@ -105,9 +104,8 @@ export default {
       const self = this
       if (this.$util.validateQueue({linkman: this.getProfile.linkman})) {
         this.$http.post(`${ENV.BokaApi}/api/user/update/0`, this.getProfile)
-        .then(res => res.json())
-        .then(data => {
-          self.$vux.toast.text(data.error, 'middle')
+        .then(res => {
+          self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {
             self.$router.go(-1)
           }, 3000)

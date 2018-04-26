@@ -54,9 +54,8 @@ export default {
   methods: {
     getData () {
       this.$http.get(`${ENV.BokaApi}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
+      .then(res => {
+        console.log(res.data)
       })
     }
   }

@@ -178,27 +178,24 @@ export default {
       const self = this
       const user = User.get()
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'news'})
-      .then(res => res.json())
-      .then(data => {
-        self.articles = data
+      .then(res => {
+        self.articles = res.data
       })
     },
     getCommodities () {
       const self = this
       const user = User.get()
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'product'})
-      .then(res => res.json())
-      .then(data => {
-        self.commodities = data
+      .then(res => {
+        self.commodities = res.data
       })
     },
     getStores () {
       const self = this
       const user = User.get()
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'retailer'})
-      .then(res => res.json())
-      .then(data => {
-        self.stores = data
+      .then(res => {
+        self.stores = res.data
       })
     },
     articleItemClick (item) {
@@ -213,9 +210,8 @@ export default {
     cancelArticel (item) {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.moduleid, module: item.type})
-      .then(res => res.json())
-      .then(data => {
-        if (data.flag) {
+      .then(res => {
+        if (res.data.flag) {
           self.$util.deleteItem(self.articles, item.id)
         }
       })
