@@ -5,12 +5,12 @@
 */
 <template>
   <div id="personal-center" v-cloak>
-    <c-title :avatar-href="getAvatar"
-            :user-name="getName"
-            :user-credits="getCredits"
-            :user-level="getLevel"
+    <c-title :avatar-href="avatarHref"
+            :user-name="linkMan"
+            :user-credits="userCredits"
+            :user-level="userLevels"
             :profile="profile"
-            :messages="getMessages">
+            :messages="messages">
     </c-title>
     <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
       <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
@@ -121,35 +121,6 @@ export default {
       profile: {},
       messages: 0,
       direct: ''
-    }
-  },
-  computed: {
-    direction: {
-      get () {
-        return this.direct
-      },
-      set (direct) {
-        this.direct = direct
-      }
-    },
-    getAvatar () {
-      return this.avatarHref
-    },
-    getName () {
-      return this.linkMan
-    },
-    getCredits () {
-      return this.userCredits
-    },
-    getLevel () {
-      return this.userLevels
-    },
-    getMessages () {
-      return this.messages
-    },
-    viewTransition () {
-      if (!this.direction) return ''
-      return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
   },
   methods : {
