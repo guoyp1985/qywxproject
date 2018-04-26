@@ -282,7 +282,7 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
-let flag = true
+localStorage.removeItem('token')
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   removePending(config)
@@ -327,7 +327,7 @@ Vue.http.interceptors.response.use(response => {
       res => {
         Token.set(res.data.data.token)
         // alert(JSON.stringify(res.data))
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
   } else {
