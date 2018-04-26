@@ -71,6 +71,7 @@ export default {
           }
         })
         .then(res => {
+          console.log(res)
           User.set(res.data)
         })
       }, 5000)
