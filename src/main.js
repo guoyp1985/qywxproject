@@ -325,8 +325,8 @@ Vue.http.interceptors.response.use(response => {
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
-        Token.set(res.data.token)
-        alert(JSON.stringify(res.data))
+        Token.set(res.data.data.token)
+        // alert(JSON.stringify(res.data))
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
