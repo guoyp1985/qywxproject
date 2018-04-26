@@ -79,9 +79,6 @@ Util.install = function (Vue, options) {
       }
       return ret
     },
-    wxShare: function() {
-      console.log(this)
-    },
     timeStamp : () => Math.floor(new Date().getTime()/1000).toString(),
     randomStr: (len) => {
       if (!len) {
@@ -116,7 +113,7 @@ Util.install = function (Vue, options) {
       }
       return query
     },
-    shareSuccess: (options) => {
+    wxShareSuccess: (options) => {
       let wxData = options.data
       Vue.http.get(`${ENV.BokaApi}/api/credit`,{
         params: {
@@ -131,16 +128,14 @@ Util.install = function (Vue, options) {
         options.wxData.successCallback && options.wxData.successCallback(data);
       })
     },
-    share: function (options) {
+    wxShare: function (options) {
       const self = this
       let wxData = options.data
       let isUpdate = false
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
         { params: { url: encodeURIComponent(location.href) } }
-      ).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        Vue.wechat.config(data)
+      ).then(res => {
+        Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
           //alert("微信还没有准备好，请刷新页面");
         });
@@ -151,7 +146,7 @@ Util.install = function (Vue, options) {
               'menuItem:profile',
               'menuItem:addContact'
             ]
-          });
+          })
           Vue.wechat.hideMenuItems({
             menuList: [
               'menuItem:exposeArticle',
@@ -162,7 +157,7 @@ Util.install = function (Vue, options) {
               'menuItem:share:weiboApp',
               'menuItem:share:facebook'
             ]
-          });
+          })
           let wxshareurl = wxData.link
           let query = self.query(wxshareurl)
           if (query.openid) {
@@ -191,7 +186,7 @@ Util.install = function (Vue, options) {
                 alert("微信还没准备好分享，请稍后再试");
               }
               if (res.shareTo == "favorite") {
-                Util.shareSuccess({
+                self.wxShareSuccess({
                   data: wxData,
                   type: 'favorite'
                 })
@@ -201,13 +196,13 @@ Util.install = function (Vue, options) {
               if (isUpdate) {
                 alert("微信版本太低，请先升级微信客户端!")
               }
-              Util.shareSuccess({
+              self.wxShareSuccess({
                 data: wxData,
                 type: 'friend'
               })
             },
             cancel: function (resp) {
-              Util.shareSuccess({
+              self.wxShareSuccess({
                 data: wxData,
                 type: 'friend'
               })
@@ -226,13 +221,13 @@ Util.install = function (Vue, options) {
               }
             },
             success: function (resp) {
-              Util.shareSuccess({
+              self.wxShareSuccess({
                 data: wxData,
                 type: 'timeline'
               })
             },
             cancel: function (resp) {
-              Util.shareSuccess({
+              self.wxShareSuccess({
                 data: wxData,
                 type: 'timeline'
               })
@@ -252,13 +247,13 @@ Util.install = function (Vue, options) {
               }
             },
             success: function (resp) {
-              Util.shareSuccess({
+              self.wxShareSuccess({
                 data: wxData,
                 type: 'qq'
               })
             },
             cancel: function (resp) {
-              Util.shareSuccess({
+              self.wxShareSuccess({
                 data: wxData,
                 type: 'qq'
               })
@@ -266,8 +261,6 @@ Util.install = function (Vue, options) {
           })
         })
       })
-    },
-    wxShare: function () {
     },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {
