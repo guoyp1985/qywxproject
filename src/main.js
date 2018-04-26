@@ -282,6 +282,7 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
+let flag = true
 //请求拦截器
 Vue.http.interceptors.request.use(config => {
   removePending(config)
@@ -290,7 +291,8 @@ Vue.http.interceptors.request.use(config => {
   })
   // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
-  if (lUrl.query.code) {
+  if (lUrl.query.code && flag) {
+    flag = false
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -316,7 +318,7 @@ Vue.http.interceptors.response.use(response => {
     if (isPC) {
       router.push({name: 'tLogin'})
     } else {
-      alert('lUrl.query.code')
+      // alert('lUrl.query.code')
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
