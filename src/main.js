@@ -166,7 +166,7 @@ const matchExclude = url => {
   }
   return false
 }
-// localStorage.removeItem('token')
+localStorage.removeItem('token')
 // let token = null // test
 // 全局请求过滤器
 Vue.http.interceptors.request.use(function (config) {
@@ -174,8 +174,9 @@ Vue.http.interceptors.request.use(function (config) {
   const lUrl = urlParse(location.href, true)
   if (matchExclude(rUrl.href)) {
     // alert(`${rUrl.href}`)
-    return Promise.reject(error)
+    return config
   }
+  alert(lUrl.query.code)
   if (lUrl.query.code) {
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
@@ -236,7 +237,6 @@ Vue.http.interceptors.request.use(function (config) {
   return config
 },
 function (error) {
-  console.log(error)
   return Promise.reject(error)
 })
 
@@ -245,22 +245,20 @@ Vue.http.interceptors.response.use(function (response) {
 }, function (error) {
   $vue.$util.access(error.response, isPC => {
     if (isPC) {
-      Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
-      .then(
-        res => {
-          router.push({name: 'tLogin', params: {qrCode: res.data, fromPath: router.currentRoute.path}})
-        },
-        error => {
-          console.error(error)
-        }
-      )
+      // Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
+      // .then(
+      //   res => {
+        // router.push({name: 'tLogin', params: {qrCode: res.data, fromPath: router.currentRoute.path}})
+        // },
+        // error => {
+        //   console.error(error)
+        // }
+        router.push({name: 'tLogin'})
+      // )
     } else {
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
-  },
-  () => {
-    // console.log('okokokok')
   })
   return Promise.reject(error)
 })
