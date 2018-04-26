@@ -130,6 +130,7 @@ Util.install = function (Vue, options) {
     },
     wxShare: function (params) {
       const self = this
+      console.log(params)
       let wxData = params.data
       let isUpdate = false
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
