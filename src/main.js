@@ -148,25 +148,25 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-let excludeUrls = [
-  `${ENV.BokaApi}/api/authLogin/*`,
-  `${ENV.BokaApi}/api/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`
+// let excludeUrls = [
+//   `${ENV.BokaApi}/api/authLogin/*`,
+//   `${ENV.BokaApi}/api/qrcode/login*`,
+//   `${ENV.BokaApi}/api/login/*`,
+//   `${ENV.BokaApi}/api/scanlogin`
   // `${ENV.BokaApi}/api/weixin/token`
-]
+// ]
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
-const matchExclude = url => {
-  for (let i = 0; i < rExcludeUrls.length; i++) {
-    // alert(`${item.url} ${item.reqMax}`)
-    if (rExcludeUrls[i].test(url)) {
-      return true
-    }
-  }
-  return false
-}
+// const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+// const matchExclude = url => {
+//   for (let i = 0; i < rExcludeUrls.length; i++) {
+//     // alert(`${item.url} ${item.reqMax}`)
+//     if (rExcludeUrls[i].test(url)) {
+//       return true
+//     }
+//   }
+//   return false
+// }
 // localStorage.removeItem('token')
 // let token = null // test
 // 全局请求过滤器
