@@ -123,12 +123,11 @@ export default {
       direct: ''
     }
   },
-  methods : {
+  methods: {
     buttonClick (btn) {
       if (btn.link) {
         this.$router.push({path: btn.link})
-      }
-      else {
+      } else {
         btn.react()
       }
     }

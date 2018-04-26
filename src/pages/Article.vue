@@ -160,7 +160,7 @@ export default {
         return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
       .then(res => {
-        if(res.data) {
+        if (res.data) {
           self.comments = res.data
         }
       })
