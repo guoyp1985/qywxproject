@@ -172,6 +172,7 @@ Vue.http.interceptors.request.use(function (config) {
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   if (matchExclude(rUrl.href)) {
+    alert(rUrl.href)
     return
   }
   if (lUrl.query.code) {
