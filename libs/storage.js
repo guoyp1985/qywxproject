@@ -37,6 +37,9 @@ const User = {
   },
   get () {
     return JSON.parse(localStorage.getItem('user'))
+  },
+  remove () {
+    localStorage.removeItem('user')
   }
 }
 export { Token, OpenId, WxQrCode, User }

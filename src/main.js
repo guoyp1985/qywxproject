@@ -290,7 +290,6 @@ Vue.http.interceptors.request.use(config => {
     pending.push({ u: config.url + '&' + config.method, f: c })
   })
   const token = Token.get()
-  alert(token)
   config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, error => {
@@ -323,7 +322,6 @@ Vue.http.interceptors.response.use(response => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
-        alert('ok')
         const orginHref = encodeURIComponent(location.href)
         location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       }

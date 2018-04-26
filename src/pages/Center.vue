@@ -105,6 +105,7 @@ export default {
           color: 'color-exit',
           react: function () {
             Token.remove()
+            User.remove()
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
