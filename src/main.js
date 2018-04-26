@@ -282,7 +282,7 @@ let removePending = (config) => {
   }
 }
 // console.log(new CancelToken(c => {}))
-localStorage.removeItem('token')
+// localStorage.removeItem('token')
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   removePending(config)
