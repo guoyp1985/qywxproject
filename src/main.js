@@ -291,13 +291,13 @@ Vue.http.interceptors.request.use(config => {
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   if (lUrl.query.code) {
+    alert(location.href)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         Token.set(res.data.token)
         location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        alert(location.href)
       }
     )
   }
