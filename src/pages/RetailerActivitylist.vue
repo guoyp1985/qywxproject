@@ -275,8 +275,8 @@ Stat:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup } from 'vux'
-import Time from '../../libs/time'
-import ENV from '../../libs/env'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -317,7 +317,7 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.hide()
+    self.$vux.loading.show()
     self.getdata1()
   },
   watch: {
@@ -347,9 +347,8 @@ export default {
     },
     getdata1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
-        params: { pagestart: self.pagestart1, limit: self.limit }
-      }).then(function (res) {
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()

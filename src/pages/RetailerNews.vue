@@ -170,6 +170,7 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.getdata1()
   },
   methods: {
@@ -201,9 +202,8 @@ export default {
     },
     getdata1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
-        params: { pagestart: self.pagestart1, limit: self.limit }
-      }).then(function (res) {
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
@@ -254,13 +254,14 @@ export default {
     },
     tabitemclick (index) {
       const self = this
-      self.$vux.loading.hide()
       if (index === 0) {
         if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
           self.getdata1()
         }
       } else if (index === 1) {
         if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
           self.getdata2()
         }
       }

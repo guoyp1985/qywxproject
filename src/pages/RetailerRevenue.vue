@@ -12,7 +12,7 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tablink">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -27,25 +27,29 @@
                   <div class="mt5">暂无待提现金额记录！</div>
                   <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
                 </div>
-                <Checkboxitemplate v-else v-for="(item,index1) in getCheckdata" :key="item.id">
-                  <input slot="checkbox" type="checkbox" :checked="item.checked" @click="checkboxclick(item)" />
-                  <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                  <div slot="title" class="clamp1">{{item.buyername}}</div>
-                  <div slot="title" class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
-                  <div slot="title" class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                  <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-                </Checkboxitemplate>
+                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in tabdata1" :key="item.id" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50">
+                      <img :src="item.avatar" class="avatarimg1" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.buyername}}</div>
+                      <div class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
+                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                    </div>
+                    <div class="t-cell align_right v_middle w100">
+                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </div>
+                </check-icon>
               </div>
             </div>
             <div class="toolbar_bg" style="position:absolute;left:0;bottom:0;right:0;height:45px;">
               <div class="t-table h_100">
-                <div class="t-cell h_100 v_middle checkAll pl10 w70">
-                  <label class="qcheckbox m0">
-                    <input type="checkbox" :checked="checkedAll" @click="checkAll" />
-                    <i class="al"></i><span class="v_middle">全选</span>
-                  </label>
+                <div class="t-cell h_100 v_middle w100">
+                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAll">全选</check-icon>
                 </div>
-                <div class="t-cell h_100 v_middle align_left pl20">合计：<font class="color-orange">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
+                <div class="t-cell h_100 v_middle align_left">合计：<font class="color-orange">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
                 <div class="t-cell h_100 v_middle font16 align_center bg-orange1 color-white w80" >提现</div>
               </div>
             </div>
@@ -135,8 +139,7 @@ Know txt:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup } from 'vux'
-import Checkboxitemplate from '@/components/Checkboxitemplate'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon } from 'vux'
 import Listplate from '@/components/Listplate'
 import Time from '#/time'
 import ENV from '#/env'
@@ -150,9 +153,9 @@ export default {
     TabItem,
     Swiper,
     SwiperItem,
-    Checkboxitemplate,
     Listplate,
-    Popup
+    Popup,
+    CheckIcon
   },
   filters: {
     dateformat: function (value) {
@@ -185,6 +188,7 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.getdata1()
   },
   computed: {
@@ -256,15 +260,13 @@ export default {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata1 = self.tabdata1.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.retailerrevenue .swiperitem')
           self.scrollArea1 = items[0]
-          self.scrollArea2 = items[0]
-          self.scrollArea3 = items[0]
+          self.scrollArea2 = items[1]
+          self.scrollArea3 = items[2]
           self.isBindScroll1 = true
           self.scrollArea1.removeEventListener('scroll', self.scroll1)
           self.scrollArea1.addEventListener('scroll', self.scroll1)
@@ -278,10 +280,8 @@ export default {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata2 = self.tabdata2.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -296,10 +296,8 @@ export default {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata3 = self.tabdata3.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata3 = self.tabdata3.concat(retdata)
         if (!self.isBindScroll3) {
           self.isBindScroll3 = true
           self.scrollArea3.removeEventListener('scroll', self.scroll3)
@@ -308,7 +306,6 @@ export default {
       })
     },
     checkboxclick (d) {
-      d.checked = !d.checked
       this.totalPrice = 0
       let curdata = this.checkdata
       for (var i = 0; i < curdata.length; i++) {
@@ -320,7 +317,6 @@ export default {
       this.totalPrice = this.totalPrice.toFixed(2)
     },
     checkAll () {
-      this.checkedAll = !this.checkedAll
       let curdata = this.checkdata
       for (var i = 0; i < curdata.length; i++) {
         let d = curdata[i]
@@ -340,13 +336,21 @@ export default {
     },
     tabclick (index) {
       const self = this
-      self.$vux.loading.hide()
       if (index === 0) {
-        self.getdata1()
+        if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
       } else if (index === 1) {
-        self.getdata2()
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
       } else if (index === 2) {
-        self.getdata3()
+        if (self.pagestart3 === 0 && !self.isBindScroll3) {
+          self.$vux.loading.show()
+          self.getdata3()
+        }
       }
     }
   }

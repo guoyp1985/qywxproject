@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{path: '/orderDetail', query: {id: data.id}}" class="bk-orderitem order-item scroll_item mb10 font14 db">
+  <router-link :to="{path: '/retailerOrderDetail', query: {id: data.id}}" class="bk-orderitem order-item scroll_item mb10 font14 db">
     <div class="bg-white padding10 b_bottom_after font12 flex_center">
         <div class="flex_cell color-gray5">创建时间：<slot name="createdate"></slot></div>
         <div class="align_right color-orange5" style="width:100px;"><slot name="flagstr"></slot></div>

@@ -289,16 +289,13 @@ export default {
     },
     getdata1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, {
-        params: { pagestart: self.pagestart1, limit: self.limit }
-      }).then(function (res) {
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata1 = self.tabdata1.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.retailerordes .swiperitem')
           self.scrollArea1 = items[0]
@@ -318,10 +315,8 @@ export default {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata2 = self.tabdata2.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -336,10 +331,8 @@ export default {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata3 = self.tabdata3.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata3 = self.tabdata3.concat(retdata)
         if (!self.isBindScroll3) {
           self.isBindScroll3 = true
           self.scrollArea3.removeEventListener('scroll', self.scroll3)
@@ -354,10 +347,8 @@ export default {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let retdata = data.data ? data.data : data
-          self.tabdata4 = self.tabdata4.concat(retdata)
-        }
+        let retdata = data.data ? data.data : data
+        self.tabdata4 = self.tabdata4.concat(retdata)
         if (!self.isBindScroll4) {
           self.isBindScroll4 = true
           self.scrollArea4.removeEventListener('scroll', self.scroll4)
@@ -367,21 +358,24 @@ export default {
     },
     tabclick (index) {
       const self = this
-      self.$vux.loading.hide()
       if (index === 0) {
         if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
           self.getdata1()
         }
       } else if (index === 1) {
         if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
           self.getdata2()
         }
       } else if (index === 2) {
         if (self.pagestart3 === 0 && !self.isBindScroll3) {
+          self.$vux.loading.show()
           self.getdata3()
         }
       } else if (index === 3) {
         if (self.pagestart4 === 0 && !self.isBindScroll4) {
+          self.$vux.loading.show()
           self.getdata4()
         }
       }

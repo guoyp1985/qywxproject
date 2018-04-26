@@ -49,7 +49,7 @@
       </form>
     </div>
     <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
-    <div v-transfer-dom class="x-popup">
+    <div v-transfer-dom class="x-popup popup-selectproduct">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
@@ -73,11 +73,11 @@
               <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                 <div class="t-table">
                   <div class="t-cell pic v_middle w50">
-                    <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                    <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
                   </div>
                   <div class="t-cell v_middle" style="color:inherit;">
-                    <div slot="title" class="clamp1">{{item.title}}</div>
-                    <div slot="title" class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                    <div class="clamp1">{{item.title}}</div>
+                    <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
                   </div>
                 </div>
               </check-icon>
@@ -121,9 +121,8 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon, Radio } from 'vux'
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
-import Radioitemplate from '@/components/Radioitemplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
 import FormDiscount from '@/components/FormDiscount'
@@ -140,7 +139,6 @@ export default {
     XInput,
     TransferDom,
     Popup,
-    Radioitemplate,
     Alert,
     Loading,
     Datetime,
@@ -148,8 +146,7 @@ export default {
     FormGroupbuy,
     FormBargainbuy,
     FormDiscount,
-    CheckIcon,
-    Radio
+    CheckIcon
   },
   data () {
     return {
@@ -172,22 +169,17 @@ export default {
       submitdata: {},
       requireddata: {},
       searchword: '',
-      searchresult: false
+      searchresult: false,
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   created: function () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$util.share({
-      data: {
-        link: location.href,
-        title: '分享标题',
-        desc: '分享描述',
-        photo: ''
-      }
-    })
     self.query = self.$route.query
-    self.getProductData()
     let nowdate = new Date().getTime()
     let startime = self.dateformat(parseInt(nowdate / 1000))
     let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
@@ -248,32 +240,6 @@ export default {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     },
-    getProductData (keyword) {
-      const self = this
-      let params = { params: { from: 'activity' } }
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
-        params.params.keyword = keyword
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        self.$vux.loading.hide()
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
-          self.searchresult = true
-        } else {
-          self.searchresult = false
-        }
-        data = data.data ? data.data : data
-        self.productdata = data
-      })
-    },
-    onChange (val) {
-      this.searchword = val
-    },
-    onSubmit () {
-      const self = this
-      self.getProductData(self.searchword)
-    },
     radioclick (data, index) {
       const self = this
       if (data.checked) {
@@ -301,8 +267,61 @@ export default {
         this.showproductitem = true
       }
     },
+    onChange (val) {
+      this.searchword = val
+    },
+    onSubmit () {
+      const self = this
+      self.$vux.loading.show()
+      self.productdata = []
+      self.pagestart1 = 0
+      self.getProductData()
+    },
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getProductData()
+          }
+        }
+      })
+    },
+    getProductData () {
+      const self = this
+      let params = { params: { from: 'activity', pagestart: self.pagestart1, limit: self.limit } }
+      let keyword = self.searchword
+      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        params.params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+          self.searchresult = true
+        } else {
+          self.searchresult = false
+        }
+        let retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('.popup-selectproduct .popup-middle')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
     selectevent () {
-      this.showpopup = true
+      const self = this
+      self.showpopup = true
+      if (self.productdata.length === 0) {
+        self.getProductData()
+      }
     },
     closepopup () {
       this.showpopup = false

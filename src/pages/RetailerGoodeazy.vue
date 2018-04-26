@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="pl10 pr10">
             <div class="font15 pt15">搜索关键词采集文章</div>
             <div class="font12 color-gray mt5">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
@@ -146,7 +146,12 @@ export default {
       searchdata: [],
       searchword: '',
       showSearchEmpty: false,
-      collecturl: ''
+      collecturl: '',
+      limit: 20,
+      pagestart: 0,
+      isBindScroll: false,
+      scrollArea: null
+
     }
   },
   created () {
@@ -154,6 +159,37 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   methods: {
+    scroll: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea,
+        callback: function () {
+          if (self.newsdata.length === (self.pagestart + 1) * self.limit) {
+            self.pagestart++
+            self.$vux.loading.show()
+            self.getnewsdata()
+          }
+        }
+      })
+    },
+    getnewsdata () {
+      const self = this
+      let params = { do: 'list', pagestart: self.pagestart, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
+        return res.json()
+      }).then(function (data) {
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.newsdata = self.newsdata.concat(retdata)
+        if (!self.isBindScroll) {
+          let items = document.querySelectorAll('.rgoodeazy .swiperitem')
+          self.scrollArea = items[1]
+          self.isBindScroll = true
+          self.scrollArea.removeEventListener('scroll', self.scroll)
+          self.scrollArea.addEventListener('scroll', self.scroll)
+        }
+      })
+    },
     onChange (val) {
       this.searchword = val
     },
@@ -185,13 +221,10 @@ export default {
     tabitemclick (index) {
       const self = this
       if (index === 1) {
-        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-          { do: 'list' }
-        ).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.newsdata = data.data ? data.data : data
-        })
+        if (self.pagestart === 0 && !self.isBindScroll) {
+          self.$vux.loading.show()
+          self.getnewsdata()
+        }
       }
     },
     collect (item, index) {

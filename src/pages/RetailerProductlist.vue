@@ -62,20 +62,6 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom>
-      <confirm v-model="showupconfirm"
-      @on-cancel="cancelupConfirm"
-      @on-confirm="okupConfirm">
-        <p style="text-align:center;">{{ $t('Are you sure up?') }}</p>
-      </confirm>
-    </div>
-    <div v-transfer-dom>
-      <confirm v-model="showdownconfirm"
-      @on-cancel="canceldownConfirm"
-      @on-confirm="okdownConfirm">
-        <p style="text-align:center;">{{ $t('Are you sure down?') }}</p>
-      </confirm>
-    </div>
   </div>
 </template>
 
@@ -84,15 +70,11 @@ Add product:
   zh-CN: 添加商品
 Back go shop:
   zh-CN: 返回店铺
-Are you sure up?:
-  zh-CN: 确定要上架吗？
-Are you sure down?:
-  zh-CN: 确定要下架吗？
 </i18n>
 
 <script>
 import { TransferDom, Popup, Confirm } from 'vux'
-import ENV from '../../libs/env'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -116,8 +98,6 @@ export default {
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
-      showupconfirm: false,
-      showdownconfirm: false,
       limit: 20,
       pagestart1: 0,
       isBindScroll1: false,
@@ -156,13 +136,13 @@ export default {
     },
     getdata1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
-        params: { pagestart: self.pagestart1, limit: self.limit }
-      }).then(function (res) {
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params).then(function (res) {
         return res.json()
       }).then(function (data) {
         self.$vux.loading.hide()
-        self.productdata = self.productdata.concat(data)
+        let retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
         if (!self.isBindScroll1) {
           self.scrollArea1 = document.querySelector('.rproductlist .s-container')
           self.isBindScroll1 = true
@@ -180,31 +160,45 @@ export default {
     popupevent (status) {
     },
     clickpopup (key) {
+      const self = this
       if (key === 'up') {
-        this.showupconfirm = true
+        self.$vux.confirm.show({
+          title: '确定要上架该商品吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, moderate: 1 }
+            self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
+              return res.json()
+            }).then(function (data) {
+              self.$vux.loading.hide()
+              self.clickdata.moderate = 1
+              self.productdata[self.clickindex].moderate = 1
+              self.showpopup1 = false
+            })
+          }
+        })
       } else if (key === 'down') {
-        this.showdownconfirm = true
+        self.$vux.confirm.show({
+          title: '确定要下架该商品吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, moderate: 0 }
+            self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
+              return res.json()
+            }).then(function (data) {
+              self.$vux.loading.hide()
+              self.clickdata.moderate = 0
+              self.productdata[self.clickindex].moderate = 0
+              self.showpopup1 = false
+            })
+          }
+        })
+      } else if (key === 'edit') {
+        self.showpopup1 = false
+        self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
       } else {
         this.showpopup1 = false
       }
-    },
-    cancelupConfirm () {
-      this.showupconfirm = false
-    },
-    okupConfirm () {
-      this.clickdata.moderate = 1
-      this.productdata[this.clickindex].moderate = 1
-      this.showupconfirm = false
-      this.showpopup1 = false
-    },
-    canceldownConfirm () {
-      this.showdownconfirm = false
-    },
-    okdownConfirm () {
-      this.clickdata.moderate = 0
-      this.productdata[this.clickindex].moderate = 0
-      this.showupconfirm = false
-      this.showpopup1 = false
     }
   }
 }
