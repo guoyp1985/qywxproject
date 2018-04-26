@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { Token } from '#/storage'
+import { Token, User } from '#/storage'
 import ENV from '#/env'
 let intervalId = 0
 export default {
@@ -67,7 +67,11 @@ export default {
             self.$router.go(-1)
             self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
             clearInterval(intervalId)
+            return his.$http.get(`${ENV.BokaApi}/api/user/show`)
           }
+        })
+        .then(res => {
+          User.set(res.data)
         })
       }, 5000)
     },
