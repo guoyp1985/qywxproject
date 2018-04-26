@@ -150,7 +150,7 @@ export default {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'comments', message: value})
       .then(res => {
-        if(res.data.flag) {
+        if (res.data.flag) {
           self.comments.replies.push(res.data.data)
         }
       })
