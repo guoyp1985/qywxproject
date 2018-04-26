@@ -242,6 +242,7 @@ function (error) {
 Vue.http.interceptors.response.use(function (response) {
   return response
 }, function (error) {
+  alert(error.response.status)
   $vue.$util.access(error.response, isPC => {
     if (isPC) {
       // Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
@@ -255,7 +256,6 @@ Vue.http.interceptors.response.use(function (response) {
       router.push({name: 'tLogin'})
       // )
     } else {
-      alert('ok')
       const orginHref = encodeURIComponent(location.href)
       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
     }
