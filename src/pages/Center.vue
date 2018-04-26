@@ -174,6 +174,7 @@ export default {
     //     company: data.company
     //   }
     // })
+    alert('user')
     const user = User.get()
     this.avatarHref = user.avatar
     this.linkMan = user.linkman
@@ -187,7 +188,6 @@ export default {
       mobile: user.mobile,
       company: user.company
     }
-    alert(user)
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
   }
 }
