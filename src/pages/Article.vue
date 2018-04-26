@@ -179,7 +179,7 @@ export default {
             data: {
               link: location.href,
               title: self.article.seotitle || self.article.title,
-              desc: self.articel.seodescription,
+              desc: self.article.seodescription,
               photo: self.article.sharephoto
             }
           })
