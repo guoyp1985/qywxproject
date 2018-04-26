@@ -326,6 +326,7 @@ Vue.http.interceptors.response.use(response => {
     .then(
       res => {
         Token.set(res.data.token)
+        alert(res.data.token)
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
