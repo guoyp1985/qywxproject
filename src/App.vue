@@ -124,7 +124,7 @@ export default {
   created () {
     this.$util.wxShare()
     document.title = this.$t('tIndex')
-    this.getData()
+    // this.getData()
   },
   methods: {
     getTitle (path) {
@@ -137,10 +137,9 @@ export default {
     },
     getData () {
       this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      .then(res => res.json())
       .then(
-        data => {
-          User.set(data)
+        res => {
+          User.set(res.data)
           console.log(User.get())
         }
       )

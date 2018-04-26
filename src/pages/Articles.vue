@@ -103,19 +103,16 @@ export default {
     getInitData () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
-      .then(res => res.json())
-      .then(data => {
-        self.tabs = data.data
+      .then(res => {
+        self.tabs = res.data.data
         self.getAritcles(self.selectedIndex)
       })
     },
     getAritcles (index) {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/list/news?classid=0`) // ${this.tabs[index].id}
-      .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        self.oArticles = data
+      .then(res => {
+        self.oArticles = res.data
       })
     }
   },

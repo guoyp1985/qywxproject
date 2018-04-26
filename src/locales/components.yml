@@ -616,6 +616,13 @@ zh-CN:
   All Checked: 全选
   Setting Default Success For Address: 默认地址设置成功
   Favorite Success: 收藏成功
+  Receivables: 收款方
+  Wechat Safe Payment: 微信安全支付
+  Photo: 照片
+  Image Text: 图文
+  User Info: 用户信息
+  Delete Succss: 删除成功
+  Press And Talk: 按住 说话
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心
@@ -656,6 +663,7 @@ zh-CN:
   tDecorationShop: 滚动展示
   tRetailerApply: 申请入驻
   tRebateApply: 返点客申请
+  tPay: 微信安全支付
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
@@ -673,4 +681,3 @@ zh-CN:
   Groupprice: 团购价
   Group numbers: 成团人数
   Person: 人
-  tPay: 微信安全支付

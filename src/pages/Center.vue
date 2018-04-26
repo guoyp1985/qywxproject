@@ -5,15 +5,15 @@
 */
 <template>
   <div id="personal-center" v-cloak>
-    <c-title :avatar-href="getAvatar"
-            :user-name="getName"
-            :user-credits="getCredits"
-            :user-level="getLevel"
+    <c-title :avatar-href="avatarHref"
+            :user-name="linkMan"
+            :user-credits="userCredits"
+            :user-level="userLevels"
             :profile="profile"
-            :messages="getMessages">
+            :messages="messages">
     </c-title>
     <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" :link="btn.link">
+      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
         <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
           <span :class="`fa ${btn.icon}`"></span>
         </div>
@@ -21,7 +21,7 @@
     </grid>
     <div class="grid-title">{{ $t('Service') }}</div>
     <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" :link="btn.link">
+      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
         <div slot="icon" :class="btn.color">
           <span :class="`al ${btn.icon}`"></span>
         </div>
@@ -37,7 +37,7 @@
 import { Grid, GridItem } from 'vux'
 import CTitle from '@/components/CTitle'
 // import ENV from '#/env'
-import { User } from '#/storage'
+import { Token, User } from '#/storage'
 
 export default {
   components: {
@@ -46,6 +46,7 @@ export default {
     CTitle
   },
   data () {
+    const self = this
     return {
       btns: [
         {
@@ -102,7 +103,15 @@ export default {
           name: 'Exit',
           icon: 'al-tuichu3',
           color: 'color-exit',
-          link: '/exit'
+          react: function () {
+            Token.remove()
+            User.remove()
+            if (self.$util.isPC()) {
+              self.$router.push({name: 'tLogin'})
+            } else {
+              self.$router.push({name: 'tIndex'})
+            }
+          }
         }
       ],
       avatarHref: '',
@@ -114,33 +123,13 @@ export default {
       direct: ''
     }
   },
-  computed: {
-    direction: {
-      get () {
-        return this.direct
-      },
-      set (direct) {
-        this.direct = direct
+  methods: {
+    buttonClick (btn) {
+      if (btn.link) {
+        this.$router.push({path: btn.link})
+      } else {
+        btn.react()
       }
-    },
-    getAvatar () {
-      return this.avatarHref
-    },
-    getName () {
-      return this.linkMan
-    },
-    getCredits () {
-      return this.userCredits
-    },
-    getLevel () {
-      return this.userLevels
-    },
-    getMessages () {
-      return this.messages
-    },
-    viewTransition () {
-      if (!this.direction) return ''
-      return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
   },
   created () {
@@ -163,6 +152,7 @@ export default {
     //   }
     // })
     const user = User.get()
+    console.log(user)
     this.avatarHref = user.avatar
     this.linkMan = user.linkman
     this.userCredits = user.credit

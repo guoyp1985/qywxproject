@@ -22,20 +22,21 @@
   </div>
 </template>
 <script>
-import { Token } from '../../libs/storage'
-import ENV from '../../libs/env'
+import { Token, User } from '#/storage'
+import ENV from '#/env'
 let intervalId = 0
 export default {
   created () {
-    const token = Token.get()
-    if (token) {
-
-    }
-    this.qrCode = this.$route.params.qrCode
-    if (!this.qrCode) {
-      this.requestLogin()
-      this.polling()
-    }
+    // const token = Token.get()
+    // if (token) {
+    //
+    // }
+    // this.qrCode = this.$route.params.qrCode
+    // if (!this.qrCode) {
+    //   this.requestLogin()
+    //   this.polling()
+    // }
+    this.requestLogin()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   data () {
@@ -50,22 +51,21 @@ export default {
     polling () {
       const self = this
       intervalId = setInterval(() => {
-        self.$http.get(`${ENV.BokaApi}/api/scanlogin/${this.qrCode.verifycode}`, {})
-        .then(res => res.json())
-        .then(data => {
-          const token = data.data ? data.data.token : null
-          const error = data.error
+        self.$http.get(`${ENV.BokaApi}/api/scanlogin/${this.qrCode.verifycode}`)
+        .then(res => {
+          const token = res.data.data ? res.data.data.token : null
+          const error = res.data.data ? res.data.data.error : null
           if (error) {
             console.error(error)
           } else if (token) {
             Token.set(token)
-            if (self.$route.params.fromPath) {
-              self.$router.push({path: self.$route.params.fromPath, query: self.$route.params.query})
-            } else {
-              self.$router.push({path: '/'})
-            }
-            self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-            clearInterval(intervalId)
+            self.$http.get(`${ENV.BokaApi}/api/user/show`)
+            .then(res => {
+              User.set(res.data)
+              self.$router.go(-1)
+              self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+              clearInterval(intervalId)
+            })
           }
         })
       }, 5000)
@@ -73,13 +73,10 @@ export default {
     requestLogin () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/qrcode/login`)
-      .then(res => res.json())
       .then(
-        data => {
-          self.qrCode = data
-        },
-        error => {
-          console.error(error)
+        res => {
+          self.qrCode = res.data
+          self.polling()
         }
       )
     }

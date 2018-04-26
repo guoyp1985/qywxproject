@@ -5,12 +5,12 @@
   	</div>
     <div class="pt10 pb10 pl5 pr5 b_bottom_after">
       <div class="t-table">
-        <div class="t-cell align_left">收款方</div>
+        <div class="t-cell align_left">{{$t('Receivables')}}</div>
         <div class="t-cell align_right">{{receivables}}</div>
       </div>
     </div>
     <box gap="10px">
-      <x-button type="primary" @click.native="pay">微信安全支付</x-button>
+      <x-button type="primary" @click.native="pay">{{$t('Wechat Safe Payment')}}</x-button>
     </box>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
-          if (res.err_msg === 'get_brand_wcpay_request:ok' ) {
+          if (res.err_msg === 'get_brand_wcpay_request:ok') {
           }
         }
       )
