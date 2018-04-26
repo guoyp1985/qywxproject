@@ -109,7 +109,7 @@ export default {
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
-              location.reload()
+              self.$router.push({name: 'tIndex'})
             }
           }
         }
