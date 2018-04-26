@@ -176,8 +176,7 @@ export default {
       const self = this
       let params = { do: 'list', pagestart: self.pagestart, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.newsdata = self.newsdata.concat(retdata)
@@ -207,8 +206,7 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
         { do: 'get_sogou_list', keyword: kw }
       ).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
@@ -236,8 +234,7 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
             { do: 'download', url: item.url }
           ).then(function (res) {
-            return res.json()
-          }).then(function (data) {
+            let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
@@ -266,8 +263,7 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
         { do: 'download', url: self.collecturl }
       ).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,

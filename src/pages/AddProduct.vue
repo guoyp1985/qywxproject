@@ -125,9 +125,6 @@
       <div class="flex_cell flex_center h_100 bg-orange color-white" style="border-right:#fff 1px solid;" @click="saveevent">{{ $t('Save') }}</div>
       <div class="flex_cell flex_center h_100 bg-orange color-white" @click="saveupevent">{{ $t('Save and up') }}</div>
     </div>
-    <div v-transfer-dom>
-      <loading :show="isShowLoading" text=""></loading>
-    </div>
   </div>
 </template>
 
@@ -176,7 +173,6 @@ export default {
     return {
       query: {},
       data: {},
-      isShowLoading: false,
       photoarr: [],
       maxnum: 9,
       havenum: 0,
@@ -206,8 +202,7 @@ export default {
     if (self.query.id) {
       let params = { params: { id: self.query.id, module: 'product' } }
       self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.data = data.data ? data.data : data
         for (let key in self.submitdata) {
           self.submitdata[key] = self.data[key]
@@ -243,14 +238,13 @@ export default {
     filechange (e) {
       const self = this
       let files = e.target.files
-      if (files.length > 0 && !self.isShowLoading) {
+      if (files.length > 0) {
         let fileform = document.querySelector('.fileform1')
         let filedata = new FormData(fileform)
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.isShowLoading = false
+          let data = res.data
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.photoarr.push(data.data)
             self.submitdata.photo = self.photoarr.join(',')
@@ -271,14 +265,13 @@ export default {
     filechange1 (e) {
       const self = this
       let files = e.target.files
-      if (files.length > 0 && !self.isShowLoading) {
+      if (files.length > 0) {
         let fileform = document.querySelector('.fileform2')
         let filedata = new FormData(fileform)
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.isShowLoading = false
+          let data = res.data
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.photoarr1.push(data.data)
             self.submitdata.contentphoto = self.photoarr1.join(',')
@@ -317,14 +310,13 @@ export default {
         })
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       if (self.query.id) {
         self.submitdata.id = self.query.id
       }
       self.$http.post(`${ENV.BokaApi}/api/add/product`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        self.isShowLoading = false
+        let data = res.data
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
@@ -354,13 +346,12 @@ export default {
         })
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       let postdata = self.submitdata
       postdata['moderate'] = 1
       self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        self.isShowLoading = false
+        let data = res.data
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),

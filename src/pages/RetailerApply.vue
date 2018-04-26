@@ -270,8 +270,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
         { params: { limit: 100 } }
       ).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         data = data.data ? data.data : data
         for (let i = 0; i < data.length; i++) {
           let d = data[i]
@@ -311,8 +310,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
         params: { phone: self.$util.trim(self.submitdata.mobile) }
       }).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -379,8 +377,7 @@ export default {
         self.$vux.loading.show()
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
-          return res.json()
-        }).then(function (data) {
+          let data = res.data
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,

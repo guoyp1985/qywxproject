@@ -90,12 +90,6 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom>
-      <alert v-model="showalert">{{ $t('Please select product') }}</alert>
-    </div>
-    <div v-transfer-dom>
-      <loading :show="isShowLoading" text=""></loading>
-    </div>
   </div>
 </template>
 
@@ -153,8 +147,6 @@ export default {
       autofixed: false,
       query: {},
       allowsubmit: true,
-      showalert: false,
-      isShowLoading: false,
       showselectproduct: true,
       showproductitem: false,
       selectproduct: {},
@@ -258,14 +250,18 @@ export default {
       this.checkeduid = val
     },
     confirmpopup () {
+      const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
-        this.showalert = true
-      } else {
-        this.selectproduct = this.selectpopupdata
-        this.showpopup = false
-        this.showselectproduct = false
-        this.showproductitem = true
+        self.$vux.alert.show({
+          title: '',
+          content: '请选择商品'
+        })
+        return false
       }
+      this.selectproduct = this.selectpopupdata
+      this.showpopup = false
+      this.showselectproduct = false
+      this.showproductitem = true
     },
     onChange (val) {
       this.searchword = val
@@ -298,8 +294,7 @@ export default {
         params.params.keyword = keyword
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
           self.searchresult = true
@@ -368,11 +363,10 @@ export default {
         })
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        self.isShowLoading = false
+        let data = res.data
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),

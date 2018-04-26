@@ -79,7 +79,6 @@ export default {
     },
     '$route' (to, from) {
       document.title = this.getTitle(to.path)
-      this.getData()
     }
   },
   computed: {
@@ -122,7 +121,6 @@ export default {
     }
   },
   created () {
-    this.$util.wxShare()
     document.title = this.$t('tIndex')
     // this.getData()
   },

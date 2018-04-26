@@ -189,8 +189,7 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       let retailerInfo = data.data ? data.data : data
       for (let key in self.submitdata) {
         self.submitdata[key] = retailerInfo[key]
@@ -225,8 +224,7 @@ export default {
         let filedata = new FormData(fileform)
         self.isShowLoading = true
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          return res.json()
-        }).then(function (data) {
+          let data = res.data
           self.isShowLoading = false
           if (data.flag === 1) {
             self.photoarr.push(data.data)
@@ -276,8 +274,7 @@ export default {
       }
       self.isShowLoading = true
       self.$http.post(`${ENV.BokaApi}/api/retailer/changeInfo`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.isShowLoading = false
         self.$vux.toast.show({
           text: data.error,

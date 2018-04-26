@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14">
+  <div class="containerarea bg-white font14 rsaleview">
     <div class="s-topbanner s-topbanner2">
       <div class="row row1">
         <div class="bg"></div>
@@ -33,15 +33,15 @@
     </div>
     <div class="s-container s-container2">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div class="scroll_list pl10 pr10">
-              <div v-if="!data1 || data1.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有带来消费</div>
                 <div>积极与返点客沟通可调动TA的积极性哦！</div>
               </div>
-              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in data1" :key="item.id">
+              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <div class="t-cell v_middle w50" style="width:50px;">
                     <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
@@ -60,12 +60,12 @@
           </div>
           <div v-if="(index == 1)">
             <div class="scroll_list pl10 pr10">
-              <div v-if="!data2 || data2.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有分享过</div>
                 <div>积极与返点客沟通可调动TA的积极性哦！</div>
               </div>
-              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in data2" :key="item.id">
+              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
                   <div class="t-cell v_middle w80">
                     <img :src="item.photo" class="imgcover v_middle" style="width:70px;height:70px;" />
@@ -88,12 +88,12 @@
               </div>
             </div>
             <div class="scroll_list pl10 pr10 cols-2">
-              <div v-if="!data3 || data3.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有带来客户</div>
                 <div>积极与返点客沟通可调动TA的积极性哦！</div>
               </div>
-              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in data3" :key="item.id">
+              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                 <div class="t-table">
                   <div class="t-cell v_middle w50">
                     <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
@@ -160,9 +160,19 @@ export default {
       sellerUser: { avatar: '/src/assets/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
       tabtxts: [ '带来消费', '分享记录', '带来客户' ],
       tabmodel: 0,
-      data1: [],
-      data2: [],
-      data3: []
+      tabdata1: [],
+      tabdata2: [],
+      tabdata3: [],
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      isBindScroll3: false,
+      scrollArea1: null,
+      scrollArea2: null,
+      scrollArea3: null
     }
   },
   created () {
@@ -172,46 +182,117 @@ export default {
     self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
       { params: { selleruid: self.query.uid } }
     ).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       self.sellerUser = (data.data ? data.data : data)
-    })
-    self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`,
-      { params: { selleruid: self.query.uid, action: 'orders' } }
-    ).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.data1 = data.data ? data.data : data
+      self.getdata1()
     })
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    scroll3: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea3,
+        callback: function () {
+          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.pagestart3++
+            self.$vux.loading.show()
+            self.getdata3()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { params: { selleruid: self.query.uid, action: 'orders', pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rsaleview .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
+          self.scrollArea3 = items[2]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { params: { selleruid: self.query.uid, action: 'shares', pagestart: self.pagestart2, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
+      })
+    },
+    getdata3 () {
+      const self = this
+      let params = { params: { selleruid: self.query.uid, action: 'customers', pagestart: self.pagestart3, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata3 = self.tabdata3.concat(retdata)
+        if (!self.isBindScroll3) {
+          self.isBindScroll3 = true
+          self.scrollArea3.removeEventListener('scroll', self.scroll3)
+          self.scrollArea3.addEventListener('scroll', self.scroll3)
+        }
+      })
+    },
     tabclick (index) {
-      event.preventDefault()
       const self = this
       if (index === 0) {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`,
-          { params: { selleruid: self.query.uid, action: 'orders' } }
-        ).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.data1 = data.data ? data.data : data
-        })
+        if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
       } else if (index === 1) {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`,
-          { params: { selleruid: self.query.uid, action: 'shares' } }
-        ).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.data2 = data.data ? data.data : data
-        })
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
       } else if (index === 2) {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`,
-          { params: { selleruid: self.query.uid, action: 'customers' } }
-        ).then(function (res) {
-          return res.json()
-        }).then(function (data) {
-          self.data3 = data.data ? data.data : data
-        })
+        if (self.pagestart3 === 0 && !self.isBindScroll3) {
+          self.$vux.loading.show()
+          self.getdata3()
+        }
       }
     }
   }

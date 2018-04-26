@@ -233,8 +233,7 @@ export default {
         params.params.keyword = keyword
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
           self.searchresult1 = true
@@ -262,8 +261,7 @@ export default {
         params.params.keyword = keyword
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
           self.searchresult2 = true

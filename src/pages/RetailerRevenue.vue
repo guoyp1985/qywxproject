@@ -257,8 +257,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, {
         params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit }
       }).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
@@ -277,8 +276,7 @@ export default {
       const self = this
       let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
@@ -293,8 +291,7 @@ export default {
       const self = this
       let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)

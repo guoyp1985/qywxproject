@@ -361,11 +361,13 @@ export default {
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
     }
+    if (self.query.share_uid) {
+      infoparams['share_uid'] = self.query.share_uid
+    }
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       self.productdata = data.data ? data.data : data
       self.retailerinfo = self.productdata.retailerinfo
       if (!self.$util.isNull(self.productdata.photo)) {
@@ -381,19 +383,17 @@ export default {
       }
       return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
         params: buyparams
-      }).then(function (res) {
-        return res.json()
       })
-    }).then(function (data) {
+    }).then(function (res) {
+      let data = res.data
       if (data.flag === 1) {
         self.buyuserdata = (data.data ? data.data : data)
       }
       return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
         { params: { module: self.module, id: self.query.id } }
-      ).then(function (res) {
-        return res.json()
-      })
-    }).then(function (data) {
+      )
+    }).then(function (res) {
+      let data = res.data
       if (data.flag === 1) {
         self.isfavorite = true
       } else {
@@ -401,10 +401,9 @@ export default {
       }
       return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
         { params: { module: self.module, nid: self.query.id } }
-      ).then(function (res) {
-        return res.json()
-      })
-    }).then(function (data) {
+      )
+    }).then(function (res) {
+      let data = res.data
       if (data.flag === 1) {
         self.evluatedata = (data.data ? data.data : data)
       }
@@ -497,8 +496,7 @@ export default {
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/delete`,
           { params: { module: self.module, id: self.query.id } }
         ).then(function (res) {
-          return res.json()
-        }).then(function (data) {
+          let data = res.data
           self.isShowLoading = false
           if (data.flag === 1) {
             self.isfavorite = false
@@ -518,8 +516,7 @@ export default {
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
           { params: { module: self.module, id: self.query.id, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
-          return res.json()
-        }).then(function (data) {
+          let data = res.data
           self.isShowLoading = false
           if (data.flag === 1) {
             self.isfavorite = true
@@ -537,8 +534,7 @@ export default {
       const self = this
       self.isShowLoading = true
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.isShowLoading = false
         if (data.flag === 1) {
           self.$router.push({ path: '/addOrder', query: { id: self.query.id } })

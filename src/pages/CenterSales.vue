@@ -59,7 +59,8 @@
     <div class="grid-title">{{ $t('Customer mange') }}</div>
     <template v-if="retailerInfo.products > 0">
       <grid :cols="3" class="bk-grid">
-        <grid-item :label="$t('Rebate customer')" :link="{path:'/retailerSales'}">
+        <grid-item :link="{path:'/retailerSales'}" class="color-red">
+          <div slog="label" class="color-red align_center mt5">{{ $t('Rebate customer') }}</div>
           <div slot="icon" style="position:relative;">
             <i class="al al-xiaoshou icon-blue db-in font30" style="margin-top:-6px;"></i>
             <div class="numicon flex_center" v-if="retailerInfo.newsellers > 0">{{ retailerInfo.newsellers }}</div>
@@ -145,7 +146,7 @@ News:
 Customer mange:
   zh-CN: 客户管理
 Rebate customer:
-  zh-CN: 返点客户
+  zh-CN: 返点客
 Sale chance:
   zh-CN: 销售机会
 Contact customer:
@@ -197,13 +198,11 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       self.retailerInfo = data.data ? data.data : data
-    })
-    self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+    }).then(function (res) {
+      let data = res.data
       self.marquedata = data.data ? data.data : data
     })
   },
