@@ -180,6 +180,7 @@ Vue.http.interceptors.request.use(function (config) {
       Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
       .then(
         res => {
+          alert(res)
           const token = res.data.token
           Token.set(token)
           // token = data.data.token // test
