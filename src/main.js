@@ -17,7 +17,7 @@ import ENV from '#/env'
 import Util from '#/util'
 
 // Vue.use(VueResource)
-const CancelToken = AjaxPlugin.$http.CancelToken;
+const CancelToken = AjaxPlugin.$http.CancelToken
 // console.log(AjaxPlugin)
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
@@ -274,7 +274,7 @@ const matchExclude = url => {
 let pending = []
 // let cancelToken = axios.CancelToken
 let removePending = (config) => {
-  for(let p in pending){
+  for (let p in pending) {
     if(pending[p].u === config.url + '&' + config.method) {
       pending[p].f()
       pending.splice(p, 1)
@@ -286,7 +286,7 @@ let flag = false
 //请求拦截器
 Vue.http.interceptors.request.use(config => {
   removePending(config)
-  config.cancelToken = new CancelToken(c => {
+  config.cancelToken = new CancelToken (c => {
     pending.push({ u: config.url + '&' + config.method, f: c })
   })
   // const rUrl = urlParse(config.url)
@@ -312,7 +312,7 @@ Vue.http.interceptors.request.use(config => {
 //响应拦截器
 Vue.http.interceptors.response.use(response => {
   removePending(response.config)
-  return response;
+  return response
 }, error => {
   $vue.$util.access(error.response, isPC => {
     if (isPC) {
@@ -324,7 +324,7 @@ Vue.http.interceptors.response.use(response => {
     }
   })
   return { data: { } }
-});
+})
 
 const $vue = new Vue({
   store,
