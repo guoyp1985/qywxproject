@@ -175,6 +175,7 @@ export default {
       mobile: user.mobile,
       company: user.company
     }
+    alert(user)
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
   }
 }
