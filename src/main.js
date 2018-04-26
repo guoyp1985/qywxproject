@@ -150,7 +150,7 @@ router.afterEach(function (to) {
 let excludeUrls = [
   `${ENV.BokaApi}/api/authLogin/*`,
   `${ENV.BokaApi}/api/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`
+  `${ENV.BokaApi}/api/login/*`,
   `${ENV.BokaApi}/api/scanlogin`
   // `${ENV.BokaApi}/api/weixin/token`
 ]
@@ -252,7 +252,7 @@ Vue.http.interceptors.response.use(function (response) {
         // error => {
         //   console.error(error)
         // }
-        router.push({name: 'tLogin'})
+      router.push({name: 'tLogin'})
       // )
     } else {
       const orginHref = encodeURIComponent(location.href)
