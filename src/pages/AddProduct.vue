@@ -204,6 +204,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
         let data = res.data
         self.data = data.data ? data.data : data
+        self.activityInfo = self.data.activitinfo
         for (let key in self.submitdata) {
           self.submitdata[key] = self.data[key]
         }

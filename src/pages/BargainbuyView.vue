@@ -6,22 +6,22 @@
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <img :src="activityuser.avatar">
+          <img :src="crowduser.avatar">
         </div>
-        <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ activityuser.linkman }}</div>
+        <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
     </div>
     <div class="boxarea">
       <div class="inner">
         <div class="innerbg">
-          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:productdata.wid,id:productdata.id}}">
-            <div class="t-cell v_middle" style="width:80px;">
-              <img :src="productdata.photo" style="width:70px;height:70px;">
+          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
+            <div class="t-cell v_middle w80">
+              <img :src="product.photo" style="width:70px;height:70px;" class="imgcover" />
             </div>
             <div class="t-cell">
-              <div class="clamp2 font13 color-gray7">{{ productdata.title }}</div>
-              <div class="clamp1 font13" style="color:#E02D24;">最低价：<span class="font16 bold">{{ productdata.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ productdata.price }} 元</del></div>
-              <div class="clamp1 font13" style="color:#E02D24;">剩  余：<span class="font16 bold">{{ productdata.leftstorage }}</span> 件</div>
+              <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
+              <div class="clamp1 font13" style="color:#E02D24;">最低价：<span class="font16 bold">{{ data.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ product.price }} 元</del></div>
+              <div class="clamp1 font13" style="color:#E02D24;">剩  余：<span class="font16 bold">{{ data.leftstorage }}</span> 件</div>
             </div>
           </router-link>
         </div>
@@ -42,15 +42,18 @@
             <div class="line linepercent" style="width:0%;"></div>
           </div>
           <div class="t-table">
-            <div class="t-cell align_left">￥{{ cutinfo.price }}</div>
+            <div class="t-cell align_left">￥{{ product.price }}</div>
             <div class="t-cell align_center">￥{{ cutinfo.cutprice }}</div>
-            <div class="t-cell align_right">￥{{ cutinfo.minprice }}</div>
+            <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
-        <div v-if="isfinish" class="btn db">指定时间内未完成砍价，砍价失败</div>
+        <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
+        <template v-else>
+          <div v-if="data.isfinished" class="btn">指定时间内未完成砍价，砍价失败</div>
+        </template>
         <template v-else>
           <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-          <div class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+          <div v-if="crowduser" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
             <span class="v_middle db-in">还剩</span>
             <span class="v_middle db-in">{{ lefthour }}</span>
             <span class="v_middle db-in">:</span>
@@ -109,7 +112,9 @@
 <script>
 
 import { TransferDom, Popup } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -118,89 +123,61 @@ export default {
   components: {
     Popup
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    let self = this
-    let cutdownInterval = setInterval(function () {
-      let h = parseInt(self.lefthour)
-      let m = parseInt(self.leftminute)
-      let s = parseInt(self.leftsecond)
-      if (s > 0) {
-        s--
-        if (s < 10) {
-          self.leftsecond = '0' + s
-        } else {
-          self.leftsecond = s
-        }
-      } else if (m > 0) {
-        m--
-        if (m < 10) {
-          self.leftminute = '0' + m
-        } else {
-          self.leftminute = m
-        }
-        self.leftsecond = '59'
-      } else if (h > 0) {
-        h--
-        if (h < 10) {
-          self.lefthour = '0' + h
-        } else {
-          self.lefthour = h
-        }
-        self.leftminute = '59'
-        self.leftsecond = '59'
-      }
-      if (h === 0 && m === 0 && s === 0) {
-        clearInterval(cutdownInterval)
-        self.isfinish = true
-      }
-    }, 1000)
-  },
   data () {
     return {
+      loginUser: Object,
       showpopup: false,
-      isfinish: false,
-      lefthour: '00',
-      leftminute: '00',
-      leftsecond: '05',
-      activityuser: {
-        uid: 187,
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-        linkman: 'YOUNG'
-      },
       cutinfo: {
         price: '8,000.00',
         minprice: '1000.00',
         cutprice: '0.00'
       },
-      productdata: {
-        id: 124,
-        wid: 187,
-        title: '苹果手机',
-        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        minprice: '10.00',
-        price: '8,000.00',
-        special: '8,000.00',
-        shares: 7,
-        saled: 1000,
-        postage: '0.00',
-        moderate: 1,
-        buyonline: 0,
-        storage: 10,
-        leftstorage: 3,
-        currentnumbers: 0,
-        endtime: 1522221270,
-        content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
-      },
-      cutdata: [
-        { avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg', linkman: 'YOUNG', cutmoney: '0.01' }
-      ]
+      lefthour: '',
+      leftminute: '',
+      leftsecond: '',
+      data: Object,
+      product: Object,
+      cutdata: [],
+      crowduser: { avatar: '/src/assets/images/user.jpg' }
     }
   },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.loginUser = User.get()
+    self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
+      params: { id: self.query.id, crowduserid: self.query.crowduserid }
+    }).then(function (res) {
+      let data = res.data
+      self.data = data.data ? data.data : data
+      self.crowduser = self.data.crowduser
+      document.title = self.data.title
+      let lurl = location.href
+      let wxData = {
+        title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
+        desc: '好友帮帮忙，优惠享更多！',
+        link: `${lurl}&share_uid=${self.loginUser.uid}`,
+        imgUrl: self.data.photo
+      }
+      if (self.data) {
+        self.product = self.data.product
+      }
+      if (self.crowduser) {
+        self.lefthour = self.crowduser.timeleft.hour
+        self.leftminute = self.crowduser.timeleft.minute
+        self.leftsecond = self.crowduser.timeleft.second
+        self.cutdown()
+      }
+      return self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.query.id })
+    }).then(function (res) {
+      let data = res.data
+    })
   },
   methods: {
     joinin () {
@@ -211,6 +188,43 @@ export default {
     },
     closeinvite () {
       this.showpopup = false
+    },
+    cutdown () {
+      const self = this
+      let cutdownInterval = setInterval(function () {
+        let h = parseInt(self.lefthour)
+        let m = parseInt(self.leftminute)
+        let s = parseInt(self.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            self.leftsecond = '0' + s
+          } else {
+            self.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            self.leftminute = '0' + m
+          } else {
+            self.leftminute = m
+          }
+          self.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            self.lefthour = '0' + h
+          } else {
+            self.lefthour = h
+          }
+          self.leftminute = '59'
+          self.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(cutdownInterval)
+          self.isfinish = true
+        }
+      }, 1000)
     }
   }
 }
@@ -220,16 +234,9 @@ export default {
 .bargainbuyview {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }
-.bargainbuyview .topimg img {
-    width: 100%;
-    vertical-align: middle;
-}
-.bargainbuyview .b_header{
-  position:absolute;
-  height:90px;
-  top:30px;
-  width:100%;
-}
+.bargainbuyview .topimg{position:absolute;left:0;top:0;width:100%;}
+.bargainbuyview .topimg img{width:100%;max-height:240px;vertical-align: middle;}
+.bargainbuyview .b_header{width:100%;height:90px;padding-top:30px;overflow:hidden;position: relative;}
 .bargainbuyview .b_header .inner {
     width: 168px;
     height: 168px;
@@ -246,7 +253,7 @@ export default {
   width: 94%;
   box-sizing:border-box;
   position:relative;
-  margin:45px auto 0;
+  margin:0 auto;
   background: #FDC45D;
   border-radius: 13px;
   padding: 16px 12px 16px 12px;

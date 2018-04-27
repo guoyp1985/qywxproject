@@ -37,13 +37,13 @@
           <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
         </Forminputplate>
         <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
-        <template v-if="query.type == 'groupbuy'">
+        <template v-if="activityType == 'groupbuy'">
           <FormGroupbuy :submitdata="submitdata"></FormGroupbuy>
         </template>
-        <template v-if="query.type == 'bargainbuy'">
+        <template v-if="activityType == 'bargainbuy'">
           <FormBargainbuy :submitdata="submitdata"></FormBargainbuy>
         </template>
-        <template v-if="query.type == 'discount'">
+        <template v-if="activityType == 'discount'">
           <FormDiscount :submitdata="submitdata"></FormDiscount>
         </template>
       </form>
@@ -146,6 +146,7 @@ export default {
     return {
       autofixed: false,
       query: {},
+      activityType: null,
       allowsubmit: true,
       showselectproduct: true,
       showproductitem: false,
@@ -172,12 +173,13 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.activityType = self.query.type
     let nowdate = new Date().getTime()
     let startime = self.dateformat(parseInt(nowdate / 1000))
     let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
     self.selectdatetxt1 = ''
     self.selectdatetxt2 = ''
-    if (self.query.type === 'groupbuy') {
+    if (self.activityType === 'groupbuy') {
       self.submitdata = {
         productid: '',
         starttime: startime,
@@ -188,7 +190,7 @@ export default {
         param_finishtime: '',
         param_everybuy: ''
       }
-    } else if (self.query.type === 'bargainbuy') {
+    } else if (self.activityType === 'bargainbuy') {
       self.submitdata = {
         productid: '',
         starttime: startime,
@@ -199,7 +201,7 @@ export default {
         param_everymin: '',
         param_everymax: ''
       }
-    } else if (self.query.type === 'discount') {
+    } else if (self.activityType === 'discount') {
       self.submitdata = {
         productid: '',
         starttime: startime,
@@ -259,6 +261,7 @@ export default {
         return false
       }
       this.selectproduct = this.selectpopupdata
+      self.submitdata.productid = self.selectproduct.id
       this.showpopup = false
       this.showselectproduct = false
       this.showproductitem = true

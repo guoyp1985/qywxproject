@@ -44,7 +44,7 @@
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
                 </router-link>
-                <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
+                <router-link :to="{path:'/product',query:{wid:item.wid,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">

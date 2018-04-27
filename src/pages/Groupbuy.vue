@@ -34,10 +34,10 @@
           <img :src="item" class="imgcover" style="width:100%;height:100%;" />
         </swiper-item>
       </swiper>
-      <div class="grouptitle flex_left" v-if="activityInfo.type == 'groupbuy'">
-				<div class="col1"><span>￥</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
-				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
-				<div class="col3">已团{{ activityInfo.havetuan }}件</div>
+      <div class="grouptitle flex_left">
+				<div class="col1"><span>￥</span><span class="font20 bold">{{ productdata.groupprice }}</span></div>
+				<div class="col2"><div class="colicon">{{ productdata.numbers }}人团</div></div>
+				<div class="col3">已团{{ productdata.havetuan }}件</div>
 			</div>
       <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
     		<div class="clamp2">
@@ -56,7 +56,7 @@
 					</div>
 				</div>
   		</div>
-			<div class="groupbuarea" v-if="activityInfo.type == 'groupbuy' && activitydata.length > 0">
+			<div class="groupbuarea">
 				<div class="bg-page" style="height:10px;"></div>
 				<div class="bg-white">
 					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
@@ -169,7 +169,7 @@
 			</div>
 		</div>
     <template v-else>
-  		<div v-if="activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
+  		<div class="pagebottom b_top_after groupbybottom">
   			<div class="t-table h_100">
           <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
             <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
@@ -179,35 +179,15 @@
   					<i class="al font18 mr3"></i>
   				</div>
   				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
-  					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
+  					<div>{{ $t('RMB') }} {{ productdata.special }}</div>
   					<div>原价购买</div>
   				</div>
-  				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent('groupbuy')">
-  					<div>{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
+  				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">
+  					<div>{{ $t('RMB') }} {{ productdata.groupprice }}</div>
   					<div>一键拼团</div>
   				</div>
   			</div>
   		</div>
-      <template v-else>
-    		<div v-if="productdata.buyonline >= 1" class="pagebottom b_top_after">
-    			<div class="t-table h_100">
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-    					<i class="al font12 mr3"></i>
-    				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
-    				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-    				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
-    			</div>
-    		</div>
-        <div v-else class="pagebottom b_top_after">
-    			<div class="t-table h_100">
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-    					<i class="al font12 mr3"></i>
-    				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
-    			</div>
-    		</div>
-      </template>
     </template>
     <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
       <popup v-model="showpopup" height="100%">
@@ -320,7 +300,6 @@ export default {
       query: {},
       productid: null,
       module: 'product',
-      activityInfo: {},
       showtopcss: '',
       loginUser: {},
       isshowtop: false,
@@ -337,8 +316,14 @@ export default {
       contentphotoarr: [],
       buyuserdata: [],
       evluatedata: [],
-      ingdata: [],
-      activitydata: [],
+      activitydata: [
+        { 'id': 227, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'price': '1.00', 'havetuan': 0 },
+        { 'id': 217, 'title': '团购:测试商品分享', 'type': 'groupbuy', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
+        { 'id': 216, 'title': '团购:欧美宽松潮牌国潮复古加绒卫衣男连帽韩版外套男女oversize青少年', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204034569409.png', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
+        { 'id': 215, 'title': '团购:欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 2 },
+        { 'id': 212, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214217886785.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
+        { 'id': 211, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 3 }
+      ],
       submitdata: { flag: 1, quantity: 1 }
     }
   },
@@ -366,9 +351,7 @@ export default {
     }).then(function (res) {
       let data = res.data
       self.productdata = data.data ? data.data : data
-      document.title = self.productdata.title
       self.retailerinfo = self.productdata.retailerinfo
-      self.activityInfo = self.productdata.activityinfo
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
       }
@@ -406,14 +389,6 @@ export default {
       if (data.flag === 1) {
         self.evluatedata = (data.data ? data.data : data)
       }
-      if (self.activityInfo.type === 'groupbuy') {
-        return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
-          { params: { id: self.productid } }
-        )
-      }
-    }).then(function (res) {
-      let data = res.data
-      self.activitydata = data.data ? data.data : data
     })
   },
   watch: {
@@ -537,12 +512,9 @@ export default {
       }
       this.isfavorite = !this.isfavorite
     },
-    buyevent (buytype) {
+    buyevent () {
       const self = this
       self.isShowLoading = true
-      if (buytype === 'groupbuy') {
-        self.submitdata['activityid'] = self.activityInfo.id
-      }
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
         let data = res.data
         self.isShowLoading = false
@@ -650,7 +622,4 @@ export default {
 .product .groupbybottom .btnfavorite:after{display:block;}
 .product .btnfavorite.none:after{content:"收藏";}
 .product .btnfavorite.have:after{content:"已收藏";}
-
-.product .pagemiddle{bottom:50px;}
-.product .pagebottom{height:50px;}
 </style>
