@@ -8,7 +8,7 @@
     <sticky scroll-box="order-detail">
       <div class="order-service">
         <div class="seller-cell">
-          <span class="font14">卖家: {{seller}}</span>
+          <span class="font14">卖家: {{retailertitle}}</span>
         </div>
         <div class="contact-cell">
           <div class="ol-contact">
@@ -33,10 +33,13 @@
     </group>
     <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
     <group>
-      <cell class="order-list" v-for="(order, index) in orders" :title="order.name" :key="index">
+      <cell class="order-list font12" v-for="(order, index) in orders" :key="index">
         <img slot="icon" :src="order.photo"/>
-        <div slot="after-title">
-          数量: {{orders.length}}
+        <div slot="title">
+          {{order.name}}
+        </div>
+        <div slot="after-title" class="color-gray">
+          数量: {{order.quantity}}
         </div>
         <div slot="inline-desc">
           ¥{{order.special}}
@@ -75,7 +78,7 @@ export default {
   },
   data () {
     return {
-      seller: 'unkown',
+      retailertitle: 'unkown',
       receiver: 'unkown',
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
@@ -105,6 +108,9 @@ export default {
       .then(res => {
         if (res.data.flag) {
           self.orders = res.data.data.orderlist
+          console.log(res.data)
+          self.retailertitle = res.data.data.retailer.title
+          self.shippingAddress = res.data.data.address
         }
       })
     }
@@ -189,5 +195,14 @@ export default {
 }
 #order-detail .weui-cells {
   margin-top: 10px !important;
+}
+#order-detail .vux-cell-primary {
+  padding-left: 10px;
+}
+#order-detail .vux-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 80%;
 }
 </style>

@@ -13,7 +13,7 @@
         <tab-item>{{ $t('Completed') }}</tab-item>
       </Tab>
     </sticky>
-    <view-box v-show="selectedIndex===0">
+    <div v-show="selectedIndex===0">
       <template v-if="list.length">
         <order-info v-for="(item, index) in list" :item="item" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -22,8 +22,8 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
-    <view-box v-show="selectedIndex===1">
+    </div>
+    <div v-show="selectedIndex===1">
       <template v-if="list1.length">
         <order-info v-for="(item, index) in list1" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -32,8 +32,8 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
-    <view-box v-show="selectedIndex===2">
+    </div>
+    <div v-show="selectedIndex===2">
       <template v-if="list2.length">
         <order-info v-for="(item, index) in list2" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -42,8 +42,8 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
-    <view-box v-show="selectedIndex===3">
+    </div>
+    <div v-show="selectedIndex===3">
       <template v-if="list3.length">
         <order-info v-for="(item, index) in list3" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -52,7 +52,7 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
+    </div>
   </div>
 </template>
 
@@ -60,7 +60,7 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem, ViewBox } from 'vux'
+import { Sticky, Tab, TabItem } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import ENV from '#/env'
 
@@ -69,7 +69,6 @@ export default {
     Sticky,
     Tab,
     TabItem,
-    ViewBox,
     OrderInfo
   },
   data () {
