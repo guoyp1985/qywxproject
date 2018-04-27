@@ -308,6 +308,7 @@ Vue.http.interceptors.response.use(response => {
     .then(
       res => {
         Token.set(res.data.data.token)
+        // getAddress(res.data.data.weixin_token)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
@@ -329,6 +330,38 @@ Vue.http.interceptors.response.use(response => {
   }
   return { data: { } }
 })
+
+const getAddress = (wxToken) => {
+  const accessToken = wxToken
+  const nonceStr = $vue.$util.randomStr(6)
+  const timeStamp = $vue.$util.timeStamp()
+  const currentUrl = urlParse(location.href, true)
+  const url = currentUrl.href.replace(/#\/\w*/g, '')
+  alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+  const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+  WeixinJSBridge.invoke('editAddress', {
+    appId: ENV.AppId,
+    scope: 'jsapi_address',
+    signType: 'sha1',
+    addrSign: addrSign,
+    timeStamp: timeStamp,
+    nonceStr: nonceStr
+  },
+  res => {
+    alert(res.err_msg)
+    if (res.err_msg === 'edit_address:ok') {
+      const param = {
+        linkman: res.userName,
+        telephone: res.telNumber,
+        province: res.proviceFirstStageName,
+        city: res.addressCitySecondStageName,
+        counties: res.addressCountiesThirdStageName,
+        address: res.addressDetailInfo
+      }
+      alert(param)
+    }
+  })
+}
 
 const $vue = new Vue({
   store,

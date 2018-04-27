@@ -27,7 +27,7 @@
       </div>
     </sticky>
     <group class="shipping-card">
-      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link link="/shippingDetails"></cell>
+      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: `/shippingDetails/${expressNumber}` }"></cell>
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
     </group>
@@ -46,6 +46,10 @@
         </div>
       </cell>
     </group>
+    <group>
+      <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
+      <cell class="font14" :value="`${$t('Actual Payment')}: ¥${special}`"></cell>
+    </group>
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
@@ -62,7 +66,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDomDirective as TransferDom } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import ENV from '#/env'
 export default {
@@ -74,17 +78,21 @@ export default {
     Cell,
     Sticky,
     XDialog,
-    OrderInfo
+    OrderInfo,
+    CellFormPreview
   },
   data () {
     return {
+      id: 0,
       retailertitle: 'unkown',
       receiver: 'unkown',
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
       expressNumber: '100000000000',
       shippingAddress: '北京市市辖区',
+      special: 0,
       orders: [],
+      priceInfos: [],
       userQrCode: '',
       wxCardShow: false
     }
@@ -103,19 +111,24 @@ export default {
     },
     getData () {
       const self = this
-      const id = this.$route.query.id
-      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${id}`)
+      this.id = this.$route.params.id
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
       .then(res => {
         if (res.data.flag) {
           self.orders = res.data.data.orderlist
-          console.log(res.data)
+          self.special = res.data.data.special
           self.retailertitle = res.data.data.retailer.title
           self.shippingAddress = res.data.data.address
+          self.receiver = res.data.data.username
+          self.receiverPhone = res.data.data.telephone
+          self.expressCompany = res.data.data.delivercompany
+          self.expressNumber = res.data.data.delivercode
         }
       })
     }
   },
   created () {
+    console.log('this.id')
     this.getData()
   }
 }

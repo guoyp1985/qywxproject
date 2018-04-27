@@ -123,6 +123,7 @@ export default {
   },
   created () {
     document.title = this.$t('tIndex')
+    this.$util.wxConfig()
     // this.getData()
   },
   methods: {

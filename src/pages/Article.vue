@@ -20,9 +20,9 @@
       </div>
       <div class="article-content" v-html="article.content"></div>
       <div class="operate-area">
-        <x-button mini plain type="primary" @click.native="onFavorite">
+        <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
           <span class="fa fa-star-o"></span>
-          <span>{{$t('Favorite')}}</span>
+          <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
         </x-button>
         <x-button mini plain type="primary" @click.native="onAdvisory">
           <span class="fa fa-user"></span>
@@ -91,6 +91,7 @@ export default {
     return {
       commentPopupShow: false,
       replyPopupShow: false,
+      notFavorite: true,
       reward: {},
       article: {},
       comments: []
@@ -184,14 +185,35 @@ export default {
             }
           })
         }
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
+      })
+      .then(res => {
+        if (res.data.flag < 1) {
+          self.notFavorite = true
+        } else {
+          self.notFavorite = false
+        }
       })
     },
     onFavorite () {
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
-      .then(res => {
-        self.$vux.toast.text(self.$t('Favorite Success'))
-      })
+      if (this.notFavorite) {
+        this.notFavorite = false
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
+        .then(res => {
+          if (res.data.flag) {
+            self.$vux.toast.text(self.$t('Favorite Success'))
+          }
+        })
+      } else {
+        this.notFavorite = true
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: 'news'})
+        .then(res => {
+          if (res.data.flag) {
+            self.$vux.toast.text(self.$t('Cancel Favorite'))
+          }
+        })
+      }
     },
     onAdvisory () {
 

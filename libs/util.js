@@ -128,140 +128,144 @@ Util.install = function (Vue, options) {
         params.wxData.successCallback && params.wxData.successCallback(data);
       })
     },
-    wxShare: function (params) {
-      const self = this
-      console.log(params)
-      let wxData = params.data
-      let isUpdate = false
+    wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
         { params: { url: encodeURIComponent(location.href) } }
       ).then(res => {
         Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
-          //alert("微信还没有准备好，请刷新页面");
-        });
-        Vue.wechat.ready(function () {
-          params.readyCallback && params.readyCallback()
-          Vue.wechat.showMenuItems({
-            menuList: [
-              'menuItem:profile',
-              'menuItem:addContact'
-            ]
-          })
-          Vue.wechat.hideMenuItems({
-            menuList: [
-              'menuItem:exposeArticle',
-              'menuItem:setFont',
-              'menuItem:readMode',
-              'menuItem:share:qq',
-              'menuItem:share:QZone',
-              'menuItem:share:weiboApp',
-              'menuItem:share:facebook'
-            ]
-          })
-          let wxshareurl = wxData.link
-          let query = self.query(wxshareurl)
-          if (query.openid) {
-              wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
+          // alert("微信还没有准备好，请刷新页面");
+        })
+        callback && callback()
+      })
+    },
+    wxShare: function (params) {
+      const self = this
+      let wxData = params.data
+      let isUpdate = false
+      // this.wxConfig(function() {
+      Vue.wechat.ready(function () {
+        params.readyCallback && params.readyCallback()
+        Vue.wechat.showMenuItems({
+          menuList: [
+            'menuItem:profile',
+            'menuItem:addContact'
+          ]
+        })
+        Vue.wechat.hideMenuItems({
+          menuList: [
+            'menuItem:exposeArticle',
+            'menuItem:setFont',
+            'menuItem:readMode',
+            'menuItem:share:qq',
+            'menuItem:share:QZone',
+            'menuItem:share:weiboApp',
+            'menuItem:share:facebook'
+          ]
+        })
+        let wxshareurl = wxData.link
+        let query = self.query(wxshareurl)
+        if (query.openid) {
+            wxshareurl = wxshareurl.replace(`&openid=${query.openid}`, '').replace(`openid=${query.openid}`, '')
+        }
+        Vue.wechat.checkJsApi({
+          jsApiList: ['onMenuShareAppMessage'],
+          success: function(res) {
+            if (!res.checkResult.onMenuShareAppMessage) {
+              isUpdate = true
+            }
           }
-          Vue.wechat.checkJsApi({
-            jsApiList: ['onMenuShareAppMessage'],
-            success: function(res) {
-              if (!res.checkResult.onMenuShareAppMessage) {
-                isUpdate = true
-              }
+        })
+        Vue.wechat.onMenuShareAppMessage({
+          title: wxData.title,
+          desc: wxData.desc,
+          link: wxshareurl,
+          imgUrl: wxData.photo,
+          type: wxData.type,
+          dataUrl:wxData.dataUrl,
+          trigger: function (res) {
+            //分享之前执行
+            //	alert('用户点击发送给朋友');
+            params.beforeShare && params.beforeShare()
+            if (wxData.desc == "undefined" || wxData.desc == undefined) {
+              alert("微信还没准备好分享，请稍后再试");
             }
-          })
-          Vue.wechat.onMenuShareAppMessage({
-            title: wxData.title,
-            desc: wxData.desc,
-            link: wxshareurl,
-            imgUrl: wxData.photo,
-            type: wxData.type,
-            dataUrl:wxData.dataUrl,
-            trigger: function (res) {
-              //分享之前执行
-              //	alert('用户点击发送给朋友');
-              params.beforeShare && params.beforeShare()
-              if (wxData.desc == "undefined" || wxData.desc == undefined) {
-                alert("微信还没准备好分享，请稍后再试");
-              }
-              if (res.shareTo == "favorite") {
-                self.wxShareSuccess({
-                  data: wxData,
-                  type: 'favorite'
-                })
-              }
-            },
-            success: function (resp) {
-              if (isUpdate) {
-                alert("微信版本太低，请先升级微信客户端!")
-              }
+            if (res.shareTo == "favorite") {
               self.wxShareSuccess({
                 data: wxData,
-                type: 'friend'
-              })
-            },
-            cancel: function (resp) {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'friend'
+                type: 'favorite'
               })
             }
-          })
-          Vue.wechat.onMenuShareTimeline({
-            title: wxData.timelineTitle,
-            link: wxshareurl,
-            imgUrl: wxData.photo,
-            trigger: function (res) {
-              //分享之前执行
-              //	alert('用户点击发送给朋友');
-              params.beforeShare && params.beforeShare()
-              if (wxData.desc === "undefined" || wxData.desc === undefined) {
-                alert("微信还没准备好分享，请稍后再试");
-              }
-            },
-            success: function (resp) {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'timeline'
-              })
-            },
-            cancel: function (resp) {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'timeline'
-              })
+          },
+          success: function (resp) {
+            if (isUpdate) {
+              alert("微信版本太低，请先升级微信客户端!")
             }
-          })
-          Vue.wechat.onMenuShareQQ({
-            title: wxData.title,
-            desc: wxData.desc,
-            link: wxshareurl,
-            imgUrl: wxData.photo,
-            trigger: function (res) {
-              //分享之前执行
-              //	alert('用户点击发送给朋友');
-              params.beforeShare && params.beforeShare()
-              if (wxData.desc === "undefined" || wxData.desc === undefined) {
-                alert("微信还没准备好分享，请稍后再试");
-              }
-            },
-            success: function (resp) {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'qq'
-              })
-            },
-            cancel: function (resp) {
-              self.wxShareSuccess({
-                data: wxData,
-                type: 'qq'
-              })
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'friend'
+            })
+          },
+          cancel: function (resp) {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'friend'
+            })
+          }
+        })
+        Vue.wechat.onMenuShareTimeline({
+          title: wxData.timelineTitle,
+          link: wxshareurl,
+          imgUrl: wxData.photo,
+          trigger: function (res) {
+            //分享之前执行
+            //	alert('用户点击发送给朋友');
+            params.beforeShare && params.beforeShare()
+            if (wxData.desc === "undefined" || wxData.desc === undefined) {
+              alert("微信还没准备好分享，请稍后再试");
             }
-          })
+          },
+          success: function (resp) {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'timeline'
+            })
+          },
+          cancel: function (resp) {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'timeline'
+            })
+          }
+        })
+        Vue.wechat.onMenuShareQQ({
+          title: wxData.title,
+          desc: wxData.desc,
+          link: wxshareurl,
+          imgUrl: wxData.photo,
+          trigger: function (res) {
+            //分享之前执行
+            //	alert('用户点击发送给朋友');
+            params.beforeShare && params.beforeShare()
+            if (wxData.desc === "undefined" || wxData.desc === undefined) {
+              alert("微信还没准备好分享，请稍后再试");
+            }
+          },
+          success: function (resp) {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'qq'
+            })
+          },
+          cancel: function (resp) {
+            self.wxShareSuccess({
+              data: wxData,
+              type: 'qq'
+            })
+          }
         })
       })
+      // })
     },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {

@@ -48,7 +48,7 @@
               </form>
             </div>
           </grid-item>
-          <grid-item @click.native="shenImgTxt">
+          <grid-item @click.native="sendImgTxt">
             <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
             <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
           </grid-item>
@@ -149,10 +149,21 @@ export default {
     },
     sendPhoto () {
       if (!this.isPC) {
-
+        const self = this
+        // this.$wechat.ready(function () {
+          self.$wechat.chooseImage({
+            count: 1,
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera'],
+            success: function (res) {
+              const localIds = res.localIds
+              alert(localIds)
+            }
+          })
+        // })
       }
     },
-    shenImgTxt () {
+    sendImgTxt () {
 
     },
     viewUserInfo () {

@@ -80,25 +80,25 @@ export default {
       list3: []
     }
   },
-  computed: {
-    getItems () {
-      let data = this.$route.query.data
-      if (typeof data === 'object') {
-        let match = false
-        this.items = this.items.map(item => {
-          if (item.id === data.id) {
-            match = true
-            return data
-          }
-          return item
-        })
-        if (!match) {
-          this.items.push(data)
-        }
-      }
-      return this.items
-    }
-  },
+  // computed: {
+  //   getItems () {
+  //     let data = this.$route.query.data
+  //     if (typeof data === 'object') {
+  //       let match = false
+  //       this.items = this.items.map(item => {
+  //         if (item.id === data.id) {
+  //           match = true
+  //           return data
+  //         }
+  //         return item
+  //       })
+  //       if (!match) {
+  //         this.items.push(data)
+  //       }
+  //     }
+  //     return this.items
+  //   }
+  // },
   filters: {
     addressFormat: function (address) {
       return `${address.area.join('')}${address.details}`

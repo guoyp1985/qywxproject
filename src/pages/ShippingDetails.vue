@@ -5,10 +5,10 @@
 */
 <template>
   <div id="shipping-details">
-    <sticky scroll-box="shipping-details">
+    <sticky scroll-box="vux_view_box_body">
       <div class="express-info">
         <div class="goods-cell">
-          <x-img :src="orderImg"></x-img>
+          <img :src="orderImg"></img>
         </div>
         <div class="express-cell font13">
           <div class="express-status">
@@ -36,14 +36,13 @@
 </i18n>
 
 <script>
-import { Sticky, Timeline, TimelineItem, XImg } from 'vux'
-
+import { Sticky, Timeline, TimelineItem } from 'vux'
+import ENV from '#/env'
 export default {
   components: {
     Sticky,
     Timeline,
-    TimelineItem,
-    XImg
+    TimelineItem
   },
   data () {
     return {
@@ -72,6 +71,19 @@ export default {
     expressInfo () {
       return `${this.expressCompany} ${this.expressNumber}`
     }
+  },
+  methods: {
+    getData () {
+      const id = this.$route.params.id
+      this.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, {id: id})
+      .then(res => {
+        console.log(res.data)
+      })
+    }
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    this.getData()
   }
 }
 </script>
