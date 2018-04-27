@@ -136,6 +136,9 @@ export default {
     }
   },
   methods: {
+  },
+  created () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
   }
 }
 </script>
