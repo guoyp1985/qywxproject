@@ -15,7 +15,7 @@
             <span>{{expressStatus}}</span>
           </div>
           <div class="express-company">
-            <span>{{expressCompany}} {{expressId}}</span>
+            <span>{{expressCompany}} {{expressNumber}}</span>
           </div>
           <div class="express-phone">
             <span>官方电话: {{expressPhone}}</span>
@@ -46,25 +46,12 @@ export default {
   },
   data () {
     return {
-      expressStatus: 'unkown',
-      expressCompany: 'unkown',
-      expressId: '100000000000',
-      expressPhone: '00000',
+      expressStatus: '',
+      expressCompany: '',
+      expressNumber: '',
+      expressPhone: '',
       orderImg: '../../asset/_images/nopic.png',
-      timelines: [
-        {'time': '2018-04-03 10:19:40', 'status': '在官网"运单资料&签收图",可查看签收人信息'},
-        {'time': '2018-04-03 10:18:40', 'status': '已签收(同事 ),感谢使用顺丰,期待再次为您服务'},
-        {'time': '2018-04-03 08:20:31', 'status': '快件交给韩志磊，正在派送途中（联系电话：18610652457）'},
-        {'time': '2018-04-03 08:11:48', 'status': '正在派送途中,请您准备签收(派件人:刘其美,电话:15501010502)'},
-        {'time': '2018-04-03 08:01:24', 'status': '快件到达 【北京丰台莲怡营业点】'},
-        {'time': '2018-04-03 03:57:54', 'status': '快件已发车'},
-        {'time': '2018-04-03 03:39:38', 'status': '快件在【北京金马同城集散点】已装车,准备发往 【北京丰台莲怡营业点】'},
-        {'time': '2018-04-02 22:19:35', 'status': '快件到达 【北京金马同城集散点】'},
-        {'time': '2018-04-02 20:36:14', 'status': '快件已发车'},
-        {'time': '2018-04-02 19:47:49', 'status': '快件在【北京田家园营业点】已装车,准备发往 【北京金马同城集散点】'},
-        {'time': '2018-04-02 16:49:00', 'status': '顺丰速运 已收取快件'},
-        {'time': '2018-04-02 16:46:57', 'status': '顺丰速运 已收取快件'}
-      ]
+      timelines: []
     }
   },
   computed: {
@@ -74,10 +61,22 @@ export default {
   },
   methods: {
     getData () {
+      const self = this
       const id = this.$route.params.id
       this.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, {id: id})
       .then(res => {
         console.log(res.data)
+        if (res.data.data) {
+          self.timelines = res.data.data
+        }
+        return this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${id}`)
+      })
+      .then(res => {
+        if (res.data.flag) {
+          self.orderImg = res.data.data.orderlist[0].photo
+          self.expressCompany = res.data.data.delivercompany
+          self.expressNumber = res.data.data.delivercode
+        }
       })
     }
   },

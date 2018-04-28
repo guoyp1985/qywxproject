@@ -53,11 +53,18 @@ export default {
   },
   methods: {
     getData () {
-      this.$http.get(`${ENV.BokaApi}`)
+      const self = this
+      const id = this.$route.query.id
+      const module = this.$route.query.module
+      this.$http.get(`${ENV.BokaApi}/api/stat/shareview?module=${module}&id=${id}`)
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
+        self.list = res.data.data
       })
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

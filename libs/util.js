@@ -56,6 +56,14 @@ Util.install = function (Vue, options) {
         }
       }
     },
+    changeItem: function (list, id, callback) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i].id === id) {
+          callback(list[i])
+          break
+        }
+      }
+    },
     checkMobile : function(mobile) {
       if (isNaN(mobile)) return false;
       if (!mobile || mobile=="" || mobile.length!=11) {

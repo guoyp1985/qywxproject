@@ -15,7 +15,7 @@
       class="share-item font14"
       align-items
       :title="item.title"
-      :link="{name: 'tSharingDetail', params: {id: item.id}}">
+      :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
         <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.photo"></x-img>
         <div slot="inline-desc">
           {{item.dateline | dateFormat}} {{item.typestr}}
@@ -53,7 +53,7 @@ export default {
   },
   filters: {
     dateFormat: function (isoDate) {
-      return `${new Time(isoDate).dateFormat('yyyy-MM-dd hh:mm')} 分享给朋友`
+      return `${new Time(isoDate * 1000).dateFormat('yyyy-MM-dd hh:mm')} 分享给朋友`
     },
     valueFormat: function (value) {
       return Number(value) < 0 ? `${value}` : `+${value}`
