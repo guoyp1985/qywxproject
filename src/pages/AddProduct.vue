@@ -349,6 +349,9 @@ export default {
       }
       self.$vux.loading.show()
       let postdata = self.submitdata
+      if (self.query.id) {
+        self.submitdata.id = self.query.id
+      }
       postdata['moderate'] = 1
       self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
         let data = res.data

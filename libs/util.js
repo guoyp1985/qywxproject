@@ -3,6 +3,7 @@ import Reg from './reg'
 import ENV from './env'
 import SHA1 from 'js-sha1'
 import Base64 from './base64'
+import Time from './time'
 const Util = {}
 Util.install = function (Vue, options) {
   Vue.prototype.$util = {
@@ -290,7 +291,7 @@ Util.install = function (Vue, options) {
         }
       }
     },
-    scrollEvent : function(os){
+    scrollEvent : function (os) {
       let _ele = os.element
       let scrollTop = _ele.scrollTop
       let scrollHeight = _ele.scrollHeight
@@ -305,7 +306,45 @@ Util.install = function (Vue, options) {
 			if (scrollTop + height >= scrollHeight - distance) {
 				os.callback && os.callback()
 			}
-		}
+		},
+    getDateState : function (dt) {
+      let newtime = new Time(dt * 1000)
+      let year = newtime.year()
+      let month = newtime.month()
+      let date = newtime.date()
+      let nowtime = new Time(new Date())
+      let nowyear = nowtime.year()
+      let nowmonth = nowtime.month()
+      let nowdate = nowtime.date()
+      let state = ''
+      if (year === nowyear && month === nowmonth) {
+        if (date === nowdate) {
+          state = '今'
+        } else if (date + 1 === nowdate) {
+          state = '昨'
+        } else if (date + 2 === nowdate) {
+          state = '前'
+        }
+      }
+      return state
+    },
+    getDateClass : function (dt) {
+      const self = this
+      let state = self.getDateState(dt)
+      let ret = 'datestate '
+      if (state !== '') {
+        if (state === '今') {
+          ret += 'today'
+        } else if (state === '昨') {
+          ret = 'yestoday'
+        } else if (state === '前') {
+          ret += ''
+        } else {
+          ret += 'hide'
+        }
+      }
+      return ret
+    }
   }
 }
 

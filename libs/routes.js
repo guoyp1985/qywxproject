@@ -61,6 +61,7 @@ import AccountDetail from '@/pages/AccountDetail'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
 import Deliverinfo from '@/pages/Deliverinfo'
 import Groupbuy from '@/pages/Groupbuy'
+import KnowledgeClass from '@/pages/KnowledgeClass'
 
 export default [
   {
@@ -396,5 +397,10 @@ export default [
     path: '/groupbuy',
     name: 'tGroupbuy',
     component: Groupbuy
+  },
+  {
+    path: '/knowledgeClass',
+    name: 'tKnowledgeClass',
+    component: KnowledgeClass
   }
 ]

@@ -29,7 +29,10 @@
                 <img :src="item.photo" style="width:40px;height:40px;" />
               </div>
               <div class="t-cell v_middle">
+                <!--
                 <div class="clamp1"><span :class="item.dateline | getdateclass">{{ item.dateline | getdatestate }}</span>{{ item.title }}</div>
+              -->
+                <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
                 <div class="clamp1 color-gray font12">
                   <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
                   <span class="v_middle">{{ item.dateline | dateformat }}</span>
@@ -54,73 +57,20 @@ Percent:
 
 <script>
 import { Search } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
     Search
   },
   created () {
+    console.log(new Date().getTime())
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    },
-    getdatestate: function (dt) {
-      let newtime = new Time(dt * 1000)
-      let year = newtime.year()
-      let month = newtime.month()
-      let date = newtime.date()
-      let nowtime = new Time(new Date())
-      let nowyear = nowtime.year()
-      let nowmonth = nowtime.month()
-      let nowdate = nowtime.date()
-      let state = ''
-      if (year === nowyear && month === nowmonth) {
-        if (date === nowdate) {
-          state = '今'
-        } else if (date + 1 === nowdate) {
-          state = '昨'
-        } else if (date + 2 === nowdate) {
-          state = '前'
-        }
-      }
-      return state
-    },
-    getdateclass: function (dt) {
-      let newtime = new Time(dt * 1000)
-      let year = newtime.year()
-      let month = newtime.month()
-      let date = newtime.date()
-      let nowtime = new Time(new Date())
-      let nowyear = nowtime.year()
-      let nowmonth = nowtime.month()
-      let nowdate = nowtime.date()
-      let state = ''
-      let ret = 'datestate '
-      if (year === nowyear && month === nowmonth) {
-        if (date === nowdate) {
-          state = '今'
-        } else if (date + 1 === nowdate) {
-          state = '昨'
-        } else if (date + 2 === nowdate) {
-          state = '前'
-        }
-      }
-      if (state !== '') {
-        console.log(state === '前')
-        if (state === '今') {
-          ret += 'today'
-        } else if (state === '昨') {
-          ret = 'yestoday'
-        } else if (state === '前') {
-          ret += ''
-        } else {
-          ret += 'hide'
-        }
-      }
-      return ret
     }
   },
   data () {
@@ -131,7 +81,7 @@ export default {
       },
       listdata: [
         {
-          id: '1', title: '医美运营营销36兵法攻略', dateline: 1523694550, visitor: 0, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15236697775676'
+          id: '1', title: '医美运营营销36兵法攻略', dateline: 1524881282, visitor: 0, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15236697775676'
         },
         {
           id: '2', title: '商品1', dateline: 1523694550, visitor: 10, photo: 'http://ossgxs.boka.cn/month_201804/15236839495706.jpg'
@@ -154,6 +104,12 @@ export default {
     onFocus () {
     },
     onCancel () {
+    },
+    getDateState: function (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass: function (dt) {
+      return this.$util.getDateClass(dt)
     }
   }
 }
