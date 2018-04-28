@@ -37,13 +37,13 @@
           <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
         </Forminputplate>
         <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
-        <template v-if="query.type == 'groupbuy'">
+        <template v-if="activityType == 'groupbuy'">
           <FormGroupbuy :submitdata="submitdata"></FormGroupbuy>
         </template>
-        <template v-if="query.type == 'bargainbuy'">
+        <template v-if="activityType == 'bargainbuy'">
           <FormBargainbuy :submitdata="submitdata"></FormBargainbuy>
         </template>
-        <template v-if="query.type == 'discount'">
+        <template v-if="activityType == 'discount'">
           <FormDiscount :submitdata="submitdata"></FormDiscount>
         </template>
       </form>
@@ -89,12 +89,6 @@
           </div>
         </div>
       </popup>
-    </div>
-    <div v-transfer-dom>
-      <alert v-model="showalert">{{ $t('Please select product') }}</alert>
-    </div>
-    <div v-transfer-dom>
-      <loading :show="isShowLoading" text=""></loading>
     </div>
   </div>
 </template>
@@ -152,9 +146,8 @@ export default {
     return {
       autofixed: false,
       query: {},
+      activityType: null,
       allowsubmit: true,
-      showalert: false,
-      isShowLoading: false,
       showselectproduct: true,
       showproductitem: false,
       selectproduct: {},
@@ -180,12 +173,13 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.activityType = self.query.type
     let nowdate = new Date().getTime()
     let startime = self.dateformat(parseInt(nowdate / 1000))
     let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
     self.selectdatetxt1 = ''
     self.selectdatetxt2 = ''
-    if (self.query.type === 'groupbuy') {
+    if (self.activityType === 'groupbuy') {
       self.submitdata = {
         productid: '',
         starttime: startime,
@@ -196,7 +190,7 @@ export default {
         param_finishtime: '',
         param_everybuy: ''
       }
-    } else if (self.query.type === 'bargainbuy') {
+    } else if (self.activityType === 'bargainbuy') {
       self.submitdata = {
         productid: '',
         starttime: startime,
@@ -207,7 +201,7 @@ export default {
         param_everymin: '',
         param_everymax: ''
       }
-    } else if (self.query.type === 'discount') {
+    } else if (self.activityType === 'discount') {
       self.submitdata = {
         productid: '',
         starttime: startime,
@@ -258,14 +252,19 @@ export default {
       this.checkeduid = val
     },
     confirmpopup () {
+      const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
-        this.showalert = true
-      } else {
-        this.selectproduct = this.selectpopupdata
-        this.showpopup = false
-        this.showselectproduct = false
-        this.showproductitem = true
+        self.$vux.alert.show({
+          title: '',
+          content: '请选择商品'
+        })
+        return false
       }
+      this.selectproduct = this.selectpopupdata
+      self.submitdata.productid = self.selectproduct.id
+      this.showpopup = false
+      this.showselectproduct = false
+      this.showproductitem = true
     },
     onChange (val) {
       this.searchword = val
@@ -298,8 +297,7 @@ export default {
         params.params.keyword = keyword
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
           self.searchresult = true
@@ -368,11 +366,10 @@ export default {
         })
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        self.isShowLoading = false
+        let data = res.data
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),

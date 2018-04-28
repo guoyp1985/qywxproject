@@ -44,7 +44,7 @@
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
                 </router-link>
-                <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
+                <router-link :to="{path:'/product',query:{wid:item.wid,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
@@ -349,8 +349,7 @@ export default {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
@@ -381,8 +380,7 @@ export default {
       self.showconfirm = false
       self.isShowLoading = true
       self.$http.post(`${ENV.BokaApi}/api/retailer/stopActivity`, { id: self.clickdata.id }).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.isShowLoading = false
         self.$vux.toast.show({
           text: data.error,

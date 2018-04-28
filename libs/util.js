@@ -267,6 +267,21 @@ Util.install = function (Vue, options) {
       })
       // })
     },
+    wxPreviewImage: function(viewId) {
+      const triggerView = document.getElementById(viewId)
+      const images = document.querySelectorAll(`#${viewId} .wx__img-preview`)
+      const urls = []
+      images.map(img => urls.push(img.src))
+      triggerView.addEventListener('click', function(event) {
+        const target = event.target
+        if (target.nodeName.toLowerCase() === 'img' && /\.wx__img-preview/.test(target.getAttribute('class'))) {
+          Vue.wechat.previewImage({
+            current: target.src,
+            urls: urls
+          })
+        }
+      }, false)
+    },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {

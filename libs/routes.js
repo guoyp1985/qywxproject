@@ -59,6 +59,8 @@ import Pay from '@/pages/Pay'
 import RetailerSaleview from '@/pages/RetailerSaleview'
 import AccountDetail from '@/pages/AccountDetail'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
+import Deliverinfo from '@/pages/Deliverinfo'
+import Groupbuy from '@/pages/Groupbuy'
 
 export default [
   {
@@ -384,5 +386,15 @@ export default [
     path: '/retailerOrderDetail',
     name: 'tRetailerOrderDetail',
     component: RetailerOrderDetail
+  },
+  {
+    path: '/deliverinfo',
+    name: 'tDeliverinfo',
+    component: Deliverinfo
+  },
+  {
+    path: '/groupbuy',
+    name: 'tGroupbuy',
+    component: Groupbuy
   }
 ]

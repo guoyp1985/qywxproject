@@ -124,6 +124,8 @@ export default {
           state = '昨天'
         } else if (date + 2 === nowdate) {
           state = '前天'
+        } else {
+          state = new Time(dt * 1000).dateFormat('MM-dd')
         }
       } else {
         state = new Time(dt * 1000).dateFormat('MM-dd')
@@ -163,16 +165,14 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       if (data && data.flag === 1) {
         self.viewdata = data.data
       }
       let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        return res.json()
-      })
-    }).then(function (data) {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params)
+    }).then(function (res) {
+      let data = res.data
       self.$vux.loading.hide()
       let retdata = data.data ? data.data : data
       self.tabdata1 = self.tabdata1.concat(retdata)
@@ -217,8 +217,7 @@ export default {
       const self = this
       let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
@@ -236,8 +235,7 @@ export default {
       const self = this
       let params = { params: { action: 'views', pagestart: self.pagestart2, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
@@ -298,14 +296,6 @@ export default {
   border-top:@list-border-color 1px solid;
   border-bottom:@list-border-color 1px solid;
 }
-
-.x-timeline .vux-timeline-item-color{background-color:#bfcadf;left:30px;}
-.x-timeline .vux-timeline-item-head-first{width: 10px;height: 10px;top: 4px;}
-.x-timeline .vux-timeline-item-tail{background-color:#bfcadf;left:34px;}
-.x-timeline .vux-timeline-item-checked.weui-icon-success-no-circle::before{display:none;}
-.x-timeline .vux-timeline-item-content{padding:0 0 10px 50px;}
-.x-timeline .ddate{position:absolute;left:-10px;}
-.x-timeline .dtime{position:absolute;left:-10px;top:17px;}
 
 .rsalechance .pagetop{height:202px;}
 .rsalechance .pagemiddle{top:202px;}

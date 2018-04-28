@@ -49,10 +49,10 @@
                       <div class="mt3">{{ item.address }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2">
-                      <div class="qbtn4 font12" style="padding:1px 8px;">{{ $t('Deliver goods') }}</div>
+                      <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
-                      <a class="qbtn3 font12 " style="padding:1px 8px;">{{ $t('View deliver') }}</a>
+                      <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
                       <div class="mt3">{{ item.address }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80">
-                      <div class="qbtn4 font12" style="padding:1px 8px;">{{ $t('Deliver goods') }}</div>
+                      <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
                   </div>
                 </div>
@@ -171,6 +171,45 @@
         <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
     </div>
+    <div v-transfer-dom class="x-popup popup-deliver">
+      <popup v-model="showpopup" height="100%">
+        <div class="popup1 font14">
+          <div class="popup-top flex_center">发货</div>
+          <div class="popup-middle">
+            <div class="scroll_list">
+              <div class="scroll_item padding10">
+                <div class="t-table">
+                  <div class="t-cell w80">物流<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                  <div class="t-cell">
+                    <select class="qselect" v-model="deliverdata.delivercompany">
+                      <option v-for="(item,index) in delivercompany" :key='item.id' :value="item.id">{{ item.name }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div v-if="deliverdata.delivercompany != '-1'" class="scroll_item padding10 form-item">
+                <div class="t-table">
+                  <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+                  <div class="t-cell">
+                    <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
+                  </div>
+                  <div class="t-cell align_right w50" style="position:relative;">
+                    <i class="al al-scanning color-blue"></i>
+                    <form class="fileform1" enctype="multipart/form-data">
+                      <input class="fileinput" type="file" name="files" @change="filechange" />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
+            <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -182,13 +221,16 @@ My orders:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDomDirective as TransferDom, Popup } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from '#/env'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Tab,
     TabItem,
@@ -198,7 +240,8 @@ export default {
     Group,
     XButton,
     Orderitemplate,
-    Orderproductplate
+    Orderproductplate,
+    Popup
   },
   filters: {
     dateformat: function (value) {
@@ -225,7 +268,12 @@ export default {
       scrollArea1: null,
       scrollArea2: null,
       scrollArea3: null,
-      scrollArea4: null
+      scrollArea4: null,
+      showpopup: false,
+      deliveritem: null,
+      deliverindex: 0,
+      delivercompany: [],
+      deliverdata: { delivercompany: '-1', delivercode: '' }
     }
   },
   created () {
@@ -291,8 +339,7 @@ export default {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
@@ -312,8 +359,7 @@ export default {
       const self = this
       let params = { params: { flag: 1, pagestart: self.pagestart2, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
@@ -328,8 +374,7 @@ export default {
       const self = this
       let params = { params: { flag: 2, pagestart: self.pagestart3, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
@@ -344,8 +389,7 @@ export default {
       const self = this
       let params = { params: { flag: 3, pagestart: self.pagestart4, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata4 = self.tabdata4.concat(retdata)
@@ -379,10 +423,98 @@ export default {
           self.getdata4()
         }
       }
+    },
+    uploaddeliver (item, index) {
+      event.preventDefault()
+      const self = this
+      self.deliveritem = item
+      self.deliverindex = index
+      for (let key in self.deliverdata) {
+        self.deliverdata[key] = self.deliveritem[key]
+      }
+      if (!self.delivercompany.length) {
+        self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
+          let data = res.data
+          self.delivercompany = data.data ? data.data : data
+        })
+      }
+      this.showpopup = true
+    },
+    confirmpopup () {
+      const self = this
+      if (self.deliverdata.delivercompany !== '-1' && self.$util.isNull(self.deliverdata.delivercode)) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请输入物流单号'
+        })
+        return false
+      }
+      self.$vux.loading.show()
+      self.deliverdata.id = self.deliveritem.id
+      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              let updatedata = self.tabdata1[self.deliverindex]
+              updatedata.delivercompany = self.deliverdata.delivercompany
+              updatedata.delivercode = self.deliverdata.delivercode
+              updatedata.flag = 3
+              for (let i = 0; i < self.tabdata3.length; i++) {
+                let td = self.tabdata3[i]
+                if (td.id === updatedata.id) {
+                  td.delivercompany = self.deliverdata.delivercompany
+                  td.delivercode = self.deliverdata.delivercode
+                }
+              }
+              self.showpopup = false
+              self.deliveritem = null
+              self.deliverindex = 0
+              self.deliverdata = { delivercompany: '-1', delivercode: '' }
+            }
+          }
+        })
+      })
+    },
+    closepopup () {
+      this.showpopup = false
+      self.deliveritem = null
+      self.deliverindex = 0
+      self.deliverdata = { delivercompany: '-1', delivercode: '' }
+    },
+    filechange (e) {
+      const self = this
+      let files = e.target.files
+      if (files.length > 0) {
+        let fileform = document.querySelector('.popup-deliver .fileform1')
+        let filedata = new FormData(fileform)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          let data = res.data
+          if (data.flag === 1) {
+            let picurl = data.data
+            return self.$http.post(`${ENV.BokaApi}/api/retailer/qrcodeDecode`, { picurl: encodeURIComponent(picurl) })
+          } else if (data.error) {
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        }).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          self.deliverdata.delivercode = data.data
+        })
+      }
     }
   }
 }
 </script>
 
 <style lang="less">
+.popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 </style>

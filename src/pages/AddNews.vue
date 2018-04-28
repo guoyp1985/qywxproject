@@ -175,8 +175,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: { id: query.id, module: 'news' }
       }).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         let retdata = data.data ? data.data : data
         if (retdata) {
           for (let key in self.submitdata) {
@@ -212,8 +211,7 @@ export default {
         let filedata = new FormData(fileform)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          return res.json()
-        }).then(function (data) {
+          let data = res.data
           self.$vux.loading.hide()
           if (data.flag === 1) {
             self.photoarr.push(data.data)
@@ -282,8 +280,7 @@ export default {
         delete self.submitdata['id']
       }
       self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,

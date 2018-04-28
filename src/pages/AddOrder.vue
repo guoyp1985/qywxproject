@@ -187,8 +187,7 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.$http.get(`${ENV.BokaApi}/api/user/address/list`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       let retdata = data.data ? data.data : data
       if (retdata) {
         self.addressdata = retdata
@@ -208,8 +207,7 @@ export default {
       }
     })
     self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       self.orderdata = data
       let total = 0
       for (let i = 0; i < self.orderdata.length; i++) {
@@ -288,8 +286,7 @@ export default {
       }
       self.isShowLoading = true
       self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.isShowLoading = false
         self.$vux.toast.show({
           text: data.error,

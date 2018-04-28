@@ -64,19 +64,6 @@ Behavior analysis in the last month:
 import Time from '../../libs/time'
 import ENV from '../../libs/env'
 export default {
-  created: function () {
-    let self = this
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    let curquery = self.$route.query
-    console.log(curquery)
-    self.$http.post(`${ENV.BokaApi}/mobile/ajax/api.php?module=news&action=list&type=all&notclass0=1&pagestart=0&limit=20`, {
-      data: { uid: curquery.uid }
-    }).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-
-    })
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -115,6 +102,18 @@ export default {
         }
       ]
     }
+  },
+  created: function () {
+    let self = this
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    let curquery = self.$route.query
+    console.log(curquery)
+    self.$http.post(`${ENV.BokaApi}/mobile/ajax/api.php?module=news&action=list&type=all&notclass0=1&pagestart=0&limit=20`, {
+      data: { uid: curquery.uid }
+    }).then(function (res) {
+      let data = res.data
+      self.listdata = data.data ? data.data : data
+    })
   },
   computed: {
   },

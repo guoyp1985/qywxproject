@@ -124,8 +124,7 @@ export default {
     self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
       { params: { customeruid: self.query.uid } }
     ).then(function (res) {
-      return res.json()
-    }).then(function (data) {
+      let data = res.data
       if (data) {
         self.viewuser = data.data ? data.data : data
         document.title = self.viewuser.linkman
@@ -159,8 +158,7 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
         { action: 'stickcustomer', customeruid: self.query.uid }
       ).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -183,8 +181,7 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
             { inviteuid: self.query.uid }
           ).then(function (res) {
-            return res.json()
-          }).then(function (data) {
+            let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
@@ -216,21 +213,11 @@ export default {
           self.$vux.confirm.setInputValue(inputval)
         },
         onConfirm (val) {
-          /*
-          if (self.$util.isNull(val)) {
-            self.$vux.alert.show({
-              title: '',
-              content: '更新值不能为空'
-            })
-            return false
-          }
-          */
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
             { action: 'update', customeruid: self.query.uid, char: char, value: val }
           ).then(function (res) {
-            return res.json()
-          }).then(function (data) {
+            let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,

@@ -151,15 +151,15 @@ export default {
       if (!this.isPC) {
         const self = this
         // this.$wechat.ready(function () {
-          self.$wechat.chooseImage({
-            count: 1,
-            sizeType: ['original', 'compressed'],
-            sourceType: ['album', 'camera'],
-            success: function (res) {
-              const localIds = res.localIds
-              alert(localIds)
-            }
-          })
+        this.$wechat.chooseImage({
+          count: 9,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+          success: function (res) {
+            const localIds = res.localIds
+            alert(localIds)
+          }
+        })
         // })
       }
     },

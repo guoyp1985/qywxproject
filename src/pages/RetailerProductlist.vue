@@ -138,8 +138,7 @@ export default {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params).then(function (res) {
-        return res.json()
-      }).then(function (data) {
+        let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
@@ -168,12 +167,19 @@ export default {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
             self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
-              return res.json()
-            }).then(function (data) {
+              let data = res.data
               self.$vux.loading.hide()
-              self.clickdata.moderate = 1
-              self.productdata[self.clickindex].moderate = 1
-              self.showpopup1 = false
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.moderate = 1
+                    self.productdata[self.clickindex].moderate = 1
+                    self.showpopup1 = false
+                  }
+                }
+              })
             })
           }
         })
@@ -184,12 +190,19 @@ export default {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
             self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
-              return res.json()
-            }).then(function (data) {
+              let data = res.data
               self.$vux.loading.hide()
-              self.clickdata.moderate = 0
-              self.productdata[self.clickindex].moderate = 0
-              self.showpopup1 = false
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.moderate = 0
+                    self.productdata[self.clickindex].moderate = 0
+                    self.showpopup1 = false
+                  }
+                }
+              })
             })
           }
         })
