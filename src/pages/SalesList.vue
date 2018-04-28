@@ -96,7 +96,7 @@ export default {
     Search
   },
   created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
   },
   filters: {
     dateformat: function (value) {

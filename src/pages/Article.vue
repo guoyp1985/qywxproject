@@ -20,9 +20,9 @@
       </div>
       <div class="article-content" v-html="article.content"></div>
       <div class="operate-area">
-        <x-button mini plain type="primary" @click.native="onFavorite">
+        <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
           <span class="fa fa-star-o"></span>
-          <span>{{$t('Favorite')}}</span>
+          <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
         </x-button>
         <x-button mini plain type="primary" @click.native="onAdvisory">
           <span class="fa fa-user"></span>
@@ -91,6 +91,7 @@ export default {
     return {
       commentPopupShow: false,
       replyPopupShow: false,
+      notFavorite: true,
       reward: {},
       article: {},
       comments: []
@@ -127,7 +128,7 @@ export default {
     replyPopupCancel () {
       this.replyPopupShow = false
     },
-    commentSubmit (value) {
+    commentSubmit (value) { // 留言提交
       this.commentPopupShow = false
       // let comment = {
       //   userName: 'simon',
@@ -140,13 +141,20 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'news', message: value})
       .then(res => {
         if (res.data.flag) {
-          self.comments.push(res.data)
+          self.comments.push(res.data.data)
         }
       })
       // this.comments.push(comment)
     },
-    replySubmit () {
-
+    replySubmit (value) { // 回复提交
+      this.replyPopupShow = false
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'comments', message: value})
+      .then(res => {
+        if (res.data.flag) {
+          self.comments.replies.push(res.data.data)
+        }
+      })
     },
     getData () {
       const self = this
@@ -163,14 +171,49 @@ export default {
         if (res.data) {
           self.comments = res.data
         }
+        return self.$http.post(`${ENV.BokaApi}/api/share/news`, {id: self.article.id, title: self.article.title})
+      })
+      .then(res => {
+        if (res.data.flag) {
+          console.log(self.article)
+          self.$util.wxShare({
+            data: {
+              link: location.href,
+              title: self.article.seotitle || self.article.title,
+              desc: self.article.seodescription,
+              photo: self.article.sharephoto
+            }
+          })
+        }
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
+      })
+      .then(res => {
+        if (res.data.flag < 1) {
+          self.notFavorite = true
+        } else {
+          self.notFavorite = false
+        }
       })
     },
     onFavorite () {
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
-      .then(res => {
-        self.$vux.toast.text(self.$t('Favorite Success'))
-      })
+      if (this.notFavorite) {
+        this.notFavorite = false
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
+        .then(res => {
+          if (res.data.flag) {
+            self.$vux.toast.text(self.$t('Favorite Success'))
+          }
+        })
+      } else {
+        this.notFavorite = true
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: 'news'})
+        .then(res => {
+          if (res.data.flag) {
+            self.$vux.toast.text(self.$t('Cancel Favorite'))
+          }
+        })
+      }
     },
     onAdvisory () {
 
@@ -183,8 +226,8 @@ export default {
     }
   },
   created () {
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.getData()
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>

@@ -13,17 +13,17 @@
         <tab-item>{{ $t('Completed') }}</tab-item>
       </Tab>
     </sticky>
-    <view-box v-show="selectedIndex===0">
+    <div v-show="selectedIndex===0">
       <template v-if="list.length">
-        <order-info v-for="(item, index) in list" :key="index" @on-eval="onEvaluate(item)"></order-info>
+        <order-info v-for="(item, index) in list" :item="item" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
-    <view-box v-show="selectedIndex===1">
+    </div>
+    <div v-show="selectedIndex===1">
       <template v-if="list1.length">
         <order-info v-for="(item, index) in list1" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -32,8 +32,8 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
-    <view-box v-show="selectedIndex===2">
+    </div>
+    <div v-show="selectedIndex===2">
       <template v-if="list2.length">
         <order-info v-for="(item, index) in list2" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -42,8 +42,8 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
-    <view-box v-show="selectedIndex===3">
+    </div>
+    <div v-show="selectedIndex===3">
       <template v-if="list3.length">
         <order-info v-for="(item, index) in list3" :key="index" @on-eval="onEvaluate(item)"></order-info>
       </template>
@@ -52,7 +52,7 @@
           <span>{{$t('No Related Orders')}}</span>
         </div>
       </template>
-    </view-box>
+    </div>
   </div>
 </template>
 
@@ -60,59 +60,45 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem, ViewBox } from 'vux'
+import { Sticky, Tab, TabItem } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import ENV from '#/env'
 
 export default {
   components: {
     Sticky,
     Tab,
     TabItem,
-    ViewBox,
     OrderInfo
   },
   data () {
     return {
       selectedIndex: 0,
-      list: [
-        {
-          id: '0',
-          type: 1,
-          name: 'unkown',
-          storeId: '0',
-          storeType: 1,
-          storeName: 'unkown',
-          status: 0,
-          imgs: ['../assets/_images/nopic.jpg'],
-          desc: undefined,
-          num: 0,
-          pay: 0
-        }
-      ],
+      list: [],
       list1: [],
       list2: [],
       list3: []
     }
   },
-  computed: {
-    getItems () {
-      let data = this.$route.query.data
-      if (typeof data === 'object') {
-        let match = false
-        this.items = this.items.map(item => {
-          if (item.id === data.id) {
-            match = true
-            return data
-          }
-          return item
-        })
-        if (!match) {
-          this.items.push(data)
-        }
-      }
-      return this.items
-    }
-  },
+  // computed: {
+  //   getItems () {
+  //     let data = this.$route.query.data
+  //     if (typeof data === 'object') {
+  //       let match = false
+  //       this.items = this.items.map(item => {
+  //         if (item.id === data.id) {
+  //           match = true
+  //           return data
+  //         }
+  //         return item
+  //       })
+  //       if (!match) {
+  //         this.items.push(data)
+  //       }
+  //     }
+  //     return this.items
+  //   }
+  // },
   filters: {
     addressFormat: function (address) {
       return `${address.area.join('')}${address.details}`
@@ -121,7 +107,19 @@ export default {
   methods: {
     onEvaluate (order) {
       this.$router.push({name: 'tEvaluation', params: {order: order}})
+    },
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
+      .then(res => {
+        if (res.data.flag) {
+          self.list = res.data.data
+        }
+      })
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>

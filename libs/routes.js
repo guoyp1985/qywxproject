@@ -193,12 +193,12 @@ export default [
     component: OrderSearch
   },
   {
-    path: '/orderDetail',
+    path: '/orderDetail/:id',
     name: 'tOrderDetail',
     component: OrderDetail
   },
   {
-    path: '/shippingDetails',
+    path: '/shippingDetails/:id',
     name: 'tShippingDetails',
     component: ShippingDetails
   },

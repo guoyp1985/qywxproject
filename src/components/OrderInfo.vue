@@ -9,33 +9,36 @@
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
-          <span>{{item.storeName}}</span>
+          <span class="font14">{{item.retailertitle}}</span>
           <span class="al al-mjiantou-copy font16"></span>
         </div>
-        <div class="status-cell" v-if="item.status">
-          <span>{{item.status}}</span>
+        <div class="status-cell font12 color-orange6" v-if="item.flagstr">
+          <span>{{item.flagstr}}</span>
         </div>
       </div>
     </router-link>
-    <router-link :to="{path:'/orderDetail',query:{order:item}}">
-      <div class="products-info" v-if="item.imgs.length > 1">
+    <router-link :to="{path:`/orderDetail/${item.id}`}">
+      <div class="products-info" v-if="item.orderlist.length > 1">
+        <div class="product-img">
+          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" :key="index" container="#vux_view_box_body"></x-img>
+        </div>
       </div>
       <div class="product-info" v-else>
         <div class="product-img">
-          <x-img :src="item.imgs[0]"></x-img>
+          <x-img :src="item.orderlist[0].photo"></x-img>
         </div>
         <div class="product-detail">
-          <div class="product-name">
-            {{item.name}}
+          <div class="product-name font12">
+            {{item.orderlist[0].name}}
           </div>
           <div class="product-desc" v-if="item.desc">
-            {{item.desc}}
+            {{item.orderlist[0].desc}}
           </div>
         </div>
       </div>
     </router-link>
     <div class="pay-info">
-      <span class="font12">共{{item.num}}件商品 实付款: </span><span class="font14">¥{{item.pay}}</span>
+      <span class="font12">共{{item.quantity}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
     <div class="operate-area">
       <x-button mini v-for="(button, index) in buttons[item.type]" :key="index" @click.native="buttonClick(button.type)">{{button.name}}</x-button>
@@ -146,9 +149,6 @@ export default {
 .order-info .product-info .product-detail {
   flex: 1;
 }
-.order-info .product-info .product-detail {
-  margin-left: 10px;
-}
 .order-info .store-info .info-cell span {
   vertical-align: middle;
 }
@@ -158,14 +158,16 @@ export default {
   background-color: #f7f7f7;
 }
 .order-info .store-info .status-cell {
-  width: 80px;
+  text-align: center;
 }
 .order-info .store-info .status-cell span {
-  line-height: 32px;
+  line-height: 34px;
 }
 .order-info .product-info .product-img img{
   width: 60px;
   height: 60px;
+  margin-right: 10px;
+  border: 1px solid #eeeeee;
 }
 .order-info .pay-info,
 .order-info .operate-area {

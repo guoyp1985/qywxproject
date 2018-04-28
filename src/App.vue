@@ -54,8 +54,8 @@ Center:
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import routes from '#/routes'
-import ENV from '#/env'
-import { User } from '#/storage'
+// import ENV from '#/env'
+// import { User } from '#/storage'
 
 // Util.share()
 
@@ -122,6 +122,7 @@ export default {
   },
   created () {
     document.title = this.$t('tIndex')
+    this.$util.wxConfig()
     // this.getData()
   },
   methods: {
@@ -132,16 +133,17 @@ export default {
           return title || '$$'
         }
       }
-    },
-    getData () {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      .then(
-        res => {
-          User.set(res.data)
-          console.log(User.get())
-        }
-      )
     }
+    // getData () {
+    //   this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    //   .then(
+    //     res => {
+    //       console.log()
+    //       User.set(res.data)
+    //       console.log(User.get())
+    //     }
+    //   )
+    // }
   }
 }
 </script>

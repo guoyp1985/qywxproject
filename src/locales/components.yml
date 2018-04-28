@@ -375,6 +375,7 @@ zh-CN:
   Home: 首页
   Message: 消息
   Favorite: 收藏
+  Has Favorite: 已收藏
   Center: 个人中心
   Personal Center: 个人中心
   Search Orders: 查订单
@@ -389,7 +390,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客
+  Rebate customer: 返点客户
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -616,6 +617,7 @@ zh-CN:
   All Checked: 全选
   Setting Default Success For Address: 默认地址设置成功
   Favorite Success: 收藏成功
+  Cancel Favorite: 取消收藏
   Receivables: 收款方
   Wechat Safe Payment: 微信安全支付
   Photo: 照片
@@ -623,6 +625,7 @@ zh-CN:
   User Info: 用户信息
   Delete Succss: 删除成功
   Press And Talk: 按住 说话
+  Actual Payment: 实付款
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心

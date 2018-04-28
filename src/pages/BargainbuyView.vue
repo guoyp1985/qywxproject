@@ -160,13 +160,13 @@ export default {
       self.data = data.data ? data.data : data
       self.crowduser = self.data.crowduser
       document.title = self.data.title
-      let lurl = location.href
-      let wxData = {
-        title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-        desc: '好友帮帮忙，优惠享更多！',
-        link: `${lurl}&share_uid=${self.loginUser.uid}`,
-        imgUrl: self.data.photo
-      }
+      // let lurl = location.href
+      // let wxData = {
+      //   title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
+      //   desc: '好友帮帮忙，优惠享更多！',
+      //   link: `${lurl}&share_uid=${self.loginUser.uid}`,
+      //   imgUrl: self.data.photo
+      // }
       if (self.data) {
         self.product = self.data.product
       }
@@ -178,7 +178,7 @@ export default {
       }
       return self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.query.id })
     }).then(function (res) {
-      let data = res.data
+      // let data = res.data
     })
   },
   methods: {

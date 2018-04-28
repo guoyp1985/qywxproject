@@ -8,7 +8,7 @@
     <sticky scroll-box="order-detail">
       <div class="order-service">
         <div class="seller-cell">
-          <span class="font14">卖家: {{seller}}</span>
+          <span class="font14">卖家: {{retailertitle}}</span>
         </div>
         <div class="contact-cell">
           <div class="ol-contact">
@@ -27,11 +27,29 @@
       </div>
     </sticky>
     <group class="shipping-card">
-      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link link="/shippingDetails"></cell>
+      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: `/shippingDetails/${expressNumber}` }"></cell>
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
     </group>
-    <order-info :item="order" @on-eval="evaluate"></order-info>
+    <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
+    <group>
+      <cell class="order-list font12" v-for="(order, index) in orders" :key="index">
+        <img slot="icon" :src="order.photo"/>
+        <div slot="title">
+          {{order.name}}
+        </div>
+        <div slot="after-title" class="color-gray">
+          数量: {{order.quantity}}
+        </div>
+        <div slot="inline-desc">
+          ¥{{order.special}}
+        </div>
+      </cell>
+    </group>
+    <group>
+      <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
+      <cell class="font14" :value="`${$t('Actual Payment')}: ¥${special}`"></cell>
+    </group>
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
@@ -48,9 +66,9 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDomDirective as TransferDom } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
-
+import ENV from '#/env'
 export default {
   directives: {
     TransferDom
@@ -60,29 +78,21 @@ export default {
     Cell,
     Sticky,
     XDialog,
-    OrderInfo
+    OrderInfo,
+    CellFormPreview
   },
   data () {
     return {
-      seller: 'unkown',
+      id: 0,
+      retailertitle: 'unkown',
       receiver: 'unkown',
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
       expressNumber: '100000000000',
       shippingAddress: '北京市市辖区',
-      order: {
-        id: '0',
-        type: 1,
-        name: 'unkown',
-        storeId: '0',
-        storeType: 1,
-        storeName: 'unkown',
-        status: 0,
-        imgs: ['../assets/images/nopic.jpg'],
-        desc: undefined,
-        num: 0,
-        pay: 0
-      },
+      special: 0,
+      orders: [],
+      priceInfos: [],
       userQrCode: '',
       wxCardShow: false
     }
@@ -97,9 +107,29 @@ export default {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
     },
     wxContact () {
-      console.log(false)
       this.wxCardShow = true
+    },
+    getData () {
+      const self = this
+      this.id = this.$route.params.id
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
+      .then(res => {
+        if (res.data.flag) {
+          self.orders = res.data.data.orderlist
+          self.special = res.data.data.special
+          self.retailertitle = res.data.data.retailer.title
+          self.shippingAddress = res.data.data.address
+          self.receiver = res.data.data.username
+          self.receiverPhone = res.data.data.telephone
+          self.expressCompany = res.data.data.delivercompany
+          self.expressNumber = res.data.data.delivercode
+        }
+      })
     }
+  },
+  created () {
+    console.log('this.id')
+    this.getData()
   }
 }
 </script>
@@ -178,5 +208,14 @@ export default {
 }
 #order-detail .weui-cells {
   margin-top: 10px !important;
+}
+#order-detail .vux-cell-primary {
+  padding-left: 10px;
+}
+#order-detail .vux-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 80%;
 }
 </style>
