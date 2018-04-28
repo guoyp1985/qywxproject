@@ -50,6 +50,8 @@
         <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
         <template v-else>
           <div v-if="data.isfinished" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <template v-else>
+          </template>
         </template>
         <template v-else>
           <div class="btn db" @click="inviteevent">邀请好友砍价</div>
