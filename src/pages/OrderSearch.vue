@@ -102,7 +102,7 @@ export default {
       console.log(this.list)
       return this.setListButton(this.list)
     },
-    getList1() {
+    getList1 () {
       return this.setListButton(this.list1)
     },
     getList2 () {
@@ -156,7 +156,7 @@ export default {
       this.$router.push({name: 'tEvaluation', params: {order: order}})
     },
     confirm (order) {
-      const self = this
+      // const self = this
       this.$vux.confirm.show({
         title: '您是否确认收货？',
         content: '请确认货物已收到',
@@ -170,7 +170,7 @@ export default {
       this.$vux.confirm.show({
         title: '您确认取消订单？',
         onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id : order.id})
+          self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id: order.id})
           .then(res => {
             self.$vux.toast.text(res.data.error)
             self.changeOrderView(order)
@@ -231,7 +231,7 @@ export default {
           list = this.list3
           break
       }
-      this.$util.changeItem(list, order.id, function(m) {
+      this.$util.changeItem(list, order.id, function (m) {
         m.flag = 0
         m.buttons = []
       })
@@ -270,7 +270,6 @@ export default {
             }
           })
           break
-
       }
     },
     getData () {

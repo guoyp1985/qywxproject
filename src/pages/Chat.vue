@@ -149,7 +149,7 @@ export default {
     },
     sendPhoto () {
       if (!this.isPC) {
-        const self = this
+        // const self = this
         // this.$wechat.ready(function () {
         this.$wechat.chooseImage({
           count: 9,
