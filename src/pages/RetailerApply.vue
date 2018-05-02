@@ -395,7 +395,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .retailerapply .pagebottom{
   background-color:#f2f2f2;
 }

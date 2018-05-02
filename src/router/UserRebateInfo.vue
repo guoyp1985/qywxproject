@@ -217,7 +217,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 #user-rebate {
   height: 100%
 }

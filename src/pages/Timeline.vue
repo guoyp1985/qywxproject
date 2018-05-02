@@ -122,7 +122,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .membersview .btnlist .btn{
   display:inline-block;vertical-align: middle;
   width:90%;box-sizing: border-box;height:35px;line-height:35px;border-radius:20px;

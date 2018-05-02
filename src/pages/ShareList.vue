@@ -159,7 +159,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .textarea-outer{padding:10px;}
 .textarea-outer .weui-cells{margin-top:0;}
 .textarea-outer .weui-cells:before{display:none;}

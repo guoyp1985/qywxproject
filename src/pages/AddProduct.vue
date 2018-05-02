@@ -368,7 +368,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .form-item{position:relative;padding:10px;}
 .form-item:after{
   content:"";display:block;

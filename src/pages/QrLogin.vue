@@ -84,7 +84,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .qrcode-box {
   margin-top: 50px;
   text-align: center;

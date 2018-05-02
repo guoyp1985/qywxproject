@@ -100,7 +100,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .deliverinfo .pagetop{height:70px;background:rgba(0,0,0,0.85);}
 .deliverinfo .pagemiddle{
   top:90px;padding:0 20px 0 20px;

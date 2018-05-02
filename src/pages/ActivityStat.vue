@@ -99,7 +99,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .radiusarea:after{content:"";clear:both;display:block;}
 .radiusarea .item{float:left;width:33.333333%;text-align:center;}
 .radiusarea .inner{padding:10px 10px 0 10px;}

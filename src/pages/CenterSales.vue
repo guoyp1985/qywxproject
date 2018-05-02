@@ -217,7 +217,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .bk-salestopplate .numicon{
   position: absolute;
   top: 0;

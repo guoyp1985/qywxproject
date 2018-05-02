@@ -218,7 +218,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
 .rproductlist .scroll_item .icon{display:none;}
 .rproductlist .scroll_item .down.icon{
