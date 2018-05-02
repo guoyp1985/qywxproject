@@ -282,12 +282,14 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
+          type: toasttype,
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({name: '/article', query: { id: data.data }})
+              self.$router.push({ path: `/articles/${data.data}`, query: { newadd: 1 } })
             }
           }
         })

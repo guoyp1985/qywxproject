@@ -27,16 +27,24 @@
                   </div>
                 </div>
               </div>
-              <Listplate1 v-else v-for="(item,index1) in tabdata1" :key="item.id">
-                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
-                <div slot="title" class="clamp1 font16">{{item.title}}</div>
-                <div slot="title" class="clamp1 font12 color-gray v_middle">
-                    <span class="v_middle">{{ item.dateline | dateformat }}</span>
-                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
-                    <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+              <router-link :to="{path: `/articles/${item.id}`}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
+                <div class="t-table">
+                  <div class="t-cell v_middle w50">
+                    <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1 font16">{{item.title}}</div>
+                    <div class="clamp1 font12 color-gray v_middle">
+                        <span class="v_middle">{{ item.dateline | dateformat }}</span>
+                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
+                        <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+                    </div>
+                  </div>
+                  <div class="t-cell v_middle w50">
+                    <div class="qbtn1 bg-green color-white" @click="controlpopup1(item)">{{ $t('Control text') }}</div>
+                  </div>
                 </div>
-                <div class="qbtn1 bg-green color-white" @click="controlpopup1(item)">{{ $t('Control text') }}</div>
-              </Listplate1>
+              </router-link>
             </div>
           </template>
           <template v-if="(index == 1)">
@@ -51,16 +59,24 @@
                   </div>
                 </div>
               </div>
-              <Listplate1 v-else v-for="(item,index) in tabdata2" :key="item.id">
-                <img slot="pic" :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
-                <div slot="title" class="clamp1 font14">{{item.title}}</div>
-                <div slot="title" class="clamp1 mt5 font12 color-gray ">
-                    <span class="v_middle">{{ item.dateline | dateformat }}</span>
-                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
-                    <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+              <router-link :to="{path: `/articles/${item.id}`}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
+                <div class="t-table">
+                  <div class="t-cell v_middle w50">
+                    <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1 font16">{{item.title}}</div>
+                    <div class="clamp1 font12 color-gray v_middle">
+                        <span class="v_middle">{{ item.dateline | dateformat }}</span>
+                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
+                        <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+                    </div>
+                  </div>
+                  <div class="t-cell v_middle w50">
+                    <div class="qbtn1 bg-green color-white" @click="controlpopup1(item)">{{ $t('Control text') }}</div>
+                  </div>
                 </div>
-                <div class="qbtn1 bg-green color-white" @click="controlpopup2(item)">{{ $t('Control text') }}</div>
-              </Listplate1>
+              </router-link>
             </div>
           </template>
         </swiper-item>
@@ -119,7 +135,6 @@ Control text:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup } from 'vux'
-import Listplate1 from '@/components/Listplate1'
 import Time from '#/time'
 import ENV from '#/env'
 
@@ -132,7 +147,6 @@ export default {
     TabItem,
     Swiper,
     SwiperItem,
-    Listplate1,
     Group,
     TransferDom,
     Popup
@@ -202,7 +216,7 @@ export default {
     },
     getdata1 () {
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -220,7 +234,7 @@ export default {
     },
     getdata2 () {
       const self = this
-      let params = { do: 'list', pagestart: self.pagestart2, limit: self.limit }
+      let params = { from: 'retailer', do: 'list', pagestart: self.pagestart2, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -234,10 +248,12 @@ export default {
       })
     },
     controlpopup1 (item) {
+      event.preventDefault()
       this.showpopup1 = !this.showpopup1
       this.clickdata1 = item
     },
     controlpopup2 (item) {
+      event.preventDefault()
       this.showpopup2 = !this.showpopup2
       this.clickdata2 = item
     },
@@ -269,7 +285,6 @@ export default {
 </script>
 
 <style lang="less">
-.rnews .bk-listplate1 .iconcell{width:45px;}
 .vux-popup-dialog .weui-cell__bd{text-align:center;}
 .vux-popup-dialog .weui-cell__ft{display:none;}
 

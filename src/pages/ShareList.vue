@@ -1,10 +1,10 @@
 <template>
-  <div class="containerarea bg-white">
+  <div class="containerarea bg-white font14 rsharelist">
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100">
-          <div class="flex_cell font18 pl20">{{ user.linkman }}{{$t('Share')}}</div>
+          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}{{$t('Share')}}</div>
         </div>
       </div>
     </div>
@@ -12,18 +12,19 @@
       <div style="position:absolute;left:0;top:0;right:0;">
         <search
           class="x-search"
-          position="absolute"
-          auto-scroll-to-top top="0px"
-          @on-focus="onFocus"
-          @on-cancel="onCancel"
-          @on-submit="onSubmit"
+          :auto-fixed="autofixed"
+          @on-submit="onSubmit1"
+          @on-change="onChange1"
           ref="search">
         </search>
       </div>
       <div style="position:absolute;left:0;top:44px;right:0;bottom:0;overflow-y:auto;">
         <div class="scroll_list pl10 pr10">
-          <div class="scroll_item emptyitem flex_center" v-if="(!listdata || listdata.length == 0)">暂无分享数据</div>
-          <div v-else v-for="item in listdata" :key="item.id" class="scroll_item padding10">
+          <div v-if="!data || data.length === 0" class="scroll_item  emptyitem flex_center">
+            <template v-if="searchresult1">暂无搜索结果</template>
+            <template v-else>暂无分享数据</template>
+          </div>
+          <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item padding10">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;height:50px;">
                 <img :src="item.photo" style="width:40px;height:40px;" />
@@ -64,10 +65,6 @@ export default {
   components: {
     Search
   },
-  created () {
-    console.log(new Date().getTime())
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -75,35 +72,64 @@ export default {
   },
   data () {
     return {
-      user: {
-        uid: 187,
-        linkman: 'YOUNG'
-      },
-      listdata: [
-        {
-          id: '1', title: '医美运营营销36兵法攻略', dateline: 1524881282, visitor: 0, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15236697775676'
-        },
-        {
-          id: '2', title: '商品1', dateline: 1523694550, visitor: 10, photo: 'http://ossgxs.boka.cn/month_201804/15236839495706.jpg'
-        },
-        {
-          id: '3', title: 'YOUNG向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！', dateline: 1521694550, visitor: 32, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg'
-        }
-      ]
+      autofixed: false,
+      query: Object,
+      viewuser: Object,
+      data: [],
+      searchword1: '',
+      searchresult1: false,
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   methods: {
-    setFocus () {
+    onChange1 (val) {
+      this.searchword1 = val
     },
-    resultClick (item) {
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
     },
-    getResult (val) {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.data.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
     },
-    onSubmit () {
-    },
-    onFocus () {
-    },
-    onCancel () {
+    getdata1 () {
+      const self = this
+      let params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        self.searchresult1 = true
+        params.params.keyword = keyword
+      } else {
+        self.searchresult1 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/user/shareList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.data = self.data.concat(retdata)
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('.rsharelist .s-container')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
     },
     getDateState: function (dt) {
       return this.$util.getDateState(dt)
@@ -111,6 +137,21 @@ export default {
     getDateClass: function (dt) {
       return this.$util.getDateClass(dt)
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+      { params: { customeruid: self.query.uid } }
+    ).then(function (res) {
+      let data = res.data
+      if (data) {
+        self.viewuser = data.data ? data.data : data
+        document.title = `${self.viewuser.linkman}分享`
+      }
+    })
+    self.getdata1()
   }
 }
 </script>

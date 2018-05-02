@@ -209,6 +209,13 @@
     		</div>
       </template>
     </template>
+    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+			<div class="ico"><i class="al al-feiji"></i></div>
+			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+			<div class="pic">
+				<img src="../assets/images/share1.jpg" />
+			</div>
+		</div>
     <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
@@ -318,6 +325,7 @@ export default {
   data () {
     return {
       query: {},
+      showsharetip: true,
       productid: null,
       module: 'product',
       activityInfo: {},
@@ -353,6 +361,11 @@ export default {
       setTimeout(function () {
         self.isshowtop = false
       }, 5000)
+    }
+    if (self.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
     }
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
@@ -486,6 +499,9 @@ export default {
     }
   },
   methods: {
+    closeSharetip () {
+      this.showsharetip = false
+    },
     popupbuy () {
       this.showpopup = true
     },

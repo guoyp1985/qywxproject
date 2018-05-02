@@ -89,10 +89,13 @@ export default {
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.data = data.data ? data.data : data
-        for (let i = 0; i < self.data.length; i++) {
-          let d = self.data[i]
-          d.dateline = parseInt(Date.parse(d.time) / 1000)
+        let retdata = data.data ? data.data : data
+        if (!retdata.status) {
+          self.data = retdata
+          for (let i = 0; i < self.data.length; i++) {
+            let d = self.data[i]
+            d.dateline = parseInt(Date.parse(d.time) / 1000)
+          }
         }
       })
     }

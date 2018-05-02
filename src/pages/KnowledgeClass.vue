@@ -1,131 +1,157 @@
 /*
-* @description: 文章列表页
-* @auther: simon
-* @created_date: 2018-4-20
+* @description: 知识库列表页
+* @auther: gyp
+* @created_date: 2018-04-28
 */
 <template>
-  <div id="view-articles">
-    <sticky scroll-box="view-articles">
-      <tab v-model="selectedIndex" bar-active-color="#04be02">
-        <tab-item active-class="active-green" v-for="(tab, index) in tabs" :key="index" :selected="index===0" @on-item-click="onItemClick">{{ tab.title }}</tab-item>
-      </tab>
-    </sticky>
-    <swiper :list="headlines" v-model="swiperIndex" @on-index-change="onIndexChange"></swiper>
-    <div v-for="(tab, index) in tabs" :key="index" v-show="selectedIndex===index">
-      <panel v-if="oArticles.length" :list="oArticles | convert" type="5" @on-img-error="onImgError" @on-click-item="clickArticle"></panel>
-      <div v-else class="no-related-x color-gray">
-        <span>{{$t('No Related Articles')}}</span>
+  <div class="containerarea font14 bg-white knowledgeclass notop">
+    <div class="pagemiddle">
+      <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
+      <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item">
+        <div class="pic">
+          <div class="inner">
+            <img :src="item.photo" />
+          </div>
+        </div>
+        <div class="padding15 border-box">
+          <div class="font16">{{ item.title }}</div>
+          <div class="color-gray clamp2">{{ item.summary }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="pagebottom bottomnaviarea b_top_after">
+      <div class="t-table bottomnavi">
+        <router-link class="t-cell item" to="/centerSales">{{ $t('I am the seller') }}</router-link>
+        <div class="t-cell item">
+          <popover class="x-popover" placement="top" @on-show="onShow" @on-hide="onHide" >
+            <div slot="content" class="popover-demo-content">
+              <div class="x-popover-list">
+                <router-link class="pitem" to="/store">{{ $t('My shop') }}</router-link>
+                <router-link class="pitem" to="/retailerSalcechance">{{ $t('Sale chance') }}</router-link>
+                <router-link class="pitem" to="/retailerSales">{{ $t('Rebate customer') }}</router-link>
+                <router-link class="pitem" to="/retailerOrders">{{ $t('Order manage') }}</router-link>
+                <router-link class="pitem" to="/center">{{ $t('Personal Center') }}</router-link>
+              </div>
+            </div>
+            <div><img class="ico" src="../assets/images/icon-menu.png" /><span class="v_middle">{{ $t('Sales Assistant') }}</span></div>
+          </popover>
+        </div>
+        <router-link class="t-cell item" :to="{path: '/knowledgeclass', query: {classid: 1}}">{{ $t('Newcomer Guide') }}</router-link>
       </div>
     </div>
   </div>
 </template>
+
+<i18n>
+I am the seller:
+  zh-CN: 我是卖家
+Sales Assistant:
+  zh-CN: 销售助手
+Newcomer Guide:
+  zh-CN: 新手指南
+</i18n>
+
 <script>
-import { Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
-import Time from '#/time'
+import { Popover } from 'vux'
 import ENV from '#/env'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Sticky,
-    Swiper,
-    Panel
+    Popover
   },
   data () {
     return {
-      tabs: [],
-      headlines: [
-        {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/1.jpg',
-          title: '送你一朵fua'
-        },
-        {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/2.jpg',
-          title: '送你一辆车'
-        },
-        {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/5.jpg',
-          title: '送你一次旅行'
-        }
-      ],
-      oArticles: [],
-      selectedIndex: 0,
-      swiperIndex: 0
+      query: {},
+      data: [],
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
-  // computed: {
-  //   aritcles: {
-  //     get () {
-  //       return this.oArticles.map((article) => {
-  //         article.meta.date = new Time(article.meta.date).dateFormat('yyyy-MM-dd hh:mm')
-  //         return article
-  //       })
-  //     },
-  //     set (data) {
-  //       this.oArticles = data
-  //     }
-  //   }
-  // },
+  computed: {
+  },
   filters: {
-    convert (articles) {
-      return articles.map((article) => {
-        return {
-          id: article.id,
-          title: article.title,
-          desc: article.summary,
-          src: article.photo,
-          module: article.module,
-          meta: {
-            source: article.author,
-            date: new Time(article.dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
+  },
+  methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.data.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
           }
         }
       })
-    }
-  },
-  methods: {
-    onItemClick (index) {
-      this.getAritcles(index)
     },
-    onIndexChange (index) {
-      this.swiperIndex = index
-    },
-    onImgError () {
-
-    },
-    clickArticle (item) {
-      this.$router.push({path: `/articles/${item.id}`})
-    },
-    getInitData () {
+    getdata1 () {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/classList/news`)
-      .then(res => {
-        self.tabs = res.data.data
-        self.getAritcles(self.selectedIndex)
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      if (self.query.classid) {
+        params.params.classid = self.query.classid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/knowledge`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.data = self.data.concat(retdata)
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('.knowledgeclass .pagemiddle')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
       })
     },
-    getAritcles (index) {
-      const self = this
-      this.$http.get(`${ENV.BokaApi}/api/list/news?classid=0`) // ${this.tabs[index].id}
-      .then(res => {
-        self.oArticles = res.data
-      })
+    onShow () {
+      console.log('on show')
+    },
+    onHide () {
+      console.log('on hide')
     }
   },
   created () {
-    this.getInitData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.query = self.$route.query
+    self.getdata1()
   }
 }
 </script>
 
 <style lang="less">
-#view-articles .active-green {
-  color: #04be02 !important;
-  border-color: #04be02 !important;
+.knowledgeclass .scroll_item{
+  box-shadow: 0 1px 2px rgba(0,0,0,.3);
+  position: relative;
+  border-radius: 2px;
+}
+.knowledgeclass .scroll_item:not(:last-child){margin-bottom:10px;}
+.knowledgeclass .scroll_item .pic{
+  padding-bottom:55%;
+  position:relative;
+}
+.knowledgeclass .scroll_item .pic .inner{
+  position:absolute;
+  left:0;right:0;bottom:0;top:0;
+}
+.knowledgeclass .scroll_item .pic img{
+  width:100%;height:100%;vertical-algin:middle;
+}
+.x-popover-list .pitem{
+  position:relative;
+  padding:10px;
+  display:block;
+}
+.x-popover-list .pitem:not(:last-child):after{
+  content:"";display:block;
+	background-color:@list-border-color;height:1px;overflow:hidden;
+	position: absolute;left: 0;right: 0;bottom:0px;
+	-webkit-transform: scaleY(0.5) translateY(0.5px);
+	transform: scaleY(0.5) translateY(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
 }
 </style>
