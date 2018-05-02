@@ -14,7 +14,7 @@
           <div class="ol-contact">
             <router-link to="">
               <span class="al al-pinglun3 color-order-detail font14"></span>
-              <span class="font13">{{$t('Online Contact')}}</span>
+              <span class="font13">{{$t('Contact Seller')}}</span>
             </router-link>
           </div>
           <div class="wx-contact">
@@ -27,7 +27,7 @@
       </div>
     </sticky>
     <group class="shipping-card">
-      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: `/shippingDetails/${expressNumber}` }"></cell>
+      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: `/shippingDetails/${id}` }"></cell>
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
     </group>

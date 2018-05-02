@@ -40,8 +40,8 @@
     <div class="pay-info">
       <span class="font12">共{{item.quantity}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
-    <div class="operate-area">
-      <x-button mini v-for="(button, index) in buttons[item.type]" :key="index" @click.native="buttonClick(button.type)">{{button.name}}</x-button>
+    <div class="operate-area" v-if="item.buttons.length">
+      <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
     </div>
   </div>
 </template>
@@ -76,15 +76,7 @@ export default {
     },
     buttons: {
       type: Array,
-      default: () => [
-        [],
-        [
-          {
-            type: 1,
-            name: '评价'
-          }
-        ]
-      ]
+      default: () => []
     }
   },
   computed: {
@@ -102,12 +94,7 @@ export default {
   },
   methods: {
     buttonClick (type) {
-      switch (type) {
-        case 1:
-          this.$emit('on-eval')
-          break
-        default:
-      }
+      this.$emit('on-process', type, this.item)
     }
   }
 }
@@ -182,5 +169,8 @@ export default {
 /* vux css hack */
 .order-info .weui-btn + .weui-btn {
   margin-top: 0;
+}
+.order-info .weui-btn {
+  margin-left: 5px;
 }
 </style>
