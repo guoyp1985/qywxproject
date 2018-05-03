@@ -70,6 +70,7 @@
         <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
       </comment>
     </div>
+    <editor></editor>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
@@ -80,6 +81,7 @@ import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
+import Editor from '@/components/Editor'
 import Time from '#/time'
 import ENV from '#/env'
 import { User } from '#/storage'
@@ -92,7 +94,8 @@ export default {
     TitleTip,
     Comment,
     Reply,
-    CommentPopup
+    CommentPopup,
+    Editor
   },
   data () {
     return {
