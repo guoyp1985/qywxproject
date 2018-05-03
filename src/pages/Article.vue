@@ -25,7 +25,7 @@
         <span class="article-ex"></span>
         <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
       </div>
-      <div class="article-content" v-html="article.content"></div>
+      <div id="editor-content" class="article-content" v-html="article.content"></div>
       <div class="operate-area">
         <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
           <span class="fa fa-star-o"></span>
@@ -70,7 +70,7 @@
         <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
       </comment>
     </div>
-    <editor></editor>
+    <editor elem="#editor-content"></editor>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
