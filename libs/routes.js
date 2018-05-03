@@ -62,6 +62,9 @@ import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
 import Deliverinfo from '@/pages/Deliverinfo'
 import Groupbuy from '@/pages/Groupbuy'
 import KnowledgeClass from '@/pages/KnowledgeClass'
+import SaleProducts from '@/pages/SaleProducts'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
 
 export default [
   {
@@ -402,5 +405,20 @@ export default [
     path: '/knowledgeClass',
     name: 'tKnowledgeClass',
     component: KnowledgeClass
+  },
+  {
+    path: '/saleProducts',
+    name: 'tSaleProducts',
+    component: SaleProducts
+  },
+  {
+    path: '/poster',
+    name: 'tPoster',
+    component: Poster
+  },
+  {
+    path: '/posterDetail',
+    name: 'tPosterDetail',
+    component: PosterDetail
   }
 ]

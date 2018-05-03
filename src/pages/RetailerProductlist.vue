@@ -55,12 +55,30 @@
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list" v-if="clickdata">
+            <div class="item">
+              <router-link class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
+            </div>
+            <div class="item" v-if="clickdata.moderate == 0">
+              <div class="inner" @click="clickpopup('up')">上架</div>
+            </div>
+            <div class="item" v-else-if="clickdata.moderate == 1">
+              <div class="inner" @click="clickpopup('down')">下架</div>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/productStat', query: {id: clickdata.id}}">统计</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/poster', query: {id: clickdata.id, module: 'product'}}">生成海报</router-link>
+            </div>
+
+            <!--
             <div class="item" v-for="(row,index1) in controldata1" :key="index1">
               <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
               <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
               <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
               <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
             </div>
+          -->
             <div class="item close mt10" @click="clickpopup('row.key')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
