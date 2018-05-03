@@ -275,6 +275,15 @@ en:
   I am the seller: I am the seller
   Sales Assistant: Sales Assistant
   Newcomer Guide: Newcomer Guide
+  Selected: Selected
+  Promotion: Promotion
+  Generating poster: Generating poster
+  Choice cover photo: Choice cover photo
+  Main title: Main title
+  Input main title: Input main title
+  Subtitle: Subtitle
+  Input subtitle: Input subtitle
+  Upload images: Upload images
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -674,6 +683,8 @@ zh-CN:
   tRebateApply: 返点客申请
   tPay: 微信安全支付
   tKnowdedgeClass: 知识库
+  tSaleProducts: 精品促销
+  tUserPoster: 生成海报
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
@@ -695,3 +706,12 @@ zh-CN:
   I am the seller: 我是卖家
   Sales Assistant: 销售助手
   Newcomer Guide: 新手指南
+  Selected: 精选
+  Promotion: 促销
+  Generating poster: 生成海报
+  Choice cover photo: 选择已有封面图
+  Main title: 主标题
+  Input main title: 请输入主标题 30字以内
+  Subtitle: 副标题
+  Input subtitle: 请输入副标题 30字以内
+  Upload images: 上传图像

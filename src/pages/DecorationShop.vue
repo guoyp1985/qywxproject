@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14 s-havebottom rproductlist">
+  <div class="containerarea bg-page font14 s-havebottom decorationshop">
     <div class="s-container" style="top:0px;">
       <div class="scroll_list bg-page">
         <template v-if="!productdata || productdata.length == 0">
@@ -27,7 +27,7 @@
                   <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
                 </div>
                 <div class="align_right pr10">
-                  <div class="btnicon" style="padding: 1px 8px;" @click="showpopupclick(item,index)">{{ $t('Rolling show') }}</div>
+                  <div class="qbtn2" @click="showRolling(item,index)">{{ $t('Rolling show') }}</div>
                 </div>
         			</div>
         		</div>
@@ -37,7 +37,7 @@
     </div>
     <div class="s-bottom">
       <div class="t-table h_100 align_center">
-        <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/retailerShop', query: { wid: loginuser.uid}}">{{ $t('Back go shop') }}</router-link>
+        <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/store'}">{{ $t('Back go shop') }}</router-link>
         <router-link class="t-cell h_100 v_middle bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
       </div>
     </div>
@@ -49,18 +49,21 @@
             <div class="padding10">
               <div class="pt10 pb5">（图像最佳宽高比为9:5）</div>
               <div>
-                <input type="hidden" name="qrcode" required="" :value="clickdata.photo" class="no-fastclick">
-                <div class="q_photolist align_left" uploadform=".uploadfileForm">
+                <input type="hidden" name="photo" />
+                <div class="q_photolist align_left">
                   <template v-if="photoarr.length > 0">
                     <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                      <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
+                      <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
                         <div class="close" @click="deletephoto(item,index)">×</div>
+                        <div class="clip"><i class="al al-set"></i></div>
                       </div>
                     </div>
                   </template>
                   <div v-if="photoarr.length < maxnum" class="photoitem add">
                     <div class="inner">
-                      <input type="file" style="position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;" @change="filechange">
+                      <form class="fileform" enctype="multipart/form-data">
+                        <input class="fileinput" type="file" name="files" @change="filechange" />
+                      </form>
                       <div class="t-table">
                         <div class="t-cell">
                           <div class="txt">
@@ -73,18 +76,14 @@
                   </div>
                 </div>
               </div>
-              <div class="mt12 font12 color-red" v-if="showtip">{{ $t('Please upload rolling show photo') }}</div>
   					</div>
           </div>
-          <div class="popup-bottom flex_center" @click="closepopup">
+          <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup">{{ $t('Close') }}</div>
             <div class="flex_cell flex_center h_100 bg-green color-white" @click="subphoto">{{ $t('Confirm txt') }}</div>
           </div>
         </div>
       </popup>
-    </div>
-    <div v-transfer-dom>
-      <alert v-model="showalert">{{ $t('Please upload rolling show photo') }}</alert>
     </div>
   </div>
 </template>
@@ -102,6 +101,7 @@ Please upload rolling show photo:
 
 <script>
 import { TransferDom, Popup, Confirm, Alert } from 'vux'
+import ENV from '#/env'
 
 export default {
   directives: {
@@ -112,44 +112,21 @@ export default {
     Confirm,
     Alert
   },
-  created: function () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
-      this.havenum = this.clickdata.rollingphoto.split(',')
-    } else {
-      this.havenum = 0
-    }
-  },
   data () {
     return {
       loginuser: { uid: 187 },
-      productdata: [
-        { 'id': 124, isfinished: 1, moderate: 0, 'title': '苹果手机', 'photo': 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', 'price': '8,000.00', rollingphoto: '' },
-        { 'id': 113, isfinished: 0, moderate: 1, 'title': '维生素B族片', 'photo': 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg', 'price': '1.00', 'saled': 1, rollingphoto: '' },
-        { 'id': 107, isfinished: 1, moderate: 1, 'title': '大王卡', 'photo': 'http://ossgxs.boka.cn/month_201803/15222378479011.jpg', 'price': '12.00', 'saled': 0, rollingphoto: '' },
-        { 'id': 106, isfinished: 0, moderate: 1, 'title': '测试分享商品通知', 'photo': 'http://ossgxs.boka.cn/month_201803/15222375843651.jpg', 'price': '1.00', 'saled': 0, rollingphoto: '' },
-        { 'id': 105, isfinished: 1, moderate: 0, 'title': '测试商品分享', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'price': '1.00', 'saled': 0, rollingphoto: '' },
-        { 'id': 103, isfinished: 1, moderate: 0, 'title': '测试商品图片', 'photo': 'http://ossgxs.boka.cn/month_201803/15222183428017.jpg?x-oss-process=image/crop,x_-109,y_-103,w_1086,h_1086', 'price': '10.00', 'saled': 2, rollingphoto: '' },
-        { 'id': 98, isfinished: 0, moderate: 0, 'title': '111', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15221287780438.jpg', 'price': '222.00', 'saled': 0, rollingphoto: '' },
-        { 'id': 92, isfinished: 0, moderate: 0, 'title': '商品2', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220609241178.png', 'price': '12.00', 'saled': 0, rollingphoto: '' },
-        { 'id': 91, isfinished: 0, moderate: 0, 'title': '商品1', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'price': '1.00', 'saled': 1, rollingphoto: '' },
-        { 'id': 89, isfinished: 0, moderate: 0, 'title': '啊', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220603289333.jpg', 'price': '1.00', 'saled': 0, rollingphoto: '' }
-      ],
-      controldata1: [
-        { key: 'edit', title: '编辑' },
-        { key: 'up', title: '上架' },
-        { key: 'down', title: '下架' },
-        { key: 'stat', title: '统计' },
-        { key: 'createposter', title: '生成海报' }
-      ],
+      productdata: [],
       clickdata: {},
       clickindex: 0,
       showphotopop: false,
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      showalert: false,
-      showtip: false
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null,
+      rollingData: null
     }
   },
   watch: {
@@ -157,11 +134,7 @@ export default {
       return this.photoarr
     },
     havenum: function () {
-      let len = 0
-      if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
-        len = this.clickdata.rollingphoto.split(',')
-      }
-      return len
+      return this.photoarr.length
     }
   },
   computed: {
@@ -170,38 +143,98 @@ export default {
     }
   },
   methods: {
-    showpopupclick (item, index) {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { params: { from: 'myshop', pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.decorationshop .s-container')
+          if (items.length > 1) {
+            self.scrollArea1 = items[0]
+            self.isBindScroll1 = true
+            self.scrollArea1.removeEventListener('scroll', self.scroll1)
+            self.scrollArea1.addEventListener('scroll', self.scroll1)
+          }
+        }
+      })
+    },
+    showRolling (item, index) {
       event.preventDefault()
       let self = this
       self.showphotopop = !this.showphotopop
       self.clickdata = item
       self.clickindex = index
-      if (item.rollingphoto && item.rollingphoto !== '') {
-        self.photoarr = item.rollingphoto.split(',')
-      } else {
-        self.photoarr = []
-      }
-      self.havenum = self.photoarr.length
-      if (self.havenum > self.maxnum) {
-        self.havenum = self.maxnum
-      }
-    },
-    popupevent (status) {
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'show', id: self.clickdata.id }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        if (retdata && retdata.photo) {
+          self.rollingData = retdata
+          self.photoarr = retdata.photo.split(',')
+        }
+      })
     },
     filechange (e) {
-      if (this.havenum < this.maxnum) {
-        this.havenum += 1
-        this.photoarr.push('http://ossgxs.boka.cn/month_201804/15231791164010.jpg')
+      const self = this
+      let files = e.target.files
+      if (files.length > 0) {
+        let fileform = document.querySelector('.fileform')
+        let filedata = new FormData(fileform)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1) {
+            self.photoarr.push(data.data)
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
       }
     },
     deletephoto (item, index) {
-      for (var i = 0; i < this.photoarr.length; i++) {
-        if (i === index) {
-          this.photoarr.splice(i, 1)
-          this.havenum -= 1
-          break
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除图像吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'delete', id: self.rollingData.id }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.rollingData = null
+                  self.photoarr.splice(index, 1)
+                }
+              }
+            })
+          })
         }
-      }
+      })
     },
     closepopup () {
       this.showphotopop = false
@@ -209,11 +242,48 @@ export default {
     subphoto () {
       let self = this
       if (self.photoarr.length === 0) {
-        self.showalert = true
+        self.$vux.alert.show({
+          title: '',
+          content: '请上传滚动展示图像',
+          onShow () {
+          },
+          onHide () {
+            self.allowsubmit = true
+          }
+        })
+        return false
       } else {
-        self.clickdata.rollingphoto = self.photoarr.join(',')
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'add', id: self.clickdata.id, topbanner: self.photoarr.join(',') }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          let toasttype = data.flag !== 1 ? 'warn' : 'success'
+          self.$vux.toast.show({
+            text: data.error,
+            type: toasttype,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.showphotopop = false
+                self.photoarr = []
+                self.rollingData = null
+              }
+            }
+          })
+        })
       }
     }
+  },
+  created: function () {
+    let self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
+      this.havenum = this.clickdata.rollingphoto.split(',')
+    } else {
+      this.havenum = 0
+    }
+    self.$vux.loading.show()
+    self.getdata1()
   }
 }
 </script>
