@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bargainbuyview" style="overflow-y:auto;">
+  <div class="containerarea font14 bargainbuydetail" style="overflow-y:auto;">
     <div class="topimg">
       <img src="../assets/images/bargainbuy_2.png">
     </div>
@@ -39,32 +39,38 @@
             <div class="t-cell align_right">最低价</div>
           </div>
           <div class="priceline">
-            <div class="line linepercent" style="width:0%;"></div>
+            <div class="line linepercent" :style="`width:${crowduser.cutpercent}%;`"></div>
           </div>
           <div class="t-table">
             <div class="t-cell align_left">￥{{ product.price }}</div>
-            <div class="t-cell align_center">￥{{ cutinfo.cutprice }}</div>
+            <div class="t-cell align_center">￥{{ crowduser.leftmoney }}</div>
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
-        <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
-        <template v-else>
-          <div v-if="data.isfinished" class="btn">指定时间内未完成砍价，砍价失败</div>
-          <template v-else>
-          </template>
-        </template>
-        <template v-else>
-          <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-          <div v-if="crowduser" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
-            <span class="v_middle db-in">还剩</span>
-            <span class="v_middle db-in">{{ lefthour }}</span>
-            <span class="v_middle db-in">:</span>
-            <span class="v_middle db-in">{{ leftminute }}</span>
-            <span class="v_middle db-in">:</span>
-            <span class="v_middle db-in">{{ leftsecond }}</span>
-            <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+        <div class="t-table">
+          <div v-if="data.leftstorage <= 0" class="t-cell">
+            <div class="btn db">商品已售罄，本次活动结束</div>
           </div>
-        </template>
+          <template v-else>
+            <div v-if="crowduser.isovertime && !crowduser.isfull" class="t-cell">
+              <div class="btn db">砍价失败</div>
+            </div>
+            <template v-else>
+              <div v-if="crowduser.isfull" class="t-cell">
+                <div class="btn db">已完成砍价</div>
+              </div>
+              <div v-else-if="!crowduser.isovertime" class="t-cell">
+                <div class="btn db" @click="cutevent">帮TA砍价</div>
+              </div>
+              <div v-if="data.havecreate" class="t-cell">
+                <router-link :to="{path: '/bargainbuy', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
+              </div>
+              <div v-else-if="!data.isfinished && !data.havecreate" class="t-cell">
+                <div class="btn db" @click="joinin">我要参与</div>
+              </div>
+            </template>
+          </template>
+        </div>
       </div>
     </div>
     <div>
@@ -97,14 +103,6 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showpopup" height="100%">
-        <div class="popup1 invitelayer" @click="closeinvite">
-          <div class="iconarea" style="padding:15px 40px;"><i class="al al-feiji font60" style="color:rgba(255,255,255,0.9)"></i></div>
-          <div class="txtarea align_center color-fff font16" style="line-height:26px;text-shadow: -2px 0px 1px #000;">点击右上角“···”发送给微信好友<br>邀请对方帮你砍价！</div>
-        </div>
-      </popup>
-    </div>
   </div>
 </template>
 
@@ -113,83 +111,85 @@
 
 <script>
 
-import { TransferDom, Popup } from 'vux'
+import { Countdown } from 'vux'
 import Time from '#/time'
 import ENV from '#/env'
-import { User } from '#/storage'
 
 export default {
-  directives: {
-    TransferDom
+  name: 'BargainbuyDetail',
+  props: {
+    data: Object,
+    crowduser: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    user: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    onJoin: Function,
+    onCut: Function
   },
   components: {
-    Popup
+    Countdown
   },
   data () {
     return {
       loginUser: Object,
-      showpopup: false,
-      cutinfo: {
-        price: '8,000.00',
-        minprice: '1000.00',
-        cutprice: '0.00'
-      },
+      product: Object,
+      nowdateline: new Date().getTime() / 1000,
+      isfull: false,
+      canbuy: true,
       lefthour: '',
       leftminute: '',
       leftsecond: '',
-      data: Object,
-      product: Object,
-      cutdata: [],
-      crowduser: { avatar: '/src/assets/images/user.jpg' }
+      cutdata: []
     }
+  },
+  created () {
+    const self = this
+    if (self.data) {
+      self.product = self.data.product
+    }
+    if (self.crowduser) {
+      self.lefthour = self.crowduser.timeleft.hour
+      self.leftminute = self.crowduser.timeleft.minute
+      self.leftsecond = self.crowduser.timeleft.second
+      self.cutdown()
+    }
+    self.getCutuser()
   },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
-      params: { id: self.query.id, crowduserid: self.query.crowduserid }
-    }).then(function (res) {
-      let data = res.data
-      self.data = data.data ? data.data : data
-      self.crowduser = self.data.crowduser
-      document.title = self.data.title
-      // let lurl = location.href
-      // let wxData = {
-      //   title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-      //   desc: '好友帮帮忙，优惠享更多！',
-      //   link: `${lurl}&share_uid=${self.loginUser.uid}`,
-      //   imgUrl: self.data.photo
-      // }
-      if (self.data) {
-        self.product = self.data.product
-      }
-      if (self.crowduser) {
-        self.lefthour = self.crowduser.timeleft.hour
-        self.leftminute = self.crowduser.timeleft.minute
-        self.leftsecond = self.crowduser.timeleft.second
-        self.cutdown()
-      }
-      return self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.query.id })
-    }).then(function (res) {
-      // let data = res.data
-    })
+  watch: {
+    data () {
+      return this.data
+    },
+    crowduser () {
+      return this.data.crowduser
+    }
   },
   methods: {
-    joinin () {
-      this.$router.push('/retailerShop')
-    },
-    inviteevent () {
-      this.showpopup = true
-    },
-    closeinvite () {
-      this.showpopup = false
+    cutevent () {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.onCut && self.onCut()
+              self.getCutuser()
+            }
+          }
+        })
+      })
     },
     cutdown () {
       const self = this
@@ -227,19 +227,43 @@ export default {
           self.isfinish = true
         }
       }, 1000)
+    },
+    joinin () {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.onJoin && self.onJoin(data.data)
+            }
+          }
+        })
+      })
+    },
+    getCutuser () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
+        let data = res.data
+        self.cutdata = data.data ? data.data : data
+      })
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
-.bargainbuyview {
+<style lang="less">
+.bargainbuydetail {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }
-.bargainbuyview .topimg{position:absolute;left:0;top:0;width:100%;}
-.bargainbuyview .topimg img{width:100%;max-height:240px;vertical-align: middle;}
-.bargainbuyview .b_header{width:100%;height:90px;padding-top:30px;overflow:hidden;position: relative;}
-.bargainbuyview .b_header .inner {
+.bargainbuydetail .topimg{position:absolute;left:0;top:0;width:100%;}
+.bargainbuydetail .topimg img{width:100%;max-height:240px;vertical-align: middle;}
+.bargainbuydetail .b_header{width:100%;height:90px;padding-top:30px;overflow:hidden;position: relative;}
+.bargainbuydetail .b_header .inner {
     width: 168px;
     height: 168px;
     box-sizing:border-box;
@@ -249,18 +273,18 @@ export default {
     background: #FDC45D;
     margin:0 auto;
 }
-.bargainbuyview .b_header .pic{width:60px;margin:0 auto;}
-.bargainbuyview .b_header .pic img{width:60px;height:60px;border-radius:50%;vertical-align:middle;}
-.bargainbuyview .boxarea {
+.bargainbuydetail .b_header .pic{width:60px;margin:0 auto;}
+.bargainbuydetail .b_header .pic img{width:60px;height:60px;border-radius:50%;vertical-align:middle;}
+.bargainbuydetail .boxarea {
   width: 94%;
   box-sizing:border-box;
   position:relative;
-  margin:0 auto;
+  margin:-1px auto 0;
   background: #FDC45D;
   border-radius: 13px;
   padding: 16px 12px 16px 12px;
 }
-.bargainbuyview .boxarea .inner {
+.bargainbuydetail .boxarea .inner {
     border-radius: 8px;
     background: white;
     margin-top: 5px;
@@ -268,37 +292,37 @@ export default {
     position: relative;
     cursor: pointer;
 }
-.bargainbuyview .boxarea .innerbg {
+.bargainbuydetail .boxarea .innerbg {
     border-radius: 7px;
     background: #F7F7F7;
     padding: 6px;
 }
-.bargainbuyview .boxarea .pic{width:80px;}
-.bargainbuyview .boxarea .pic img{width:70px;height:70px;vertical-align:middle;}
+.bargainbuydetail .boxarea .pic{width:80px;}
+.bargainbuydetail .boxarea .pic img{width:70px;height:70px;vertical-align:middle;}
 
-.bargainbuyview .boxarea1{width:94%;margin:0 auto;}
-.bargainbuyview .boxarea1 .inner{
+.bargainbuydetail .boxarea1{width:94%;margin:0 auto;}
+.bargainbuydetail .boxarea1 .inner{
   background-color: #FDC45D;border-radius: 13px;padding:11px 15px 8px 15px;
 }
-.bargainbuyview .boxarea1 .pricearea{
+.bargainbuydetail .boxarea1 .pricearea{
   width: 90%;
   margin: 20px auto 0;
   color: #C93A3A;
 }
-.bargainbuyview .priceline {
+.bargainbuydetail .priceline {
   margin: 12px auto;
   background-color: rgba(255, 255, 255, 0.75);
   width: 100%;
   height: 10px;
   border-radius: 5px;
 }
-.bargainbuyview .line {
+.bargainbuydetail .line {
   width: 0%;
   height: 100%;
   background-image: linear-gradient(0deg, #EC3F57 0%, #FF8147 99%);
   border-radius: 5px;
 }
-.bargainbuyview .btn{
+.bargainbuydetail .btn{
   width: 90%;
   background-image: linear-gradient(90deg, #EC3F57 0%, #FF8147 99%);
   box-shadow: 0 5px 8px 0 #C13123;
@@ -311,7 +335,7 @@ export default {
   margin: 16px auto 10px auto;
   cursor: pointer;
 }
-.bargainbuyview .boxtitle {
+.bargainbuydetail .boxtitle {
     background: #C93A3A;
     border-radius: 6px 6px 0 0;
     width: 160px;
@@ -322,29 +346,23 @@ export default {
     text-align: center;
     margin: 20px auto 0px auto;
 }
-.bargainbuyview .titleline{
+.bargainbuydetail .titleline{
   width: 94%;padding-left: 24px;padding-right: 24px;margin:0 auto;
   box-sizing: border-box;
 }
-.bargainbuyview .titleline .inner{
+.bargainbuydetail .titleline .inner{
   background: #C93A3A;border-radius: 100px;height: 8px;width: 100%;
 }
-.bargainbuyview .listarea{
+.bargainbuydetail .listarea{
   background: #F8F8F8; border-radius: 24px;padding: 1px 12px 1px 12px;margin: -5px 5px 5px 5px;
   box-sizing: border-box;
 }
-.bargainbuyview .scroll_list{margin:20px auto;}
-.bargainbuyview .listarea .scroll_item {
+.bargainbuydetail .scroll_list{margin:20px auto;}
+.bargainbuydetail .listarea .scroll_item {
     border-radius: 6px;
     padding-left: 10px;
     height: 60px;
     margin-top: 10px;
     background-color: #E0E0E0;
-}
-.invitelayer{width:100%;height:100%;position:relative;background: rgba(0, 0, 0, 0.85);}
-.invitelayer .iconarea{text-align:right;padding:15px 40px;color:rgba(255,255,255,0.9);}
-.invitelayer .txtarea{
-  text-align:center;color:#fff;font-size:16px;
-  line-height:26px;text-shadow: -2px 0px 1px #000;
 }
 </style>

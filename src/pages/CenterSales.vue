@@ -20,17 +20,19 @@
         <span class="ml3">{{$t('Myrevenue')}}</span>
       </router-link>
     </Salestopplate>
-    <div class="vux-marquee" item-height=40 duration=2000>
-      <marquee>
+    <div class="vux-marquee">
+      <marquee :item-height=40 :interval=5000 :duration=1000>
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
-            <CellBox align-items="left" class="font12 db-flex">
-              <span class="clamp1">
-                <span class="color-blue mr3">{{item.username}}</span>
-                <span class="color-gray1">查看了《{{item.title}}》</span>
-              </span>
-              <span class="w80 align_right color-gray1">{{ item.dateline | dateformat }}</span>
-            </CellBox>
+            <router-link :to="{path: `/${item.module}Stat`, query: {id: item.id}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
+              <div class="t-cell v_middle h_100">
+                <div class="clamp1">
+                  <span class="v_middle color-blue mr3">{{item.username}}</span>
+                  <span class="v_middle color-gray1">查看了《{{item.title}}》</span>
+                </div>
+              </div>
+              <div class="t-cell v_middle h_100 w80 align_right color-gray1">{{ item.dateline | dateformat }}</div>
+            </router-link>
           </group>
         </marquee-item>
       </marquee>

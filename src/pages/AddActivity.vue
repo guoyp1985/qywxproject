@@ -370,8 +370,10 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
+          type: toasttype,
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {

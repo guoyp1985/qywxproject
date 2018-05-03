@@ -39,31 +39,33 @@
             <div class="t-cell align_right">最低价</div>
           </div>
           <div class="priceline">
-            <div class="line linepercent" style="width:0%;"></div>
+            <div class="line linepercent" :style="`width:${crowduser.cutpercent}%;`"></div>
           </div>
           <div class="t-table">
             <div class="t-cell align_left">￥{{ product.price }}</div>
-            <div class="t-cell align_center">￥{{ cutinfo.cutprice }}</div>
+            <div class="t-cell align_center">￥{{ crowduser.leftmoney }}</div>
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
         <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
         <template v-else>
-          <div v-if="data.isfinished" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <div v-if="data.isovertime" class="btn">指定时间内未完成砍价，砍价失败</div>
           <template v-else>
+            <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
+            <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
+            <template v-if="crowduser.isfull == 0">
+              <div class="btn db" @click="inviteevent">邀请好友砍价</div>
+              <div v-if="crowduser" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+                <span class="v_middle db-in">还剩</span>
+                <span class="v_middle db-in">{{ lefthour }}</span>
+                <span class="v_middle db-in">:</span>
+                <span class="v_middle db-in">{{ leftminute }}</span>
+                <span class="v_middle db-in">:</span>
+                <span class="v_middle db-in">{{ leftsecond }}</span>
+                <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+              </div>
+            </template>
           </template>
-        </template>
-        <template v-else>
-          <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-          <div v-if="crowduser" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
-            <span class="v_middle db-in">还剩</span>
-            <span class="v_middle db-in">{{ lefthour }}</span>
-            <span class="v_middle db-in">:</span>
-            <span class="v_middle db-in">{{ leftminute }}</span>
-            <span class="v_middle db-in">:</span>
-            <span class="v_middle db-in">{{ leftsecond }}</span>
-            <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
-          </div>
         </template>
       </div>
     </div>
@@ -112,13 +114,23 @@
 </i18n>
 
 <script>
-
 import { TransferDom, Popup } from 'vux'
-import Time from '#/time'
 import ENV from '#/env'
-import { User } from '#/storage'
 
 export default {
+  name: 'BargainbuyView',
+  props: {
+    data: Object,
+    crowduser: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    user: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    onJoin: Function
+  },
   directives: {
     TransferDom
   },
@@ -127,64 +139,35 @@ export default {
   },
   data () {
     return {
+      query: {},
       loginUser: Object,
+      product: Object,
       showpopup: false,
-      cutinfo: {
-        price: '8,000.00',
-        minprice: '1000.00',
-        cutprice: '0.00'
-      },
       lefthour: '',
       leftminute: '',
       leftsecond: '',
-      data: Object,
-      product: Object,
-      cutdata: [],
-      crowduser: { avatar: '/src/assets/images/user.jpg' }
-    }
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd')
+      cutdata: []
     }
   },
   created () {
     const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
-      params: { id: self.query.id, crowduserid: self.query.crowduserid }
-    }).then(function (res) {
+    if (self.data) {
+      self.product = self.data.product
+    }
+    console.log(self.crowduser)
+    if (self.crowduser) {
+      self.lefthour = self.crowduser.timeleft.hour
+      self.leftminute = self.crowduser.timeleft.minute
+      self.leftsecond = self.crowduser.timeleft.second
+      self.cutdown()
+    }
+    self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
       let data = res.data
-      self.data = data.data ? data.data : data
-      self.crowduser = self.data.crowduser
-      document.title = self.data.title
-      // let lurl = location.href
-      // let wxData = {
-      //   title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-      //   desc: '好友帮帮忙，优惠享更多！',
-      //   link: `${lurl}&share_uid=${self.loginUser.uid}`,
-      //   imgUrl: self.data.photo
-      // }
-      if (self.data) {
-        self.product = self.data.product
-      }
-      if (self.crowduser) {
-        self.lefthour = self.crowduser.timeleft.hour
-        self.leftminute = self.crowduser.timeleft.minute
-        self.leftsecond = self.crowduser.timeleft.second
-        self.cutdown()
-      }
-      return self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.query.id })
-    }).then(function (res) {
-      // let data = res.data
+      self.cutdata = data.data ? data.data : data
     })
   },
   methods: {
-    joinin () {
-      this.$router.push('/retailerShop')
-    },
     inviteevent () {
       this.showpopup = true
     },
@@ -227,12 +210,37 @@ export default {
           self.isfinish = true
         }
       }, 1000)
+    },
+    buyevent () {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要购买吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.uploader }
+          if (self.query.share_uid) {
+            params.share_uid = self.query.share_uid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/order/addShop`, params).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            if (data.flag === 1) {
+              self.$router.push({ path: '/addOrder', query: { id: self.product.id } })
+            } else if (data.error) {
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
+            }
+          })
+        }
+      })
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .bargainbuyview {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }
@@ -255,7 +263,7 @@ export default {
   width: 94%;
   box-sizing:border-box;
   position:relative;
-  margin:0 auto;
+  margin:-1px auto 0;
   background: #FDC45D;
   border-radius: 13px;
   padding: 16px 12px 16px 12px;

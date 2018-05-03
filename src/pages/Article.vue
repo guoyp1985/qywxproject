@@ -5,6 +5,13 @@
 */
 <template>
   <div id="article-content">
+    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+			<div class="ico"><i class="al al-feiji"></i></div>
+			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+			<div class="pic">
+				<img src="../assets/images/share1.jpg" />
+			</div>
+		</div>
     <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
     <div class="article-view">
       <div class="article-title">
@@ -89,6 +96,8 @@ export default {
   },
   data () {
     return {
+      query: Object,
+      showsharetip: true,
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
@@ -106,6 +115,9 @@ export default {
     }
   },
   methods: {
+    closeSharetip () {
+      this.showsharetip = false
+    },
     onReplyShow () {
       this.replyPopupShow = true
     },
@@ -226,8 +238,15 @@ export default {
     }
   },
   created () {
+    const self = this
     this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.query = self.$route.query
+    if (self.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
+    }
   }
 }
 </script>

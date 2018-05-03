@@ -272,6 +272,9 @@ en:
   Groupprice: Groupprice
   Group numbers: Group numbers
   Person: Person
+  I am the seller: I am the seller
+  Sales Assistant: Sales Assistant
+  Newcomer Guide: Newcomer Guide
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -524,7 +527,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -670,6 +673,7 @@ zh-CN:
   tRetailerApply: 申请入驻
   tRebateApply: 返点客申请
   tPay: 微信安全支付
+  tKnowdedgeClass: 知识库
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
@@ -688,3 +692,6 @@ zh-CN:
   Group numbers: 成团人数
   Person: 人
   Online consulting: 在线咨询
+  I am the seller: 我是卖家
+  Sales Assistant: 销售助手
+  Newcomer Guide: 新手指南

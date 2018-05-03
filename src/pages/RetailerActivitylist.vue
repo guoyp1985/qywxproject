@@ -75,7 +75,7 @@
                     </div>
                     <div class="t-cell align_right v_middle" style="width:60px;">
                       <router-link class="qbtn1 bg-orange1 color-white" to="/bargainbuyStat">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item)">停止</div>
+                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -417,10 +417,10 @@ export default {
 
 <style lang="less" scoped>
 .ractivitylist .icon{
-        position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
-        background-color:#ff9f9f;color:#fff;text-align:center;font-size: 12px;
-        -webkit-transform: translate(-30px,5px) rotate(-45deg);
-        transform: translate(-30px,5px) rotate(-45deg);
+  position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
+  background-color:#ff9f9f;color:#fff;text-align:center;font-size: 12px;
+  -webkit-transform: translate(-40px,-2px) rotate(-45deg);
+  transform: translate(-40px,-2px) rotate(-45deg);
 }
 .ractivitylist .finished.icon{background-color:#8a8a8a;}
 .ractivitylist .finished.icon:after{content:"已结束";}
