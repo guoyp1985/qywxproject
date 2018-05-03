@@ -68,7 +68,7 @@ export default {
   }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
 #product-evaluation .product-img {
   width: 60px;
   height: 60px;

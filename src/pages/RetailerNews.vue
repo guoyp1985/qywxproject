@@ -285,6 +285,7 @@ export default {
 </script>
 
 <style lang="less">
+.rnews .bk-listplate1 .iconcell{width:45px;}
 .vux-popup-dialog .weui-cell__bd{text-align:center;}
 .vux-popup-dialog .weui-cell__ft{display:none;}
 

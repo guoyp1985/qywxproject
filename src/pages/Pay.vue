@@ -71,7 +71,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .paypage .inner{
   height:180px;font-size:35px;font-weight:bold;
   border-bottom:@list-border-color 1px solid;

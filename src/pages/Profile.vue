@@ -127,6 +127,9 @@ export default {
   height: 60px;
 }
 /* weui css hack */
+#user-profile .weui-cell__hd {
+  display: flex;
+}
 #user-profile .weui-cell__hd img {
   margin-right: 10px;
 }

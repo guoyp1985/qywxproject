@@ -176,11 +176,6 @@ export default {
       }
     }
   },
-  watch: {
-    selectaddress: function () {
-      return this.selectaddress
-    }
-  },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
@@ -239,6 +234,9 @@ export default {
     },
     payPrice: function () {
       return this.payPrice
+    },
+    selectaddress: function () {
+      return this.selectaddress
     }
   },
   computed: {
@@ -314,7 +312,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .form-item{position:relative;padding:10px;}
 .form-item:after{
   content:"";display:block;

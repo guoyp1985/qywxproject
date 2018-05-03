@@ -207,7 +207,7 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="less">
 #rebate-store .rebate-store-title {
   padding: 10px;
   background-image: url('../assets/images/bannerbg2.png');

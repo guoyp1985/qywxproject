@@ -10,15 +10,11 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-// import VueResource from 'vue-resource'
-// import Login from '#/login'
 import { Token, User } from '#/storage'
 import ENV from '#/env'
 import Util from '#/util'
 
-// Vue.use(VueResource)
 const CancelToken = AjaxPlugin.$http.CancelToken
-// console.log(AjaxPlugin)
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
@@ -79,12 +75,6 @@ for (let i in finalLocales) {
   Vue.i18n.add(i, finalLocales[i])
 }
 Vue.i18n.set('zh-CN')
-
-// routes = routes.concat(demos)
-
-// const router = new VueRouter({
-//   routes
-// })
 
 FastClick.attach(document.body)
 
@@ -272,7 +262,6 @@ router.afterEach(function (to) {
 // })
 
 let pending = []
-// let cancelToken = axios.CancelToken
 let removePending = (config) => {
   for (let p in pending) {
     if (pending[p].u === config.url + '&' + config.method) {

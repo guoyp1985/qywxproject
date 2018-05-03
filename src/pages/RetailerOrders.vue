@@ -517,6 +517,6 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 </style>

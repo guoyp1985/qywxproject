@@ -299,7 +299,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .addnews .addbtn{
   display:inline-block;
   width:30px;

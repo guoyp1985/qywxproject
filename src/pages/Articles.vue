@@ -123,7 +123,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #view-articles .active-green {
   color: #04be02 !important;
   border-color: #04be02 !important;

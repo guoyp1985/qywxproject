@@ -281,7 +281,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
 </style>

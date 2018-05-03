@@ -40,14 +40,7 @@ export default {
   data () {
     return {
       addressData: ChinaAddressV4Data,
-      initItem: {
-        id: 0,
-        linkman: '',
-        telephone: '',
-        address: '',
-        isdefault: 0,
-        area: []
-      },
+      initItem: {},
       switcher: false
     }
   },
@@ -99,7 +92,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #personal-address .top-gap {
   margin-top: 20px;
 }

@@ -196,7 +196,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .vline{position:relative;}
 .vline:after {
   content: " ";

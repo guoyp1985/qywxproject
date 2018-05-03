@@ -415,7 +415,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .ractivitylist .icon{
   position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
   background-color:#ff9f9f;color:#fff;text-align:center;font-size: 12px;

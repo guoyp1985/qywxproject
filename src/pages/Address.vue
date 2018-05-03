@@ -169,7 +169,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #personal-address {
   height: 100%;
 }
