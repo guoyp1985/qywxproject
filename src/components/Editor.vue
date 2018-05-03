@@ -58,8 +58,8 @@ export default {
     },
     createEditor () {
       editor = new Eleditor({
-				el: this.elem,
-				toolbars: [
+        el: this.elem,
+        toolbars: [
           'insertText',
           'editText',
           'insertImage',
@@ -68,8 +68,8 @@ export default {
           'delete',
           'undo',
           'cancel'
-				]
-			})
+        ]
+      })
     }
   }
 }
