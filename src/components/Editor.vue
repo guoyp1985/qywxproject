@@ -5,17 +5,33 @@
 */
 <template>
   <div class="editor">
-    <div class="edit-btn-box">
-      <a class="edit-btn" v-show="!showOptionArea" @click="clickHandle">
+    <div class="edit-btn-box" v-show="!showBtnArea">
+      <a class="edit-btn" @click="clickEditHandle">
         <span class="color-white font16">{{$t('Edit')}}</span>
       </a>
     </div>
-    <flexbox slot="bottom" class="button-area" v-show="showOptionArea">
+    <div class="menu-btn-box" v-show="!showMenuArea">
+      <a class="menu-btn" @click="clickMenuHandle">
+        <span class="color-white font16">{{$t('Menu')}}</span>
+      </a>
+    </div>
+    <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
       <flexbox-item>
         <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
       </flexbox-item>
       <flexbox-item>
         <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
+      </flexbox-item>
+    </flexbox>
+    <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
+      <flexbox-item>
+        <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
+      </flexbox-item>
+      <flexbox-item>
+        <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
+      </flexbox-item>
+      <flexbox-item>
+        <x-button @click.native="onClose">{{$t('Close')}}</x-button>
       </flexbox-item>
     </flexbox>
   </div>
@@ -37,22 +53,25 @@ export default {
   },
   data () {
     return {
-      showOptionArea: false
+      showBtnArea: false,
+      showMenuArea: false
     }
   },
   computed: {
   },
   methods: {
-    clickHandle () {
-      this.showOptionArea = true
+    clickEditHandle () {
+      this.showMenuArea = false
+      this.showBtnArea = true
       this.createEditor()
-      this.$emit('on-click')
+      this.$vux.toast.text(this.$t('Entry Edit Mode'))
+      this.$emit('on-edit')
     },
     onSave () {
       this.$emit('on-save')
     },
     onCancel () {
-      this.showOptionArea = false
+      this.showBtnArea = false
       editor.destory()
       this.$emit('on-cancel')
     },
@@ -70,32 +89,67 @@ export default {
           'cancel'
         ]
       })
+    },
+    clickMenuHandle () {
+      if(editor) {
+        editor.destory()
+      }
+      this.showBtnArea = false
+      this.showMenuArea = true
+      this.$emit('on-menu')
+    },
+    onSetting () {
+      this.$emit('on-setting')
+    },
+    onDelete () {
+      this.$emit('on-delete')
+    },
+    onClose () {
+      this.showMenuArea = false
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-  .edit-btn-box {
-    position: absolute;
-    bottom: 80px;
-    right: 20px;
-  }
-  .edit-btn {
-    width: 55px;
-    height: 55px;
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.55);
-    border-radius: 50%;
-    display: block;
-    text-align: center;
-    line-height: 55px;
-  }
-  .button-area {
-    position: absolute;
-    bottom: 0;
-    z-index: 500px;
-    height: 42px;
-    padding: 2px 0;
-  }
+.edit-btn-box {
+  position: absolute;
+  bottom: 150px;
+  right: 20px;
+}
+.menu-btn-box {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+}
+
+.edit-btn,
+.menu-btn {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  display: block;
+  text-align: center;
+  line-height: 40px;
+}
+.option-area {
+  position: absolute;
+  bottom: 0;
+  z-index: 500;
+  // height: 62px;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+.option-area:before {
+  content: ' ';
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 1px;
+  border-top: 1px solid #e7e7e7;
+}
 </style>
