@@ -7,7 +7,6 @@ import AddProduct from '@/pages/AddProduct'
 import Articles from '@/pages/Articles'
 import Article from '@/pages/Article'
 import AddOrder from '@/pages/AddOrder'
-import ArticleInfoEdit from '@/pages/ArticleInfoEdit'
 import BargainbuyStat from '@/pages/BargainbuyStat'
 import Bargainbuy from '@/pages/Bargainbuy'
 import BargainbuyView from '@/pages/BargainbuyView'
@@ -421,10 +420,5 @@ export default [
     path: '/posterDetail',
     name: 'tPosterDetail',
     component: PosterDetail
-  },
-  {
-    path: '/articleInfoEdit',
-    name: 'tArticleInfoEdit',
-    component: ArticleInfoEdit
   }
 ]
