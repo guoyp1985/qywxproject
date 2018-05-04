@@ -3,7 +3,7 @@
  * @version 0.3
  * @date 2018-4-20
  */
-
+import jQuery from 'jquery'
 const round = function(n){return n >> 0;},
 const touchDevice = ("ontouchstart" in window),
 const _START = touchDevice?"touchstart":"mousedown",
@@ -44,7 +44,7 @@ Draggable.prototype = {
         options = options||{};
         // this.validate = false;
 
-        var element = options.element = typeof(options.element) == "string" ? jQuery(options.element) : options.element;
+        const element = options.element = typeof(options.element) == "string" ? jQuery(options.element) : options.element;
 
         this.options = {
                 left : 0,
@@ -74,11 +74,11 @@ Draggable.prototype = {
         };
 
         if(typeof options == "object") {
-                for(var p in options) {
+                for(let p in options) {
                         this.options[p] = options[p];
                 }
         }
-        var self = this;
+        const self = this;
         this.left = this.options.left;
         this.top = this.options.top;
         this.scale = 1;
@@ -95,8 +95,8 @@ Draggable.prototype = {
 
         // this.options.setInCenter && this.inCenter();
 
-        var oValue = this.scroll.style[prefix + "Transform"],
-                nValue = tdOpen + this.left + "px," + this.top + "px" + tdClose;
+        const oValue = this.scroll.style[prefix + "Transform"];
+        const nValue = tdOpen + this.left + "px," + this.top + "px" + tdClose;
 
         if(rTranslate.test(oValue)){
                 this.scroll.style[prefix + "Transform"] = oValue.replace(rTranslate, nValue);
@@ -141,7 +141,7 @@ Draggable.prototype = {
         this.xSwap = this.options.xSwap || Math.abs(this.swapWidth) >= 0;
         this.ySwap = this.options.ySwap || ( !this.xSwap || this.contentHeight > this.viewHeight );
 
-        var offset = this.offset(this.view);
+        const offset = this.offset(this.view);
         this.viewOffsetLeft = -offset.left;
         this.viewOffsetTop = -offset.top;
         // this.scroll.style[prefix + 'TransitionDuration'] = '0';
@@ -150,8 +150,8 @@ Draggable.prototype = {
       },
       position:function(x,y) {
               // console.log("X:"+this.xSwap);
-              var scrollW = $(this.scroll).width()*this.scale,
-                      scrollH = $(this.scroll).height()*this.scale;
+              const scrollW = $(this.scroll).width()*this.scale;
+              const scrollH = $(this.scroll).height()*this.scale;
               if(x > 0){
                       x = 0;
               }else if(x < this.viewWidth - scrollW){
@@ -166,8 +166,8 @@ Draggable.prototype = {
               y = this.ySwap ? y : 0;
               // this.scroll.style[prefix + "Transform"] = tdOpen + x + "px," + y + "px" + tdClose;
               // console.log(this.scroll.style[prefix + 'Transform'])
-              var oValue = this.scroll.style[prefix + "Transform"],
-                      nValue = tdOpen + x + "px," + y + "px" + tdClose;
+              const oValue = this.scroll.style[prefix + "Transform"];
+              const nValue = tdOpen + x + "px," + y + "px" + tdClose;
               this.scroll.style[prefix + "Transform"] = oValue.replace(rTranslate, nValue);
               this.left = x;
               this.top = y;
@@ -179,8 +179,12 @@ Draggable.prototype = {
       },
 
       touchStart:function(event) {
-              var tap = touchDevice ? event.touches[0] : event,
-                      matrix, left, top, c1, c2;
+              const tap = touchDevice ? event.touches[0] : event,
+              let matrix = null;
+              let left = 0;
+              let top = 0;
+              let c1 = 0;
+              let c2 = 0;
 
               if (this.options.onBeforeScrollStart) this.options.onBeforeScrollStart.call(this, event);
 
@@ -234,15 +238,17 @@ Draggable.prototype = {
       },
       touchMove:function(event){
               // console.log("move")
-              var tap = touchDevice ? event.touches[0] : event,
-                      pageX = tap.pageX,
-                      pageY = tap.pageY,
-                      dx = pageX - this.touchX,
-                      dy = pageY - this.touchY,
-                      scrollX = this.left + dx,
-                      scrollY = this.top + dy,
-                      time = event.timeStamp || new Date().now(),
-                      c1, c2, scale;
+              const tap = touchDevice ? event.touches[0] : event;
+              let pageX = tap.pageX;
+              let pageY = tap.pageY;
+              let dx = pageX - this.touchX;
+              let dy = pageY - this.touchY;
+              let scrollX = this.left + dx;
+              let scrollY = this.top + dy;
+              let time = event.timeStamp || new Date().now();
+              let c1 = null;
+              let c2 = null;
+              let scale = null;
 
               // Zoom
               if (this.options.zoom && touchDevice && event.touches.length > 1) {
@@ -261,7 +267,7 @@ Draggable.prototype = {
                       else if (scale > this.options.zoomMax) scale = 2.0 * this.options.zoomMax * Math.pow(0.5, this.options.zoomMax / scale);
 
                       this.lastScale = scale / this.scale;
-                      var curscale = scale;
+                      let curscale = scale;
                       if(curscale < this.options.ozoomMin)curscale = this.options.ozoomMin;
 
                       scrollX = this.originX - this.originX * this.lastScale + this.left;
@@ -271,8 +277,8 @@ Draggable.prototype = {
                       // this.position(scrollX, scrollY);
 
 
-                      var scrollW = this.options.clipImgWidth * curscale,
-                              scrollH = this.options.clipImgWidth * curscale;
+                      const scrollW = this.options.clipImgWidth * curscale;
+                      const scrollH = this.options.clipImgWidth * curscale;
                       if(scrollX > 0){
                               scrollX = 0;
                       }else if(scrollX < this.viewWidth - scrollW){
@@ -284,7 +290,7 @@ Draggable.prototype = {
                               scrollX = this.viewHeight - scrollH;
                       }
 
-                      var nValue = tdOpen + scrollX + "px," + scrollY + "px" + tdClose + " scale(" + curscale + ", " + curscale + ")";
+                      const nValue = tdOpen + scrollX + "px," + scrollY + "px" + tdClose + " scale(" + curscale + ", " + curscale + ")";
 
                       this.scroll.style[prefix + "Transform"] = nValue;
 
@@ -348,14 +354,14 @@ Draggable.prototype = {
               // if(returnValue === false) return;
       },
       touchEnd:function(event){
-              var tap = touchDevice ? event.changedTouches[0] : event,
-                      momentumX = { dist:0, time:0 },
-                      momentumY = { dist:0, time:0 },
-                      duration = ( event.timeStamp || new Date().now() ) - this.startTime,
-                      left = this.left,
-                      top = this.top,
-                      newDuration,
-                      scale;
+              const tap = touchDevice ? event.changedTouches[0] : event;
+              let momentumX = { dist:0, time:0 };
+              let momentumY = { dist:0, time:0 };
+              let duration = ( event.timeStamp || new Date().now() ) - this.startTime;
+              let left = this.left;
+              let top = this.top;
+              let newDuration = null;
+              let scale = null;
 
               this.scroll.removeEventListener(_MOVE,this,false);
               this.scroll.removeEventListener(_END,this,false);
@@ -371,11 +377,11 @@ Draggable.prototype = {
                       this.left = this.originX - this.originX * this.lastScale + this.left;
                       this.top = this.originY - this.originY * this.lastScale + this.top;
 
-                      var transX = this.left,
-                              transY = this.top;
+                      let transX = this.left;
+                      let transY = this.top;
                       if(this.scale < this.options.ozoomMin)this.scale = this.options.ozoomMin;
-                      var scrollW = $(this.scroll).width()*this.scale,
-                              scrollH = $(this.scroll).height()*this.scale;
+                      const scrollW = $(this.scroll).width()*this.scale;
+                      const scrollH = $(this.scroll).height()*this.scale;
                       if(transX > 0){
                               transX = 0;
                       }else if(transX < this.viewWidth - scrollW){
@@ -391,7 +397,7 @@ Draggable.prototype = {
 
                       this.scroll.style[prefix + "TransitionDuration"] = "200ms";
                       // this.scroll.style[transform] = 'translate(' + that.x + 'px,' + that.y + 'px) scale(' + that.scale + ')' + translateZ;
-                      var nValue = tdOpen + this.left + "px," + this.top + "px" + tdClose + " scale(" + this.scale + ", " + this.scale + ")";
+                      const nValue = tdOpen + this.left + "px," + this.top + "px" + tdClose + " scale(" + this.scale + ", " + this.scale + ")";
                       this.scroll.style[prefix + "Transform"] = nValue;
 
                       this.zoomed = false;
@@ -403,10 +409,10 @@ Draggable.prototype = {
 
               if(!this.options.constract) {
                       if (duration < 300 && this.options.momentum) {
-                              var maxScrollUpperX = -this.left,
-                                      minScrollLowerX = this.contentWidth - this.viewWidth + this.left,
-                                      maxScrollUpperY = -this.top,
-                                      minScrollLowerY = this.swapHeight < 0 ? this.contentHeight - this.viewHeight + this.top - this.minSwapY : 0;
+                              let maxScrollUpperX = -this.left;
+                              let minScrollLowerX = this.contentWidth - this.viewWidth + this.left;
+                              let maxScrollUpperY = -this.top;
+                              let minScrollLowerY = this.swapHeight < 0 ? this.contentHeight - this.viewHeight + this.top - this.minSwapY : 0;
                               momentumX = left ? this.momentum(left - this.scrollStartX, duration, maxScrollUpperX, minScrollLowerX, this.options.obstacle ? this.viewWidth : 0) : momentumX;
                               momentumY = top ? this.momentum(top - this.scrollStartY, duration, maxScrollUpperY, minScrollLowerY, this.options.obstacle ? this.viewHeight : 0) : momentumY;
 
@@ -436,8 +442,8 @@ Draggable.prototype = {
               this.scrollTimer();
       },
       offset: function (el) {
-              var left = -el.offsetLeft,
-                      top = -el.offsetTop;
+              let left = -el.offsetLeft;
+              let top = -el.offsetTop;
 
               while (el = el.offsetParent) {
                       left -= el.offsetLeft;
@@ -448,7 +454,7 @@ Draggable.prototype = {
       },
 
       scrollTimer : function(){
-              var step;
+              let step = null;
 
               if(!this.steps.length){
                       this.reset(400);
@@ -469,8 +475,8 @@ Draggable.prototype = {
       },
 
       reset:function(time){
-              var resetX = this.left >= 0 ? 0 : this.left < this.swapWidth ? this.swapWidth : this.left,
-                      resetY = this.top >= this.minSwapY || this.swapHeight > 0 ? this.minSwapY : this.top < this.swapHeight ? this.swapHeight : this.top;
+              const resetX = this.left >= 0 ? 0 : this.left < this.swapWidth ? this.swapWidth : this.left;
+              const resetY = this.top >= this.minSwapY || this.swapHeight > 0 ? this.minSwapY : this.top < this.swapHeight ? this.swapHeight : this.top;
               if (resetX == this.left && resetY == this.top) {
                       if (this.moved) {
                               if (this.options.onScrollEnd) this.options.onScrollEnd.call(this);
@@ -489,10 +495,11 @@ Draggable.prototype = {
       },
 
       momentum: function (dist, time, maxDistUpper, maxDistLower,size) {
-              var deceleration = 0.0007,// ( Math.abs(dist) * 2 ) / ( time * time ) ,// 0.0006,
-                      speed = Math.abs(dist) / time,
-                      newDist = (speed * speed) / (2 * deceleration),
-                      newTime = 0, outsideDist = 0;
+              const deceleration = 0.0007;// ( Math.abs(dist) * 2 ) / ( time * time ) ,// 0.0006,
+              let speed = Math.abs(dist) / time;
+              let newDist = (speed * speed) / (2 * deceleration);
+              let newTime = 0;
+              let outsideDist = 0;
               if (dist > 0 && newDist > maxDistUpper) {
                       outsideDist = size / (6 / (newDist / speed * deceleration));
                       maxDistUpper = maxDistUpper + outsideDist;
@@ -520,7 +527,7 @@ Draggable.prototype = {
 
 Draggable.prototype.init.prototype = Draggable.prototype;
 
-var Clip = function(options) {
+const Clip = function(options) {
       return new Clip.prototype.init(options);
 }
 
@@ -543,11 +550,11 @@ Clip.prototype = {
               }
       },
       init : function(options) {
-              var self = this;
-              var view = this.view = typeof(options.view) == "string" ? jQuery(options.view) : options.view;
+              const self = this;
+              const view = this.view = typeof(options.view) == "string" ? jQuery(options.view) : options.view;
               this.viewWidth = view.width();
               this.viewHeight = view.height();
-              var clipElement = typeof(options.clipElement) == "string" ? jQuery(options.clipElement) : options.clipElement;
+              const clipElement = typeof(options.clipElement) == "string" ? jQuery(options.clipElement) : options.clipElement;
               this.snapshot = typeof(options.snapshot) == "string" ? jQuery(options.snapshot) : options.snapshot;
               this.options = options;
               this.cWidth = this.options.clipWidth || 0;
@@ -561,13 +568,13 @@ Clip.prototype = {
 
               this.repaint(clipElement);
 
-              var toolbar = this.toolbarElement = this.toolbar();
+              const toolbar = this.toolbarElement = this.toolbar();
               this.buildFrame();
               this.options.initCallback && this.options.initCallback(this);
       },
       buildFrame : function() {
-              var width = this.cLeft = ( this.oWidth - this.cWidth ) / 2;
-              var height = this.cTop = ( this.oHeight - this.cHeight ) / 2;
+              let width = this.cLeft = ( this.oWidth - this.cWidth ) / 2;
+              let height = this.cTop = ( this.oHeight - this.cHeight ) / 2;
               /*
                var frameTop = jQuery("<div class='clip-frame top'/>").css({"width" : this.oWidth, "height" : height}).insertBefore(this.clipElement),
                frameBottom = jQuery("<div class='clip-frame bottom'/>").css({"width" : this.oWidth, "height" : height}).insertBefore(this.clipElement),
@@ -576,11 +583,11 @@ Clip.prototype = {
                */
       },
       inCenter : function() {
-              this.left = Math.round((this.oWidth - this.oClipWidth) / 2),
-                      this.top = Math.round((this.oHeight - this.oClipHeight) / 2);
+              this.left = Math.round((this.oWidth - this.oClipWidth) / 2);
+              this.top = Math.round((this.oHeight - this.oClipHeight) / 2);
 
-              var // oValue = this.clipElement[0].style[prefix + "Transform"],
-                      nValue = tdOpen + this.left + "px," + this.top + "px" + tdClose;
+              // oValue = this.clipElement[0].style[prefix + "Transform"],
+              const nValue = tdOpen + this.left + "px," + this.top + "px" + tdClose;
               this.clipElement[0].style[prefix + "Transform"] = nValue;
       },
       zoomInitial : function() {
@@ -591,14 +598,14 @@ Clip.prototype = {
               this.zoomOutFlag = true;
               this.zoomInFlag = true;
 
-              var nValue = "scale(" + this.multiple + ", " + this.multiple + ")",
-                      oValue = this.clipElement[0].style[prefix + "Transform"];
+              const nValue = "scale(" + this.multiple + ", " + this.multiple + ")";
+              const oValue = this.clipElement[0].style[prefix + "Transform"];
 
               if(rScale.test(oValue)) {
-                      this.clipElement[0].style[prefix + "Transform"] = oValue.replace(rScale, nValue);
+                  this.clipElement[0].style[prefix + "Transform"] = oValue.replace(rScale, nValue);
               }
               else {
-                      this.clipElement[0].style[prefix + "Transform"] += nValue;
+                  this.clipElement[0].style[prefix + "Transform"] += nValue;
               }
 
               /*
@@ -635,7 +642,7 @@ Clip.prototype = {
               this.zoomMax = this.zoomMax || 1;
       },
       repaint : function(clipElement) {
-              var self = this;
+              const self = this;
               this.clipElement = clipElement;
               this.oClipWidth = clipElement[0].offsetWidth;
               this.oClipHeight = clipElement[0].offsetHeight;
@@ -675,13 +682,15 @@ Clip.prototype = {
 
       },
       toolbar : function() {
-              var self = this;
-              var bar = jQuery("<div class='button-b button-g cliptoolbar hide'/>").insertBefore(this.view),
-                      zoomOutBtn = this.zoomOutBtn = jQuery("<button class='clip_button button-radius'><span class='clipicon zoom-out-icon'>缂╁皬</span></button>").appendTo(bar),
-                      zoomInBtn = this.zoomInBtn = jQuery("<button class='clip_button'><span class='clipicon zoom-in-icon'>鏀惧ぇ</span></button>").appendTo(bar),
-                      confirmBtn = this.confirmBtn = jQuery("<button class='clip_button button-radius'><span class='clipicon confirm-icon'>淇濆瓨</span></button>").appendTo(bar);
+              const self = this;
+              const bar = jQuery("<div class='button-b button-g cliptoolbar hide'/>").insertBefore(this.view);
+              const zoomOutBtn = jQuery("<button class='clip_button button-radius'><span class='clipicon zoom-out-icon'>缂╁皬</span></button>").appendTo(bar);
+              const zoomInBtn  = jQuery("<button class='clip_button'><span class='clipicon zoom-in-icon'>鏀惧ぇ</span></button>").appendTo(bar);
+              const confirmBtn = jQuery("<button class='clip_button button-radius'><span class='clipicon confirm-icon'>淇濆瓨</span></button>").appendTo(bar);
               // cutBtn = jQuery("<button class='clip_button button-radius'><span class='icon cut-icon'/></button>").appendTo(bar);
-
+              this.zoomOutBtn = zoomOutBtn;
+              this.zoomInBtn = zoomInBtn;
+              this.confirmBtn = confirmBtn;
               zoomOutBtn[0].onclick = function(event) {
                       event.preventDefault();
                       if(zoomOutBtn.hasClass("disable-state")) return;
@@ -697,12 +706,12 @@ Clip.prototype = {
               confirmBtn[0].onclick = function(event) {
                       event.preventDefault();
                       if(confirmBtn.hasClass("disable-state")) return;
-                      var matrix1 = getComputedStyle(self.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
+                      const matrix1 = getComputedStyle(self.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
                       // var matrix2 = getComputedStyle(self.snap[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
-                      var left = self.cLeft - matrix1[4] * 1,
-                              top = self.cTop - matrix1[5] * 1,
-                              width = self.cWidth,
-                              height = self.cHeight;
+                      const left = self.cLeft - matrix1[4] * 1;
+                      const top = self.cTop - matrix1[5] * 1;
+                      const width = self.cWidth;
+                      const height = self.cHeight;
 
                       self.options.onConfirm && self.options.onConfirm.apply(self, [left, top, width, height, self.oClipWidth, self.oClipHeight, self.multiple]);
               }
@@ -731,8 +740,8 @@ Clip.prototype = {
                       this.draggable.left = Math.round((this.oWidth - this.oClipWidth) / 2);
                       this.draggable.top = Math.round((this.oHeight - this.oClipHeight) / 2);
 
-                      var scrollW = this.options.clipImgWidth * this.multiple,
-                              scrollH = this.options.clipImgWidth * this.multiple;
+                      const scrollW = this.options.clipImgWidth * this.multiple;
+                      const scrollH = this.options.clipImgWidth * this.multiple;
                       if(this.draggable.left > 0){
                               this.draggable.left = 0;
                       }else if(this.draggable.left < this.viewWidth - scrollW){
@@ -744,15 +753,15 @@ Clip.prototype = {
                               this.draggable.top = this.viewHeight - scrollH;
                       }
 
-                      var oValue = this.clipElement[0].style[prefix + "Transform"],
-                              nValue = tdOpen + this.draggable.left + "px," + this.draggable.top + "px" + tdClose;
+                      const oValue = this.clipElement[0].style[prefix + "Transform"];
+                      const nValue = tdOpen + this.draggable.left + "px," + this.draggable.top + "px" + tdClose;
 
                       this.clipElement[0].style[prefix + "Transform"] = oValue.replace(rTranslate, nValue);
               }
 
               this.draggable.scale = this.multiple;
-              var nValue = "scale(" + this.multiple + ", " + this.multiple + ")",
-                      oValue = this.clipElement[0].style[prefix + "Transform"];
+              const nValue = "scale(" + this.multiple + ", " + this.multiple + ")";
+              const oValue = this.clipElement[0].style[prefix + "Transform"];
               this.clipElement[0].style[prefix + "Transform"] = oValue.replace(rScale, nValue);
               this.clipElement[0].addEventListener(_TRANSITION_END_EVENT, this, false);
       },
@@ -780,8 +789,8 @@ Clip.prototype = {
                       this.draggable.left = Math.round((this.oWidth - this.oClipWidth) / 2);
                       this.draggable.top = Math.round((this.oHeight - this.oClipHeight) / 2);
 
-                      var scrollW = this.options.clipImgWidth * this.multiple,
-                              scrollH = this.options.clipImgWidth * this.multiple;
+                      const scrollW = this.options.clipImgWidth * this.multiple;
+                      const scrollH = this.options.clipImgWidth * this.multiple;
                       if(this.draggable.left > 0){
                               this.draggable.left = 0;
                       }else if(this.draggable.left < this.viewWidth - scrollW){
@@ -793,14 +802,14 @@ Clip.prototype = {
                               this.draggable.top = this.viewHeight - scrollH;
                       }
 
-                      var oValue = this.clipElement[0].style[prefix + "Transform"],
-                              nValue = tdOpen + this.draggable.left + "px," + this.draggable.top + "px" + tdClose;
+                      const oValue = this.clipElement[0].style[prefix + "Transform"];
+                      const nValue = tdOpen + this.draggable.left + "px," + this.draggable.top + "px" + tdClose;
                       this.clipElement[0].style[prefix + "Transform"] = oValue.replace(rTranslate, nValue);
               }
               this.draggable.scale = this.multiple;
 
-              var nValue = "scale(" + this.multiple + ", " + this.multiple + ")",
-                      oValue = this.clipElement[0].style[prefix + "Transform"];
+              const nValue = "scale(" + this.multiple + ", " + this.multiple + ")",
+              const oValue = this.clipElement[0].style[prefix + "Transform"];
               this.clipElement[0].style[prefix + "Transform"] = oValue.replace(rScale, nValue);
               this.clipElement[0].addEventListener(_TRANSITION_END_EVENT, this, false);
       },
@@ -811,19 +820,19 @@ Clip.prototype = {
               // this.draggable.repaint();
       },
       canvasSnap : function() {
-              var matrix1 = getComputedStyle(this.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
-              var matrix2 = getComputedStyle(this.snap[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
-              var sx = ( Math.abs(matrix1[4] * 1) + matrix2[4] * 1 ) / this.multiple, // 缂╂斁x杞翠綅缃�
-                      sy = ( Math.abs(matrix1[5] * 1) + matrix2[5] * 1 ) / this.multiple, // 缂╂斁y杞翠綅缃�
-                      sWidth = this.snap[0].offsetWidth / this.multiple, // 缂╂斁鍚庢簮瀹藉害
-                      sHeight = this.snap[0].offsetHeight / this.multiple, // 缂╂斁鍚庢簮楂樺害
-                      dWidth = this.snap[0].offsetWidth,
-                      dHeight = this.snap[0].offsetHeight;
-              cWidth = this.options.canvasWidth || dWidth,
-                      cHeight =  this.options.canvasHeight || dHeight;
+              const matrix1 = getComputedStyle(this.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
+              const matrix2 = getComputedStyle(this.snap[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
+              const sx = ( Math.abs(matrix1[4] * 1) + matrix2[4] * 1 ) / this.multiple; // 缂╂斁x杞翠綅缃�
+              const sy = ( Math.abs(matrix1[5] * 1) + matrix2[5] * 1 ) / this.multiple; // 缂╂斁y杞翠綅缃�
+              const sWidth = this.snap[0].offsetWidth / this.multiple; // 缂╂斁鍚庢簮瀹藉害
+              const sHeight = this.snap[0].offsetHeight / this.multiple; // 缂╂斁鍚庢簮楂樺害
+              const dWidth = this.snap[0].offsetWidth;
+              const dHeight = this.snap[0].offsetHeight;
+              const cWidth = this.options.canvasWidth || dWidth;
+              const cHeight =  this.options.canvasHeight || dHeight;
               this.snapshot.empty();
-              var canvas = jQuery("<canvas/>").appendTo(this.snapshot);
-              var ctx = canvas[0].getContext("2d");
+              const canvas = jQuery("<canvas/>").appendTo(this.snapshot);
+              const ctx = canvas[0].getContext("2d");
               this.canvas = canvas[0];
               canvas[0].width = cWidth;
               canvas[0].height = cHeight;
