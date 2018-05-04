@@ -6,6 +6,17 @@
         上传图像后可点击<i class="al al-set font16"></i>进行剪裁
       </cell>
     </group>
+    <div class="img-operate-area">
+      <div class="img-box">
+        <img src=""/>
+        <a class="setting-btn">
+          <i class="al al-set font16"></i>
+        </a>
+        <a class="delete-btn">
+          <i class="al al-set font16"></i>
+        </a>
+      </div>
+    </div>
   </div>
 </template>
 <script>
