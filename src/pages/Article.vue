@@ -243,7 +243,7 @@ export default {
 
     },
     editSetting () {
-
+      this.$router.push({name: 'tArticleInfoEdit', params: {id: this.article.id}})
     },
     editDelete () {
       this.$vux.confirm.show({
