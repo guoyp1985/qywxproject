@@ -20,78 +20,112 @@
               <div class="scroll_list padding10">
                 <div v-if="!datalist[index] || datalist[index].length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in datalist[index]" :key="item.id" class="scroll_item pt10 pb10">
+                  <div v-if="item.type == 'shareview '" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                      <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
+                      <div class="clamp1">阅读次数:{{ item.number }}次</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
+                  <div v-else-if="item.type == 'buylist'" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
+                  <div v-else-if="item.type == 'sharelist'" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.username }}</div>
+                      <div class="clamp1">传播级别:{{ item.level }}人</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
+                  <div v-else-if="item.type == 'asklist'" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                      <div class="clamp1 font13">{{ item.content }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
+                  <div v-else-if="item.type == 'viewlist'" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                      <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
+                      <div class="clamp1">阅读次数:{{ item.number }}次</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
+                  <div v-else-if="item.type == 'second'" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                      <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
+                      <div class="clamp1">阅读次数:{{ item.number }}次</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
+                  <div v-else-if="item.type == 'crowdlist'" class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img class="avatarimg1" :src="item.avatar" />
+                    </div>
+                    <div class="t-cell">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                      <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
+                      <div class="clamp1">阅读次数:{{ item.number }}次</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                    </div>
+                    <div class="t-cell v_middle align_right" style="width:60px;">
+                      <span class="qbtn1 bg-green color-white">联系</span>
+                    </div>
+                  </div>
                 </div>
                 <!--
-                <template v-if="index == 0">
-                  <div v-if="!tabdata1 || tabdata1.length == 0" class="emptyitem flex_center">暂无数据</div>
-                  <div v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
-                      </div>
-                      <div class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                      </div>
-                      <div class="t-cell v_middle align_right" style="width:60px;">
-                        <span class="qbtn1 bg-green color-white">联系</span>
-                      </div>
-                    </div>
-                  </div>
-                </template>
-                <template v-if="index == 1">
-                  <div v-if="!tabdata2 || tabdata2.length == 0" class="emptyitem flex_center">暂无数据</div>
-                  <div v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
-                      </div>
-                      <div class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
-                        <div class="clamp1">阅读次数:{{ item.number }}次</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                      </div>
-                      <div class="t-cell v_middle align_right" style="width:60px;">
-                        <span class="qbtn1 bg-green color-white">联系</span>
-                      </div>
-                    </div>
-                  </div>
-                </template>
                 <template v-if="index == 2">
                   <div v-if="!tabdata3 || tabdata3.length == 0" class="emptyitem flex_center">暂无数据</div>
                   <div v-else v-for="(item,index1) in tabdata3" :key="item.id" class="scroll_item pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
-                      </div>
-                      <div class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font13">{{ item.content }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                      </div>
-                      <div class="t-cell v_middle align_right" style="width:60px;">
-                        <span class="qbtn1 bg-green color-white">联系</span>
-                      </div>
-                    </div>
+
                   </div>
                 </template>
                 <template v-if="index == 3">
                   <div v-if="!tabdata3 || tabdata3.length == 0" class="emptyitem flex_center">暂无数据</div>
                   <div v-else v-for="(item,index1) in tabdata3" :key="item.id" class="scroll_item pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
-                      </div>
-                      <div class="t-cell">
-                        <div class="clamp1">{{ item.username }}</div>
-                        <div class="clamp1">传播级别:{{ item.level }}人</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                      </div>
-                      <div class="t-cell v_middle align_right" style="width:60px;">
-                        <span class="qbtn1 bg-green color-white">联系</span>
-                      </div>
-                    </div>
+
                   </div>
                 </template>
               -->
@@ -226,20 +260,14 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.module = self.query.module
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`,
-      { params: { id: self.query.id, module: self.module } }
+    self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
+        { params: { id: self.query.id } }
     ).then(function (res) {
       let data = res.data
-      self.data = data.data ? data.data : data
-      return self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
-        { params: { id: self.query.id } }
-      )
-    }).then(function (res) {
-      let data = res.data
       self.statData = data.data ? data.data : data
-      if (data.detail) {
-        self.tabsdata = data.detail
-      }
+      self.tabsdata = data.detail
+      self.data = data.moduleinfo
+      document.title = `统计-${self.data.title}`
       self.clickindex = 0
       self.clickTabitem = self.tabsdata[0]
       self.getdata()

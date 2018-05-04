@@ -10,7 +10,7 @@
     </div>
     <div class="s-container" style="top:44px;">
       <div class="scroll_list pl10 pr10">
-        <div class="scroll_item pt10 pb10" v-for="(item,index) in messagedata" :key="item.id">
+        <div class="scroll_item pt10 pb10" v-for="(item,index) in data" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
               <img :src="item.avatar" class="avatarimg1" />
@@ -36,7 +36,8 @@ Message:
 </i18n>
 
 <script>
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from '#/env'
 
 export default {
   components: {
@@ -103,26 +104,20 @@ export default {
   },
   data () {
     return {
-      messagedata: [
-        {
-          id: '1', uid: '51', dateline: 1523343456, title: 'hello', username: '贪吃小松鼠', unreadNumber: 1, avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg'
-        },
-        {
-          id: '2', uid: '272', dateline: 1523179256, title: 'hello', username: 'zxj', unreadNumber: 0, avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/272.jpg'
-        },
-        {
-          id: '3', uid: '29', dateline: 1522221270, title: 'hello', username: '网络影响力', unreadNumber: 1, avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/29.jpg'
-        },
-        {
-          id: '4', uid: '4', dateline: 1522221270, title: 'hello', username: '楚风越韵  🏠', unreadNumber: 0, avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/4.jpg'
-        },
-        {
-          id: '5', uid: '2', dateline: 1522221270, title: 'hello', username: '仇红波', unreadNumber: 1, avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/2.jpg'
-        }
-      ]
+      data: []
     }
   },
   methods: {
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.$http.get(`${ENV.BokaApi}/api/message/list`).then(function (res) {
+      let data = res.data
+      self.$vux.loading.hide()
+      self.data = data.data ? data.data : data
+    })
   }
 }
 </script>

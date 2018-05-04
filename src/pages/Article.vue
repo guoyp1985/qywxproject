@@ -147,7 +147,7 @@ export default {
       this.commentPopupShow = false
       // let comment = {
       //   userName: 'simon',
-      //   userAvatar: '../assets/_images/nopic.jpg',
+      //   userAvatar: '/src/assets/images/user.jpg',
       //   content: value,
       //   date: new Date().getTime(),
       //   diggCount: 0
@@ -243,7 +243,7 @@ export default {
 
     },
     editSetting () {
-
+      this.$router.push({name: 'tArticleInfoEdit', params: {id: this.article.id}})
     },
     editDelete () {
       this.$vux.confirm.show({

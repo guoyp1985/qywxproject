@@ -56,7 +56,7 @@
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
                     </div>
                     <div class="t-cell align_right v_middle" style="width:60px;">
-                      <router-link class="qbtn1 bg-orange1 color-white" to="groupbuyStat">{{ $t('Stat') }}</router-link>
+                      <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
                       <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
@@ -74,7 +74,7 @@
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Limitbuy count') }} {{ item.limitbuy }}</div>
                     </div>
                     <div class="t-cell align_right v_middle" style="width:60px;">
-                      <router-link class="qbtn1 bg-orange1 color-white" to="/bargainbuyStat">{{ $t('Stat') }}</router-link>
+                      <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
                       <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
