@@ -65,6 +65,7 @@ import KnowledgeClass from '@/pages/KnowledgeClass'
 import SaleProducts from '@/pages/SaleProducts'
 import Poster from '@/pages/Poster'
 import PosterDetail from '@/pages/PosterDetail'
+import Stat from '@/pages/Stat'
 
 export default [
   {
@@ -420,5 +421,10 @@ export default [
     path: '/posterDetail',
     name: 'tPosterDetail',
     component: PosterDetail
+  },
+  {
+    path: '/stat',
+    name: 'tStat',
+    component: Stat
   }
 ]

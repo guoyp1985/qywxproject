@@ -641,7 +641,7 @@ zh-CN:
   Menu: 菜单
   Setting: 设置
   Entry Edit Mode: 进入编辑模式
-  Delete Article Confirm: 是否确认删除？ 
+  Delete Article Confirm: 是否确认删除？
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心
@@ -689,6 +689,7 @@ zh-CN:
   tKnowdedgeClass: 知识库
   tSaleProducts: 精品促销
   tUserPoster: 生成海报
+  tStat: 统计
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中

@@ -18,6 +18,10 @@
           <swiper v-model="tabmodel" class="x-swiper no-indicator">
             <swiper-item class="swiperitem" v-for="(tabitem, index) in tabsdata" :key="index">
               <div class="scroll_list padding10">
+                <div v-if="!datalist[index] || datalist[index].length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in datalist[index]" :key="item.id" class="scroll_item pt10 pb10">
+                </div>
+                <!--
                 <template v-if="index == 0">
                   <div v-if="!tabdata1 || tabdata1.length == 0" class="emptyitem flex_center">暂无数据</div>
                   <div v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item pt10 pb10">
@@ -90,6 +94,7 @@
                     </div>
                   </div>
                 </template>
+              -->
               </div>
             </swiper-item>
           </swiper>
@@ -157,152 +162,62 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    scroll: function () {
       const self = this
+      let index = self.clickTabIndex
       self.$util.scrollEvent({
         element: self.scrollArea1,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * self.limit) {
+            self.scrollData[index].pagestart++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getdata()
           }
         }
       })
     },
-    scroll2: function () {
+    getdata () {
       const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea2,
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
-          }
+      let item = self.clickTabitem
+      let index = self.clickTabIndex
+      if (self.scrollData.length === 0) {
+        for (let i = 0; i < self.tabsdata.length; i++) {
+          self.scrollData.push({ pagestart: 0 })
+          self.datalist.push([])
         }
-      })
-    },
-    scroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea3,
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getdata3()
-          }
-        }
-      })
-    },
-    scroll4: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea4,
-        callback: function () {
-          if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
-            self.pagestart4++
-            self.$vux.loading.show()
-            self.getdata4()
-          }
-        }
-      })
-    },
-    getdata1 () {
-      const self = this
-      let params = { params: { type: self.tabsdata[0].type, id: self.query.id, pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/statDetail/product`, params).then(function (res) {
+      }
+      let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.tabdata1 = self.tabdata1.concat(retdata)
-        if (!self.isBindScroll1) {
-          console.log(document.querySelector('.productstat .tabarea'))
+        self.datalist[index] = self.datalist[index].concat(retdata)
+        if (self.isFirst) {
+          self.isFirst = false
           self.tabtop = document.querySelector('.productstat .tabarea').offsetTop + 44
           let swiper = document.querySelector('.productstat .x-swiper')
-          console.log(swiper)
           swiper.style['position'] = 'absolute'
           swiper.style['top'] = `${self.tabtop}px`
           swiper.style['bottom'] = '0px'
-          let items = document.querySelectorAll('.productstat .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.scrollArea3 = items[2]
-          self.scrollArea4 = items[3]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
+          let items = document.querySelectorAll('.statpage .swiperitem')
+          for (let i = 0; i < items.length; i++) {
+            self.scrollData[i].scrollArea = items[i]
+          }
         }
-      })
-    },
-    getdata2 () {
-      const self = this
-      let params = { params: { type: self.tabsdata[1].type, id: self.query.id, pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/statDetail/product`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata2 = self.tabdata2.concat(retdata)
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
-      })
-    },
-    getdata3 () {
-      const self = this
-      let params = { params: { type: self.tabsdata[2].type, id: self.query.id, pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/statDetail/product`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata3 = self.tabdata3.concat(retdata)
-        if (!self.isBindScroll3) {
-          self.isBindScroll3 = true
-          self.scrollArea3.removeEventListener('scroll', self.scroll3)
-          self.scrollArea3.addEventListener('scroll', self.scroll3)
-        }
-      })
-    },
-    getdata4 () {
-      const self = this
-      let params = { params: { type: self.tabsdata[3].type, id: self.query.id, pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/statDetail/product`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata4 = self.tabdata4.concat(retdata)
-        if (!self.isBindScroll4) {
-          self.isBindScroll4 = true
-          self.scrollArea4.removeEventListener('scroll', self.scroll4)
-          self.scrollArea4.addEventListener('scroll', self.scroll4)
+        if (!self.scrollData[index].isBindScroll) {
+          self.scrollData[index].isBindScroll = true
+          self.scrollData[index].scrollArea.removeEventListener('scroll', self.scroll)
+          self.scrollData[index].scrollArea.addEventListener('scroll', self.scroll)
         }
       })
     },
     tabclick (item, index) {
       const self = this
-      if (index === 0) {
-        if (self.pagestart1 > 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        if (self.pagestart3 === 0 && !self.isBindScroll3) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
-      } else if (index === 3) {
-        if (self.pagestart4 === 0 && !self.isBindScroll4) {
-          self.$vux.loading.show()
-          self.getdata4()
-        }
+      self.clickTabitem = item
+      self.clickTabIndex = index
+      if (self.scrollData[index].pagestart === 0 && !self.scrollData[index].isBindScroll) {
+        self.$vux.loading.show()
+        self.getdata()
       }
     }
   },
@@ -312,11 +227,11 @@ export default {
     self.query = self.$route.query
     self.module = self.query.module
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`,
-      { params: { id: self.query.id, module: 'product' } }
+      { params: { id: self.query.id, module: self.module } }
     ).then(function (res) {
       let data = res.data
       self.data = data.data ? data.data : data
-      return self.$http.get(`${ENV.BokaApi}/api/statData/product`,
+      return self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
         { params: { id: self.query.id } }
       )
     }).then(function (res) {
@@ -325,7 +240,9 @@ export default {
       if (data.detail) {
         self.tabsdata = data.detail
       }
-      self.getdata1()
+      self.clickindex = 0
+      self.clickTabitem = self.tabsdata[0]
+      self.getdata()
     })
   }
 }

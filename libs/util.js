@@ -299,7 +299,7 @@ Util.install = function (Vue, options) {
         }
       }
     },
-    scrollEvent : function (os) {
+    scrollEvent: function (os) {
       let _ele = os.element
       let scrollTop = _ele.scrollTop
       let scrollHeight = _ele.scrollHeight
@@ -315,7 +315,7 @@ Util.install = function (Vue, options) {
 				os.callback && os.callback()
 			}
 		},
-    getDateState : function (dt) {
+    getDateState: function (dt) {
       let newtime = new Time(dt * 1000)
       let year = newtime.year()
       let month = newtime.month()
@@ -336,7 +336,7 @@ Util.install = function (Vue, options) {
       }
       return state
     },
-    getDateClass : function (dt) {
+    getDateClass: function (dt) {
       const self = this
       let state = self.getDateState(dt)
       let ret = 'datestate '
@@ -351,6 +351,14 @@ Util.install = function (Vue, options) {
           ret += 'hide'
         }
       }
+      return ret
+    },
+    getHost: function (url) {
+      if (!url) {
+        url = location.href
+      }
+      let index = url.indexOf('/#/')
+      let ret = url.substr(0, index)
       return ret
     }
   }
