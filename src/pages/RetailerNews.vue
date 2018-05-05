@@ -91,7 +91,7 @@
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/newsStat',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata1.id,module:'news'}}">{{ row.title }}</router-link>
               <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
               <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata1.id, module:'news'}}">{{ row.title }}</router-link>
               <div class="inner" v-else @click="clickpopup1(row.key,clickdata1)">
@@ -110,7 +110,7 @@
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/newsStat',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata2.id,module:'news'}}">{{ row.title }}</router-link>
               <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
               <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata2.id, module:'news'}}">{{ row.title }}</router-link>
               <div v-else class="inner" @click="clickpopup2(row.key,clickdata2)">

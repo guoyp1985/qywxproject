@@ -65,7 +65,7 @@
               <div class="inner" @click="clickpopup('down')">下架</div>
             </div>
             <div class="item">
-              <router-link class="inner" :to="{path: '/productStat', query: {id: clickdata.id}}">统计</router-link>
+              <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'product'}}">统计</router-link>
             </div>
             <div class="item">
               <router-link class="inner" :to="{path: '/poster', query: {id: clickdata.id, module: 'product'}}">生成海报</router-link>

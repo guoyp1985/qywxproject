@@ -182,7 +182,6 @@ export default {
     },
     saveevent () {
       const self = this
-      const query = self.$route.query
       for (let key in self.requireddata) {
         self.requireddata[key] = self.submitdata[key]
       }
@@ -233,7 +232,7 @@ export default {
       if (!self.$util.isNull(self.data.photo)) {
         let arr = self.data.photo.split(',')
         for (let i = 0; i < arr.length; i++) {
-          self.coverphotoarr.push({ photo: arr[i], checked: false})
+          self.coverphotoarr.push({ photo: arr[i], checked: false })
         }
       }
     })

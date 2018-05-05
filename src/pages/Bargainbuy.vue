@@ -52,16 +52,6 @@ export default {
       return this.data
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    if (self.query.crowduserid) {
-      self.crowduserid = self.query.crowduserid
-    }
-    self.loginUser = User.get()
-    self.getInfo()
-  },
   methods: {
     showMain () {
       const self = this
@@ -94,13 +84,15 @@ export default {
           self.crowduser = self.data.crowduser
         }
         document.title = self.data.title
-        let lurl = location.href
-        let wxData = {
-          title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-          desc: '好友帮帮忙，优惠享更多！',
-          link: `${lurl}&share_uid=${self.loginUser.uid}`,
-          imgUrl: self.data.photo
-        }
+        let host = self.$util.getHost()
+        self.$util.wxShare({
+          data: {
+            title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
+            desc: '好友帮帮忙，优惠享更多！',
+            link: `${host}/bargainbuy?id=${self.data.id}&crowduserid=${self.crowduser.crowdowner}&share_uid=${self.loginUser.uid}`,
+            imgUrl: self.data.photo
+          }
+        })
         self.product = self.data.product
         if (self.crowduserid && self.crowduser) {
           if (self.loginUser.uid === self.crowduser.crowdowner) {
@@ -126,6 +118,16 @@ export default {
       const self = this
       self.getInfo()
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    if (self.query.crowduserid) {
+      self.crowduserid = self.query.crowduserid
+    }
+    self.loginUser = User.get()
+    self.getInfo()
   }
 }
 </script>

@@ -1,5 +1,4 @@
 import AccountDetail from '@/pages/AccountDetail'
-import ActivityStat from '@/pages/ActivityStat'
 import Address from '@/pages/Address'
 import AddActivity from '@/pages/AddActivity'
 import AddNews from '@/pages/AddNews'
@@ -27,13 +26,13 @@ import KnowledgeClass from '@/pages/KnowledgeClass'
 import MembersView from '@/pages/MembersView'
 import Messages from '@/pages/Messages'
 import NewAddress from '@/pages/NewAddress'
-import NewsStat from '@/pages/NewsStat'
 import OrderSearch from '@/pages/OrderSearch'
 import OrderDetail from '@/pages/OrderDetail'
 import Profile from '@/pages/Profile'
-import ProductStat from '@/pages/ProductStat'
 import Product from '@/pages/Product'
 import Pay from '@/pages/Pay'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
 import Poster from '@/pages/Poster'
 import PosterDetail from '@/pages/PosterDetail'
 import QrLogin from '@/pages/QrLogin'
@@ -57,6 +56,7 @@ import RetailerSaleview from '@/pages/RetailerSaleview'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
 import Store from '@/pages/Store'
 import Share from '@/pages/Share'
+import Stat from '@/pages/Stat'
 import ShippingDetails from '@/pages/ShippingDetails'
 import ShareList from '@/pages/ShareList'
 import SalesList from '@/pages/SalesList'
@@ -277,21 +277,6 @@ export default [
     component: BargainbuyStat
   },
   {
-    path: '/activityStat',
-    name: 'tActivityStat',
-    component: ActivityStat
-  },
-  {
-    path: '/newsStat',
-    name: 'tNewStat',
-    component: NewsStat
-  },
-  {
-    path: '/productStat',
-    name: 'tProductStat',
-    component: ProductStat
-  },
-  {
     path: '/product',
     name: 'tProduct',
     component: Product
@@ -420,5 +405,10 @@ export default [
     path: '/posterDetail',
     name: 'tPosterDetail',
     component: PosterDetail
+  },
+  {
+    path: '/stat',
+    name: 'tStat',
+    component: Stat
   }
 ]

@@ -352,6 +352,7 @@ export default {
   },
   created () {
     const self = this
+    let host = self.$util.getHost()
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.productid = self.query.id
@@ -380,6 +381,14 @@ export default {
       let data = res.data
       self.productdata = data.data ? data.data : data
       document.title = self.productdata.title
+      self.$util.wxShare({
+        data: {
+          title: self.productdata.title,
+          desc: self.productdata.title,
+          link: `${host}/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+          imgUrl: self.productdata.photo
+        }
+      })
       self.retailerinfo = self.productdata.retailerinfo
       self.activityInfo = self.productdata.activityinfo
       if (!self.$util.isNull(self.productdata.photo)) {

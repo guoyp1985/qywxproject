@@ -91,7 +91,7 @@ export default {
       })
     },
     clickMenuHandle () {
-      if(editor) {
+      if (editor) {
         editor.destory()
       }
       this.showBtnArea = false

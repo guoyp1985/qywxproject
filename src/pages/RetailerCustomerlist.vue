@@ -55,9 +55,9 @@
                         <div class="txt font12">{{ item.percent }}%</div>
                       </div>
                   </div>
-                  <div class="t-cell v_middle w60 align_right">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
                     <div class="qbtn bg-green color-white">联系</div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -95,9 +95,9 @@
                     <div class="clamp1 font14">{{item.linkman}}</div>
                     <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
                   </router-link>
-                  <div class="t-cell v_middle w60 align_right">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
                     <div class="qbtn bg-green color-white">联系</div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
