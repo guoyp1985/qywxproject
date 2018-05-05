@@ -43,9 +43,9 @@
                     <div class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
                     <div class="clamp1 mt5 font12 color-gray">带来消费：￥{{item.sales}}</div>
                   </router-link>
-                  <div class="t-cell align_right" style="width:60px;">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w60 align_right v_middle">
                     <div class="qbtn bg-green color-white">联系</div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
