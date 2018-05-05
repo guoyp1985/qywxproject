@@ -63,10 +63,11 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
-console.log(path.join(__dirname, 'wxmp'))
 app.use(express.static(path.join(__dirname, 'wxmp')));
+
 app.get('/:name', function(req, res) {
-  var filepath = 'wxmp/'+req.params.name
+  console.log(req.params.name)
+  var filepath = 'wxmp/'+req.params.name;
   res.download(filepath);
 });
 
