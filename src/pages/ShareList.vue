@@ -30,9 +30,6 @@
                 <img :src="item.photo" style="width:40px;height:40px;" />
               </div>
               <div class="t-cell v_middle">
-                <!--
-                <div class="clamp1"><span :class="item.dateline | getdateclass">{{ item.dateline | getdatestate }}</span>{{ item.title }}</div>
-              -->
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
                 <div class="clamp1 color-gray font12">
                   <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
@@ -135,7 +132,9 @@ export default {
       return this.$util.getDateState(dt)
     },
     getDateClass: function (dt) {
-      return this.$util.getDateClass(dt)
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
     }
   },
   created () {

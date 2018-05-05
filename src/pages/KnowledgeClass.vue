@@ -7,7 +7,7 @@
   <div class="containerarea font14 bg-white knowledgeclass notop">
     <div class="pagemiddle">
       <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
-      <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item">
+      <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
         <div class="pic">
           <div class="inner">
             <img :src="item.photo" />
@@ -17,7 +17,7 @@
           <div class="font16">{{ item.title }}</div>
           <div class="color-gray clamp2">{{ item.summary }}</div>
         </div>
-      </div>
+      </router-link>
     </div>
     <div class="pagebottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">

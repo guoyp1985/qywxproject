@@ -41,7 +41,7 @@
                     </div>
                   </div>
                   <div class="t-cell v_middle w50">
-                    <div class="qbtn1 bg-green color-white" @click="controlpopup1(item)">{{ $t('Control text') }}</div>
+                    <div class="qbtn1 bg-green color-white" @click="controlpopup(item)">{{ $t('Control text') }}</div>
                   </div>
                 </div>
               </router-link>
@@ -59,7 +59,7 @@
                   </div>
                 </div>
               </div>
-              <router-link :to="{path: `/articles/${item.id}`}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
+              <router-link :to="{path: `/articles/${item.id}`}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w50">
                     <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
@@ -73,7 +73,7 @@
                     </div>
                   </div>
                   <div class="t-cell v_middle w50">
-                    <div class="qbtn1 bg-green color-white" @click="controlpopup1(item)">{{ $t('Control text') }}</div>
+                    <div class="qbtn1 bg-green color-white" @click="controlpopup(item)">{{ $t('Control text') }}</div>
                   </div>
                 </div>
               </router-link>
@@ -87,39 +87,66 @@
       <router-link class="bg-blue3 flex_center h_100" to="/addNews" style="width:30%;">{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
+      <popup class="menuwrap" v-model="showpopup">
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata1.id,module:'news'}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata1.id}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata1.id, module:'news'}}">{{ row.title }}</router-link>
-              <div class="inner" v-else @click="clickpopup1(row.key,clickdata1)">
+              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'news'}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata.id}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'news'}}">{{ row.title }}</router-link>
+              <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
             </div>
-            <div class="item close mt10" @click="clickpopup1('row.key,clickdata1')">
+            <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
           </div>
         </div>
       </popup>
     </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup2" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
-        <div class="popup0">
-          <div class="list">
-            <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata2.id,module:'news'}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata2.id}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata2.id, module:'news'}}">{{ row.title }}</router-link>
-              <div v-else class="inner" @click="clickpopup2(row.key,clickdata2)">
-                <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
+    <div v-transfer-dom class="x-popup popupCustomer">
+      <popup v-model="showpush" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">选择返点客</div>
+          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
+            <div class="w_100">
+              <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
+                <div class="flex_left">全选</div>
+              </check-icon>
+            </div>
+          </div>
+          <div class="popup-middle font14" style="top:85px;bottom:86px;">
+            <div class="padding10">
+              <div class="scroll_list">
+                <template v-if="customerdata.length == 0">
+                  <div class="scroll_item emptyitem">
+          					<div class="t-table">
+          						<div class="t-cell" style="padding:10px;">暂无返点客</div>
+          					</div>
+          				</div>
+                </template>
+                <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img :src="item.avatar" class="avatarimg imgcover" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                    </div>
+                  </div>
+                </check-icon>
               </div>
+  					</div>
+          </div>
+          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+            <div class="w_100">
+              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
             </div>
-            <div class="item close mt10" @click="clickpopup2('row.key,clickdata2')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
-            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
           </div>
         </div>
       </popup>
@@ -137,7 +164,7 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon } from 'vux'
 import Time from '#/time'
 import ENV from '#/env'
 
@@ -152,7 +179,8 @@ export default {
     SwiperItem,
     Group,
     TransferDom,
-    Popup
+    Popup,
+    CheckIcon
   },
   filters: {
     dateformat: function (value) {
@@ -171,24 +199,23 @@ export default {
         { key: 'stat', title: '文章统计' },
         { key: 'createposter', title: '生成海报' }
       ],
-      showpopup1: false,
-      showpopup2: false,
-      clickdata1: {},
-      clickdata2: {},
-      limit: 10,
+      showpopup: false,
+      clickdata: {},
+      limit: 20,
       pagestart1: 0,
       pagestart2: 0,
       isBindScroll1: false,
       isBindScroll2: false,
       scrollArea1: null,
-      scrollArea2: null
+      scrollArea2: null,
+      showpush: false,
+      customerdata: [],
+      pushdata: [],
+      checkAll: false,
+      customerPagestart: 0,
+      isBindCustomerScroll: false,
+      scrollCustomerArea: null
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.getdata1()
   },
   methods: {
     scroll1: function () {
@@ -250,24 +277,54 @@ export default {
         }
       })
     },
-    controlpopup1 (item) {
+    controlpopup (item) {
       event.preventDefault()
-      this.showpopup1 = !this.showpopup1
-      this.clickdata1 = item
+      this.showpopup = !this.showpopup
+      this.clickdata = item
     },
-    controlpopup2 (item) {
-      event.preventDefault()
-      this.showpopup2 = !this.showpopup2
-      this.clickdata2 = item
+    scrollCustomer: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollCustomerArea,
+        callback: function () {
+          if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
+            self.customerPagestart++
+            self.$vux.loading.show()
+            self.getCustomerdata()
+          }
+        }
+      })
     },
-    popupevent (status) {
-
+    getCustomerdata () {
+      const self = this
+      self.$vux.loading.show()
+      let params = { params: { pagestart: self.customerPagestart, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.customerdata = data.data ? data.data : data
+        if (!self.isBindCustomerScroll) {
+          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+          self.isBindCustomerScroll = true
+          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+        }
+      })
     },
-    clickpopup1 (key, item) {
-      this.showpopup1 = false
-    },
-    clickpopup2 (key, item) {
-      this.showpopup2 = false
+    clickpopup (key, item) {
+      const self = this
+      this.showpopup = false
+      if (key === 'push') {
+        this.showpush = true
+      }
+      if (self.customerdata.length === 0) {
+        self.getCustomerdata()
+      } else {
+        self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+        self.isBindCustomerScroll = true
+        self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+        self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+      }
     },
     tabitemclick (index) {
       const self = this
@@ -282,7 +339,66 @@ export default {
           self.getdata2()
         }
       }
+    },
+    closepush () {
+      this.showpush = false
+      self.isBindCustomerScroll = false
+    },
+    submitpush () {
+      const self = this
+      if (self.pushdata.length === 0) {
+        self.$vux.toast.show({
+          text: '请选择返点客'
+        })
+        return false
+      }
+      self.$vux.loading.show()
+      let subdata = { id: self.clickdata.id, sendmodule: 'news', uid: self.pushdata }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showpush = false
+            }
+          }
+        })
+      })
+      self.isBindCustomerScroll = false
+    },
+    radioclick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.pushdata.push(data.uid)
+      } else {
+        self.checkAll = false
+        for (let i = 0; i < self.pushdata.length; i++) {
+          if (self.pushdata[i] === data.uid) {
+            self.pushdata.splice(i, 1)
+            break
+          }
+        }
+      }
+    },
+    checkAllEvent () {
+      const self = this
+      for (let i = 0; i < self.customerdata.length; i++) {
+        if (self.checkAll) {
+          self.customerdata[i].checked = true
+        } else {
+          delete self.customerdata[i].checked
+        }
+      }
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.getdata1()
   }
 }
 </script>

@@ -66,6 +66,7 @@ import UserRebateInfo from '@/pages/UserRebateInfo'
 import Poster from '@/pages/Poster'
 import PosterDetail from '@/pages/PosterDetail'
 import Stat from '@/pages/Stat'
+import Knowledge from '@/pages/Knowledge'
 
 export default [
   {
@@ -416,5 +417,10 @@ export default [
     path: '/stat',
     name: 'tStat',
     component: Stat
+  },
+  {
+    path: '/knowledge',
+    name: 'tKnowledge',
+    component: Knowledge
   }
 ]

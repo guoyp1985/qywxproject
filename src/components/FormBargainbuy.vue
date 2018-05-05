@@ -9,7 +9,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">活动价格<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_minprice" type="text" class="input" name="param_minprice" placeholder="活动价格" />
+          <input v-model="submitdata.param_minprice" type="text" class="input minprice" name="param_minprice" placeholder="活动价格" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
       </div>
@@ -36,7 +36,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">最小可砍<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_everymin" type="text" class="input" name="param_everymin" placeholder="用户砍价最小金额" />
+          <input v-model="submitdata.param_everymin" type="text" class="input everymin" name="param_everymin" placeholder="用户砍价最小金额" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
       </div>
@@ -45,7 +45,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">最大可砍<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_everymax" type="text" class="input" name="param_everymax" placeholder="用户砍价最大金额" />
+          <input v-model="submitdata.param_everymax" type="text" class="input everymax" name="param_everymax" placeholder="用户砍价最大金额" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
       </div>

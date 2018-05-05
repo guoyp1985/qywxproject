@@ -263,13 +263,11 @@ export default {
     },
     radioclick (data, index) {
       const self = this
-      console.log(data.checked)
       if (data.checked) {
         self.selectaddress = data
       } else {
         self.selectaddress = null
       }
-      console.log(self.selectaddress)
       for (let d of self.addressdata) {
         if (d.id !== data.id && d.checked) {
           delete d.checked
