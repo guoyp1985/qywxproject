@@ -11,7 +11,7 @@
         <tab-item class="font14">{{$t('Bought Stores')}}</tab-item>
       </tab>
     </sticky>
-    <view-box v-show="selectedIndex===0">
+    <div v-show="selectedIndex===0">
       <group v-if="list.length">
         <cell-box v-for="(item, index) in list" :key="index" :link="{name: 'tRebateStore', params: {id: item.id}}">
           <div class="store-img">
@@ -27,8 +27,8 @@
       <div v-else class="no-related-x color-gray">
         <span>{{$t('No Related Ruturn Stores')}}</span>
       </div>
-    </view-box>
-    <view-box v-show="selectedIndex===1">
+    </div>
+    <div v-show="selectedIndex===1">
       <group v-if="list1.length">
         <cell-box v-for="(item, index) in list1" :key="index">
           <div class="store-img">
@@ -47,15 +47,14 @@
       <div v-else class="no-related-stores color-gray">
         <span>{{$t('No Bought Stores')}}</span>
       </div>
-    </view-box>
+    </div>
   </div>
 </template>
 <script>
-import { ViewBox, Tab, TabItem, Group, CellBox, XImg, Sticky, XButton } from 'vux'
+import { Tab, TabItem, Group, CellBox, XImg, Sticky, XButton } from 'vux'
 
 export default {
   components: {
-    ViewBox,
     Tab,
     TabItem,
     Group,

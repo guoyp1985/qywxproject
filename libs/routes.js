@@ -6,7 +6,6 @@ import AddProduct from '@/pages/AddProduct'
 import Articles from '@/pages/Articles'
 import Article from '@/pages/Article'
 import AddOrder from '@/pages/AddOrder'
-import ArticleInfoEdit from '@/pages/ArticleInfoEdit'
 import BargainbuyStat from '@/pages/BargainbuyStat'
 import Bargainbuy from '@/pages/Bargainbuy'
 import BargainbuyView from '@/pages/BargainbuyView'
@@ -34,6 +33,8 @@ import Product from '@/pages/Product'
 import Pay from '@/pages/Pay'
 import Poster from '@/pages/Poster'
 import PosterDetail from '@/pages/PosterDetail'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
 import QrLogin from '@/pages/QrLogin'
 import RetailerSales from '@/pages/RetailerSales'
 import RetailerSalechance from '@/pages/RetailerSalechance'
@@ -55,6 +56,7 @@ import RetailerSaleview from '@/pages/RetailerSaleview'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
 import Store from '@/pages/Store'
 import Share from '@/pages/Share'
+import Stat from '@/pages/Stat'
 import ShippingDetails from '@/pages/ShippingDetails'
 import ShareList from '@/pages/ShareList'
 import SalesList from '@/pages/SalesList'
@@ -407,11 +409,6 @@ export default [
     path: '/posterDetail',
     name: 'tPosterDetail',
     component: PosterDetail
-  },
-  {
-    path: '/articleInfoEdit',
-    name: 'tArticleInfoEdit',
-    component: ArticleInfoEdit
   },
   {
     path: '/stat',

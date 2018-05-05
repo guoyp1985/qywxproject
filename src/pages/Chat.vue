@@ -289,10 +289,11 @@ export default {
           'isactivemsg': 1,
           'type': '',
           'unreadNumber': 0
-        }],
-        focusInterval: null,
-        msgcontent: '',
-        showSend: false
+        }
+      ],
+      focusInterval: null,
+      msgcontent: '',
+      showSend: false
     }
   },
   watch: {
