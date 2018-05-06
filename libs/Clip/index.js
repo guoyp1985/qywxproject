@@ -324,7 +324,7 @@ Draggable.prototype = {
 				return;
 			}
 
-			console.log(this.cLeft+','+this.cTop+','+this.cRight+','+this.cBottom)
+			// console.log(this.cLeft+','+this.cTop+','+this.cRight+','+this.cBottom)
 			// 禁止拖出截图区域
 			if (scrollX > this.cLeft || scrollY > this.cTop || (scrollX + this.oClipWidth) < this.cRight || (scrollY + this.oClipHeight) < this.cBottom) {
 				return
@@ -731,7 +731,7 @@ Clip.prototype = {
 	computed: function() {
 		var matrix1 = getComputedStyle(this.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
 		// var matrix2 = getComputedStyle(self.snap[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
-		console.log(this.cLeft)
+		// console.log(this.cLeft)
 		var left = this.cLeft - matrix1[4] * 1,
 			top = this.cTop - matrix1[5] * 1,
 			width = this.cWidth,

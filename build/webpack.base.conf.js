@@ -34,7 +34,7 @@ let webpackConfig = {
     }
   },
   externals: {
-    'WeixinJSBridge': 'WeixinJSBridge',
+    'WeixinJSBridge': 'window.WeixinJSBridge',
   },
   module: {
     rules: [
