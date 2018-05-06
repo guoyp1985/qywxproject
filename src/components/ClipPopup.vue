@@ -6,9 +6,9 @@
 <template>
   <div v-transfer-dom>
     <popup v-show="show" height="100%">
-      <div id="clip-area" class="clip-frame">
-        <div class="clip-area">
-          <img :src="img"/>
+      <div id="clip-view">
+        <div id="photo-box" class="swapanim">
+          <img draggable="false" :src="img" @load="imgLoad"/>
         </div>
       </div>
       <div class="clip-popup">
@@ -44,30 +44,45 @@ export default {
   },
   data () {
     return {
+      clip: null
     }
   },
   methods: {
     onSubmit () {
       this.$emit('on-submit')
+      console.log(this.clip.value)
     },
     onCancel () {
       this.$emit('on-cancel')
+    },
+    imgLoad () {
+      this.clip = Clip({
+        view: '#clip-view',
+        clipElement: '#photo-box',
+        clipWidth: 160,
+        clipHeight: 160,
+        setInCenter: true,
+        zoomMin: 1,
+        zoomMax: 2
+      })
     }
-  },
-  mounted () {
-    Clip({
-      view: '#clip-area',
-      clipElement: '#clip-area .clip-area',
-      setInCenter: true,
-      clipWidth: 90,
-      clipHeight: 90,
-      clipImgWidth: 300,
-      clipImgHeight: 200
-    })
   }
 }
 </script>
 <style>
+#clip-view {
+  overflow: hidden;
+  position: relative;
+  margin: 20px 20px 10px 20px;
+  box-sizing: border-box;
+}
+#photo-box {
+  cursor: move;
+  line-height: 0;
+}
+#photo-box img {
+  width: 100%;
+}
 .submit-area {
   position: absolute;
   bottom: 0px;
