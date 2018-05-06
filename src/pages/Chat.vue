@@ -306,20 +306,15 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      const self = this
       this.intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
     },
     onBlur () {
-      const self = this
       clearInterval(this.intervalId)
     },
     onChange (val) {
-      console.log('in change')
-      console.log(val)
       const self = this
-      console.log(self.$util.isNull(val))
       if (self.$util.isNull(val)) {
         self.showSend = false
       } else {

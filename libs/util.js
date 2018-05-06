@@ -124,12 +124,10 @@ Util.install = function (Vue, options) {
     },
     wxShareSuccess: (params) => {
       let wxData = params.data
-      Vue.http.get(`${ENV.BokaApi}/api/credit`,{
+      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
         params: {
-          do: 'add',
-          type: params.type,
-          shareurl:wxData.link,
-          title:Base64.encode(wxData.title)
+          id: wxData.moduleid,
+          title: Base64.encode(wxData.title)
         }
       }).then(function (res) {
         return res.json()
@@ -299,6 +297,14 @@ Util.install = function (Vue, options) {
         }
       }
     },
+    deleteValue: function (list, val) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === val) {
+          list.splice(i, 1)
+          break
+        }
+      }
+    },
     scrollEvent: function (os) {
       let _ele = os.element
       let scrollTop = _ele.scrollTop
@@ -350,6 +356,8 @@ Util.install = function (Vue, options) {
         } else {
           ret += 'hide'
         }
+      } else {
+        ret += 'hide'
       }
       return ret
     },
@@ -359,6 +367,17 @@ Util.install = function (Vue, options) {
       }
       let index = url.indexOf('/#/')
       let ret = url.substr(0, index)
+      return ret
+    },
+    previewerImgdata: function (arr) {
+      let ret = []
+      for (let i = 0; i < arr.length; i++) {
+        let p = arr[i]
+        ret.push({
+          msrc: p,
+          src: p
+        })
+      }
       return ret
     }
   }

@@ -23,6 +23,7 @@ import Favorite from '@/pages/Favorite'
 import GroupbuyStat from '@/pages/GroupbuyStat'
 import Groupbuy from '@/pages/Groupbuy'
 import KnowledgeClass from '@/pages/KnowledgeClass'
+import Knowledge from '@/pages/Knowledge'
 import MembersView from '@/pages/MembersView'
 import Messages from '@/pages/Messages'
 import NewAddress from '@/pages/NewAddress'
@@ -410,5 +411,10 @@ export default [
     path: '/stat',
     name: 'tStat',
     component: Stat
+  },
+  {
+    path: '/knowledge',
+    name: 'tKnowledge',
+    component: Knowledge
   }
 ]

@@ -1,9 +1,16 @@
 <template>
   <div class="containerarea font14">
-    <Salestopplate>
-      <img :src="retailerInfo.avatar" slot="img" />
-      <div slot="txtarea" class="font16 color-white">{{ retailerInfo.linkman }}</div>
-      <div slot="txtarea" class="font16 color-white">{{ $t('With the customer rebate money together!') }}</div>
+    <div class="bk-salestop">
+      <div class="img-cell">
+        <img :src="retailerInfo.avatar" @click="showBigimg(0)" />
+        <div v-transfer-dom>
+          <previewer :list="imgarr" ref="previewer"></previewer>
+        </div>
+      </div>
+      <div class="txt-cell">
+        <div class="font16 color-white">{{ retailerInfo.linkman }}</div>
+        <div class="font16 color-white">{{ $t('With the customer rebate money together!') }}</div>
+      </div>
       <div style="position:absolute;top:10px;right:20px;height:35px;">
         <router-link class="color-white" style="padding-top:8px;" to="/retailerSetting"><span class="al al-set font20"></span></router-link>
         <router-link  style="position:reltaive;color:#fff;margin-left:5px;" to="/retailerMessagelist">
@@ -19,7 +26,7 @@
         <span class="al al-qitashouru font18"></span>
         <span class="ml3">{{$t('Myrevenue')}}</span>
       </router-link>
-    </Salestopplate>
+    </div>
     <div class="vux-marquee">
       <marquee :item-height=40 :interval=5000 :duration=1000>
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
@@ -166,13 +173,16 @@ With the customer rebate money together!:
 </i18n>
 
 <script>
-import { Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
-import Salestopplate from '@/components/Salestopplate'
+import { Previewer, TransferDom, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
 import Time from '#/time'
 import ENV from '#/env'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
+    Previewer,
     Group,
     Cell,
     XButton,
@@ -180,7 +190,6 @@ export default {
     Card,
     Grid,
     GridItem,
-    Salestopplate,
     Marquee,
     MarqueeItem,
     CellBox
@@ -192,21 +201,14 @@ export default {
   },
   data () {
     return {
-      retailerInfo: {},
-      marquedata: []
+      retailerInfo: { avatar: '/src/assets/images/user.jpg' },
+      marquedata: [],
+      imgarr: [{
+        msrc: '/src/assets/images/user.jpg',
+        src: '/src/assets/images/user.jpg'
+      }],
+      wximgarr: ['/src/assets/images/user.jpg']
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-      let data = res.data
-      self.retailerInfo = data.data ? data.data : data
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-    }).then(function (res) {
-      let data = res.data
-      self.marquedata = data.data ? data.data : data
-    })
   },
   watch: {
     retailerInfo () {
@@ -215,12 +217,105 @@ export default {
     marquedata () {
       return this.marquedata
     }
+  },
+  methods: {
+    showBigimg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewer.show(index)
+      } else {
+        self.$vue.wechat.previewImage({
+          current: self.wximgarr[index],
+          urls: self.wximgarr
+        })
+      }
+    }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+      let data = res.data
+      self.retailerInfo = data.data ? data.data : data
+      self.imgarr[0].msrc = self.retailerInfo.avatar
+      self.imgarr[0].src = self.retailerInfo.avatar
+      self.wximgarr[0] = self.retailerInfo.avatar
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+    }).then(function (res) {
+      let data = res.data
+      self.marquedata = data.data ? data.data : data
+    })
   }
 }
 </script>
 
-<style lang="less" scoped>
-.bk-salestopplate .numicon{
+<style lang="less">
+.bk-salestop {
+  width: 100%;
+  height: 145px;
+  background-image: url(../assets/images/bannerbg1.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.bk-salestop .img-cell{
+  padding-left:20px;
+  width:100px;
+  height:100%;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.bk-salestop .img-cell img{
+  width: 76px;
+  height: 76px;
+  border: rgba(255, 255, 255, 0.5) 2px solid;
+  border-radius: 50%;
+}
+
+.bk-salestop .right-cell {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.bk-salestop .right-cell .right-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 0;
+}
+
+.bk-salestop .right-cell .title-area {
+  font-size: 18px !important;
+  color: #fff;
+}
+
+.bk-salestop .right-cell .nav-area {
+  position: relative;
+}
+
+.bk-salestop .right-cell .btns-area {
+  position: absolute;
+  right: 20px;
+}
+
+.bk-salestop .numicon{
   position: absolute;
   top: 0;
   right: -15px;

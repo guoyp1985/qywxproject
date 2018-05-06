@@ -36,7 +36,7 @@
                 </div>
               </div>
             </div>
-            <div class="font12 color-blue3 mt5">{{ $t('Upload qrcode text') }}</div>
+            <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
           </div>
         </div>
         <Forminputplate class="required">
@@ -123,6 +123,30 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showqrcode" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">如何获取二维码</div>
+          <div class="popup-middle">
+            <div class="padding10">
+                <div class="align_center">
+                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode.png" />
+                </div>
+                <div class="align_center mt5">
+                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode1.png" />
+                </div>
+                <div class="align_center mt5">
+                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode3.png" />
+                </div>
+                <div class="align_center mt5">
+                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode2.png" />
+                </div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center bg-orange color-white" @click="closeQrcodePopup">{{ $t('Close') }}</div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -182,7 +206,8 @@ export default {
       submitdata: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
       requireddata: { title: '', 'qrcode': '' },
       showonline: false,
-      showoffline: false
+      showoffline: false,
+      showqrcode: false
     }
   },
   created () {
@@ -253,6 +278,12 @@ export default {
     },
     closeOffPopup () {
       this.showoffline = false
+    },
+    disqrcode () {
+      this.showqrcode = true
+    },
+    closeQrcodePopup () {
+      this.showqrcode = false
     },
     submitevent () {
       const self = this

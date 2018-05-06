@@ -1,7 +1,7 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14">
+  <div class="containerarea s-havebottom bg-white font14 addActivity">
     <div class="s-container" style="top:0;">
-      <form>
+      <form class="addForm">
         <Forminputplate class="required">
           <span slot="title">{{ $t('Activity product') }}</span>
           <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
@@ -365,6 +365,21 @@ export default {
           }
         })
         return false
+      }
+      if (self.activityType === 'bargainbuy') {
+        let priceinput = document.querySelector('.addActivity .addForm .minprice')
+        let priceval = parseFloat(priceinput.value)
+        let mininput = document.querySelector('.addActivity .addForm .everymin')
+        let minval = parseFloat(mininput.value)
+        let maxinput = document.querySelector('.addActivity .addForm .everymax')
+        let maxval = parseFloat(maxinput.value)
+        if (minval > priceval || maxval > priceval) {
+          self.$vux.alert.show({
+            title: '',
+            content: '可砍金额不能大于活动价格'
+          })
+          return false
+        }
       }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
