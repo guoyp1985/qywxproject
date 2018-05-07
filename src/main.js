@@ -286,7 +286,7 @@ Vue.http.interceptors.request.use(config => {
     return config
   } else {
     // alert(JSON.stringify(config))
-    return
+    return new Error
   }
 }, error => {
   return Promise.reject(error)
