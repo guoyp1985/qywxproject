@@ -528,7 +528,7 @@ var Eleditor = function(){
 
 	var _editorModuleEvents = {
     insertProduct: function(){
-        _arg.insertProductCallback && _arg.insertProductCallback(function(rethtml){
+        _args.insertProductCallback && _args.insertProductCallback(function(rethtml){
             var _buildWordHtml = '';
             var _buildWordHtml = $(rethtml);
 
@@ -554,9 +554,27 @@ var Eleditor = function(){
 			_$editorTextModule.attr({'role': 'insert', 'type': 'link'}).show();
 		},
 		insertImage: function(){
+			/*
 			if( typeof WebUploader === 'undefined' && typeof _args.uploader != 'function' ){
 				window.alert('上传参数未定义.');
 			}
+			*/
+			_args.insertImageCallback && _args.insertImageCallback(function(returl){
+        var _buildWordHtml = '';
+        var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
+
+        _$selected.after(_buildWordHtml);
+        _flushEditorControllerLayerPosi();
+        _appendHistory({ m: 'insertNode', node: _buildWordHtml });
+
+        _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
+        _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
+        _$editorTextArea.removeAttr('style').html('');
+        _$editorTextLinkArea.val('');
+        _hideEditorWrapMask();
+        _$editorTextModule.hide();
+        _hideEditorControllerLayer();
+      });
 		},
 		insertHr: function(){
 

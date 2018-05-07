@@ -541,6 +541,7 @@ export default {
       let data = res.data
       self.productdata = data.data ? data.data : data
       document.title = self.productdata.title
+      console.log(self.productdata.photo)
       self.$util.wxShare({
         data: {
           title: self.productdata.title,
