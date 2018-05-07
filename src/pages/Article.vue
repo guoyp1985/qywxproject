@@ -330,6 +330,12 @@ export default {
   text-align: right;
   color: #1aad19;
 }
+#editor-content {
+  overflow: hidden;
+}
+#editor-content img {
+  max-width: 100% !important;
+}
 
 /* vui css hack */
 #article-content .weui-btn_mini {

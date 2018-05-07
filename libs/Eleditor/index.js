@@ -40,7 +40,6 @@ var w = window;
 // 	var _buildLib = '<link rel="stylesheet" href="'+s+'/libs/Eleditor/layout/base.css'+(_debug ? '?v=' + (+new Date()) : '')+'">';
 // 	$('head').append(_buildLib);
 // });
-
 var _inArray = function(s,a){
     for(var i in a){
         if(a[i]==s){
@@ -69,7 +68,7 @@ var _genEditorUid = function(){
 	return _namespace + '' + +new Date;
 };
 
-
+console.log('simon eleditor');
 var _correctHtmlStructure = function(){
 
 	var _$wrap = arguments[0],

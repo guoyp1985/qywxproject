@@ -39,6 +39,7 @@ Confirm:
 <script>
 import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -51,7 +52,6 @@ export default {
   },
   data () {
     return {
-      avatarHref: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
       option: '',
       options: [
         {
@@ -64,7 +64,7 @@ export default {
         }
       ],
       profile: {
-        avatar: '',
+        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
         linkman: '',
         sex: 1,
         company: '',
@@ -86,7 +86,11 @@ export default {
     }
   },
   created () {
-    this.getProfile = this.$route.params.profile
+    if (this.$route.params.profile) {
+      this.getProfile = this.$route.params.profile
+    } else {
+      this.getProfile = User.get()
+    }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
@@ -105,6 +109,11 @@ export default {
       if (this.$util.validateQueue({linkman: this.getProfile.linkman})) {
         this.$http.post(`${ENV.BokaApi}/api/user/update/0`, this.getProfile)
         .then(res => {
+          const user = User.get()
+          User.set({
+            ...user,
+            ...self.getProfile,
+          })
           self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {
             self.$router.go(-1)
