@@ -301,9 +301,9 @@ Vue.http.interceptors.response.use(response => {
   console.log(error.response)
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
-  if (matchExclude(rUrl.href)) {
-    return {}
-  }
+  // if (matchExclude(rUrl.href)) {
+  //   return {}
+  // }
   if (lUrl.query.code) {
     alert(lUrl.query.code)
     const code = lUrl.query.code
