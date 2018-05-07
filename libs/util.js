@@ -16,7 +16,7 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
-      alert(userAgentInfo)
+      alert(Reg.rPlatfrom.test(userAgentInfo))
       if (Reg.rPlatfrom.test(userAgentInfo)) {
         return false
       }
