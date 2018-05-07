@@ -99,7 +99,12 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/user/refresh/0`)
       .then(res => {
         if (res.data.flag) {
+          const user = User.get()
           self.getProfile = res.data.data
+          User.set({
+            ...user,
+            ...self.getProfile
+          })
           self.$vux.toast.text(res.data.error, 'middle')
         }
       })
