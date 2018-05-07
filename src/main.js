@@ -291,6 +291,7 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   const lUrl = urlParse(location.href, true)
+  alert(location.href)
   if (lUrl.query.code) {
     const code = lUrl.query.code
     alert(code)
