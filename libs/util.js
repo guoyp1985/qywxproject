@@ -444,11 +444,9 @@ Util.install = function (Vue, options) {
     getHost: function (url) {
       if (!url) {
         url = location.href
-        alert(location.href)
       }
-      alert(url)
+      url = url.replace(/from=singlemessage&isappinstalled=0/g,'')
       let index = url.indexOf('/#/')
-      alert(index)
       let ret = url.substr(0, index)
       alert(ret)
       return ret
