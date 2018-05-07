@@ -293,7 +293,7 @@ Vue.http.interceptors.response.use( function (response) {
   alert(response)
   return response
 }, function (error) {
-  // alert(JSON.stringify(error))
+  alert(JSON.stringify(error))
   console.log(error.response)
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
