@@ -24,7 +24,7 @@ Util.install = function (Vue, options) {
     // 判授权
     access: function (response, authorization) {
       const isPC = this.isPC()
-      // alert(response)
+      alert(response)
       if (!response || response.status === 401) {
         authorization(isPC)
       }
