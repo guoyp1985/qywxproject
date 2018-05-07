@@ -190,13 +190,15 @@ export default {
       })
       .then(res => {
         if (res.data.flag) {
-          console.log(self.article)
+          let host = self.$util.getHost()
           self.$util.wxShare({
             data: {
-              link: location.href,
+              module: 'news',
+              moduleid: id,
+              link: `${host}/#/news?id=${id}&wid=${self.article.retailerinfo.uid}&share_uid=${self.reward.uid}`,
               title: self.article.seotitle || self.article.title,
               desc: self.article.seodescription,
-              photo: self.article.sharephoto
+              photo: self.article.photo
             }
           })
         }

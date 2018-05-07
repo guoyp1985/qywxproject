@@ -152,7 +152,7 @@ export default {
             data: {
               module: 'knowledge',
               moduleid: id,
-              link: `${host}/knowledge?id=${id}&share_uid=${self.reward.uid}`,
+              link: `${host}/#/knowledge?id=${id}&share_uid=${self.reward.uid}`,
               title: self.article.seotitle || self.article.title,
               desc: self.article.seodescription,
               photo: self.article.photo
