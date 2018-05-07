@@ -295,6 +295,7 @@ Vue.http.interceptors.request.use(function (config) {
 // 响应拦截器
 Vue.http.interceptors.response.use( function (response) {
   // removePending(response.config)
+  alert(response)
   return response
 }, function (error) {
   // alert(JSON.stringify(error))
