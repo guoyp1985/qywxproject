@@ -551,18 +551,13 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
-      let host = self.$util.getHost(location.href)
-      let wxData = {
-        title: self.productdata.title,
-        desc: self.productdata.title,
-        link: `${host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-        photo: self.photoarr.length > 0 ? self.photoarr[0] : self.productdata.photo
-      }
-      alert(`host= ${host}`)
-      alert(`after info link = ${wxData.link}`)
-      alert(`after info photo = ${wxData.photo}`)
       self.$util.wxShare({
-        data: wxData
+        data: {
+          title: self.productdata.seotitle || self.productdata.title,
+          desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
+          link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+          photo: self.photoarr[0]
+        }
       })
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid

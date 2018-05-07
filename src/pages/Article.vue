@@ -179,28 +179,20 @@ export default {
         if (res.data.flag) {
           self.article = res.data.data
           self.reward = User.get()
+          self.$util.wxShare({
+            data: {
+              title: self.article.seotitle || self.article.title,
+              desc: self.article.seodescription || self.article.seotitle || self.article.title,
+              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              photo: self.article.photo.split(',')[0]
+            }
+          })
         }
         return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
       .then(res => {
         if (res.data) {
           self.comments = res.data
-        }
-        return self.$http.post(`${ENV.BokaApi}/api/share/news`, {id: self.article.id, title: self.article.title})
-      })
-      .then(res => {
-        if (res.data.flag) {
-          let host = self.$util.getHost()
-          self.$util.wxShare({
-            data: {
-              module: 'news',
-              moduleid: id,
-              link: `${host}/#/news?id=${id}&wid=${self.article.retailerinfo.uid}&share_uid=${self.reward.uid}`,
-              title: self.article.seotitle || self.article.title,
-              desc: self.article.seodescription,
-              photo: self.article.photo
-            }
-          })
         }
         return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
       })

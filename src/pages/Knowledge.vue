@@ -158,6 +158,14 @@ export default {
               photo: self.article.photo
             }
           })
+          self.$util.wxShare({
+            data: {
+              title: self.article.seotitle || self.article.title,
+              desc: self.article.seodescription || self.article.seotitle || self.article.title,
+              link: `${ENV.Host}/#/knowledge?id=${self.productdata.id}&share_uid=${self.reward.uid}`,
+              photo: self.article.photo.split(',')[0]
+            }
+          })
         }
         return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'knowledge'}) // 获取评论
       })

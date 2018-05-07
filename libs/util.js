@@ -194,8 +194,6 @@ Util.install = function (Vue, options) {
           trigger: function (res) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
-            alert('分享url='+wxshareurl)
-            alert('分享photo='+wxData.photo)
             params.beforeShare && params.beforeShare()
             if (wxData.desc == "undefined" || wxData.desc == undefined) {
               alert("微信还没准备好分享，请稍后再试");
@@ -230,8 +228,6 @@ Util.install = function (Vue, options) {
           trigger: function (res) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
-            alert('分享url='+wxshareurl)
-            alert('分享photo='+wxData.photo)
             params.beforeShare && params.beforeShare()
             if (wxData.desc === "undefined" || wxData.desc === undefined) {
               alert("微信还没准备好分享，请稍后再试");
@@ -445,11 +441,9 @@ Util.install = function (Vue, options) {
       if (!url) {
         url = location.href
       }
-      alert(url)
       url = url.replace(/\?from=singlemessage&isappinstalled=0/g,'')
       let index = url.indexOf('/#/')
       let ret = url.substr(0, index)
-      alert(ret)
       return ret
     },
     previewerImgdata: function (arr) {
