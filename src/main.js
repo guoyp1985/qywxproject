@@ -283,6 +283,7 @@ Vue.http.interceptors.request.use(config => {
   config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, error => {
+  alert(JSON.stringify(error))
   return Promise.reject(error)
 })
 
@@ -291,7 +292,6 @@ Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
   return response
 }, error => {
-  alert(JSON.stringify(error))
   const lUrl = urlParse(location.href, true)
   if (lUrl.query.code) {
     const code = lUrl.query.code
