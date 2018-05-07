@@ -503,10 +503,10 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        WeixinJSBridge.invoke("imagePreview",{
-					current: self.photoarr[index],
-					urls: self.photoarr
-				})
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.photoarr[index],
+          urls: self.photoarr
+        })
       }
     }
   },

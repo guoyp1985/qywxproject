@@ -33,7 +33,7 @@
                     <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
                   </div>
                   <div class="t-cell v_middle">
-                    <div class="clamp1 font16">{{item.title}}</div>
+                    <div class="clamp1 font16"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
                     <div class="clamp1 font12 color-gray v_middle">
                         <span class="v_middle">{{ item.dateline | dateformat }}</span>
                         <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
@@ -65,7 +65,7 @@
                     <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
                   </div>
                   <div class="t-cell v_middle">
-                    <div class="clamp1 font16">{{item.title}}</div>
+                    <div class="clamp1 font16"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
                     <div class="clamp1 font12 color-gray v_middle">
                         <span class="v_middle">{{ item.dateline | dateformat }}</span>
                         <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
@@ -392,6 +392,14 @@ export default {
           delete self.customerdata[i].checked
         }
       }
+    },
+    getDateState: function (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass: function (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
     }
   },
   created () {
