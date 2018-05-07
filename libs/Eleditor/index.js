@@ -6,6 +6,7 @@
 */
 // (function(w){
 import jQuery from 'jquery';
+import './css/base.css';
 var _debug = false;
 var _namespace = 'Eleditor';
 var _notctname = ['INPUT', 'IMG', 'TEXTAREA'];
@@ -30,15 +31,15 @@ var w = window;
 // 	var $ = typeof jQuery != 'undefined' ? jQuery : Zepto;
 // }
 
-var _scriptPath = function(func){
-	var _js = document.scripts;
-	_js = _js[ _js.length - 1 ].src.substring(0, _js[ _js.length-1 ].src.lastIndexOf("/") + 1 );
-	func(_js);
-	return _js;
-}(function(s){
-	var _buildLib = '<link rel="stylesheet" href="'+s+'/libs/Eleditor/layout/base.css'+(_debug ? '?v=' + (+new Date()) : '')+'">';
-	$('head').append(_buildLib);
-});
+// var _scriptPath = function(func){
+// 	var _js = document.scripts;
+// 	_js = _js[ _js.length - 1 ].src.substring(0, _js[ _js.length-1 ].src.lastIndexOf("/") + 1 );
+// 	func(_js);
+// 	return _js;
+// }(function(s){
+// 	var _buildLib = '<link rel="stylesheet" href="'+s+'/libs/Eleditor/layout/base.css'+(_debug ? '?v=' + (+new Date()) : '')+'">';
+// 	$('head').append(_buildLib);
+// });
 
 var _inArray = function(s,a){
     for(var i in a){
