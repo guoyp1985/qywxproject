@@ -504,8 +504,8 @@ export default {
         self.$refs.previewer.show(index)
       } else {
         WeixinJSBridge.invoke("imagePreview",{
-					"urls": self.photoarr[index],
-					"current": self.photoarr
+					current: self.photoarr[index],
+					urls: self.photoarr
 				})
       }
     }
