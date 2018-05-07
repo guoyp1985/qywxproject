@@ -295,12 +295,12 @@ Vue.http.interceptors.response.use(function (response) {
   return response
 }, function (error) {
   alert(JSON.stringify(error))
-  console.log(error.response)
-  const rUrl = urlParse(config.url)
+  // console.log(error.response)
+  // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
-  if (matchExclude(rUrl.href)) {
-    return {}
-  }
+  // if (matchExclude(rUrl.href)) {
+  //   return {}
+  // }
   if (lUrl.query.code) {
     alert(lUrl.query.code)
     const code = lUrl.query.code
