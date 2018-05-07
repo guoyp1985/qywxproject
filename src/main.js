@@ -280,6 +280,7 @@ Vue.http.interceptors.request.use(config => {
   })
   const token = Token.get()
   config.headers['Authorization'] = `Bearer ${token}`
+  alert(token)
   return config
 }, error => {
   return Promise.reject(error)
