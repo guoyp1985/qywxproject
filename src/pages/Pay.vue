@@ -17,7 +17,8 @@
 
 <script>
 import { Box, XButton } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
+import WeixinJSBridge from 'WeixinJSBridge'
 export default {
   components: {
     Box,
@@ -71,7 +72,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .paypage .inner{
   height:180px;font-size:35px;font-weight:bold;
   border-bottom:@list-border-color 1px solid;

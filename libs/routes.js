@@ -1,66 +1,72 @@
+import AccountDetail from '@/pages/AccountDetail'
+import Address from '@/pages/Address'
+import AddActivity from '@/pages/AddActivity'
+import AddNews from '@/pages/AddNews'
+import AddProduct from '@/pages/AddProduct'
+import Articles from '@/pages/Articles'
+import Article from '@/pages/Article'
+import AddOrder from '@/pages/AddOrder'
+import Bargainbuy from '@/pages/Bargainbuy'
+import BringCustomer from '@/pages/BringCustomer'
 import Center from '@/pages/Center'
 import CenterSales from '@/pages/CenterSales'
+import Credit from '@/pages/Credit'
+import Chat from '@/pages/Chat'
+import DefaultStat from '@/pages/DefaultStat'
+import DecorationShop from '@/pages/DecorationShop'
+import Deliverinfo from '@/pages/Deliverinfo'
+import Evaluation from '@/pages/Evaluation'
+import Favorite from '@/pages/Favorite'
+import GroupbuyStat from '@/pages/GroupbuyStat'
+import Groupbuy from '@/pages/Groupbuy'
+import KnowledgeClass from '@/pages/KnowledgeClass'
+import Knowledge from '@/pages/Knowledge'
+import MembersView from '@/pages/MembersView'
+import Messages from '@/pages/Messages'
+import NewAddress from '@/pages/NewAddress'
+import OrderSearch from '@/pages/OrderSearch'
+import OrderDetail from '@/pages/OrderDetail'
+import Profile from '@/pages/Profile'
+import Product from '@/pages/Product'
+import Pay from '@/pages/Pay'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
+import QrLogin from '@/pages/QrLogin'
 import RetailerSales from '@/pages/RetailerSales'
 import RetailerSalechance from '@/pages/RetailerSalechance'
 import RetailerCustomerlist from '@/pages/RetailerCustomerlist'
 import RetailerAddorder from '@/pages/RetailerAddorder'
 import RetailerOrders from '@/pages/RetailerOrders'
-import Store from '@/pages/Store'
 import RetailerNews from '@/pages/RetailerNews'
 import RetailerProductlist from '@/pages/RetailerProductlist'
 import RetailerActivitylist from '@/pages/RetailerActivitylist'
 import RetailerRevenue from '@/pages/RetailerRevenue'
-import Profile from '@/pages/Profile'
-import Credit from '@/pages/Credit'
-import Share from '@/pages/Share'
-import Address from '@/pages/Address'
-import NewAddress from '@/pages/NewAddress'
-import Favorite from '@/pages/Favorite'
-import OrderSearch from '@/pages/OrderSearch'
-import OrderDetail from '@/pages/OrderDetail'
-import ShippingDetails from '@/pages/ShippingDetails'
 import Recommend from '@/pages/Recommend'
-import Articles from '@/pages/Articles'
-import Article from '@/pages/Article'
 import RetailerSetting from '@/pages/RetailerSetting'
-import Userproducts from '@/pages/Userproducts'
-import AddActivity from '@/pages/AddActivity'
-import AddProduct from '@/pages/AddProduct'
 import RetailerGoodeazy from '@/pages/RetailerGoodeazy'
-import AddNews from '@/pages/AddNews'
 import RetailerMessagelist from '@/pages/RetailerMessagelist'
-import DefaultStat from '@/pages/DefaultStat'
-import GroupbuyStat from '@/pages/GroupbuyStat'
-import BargainbuyStat from '@/pages/BargainbuyStat'
-import ActivityStat from '@/pages/ActivityStat'
-import NewsStat from '@/pages/NewsStat'
-import ProductStat from '@/pages/ProductStat'
-import Product from '@/pages/Product'
-import Bargainbuy from '@/pages/Bargainbuy'
-import BargainbuyView from '@/pages/BargainbuyView'
-import BargainbuyDetail from '@/pages/BargainbuyDetail'
-import AddOrder from '@/pages/AddOrder'
-import MembersView from '@/pages/MembersView'
-import ShareList from '@/pages/ShareList'
-import SalesList from '@/pages/SalesList'
-import Timeline from '@/pages/Timeline'
-import QrLogin from '@/pages/QrLogin'
-import Messages from '@/pages/Messages'
-import Evaluation from '@/pages/Evaluation'
-import SharingDetail from '@/pages/SharingDetail'
-import DecorationShop from '@/pages/DecorationShop'
 import RetailerApply from '@/pages/RetailerApply'
 import RebateApply from '@/pages/RebateApply'
 import RebateStore from '@/pages/RebateStore'
-import UserRebateInfo from '@/pages/UserRebateInfo'
-import BringCustomer from '@/pages/BringCustomer'
-import Chat from '@/pages/Chat'
-import Pay from '@/pages/Pay'
 import RetailerSaleview from '@/pages/RetailerSaleview'
-import AccountDetail from '@/pages/AccountDetail'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
-import Deliverinfo from '@/pages/Deliverinfo'
-import Groupbuy from '@/pages/Groupbuy'
+import Store from '@/pages/Store'
+import Share from '@/pages/Share'
+import Stat from '@/pages/Stat'
+import ShippingDetails from '@/pages/ShippingDetails'
+import ShareList from '@/pages/ShareList'
+import SalesList from '@/pages/SalesList'
+import SharingDetail from '@/pages/SharingDetail'
+import SaleProducts from '@/pages/SaleProducts'
+import Timeline from '@/pages/Timeline'
+import Userproducts from '@/pages/Userproducts'
+import UserRebateInfo from '@/pages/UserRebateInfo'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
+import Stat from '@/pages/Stat'
+import Knowledge from '@/pages/Knowledge'
 
 export default [
   {
@@ -268,26 +274,6 @@ export default [
     component: GroupbuyStat
   },
   {
-    path: '/bargainbuyStat',
-    name: 'tBargainbuyStat',
-    component: BargainbuyStat
-  },
-  {
-    path: '/activityStat',
-    name: 'tActivityStat',
-    component: ActivityStat
-  },
-  {
-    path: '/newsStat',
-    name: 'tNewStat',
-    component: NewsStat
-  },
-  {
-    path: '/productStat',
-    name: 'tProductStat',
-    component: ProductStat
-  },
-  {
     path: '/product',
     name: 'tProduct',
     component: Product
@@ -296,16 +282,6 @@ export default [
     path: '/bargainbuy',
     name: 'tBargainbuy',
     component: Bargainbuy
-  },
-  {
-    path: '/bargainbuyView',
-    name: 'tBargainbuyView',
-    component: BargainbuyView
-  },
-  {
-    path: '/bargainbuyDetail',
-    name: 'tBargainbuyDetail',
-    component: BargainbuyDetail
   },
   {
     path: '/addOrder',
@@ -396,5 +372,35 @@ export default [
     path: '/groupbuy',
     name: 'tGroupbuy',
     component: Groupbuy
+  },
+  {
+    path: '/knowledgeClass',
+    name: 'tKnowledgeClass',
+    component: KnowledgeClass
+  },
+  {
+    path: '/saleProducts',
+    name: 'tSaleProducts',
+    component: SaleProducts
+  },
+  {
+    path: '/poster',
+    name: 'tPoster',
+    component: Poster
+  },
+  {
+    path: '/posterDetail',
+    name: 'tPosterDetail',
+    component: PosterDetail
+  },
+  {
+    path: '/stat',
+    name: 'tStat',
+    component: Stat
+  },
+  {
+    path: '/knowledge',
+    name: 'tKnowledge',
+    component: Knowledge
   }
 ]

@@ -33,6 +33,10 @@ let webpackConfig = {
       '@': resolve('src')
     }
   },
+  externals: {
+    'env': 'ENV',
+    'WeixinJSBridge': 'window.WeixinJSBridge',
+  },
   module: {
     rules: [
       ...(config.dev.useEslint? [{

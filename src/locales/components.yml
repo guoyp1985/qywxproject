@@ -272,6 +272,18 @@ en:
   Groupprice: Groupprice
   Group numbers: Group numbers
   Person: Person
+  I am the seller: I am the seller
+  Sales Assistant: Sales Assistant
+  Newcomer Guide: Newcomer Guide
+  Selected: Selected
+  Promotion: Promotion
+  Generating poster: Generating poster
+  Choice cover photo: Choice cover photo
+  Main title: Main title
+  Input main title: Input main title
+  Subtitle: Subtitle
+  Input subtitle: Input subtitle
+  Upload images: Upload images
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -524,7 +536,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起更多设置
+  Up text: 收起
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -626,6 +638,10 @@ zh-CN:
   Delete Succss: 删除成功
   Press And Talk: 按住 说话
   Actual Payment: 实付款
+  Menu: 菜单
+  Setting: 设置
+  Entry Edit Mode: 进入编辑模式
+  Delete Article Confirm: 是否确认删除？
   tIndex: 销售宝
   tLogin: 扫码登录
   tCenter: 个人中心
@@ -670,6 +686,10 @@ zh-CN:
   tRetailerApply: 申请入驻
   tRebateApply: 返点客申请
   tPay: 微信安全支付
+  tKnowdedgeClass: 知识库
+  tSaleProducts: 精品促销
+  tUserPoster: 生成海报
+  tStat: 统计
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
@@ -688,3 +708,15 @@ zh-CN:
   Group numbers: 成团人数
   Person: 人
   Online consulting: 在线咨询
+  I am the seller: 我是卖家
+  Sales Assistant: 销售助手
+  Newcomer Guide: 新手指南
+  Selected: 精选
+  Promotion: 促销
+  Generating poster: 生成海报
+  Choice cover photo: 选择已有封面图
+  Main title: 主标题
+  Input main title: 请输入主标题 30字以内
+  Subtitle: 副标题
+  Input subtitle: 请输入副标题 30字以内
+  Upload images: 上传图像

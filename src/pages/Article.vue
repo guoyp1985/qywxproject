@@ -5,6 +5,13 @@
 */
 <template>
   <div id="article-content">
+    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+			<div class="ico"><i class="al al-feiji"></i></div>
+			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+			<div class="pic">
+				<img src="../assets/images/share1.jpg" />
+			</div>
+		</div>
     <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
     <div class="article-view">
       <div class="article-title">
@@ -18,7 +25,7 @@
         <span class="article-ex"></span>
         <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
       </div>
-      <div class="article-content" v-html="article.content"></div>
+      <div id="editor-content" class="article-content" v-html="article.content"></div>
       <div class="operate-area">
         <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
           <span class="fa fa-star-o"></span>
@@ -63,6 +70,7 @@
         <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
       </comment>
     </div>
+    <editor elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
@@ -73,8 +81,9 @@ import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
+import Editor from '@/components/Editor'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
@@ -85,10 +94,13 @@ export default {
     TitleTip,
     Comment,
     Reply,
-    CommentPopup
+    CommentPopup,
+    Editor
   },
   data () {
     return {
+      query: Object,
+      showsharetip: true,
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
@@ -106,6 +118,9 @@ export default {
     }
   },
   methods: {
+    closeSharetip () {
+      this.showsharetip = false
+    },
     onReplyShow () {
       this.replyPopupShow = true
     },
@@ -132,7 +147,7 @@ export default {
       this.commentPopupShow = false
       // let comment = {
       //   userName: 'simon',
-      //   userAvatar: '../assets/_images/nopic.jpg',
+      //   userAvatar: '/src/assets/images/user.jpg',
       //   content: value,
       //   date: new Date().getTime(),
       //   diggCount: 0
@@ -164,26 +179,20 @@ export default {
         if (res.data.flag) {
           self.article = res.data.data
           self.reward = User.get()
+          self.$util.wxShare({
+            data: {
+              title: self.article.seotitle || self.article.title,
+              desc: self.article.seodescription || self.article.seotitle || self.article.title,
+              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              photo: self.article.photo.split(',')[0]
+            }
+          })
         }
         return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
       .then(res => {
         if (res.data) {
           self.comments = res.data
-        }
-        return self.$http.post(`${ENV.BokaApi}/api/share/news`, {id: self.article.id, title: self.article.title})
-      })
-      .then(res => {
-        if (res.data.flag) {
-          console.log(self.article)
-          self.$util.wxShare({
-            data: {
-              link: location.href,
-              title: self.article.seotitle || self.article.title,
-              desc: self.article.seodescription,
-              photo: self.article.sharephoto
-            }
-          })
         }
         return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
       })
@@ -223,11 +232,31 @@ export default {
     },
     onShare () {
 
+    },
+    editSave () {
+
+    },
+    editSetting () {
+      this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
+    },
+    editDelete () {
+      this.$vux.confirm.show({
+        title: this.$t('Delete Article Confirm'),
+        onCancel () {},
+        onConfirm () {}
+      })
     }
   },
   created () {
+    const self = this
     this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.query = self.$route.query
+    if (self.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
+    }
   }
 }
 </script>
@@ -294,6 +323,12 @@ export default {
 #article-content .comment-op {
   text-align: right;
   color: #1aad19;
+}
+#editor-content {
+  overflow: hidden;
+}
+#editor-content img {
+  max-width: 100% !important;
 }
 
 /* vui css hack */

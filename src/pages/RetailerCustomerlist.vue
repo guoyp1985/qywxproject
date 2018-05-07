@@ -19,6 +19,7 @@
           <div v-if="(index == 0)">
             <search
               class="x-search"
+              v-model='searchword1'
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
@@ -55,9 +56,9 @@
                         <div class="txt font12">{{ item.percent }}%</div>
                       </div>
                   </div>
-                  <div class="t-cell v_middle w60 align_right">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
                     <div class="qbtn bg-green color-white">联系</div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -65,6 +66,7 @@
           <div v-if="(index == 1)">
             <search
               class="x-search"
+              v-model='searchword2'
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
               @on-change="onChange2"
@@ -95,9 +97,9 @@
                     <div class="clamp1 font14">{{item.linkman}}</div>
                     <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
                   </router-link>
-                  <div class="t-cell v_middle w60 align_right">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
                     <div class="qbtn bg-green color-white">联系</div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
@@ -154,7 +156,7 @@ Percent:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDomDirective as TransferDom } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -229,18 +231,17 @@ export default {
       const self = this
       let params = { params: { tolevel: -1, pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
         params.params.keyword = keyword
+      } else {
+        self.searchresult1 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
-          self.searchresult1 = true
-        } else {
-          self.tabcount1 = data.count
-          self.searchresult1 = false
-        }
+        self.tabcount1 = data.count
+        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
@@ -257,18 +258,17 @@ export default {
       const self = this
       let keyword = self.searchword2
       let params = { params: { tolevel: 5, pagestart: self.pagestart2, limit: self.limit } }
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult2 = true
         params.params.keyword = keyword
+      } else {
+        self.searchresult2 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
-          self.searchresult2 = true
-        } else {
-          self.tabcount2 = data.count
-          self.searchresult2 = false
-        }
+        self.tabcount2 = data.count
+        self.searchword2 = ''
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
@@ -322,7 +322,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .percentlayer{z-index:10;position:absolute;left:0;right:0;bottom:0;top:0;}
 .percentlayer .bg{position:absolute;left:0;right:0;bottom:0;top:0;background:rgba(0,0,0,0.6);}
 .percentlayer .layerinner{

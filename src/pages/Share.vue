@@ -37,7 +37,7 @@ Sharing Details:
 <script>
 import { Group, GroupTitle, Cell, XImg } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 export default {
   components: {
     Group,

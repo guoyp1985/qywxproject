@@ -10,15 +10,12 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-// import VueResource from 'vue-resource'
-// import Login from '#/login'
 import { Token, User } from '#/storage'
-import ENV from '#/env'
+import ENV from 'env'
 import Util from '#/util'
+import WeixinJSBridge from 'WeixinJSBridge'
 
-// Vue.use(VueResource)
 const CancelToken = AjaxPlugin.$http.CancelToken
-// console.log(AjaxPlugin)
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
@@ -79,12 +76,6 @@ for (let i in finalLocales) {
   Vue.i18n.add(i, finalLocales[i])
 }
 Vue.i18n.set('zh-CN')
-
-// routes = routes.concat(demos)
-
-// const router = new VueRouter({
-//   routes
-// })
 
 FastClick.attach(document.body)
 
@@ -272,7 +263,6 @@ router.afterEach(function (to) {
 // })
 
 let pending = []
-// let cancelToken = axios.CancelToken
 let removePending = (config) => {
   for (let p in pending) {
     if (pending[p].u === config.url + '&' + config.method) {
@@ -291,6 +281,7 @@ Vue.http.interceptors.request.use(config => {
   })
   const token = Token.get()
   config.headers['Authorization'] = `Bearer ${token}`
+  alert(JSON.stringify(config))
   return config
 }, error => {
   return Promise.reject(error)
@@ -323,8 +314,9 @@ Vue.http.interceptors.response.use(response => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
-        const orginHref = encodeURIComponent(location.href)
-        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        const originHref = encodeURIComponent(location.href)
+        alert(originHref)
+        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       }
     })
   }

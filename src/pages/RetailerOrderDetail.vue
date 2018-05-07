@@ -16,7 +16,7 @@
         <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
       </div>
       <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
-        <div v-if="data.delivercompany != '-1' && (data.delivercode && data.delivercode != '' && data.delivercompanyname && data.delivercompanyname != '')" class="t-table mb10">
+        <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
           <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
           <div class="t-cell v_middle align_right w60">
             <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
@@ -114,7 +114,7 @@
 import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom, Popup } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -287,6 +287,6 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 </style>

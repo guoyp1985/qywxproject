@@ -23,7 +23,7 @@
 </template>
 <script>
 import { Token, User } from '#/storage'
-import ENV from '#/env'
+import ENV from 'env'
 let intervalId = 0
 export default {
   created () {
@@ -84,7 +84,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .qrcode-box {
   margin-top: 50px;
   text-align: center;

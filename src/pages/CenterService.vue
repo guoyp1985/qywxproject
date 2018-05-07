@@ -93,7 +93,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less" scoped>
 .vux-demo {
   text-align: center;
 }

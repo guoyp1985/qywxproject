@@ -154,7 +154,7 @@
                       <div class="mt3">{{ item.address }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80">
-                      <a class="qbtn3 font12 " style="padding:1px 8px;">{{ $t('View deliver') }}</a>
+                      <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
                     </div>
                   </div>
                 </div>
@@ -181,8 +181,8 @@
                 <div class="t-table">
                   <div class="t-cell w80">物流<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell">
-                    <select class="qselect" v-model="deliverdata.delivercompany">
-                      <option v-for="(item,index) in delivercompany" :key='item.id' :value="item.id">{{ item.name }}</option>
+                    <select class="qselect" v-model="deliverdata.delivercompany" :value="deliverdata.delivercompany">
+                      <option v-for="(item,index) in delivercompany" :key='item.id' :value="item.id" >{{ item.name }}</option>
                     </select>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDo
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -430,7 +430,9 @@ export default {
       self.deliveritem = item
       self.deliverindex = index
       for (let key in self.deliverdata) {
-        self.deliverdata[key] = self.deliveritem[key]
+        if (!self.$util.isNull(self.deliveritem[key])) {
+          self.deliverdata[key] = self.deliveritem[key]
+        }
       }
       if (!self.delivercompany.length) {
         self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
@@ -515,6 +517,6 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 </style>

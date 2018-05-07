@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import Reg from './reg'
-import ENV from './env'
+import ENV from 'env'
 import SHA1 from 'js-sha1'
 import Base64 from './base64'
+import Time from './time'
 const Util = {}
 Util.install = function (Vue, options) {
   Vue.prototype.$util = {
@@ -15,6 +16,7 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
+      alert(Reg.rPlatfrom.test(userAgentInfo))
       if (Reg.rPlatfrom.test(userAgentInfo)) {
         return false
       }
@@ -123,12 +125,10 @@ Util.install = function (Vue, options) {
     },
     wxShareSuccess: (params) => {
       let wxData = params.data
-      Vue.http.get(`${ENV.BokaApi}/api/credit`,{
+      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
         params: {
-          do: 'add',
-          type: params.type,
-          shareurl:wxData.link,
-          title:Base64.encode(wxData.title)
+          id: wxData.moduleid,
+          title: Base64.encode(wxData.title)
         }
       }).then(function (res) {
         return res.json()
@@ -290,6 +290,81 @@ Util.install = function (Vue, options) {
         }
       }, false)
     },
+    taskData: function (os) {
+      let data = os.data
+      let handleFunction = options.handleFunction
+      if(data && data.length > 0) {
+        let ascdesc = options.ascdesc ? options.ascdesc : "asc"
+        let callback = os.callback
+        let tasks = []
+        let _serial = function () {
+          if (tasks.length === 0) {
+            callback && callback()
+            return
+          }
+          let task = tasks[0]
+          tasks.splice(0, 1)
+          task(_serial)
+        }
+        if (ascdesc === 'asc') {
+          for (let i = 0; i < data.length; i++) {
+            tasks.push(handleFunction(data[i], i))
+          }
+        } else {
+          for (let i = data.length - 1; i >= 0; i++) {
+            tasks.push(handleFunction(data[i], i))
+          }
+        }
+        _serial()
+      }
+    },
+    wxUploadImage: function (os) {
+      const self = this
+      let maxnum = os.maxnum ? os.maxnum : 9
+      Vue.wechat.ready(function(){
+        Vue.wechat.chooseImage({
+          count:maxnum,
+          success: function (res) {
+            let localIds = res.localIds
+            if(localIds.length > maxnum){
+              localIds = localIds.slice(0, maxnum)
+            }
+            Vue.$vux.loading.show()
+            self.taskData({
+              data: localIds,
+              callback: function () {
+                Vue.$vux.loading.hide()
+              },
+              handleFunction: function (d) {
+                return function (done) {
+                  Vue.wechat.uploadImage({
+                    localId: d,
+                    isShowProgressTips: 0,
+                    success: function (res1) {
+                      self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
+                        imgid: res1.serverId
+                      }).then(function (res) {
+                        let data = res.data
+                        os.handleCallback && os.handelCallback(data)
+                        done()
+                      })
+                    },
+                    fail: function (res2) {
+                      Vue.$vux.toast.show({
+                        text: '上传失败'
+                      })
+                      done()
+                    }
+                  })
+                }
+              }
+            })
+          },
+          fail: function (r) {
+          }
+        })
+      })
+    },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
@@ -298,7 +373,15 @@ Util.install = function (Vue, options) {
         }
       }
     },
-    scrollEvent : function(os){
+    deleteValue: function (list, val) {
+      for (let i = 0; i < list.length; i++) {
+        if (list[i] === val) {
+          list.splice(i, 1)
+          break
+        }
+      }
+    },
+    scrollEvent: function (os) {
       let _ele = os.element
       let scrollTop = _ele.scrollTop
       let scrollHeight = _ele.scrollHeight
@@ -313,7 +396,67 @@ Util.install = function (Vue, options) {
 			if (scrollTop + height >= scrollHeight - distance) {
 				os.callback && os.callback()
 			}
-		}
+		},
+    getDateState: function (dt) {
+      let newtime = new Time(dt * 1000)
+      let year = newtime.year()
+      let month = newtime.month()
+      let date = newtime.date()
+      let nowtime = new Time(new Date())
+      let nowyear = nowtime.year()
+      let nowmonth = nowtime.month()
+      let nowdate = nowtime.date()
+      let state = ''
+      if (year === nowyear && month === nowmonth) {
+        if (date === nowdate) {
+          state = '今'
+        } else if (date + 1 === nowdate) {
+          state = '昨'
+        } else if (date + 2 === nowdate) {
+          state = '前'
+        }
+      }
+      return state
+    },
+    getDateClass: function (dt) {
+      const self = this
+      let state = self.getDateState(dt)
+      let ret = 'datestate '
+      if (state !== '') {
+        if (state === '今') {
+          ret += 'today'
+        } else if (state === '昨') {
+          ret = 'yestoday'
+        } else if (state === '前') {
+          ret += ''
+        } else {
+          ret += 'hide'
+        }
+      } else {
+        ret += 'hide'
+      }
+      return ret
+    },
+    getHost: function (url) {
+      if (!url) {
+        url = location.href
+      }
+      url = url.replace(/\?from=singlemessage&isappinstalled=0/g,'')
+      let index = url.indexOf('/#/')
+      let ret = url.substr(0, index)
+      return ret
+    },
+    previewerImgdata: function (arr) {
+      let ret = []
+      for (let i = 0; i < arr.length; i++) {
+        let p = arr[i]
+        ret.push({
+          msrc: p,
+          src: p
+        })
+      }
+      return ret
+    }
   }
 }
 

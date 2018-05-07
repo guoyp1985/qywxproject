@@ -44,9 +44,9 @@
                     <div class="color-blue font14">{{ item.linkman }}</div>
                     <div class="color-gray font12">{{ item.content }}</div>
                   </router-link>
-                  <div class="t-cell w50 align_right v_middle">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
                     <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
-                  </div>
+                  </router-link>
                 </div>
               </timeline-item>
             </timeline>
@@ -69,9 +69,9 @@
                     <div class="color-blue font14">{{ item.linkman }}</div>
                     <div class="color-gray font12">{{ item.content }}</div>
                   </router-link>
-                  <div class="t-cell w50 align_right v_middle">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
                     <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
-                  </div>
+                  </router-link>
                 </div>
               </timeline-item>
             </timeline>
@@ -94,7 +94,7 @@ Contact:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {
@@ -264,7 +264,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .card-demo-flex {
   display: flex;
 }

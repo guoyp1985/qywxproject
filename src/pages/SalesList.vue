@@ -1,10 +1,10 @@
 <template>
-  <div class="containerarea font14 rnews bg-white">
+  <div class="containerarea font14 rsaleslist bg-white">
     <div class="s-topbanner">
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{ user.linkman }}</div>
+          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}</div>
         </div>
       </div>
       <div class="row">
@@ -15,32 +15,30 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div style="position:absolute;left:0;top:0;right:0;">
-              <search
-                class="x-search"
-                position="absolute"
-                auto-scroll-to-top top="0px"
-                @on-focus="onFocus"
-                @on-cancel="onCancel"
-                @on-submit="onSubmit"
-                ref="search">
-              </search>
-            </div>
-            <div style="position:absolute;left:0;top:44px;right:0;bottom:0;overflow-y:auto;">
-              <div class="scroll_list pl10 pr10">
-                <div class="scroll_item emptyitem flex_center" v-if="(!tabdata1 || tabdata1.length == 0)">暂无线上数据</div>
-                <div v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="width:50px;height:50px;">
-                      <img :src="item.photo" style="width:40px;height:40px;" />
-                    </div>
-                    <div class="t-cell v_middle">
-                      <div class="clamp1">{{ item.title }}</div>
-                      <div class="clamp1 color-gray font12">
-                        <span class="v_middle">{{ item.dateline | dateformat }}</span>
-                      </div>
+            <search
+              class="x-search"
+              v-model="searchword1"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit1"
+              @on-change="onChange1"
+              ref="search">
+            </search>
+            <div class="scroll_list pl10 pr10">
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
+                <template v-if="searchresult1">暂无搜索结果</template>
+                <template v-else>暂无线上数据</template>
+              </div>
+              <div v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10">
+                <div class="t-table">
+                  <div class="t-cell v_middle" style="width:50px;height:50px;">
+                    <img :src="item.photo" style="width:40px;height:40px;" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1">{{ item.title }}</div>
+                    <div class="clamp1 color-gray font12">
+                      <span class="v_middle">{{ item.dateline | dateformat }}</span>
                     </div>
                   </div>
                 </div>
@@ -48,8 +46,19 @@
             </div>
           </template>
           <template v-if="(index == 1)">
+            <search
+              class="x-search"
+              v-model="searchword2"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
+              ref="search">
+            </search>
             <div class="scroll_list pl10 pr10">
-              <div class="scroll_item emptyitem flex_center" v-if="(!tabdata2 || tabdata2.length == 0)">暂无线下数据</div>
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
+                <template v-if="searchresult1">暂无搜索结果</template>
+                <template v-else>暂无线下数据</template>
+              </div>
               <div v-else v-for="item in tabdata2" :key="item.id" class="scroll_item padding10">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:50px;height:50px;">
@@ -82,7 +91,8 @@ Control text:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, Search } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -95,9 +105,6 @@ export default {
     Group,
     Search
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -105,54 +112,142 @@ export default {
   },
   data () {
     return {
-      user: {
-        uid: 187,
-        linkman: 'YOUNG'
-      },
+      autofixed: false,
+      query: Object,
+      viewuser: Object,
       tabtxts: [ '线上', '线下' ],
       tabmodel: 0,
-      tabdata1: [
-        {
-          id: '1', title: '医美运营营销36兵法攻略', dateline: 1523694550, visitor: 0, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15236697775676'
-        },
-        {
-          id: '2', title: '商品1', dateline: 1523694550, visitor: 10, photo: 'http://ossgxs.boka.cn/month_201804/15236839495706.jpg'
-        },
-        {
-          id: '3', title: 'YOUNG向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！', dateline: 1521694550, visitor: 32, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg'
-        }
-      ],
-      tabdata2: [
-        {
-          id: '1', title: '医美运营营销36兵法攻略', dateline: 1523694550, visitor: 0, photo: 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15236697775676'
-        },
-        {
-          id: '2', title: '商品1', dateline: 1523694550, visitor: 10, photo: 'http://ossgxs.boka.cn/month_201804/15236839495706.jpg'
-        },
-        {
-          id: '3', title: 'YOUNG向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！', dateline: 1521694550, visitor: 32, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg'
-        }
-      ]
+      tabdata1: [],
+      tabdata2: [],
+      searchword1: '',
+      searchresult1: false,
+      searchword2: '',
+      searchresult2: false,
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      scrollArea1: null,
+      scrollArea2: null
     }
   },
   methods: {
-    setFocus () {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
     },
-    resultClick (item) {
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
     },
-    getResult (val) {
+    getdata1 () {
+      const self = this
+      let params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
+        params.params.keyword = keyword
+      } else {
+        self.searchresult1 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.searchword1 = ''
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rsaleslist .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
     },
-    onSubmit () {
+    getdata2 () {
+      const self = this
+      let params = { params: { uid: self.query.uid, buyonline: 0, pagestart: self.pagestart2, limit: self.limit } }
+      let keyword = self.searchword2
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult2 = true
+        params.params.keyword = keyword
+      } else {
+        self.searchresult2 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.searchword2 = ''
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
+      })
     },
-    onFocus () {
+    onChange1 (val) {
+      this.searchword1 = val
     },
-    onCancel () {
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
+    },
+    onChange2 (val) {
+      this.searchword2 = val
+    },
+    onSubmit2 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     }
+  },
+  created () {
+    const self = this
+    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+      { params: { customeruid: self.query.uid } }
+    ).then(function (res) {
+      let data = res.data
+      if (data) {
+        self.viewuser = data.data ? data.data : data
+        document.title = `${self.viewuser.linkman}`
+      }
+    })
+    self.getdata1()
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .rnews .bk-listplate1 .iconcell{width:45px;}
 .vux-popup-dialog .weui-cell__bd{text-align:center;}
 .vux-popup-dialog .weui-cell__ft{display:none;}

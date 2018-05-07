@@ -1,44 +1,14 @@
 <template>
-  <div class="containerarea font14 bargainbuy notop nobottom">
-    <div class="pagemiddle">
-      <div class="topimg">
-        <img src="../assets/images/bargainbuy_bg.png" />
-      </div>
-      <div class="boxarea productarea">
-        <router-link class="t-table" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}" style="color:inherit;">
-            <div class="t-cell pic v_middle">
-              <img :src="product.photo" class="imgcover" />
-            </div>
-            <div class="t-cell pl10 v_middle">
-              <div class="clamp2 title font13 color-gray7">{{ product.title }}</div>
-              <div class="clamp1 font13 mt3 color-red3">最低价：<span class="disminprice font16 bold">{{ data.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ product.price }} 元</del></div>
-              <div class="clamp1 font13 color-red3">剩余：<span class="font16 bold">{{ data.leftstorage }}</span> 件</div>
-            </div>
-            <div class="t-cell v_middle align_center" style="width:40px;">
-                    <i class="al al-mjiantou-copy color-gray font20"></i>
-            </div>
-        </router-link>
-      </div>
-      <div class="mauto align_center" style="width: 94%;height: 5px;">
-        <div class="mauto" style="border-left:3px solid #FDC45D;border-right:3px solid #FDC45D;width: 45%;height: 100%;"></div>
-      </div>
-      <div class="mauto mb10 border-box" style="width: 94%;background-color: #FDC45D;border-radius: 13px;padding:11px 15px 8px 15px;">
-        <div class="mt12 align_center" style="color: #C93A3A;">当前有 <span class="font18 bold">{{ data.currentnumbers }}</span> 人正在砍价中...</div>
-        <div v-if="data.isfinished" class="btn">活动已结束</div>
-        <div v-else class="btn" @click="joinin">我要参与</div>
-        <div class=" font12 pt10 pl15 pr15 pb10 color-gray7">
-          <div>活动规则：</div>
-          <div>1. 每人一次砍价机会；</div>
-          <div>2. 活动商品只可购买一次；</div>
-          <div>3. 商品最终购买金额以实际所砍金额为准；</div>
-          <div>4. 砍价活动结束后，商品即恢复原价；</div>
-          <div>5. 该活动不可与其他活动优惠同时使用；</div>
-          <div>6. 参与活动的有效砍价时间为{{ data.finishtime }}小时；</div>
-          <div>7. 活动截止时间: {{ data.endtime | dateformat }}</div>
-          <div>（商品若提前售完，活动将提前截止）</div>
-        </div>
-      </div>
-    </div>
+  <div class="h_100">
+    <template v-if="showBargainbuy">
+      <Bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></Bargainbuy>
+    </template>
+    <template v-if="showBargainbuyView">
+      <BargainbuyView :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData"></BargainbuyView>
+    </template>
+    <template v-if="showBargianbuyDetail">
+      <BargainbuyDetail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></BargainbuyDetail>
+    </template>
   </div>
 </template>
 
@@ -46,19 +16,31 @@
 </i18n>
 
 <script>
+import Bargainbuy from '@/components/Bargainbuy'
+import BargainbuyView from '@/components/BargainbuyView'
+import BargainbuyDetail from '@/components/BargainbuyDetail'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
+    Bargainbuy,
+    BargainbuyView,
+    BargainbuyDetail
   },
   data () {
     return {
+      showBargainbuy: false,
+      showBargainbuyView: false,
+      showBargianbuyDetail: false,
       query: {},
       loginUser: {},
       data: {},
-      product: Object
+      product: Object,
+      crowduserid: null,
+      crowduser: null,
+      cutData: []
     }
   },
   filters: {
@@ -66,54 +48,108 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
+  watch: {
+    data: function () {
+      return this.data
+    }
+  },
+  methods: {
+    showMain () {
+      const self = this
+      self.showBargainbuy = true
+      self.showBargainbuyView = false
+      self.showBargianbuyDetail = false
+    },
+    showView () {
+      const self = this
+      self.showBargainbuy = false
+      self.showBargainbuyView = true
+      self.showBargianbuyDetail = false
+    },
+    showDetail () {
+      const self = this
+      self.showBargainbuy = false
+      self.showBargainbuyView = false
+      self.showBargianbuyDetail = true
+    },
+    getInfo () {
+      const self = this
+      let params = { params: { id: self.query.id } }
+      if (self.crowduserid) {
+        params.params.crowduserid = self.crowduserid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/activity/info`, params).then(function (res) {
+        let data = res.data
+        self.data = data.data ? data.data : data
+        if (self.data.crowduser && self.data.crowduser.length !== 0) {
+          self.crowduser = self.data.crowduser
+        }
+        document.title = self.data.title
+        let host = self.$util.getHost()
+        self.$util.wxShare({
+          data: {
+            title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
+            desc: '好友帮帮忙，优惠享更多！',
+            link: `${host}/bargainbuy?id=${self.data.id}&crowduserid=${self.crowduser.crowdowner}&share_uid=${self.loginUser.uid}`,
+            imgUrl: self.data.photo
+          }
+        })
+        self.product = self.data.product
+        let inpage = ''
+        if (self.crowduserid && self.crowduser) {
+          if (self.loginUser.uid === self.crowduser.crowdowner) {
+            self.showView()
+            inpage = 'view'
+          } else {
+            self.showDetail()
+            inpage = 'detail'
+          }
+        } else {
+          if (self.crowduser) {
+            self.showView()
+            inpage = 'view'
+          } else {
+            self.showMain()
+            inpage = 'main'
+          }
+        }
+        if (inpage === 'view' || inpage === 'detail') {
+          self.getCudata()
+        }
+      })
+    },
+    joinSuccess (crowduserid) {
+      const self = this
+      self.crowduserid = crowduserid
+      self.getInfo()
+    },
+    cutSuccess () {
+      const self = this
+      self.getInfo()
+      self.getCudata()
+    },
+    getCudata () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
+        let data = res.data
+        self.cutData = data.data ? data.data : data
+      })
+    }
+  },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
-    self.loginUser = User.get()
-    console.log(self.loginUser)
-    self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
-      params: { id: self.query.id }
-    }).then(function (res) {
-      let data = res.data
-      self.data = data.data ? data.data : data
-      document.title = self.data.title
-      let lurl = location.href
-      let wxData = {
-        title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-        desc: '好友帮帮忙，优惠享更多！',
-        link: `${lurl}&share_uid=${self.loginUser.uid}`,
-        imgUrl: self.data.photo
-      }
-      console.log(wxData)
-      if (self.data) {
-        self.product = self.data.product
-      }
-    })
-  },
-  methods: {
-    joinin () {
-      const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.query.id }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push({ path: '/bargainbuyView', query: { id: self.query.id, crowduserid: data.data } })
-            }
-          }
-        })
-      })
+    if (self.query.crowduserid) {
+      self.crowduserid = self.query.crowduserid
     }
+    self.loginUser = User.get()
+    self.getInfo()
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .bargainbuy {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }

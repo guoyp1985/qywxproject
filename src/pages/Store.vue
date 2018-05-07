@@ -1,7 +1,8 @@
 <template>
-  <div class="containerarea bg-page font14 s-havebottom">
+  <div class="containerarea bg-page font14 s-havebottom store">
     <div class="s-container" style="top:0px;">
       <swiper
+        v-if="addata && addata.length > 0"
         :list="addata"
         dots-position="center"
         :interval=6000
@@ -24,14 +25,14 @@
   				</div>
   			</div>
   		</div>
-      <template v-if="activitydata.length > 0">
+      <template v-if="activitydata && activitydata.length > 0">
         <div class="bg-white mt5 padding10 b_top_after">
     			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
     		</div>
         <div class="b_top_after"></div>
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
-            <Groupbuyitemplate v-if="item.type == 'groupbuy'">
+            <Groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
@@ -39,7 +40,7 @@
               <span slot="groupprice">{{ item.groupprice }}</span>
               <span slot="price">{{ item.price }}</span>
             </Groupbuyitemplate>
-            <Bargainbuyitemplate v-if="item.type == 'bargainbuy'">
+            <Bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
@@ -55,7 +56,7 @@
     		</div>
         <div class="b_top_after"></div>
         <div class="productlist squarepic">
-          <Productitemplate v-for="(item,index) in productdata" :key="item.id">
+          <Productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" class="imgcover" :src="item.photo" />
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
@@ -70,7 +71,7 @@
       			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
             </div>
             <div class="t-cell v_middle align_right">
-              <div class="qbtn4" style="padding: 3px 8px;line-height: 1;">
+              <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
     						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
     					</div>
             </div>
@@ -78,7 +79,7 @@
     		</div>
         <div class="b_top_after"></div>
         <div class="productlist">
-          <Newsitemplate v-for="(item,index) in toplinedata" :key="item.id">
+          <Newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
             <img slot="photo" :src="item.photo" class="v_middle" style="width: 70px; height: 50px;" />
             <span slot="title">{{ item.title }}</span>
             <span slot="date">{{ item.dateline | dateformat }}</span>
@@ -87,8 +88,25 @@
       </template>
     </div>
     <div class="s-bottom flex_center">
-      <div class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</div>
-      <div class="flex_cell bg-red color-white h_100 flex_center"><i class="al al-weixin2 color-fff font18" style="padding-right:3px;"></i>{{ $t('Wechat contact') }}</div>
+      <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</router-link>
+      <div class="flex_cell bg-red color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin2 color-fff font18" style="padding-right:3px;"></i>{{ $t('Wechat contact') }}</div>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showqrcode" height="100%">
+        <div class="popup1 h_100 flex_center font14 bg-black">
+          <div class="flex_center" style="width:82%;height:82%;">
+            <div class="align_center">
+              <img :src="retailerInfo.qrcode" class="db" style="max-width:100%;max-height:100%;margin:0 auto 15px;">
+      				<div class="color-white bg-blue padding5 border-box" style="background-color: #0f96e8;border-radius:4px;">长按识别二维码成为微信好友</div>
+      				<div style="margin-top:30px;">
+      					<span class="db-in" @click="closepopup">
+      						<i class="al al-close color-white font36"></i>
+      					</span>
+      				</div>
+            </div>
+          </div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
@@ -111,21 +129,25 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper } from 'vux'
+import { Swiper, TransferDomDirective as TransferDom, Popup } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
-import Time from '../../libs/time'
-import ENV from '../../libs/env'
+import Time from '#/time'
+import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Swiper,
     Groupbuyitemplate,
     Bargainbuyitemplate,
     Productitemplate,
-    Newsitemplate
+    Newsitemplate,
+    Popup
   },
   filters: {
     dateformat: function (value) {
@@ -134,52 +156,22 @@ export default {
   },
   data () {
     return {
-      retailerInfo: {},
-      shopname: '潮优小铺',
+      query: Object,
+      retailerInfo: { avatar: '/src/assets/images/user.jpg' },
+      showqrcode: false,
       showdot: true,
-      addata: [{
-        url: 'javascript:',
-        img: 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204043604042.jpg?x-oss-process=image/crop||x_78||y_-36||w_736||h_408',
-        title1: '欧美宽松潮牌国潮复古加绒卫衣男连帽韩版外套男女oversize青少年'
-      }, {
-        url: 'javascript:',
-        img: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        title1: '苹果手机'
-      }, {
-        url: 'javascript:',
-        img: 'http://ossgxs.boka.cn/month_201803/15223015290656.jpg',
-        title1: '维生素B族片'
-      }],
-      activitydata: [
-        { 'id': 227, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15220608592056.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'price': '1.00', 'havetuan': 0 },
-        { 'id': 226, 'title': '砍价:你会给我买名牌包包吗？', 'type': 'bargainbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15217043944267.jpg', 'minprice': '5.00', 'price': '10.00', 'saveprice': '5.00' },
-        { 'id': 217, 'title': '团购:测试商品分享', 'type': 'groupbuy', 'photo': 'http://ossgxs.boka.cn/month_201803/15222371028755.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
-        { 'id': 216, 'title': '团购:欧美宽松潮牌国潮复古加绒卫衣男连帽韩版外套男女oversize青少年', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204034569409.png', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
-        { 'id': 215, 'title': '团购:欧美简约假两件无袖背心男休闲嘻哈ulzzang青少年学生坎肩打底衫打底衫打底衫', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15204032649156.png', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 2 },
-        { 'id': 212, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214217886785.jpg', 'groupprice': '0.50', 'numbers': '3', 'groupnumbers': '10', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.50', 'havetuan': 0 },
-        { 'id': 211, 'title': '团购:商品1', 'type': 'groupbuy', 'photo': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201803/15214216879480.jpg', 'groupprice': '0.01', 'numbers': '2', 'groupnumbers': '2', 'limitbuy': '1', 'price': '1.00', 'saveprice': '0.99', 'havetuan': 3 }
-      ],
+      addata: [],
+      activitydata: [],
       productdata: [],
-      toplinedata: [
-        { 'id': 96, 'title': '沈阳市毽球协会经验介绍 | 专题', 'dateline': 1522299789, 'photo': 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222997918736' },
-        { 'id': 93, 'title': '『销售电子商务』最新职位推荐', 'dateline': 1522237185, 'photo': 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222371898745' },
-        { 'id': 90, 'title': '【渠道运营】销售≠只说话！80％的销售员都错了', 'dateline': 1522218127, 'photo': 'http://gongxiaoshe.qiyeplus.com/data/upload//month_201713/15222181292017' }
-      ]
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null,
+      newspagestart: 0,
+      newslimit: 3,
+      isgetnews: true,
+      toplinedata: []
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.retailerInfo = data.data ? data.data : data
-    })
-    self.$http.get(`${ENV.BokaApi}/api/list/product`).then(function (res) {
-      return res.json()
-    }).then(function (data) {
-      self.productdata = data.data ? data.data : data
-    })
   },
   computed: {
     isshowdot: function () {
@@ -192,11 +184,110 @@ export default {
     }
   },
   methods: {
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      if (self.query.wid) {
+        params.params.uploader = self.query.wid
+      } else {
+        params.params.from = 'myshop'
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('.store .s-container')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getnewsdata () {
+      const self = this
+      if (self.isgetnews) {
+        let params = { params: { pagestart: self.newspagestart, limit: self.newslimit, uploader: self.query.wid } }
+        self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(function (res) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          if (retdata.length === 0) {
+            self.newspagestart = 0
+            self.getnewsdata()
+          } else {
+            if (retdata.length < self.newslimit) {
+              self.toplinedata = data.data ? data.data : data
+              if (self.newspagestart === 0) {
+                self.isgetnews = false
+              } else {
+                self.newspagestart = 0
+              }
+            } else if (retdata.length === self.newslimit) {
+              self.toplinedata = data.data ? data.data : data
+              self.newspagestart++
+            }
+          }
+        })
+      }
+    },
+    changeNews () {
+      this.getnewsdata()
+    },
+    clickWetchat () {
+      this.showqrcode = true
+    },
+    closepopup () {
+      this.showqrcode = false
+    }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    let getparams = { params: Object }
+    if (self.query.wid) {
+      getparams.params.uid = self.query.wid
+    }
+    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, getparams).then(function (res) {
+      let data = res.data
+      self.retailerInfo = data.data ? data.data : data
+      document.title = self.retailerInfo.title
+      let params = { wid: self.query.wid }
+      return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, params)
+    }).then(function (res) {
+      let data = res.data
+      let retdata = data.data ? data.data : data
+      for (let i = 0; i < retdata.length; i++) {
+        retdata[i].img = retdata[i].photo
+      }
+      self.addata = retdata
+      let params = { params: { pagestart: 0, limit: 20, wid: self.query.wid } }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
+    }).then(function (res) {
+      let data = res.data
+      self.activitydata = data.data ? data.data : data
+    })
+    self.getdata1()
+    self.getnewsdata()
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .vline{position:relative;}
 .vline:after {
   content: " ";
@@ -209,5 +300,4 @@ export default {
   left: -1px;
   background-color: #ff6600;
 }
-
 </style>

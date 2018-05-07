@@ -21,69 +21,160 @@
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
-              <div class="scroll_list pl10 pr10">
-                <div v-if="!getCheckdata || getCheckdata.length == 0" class="scroll_item color-gray padding10 align_center">
+              <div class="scroll_list listarea">
+                <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
                   <div class="mt5">暂无待提现金额记录！</div>
                   <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
                 </div>
-                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in tabdata1" :key="item.id" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w50">
-                      <img :src="item.avatar" class="avatarimg1" />
+                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white">
+                  <template v-if="item.content.indexOf('平台奖励基金') < 0">
+                    <check-icon class="x-check-icon b_bottom_after" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w50">
+                          <img :src="item.avatar" class="avatarimg1" />
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">{{item.buyername}}</div>
+                          <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                        </div>
+                        <div class="t-cell align_center v_middle w100">
+                          <div class="font12">实际收入</div>
+                          <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                    <div class="padding10 border-box">
+                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">订单收入</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
+                      <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
                     </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.buyername}}</div>
-                      <div class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
-                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                  </template>
+                  <check-icon v-else class="x-check-icon" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w50">
+                        <img :src="item.avatar" class="avatarimg1" />
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{item.buyername}}</div>
+                        <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
+                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                      </div>
+                      <div class="t-cell align_center v_middle w100">
+                        <div class="font12">实际收入</div>
+                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                      </div>
                     </div>
-                    <div class="t-cell align_right v_middle w100">
-                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </div>
-                </check-icon>
+                  </check-icon>
+                </div>
               </div>
             </div>
             <div class="toolbar_bg" style="position:absolute;left:0;bottom:0;right:0;height:45px;">
               <div class="t-table h_100">
                 <div class="t-cell h_100 v_middle w100">
-                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAll">全选</check-icon>
+                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent">全选</check-icon>
                 </div>
                 <div class="t-cell h_100 v_middle align_left">合计：<font class="color-orange">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
-                <div class="t-cell h_100 v_middle font16 align_center bg-orange1 color-white w80" >提现</div>
+                <div class="t-cell h_100 v_middle font16 align_center bg-orange1 color-white w80" @click="getcash">提现</div>
               </div>
             </div>
           </template>
           <template v-if="(index == 1)">
-            <div class="scroll_list pl10 pr10">
+            <div class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
                 <div class="mt5">暂无待提现金额记录！</div>
                 <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
               </div>
-              <Listplate v-else v-for="(item,index1) in tabdata2" :key="item.id">
-                <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                <div slot="title" class="clamp1">{{item.buyername}}</div>
-                <div slot="title" class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span>{{ item.products }}</span></div>
-                <div slot="title" class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-              </Listplate>
+              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
+                <template v-if="item.content.indexOf('平台奖励基金') < 0">
+                  <div class="b_bottom_after padding5">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w50 pr10 border-box">
+                        <img :src="item.avatar" class="avatarimg1" />
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{item.buyername}}</div>
+                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                      </div>
+                      <div class="t-cell align_center v_middle w100">
+                        <div class="font12">实际收入</div>
+                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="padding10 border-box">
+                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">订单收入</span><span>{{ item.products }}</span></div>
+                    <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
+                  </div>
+                </template>
+                <div v-else class="padding5">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50 pr10 border-box">
+                      <img :src="item.avatar" class="avatarimg1" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.buyername}}</div>
+                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
+                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                    </div>
+                    <div class="t-cell align_center v_middle w100">
+                      <div class="font12">实际收入</div>
+                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </template>
           <template v-if="(index == 2)">
-            <div class="scroll_list pl10 pr10">
+            <div class="scroll_list">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
                 <div class="mt5">暂无待结算订单记录！</div>
                 <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
               </div>
-              <Listplate v-else v-for="(item,index1) in tabdata3" :key="item.id">
-                <img slot="pic" :src="item.avatar" class="avatarimg1" />
-                <div slot="title" class="clamp1">{{item.buyername}}</div>
-                <div slot="title" class="mt3 clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span>{{ item.products }}</span></div>
-                <div slot="title" class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-              </Listplate>
+              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
+                <template v-if="item.content.indexOf('平台奖励基金') < 0">
+                  <div class="b_bottom_after padding5">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w50 pr10 border-box">
+                        <img :src="item.avatar" class="avatarimg1" />
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{item.buyername}}</div>
+                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                      </div>
+                      <div class="t-cell align_center v_middle w100">
+                        <div class="font12">实际收入</div>
+                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="padding10 border-box">
+                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">订单收入</span><span>{{ item.products }}</span></div>
+                    <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
+                  </div>
+                </template>
+                <div v-else class="padding5">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50 pr10 border-box">
+                      <img :src="item.avatar" class="avatarimg1" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.buyername}}</div>
+                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
+                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                    </div>
+                    <div class="t-cell align_center v_middle w100">
+                      <div class="font12">实际收入</div>
+                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </template>
         </swiper-item>
@@ -140,9 +231,8 @@ Know txt:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon } from 'vux'
-import Listplate from '@/components/Listplate'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -153,7 +243,6 @@ export default {
     TabItem,
     Swiper,
     SwiperItem,
-    Listplate,
     Popup,
     CheckIcon
   },
@@ -164,13 +253,13 @@ export default {
   },
   data () {
     return {
-      tabtxts: [ '未提现', '待结算', '已提现' ],
+      tabtxts: [ '待提现', '待结算', '已提现' ],
       tabmodel: 0,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
       totalPrice: '0.00',
-      checkdata: this.tabdata1,
+      checkedData: [],
       checkedAll: true,
       showpopup: false,
       limit: 20,
@@ -192,26 +281,6 @@ export default {
     self.getdata1()
   },
   computed: {
-    getCheckdata: function () {
-      let curdata = this.tabdata1
-      for (var i = 0; i < curdata.length; i++) {
-        let d = curdata[i]
-        d.checked = true
-      }
-      this.checkdata = curdata
-      return curdata
-    },
-    getTotalprice: function () {
-      let curdata = this.checkdata
-      for (var i = 0; i < curdata.length; i++) {
-        let d = curdata[i]
-        if (d.checked) {
-          this.totalPrice = parseFloat(this.totalPrice) + parseFloat(d.money)
-        }
-      }
-      this.totalPrice = this.totalPrice.toFixed(2)
-      return this.totalPrice
-    }
   },
   methods: {
     scroll1: function () {
@@ -260,6 +329,12 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        if (self.checkedAll) {
+          for (let i = 0; i < retdata.length; i++) {
+            retdata[i].checked = true
+            self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(retdata[i].money.replace(/,/g, ''))).toFixed(2)
+          }
+        }
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.retailerrevenue .swiperitem')
@@ -302,28 +377,69 @@ export default {
         }
       })
     },
-    checkboxclick (d) {
-      this.totalPrice = 0
-      let curdata = this.checkdata
-      for (var i = 0; i < curdata.length; i++) {
-        let d = curdata[i]
-        if (d.checked) {
-          this.totalPrice = parseFloat(this.totalPrice) + parseFloat(d.money)
-        }
+    checkboxclick (d, index) {
+      const self = this
+      let curmoney = parseFloat(d.money.replace(/,/g, ''))
+      if (d.checked) {
+        self.checkedData.push(d.id)
+        self.totalPrice = (parseFloat(self.totalPrice) + curmoney).toFixed(2)
+      } else {
+        self.checkedAll = false
+        self.$util.deleteValue(self.checkedData, d.id)
+        self.totalPrice = (parseFloat(self.totalPrice) - curmoney).toFixed(2)
       }
-      this.totalPrice = this.totalPrice.toFixed(2)
     },
-    checkAll () {
-      let curdata = this.checkdata
-      for (var i = 0; i < curdata.length; i++) {
-        let d = curdata[i]
-        curdata[i].checked = this.checkedAll
-        if (this.checkedAll) {
-          this.totalPrice = parseFloat(this.totalPrice) + parseFloat(d.money)
+    checkAllevent () {
+      const self = this
+      self.totalPrice = '0.00'
+      self.checkedData = []
+      for (let i = 0; i < self.tabdata1.length; i++) {
+        let d = self.tabdata1[i]
+        if (self.checkedAll) {
+          self.checkedData.push(d.id)
+          self.tabdata1[i].checked = true
+          self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(d.money.replace(/,/g, ''))).toFixed(2)
         } else {
-          this.totalPrice = 0
+          delete self.tabdata1[i].checked
         }
       }
+    },
+    getcash () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要提现吗？',
+        onConfirm () {
+          if (self.checkedData.length === 0) {
+            self.$vux.toast.show({
+              text: '请选择提现数据'
+            })
+            return false
+          }
+          self.$vux.loading.show()
+          let subdata = { ids: self.checkedData }
+          self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  for (let i = 0; i < self.checkedData.length; i++) {
+                    let ckid = self.checkedData[i]
+                    for (let j = 0; j < self.tablist1.length; j++) {
+                      if (self.tablist1[j].id === ckid) {
+                        self.tablist1.splice(j, 1)
+                        break
+                      }
+                    }
+                  }
+                }
+              }
+            })
+          })
+        }
+      })
     },
     popupexplain () {
       this.showpopup = !this.showpopup
@@ -354,5 +470,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.retailerrevenue .scroll_list .scroll_item:after{display:none;}
+.retailerrevenue .scroll_list .scroll_item:not(:last-child){margin-bottom:10px;}
 </style>

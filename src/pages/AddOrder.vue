@@ -6,7 +6,7 @@
 					<div class="t-table">
 						<div v-if="selectaddress" class="t-cell v_middle">
 							<div>收货人：{{ selectaddress.linkman }} {{ selectaddress.telephone}}</div>
-							<div>收货地址：{{ selectaddress.address }}</div>
+							<div>收货地址：{{ selectaddress.fulladdress }}</div>
 						</div>
 						<div v-else class="t-cell v_middle color-red">请选择地址</div>
 						<div class="t-cell v_middle" style="width:30px;">
@@ -72,20 +72,14 @@
         					</div>
         				</div>
               </template>
-              <label v-else v-for="(item,index) in addressdata" :key="item.id" class="scroll_item padding10 db" style="position:relative;">
+              <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in addressdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                 <div class="t-table">
-                  <div class="t-cell v_middle w30">
-                    <div class="qradio">
-                      <input type="radio" name="address" @click="radioclick(item)" />
-                      <i class="al"></i>
-                    </div>
-                  </div>
-                  <div class="t-cell pic v_middle">
-                    <div>{{ item.linkman }} {{ item.telephone}}</div>
-                    <div>{{ item.fulladdress }}</div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1">{{ item.linkman }} {{ item.telephone}}</div>
+                    <div class="clamp1">{{ item.fulladdress }}</div>
                   </div>
                 </div>
-      				</label>
+              </check-icon>
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -148,8 +142,8 @@ Please select address:
 </i18n>
 
 <script>
-import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, Checklist } from 'vux'
-import ENV from '#/env'
+import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon } from 'vux'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -162,7 +156,7 @@ export default {
     XInput,
     Popup,
     Alert,
-    Checklist
+    CheckIcon
   },
   data () {
     return {
@@ -240,6 +234,9 @@ export default {
     },
     payPrice: function () {
       return this.payPrice
+    },
+    selectaddress: function () {
+      return this.selectaddress
     }
   },
   computed: {
@@ -264,9 +261,19 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    radioclick (data) {
-      console.log(111)
-      this.selectaddress = data
+    radioclick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectaddress = data
+      } else {
+        self.selectaddress = null
+      }
+      for (let d of self.addressdata) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
     },
     submitaddress () {
       if (!this.selectaddress.id) {
@@ -303,7 +310,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .form-item{position:relative;padding:10px;}
 .form-item:after{
   content:"";display:block;

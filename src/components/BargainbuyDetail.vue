@@ -6,22 +6,22 @@
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <img :src="activityuser.avatar">
+          <img :src="crowduser.avatar">
         </div>
-        <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ activityuser.linkman }}</div>
+        <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
     </div>
     <div class="boxarea">
       <div class="inner">
         <div class="innerbg">
-          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:productdata.wid,id:productdata.id}}">
-            <div class="t-cell v_middle" style="width:80px;">
-              <img :src="productdata.photo" style="width:70px;height:70px;">
+          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
+            <div class="t-cell v_middle w80">
+              <img :src="product.photo" style="width:70px;height:70px;" class="imgcover" />
             </div>
             <div class="t-cell">
-              <div class="clamp2 font13 color-gray7">{{ productdata.title }}</div>
-              <div class="clamp1 font13" style="color:#E02D24;">最低价：<span class="font16 bold">{{ productdata.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ productdata.price }} 元</del></div>
-              <div class="clamp1 font13" style="color:#E02D24;">剩  余：<span class="font16 bold">{{ productdata.leftstorage }}</span> 件</div>
+              <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
+              <div class="clamp1 font13" style="color:#E02D24;">最低价：<span class="font16 bold">{{ data.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ product.price }} 元</del></div>
+              <div class="clamp1 font13" style="color:#E02D24;">剩  余：<span class="font16 bold">{{ data.leftstorage }}</span> 件</div>
             </div>
           </router-link>
         </div>
@@ -39,34 +39,34 @@
             <div class="t-cell align_right">最低价</div>
           </div>
           <div class="priceline">
-            <div class="line linepercent" :style="`width:${cutinfo.cutpercent}%;`"></div>
+            <div class="line linepercent" :style="`width:${crowduser.cutpercent}%;`"></div>
           </div>
           <div class="t-table">
-            <div class="t-cell align_left">￥{{ cutinfo.price }}</div>
-            <div class="t-cell align_center">￥{{ cutinfo.cutprice }}</div>
-            <div class="t-cell align_right">￥{{ cutinfo.minprice }}</div>
+            <div class="t-cell align_left">￥{{ product.price }}</div>
+            <div class="t-cell align_center">￥{{ crowduser.leftmoney }}</div>
+            <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
         <div class="t-table">
-          <div v-if="productdata.leftstorage <= 0" class="t-cell">
+          <div v-if="data.leftstorage <= 0" class="t-cell">
             <div class="btn db">商品已售罄，本次活动结束</div>
           </div>
           <template v-else>
-            <div v-if="nowdateline > productdata.endtime && !isfull" class="t-cell">
+            <div v-if="crowduser.isovertime && !crowduser.isfull" class="t-cell">
               <div class="btn db">砍价失败</div>
             </div>
             <template v-else>
-              <div v-if="isfull" class="t-cell">
+              <div v-if="crowduser.isfull" class="t-cell">
                 <div class="btn db">已完成砍价</div>
               </div>
-              <div v-else class="t-cell">
+              <div v-else-if="!crowduser.isovertime" class="t-cell">
                 <div class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
-              <div v-if="currentuser.uid == activityuser.uid" class="t-cell">
-                <router-link to="/retailerActivitylist" class="btn db">我的活动</router-link>
+              <div v-if="data.havecreate" class="t-cell">
+                <router-link :to="{path: '/bargainbuy', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
               </div>
-              <div v-else-if="productdata.endtime < nowdateline && canbuy" class="t-cell">
-                <div class="btn db">我要参与</div>
+              <div v-else-if="!data.isfinished && !data.havecreate" class="t-cell">
+                <div class="btn db" @click="joinin">我要参与</div>
               </div>
             </template>
           </template>
@@ -80,12 +80,12 @@
       </div>
       <div class="listarea">
         <div class="scroll_list">
-          <div v-if="cutdata.length == 0" class="scroll_item emptyitem" style="padding:0;">
+          <div v-if="cutData.length == 0" class="scroll_item emptyitem" style="padding:0;">
               <div class="t-table">
                 <div class="t-cell middle-cell" style="color:inherit;">还没有好友砍价</div>
               </div>
           </div>
-          <div v-else v-for="(item,index) in cutdata" :key="item.id" class="scroll_item">
+          <div v-else v-for="(item,index) in cutData" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
                 <img class="v_middle" style="width:44px;height:44px;border-radius:50%;" :src="item.avatar" />
@@ -112,57 +112,50 @@
 <script>
 
 import { Countdown } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from 'env'
 
 export default {
+  name: 'BargainbuyDetail',
+  props: {
+    data: Object,
+    crowduser: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    user: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    cutData: Array,
+    onJoin: Function,
+    onCut: Function
+  },
   components: {
     Countdown
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   data () {
     return {
+      loginUser: Object,
+      product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
       canbuy: true,
-      currentuser: {
-        uid: 187,
-        linkman: 'YOUNG'
-      },
-      activityuser: {
-        uid: 187,
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-        linkman: 'YOUNG'
-      },
-      cutinfo: {
-        price: '8,000.00',
-        minprice: '1000.00',
-        cutprice: '0.00',
-        cutpercent: 0
-      },
-      productdata: {
-        id: 124,
-        wid: 187,
-        title: '苹果手机',
-        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        minprice: '10.00',
-        price: '8,000.00',
-        special: '8,000.00',
-        shares: 7,
-        saled: 1000,
-        postage: '0.00',
-        moderate: 1,
-        buyonline: 0,
-        storage: 10,
-        currentnumbers: 0,
-        endtime: 1529694513,
-        leftstorage: 3,
-        content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
-      },
-      cutdata: [
-        { avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg', linkman: 'YOUNG', cutmoney: '0.01' }
-      ]
+      lefthour: '',
+      leftminute: '',
+      leftsecond: ''
+    }
+  },
+  created () {
+    const self = this
+    if (self.data) {
+      self.product = self.data.product
+    }
+    if (self.crowduser) {
+      self.lefthour = self.crowduser.timeleft.hour
+      self.leftminute = self.crowduser.timeleft.minute
+      self.leftsecond = self.crowduser.timeleft.second
+      self.cutdown()
     }
   },
   filters: {
@@ -171,27 +164,84 @@ export default {
     }
   },
   watch: {
-    cutinfo: function () {
-      let retdata = this.cutinfo
-      let cutprice = parseFloat(retdata.cutprice)
-      let minprice = parseFloat(retdata.minprice)
-      retdata.cutpercent = ((cutprice / minprice) * 100).toFixed(2)
-      return retdata
+    data () {
+      return this.data
+    },
+    crowduser () {
+      return this.data.crowduser
     }
   },
   methods: {
     cutevent () {
-      let self = this
-      let cutp = parseFloat((Math.random() * 100).toFixed(2))
-      let cutprice = (parseFloat(self.cutinfo.cutprice) + cutp).toFixed(2)
-      let cutpercent = ((parseFloat(self.cutinfo.cutprice) / parseFloat(self.cutinfo.minprice)) * 100).toFixed(2)
-      if (cutpercent >= 100) {
-        cutpercent = 100
-        cutprice = self.cutinfo.minprice
-        self.isfull = true
-      }
-      self.cutinfo.cutprice = cutprice
-      self.cutinfo.cutpercent = cutpercent
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.onCut && self.onCut()
+            }
+          }
+        })
+      })
+    },
+    cutdown () {
+      const self = this
+      let cutdownInterval = setInterval(function () {
+        let h = parseInt(self.lefthour)
+        let m = parseInt(self.leftminute)
+        let s = parseInt(self.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            self.leftsecond = '0' + s
+          } else {
+            self.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            self.leftminute = '0' + m
+          } else {
+            self.leftminute = m
+          }
+          self.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            self.lefthour = '0' + h
+          } else {
+            self.lefthour = h
+          }
+          self.leftminute = '59'
+          self.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(cutdownInterval)
+          self.isfinish = true
+        }
+      }, 1000)
+    },
+    joinin () {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.onJoin && self.onJoin(data.data)
+            }
+          }
+        })
+      })
     }
   }
 }
@@ -201,16 +251,9 @@ export default {
 .bargainbuydetail {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }
-.bargainbuydetail .topimg img {
-    width: 100%;
-    vertical-align: middle;
-}
-.bargainbuydetail .b_header{
-  position:absolute;
-  height:90px;
-  top:30px;
-  width:100%;
-}
+.bargainbuydetail .topimg{position:absolute;left:0;top:0;width:100%;}
+.bargainbuydetail .topimg img{width:100%;max-height:240px;vertical-align: middle;}
+.bargainbuydetail .b_header{width:100%;height:90px;padding-top:30px;overflow:hidden;position: relative;}
 .bargainbuydetail .b_header .inner {
     width: 168px;
     height: 168px;
@@ -227,7 +270,7 @@ export default {
   width: 94%;
   box-sizing:border-box;
   position:relative;
-  margin:45px auto 0;
+  margin:-1px auto 0;
   background: #FDC45D;
   border-radius: 13px;
   padding: 16px 12px 16px 12px;

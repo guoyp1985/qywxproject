@@ -1,7 +1,7 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14">
+  <div class="containerarea s-havebottom bg-white font14 addActivity">
     <div class="s-container" style="top:0;">
-      <form>
+      <form class="addForm">
         <Forminputplate class="required">
           <span slot="title">{{ $t('Activity product') }}</span>
           <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
@@ -56,6 +56,7 @@
           <div class="popup-middle">
             <search
               class="x-search"
+              v-model="searchword"
               :auto-fixed="autofixed"
               @on-submit="onSubmit"
               @on-change="onChange"
@@ -121,7 +122,7 @@ import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
 import FormDiscount from '@/components/FormDiscount'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -293,17 +294,18 @@ export default {
       const self = this
       let params = { params: { from: 'activity', pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.params.keyword = keyword
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
           self.searchresult = true
         } else {
           self.searchresult = false
         }
+        self.searchword = ''
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         if (!self.isBindScroll1) {
@@ -366,12 +368,29 @@ export default {
         })
         return false
       }
+      if (self.activityType === 'bargainbuy') {
+        let priceinput = document.querySelector('.addActivity .addForm .minprice')
+        let priceval = parseFloat(priceinput.value)
+        let mininput = document.querySelector('.addActivity .addForm .everymin')
+        let minval = parseFloat(mininput.value)
+        let maxinput = document.querySelector('.addActivity .addForm .everymax')
+        let maxval = parseFloat(maxinput.value)
+        if (minval > priceval || maxval > priceval) {
+          self.$vux.alert.show({
+            title: '',
+            content: '可砍金额不能大于活动价格'
+          })
+          return false
+        }
+      }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
+          type: toasttype,
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
@@ -385,5 +404,5 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 </style>

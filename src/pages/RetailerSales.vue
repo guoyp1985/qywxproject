@@ -19,6 +19,7 @@
           <div v-if="(index == 0)">
             <search
               class="x-search"
+              v-model="searchword1"
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
@@ -43,18 +44,31 @@
                     <div class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
                     <div class="clamp1 mt5 font12 color-gray">带来消费：￥{{item.sales}}</div>
                   </router-link>
-                  <div class="t-cell align_right" style="width:60px;">
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w60 align_right v_middle">
                     <div class="qbtn bg-green color-white">联系</div>
-                  </div>
+                  </router-link>
                 </div>
               </div>
             </div>
           </div>
           <div v-if="(index == 1)">
+            <search
+              class="x-search"
+              v-model="searchword2"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
+              ref="search">
+            </search>
             <div class="scroll_list pl10 pr10">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+                <template v-if="searchresult2">
+                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                </template>
+                <template v-else>
                 <div><i class="al al-qiangkehu font60 pt20"></i></div>
                 <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
+                </template>
               </div>
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
@@ -114,7 +128,7 @@ Send text:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {
@@ -141,6 +155,8 @@ export default {
       tabdata3: [],
       searchword1: '',
       searchresult1: false,
+      searchword2: '',
+      searchresult2: false,
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
@@ -203,12 +219,16 @@ export default {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
         params.params.keyword = keyword
+      } else {
+        self.searchresult1 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
@@ -225,9 +245,17 @@ export default {
     getdata2 () {
       const self = this
       let params = { pagestart: self.pagestart2, limit: self.limit }
+      let keyword = self.searchword2
+      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        self.searchresult2 = true
+        params.keyword = keyword
+      } else {
+        self.searchresult2 = false
+      }
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword2 = ''
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
@@ -261,6 +289,16 @@ export default {
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
+    },
+    onChange2 (val) {
+      this.searchword2 = val
+    },
+    onSubmit2 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     },
     tabclick (index) {
       const self = this
@@ -310,5 +348,5 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 </style>

@@ -34,10 +34,10 @@
           <img :src="item" class="imgcover" style="width:100%;height:100%;" />
         </swiper-item>
       </swiper>
-      <div class="grouptitle flex_left" v-if="activityInfo.type == 'groupbuy'">
-				<div class="col1"><span>￥</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
+      <div class="grouptitle flex_left" v-if="activityInfo && activityInfo.type == 'groupbuy'">
+				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
 				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
-				<div class="col3">已团{{ activityInfo.havetuan }}件</div>
+				<div class="col3">已团{{ productdata.havetuan }}件</div>
 			</div>
       <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
     		<div class="clamp2">
@@ -47,16 +47,19 @@
         <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
         <div class="t-table font12 mt5 color-gray2">
           <template v-if="productdata.postage">
-  					<div class="t-cell">快递: {{ productdata.postage }}元</div>
-  					<div class="t-cell pl10 align_right">销量: {{ productdata.saled }}件</div>
+  					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
+  					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}件</div>
           </template>
-          <div v-else class="t-cell align_left">销量: {{ productdata.saled }}件</div>
-					<div v-if="productdata.buyonline != 1" class="t-cell align_right " @click="popupbuy">
+          <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}件</div>
+          <div v-if="loginUser.uid == retailerinfo.uid || productdata.identity != 'user'" class="t-cell v_middle border-box align_right">
+            <span>佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+          </div>
+					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
 						<span class="help-icon">?</span>了解购买流程
 					</div>
 				</div>
   		</div>
-			<div class="groupbuarea" v-if="activityInfo.type == 'groupbuy' && activitydata.length > 0">
+			<div class="groupbuarea" v-if="activityInfo && activityInfo.type == 'groupbuy' && activitydata.length > 0">
 				<div class="bg-page" style="height:10px;"></div>
 				<div class="bg-white">
 					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
@@ -153,10 +156,8 @@
       </div>
       <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
       <div class="productcontent">
-        <template v-if="productdata.content == ''">
-          <img v-for="(item,index) in photoarr" :key="index" :src="item" />
-        </template>
-        <div v-else v-html="productdata.content"></div>
+        <div v-html="productdata.content"></div>
+        <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
       </div>
       <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
     </div>
@@ -169,7 +170,7 @@
 			</div>
 		</div>
     <template v-else>
-  		<div v-if="activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
+  		<div v-if="activityInfo && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
   			<div class="t-table h_100">
           <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
             <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
@@ -209,6 +210,13 @@
     		</div>
       </template>
     </template>
+    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+			<div class="ico"><i class="al al-feiji"></i></div>
+			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+			<div class="pic">
+				<img src="../assets/images/share1.jpg" />
+			</div>
+		</div>
     <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
@@ -270,6 +278,9 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+    </div>
   </div>
 </template>
 
@@ -289,11 +300,11 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, Loading } from 'vux'
+import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
@@ -301,14 +312,14 @@ export default {
     TransferDom
   },
   components: {
+    Previewer,
     Swiper,
     SwiperItem,
     Groupbuyitemplate,
     Bargainbuyitemplate,
     Popup,
     Marquee,
-    MarqueeItem,
-    Loading
+    MarqueeItem
   },
   filters: {
     dateformat: function (value) {
@@ -318,6 +329,7 @@ export default {
   data () {
     return {
       query: {},
+      showsharetip: true,
       productid: null,
       module: 'product',
       activityInfo: {},
@@ -335,86 +347,13 @@ export default {
       retailerinfo: {},
       photoarr: [],
       contentphotoarr: [],
+      previewerPhotoarr: [],
       buyuserdata: [],
       evluatedata: [],
       ingdata: [],
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 }
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.productid = self.query.id
-    self.loginUser = User.get()
-    if (self.loginUser) {
-      self.isshowtop = true
-      setTimeout(function () {
-        self.isshowtop = false
-      }, 5000)
-    }
-    let infoparams = { id: self.productid, module: 'product' }
-    if (self.query.wid) {
-      infoparams['wid'] = self.query.wid
-    }
-    if (self.query.share_uid) {
-      infoparams['share_uid'] = self.query.share_uid
-    }
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-      params: infoparams
-    }).then(function (res) {
-      let data = res.data
-      self.productdata = data.data ? data.data : data
-      document.title = self.productdata.title
-      self.retailerinfo = self.productdata.retailerinfo
-      self.activityInfo = self.productdata.activityinfo
-      if (!self.$util.isNull(self.productdata.photo)) {
-        self.photoarr = self.productdata.photo.split(',')
-      }
-      self.submitdata.id = self.productdata.id
-      self.submitdata.wid = self.retailerinfo.uid
-      let buyparams = {}
-      if (self.query.wid) {
-        buyparams['wid'] = self.query.wid
-      } else {
-        buyparams['productid'] = self.productid
-      }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-        params: buyparams
-      })
-    }).then(function (res) {
-      let data = res.data
-      if (data.flag === 1) {
-        self.buyuserdata = (data.data ? data.data : data)
-      }
-      return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
-        { params: { module: self.module, id: self.productid } }
-      )
-    }).then(function (res) {
-      let data = res.data
-      if (data.flag === 1) {
-        self.isfavorite = true
-      } else {
-        self.isfavorite = false
-      }
-      return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-        { params: { module: self.module, nid: self.productid } }
-      )
-    }).then(function (res) {
-      let data = res.data
-      if (data.flag === 1) {
-        self.evluatedata = (data.data ? data.data : data)
-      }
-      if (self.activityInfo.type === 'groupbuy') {
-        return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
-          { params: { id: self.productid } }
-        )
-      }
-    }).then(function (res) {
-      let data = res.data
-      self.activitydata = data.data ? data.data : data
-    })
   },
   watch: {
     query: function () {
@@ -484,6 +423,9 @@ export default {
     }
   },
   methods: {
+    closeSharetip () {
+      this.showsharetip = false
+    },
     popupbuy () {
       this.showpopup = true
     },
@@ -499,12 +441,12 @@ export default {
     favoriteevent () {
       const self = this
       if (self.isfavorite) {
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/delete`,
           { params: { module: self.module, id: self.productid } }
         ).then(function (res) {
           let data = res.data
-          self.isShowLoading = false
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.isfavorite = false
           } else if (data.error) {
@@ -519,12 +461,12 @@ export default {
         if (self.query.wid) {
           cururl = `${cururl}&wid=${self.query.wid}`
         }
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
           { params: { module: self.module, id: self.productid, currenturl: encodeURIComponent(cururl) } }
         ).then(function (res) {
           let data = res.data
-          self.isShowLoading = false
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.isfavorite = true
           } else if (data.error) {
@@ -539,13 +481,13 @@ export default {
     },
     buyevent (buytype) {
       const self = this
-      self.isShowLoading = true
-      if (buytype === 'groupbuy') {
+      self.$vux.loading.show()
+      if (buytype === 'groupbuy' && self.activityInfo) {
         self.submitdata['activityid'] = self.activityInfo.id
       }
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
         let data = res.data
-        self.isShowLoading = false
+        self.$vux.loading.hide()
         if (data.flag === 1) {
           self.$router.push({ path: '/addOrder', query: { id: self.productid } })
         } else if (data.error) {
@@ -555,12 +497,118 @@ export default {
           })
         }
       })
+    },
+    showBigimg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewer.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.photoarr[index],
+          urls: self.photoarr
+        })
+      }
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.productid = self.query.id
+    self.loginUser = User.get()
+    if (self.loginUser) {
+      self.isshowtop = true
+      setTimeout(function () {
+        self.isshowtop = false
+      }, 5000)
+    }
+    if (self.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
+    }
+    let infoparams = { id: self.productid, module: 'product' }
+    if (self.query.wid) {
+      infoparams['wid'] = self.query.wid
+    }
+    if (self.query.share_uid) {
+      infoparams['share_uid'] = self.query.share_uid
+    }
+    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+      params: infoparams
+    }).then(function (res) {
+      let data = res.data
+      self.productdata = data.data ? data.data : data
+      document.title = self.productdata.title
+      self.retailerinfo = self.productdata.retailerinfo
+      self.activityInfo = self.productdata.activityinfo
+      if (!self.$util.isNull(self.productdata.photo)) {
+        self.photoarr = self.productdata.photo.split(',')
+      }
+      if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
+        self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+      } else if (!self.$util.isNull(self.productdata.contentphoto)) {
+        self.contentphotoarr = self.productdata.contentphoto.split(',')
+        self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
+      }
+      self.$util.wxShare({
+        data: {
+          title: self.productdata.seotitle || self.productdata.title,
+          desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
+          link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+          photo: self.photoarr[0]
+        }
+      })
+      self.submitdata.id = self.productdata.id
+      self.submitdata.wid = self.retailerinfo.uid
+      let buyparams = {}
+      if (self.query.wid) {
+        buyparams['wid'] = self.query.wid
+      } else {
+        buyparams['productid'] = self.productid
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+        params: buyparams
+      })
+    }).then(function (res) {
+      let data = res.data
+      if (data.flag === 1) {
+        self.buyuserdata = (data.data ? data.data : data)
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+        { params: { module: self.module, id: self.productid } }
+      )
+    }).then(function (res) {
+      let data = res.data
+      if (data.flag === 1) {
+        self.isfavorite = true
+      } else {
+        self.isfavorite = false
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
+        { params: { module: self.module, nid: self.productid } }
+      )
+    }).then(function (res) {
+      let data = res.data
+      if (data.flag === 1) {
+        self.evluatedata = (data.data ? data.data : data)
+      }
+      if (self.activityInfo && self.activityInfo.type === 'groupbuy') {
+        return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
+          { params: { id: self.productid } }
+        )
+      }
+    }).then(function (res) {
+      if (res) {
+        let data = res.data
+        self.activitydata = data.data ? data.data : data
+      }
+    })
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .vline{position:relative;}
 .vline:after {
   content: " ";

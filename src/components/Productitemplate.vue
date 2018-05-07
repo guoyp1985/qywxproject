@@ -1,5 +1,5 @@
 <template>
-  <div class="bk-productitem scroll_item font14">
+  <router-link :to="{path: '/product', query: {id: data.id, wid: data.uploader}}" class="bk-productitem scroll_item font14 db">
 		<div class="inner">
 			<div class="picarea">
 				<div class="pic">
@@ -16,7 +16,7 @@
 				</div>
 			</div>
 		</div>
-  </div>
+  </router-link>
 </template>
 
 <i18n>
@@ -26,7 +26,10 @@ Saled txt:
 
 <script>
 export default {
-  name: 'Productitemplate'
+  name: 'Productitemplate',
+  props: {
+    data: Object
+  }
 }
 </script>
 

@@ -31,7 +31,7 @@
 <script>
 import { Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {
@@ -89,10 +89,13 @@ export default {
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.data = data.data ? data.data : data
-        for (let i = 0; i < self.data.length; i++) {
-          let d = self.data[i]
-          d.dateline = parseInt(Date.parse(d.time) / 1000)
+        let retdata = data.data ? data.data : data
+        if (!retdata.status) {
+          self.data = retdata
+          for (let i = 0; i < self.data.length; i++) {
+            let d = self.data[i]
+            d.dateline = parseInt(Date.parse(d.time) / 1000)
+          }
         }
       })
     }
@@ -100,7 +103,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .deliverinfo .pagetop{height:70px;background:rgba(0,0,0,0.85);}
 .deliverinfo .pagemiddle{
   top:90px;padding:0 20px 0 20px;

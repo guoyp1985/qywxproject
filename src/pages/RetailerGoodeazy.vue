@@ -22,6 +22,7 @@
             <div class="mb15" style="position:relative;">
               <search
                 class="x-search"
+                v-model="searchword"
                 :auto-fixed="autofixed"
                 @on-submit="onSubmit"
                 @on-change="onChange"
@@ -120,7 +121,7 @@ My orders:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {
@@ -210,6 +211,7 @@ export default {
         self.$vux.loading.hide()
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
+        self.searchword = ''
       })
     },
     onFocus () {
@@ -281,7 +283,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
 </style>

@@ -20,7 +20,7 @@
               </group>
             </div>
             <div class="t-cell align_center w100">
-              <div v-if="showGetcode" class="qbtn bg-blue3 color-white w90" style="line-height:25px;box-sizing:border-box;" @click="getcode">获取验证码</div>
+              <div v-if="showGetcode" class="qbtn bg-blue3 color-white w90 font12" style="line-height:25px;box-sizing:border-box;" @click="getcode">获取验证码</div>
               <div v-else class="qbtn bg-gray8 color-white w90" style="line-height:25px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
           </div>
@@ -205,7 +205,7 @@ Required item not empty:
 
 <script>
 import { Group, XInput, TransferDomDirective as TransferDom, Alert, Popup, Loading, Checker, CheckerItem } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
@@ -395,7 +395,7 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .retailerapply .pagebottom{
   background-color:#f2f2f2;
 }

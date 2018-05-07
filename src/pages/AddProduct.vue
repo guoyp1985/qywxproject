@@ -5,7 +5,9 @@
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.title" type="text" class="input" name="title" :placeholder="$t('Product name')" />
+            <group class="textarea-outer" style="padding:0;">
+              <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Product name')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+            </group>
           </div>
         </div>
       </div>
@@ -157,7 +159,7 @@ Up text:
 
 <script>
 import { Group, XInput, XTextarea, Loading, TransferDomDirective as TransferDom } from 'vux'
-import ENV from '../../libs/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -293,10 +295,10 @@ export default {
     expandevent () {
       this.showmore = !this.showmore
     },
-    saveevent () {
+    savedata (postdata) {
       const self = this
       for (let key in self.requireddata) {
-        self.requireddata[key] = self.submitdata[key]
+        self.requireddata[key] = postdata[key]
       }
       self.allowsubmit = self.$util.validateQueue(self.requireddata)
       if (!self.allowsubmit) {
@@ -308,67 +310,59 @@ export default {
           onHide () {
             self.allowsubmit = true
           }
+        })
+        return false
+      }
+      if (isNaN(postdata.price) || postdata.price < 0) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请输入正确的价格'
+        })
+        return false
+      }
+      if (self.$util.isNull(postdata.content) && self.$util.isNull(postdata.contentphoto)) {
+        self.$vux.alert.show({
+          title: '',
+          content: '请完善商品介绍或者详情图片'
         })
         return false
       }
       self.$vux.loading.show()
       if (self.query.id) {
-        self.submitdata.id = self.query.id
+        postdata.id = self.query.id
       }
-      self.$http.post(`${ENV.BokaApi}/api/add/product`, self.submitdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
+          type: toasttype,
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push('/retailerProductlist')
+              self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
             }
           }
         })
       })
     },
+    saveevent () {
+      const self = this
+      let postdata = self.submitdata
+      self.savedata(postdata)
+    },
     saveupevent () {
       const self = this
-      for (let key in self.requireddata) {
-        self.requireddata[key] = self.submitdata[key]
-      }
-      self.allowsubmit = self.$util.validateQueue(self.requireddata)
-      if (!self.allowsubmit) {
-        self.$vux.alert.show({
-          title: '',
-          content: '必填项不能为空',
-          onShow () {
-          },
-          onHide () {
-            self.allowsubmit = true
-          }
-        })
-        return false
-      }
-      self.$vux.loading.show()
       let postdata = self.submitdata
       postdata['moderate'] = 1
-      self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push('/retailerProductlist')
-            }
-          }
-        })
-      })
+      self.savedata(postdata)
     }
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .form-item{position:relative;padding:10px;}
 .form-item:after{
   content:"";display:block;

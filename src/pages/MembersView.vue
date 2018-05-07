@@ -4,7 +4,10 @@
       <div class="pl10 pr10">
         <div class="t-table">
           <div class="t-cell v_middle w80">
-            <img class="avatarimg4" :src="viewuser.avatar" />
+            <img class="avatarimg4" :src="viewuser.avatar" @click="showBigimg(0)" />
+            <div v-transfer-dom>
+              <previewer :list="imgarr" ref="previewer"></previewer>
+            </div>
           </div>
           <div class="t-cell v_middle">
             <div class="font17">{{ viewuser.linkman }}</div>
@@ -102,10 +105,17 @@ Behavior:
 </i18n>
 
 <script>
+import { Previewer, TransferDom } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -114,22 +124,13 @@ export default {
   data () {
     return {
       query: {},
-      viewuser: { avatar: '/src/assets/images/user.jpg' }
+      viewuser: { avatar: '/src/assets/images/user.jpg' },
+      imgarr: [{
+        msrc: '/src/assets/images/user.jpg',
+        src: '/src/assets/images/user.jpg'
+      }],
+      wximgarr: ['/src/assets/images/user.jpg']
     }
-  },
-  created: function () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-      { params: { customeruid: self.query.uid } }
-    ).then(function (res) {
-      let data = res.data
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        document.title = self.viewuser.linkman
-      }
-    })
   },
   computed: {
     getprioritycss: function () {
@@ -231,12 +232,40 @@ export default {
           })
         }
       })
+    },
+    showBigimg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewer.show(index)
+      } else {
+        self.$vue.wechat.previewImage({
+          current: self.wximgarr[index],
+          urls: self.wximgarr
+        })
+      }
     }
+  },
+  created: function () {
+    const self = this
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+      { params: { customeruid: self.query.uid } }
+    ).then(function (res) {
+      let data = res.data
+      if (data) {
+        self.viewuser = data.data ? data.data : data
+        self.imgarr[0].msrc = self.viewuser.avatar
+        self.imgarr[0].src = self.viewuser.avatar
+        self.wximgarr[0] = self.viewuser.avatar
+        document.title = self.viewuser.linkman
+      }
+    })
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .membersview .btnlist .btn{
   display:inline-block;vertical-align: middle;
   width:90%;box-sizing: border-box;height:35px;line-height:35px;border-radius:20px;

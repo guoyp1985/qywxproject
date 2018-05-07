@@ -22,7 +22,7 @@
 <script>
 import { Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {
@@ -100,12 +100,15 @@ export default {
     clickArticle (item) {
       this.$router.push({path: `/articles/${item.id}`})
     },
-    getInitData () {
+    getData () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
       .then(res => {
         self.tabs = res.data.data
         self.getAritcles(self.selectedIndex)
+        return self.$http.get(`${ENV.BokaApi}/api/common/getAd`)
+      })
+      .then(res => {
       })
     },
     getAritcles (index) {
@@ -117,13 +120,13 @@ export default {
     }
   },
   created () {
-    this.getInitData()
+    this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 #view-articles .active-green {
   color: #04be02 !important;
   border-color: #04be02 !important;

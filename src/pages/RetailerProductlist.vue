@@ -32,11 +32,17 @@
         			</div>
         			<div class="t-cell v_middle">
                 <div class="clamp2 font15 pr10">{{item.title}}</div>
-                <div class="mt5 dishref db">
-                  <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
-                </div>
-                <div class="align_right pr10">
-                  <div class="btnicon" style="padding: 1px 8px;" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+                <div class="t-table pr10 border-box mt5">
+                  <div class="t-cell color-gray font12">
+                    <div class="clamp1">售价: {{ $t('RMB') }}{{ item.price }}</div>
+                    <div class="clamp1">
+                        <span class="v_middle db-in">库存: {{ item.storage }}件</span>
+                        <span class="v_middle db-in ml5">已售: {{ item.saled }}件</span>
+                    </div>
+                  </div>
+                  <div class="align_right t-cell v_bottom w80">
+                    <div class="btnicon" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+                  </div>
                 </div>
         			</div>
         		</div>
@@ -49,12 +55,30 @@
       <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
         <div class="popup0">
           <div class="list" v-if="clickdata">
+            <div class="item">
+              <router-link class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
+            </div>
+            <div class="item" v-if="clickdata.moderate == 0">
+              <div class="inner" @click="clickpopup('up')">上架</div>
+            </div>
+            <div class="item" v-else-if="clickdata.moderate == 1">
+              <div class="inner" @click="clickpopup('down')">下架</div>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'product'}}">统计</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/poster', query: {id: clickdata.id, module: 'product'}}">生成海报</router-link>
+            </div>
+
+            <!--
             <div class="item" v-for="(row,index1) in controldata1" :key="index1">
               <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
               <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
               <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
               <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
             </div>
+          -->
             <div class="item close mt10" @click="clickpopup('row.key')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
@@ -74,7 +98,7 @@ Back go shop:
 
 <script>
 import { TransferDom, Popup, Confirm } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -217,24 +241,25 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
 .rproductlist .scroll_item .icon{display:none;}
 .rproductlist .scroll_item .down.icon{
-        display:block;
-        position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
-        background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
-        -webkit-transform: translate(30px,5px) rotate(45deg);
-        transform: translate(30px,5px) rotate(45deg);
+  display:block;
+  position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
+  background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
+  -webkit-transform: translate(30px,5px) rotate(45deg);
+  transform: translate(30px,5px) rotate(45deg);
 }
 .rproductlist .scroll_item .down.icon:after{content:"已下架";}
 .rproductlist .btnicon{
-  display: inline-block;
-    color: #9c9c9c;
-    font-size: 14px;
-    border: 1px solid #9c9c9c;
-    text-align: center;
-    border-radius: 30px;
-    padding: 1px 8px;
+  display:inline-block;
+  color: #ff4400;
+  font-size: 12px;
+  border: 1px solid #ff4400;
+  text-align: center;
+  border-radius: 30px;
+  padding: 1px 8px;
+  letter-spacing: 0px;
 }
 </style>
