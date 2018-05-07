@@ -279,7 +279,7 @@ Vue.http.interceptors.request.use(config => {
     pending.push({ u: config.url + '&' + config.method, f: c })
   })
   const token = Token.get()
-  alert(token)
+  // alert(token)
   config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, error => {
@@ -294,7 +294,7 @@ Vue.http.interceptors.response.use(response => {
   const lUrl = urlParse(location.href, true)
   if (lUrl.query.code) {
     const code = lUrl.query.code
-    alert(code)
+    // alert(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -317,6 +317,7 @@ Vue.http.interceptors.response.use(response => {
       } else {
         const orginHref = encodeURIComponent(location.href)
         // location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        alert('redirect')
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       }
     })
