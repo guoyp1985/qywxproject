@@ -19,6 +19,7 @@
           <div v-if="(index == 0)">
             <search
               class="x-search"
+              v-model='searchword1'
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
@@ -65,6 +66,7 @@
           <div v-if="(index == 1)">
             <search
               class="x-search"
+              v-model='searchword2'
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
               @on-change="onChange2"
@@ -235,6 +237,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword1 = ''
         if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
           self.searchresult1 = true
         } else {
@@ -263,6 +266,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword2 = ''
         if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
           self.searchresult2 = true
         } else {
