@@ -292,7 +292,6 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   const lUrl = urlParse(location.href, true)
-  alert(location.href)
   if (lUrl.query.code) {
     const code = lUrl.query.code
     alert(code)
@@ -307,7 +306,8 @@ Vue.http.interceptors.response.use(response => {
     .then(
       res => {
         User.set(res.data)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
@@ -316,7 +316,8 @@ Vue.http.interceptors.response.use(response => {
         router.push({name: 'tLogin'})
       } else {
         const orginHref = encodeURIComponent(location.href)
-        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        // location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       }
     })
   }
