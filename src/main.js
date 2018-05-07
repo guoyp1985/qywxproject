@@ -13,6 +13,7 @@ import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertP
 import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
+import WeixinJSBridge from 'WeixinJSBridge'
 
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
