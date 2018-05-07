@@ -445,6 +445,7 @@ Util.install = function (Vue, options) {
       if (!url) {
         url = location.href
       }
+      alert(url)
       url = url.replace(/from=singlemessage&isappinstalled=0/g,'')
       let index = url.indexOf('/#/')
       let ret = url.substr(0, index)
