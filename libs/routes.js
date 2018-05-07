@@ -6,10 +6,7 @@ import AddProduct from '@/pages/AddProduct'
 import Articles from '@/pages/Articles'
 import Article from '@/pages/Article'
 import AddOrder from '@/pages/AddOrder'
-import BargainbuyStat from '@/pages/BargainbuyStat'
 import Bargainbuy from '@/pages/Bargainbuy'
-import BargainbuyView from '@/pages/BargainbuyView'
-import BargainbuyDetail from '@/pages/BargainbuyDetail'
 import BringCustomer from '@/pages/BringCustomer'
 import Center from '@/pages/Center'
 import CenterSales from '@/pages/CenterSales'
@@ -23,6 +20,7 @@ import Favorite from '@/pages/Favorite'
 import GroupbuyStat from '@/pages/GroupbuyStat'
 import Groupbuy from '@/pages/Groupbuy'
 import KnowledgeClass from '@/pages/KnowledgeClass'
+import Knowledge from '@/pages/Knowledge'
 import MembersView from '@/pages/MembersView'
 import Messages from '@/pages/Messages'
 import NewAddress from '@/pages/NewAddress'
@@ -276,11 +274,6 @@ export default [
     component: GroupbuyStat
   },
   {
-    path: '/bargainbuyStat',
-    name: 'tBargainbuyStat',
-    component: BargainbuyStat
-  },
-  {
     path: '/product',
     name: 'tProduct',
     component: Product
@@ -289,16 +282,6 @@ export default [
     path: '/bargainbuy',
     name: 'tBargainbuy',
     component: Bargainbuy
-  },
-  {
-    path: '/bargainbuyView',
-    name: 'tBargainbuyView',
-    component: BargainbuyView
-  },
-  {
-    path: '/bargainbuyDetail',
-    name: 'tBargainbuyDetail',
-    component: BargainbuyDetail
   },
   {
     path: '/addOrder',

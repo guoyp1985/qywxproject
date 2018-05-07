@@ -13,6 +13,7 @@ import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertP
 import { Token, User } from '#/storage'
 import ENV from '#/env'
 import Util from '#/util'
+import WeixinJSBridge from 'WeixinJSBridge'
 
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
@@ -309,7 +310,7 @@ Vue.http.interceptors.response.use(response => {
   } else {
     $vue.$util.access(error.response, isPC => {
       if (isPC) {
-        // router.push({name: 'tLogin'})
+        router.push({name: 'tLogin'})
       } else {
         const orginHref = encodeURIComponent(location.href)
         location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`

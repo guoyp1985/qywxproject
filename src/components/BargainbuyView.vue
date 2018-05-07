@@ -76,12 +76,12 @@
       </div>
       <div class="listarea">
         <div class="scroll_list">
-          <div v-if="cutdata.length == 0" class="scroll_item emptyitem" style="padding:0;">
+          <div v-if="cutData.length == 0" class="scroll_item emptyitem" style="padding:0;">
               <div class="t-table">
                 <div class="t-cell middle-cell" style="color:inherit;">还没有好友砍价</div>
               </div>
           </div>
-          <div v-else v-for="(item,index) in cutdata" :key="item.id" class="scroll_item">
+          <div v-else v-for="(item,index) in cutData" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
                 <img class="v_middle" style="width:44px;height:44px;border-radius:50%;" :src="item.avatar" />
@@ -129,6 +129,7 @@ export default {
       type: Object,
       default: { 'avatar': '/src/assets/images/user.jpg' }
     },
+    cutData: Array,
     onJoin: Function
   },
   directives: {
@@ -145,8 +146,7 @@ export default {
       showpopup: false,
       lefthour: '',
       leftminute: '',
-      leftsecond: '',
-      cutdata: []
+      leftsecond: ''
     }
   },
   created () {
@@ -162,10 +162,6 @@ export default {
       self.leftsecond = self.crowduser.timeleft.second
       self.cutdown()
     }
-    self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
-      let data = res.data
-      self.cutdata = data.data ? data.data : data
-    })
   },
   methods: {
     inviteevent () {

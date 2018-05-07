@@ -4,10 +4,10 @@
       <Bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></Bargainbuy>
     </template>
     <template v-if="showBargainbuyView">
-      <BargainbuyView :data="data" :crowduser="crowduser" :user="loginUser"></BargainbuyView>
+      <BargainbuyView :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData"></BargainbuyView>
     </template>
     <template v-if="showBargianbuyDetail">
-      <BargainbuyDetail :data="data" :crowduser="crowduser" :user="loginUser" :on-cut="cutSuccess" :on-join="joinSuccess"></BargainbuyDetail>
+      <BargainbuyDetail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></BargainbuyDetail>
     </template>
   </div>
 </template>
@@ -39,7 +39,8 @@ export default {
       data: {},
       product: Object,
       crowduserid: null,
-      crowduser: null
+      crowduser: null,
+      cutData: []
     }
   },
   filters: {
@@ -94,18 +95,26 @@ export default {
           }
         })
         self.product = self.data.product
+        let inpage = ''
         if (self.crowduserid && self.crowduser) {
           if (self.loginUser.uid === self.crowduser.crowdowner) {
             self.showView()
+            inpage = 'view'
           } else {
             self.showDetail()
+            inpage = 'detail'
           }
         } else {
           if (self.crowduser) {
             self.showView()
+            inpage = 'view'
           } else {
             self.showMain()
+            inpage = 'main'
           }
+        }
+        if (inpage === 'view' || inpage === 'detail') {
+          self.getCudata()
         }
       })
     },
@@ -117,6 +126,14 @@ export default {
     cutSuccess () {
       const self = this
       self.getInfo()
+      self.getCudata()
+    },
+    getCudata () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
+        let data = res.data
+        self.cutData = data.data ? data.data : data
+      })
     }
   },
   created () {

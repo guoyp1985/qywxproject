@@ -62,7 +62,7 @@ export default {
       currentImg: '',
       popupShow: false,
       allowsubmit: true,
-      photoarr: ['../src/assets/_images/1984.png'],
+      photoarr: ['../src/assets/_images/lion.jpg'],
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
