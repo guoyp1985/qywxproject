@@ -296,7 +296,7 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   // alert(JSON.stringify(error))
-  console.log(error)
+  console.log(error.response)
   const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   if (matchExclude(rUrl.href)) {
