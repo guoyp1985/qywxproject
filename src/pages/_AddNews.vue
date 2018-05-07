@@ -138,7 +138,7 @@ Label can not empty:
 
 <script>
 import { Group, XInput, XTextarea, Confirm, TransferDomDirective as TransferDom, Alert, Loading } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

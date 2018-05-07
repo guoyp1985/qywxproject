@@ -22,7 +22,7 @@
 <script>
 import { Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {

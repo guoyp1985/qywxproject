@@ -100,7 +100,7 @@ Upload images:
 </i18n>
 
 <script>
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   data () {

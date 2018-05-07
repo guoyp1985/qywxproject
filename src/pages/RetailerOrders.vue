@@ -225,7 +225,7 @@ import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDo
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

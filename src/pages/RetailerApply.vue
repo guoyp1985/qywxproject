@@ -205,7 +205,7 @@ Required item not empty:
 
 <script>
 import { Group, XInput, TransferDomDirective as TransferDom, Alert, Popup, Loading, Checker, CheckerItem } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {

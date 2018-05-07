@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Reg from './reg'
-import ENV from './env'
+import ENV from 'env'
 import SHA1 from 'js-sha1'
 import Base64 from './base64'
 import Time from './time'

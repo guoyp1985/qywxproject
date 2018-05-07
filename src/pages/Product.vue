@@ -304,7 +304,7 @@ import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {

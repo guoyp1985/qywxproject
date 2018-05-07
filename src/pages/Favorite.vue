@@ -130,7 +130,7 @@
 <script>
 import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {

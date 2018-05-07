@@ -56,7 +56,7 @@ Percent:
 <script>
 import { Search } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {

@@ -98,7 +98,7 @@ Back go shop:
 
 <script>
 import { TransferDom, Popup, Confirm } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

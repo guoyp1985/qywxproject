@@ -143,7 +143,7 @@ Please select address:
 
 <script>
 import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

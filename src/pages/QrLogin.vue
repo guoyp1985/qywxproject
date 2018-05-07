@@ -23,7 +23,7 @@
 </template>
 <script>
 import { Token, User } from '#/storage'
-import ENV from '#/env'
+import ENV from 'env'
 let intervalId = 0
 export default {
   created () {

@@ -154,7 +154,7 @@ Percent:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDomDirective as TransferDom } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

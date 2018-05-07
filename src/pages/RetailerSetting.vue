@@ -182,7 +182,7 @@ Confirm txt:
 <script>
 import { Group, XTextarea, XInput, TransferDom, Loading, Popup } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

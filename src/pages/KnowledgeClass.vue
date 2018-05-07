@@ -53,7 +53,7 @@ Newcomer Guide:
 
 <script>
 import { Popover } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   components: {

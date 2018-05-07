@@ -11,7 +11,7 @@ import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 import { Token, User } from '#/storage'
-import ENV from '#/env'
+import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
 

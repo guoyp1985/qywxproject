@@ -121,7 +121,7 @@ import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
 import FormDiscount from '@/components/FormDiscount'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

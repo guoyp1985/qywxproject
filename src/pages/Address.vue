@@ -63,7 +63,7 @@ import {
   SwipeoutButton
 } from 'vux'
 import CTitle from '@/components/CTitle'
-import ENV from '#/env'
+import ENV from 'env'
 // import _ from 'lodash'
 // import WeixinJSBridge from 'WeixinJSBridge'
 
