@@ -14,7 +14,7 @@ import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
-
+alert('okk')
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
@@ -271,7 +271,7 @@ let removePending = (config) => {
     }
   }
 }
-alert('okk')
+
 // Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
