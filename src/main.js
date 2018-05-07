@@ -14,7 +14,7 @@ import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
-alert('okk')
+
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
@@ -275,14 +275,13 @@ let removePending = (config) => {
 // Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
-  alert('ok')
   removePending(config)
   config.cancelToken = new CancelToken(c => {
     pending.push({ u: config.url + '&' + config.method, f: c })
   })
   const token = Token.get()
   config.headers['Authorization'] = `Bearer ${token}`
-  alert(token)
+  alert(JSON.stringify(config))
   return config
 }, error => {
   return Promise.reject(error)
@@ -315,8 +314,9 @@ Vue.http.interceptors.response.use(response => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
-        const orginHref = encodeURIComponent(location.href)
-        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        const originHref = encodeURIComponent(location.href)
+        alert(originHref)
+        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       }
     })
   }
