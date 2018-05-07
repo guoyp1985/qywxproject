@@ -280,9 +280,12 @@ Vue.http.interceptors.request.use(config => {
   //   pending.push({ u: config.url + '&' + config.method, f: c })
   // })
   const token = Token.get()
-  config.headers['Authorization'] = `Bearer ${token}`
-  alert(JSON.stringify(config))
-  return config
+  if(token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+    return config
+  } else {
+    return null
+  }
 }, error => {
   return Promise.reject(error)
 })
