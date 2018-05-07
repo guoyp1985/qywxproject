@@ -274,7 +274,7 @@ let removePending = (config) => {
 
 // Token.remove()
 // 请求拦截器
-Vue.http.interceptors.request.use(config => {
+Vue.http.interceptors.request.use(function (config) {
   // removePending(config)
   config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
@@ -288,15 +288,15 @@ Vue.http.interceptors.request.use(config => {
     // alert(JSON.stringify(config))
     return new Error
   }
-}, error => {
+}, function (error) {
   return Promise.reject(error)
 })
 
 // 响应拦截器
-Vue.http.interceptors.response.use(response => {
+Vue.http.interceptors.response.use( function (response) {
   // removePending(response.config)
   return response
-}, error => {
+}, function (error) {
   // alert(JSON.stringify(error))
   console.log(error.response)
   const rUrl = urlParse(config.url)
