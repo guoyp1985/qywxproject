@@ -551,7 +551,6 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
-      alert(`href= ${location.href}`)
       let host = self.$util.getHost(location.href)
       let wxData = {
         title: self.productdata.title,

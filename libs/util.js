@@ -446,7 +446,9 @@ Util.install = function (Vue, options) {
         url = location.href
       }
       let index = url.indexOf('/#/')
+      alert(index)
       let ret = url.substr(0, index)
+      alert(ret)
       return ret
     },
     previewerImgdata: function (arr) {
