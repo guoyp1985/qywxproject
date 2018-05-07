@@ -271,6 +271,7 @@ let removePending = (config) => {
     }
   }
 }
+alert('okk')
 // Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
