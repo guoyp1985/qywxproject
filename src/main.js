@@ -313,6 +313,7 @@ Vue.http.interceptors.response.use(response => {
     )
   } else {
     $vue.$util.access(error.response, isPC => {
+      alert(`isPC:${isPC}`)
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
