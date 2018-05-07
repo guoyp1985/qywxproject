@@ -193,6 +193,8 @@ Util.install = function (Vue, options) {
           trigger: function (res) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
+            alert('分享url='+wxshareurl)
+            alert('分享photo='+wxData.photo)
             params.beforeShare && params.beforeShare()
             if (wxData.desc == "undefined" || wxData.desc == undefined) {
               alert("微信还没准备好分享，请稍后再试");
@@ -227,6 +229,8 @@ Util.install = function (Vue, options) {
           trigger: function (res) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
+            alert('分享url='+wxshareurl)
+            alert('分享photo='+wxData.photo)
             params.beforeShare && params.beforeShare()
             if (wxData.desc === "undefined" || wxData.desc === undefined) {
               alert("微信还没准备好分享，请稍后再试");
@@ -318,6 +322,51 @@ Util.install = function (Vue, options) {
       }
     },
     wxUploadImage: function (os) {
+      const self = this
+      let maxnum = os.maxnum ? os.maxnum : 9
+      Vue.wechat.ready(function(){
+        Vue.wechat.chooseImage({
+          count:maxnum,
+          success: function (res) {
+            let localIds = res.localIds
+            if(localIds.length > maxnum){
+              localIds = localIds.slice(0, maxnum)
+            }
+            Vue.$vux.loading.show()
+            self.taskData({
+              data: localIds,
+              callback: function () {
+                Vue.$vux.loading.hide()
+              },
+              handleFunction: function (d) {
+                return function (done) {
+                  Vue.wechat.uploadImage({
+                    localId: d,
+                    isShowProgressTips: 0,
+                    success: function (res1) {
+                      self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
+                        imgid: res1.serverId
+                      }).then(function (res) {
+                        let data = res.data
+                        os.handleCallback && os.handelCallback(data)
+                        done()
+                      })
+                    },
+                    fail: function (res2) {
+                      Vue.$vux.toast.show({
+                        text: '上传失败'
+                      })
+                      done()
+                    }
+                  })
+                }
+              }
+            })
+          },
+          fail: function (r) {
+          }
+        })
+      })
     },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {

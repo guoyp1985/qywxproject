@@ -5,6 +5,9 @@
 */
 <template>
   <div class="editor">
+    <form class="editorImageForm" enctype="multipart/form-data">
+      <input style="opacity:0;" type="file" name="files" />
+    </form>
     <div class="edit-btn-box" v-show="!showBtnArea">
       <a class="edit-btn" @click="clickEditHandle">
         <span class="color-white font16">{{$t('Edit')}}</span>
@@ -40,6 +43,7 @@
 <script>
 import { Flexbox, FlexboxItem, XButton } from 'vux'
 import Eleditor from '#/Eleditor'
+import ENV from 'env'
 let editor = null
 export default {
   name: 'Editor',
@@ -79,9 +83,48 @@ export default {
       const self = this
       editor = new Eleditor({
         el: this.elem,
-        insertImageCallback:function(callback){
+        insertImageCallback: function (callback) {
+          if (self.$util.isPC()) {
+            console.log(1)
+            let fileForm = document.querySelector('.editorImageForm')
+            let fileInput = document.querySelector('.editorImageForm input')
+            fileInput.click()
+            fileInput.addEventListener('change', function (e) {
+              let files = e.target.files
+              if (files.length > 0) {
+                let filedata = new FormData(fileForm)
+                self.$vux.loading.show()
+                self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+                  let data = res.data
+                  self.$vux.loading.hide()
+                  if (data.flag === 1 && data && data[0]) {
+                    callback && callback(data[0].url)
+                  } else if (data.error) {
+                    self.$vux.toast.show({
+                      text: data.error,
+                      time: self.$util.delay(data.error)
+                    })
+                  }
+                })
+              }
+            })
+          } else {
+            self.$util.wxUploadImage({
+              maxnum: 1,
+              handleCallback: function (data) {
+                if (data.flag === 1 && data && data[0]) {
+                  callback && callback(data[0].url)
+                } else if (data.error) {
+                  self.$vux.toast.show({
+                    text: 'data.error',
+                    time: self.$util.delay(data.error)
+                  })
+                }
+              }
+            })
+          }
         },
-        insertProductCallback:function(callback){
+        insertProductCallback: function (callback) {
         }
       })
     },
