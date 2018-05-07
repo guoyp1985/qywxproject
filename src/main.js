@@ -284,7 +284,7 @@ Vue.http.interceptors.request.use(function (config) {
   // alert(JSON.stringify(config))
   return config
 }, function (error) {
-  alert(error)
+  // alert(error)
   return Promise.reject(error)
 })
 
@@ -292,7 +292,7 @@ let flag = true
 // 响应拦截器
 Vue.http.interceptors.response.use(function (response) {
   // removePending(response.config)
-  alert(response)
+  // alert(response)
   return response
 }, function (error) {
   // alert(JSON.stringify(error))
@@ -304,7 +304,7 @@ Vue.http.interceptors.response.use(function (response) {
   // }
   if (lUrl.query.code && flag) {
     flag = false
-    alert(lUrl.query.code)
+    // alert(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -321,7 +321,7 @@ Vue.http.interceptors.response.use(function (response) {
       }
     )
   } else {
-    alert(error)
+    // alert(error)
     $vue.$util.access(error.response, isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
