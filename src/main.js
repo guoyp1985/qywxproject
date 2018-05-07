@@ -294,6 +294,7 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   const lUrl = urlParse(location.href, true)
   if (lUrl.query.code) {
+    alert(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -310,7 +311,7 @@ Vue.http.interceptors.response.use(response => {
       }
     )
   } else {
-    alert(JSON.stringify(error))
+    // alert(JSON.stringify(error))
     $vue.$util.access(error.response, isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
