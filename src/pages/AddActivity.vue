@@ -367,11 +367,11 @@ export default {
         return false
       }
       if (self.activityType === 'bargainbuy') {
-        let priceinput = document.querySelector(".addActivity .addForm .minprice")
+        let priceinput = document.querySelector('.addActivity .addForm .minprice')
         let priceval = parseFloat(priceinput.value)
-        let mininput = document.querySelector(".addActivity .addForm .everymin")
+        let mininput = document.querySelector('.addActivity .addForm .everymin')
         let minval = parseFloat(mininput.value)
-        let maxinput = document.querySelector(".addActivity .addForm .everymax")
+        let maxinput = document.querySelector('.addActivity .addForm .everymax')
         let maxval = parseFloat(maxinput.value)
         if (minval > priceval || maxval > priceval) {
           self.$vux.alert.show({
