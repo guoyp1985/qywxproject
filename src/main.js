@@ -274,6 +274,7 @@ let removePending = (config) => {
 // Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
+  alert('ok')
   removePending(config)
   config.cancelToken = new CancelToken(c => {
     pending.push({ u: config.url + '&' + config.method, f: c })
