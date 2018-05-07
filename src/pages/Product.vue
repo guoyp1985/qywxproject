@@ -541,14 +541,16 @@ export default {
       let data = res.data
       self.productdata = data.data ? data.data : data
       document.title = self.productdata.title
-      console.log(self.productdata.photo)
+      let wxData = {
+        title: self.productdata.title,
+        desc: self.productdata.title,
+        link: `${host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        photo: self.productdata.photo
+      }
+      alert(`after info link = ${wxData.link}`)
+      alert(`after info photo = ${wxData.photo}`)
       self.$util.wxShare({
-        data: {
-          title: self.productdata.title,
-          desc: self.productdata.title,
-          link: `${host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-          imgUrl: self.productdata.photo
-        }
+        data: wxData
       })
       self.retailerinfo = self.productdata.retailerinfo
       self.activityInfo = self.productdata.activityinfo
