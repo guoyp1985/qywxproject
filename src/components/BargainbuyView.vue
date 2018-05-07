@@ -6,22 +6,22 @@
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <img :src="activityuser.avatar">
+          <img :src="crowduser.avatar">
         </div>
-        <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ activityuser.linkman }}</div>
+        <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
     </div>
     <div class="boxarea">
       <div class="inner">
         <div class="innerbg">
-          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:productdata.wid,id:productdata.id}}">
-            <div class="t-cell v_middle" style="width:80px;">
-              <img :src="productdata.photo" style="width:70px;height:70px;">
+          <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
+            <div class="t-cell v_middle w80">
+              <img :src="product.photo" style="width:70px;height:70px;" class="imgcover" />
             </div>
             <div class="t-cell">
-              <div class="clamp2 font13 color-gray7">{{ productdata.title }}</div>
-              <div class="clamp1 font13" style="color:#E02D24;">最低价：<span class="font16 bold">{{ productdata.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ productdata.price }} 元</del></div>
-              <div class="clamp1 font13" style="color:#E02D24;">剩  余：<span class="font16 bold">{{ productdata.leftstorage }}</span> 件</div>
+              <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
+              <div class="clamp1 font13" style="color:#E02D24;">最低价：<span class="font16 bold">{{ data.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ product.price }} 元</del></div>
+              <div class="clamp1 font13" style="color:#E02D24;">剩  余：<span class="font16 bold">{{ data.leftstorage }}</span> 件</div>
             </div>
           </router-link>
         </div>
@@ -39,18 +39,34 @@
             <div class="t-cell align_right">最低价</div>
           </div>
           <div class="priceline">
-            <div class="line linepercent" style="width:0%;"></div>
+            <div class="line linepercent" :style="`width:${crowduser.cutpercent}%;`"></div>
           </div>
           <div class="t-table">
-            <div class="t-cell align_left">￥<span>10.00</span></div>
-            <div class="t-cell align_center">￥<span>10.00</span></div>
-            <div class="t-cell align_right">￥<span>1.00</span></div>
+            <div class="t-cell align_left">￥{{ product.price }}</div>
+            <div class="t-cell align_center">￥{{ crowduser.leftmoney }}</div>
+            <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
-        <div class="btn db btninvite shareBtn">邀请好友砍价</div>
-        <div class="padding10 align_center timeleftarea font13" style="color:#A87F35; ">
-          <span style="margin-right:3px;">还剩</span><span class="hour">00:</span><span class="minute">00:</span><span class="second">00</span><span style="margin-left:3px;">结束，快让好友帮忙砍价吧~</span>
-        </div>
+        <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
+        <template v-else>
+          <div v-if="data.isovertime" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <template v-else>
+            <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
+            <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
+            <template v-if="crowduser.isfull == 0">
+              <div class="btn db" @click="inviteevent">邀请好友砍价</div>
+              <div v-if="crowduser" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+                <span class="v_middle db-in">还剩</span>
+                <span class="v_middle db-in">{{ lefthour }}</span>
+                <span class="v_middle db-in">:</span>
+                <span class="v_middle db-in">{{ leftminute }}</span>
+                <span class="v_middle db-in">:</span>
+                <span class="v_middle db-in">{{ leftsecond }}</span>
+                <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+              </div>
+            </template>
+          </template>
+        </template>
       </div>
     </div>
     <div>
@@ -83,6 +99,14 @@
         </div>
       </div>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showpopup" height="100%">
+        <div class="popup1 invitelayer" @click="closeinvite">
+          <div class="iconarea" style="padding:15px 40px;"><i class="al al-feiji font60" style="color:rgba(255,255,255,0.9)"></i></div>
+          <div class="txtarea align_center color-fff font16" style="line-height:26px;text-shadow: -2px 0px 1px #000;">点击右上角“···”发送给微信好友<br>邀请对方帮你砍价！</div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -90,50 +114,127 @@
 </i18n>
 
 <script>
-import Time from '../../libs/time'
+import { TransferDom, Popup } from 'vux'
+import ENV from 'env'
 
 export default {
+  name: 'BargainbuyView',
+  props: {
+    data: Object,
+    crowduser: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    user: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    onJoin: Function
+  },
+  directives: {
+    TransferDom
+  },
   components: {
+    Popup
   },
   data () {
     return {
-      activityuser: {
-        uid: 187,
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-        linkman: 'YOUNG'
-      },
-      productdata: {
-        id: 124,
-        wid: 187,
-        title: '苹果手机',
-        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        minprice: '10.00',
-        price: '8,000.00',
-        special: '8,000.00',
-        shares: 7,
-        saled: 1000,
-        postage: '0.00',
-        moderate: 1,
-        buyonline: 0,
-        storage: 10,
-        leftstorage: 3,
-        currentnumbers: 0,
-        endtime: 1522221270,
-        content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
-      },
-      cutdata: [
-        { avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg', linkman: 'YOUNG', cutmoney: '0.01' }
-      ]
+      query: {},
+      loginUser: Object,
+      product: Object,
+      showpopup: false,
+      lefthour: '',
+      leftminute: '',
+      leftsecond: '',
+      cutdata: []
     }
   },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd')
+  created () {
+    const self = this
+    self.query = self.$route.query
+    if (self.data) {
+      self.product = self.data.product
     }
+    console.log(self.crowduser)
+    if (self.crowduser) {
+      self.lefthour = self.crowduser.timeleft.hour
+      self.leftminute = self.crowduser.timeleft.minute
+      self.leftsecond = self.crowduser.timeleft.second
+      self.cutdown()
+    }
+    self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
+      let data = res.data
+      self.cutdata = data.data ? data.data : data
+    })
   },
   methods: {
-    joinin () {
-      this.$router.push('/retailerShop')
+    inviteevent () {
+      this.showpopup = true
+    },
+    closeinvite () {
+      this.showpopup = false
+    },
+    cutdown () {
+      const self = this
+      let cutdownInterval = setInterval(function () {
+        let h = parseInt(self.lefthour)
+        let m = parseInt(self.leftminute)
+        let s = parseInt(self.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            self.leftsecond = '0' + s
+          } else {
+            self.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            self.leftminute = '0' + m
+          } else {
+            self.leftminute = m
+          }
+          self.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            self.lefthour = '0' + h
+          } else {
+            self.lefthour = h
+          }
+          self.leftminute = '59'
+          self.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(cutdownInterval)
+          self.isfinish = true
+        }
+      }, 1000)
+    },
+    buyevent () {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要购买吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          let params = { id: self.product.id, flag: 1, quantity: 1, activityid: self.data.id, wid: self.product.uploader }
+          if (self.query.share_uid) {
+            params.share_uid = self.query.share_uid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/order/addShop`, params).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            if (data.flag === 1) {
+              self.$router.push({ path: '/addOrder', query: { id: self.product.id } })
+            } else if (data.error) {
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
+            }
+          })
+        }
+      })
     }
   }
 }
@@ -143,16 +244,9 @@ export default {
 .bargainbuyview {
     background-image: linear-gradient(-180deg, #f32a3d 0%, #FF8048 100%);
 }
-.bargainbuyview .topimg img {
-    width: 100%;
-    vertical-align: middle;
-}
-.bargainbuyview .b_header{
-  position:absolute;
-  height:90px;
-  top:30px;
-  width:100%;
-}
+.bargainbuyview .topimg{position:absolute;left:0;top:0;width:100%;}
+.bargainbuyview .topimg img{width:100%;max-height:240px;vertical-align: middle;}
+.bargainbuyview .b_header{width:100%;height:90px;padding-top:30px;overflow:hidden;position: relative;}
 .bargainbuyview .b_header .inner {
     width: 168px;
     height: 168px;
@@ -169,7 +263,7 @@ export default {
   width: 94%;
   box-sizing:border-box;
   position:relative;
-  margin:45px auto 0;
+  margin:-1px auto 0;
   background: #FDC45D;
   border-radius: 13px;
   padding: 16px 12px 16px 12px;
@@ -254,5 +348,11 @@ export default {
     height: 60px;
     margin-top: 10px;
     background-color: #E0E0E0;
+}
+.invitelayer{width:100%;height:100%;position:relative;background: rgba(0, 0, 0, 0.85);}
+.invitelayer .iconarea{text-align:right;padding:15px 40px;color:rgba(255,255,255,0.9);}
+.invitelayer .txtarea{
+  text-align:center;color:#fff;font-size:16px;
+  line-height:26px;text-shadow: -2px 0px 1px #000;
 }
 </style>

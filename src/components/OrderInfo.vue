@@ -5,75 +5,43 @@
 */
 <template>
   <div class="order-info">
-<<<<<<< HEAD
-    <router-link :to="`/retailerShop/${order.storeId}`">
-      <div class="store-info">
-        <div class="info-cell">
-          <span :class="`al ${storeType} font22`"></span>
-          <span>{{order.storeName}}</span>
-          <span class="al al-mjiantou-copy font16"></span>
-        </div>
-        <div class="status-cell" v-if="order.status">
-          <span>{{order.status}}</span>
-        </div>
-      </div>
-    </router-link>
-    <router-link :to="{path:'/orderDetail',query:{order:order}}">
-      <div class="products-info" v-if="order.imgs.length > 1">
-      </div>
-      <div class="product-info" v-else>
-        <div class="product-img">
-          <x-img :src="order.imgs[0]"></x-img>
-        </div>
-        <div class="product-detail">
-          <div class="product-name">
-            {{order.name}}
-          </div>
-          <div class="product-desc" v-if="order.desc">
-            {{order.desc}}
-=======
     <router-link :to="`/retailerShop/${item.storeId}`">
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
-          <span>{{item.storeName}}</span>
+          <span class="font14">{{item.retailertitle}}</span>
           <span class="al al-mjiantou-copy font16"></span>
         </div>
-        <div class="status-cell" v-if="item.status">
-          <span>{{item.status}}</span>
+        <div class="status-cell font12 color-orange6" v-if="item.flagstr">
+          <span>{{item.flagstr}}</span>
         </div>
       </div>
     </router-link>
-    <router-link :to="{path:'/orderDetail',query:{order:item}}">
-      <div class="products-info" v-if="item.imgs.length > 1">
+    <router-link :to="{path:`/orderDetail/${item.id}`}">
+      <div class="products-info" v-if="item.orderlist.length > 1">
+        <div class="product-img">
+          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" :key="index" container="#vux_view_box_body"></x-img>
+        </div>
       </div>
       <div class="product-info" v-else>
         <div class="product-img">
-          <x-img :src="item.imgs[0]"></x-img>
+          <x-img :src="item.orderlist[0].photo"></x-img>
         </div>
         <div class="product-detail">
-          <div class="product-name">
-            {{item.name}}
+          <div class="product-name font12">
+            {{item.orderlist[0].name}}
           </div>
           <div class="product-desc" v-if="item.desc">
-            {{item.desc}}
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
+            {{item.orderlist[0].desc}}
           </div>
         </div>
       </div>
     </router-link>
     <div class="pay-info">
-<<<<<<< HEAD
-      <span class="font12">共{{order.num}}件商品 实付款: </span><span class="font14">¥{{order.pay}}</span>
+      <span class="font12">共{{item.quantity}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
-    <div class="operate-area">
-      <x-button mini v-for="(button, index) in buttons[order.type]" :key="index" @click.native="buttonClick(button.id)">{{button.name}}</x-button>
-=======
-      <span class="font12">共{{item.num}}件商品 实付款: </span><span class="font14">¥{{item.pay}}</span>
-    </div>
-    <div class="operate-area">
-      <x-button mini v-for="(button, index) in buttons[item.type]" :key="index" @click.native="buttonClick(button.type)">{{button.name}}</x-button>
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
+    <div class="operate-area" v-if="item.buttons.length">
+      <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
     </div>
   </div>
 </template>
@@ -88,11 +56,7 @@ export default {
     XButton
   },
   props: {
-<<<<<<< HEAD
-    order: {
-=======
     item: {
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
       type: Object,
       default: () => {
         return {
@@ -112,29 +76,13 @@ export default {
     },
     buttons: {
       type: Array,
-      default: () => [
-        [],
-        [
-          {
-<<<<<<< HEAD
-            id: 1,
-=======
-            type: 1,
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
-            name: '评价'
-          }
-        ]
-      ]
+      default: () => []
     }
   },
   computed: {
     storeType () {
       let icon = ''
-<<<<<<< HEAD
-      switch (this.order.storeType) {
-=======
       switch (this.item.storeType) {
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
         case 1:
           icon = 'al-weidian1'
           break
@@ -143,19 +91,11 @@ export default {
       }
       return icon
     }
-<<<<<<< HEAD
-=======
   },
   methods: {
     buttonClick (type) {
-      switch (type) {
-        case 1:
-          this.$emit('on-eval')
-          break
-        default:
-      }
+      this.$emit('on-process', type, this.item)
     }
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
   }
 }
 </script>
@@ -196,9 +136,6 @@ export default {
 .order-info .product-info .product-detail {
   flex: 1;
 }
-.order-info .product-info .product-detail {
-  margin-left: 10px;
-}
 .order-info .store-info .info-cell span {
   vertical-align: middle;
 }
@@ -208,14 +145,16 @@ export default {
   background-color: #f7f7f7;
 }
 .order-info .store-info .status-cell {
-  width: 80px;
+  text-align: center;
 }
 .order-info .store-info .status-cell span {
-  line-height: 32px;
+  line-height: 34px;
 }
 .order-info .product-info .product-img img{
   width: 60px;
   height: 60px;
+  margin-right: 10px;
+  border: 1px solid #eeeeee;
 }
 .order-info .pay-info,
 .order-info .operate-area {
@@ -230,5 +169,8 @@ export default {
 /* vux css hack */
 .order-info .weui-btn + .weui-btn {
   margin-top: 0;
+}
+.order-info .weui-btn {
+  margin-left: 5px;
 }
 </style>

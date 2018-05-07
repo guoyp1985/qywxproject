@@ -5,14 +5,14 @@
         <img src="../assets/images/bargainbuy_bg.png" />
       </div>
       <div class="boxarea productarea">
-        <router-link class="t-table" :to="{path:'/product',params:{wid:productdata.wid,id:productdata.id}}" style="color:inherit;">
+        <router-link class="t-table" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}" style="color:inherit;">
             <div class="t-cell pic v_middle">
-              <img :src="productdata.photo" />
+              <img :src="product.photo" class="imgcover" />
             </div>
             <div class="t-cell pl10 v_middle">
-              <div class="clamp2 title font13 color-gray7">{{ productdata.title }}</div>
-              <div class="clamp1 font13 mt3 color-red3">最低价：<span class="disminprice font16 bold">{{ productdata.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ productdata.price }} 元</del></div>
-              <div class="clamp1 font13 color-red3">剩余：<span class="font16 bold">{{ productdata.leftstorage }}</span> 件</div>
+              <div class="clamp2 title font13 color-gray7">{{ product.title }}</div>
+              <div class="clamp1 font13 mt3 color-red3">最低价：<span class="disminprice font16 bold">{{ data.minprice }}</span> 元<del class="ml10 color-gray7">原价：{{ product.price }} 元</del></div>
+              <div class="clamp1 font13 color-red3">剩余：<span class="font16 bold">{{ data.leftstorage }}</span> 件</div>
             </div>
             <div class="t-cell v_middle align_center" style="width:40px;">
                     <i class="al al-mjiantou-copy color-gray font20"></i>
@@ -23,8 +23,9 @@
         <div class="mauto" style="border-left:3px solid #FDC45D;border-right:3px solid #FDC45D;width: 45%;height: 100%;"></div>
       </div>
       <div class="mauto mb10 border-box" style="width: 94%;background-color: #FDC45D;border-radius: 13px;padding:11px 15px 8px 15px;">
-        <div class="mt12 align_center" style="color: #C93A3A;">当前有 <span class="font18 bold">{{ productdata.currentnumbers }}</span> 人正在砍价中...</div>
-        <div class="btn" @click="joinin">我要参与</div>
+        <div class="mt12 align_center" style="color: #C93A3A;">当前有 <span class="font18 bold">{{ data.currentnumbers }}</span> 人正在砍价中...</div>
+        <div v-if="data.isfinished" class="btn">活动已结束</div>
+        <div v-else class="btn" @click="joinin">我要参与</div>
         <div class=" font12 pt10 pl15 pr15 pb10 color-gray7">
           <div>活动规则：</div>
           <div>1. 每人一次砍价机会；</div>
@@ -32,8 +33,9 @@
           <div>3. 商品最终购买金额以实际所砍金额为准；</div>
           <div>4. 砍价活动结束后，商品即恢复原价；</div>
           <div>5. 该活动不可与其他活动优惠同时使用；</div>
-          <div>6. 参与活动的有效砍价时间为<span>24</span>小时；</div>
-          <div>7. 活动截止时间: <span>{{ productdata.endtime | dateformat }}</span><br>（商品若提前售完，活动将提前截止）</div>
+          <div>6. 参与活动的有效砍价时间为{{ data.finishtime }}小时；</div>
+          <div>7. 活动截止时间: {{ data.endtime | dateformat }}</div>
+          <div>（商品若提前售完，活动将提前截止）</div>
         </div>
       </div>
     </div>
@@ -44,50 +46,56 @@
 </i18n>
 
 <script>
-import Time from '../../libs/time'
+import Time from '#/time'
+import ENV from 'env'
 
 export default {
+  name: 'Bargainbuy',
+  props: {
+    data: Object,
+    user: {
+      type: Object,
+      default: { 'avatar': '/src/assets/images/user.jpg' }
+    },
+    onJoin: Function
+  },
   components: {
   },
   data () {
     return {
-      productdata: {
-        id: 124,
-        title: '苹果手机',
-        photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg',
-        minprice: '10.00',
-        price: '8,000.00',
-        special: '8,000.00',
-        shares: 7,
-        saled: 1000,
-        postage: '0.00',
-        moderate: 1,
-        buyonline: 0,
-        storage: 10,
-        leftstorage: 3,
-        currentnumbers: 0,
-        endtime: 1522221270,
-        content: '维生素<img src="http://ossgxs.boka.cn/month_201803/15223015586456.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016278181.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016299171.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016329830.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016952520.jpg"><img src="http://ossgxs.boka.cn/month_201803/15223016975422.jpg">'
-      }
+      loginUser: Object,
+      product: Object
     }
   },
   filters: {
     dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd')
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
-<<<<<<< HEAD
   created () {
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    const self = this
+    self.loginUser = self.user
+    if (self.data) {
+      self.product = self.data.product
+    }
   },
   methods: {
     joinin () {
-      this.$router.push('/bargainbuyView')
-=======
-  methods: {
-    joinin () {
-      this.$router.push('/bargainbuyview')
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.onJoin && self.onJoin(data.data)
+            }
+          }
+        })
+      })
     }
   }
 }

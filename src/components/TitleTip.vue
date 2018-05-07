@@ -1,3 +1,8 @@
+/*
+* @description: 文章浏览头部组件
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
     <div class="title-tip">
@@ -9,7 +14,7 @@
           {{userName}}
         </div>
         <div class="user-credit">
-          {{$t('Credit')}}: {{userCredit}}
+          {{$t('Gain Credit')}}: {{userCredit}}
         </div>
       </div>
       <div class="op-cell">
@@ -91,5 +96,8 @@ export default {
 .title-tip .op-cell {
   width: 50px;
   text-align: right;
+}
+.title-tip .user-credit {
+  color: @keywords-color;
 }
 </style>

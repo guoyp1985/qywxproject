@@ -28,8 +28,14 @@ let webpackConfig = {
       'src': resolve('src'),
       'assets': resolve('src/assets'),
       'components': resolve('src/components'),
+      'pages': resolve('src/pages'),
+      '#': resolve('libs'),
       '@': resolve('src')
     }
+  },
+  externals: {
+    'env': 'ENV',
+    'WeixinJSBridge': 'window.WeixinJSBridge',
   },
   module: {
     rules: [

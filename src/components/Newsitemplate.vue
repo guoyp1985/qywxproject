@@ -1,5 +1,5 @@
 <template>
-  <div class="bk-newsitem scroll_item font14 bg-white mb5 pt10 pb10">
+  <router-link :to="{path: `/articles/${data.id}`, query: {wid: data.uploader}}" class="bk-newsitem scroll_item font14 bg-white mb5 pt10 pb10 db">
       <div class="t-table">
         <div class="t-cell v_middle pl10" style="width:90px;">
           <slot name="photo"></slot>
@@ -11,7 +11,7 @@
           </div>
         </div>
       </div>
-  </div>
+  </router-link>
 </template>
 
 <i18n>
@@ -19,7 +19,10 @@
 
 <script>
 export default {
-  name: 'Newsitemplate'
+  name: 'Newsitemplate',
+  props: {
+    data: Object
+  }
 }
 </script>
 

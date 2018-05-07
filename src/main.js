@@ -3,41 +3,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import FastClick from 'fastclick'
-<<<<<<< HEAD
-// import VueRouter from 'vue-router'
-import { sync } from 'vuex-router-sync'
-import urlParse from 'url-parse'
-import App from './App'
-// import CenterSales from './components/CenterSales'
-// import CenterOperating from './components/CenterOperating'
-// import CenterService from './components/CenterService'
-// import List from './components/DemoList'
-// import Hello from './components/HelloWorld'
-import router from './router'
-// import DemoList from './demo_list'
-import objectAssign from 'object-assign'
-import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin } from 'vux'
-=======
 import { sync } from 'vuex-router-sync'
 import urlParse from 'url-parse'
 import App from './App'
 import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
-import { BusPlugin, LoadingPlugin } from 'vux'
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
-import VueResource from 'vue-resource'
-import Login from '../libs/login'
-import { Token } from '../libs/storage'
-import ENV from '../libs/env'
+import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
+import { Token, User } from '#/storage'
+import ENV from 'env'
+import Util from '#/util'
 
-Vue.use(VueResource)
+const CancelToken = AjaxPlugin.$http.CancelToken
+Vue.use(AjaxPlugin)
 Vue.use(Vuex)
-<<<<<<< HEAD
-// Vue.use(VueRouter)
-=======
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
 
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
@@ -75,40 +54,13 @@ store.registerModule('vux', {
 })
 
 Vue.use(vuexI18n.plugin, store)
+Vue.use(WechatPlugin)
+Vue.use(Util)
 Vue.use(BusPlugin)
 Vue.use(LoadingPlugin)
-<<<<<<< HEAD
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
-// let routes = [{
-//   path: '/centerSales',
-//   component: CenterSales
-// },
-// {
-//   path: '/centerOperating',
-//   component: CenterOperating
-// },
-// {
-//   path: '/centerService',
-//   component: CenterService
-// },
-// {
-//   path: '/components/',
-//   component: List
-// }
-// ]
-
-// const demos = DemoList.map((com) => {
-//   return {
-//     path: `/components/${com.toLowerCase()}`,
-//     component: Vue.component(
-//     com,
-//     // 该 `import` 函数返回一个 `Promise` 对象。
-//     () => import('./demos/' + com))
-//   }
-// })
-=======
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
+Vue.use(ConfirmPlugin)
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')
@@ -123,12 +75,6 @@ for (let i in finalLocales) {
   Vue.i18n.add(i, finalLocales[i])
 }
 Vue.i18n.set('zh-CN')
-
-// routes = routes.concat(demos)
-
-// const router = new VueRouter({
-//   routes
-// })
 
 FastClick.attach(document.body)
 
@@ -192,108 +138,220 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-const excludeUrls = [
-  `${ENV.BokaApi}/weixin/userAuth/*`,
-<<<<<<< HEAD
-  `${ENV.BokaApi}/weixin/qrcode/login*`,
-  `${ENV.BokaApi}/api/login/*`,
-  `${ENV.BokaApi}/api/scanlogin`
-=======
-  `${ENV.BokaApi}/api/qrcode/login`,
-  `${ENV.BokaApi}/api/login`,
-  `${ENV.BokaApi}/api/scanlogin/*`
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
-]
+// let excludeUrls = [
+//   `${ENV.BokaApi}/api/authLogin/*`,
+//   `${ENV.BokaApi}/api/qrcode/login*`,
+//   `${ENV.BokaApi}/api/login/*`,
+//   `${ENV.BokaApi}/api/scanlogin`
+  // `${ENV.BokaApi}/api/weixin/token`
+// ]
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
-const matchExclude = url => {
-  for (let r = 0; r < rExcludeUrls.length; r++) {
-    if (rExcludeUrls[r].test(url)) {
-      return true
+// const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+// const matchExclude = url => {
+//   for (let i = 0; i < rExcludeUrls.length; i++) {
+//     // alert(`${item.url} ${item.reqMax}`)
+//     if (rExcludeUrls[i].test(url)) {
+//       return true
+//     }
+//   }
+//   return false
+// }
+// localStorage.removeItem('token')
+// let token = null // test
+// 全局请求过滤器
+// Vue.http.interceptors.request.use(function (config) {
+//   const rUrl = urlParse(config.url)
+//   const lUrl = urlParse(location.href, true)
+//   // if (matchExclude(rUrl.href)) {
+//     // alert(matchExclude(rUrl.href))
+//   //   return new Error()
+//   // }
+//   const token = Token.get()
+//   if (!token) {
+//     alert(token)
+//     if (lUrl.query.code) {
+//       const code = lUrl.query.code
+//       Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+//       .then(
+//         res => {
+//           alert(res)
+//           // const token = res.data.token
+//           Token.set(res.data.token)
+//           // token = data.data.token // test
+//           location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+//           // alert(data.data.weixin_token)
+//           // const accessToken = data.data.weixin_token
+//           // const nonceStr = $vue.$util.randomStr(6)
+//           // const timeStamp = $vue.$util.timeStamp()
+//           // const currentUrl = urlParse(location.href, true)
+//           // const url = currentUrl.href.replace(/#\/\w*/g, '')
+//           // alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+//           // const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+//           // WeixinJSBridge.invoke('editAddress', {
+//           //   appId: ENV.AppId,
+//           //   scope: 'jsapi_address',
+//           //   signType: 'sha1',
+//           //   addrSign: addrSign,
+//           //   timeStamp: timeStamp,
+//           //   nonceStr: nonceStr
+//           // },
+//           // res => {
+//           //   alert(res.err_msg)
+//           //   if (res.err_msg === 'edit_address:ok') {
+//           //     const param = {
+//           //       linkman: res.userName,
+//           //       telephone: res.telNumber,
+//           //       province: res.proviceFirstStageName,
+//           //       city: res.addressCitySecondStageName,
+//           //       counties: res.addressCountiesThirdStageName,
+//           //       address: res.addressDetailInfo
+//           //     }
+//           //     alert(param)
+//           //   }
+//           // })
+//         }
+//       )
+//       // alert('ok')
+//     }
+//     // else if (rUrl.origin === ENV.BokaApi) {
+//       // const token = Token.get()
+//       // request.method = 'GET'
+//       // request.headers.set('Authorization', `Bearer ${token}`)
+//       // config.headers['Authorization'] = `Bearer ${token}`
+//       // request.headers.set('X-CSRF-Token', 'plugin')
+//       // continue to next interceptor
+//       // next(function (response) {
+//
+//       //   return response
+//       // })
+//     // }
+//     return Promise.reject()
+//   }
+//   else {
+//     config.headers['Authorization'] = `Bearer ${token}`
+//     return config
+//   }
+// },
+// function (error) {
+//   return Promise.reject(error)
+// })
+
+// Vue.http.interceptors.response.use(function (response) {
+//   return response
+// }, function (error) {
+//   // alert(error.config.url)
+//   $vue.$util.access(error.response, isPC => {
+//     if (isPC) {
+//       // Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`)
+//       // .then(
+//       //   res => {
+//         // router.push({name: 'tLogin', params: {qrCode: res.data, fromPath: router.currentRoute.path}})
+//         // },
+//         // error => {
+//         //   console.error(error)
+//         // }
+//       router.push({name: 'tLogin'})
+//       // )
+//     } else {
+//       const orginHref = encodeURIComponent(location.href)
+//       location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+//     }
+//   })
+//   return Promise.reject(error)
+// })
+
+let pending = []
+let removePending = (config) => {
+  for (let p in pending) {
+    if (pending[p].u === config.url + '&' + config.method) {
+      pending[p].f()
+      pending.splice(p, 1)
     }
   }
-  return false
 }
-
-<<<<<<< HEAD
-=======
-// localStorage.clear()
-
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
-// 全局请求过滤器
-Vue.http.interceptors.push(function (request, next) {
-  const rUrl = urlParse(request.url)
-  const lUrl = urlParse(location.href, true)
-  console.log(matchExclude(rUrl.href))
-  if (matchExclude(rUrl.href)) {
-    return
-  }
-  if (lUrl.query.code) {
-    const code = lUrl.query.code
-    Vue.http.get(`${ENV.BokaApi}/weixin/userAuth/${code}`, {})
-    .then(res => res.json())
-    .then(
-<<<<<<< HEAD
-      (data) => {
-        Token.set(data.data.token)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-      },
-      (error) => {
-        // alert(JSON.stringify(error))
-      }
-    )
-  } else if (rUrl.origin === ENV.BokaApi) {
-    // const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbGFyYXZlbC5ib2thLmNuL2FwaS9zY2FubG9naW4vMTUyMzY3Nzk0MyIsImlhdCI6MTUyMzY3Nzk1MSwiZXhwIjoxNTI0NTQxOTUxLCJuYmYiOjE1MjM2Nzc5NTEsImp0aSI6IkI1QUJPOGpEdlVGQ3BhQngiLCJzdWIiOjQsInBydiI6Ijg2NjVhZTk3NzVjZjI2ZjZiOGU0OTZmODZmYTUzNmQ2OGRkNzE4MTgifQ.LS7L_lYqNkWofYvc_F2dpbbSb_vatkbvTViROZlD9T4'
-=======
-      data => {
-        Token.set(data.data.token)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-      }
-    )
-  } else if (rUrl.origin === ENV.BokaApi) {
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
-    const token = Token.get()
-    // request.method = 'GET'
-    request.headers.set('Authorization', `Bearer ${token}`)
-    // continue to next interceptor
-    next(function (response) {
-      Login.access(request, response, isPC => {
-        if (isPC) {
-<<<<<<< HEAD
-          console.log('isPC')
-          Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
-          .then(res => res.json())
-          .then(data => {
-            console.log(data)
-            router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-          })
-=======
-          Vue.http.get(`${ENV.BokaApi}/api/qrcode/login`, {})
-          .then(res => res.json())
-          .then(
-            data => {
-              router.push({name: 'login', params: {qrCode: data, fromPath: router.currentRoute.path}})
-            },
-            error => {
-              console.log(error)
-            }
-          )
->>>>>>> 25ba8f0938d571307dda639b762880ec13c7c827
-        } else {
-          const orginHref = encodeURIComponent(location.href)
-          location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
-        }
-      },
-      () => {
-        // console.log('okokokok')
-      })
-      return response
-    })
-  }
+// Token.remove()
+// 请求拦截器
+Vue.http.interceptors.request.use(config => {
+  removePending(config)
+  config.cancelToken = new CancelToken(c => {
+    pending.push({ u: config.url + '&' + config.method, f: c })
+  })
+  const token = Token.get()
+  config.headers['Authorization'] = `Bearer ${token}`
+  return config
+}, error => {
+  return Promise.reject(error)
 })
 
-new Vue({
+// 响应拦截器
+Vue.http.interceptors.response.use(response => {
+  removePending(response.config)
+  return response
+}, error => {
+  const lUrl = urlParse(location.href, true)
+  if (lUrl.query.code) {
+    const code = lUrl.query.code
+    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+    .then(
+      res => {
+        Token.set(res.data.data.token)
+        // getAddress(res.data.data.weixin_token)
+        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    )
+    .then(
+      res => {
+        User.set(res.data)
+        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+      }
+    )
+  } else {
+    $vue.$util.access(error.response, isPC => {
+      if (isPC) {
+        router.push({name: 'tLogin'})
+      } else {
+        const orginHref = encodeURIComponent(location.href)
+        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+      }
+    })
+  }
+  return { data: { } }
+})
+
+const getAddress = (wxToken) => {
+  const accessToken = wxToken
+  const nonceStr = $vue.$util.randomStr(6)
+  const timeStamp = $vue.$util.timeStamp()
+  const currentUrl = urlParse(location.href, true)
+  const url = currentUrl.href.replace(/#\/\w*/g, '')
+  alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
+  const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
+  WeixinJSBridge.invoke('editAddress', {
+    appId: ENV.AppId,
+    scope: 'jsapi_address',
+    signType: 'sha1',
+    addrSign: addrSign,
+    timeStamp: timeStamp,
+    nonceStr: nonceStr
+  },
+  res => {
+    alert(res.err_msg)
+    if (res.err_msg === 'edit_address:ok') {
+      const param = {
+        linkman: res.userName,
+        telephone: res.telNumber,
+        province: res.proviceFirstStageName,
+        city: res.addressCitySecondStageName,
+        counties: res.addressCountiesThirdStageName,
+        address: res.addressDetailInfo
+      }
+      alert(param)
+    }
+  })
+}
+
+const $vue = new Vue({
   store,
   router,
   render: h => h(App)
