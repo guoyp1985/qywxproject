@@ -317,7 +317,7 @@ Vue.http.interceptors.response.use(function (response) {
     .then(
       res => {
         User.set(res.data)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
       }
     )
   } else {
