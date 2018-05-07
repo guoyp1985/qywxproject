@@ -545,7 +545,7 @@ export default {
         data: {
           title: self.productdata.title,
           desc: self.productdata.title,
-          link: `${host}/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+          link: `${host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
           imgUrl: self.productdata.photo
         }
       })

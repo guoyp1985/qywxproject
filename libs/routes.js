@@ -6,10 +6,7 @@ import AddProduct from '@/pages/AddProduct'
 import Articles from '@/pages/Articles'
 import Article from '@/pages/Article'
 import AddOrder from '@/pages/AddOrder'
-import BargainbuyStat from '@/pages/BargainbuyStat'
 import Bargainbuy from '@/pages/Bargainbuy'
-import BargainbuyView from '@/pages/BargainbuyView'
-import BargainbuyDetail from '@/pages/BargainbuyDetail'
 import BringCustomer from '@/pages/BringCustomer'
 import Center from '@/pages/Center'
 import CenterSales from '@/pages/CenterSales'
@@ -66,6 +63,10 @@ import SaleProducts from '@/pages/SaleProducts'
 import Timeline from '@/pages/Timeline'
 import Userproducts from '@/pages/Userproducts'
 import UserRebateInfo from '@/pages/UserRebateInfo'
+import Poster from '@/pages/Poster'
+import PosterDetail from '@/pages/PosterDetail'
+import Stat from '@/pages/Stat'
+import Knowledge from '@/pages/Knowledge'
 
 export default [
   {
@@ -273,11 +274,6 @@ export default [
     component: GroupbuyStat
   },
   {
-    path: '/bargainbuyStat',
-    name: 'tBargainbuyStat',
-    component: BargainbuyStat
-  },
-  {
     path: '/product',
     name: 'tProduct',
     component: Product
@@ -286,16 +282,6 @@ export default [
     path: '/bargainbuy',
     name: 'tBargainbuy',
     component: Bargainbuy
-  },
-  {
-    path: '/bargainbuyView',
-    name: 'tBargainbuyView',
-    component: BargainbuyView
-  },
-  {
-    path: '/bargainbuyDetail',
-    name: 'tBargainbuyDetail',
-    component: BargainbuyDetail
   },
   {
     path: '/addOrder',
