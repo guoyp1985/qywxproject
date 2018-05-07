@@ -293,6 +293,7 @@ Vue.http.interceptors.response.use(response => {
   const lUrl = urlParse(location.href, true)
   if (lUrl.query.code) {
     const code = lUrl.query.code
+    alert(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
