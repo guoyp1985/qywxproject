@@ -444,7 +444,9 @@ Util.install = function (Vue, options) {
     getHost: function (url) {
       if (!url) {
         url = location.href
+        alert(location.href)
       }
+      alert(url)
       let index = url.indexOf('/#/')
       alert(index)
       let ret = url.substr(0, index)
