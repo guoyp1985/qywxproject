@@ -15,17 +15,21 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <search
               class="x-search"
+              v-model="searchword1"
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
               ref="search">
             </search>
             <div class="scroll_list pl10 pr10">
-              <div class="scroll_item emptyitem flex_center" v-if="(!tabdata1 || tabdata1.length == 0)">暂无线上数据</div>
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
+                <template v-if="searchresult1">暂无搜索结果</template>
+                <template v-else>暂无线上数据</template>
+              </div>
               <div v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:50px;height:50px;">
@@ -42,8 +46,19 @@
             </div>
           </template>
           <template v-if="(index == 1)">
+            <search
+              class="x-search"
+              v-model="searchword2"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit2"
+              @on-change="onChange2"
+              ref="search">
+            </search>
             <div class="scroll_list pl10 pr10">
-              <div class="scroll_item emptyitem flex_center" v-if="(!tabdata2 || tabdata2.length == 0)">暂无线下数据</div>
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
+                <template v-if="searchresult1">暂无搜索结果</template>
+                <template v-else>暂无线下数据</template>
+              </div>
               <div v-else v-for="item in tabdata2" :key="item.id" class="scroll_item padding10">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:50px;height:50px;">
@@ -106,6 +121,8 @@ export default {
       tabdata2: [],
       searchword1: '',
       searchresult1: false,
+      searchword2: '',
+      searchresult2: false,
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
@@ -116,18 +133,6 @@ export default {
     }
   },
   methods: {
-    setFocus () {
-    },
-    resultClick (item) {
-    },
-    getResult (val) {
-    },
-    onSubmit () {
-    },
-    onFocus () {
-    },
-    onCancel () {
-    },
     scroll1: function () {
       const self = this
       self.$util.scrollEvent({
@@ -157,9 +162,17 @@ export default {
     getdata1 () {
       const self = this
       let params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
+        params.params.keyword = keyword
+      } else {
+        self.searchresult1 = false
+      }
       self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
@@ -174,10 +187,18 @@ export default {
     },
     getdata2 () {
       const self = this
-      let params = { uid: self.query.uid, buyonline: 0, pagestart: self.pagestart2, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
+      let params = { params: { uid: self.query.uid, buyonline: 0, pagestart: self.pagestart2, limit: self.limit } }
+      let keyword = self.searchword2
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult2 = true
+        params.params.keyword = keyword
+      } else {
+        self.searchresult2 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword2 = ''
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
@@ -196,6 +217,16 @@ export default {
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
+    },
+    onChange2 (val) {
+      this.searchword2 = val
+    },
+    onSubmit2 () {
+      const self = this
+      self.$vux.loading.show()
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     }
   },
   created () {

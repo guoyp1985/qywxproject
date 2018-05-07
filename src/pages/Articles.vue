@@ -109,7 +109,6 @@ export default {
         return self.$http.get(`${ENV.BokaApi}/api/common/getAd`)
       })
       .then(res => {
-        
       })
     },
     getAritcles (index) {

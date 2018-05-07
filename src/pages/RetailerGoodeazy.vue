@@ -22,6 +22,7 @@
             <div class="mb15" style="position:relative;">
               <search
                 class="x-search"
+                v-model="searchword"
                 :auto-fixed="autofixed"
                 @on-submit="onSubmit"
                 @on-change="onChange"
@@ -210,6 +211,7 @@ export default {
         self.$vux.loading.hide()
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
+        self.searchword = ''
       })
     },
     onFocus () {

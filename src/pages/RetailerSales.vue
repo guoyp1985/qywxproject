@@ -19,6 +19,7 @@
           <div v-if="(index == 0)">
             <search
               class="x-search"
+              v-model="searchword1"
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
@@ -53,6 +54,7 @@
           <div v-if="(index == 1)">
             <search
               class="x-search"
+              v-model="searchword2"
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
               @on-change="onChange2"
@@ -217,7 +219,7 @@ export default {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
@@ -226,6 +228,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
@@ -252,6 +255,7 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword2 = ''
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {

@@ -12,6 +12,7 @@
       <div style="position:absolute;left:0;top:0;right:0;">
         <search
           class="x-search"
+          v-model="searchword1"
           :auto-fixed="autofixed"
           @on-submit="onSubmit1"
           @on-change="onChange1"
@@ -109,7 +110,7 @@ export default {
       const self = this
       let params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
@@ -118,6 +119,7 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/user/shareList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
         if (!self.isBindScroll1) {

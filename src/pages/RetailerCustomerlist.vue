@@ -231,19 +231,17 @@ export default {
       const self = this
       let params = { params: { tolevel: -1, pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
         params.params.keyword = keyword
+      } else {
+        self.searchresult1 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.tabcount1 = data.count
         self.searchword1 = ''
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
-          self.searchresult1 = true
-        } else {
-          self.tabcount1 = data.count
-          self.searchresult1 = false
-        }
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
@@ -260,19 +258,17 @@ export default {
       const self = this
       let keyword = self.searchword2
       let params = { params: { tolevel: 5, pagestart: self.pagestart2, limit: self.limit } }
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        self.searchresult2 = true
         params.params.keyword = keyword
+      } else {
+        self.searchresult2 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        self.tabcount2 = data.count
         self.searchword2 = ''
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
-          self.searchresult2 = true
-        } else {
-          self.tabcount2 = data.count
-          self.searchresult2 = false
-        }
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {

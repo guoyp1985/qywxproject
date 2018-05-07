@@ -56,6 +56,7 @@
           <div class="popup-middle">
             <search
               class="x-search"
+              v-model="searchword"
               :auto-fixed="autofixed"
               @on-submit="onSubmit"
               @on-change="onChange"
@@ -293,17 +294,18 @@ export default {
       const self = this
       let params = { params: { from: 'activity', pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword
-      if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
         params.params.keyword = keyword
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        if (typeof keyword !== 'undefined' && !self.$util.isNull(keyword)) {
+        if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
           self.searchresult = true
         } else {
           self.searchresult = false
         }
+        self.searchword = ''
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         if (!self.isBindScroll1) {
