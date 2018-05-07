@@ -159,7 +159,7 @@ Up text:
 
 <script>
 import { Group, XInput, XTextarea, Loading, TransferDomDirective as TransferDom } from 'vux'
-import ENV from '../../libs/env'
+import ENV from 'env'
 
 export default {
   directives: {

@@ -114,7 +114,7 @@
 import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom, Popup } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

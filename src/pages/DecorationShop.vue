@@ -101,7 +101,7 @@ Please upload rolling show photo:
 
 <script>
 import { TransferDom, Popup, Confirm, Alert } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

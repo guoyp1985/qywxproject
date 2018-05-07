@@ -147,7 +147,7 @@ Message:
 import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import Listplate from '@/components/Listplate'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 export default {
   components: {
     Tab,

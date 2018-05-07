@@ -36,7 +36,7 @@ Promotion:
 </i18n>
 
 <script>
-import ENV from '#/env'
+import ENV from 'env'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 export default {

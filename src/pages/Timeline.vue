@@ -64,7 +64,7 @@ Behavior analysis in the last month:
 
 <script>
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 export default {
   filters: {
     dateformat: function (value) {

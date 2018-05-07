@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Reg from './reg'
-import ENV from './env'
+import ENV from 'env'
 import SHA1 from 'js-sha1'
 import Base64 from './base64'
 import Time from './time'
@@ -288,6 +288,36 @@ Util.install = function (Vue, options) {
           })
         }
       }, false)
+    },
+    taskData: function (os) {
+      let data = os.data
+      let handleFunction = options.handleFunction
+      if(data && data.length > 0) {
+        let ascdesc = options.ascdesc ? options.ascdesc : "asc"
+        let callback = os.callback
+        let tasks = []
+        let _serial = function () {
+          if (tasks.length === 0) {
+            callback && callback()
+            return
+          }
+          let task = tasks[0]
+          tasks.splice(0, 1)
+          task(_serial)
+        }
+        if (ascdesc === 'asc') {
+          for (let i = 0; i < data.length; i++) {
+            tasks.push(handleFunction(data[i], i))
+          }
+        } else {
+          for (let i = data.length - 1; i >= 0; i++) {
+            tasks.push(handleFunction(data[i], i))
+          }
+        }
+        _serial()
+      }
+    },
+    wxUploadImage: function (os) {
     },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {

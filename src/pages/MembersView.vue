@@ -107,7 +107,7 @@ Behavior:
 <script>
 import { Previewer, TransferDom } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {

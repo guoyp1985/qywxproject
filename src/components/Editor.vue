@@ -76,18 +76,13 @@ export default {
       this.$emit('on-cancel')
     },
     createEditor () {
+      const self = this
       editor = new Eleditor({
         el: this.elem,
-        toolbars: [
-          'insertText',
-          'editText',
-          'insertImage',
-          'insertLink',
-          'insertHr',
-          'delete',
-          'undo',
-          'cancel'
-        ]
+        insertImageCallback:function(callback){
+        },
+        insertProductCallback:function(callback){
+        }
       })
     },
     clickMenuHandle () {

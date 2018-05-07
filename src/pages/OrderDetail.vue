@@ -68,7 +68,7 @@
 <script>
 import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDomDirective as TransferDom } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
-import ENV from '#/env'
+import ENV from 'env'
 export default {
   directives: {
     TransferDom

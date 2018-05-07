@@ -38,7 +38,7 @@ Confirm:
 
 <script>
 import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
-import ENV from '../../libs/env'
+import ENV from 'env'
 
 export default {
   components: {

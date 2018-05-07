@@ -27,7 +27,7 @@
 </template>
 <script>
 import { Group, XInput, XAddress, ChinaAddressV4Data, Value2nameFilter as value2name, XSwitch, Box, XButton } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 export default {
   components: {
     Group,

@@ -57,7 +57,7 @@ import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
 import Editor from '@/components/Editor'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 import { User } from '#/storage'
 
 export default {

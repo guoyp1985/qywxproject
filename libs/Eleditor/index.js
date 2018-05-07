@@ -11,6 +11,7 @@ var _debug = false;
 var _namespace = 'Eleditor';
 var _notctname = ['INPUT', 'IMG', 'TEXTAREA'];
 var _toolnames = {
+	insertProduct: '插商品',
 	insertText: '插文字',
 	insertImage: '插图片',
 	insertLink: '插链接',
@@ -101,7 +102,6 @@ var _buildEditorModule = function(_toolbars, _uid){
 	var _html = '<div class="Eleditor-wrap" style="z-index:'+_getLayerMaxZIndex()+'" id="'+_uid+'">\
 					<div class="Eleditor-controller">\
 					<ul>';
-
 	for (var i = 0; i < _toolbars.length; i++) {
 		var _it = _toolbars[i],
 			_id = typeof _it === 'object' ? _it.id : _it,
@@ -216,6 +216,7 @@ var Eleditor = function(){
 	var _args = arguments[0];
 	_args.upload = _args.upload || {};
 	_args.toolbars = _args.toolbars || [];
+
 		// _undolen = isNaN(_args._undolen) ? 10 : _args._undolen;
 	var	_editorUid = _genEditorUid(),
 			_historys = [],
@@ -224,6 +225,7 @@ var Eleditor = function(){
 
 	if( _args.toolbars.length === 0 ){
 		_args.toolbars = [
+			'insertProduct',
 			'insertText',
 			'editText',
 			'insertImage',
@@ -526,6 +528,24 @@ var Eleditor = function(){
 	}
 
 	var _editorModuleEvents = {
+    insertProduct: function(){
+        _arg.insertProductCallback && _arg.insertProductCallback(function(rethtml){
+            var _buildWordHtml = '';
+            var _buildWordHtml = $(rethtml);
+
+            _$selected.after(_buildWordHtml);
+            _flushEditorControllerLayerPosi();
+            _appendHistory({ m: 'insertNode', node: _buildWordHtml });
+
+            _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
+            _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
+            _$editorTextArea.removeAttr('style').html('');
+            _$editorTextLinkArea.val('');
+            _hideEditorWrapMask();
+            _$editorTextModule.hide();
+            _hideEditorControllerLayer();
+        });
+    },
 		insertText: function(){
 			_showEditorWrapMask();
 			_$editorTextModule.attr({'role': 'insert', 'type': 'word'}).show();

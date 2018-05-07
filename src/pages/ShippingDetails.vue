@@ -37,7 +37,7 @@
 
 <script>
 import { Sticky, Timeline, TimelineItem } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 export default {
   components: {
     Sticky,

@@ -115,7 +115,7 @@
 
 <script>
 import { TransferDom, Popup } from 'vux'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   name: 'BargainbuyView',

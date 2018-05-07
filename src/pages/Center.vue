@@ -36,7 +36,7 @@
 <script>
 import { Grid, GridItem } from 'vux'
 import CTitle from '@/components/CTitle'
-import ENV from '#/env'
+import ENV from 'env'
 import { Token, User } from '#/storage'
 
 export default {

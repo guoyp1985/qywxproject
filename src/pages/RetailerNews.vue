@@ -166,7 +166,7 @@ Control text:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon } from 'vux'
 import Time from '#/time'
-import ENV from '#/env'
+import ENV from 'env'
 
 export default {
   directives: {
