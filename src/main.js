@@ -282,7 +282,7 @@ Vue.http.interceptors.request.use(function (config) {
   const token = Token.get()
   config.headers['Authorization'] = `Bearer ${token}`
   // alert(JSON.stringify(config))
-  return null
+  return config
 }, function (error) {
   alert(error)
   return Promise.reject(error)
@@ -295,7 +295,7 @@ Vue.http.interceptors.response.use(function (response) {
   alert(response)
   return response
 }, function (error) {
-  alert(JSON.stringify(error))
+  // alert(JSON.stringify(error))
   // console.log(error.response)
   // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
