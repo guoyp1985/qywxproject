@@ -284,6 +284,7 @@ Vue.http.interceptors.request.use(config => {
     config.headers['Authorization'] = `Bearer ${token}`
     return config
   } else {
+    alert(JSON.stringify(config))
     return config
   }
 }, error => {
