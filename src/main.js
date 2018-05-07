@@ -314,8 +314,8 @@ Vue.http.interceptors.response.use(response => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
+        alert(location.href)
         const originHref = encodeURIComponent(location.href)
-        alert(originHref)
         location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
       }
     })
