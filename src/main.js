@@ -281,7 +281,7 @@ Vue.http.interceptors.request.use(config => {
   // })
   const token = Token.get()
   config.headers['Authorization'] = `Bearer ${token}`
-  // alert(JSON.stringify(config))
+  alert(JSON.stringify(config))
   return config
 }, error => {
   return Promise.reject(error)
@@ -290,7 +290,6 @@ Vue.http.interceptors.request.use(config => {
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
-  alert('res')
   return response
 }, error => {
   alert(JSON.stringify(error))
