@@ -100,12 +100,16 @@ export default {
     clickArticle (item) {
       this.$router.push({path: `/articles/${item.id}`})
     },
-    getInitData () {
+    getData () {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
       .then(res => {
         self.tabs = res.data.data
         self.getAritcles(self.selectedIndex)
+        return self.$http.get(`${ENV.BokaApi}/api/common/getAd`)
+      })
+      .then(res => {
+        
       })
     },
     getAritcles (index) {
@@ -117,7 +121,7 @@ export default {
     }
   },
   created () {
-    this.getInitData()
+    this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
