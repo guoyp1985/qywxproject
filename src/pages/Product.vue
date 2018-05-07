@@ -503,6 +503,10 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
+        alert('in mobile')
+        alert(index)
+        alert(self.photoarr[index])
+        alert(self.photoarr)
         self.$vue.wechat.previewImage({
           current: self.photoarr[index],
           urls: self.photoarr
