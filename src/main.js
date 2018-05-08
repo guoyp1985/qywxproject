@@ -302,20 +302,34 @@ Vue.http.interceptors.response.use(function (response) {
   // console.log(error.response)
   // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
+  const code = lUrl.query.code
+  const access = AndroidAccess.get()
   // if (matchExclude(rUrl.href)) {
   //   return {}
   // }
-  if (lUrl.query.code) {
-    alert(lUrl.query.code)
-    const code = lUrl.query.code
+  if (!access && code) {
+    AndroidAccess.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         Token.set(res.data.data.token)
         // getAddress(res.data.data.weixin_token)
-        if ($vue.$util.isAndroid()) {
-          AndroidAccess.set(true)
-        }
+        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    )
+    .then(
+      res => {
+        User.set(res.data)
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+      }
+    )
+  } else if (code) {
+    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+    .then(
+      res => {
+        Token.set(res.data.data.token)
+        // getAddress(res.data.data.weixin_token)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
