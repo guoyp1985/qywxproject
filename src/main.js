@@ -19,10 +19,10 @@ require('es6-promise').polyfill()
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
-console.log(AjaxPlugin.$http.defaults)
+// console.log(AjaxPlugin.$http.defaults)
 AjaxPlugin.$http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-// AjaxPlugin.$http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-AjaxPlugin.$http.defaults.withCredentials = true;
+AjaxPlugin.$http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+// AjaxPlugin.$http.defaults.withCredentials = true;
 
 let store = new Vuex.Store({
   modules: {
