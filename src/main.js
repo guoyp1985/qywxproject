@@ -20,6 +20,7 @@ const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
+alert(fetch)
 // Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.http.defaults.withCredentials = true;
