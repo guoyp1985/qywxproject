@@ -285,7 +285,6 @@ Vue.http.interceptors.request.use(function (config) {
     alert(token)
     config.headers['Authorization'] = `Bearer ${token}`
   } else if ($vue.$util.isAndroid() && !access) {
-    AndroidAccess.set(true)
     return null
   }
   return config
@@ -307,14 +306,16 @@ Vue.http.interceptors.response.use(function (response) {
   //   return {}
   // }
   if (lUrl.query.code) {
-    // alert(lUrl.query.code)
+    alert(lUrl.query.code)
     const code = lUrl.query.code
-    alert(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         Token.set(res.data.data.token)
         // getAddress(res.data.data.weixin_token)
+        if ($vue.$util.isAndroid()) {
+          AndroidAccess.set(true)
+        }
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
