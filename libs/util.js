@@ -131,6 +131,7 @@ Util.install = function (Vue, options) {
           lastshareuid: wxData.share_uid
         }
       }).then(function (res) {
+        alert(JSON.stringify(res))
         return res.json()
       }).then(function (data) {
         alert('in share ajax')
