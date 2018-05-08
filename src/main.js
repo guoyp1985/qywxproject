@@ -288,14 +288,13 @@ Vue.http.interceptors.request.use(function (config) {
   // }
   return config
 }, function (error) {
-  alert(error)
   return Promise.reject(error)
 })
 
 // 响应拦截器
 Vue.http.interceptors.response.use(function (response) {
   // removePending(response.config)
-  // alert(response)
+  alert(response)
   return response
 }, function (error) {
   const lUrl = urlParse(location.href, true)
