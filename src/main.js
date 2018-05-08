@@ -20,6 +20,7 @@ const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
+const headers = new Headers();
 headers.set("Origin", "https://vux.boka.cn");
 headers.set("Accept", "application/json");
 const reqInit = {
