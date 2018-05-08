@@ -279,36 +279,53 @@ Vue.http.interceptors.request.use(function (config) {
   // config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
   // })
-  const token = Token.get()
-  const access = AndroidAccess.get()
-  if (token) {
-    alert(token)
-    config.headers['Authorization'] = `Bearer ${token}`
-  } else if ($vue.$util.isAndroid() && !access) {
-    AndroidAccess.set(true)
-    return null
-  }
+  // const token = Token.get()
+  // const access = AndroidAccess.get()
+  // if (token) {
+    config.headers['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzA4MVRmRjh5MVRUZmpnMEEyczd5MURxTDh5MVRmRjhxIiwiaWF0IjoxNTI1NzQzODkyLCJleHAiOjE1MjY2MDc4OTIsIm5iZiI6MTUyNTc0Mzg5MiwianRpIjoiamtTUjVCUXloV050UEN3WiIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.fsIQlE6pDPAPBmApEoBT2wOMvaGn1f__wOVQAQ-lSdQ`
+  // } else if ($vue.$util.isAndroid() && !access) {
+  //   return null
+  // }
   return config
 }, function (error) {
+  alert(error)
   return Promise.reject(error)
 })
 
 // 响应拦截器
 Vue.http.interceptors.response.use(function (response) {
   // removePending(response.config)
-  // alert(response)
+  alert(response)
   return response
 }, function (error) {
-  // alert(JSON.stringify(error))
-  // console.log(error.response)
-  // const rUrl = urlParse(config.url)
+  alert(error)
   const lUrl = urlParse(location.href, true)
-  // if (matchExclude(rUrl.href)) {
-  //   return {}
-  // }
-  if (lUrl.query.code) {
-    // alert(lUrl.query.code)
-    const code = lUrl.query.code
+  const code = lUrl.query.code
+  const access = AndroidAccess.get()
+  // alert($vue.$util.isAndroid()+','+!access+','+code)
+  if ($vue.$util.isAndroid() && !access && code) {
+    AndroidAccess.set(true)
+    alert(`${ENV.BokaApi}/api/authLogin/${code}`)
+    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+    .then(
+      res => {
+        Token.set(res.data.data.token)
+        alert('token')
+        // getAddress(res.data.data.weixin_token)
+        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    )
+    .catch(res => {
+      alert(JSON.stringify(res))
+    })
+    .then(
+      res => {
+        User.set(res.data)
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+      }
+    )
+  } else if (code) {
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
