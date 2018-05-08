@@ -585,9 +585,10 @@ export default {
           desc: sharedesc,
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
           photo: self.photoarr[0],
-          share_uid: self.loginUser.uid
+          lastshareuid: self.query.share_uid
         },
         successCallback: function () {
+          alert('in success callback')
           self.showShareSuccess = true
         }
       })
