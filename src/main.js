@@ -22,7 +22,7 @@ Vue.use(Vuex)
 // console.log(AjaxPlugin.$http.defaults)
 Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-Vue.http.defaults.withCredentials = true;
+// Vue.http.defaults.withCredentials = true;
 
 let store = new Vuex.Store({
   modules: {
