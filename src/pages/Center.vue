@@ -138,7 +138,7 @@ export default {
   created () {
     alert('useruser')
     const user = User.get()
-    alert(user)
+    // alert(user)
     if (user) {
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
