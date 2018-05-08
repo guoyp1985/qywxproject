@@ -297,6 +297,7 @@ Vue.http.interceptors.response.use(function (response) {
   alert(response)
   return response
 }, function (error) {
+  alert(error)
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const access = AndroidAccess.get()
