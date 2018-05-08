@@ -275,18 +275,18 @@ router.afterEach(function (to) {
 // Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(function (config) {
+  alert(JSON.stringify(config))
   // removePending(config)
   // config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
   // })
-  const token = Token.get()
-  const access = AndroidAccess.get()
+  // const token = Token.get()
+  // const access = AndroidAccess.get()
   // if (token) {
     config.headers['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzA4MVRmRjh5MVRUZmpnMEEyczd5MURxTDh5MVRmRjhxIiwiaWF0IjoxNTI1NzQzODkyLCJleHAiOjE1MjY2MDc4OTIsIm5iZiI6MTUyNTc0Mzg5MiwianRpIjoiamtTUjVCUXloV050UEN3WiIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.fsIQlE6pDPAPBmApEoBT2wOMvaGn1f__wOVQAQ-lSdQ`
   // } else if ($vue.$util.isAndroid() && !access) {
   //   return null
   // }
-  alert(JSON.stringify(config))
   return config
 }, function (error) {
   alert(error)
