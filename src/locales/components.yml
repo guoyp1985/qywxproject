@@ -443,9 +443,9 @@ zh-CN:
   Article: 文章
   Commodity: 商品
   Store: 店铺
-  Share invite customer: 分享邀请返点客户
+  Share invite customer: 分享邀请返点客
   Rebate manage: 返点管理
-  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。'
+  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客,每日只能推送一次。'
   Send text: 发送
   Customer text: 客户
   Percent: 成交概率
@@ -468,7 +468,7 @@ zh-CN:
   Deliver commpany: 物流公司
   Cancel txt: 取消
   Confirm txt: 提交
-  Add order1: 返点客户
+  Add order1: 返点客
   Selection promotion: 精选促销
   All products: 全部商品
   Contact Seller: 联系卖家
@@ -646,8 +646,8 @@ zh-CN:
   tLogin: 扫码登录
   tCenter: 个人中心
   tCenterSales: 销售中心
-  tRetailerSales: 销售中心
-  tRetailerSalcechance: 销售机会
+  tRetailerSales: 返点客
+  tRetailerSalechance: 销售机会
   tRetailerCustomerlist: 联系客户
   tRetailerAddorder: 订单录入
   tRetailerOrder: 订单列表
@@ -678,7 +678,7 @@ zh-CN:
   tAddActivity: 创建活动
   tAddProduct: 添加商品
   tRetailerGoodeazy: 易采集
-  tServiceAddnews: 创建文章
+  tAddNews: 创建文章
   tRetailerMessagelist: 消息
   tAddOrder: 确认订单
   tSalesList: 返点客
@@ -690,6 +690,7 @@ zh-CN:
   tSaleProducts: 精品促销
   tUserPoster: 生成海报
   tStat: 统计
+  tPoster: 生成海报
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
