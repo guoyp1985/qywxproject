@@ -117,7 +117,7 @@ export default {
           const user = User.get()
           User.set({
             ...user,
-            ...self.getProfile,
+            ...self.getProfile
           })
           self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {

@@ -42,4 +42,15 @@ const User = {
     localStorage.removeItem('user')
   }
 }
-export { Token, OpenId, WxQrCode, User }
+const AndroidAccess = {
+  set (access) {
+    localStorage.setItem('android_access', access)
+  },
+  get () {
+    return localStorage.getItem('android_access')
+  },
+  remove () {
+    localStorage.removeItem('android_access')
+  }
+}
+export { Token, OpenId, WxQrCode, User, AndroidAccess }

@@ -10,9 +10,10 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import { Token, User } from '#/storage'
+import { Token, User, AndroidAccess } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
+import WeixinJSBridge from 'WeixinJSBridge'
 
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
@@ -139,10 +140,10 @@ router.afterEach(function (to) {
 })
 
 // let excludeUrls = [
-//   `${ENV.BokaApi}/api/authLogin/*`,
-//   `${ENV.BokaApi}/api/qrcode/login*`,
-//   `${ENV.BokaApi}/api/login/*`,
-//   `${ENV.BokaApi}/api/scanlogin`
+//   `${ENV.BokaApi}/api/authLogin/*`
+  // `${ENV.BokaApi}/api/qrcode/login*`,
+  // `${ENV.BokaApi}/api/login/*`,
+  // `${ENV.BokaApi}/api/scanlogin`
   // `${ENV.BokaApi}/api/weixin/token`
 // ]
 
@@ -261,36 +262,52 @@ router.afterEach(function (to) {
 //   return Promise.reject(error)
 // })
 
-let pending = []
-let removePending = (config) => {
-  for (let p in pending) {
-    if (pending[p].u === config.url + '&' + config.method) {
-      pending[p].f()
-      pending.splice(p, 1)
-    }
-  }
-}
+// let pending = []
+// let removePending = (config) => {
+//   for (let p in pending) {
+//     if (pending[p].u === config.url + '&' + config.method) {
+//       pending[p].f()
+//       pending.splice(p, 1)
+//     }
+//   }
+// }
+
 // Token.remove()
 // 请求拦截器
-Vue.http.interceptors.request.use(config => {
-  removePending(config)
-  config.cancelToken = new CancelToken(c => {
-    pending.push({ u: config.url + '&' + config.method, f: c })
-  })
+Vue.http.interceptors.request.use(function (config) {
+  // removePending(config)
+  // config.cancelToken = new CancelToken(c => {
+    // pending.push({ u: config.url + '&' + config.method, f: c })
+  // })
   const token = Token.get()
-  config.headers['Authorization'] = `Bearer ${token}`
+  const access = AndroidAccess.get()
+  if (token) {
+    alert(token)
+    config.headers['Authorization'] = `Bearer ${token}`
+  } else if ($vue.$util.isAndroid() && !access) {
+    AndroidAccess.set(true)
+    return null
+  }
   return config
-}, error => {
+}, function (error) {
   return Promise.reject(error)
 })
 
 // 响应拦截器
-Vue.http.interceptors.response.use(response => {
-  removePending(response.config)
+Vue.http.interceptors.response.use(function (response) {
+  // removePending(response.config)
+  // alert(response)
   return response
-}, error => {
+}, function (error) {
+  // alert(JSON.stringify(error))
+  // console.log(error.response)
+  // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
+  // if (matchExclude(rUrl.href)) {
+  //   return {}
+  // }
   if (lUrl.query.code) {
+    // alert(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -303,16 +320,19 @@ Vue.http.interceptors.response.use(response => {
     .then(
       res => {
         User.set(res.data)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
+    // alert(error)
     $vue.$util.access(error.response, isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
-        const orginHref = encodeURIComponent(location.href)
-        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${orginHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        // alert(JSON.stringify(error.response))
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       }
     })
   }

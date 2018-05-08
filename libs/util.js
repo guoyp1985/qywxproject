@@ -16,16 +16,16 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
-      alert(Reg.rPlatfrom.test(userAgentInfo))
-      if (Reg.rPlatfrom.test(userAgentInfo)) {
-        return false
-      }
-      return true
+      return !Reg.rPlatfrom.test(userAgentInfo)
+    },
+    isAndroid: function() {
+      const userAgentInfo = navigator.userAgent
+      return Reg.rAndroid.test(userAgentInfo)
     },
     // 判授权
     access: function (response, authorization) {
       const isPC = this.isPC()
-      if (response.status === 401) {
+      if (!response || response.status === 401) {
         authorization(isPC)
       }
     },
