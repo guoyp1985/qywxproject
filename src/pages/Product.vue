@@ -568,6 +568,7 @@ export default {
       }
       self.$util.wxShare({
         data: {
+          module: 'product',
           title: self.productdata.seotitle || self.productdata.title,
           desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
