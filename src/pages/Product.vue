@@ -566,16 +566,25 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
+      let sharetitle = self.productdata.title
+      if (!self.$util.isNull(self.productdata.seotitle)) {
+        sharetitle = self.productdata.seotitle
+      }
+      let sharedesc = self.productdata.title
+      if (!self.$util.isNull(self.productdata.seodescription)) {
+        sharedesc = self.productdata.seodescription
+      } else if (!self.$util.isNull(self.productdata.seotitle)) {
+        sharedesc = self.productdata.seotitle
+      }
       self.$util.wxShare({
         data: {
           module: 'product',
           moduleid: self.productdata.id,
-          title: self.productdata.seotitle || self.productdata.title,
-          desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
+          title: sharetitle,
+          desc: sharedesc,
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
           photo: self.photoarr[0],
           successCallback: function () {
-            alert('in share success callback')
             self.showShareSuccess = true
           }
         }
