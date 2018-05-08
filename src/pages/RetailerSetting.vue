@@ -42,6 +42,9 @@
         <Forminputplate class="required">
           <span slot="title">{{ $t('Pay type') }}</span>
           <div>
+            <check-icon :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+            <check-icon :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
+            <!--
             <label style="display:inline-block;" class="btnbuyonline" template=".template4">
               <div class="qradio">
                 <input v-model="submitdata.buyonline" type="radio" name="buyonline" value="1" @click="online" >
@@ -54,6 +57,7 @@
                 <i></i><span style="vertical-align:-3px;">线下支付</span>
               </div>
             </label>
+          -->
           </div>
         </Forminputplate>
         <div v-show="showmore">
@@ -180,7 +184,7 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Group, XTextarea, XInput, TransferDom, Loading, Popup } from 'vux'
+import { Group, XTextarea, XInput, TransferDom, Loading, Popup, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
 
@@ -195,10 +199,13 @@ export default {
     XInput,
     TransferDom,
     Loading,
-    Popup
+    Popup,
+    CheckIcon
   },
   data () {
     return {
+      isOnline: false,
+      isOffline: false,
       showmore: false,
       havenum: 0,
       maxnum: 1,
@@ -209,22 +216,6 @@ export default {
       showoffline: false,
       showqrcode: false
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-      let data = res.data
-      let retailerInfo = data.data ? data.data : data
-      for (let key in self.submitdata) {
-        self.submitdata[key] = retailerInfo[key]
-      }
-      let qrcode = self.submitdata.qrcode
-      if (!self.$util.isNull(qrcode)) {
-        self.photoarr = qrcode.split(',')
-      }
-      self.havenum = self.photoarr.length
-    })
   },
   watch: {
     photoarr: function () {
@@ -267,11 +258,13 @@ export default {
       this.photoarr.splice(index, 1)
       this.submitdata.qrcode = this.photoarr.join(',')
     },
-    online () {
-      this.showonline = true
-    },
-    offline () {
-      this.showoffline = true
+    setbuyonline (val) {
+      if (val === 1) {
+        this.showonline = true
+      } else {
+        this.showoffline = true
+      }
+      this.submitdata.buyonline = val
     },
     closeOnPopup () {
       this.showonline = false
@@ -318,6 +311,31 @@ export default {
         })
       })
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+      self.$vux.loading.hide()
+      let data = res.data
+      let retailerInfo = data.data ? data.data : data
+      if (retailerInfo.buyonline) {
+        self.isOnline = true
+        self.isOffline = false
+      } else {
+        self.isOnline = false
+        self.isOffline = true
+      }
+      for (let key in self.submitdata) {
+        self.submitdata[key] = retailerInfo[key]
+      }
+      let qrcode = self.submitdata.qrcode
+      if (!self.$util.isNull(qrcode)) {
+        self.photoarr = qrcode.split(',')
+      }
+      self.havenum = self.photoarr.length
+    })
   }
 }
 </script>

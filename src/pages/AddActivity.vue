@@ -334,8 +334,7 @@ export default {
         return false
       }
       if (self.activityType === 'bargainbuy') {
-        let priceinput = document.querySelector('.addActivity .addForm .minprice')
-        let priceval = parseFloat(priceinput.value)
+        let priceval = parseFloat(self.selectpopupdata.price)
         let mininput = document.querySelector('.addActivity .addForm .everymin')
         let minval = parseFloat(mininput.value)
         let maxinput = document.querySelector('.addActivity .addForm .everymax')
