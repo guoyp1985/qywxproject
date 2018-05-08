@@ -328,8 +328,8 @@ Vue.http.interceptors.response.use(function (response) {
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else if (code) {
-    // Access.set(true)
+  } else if (!access && code) {
+    Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
