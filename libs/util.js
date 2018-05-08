@@ -124,7 +124,7 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
-      alert(params)
+      alert(JSON.stringify(params))
       /*
       let wxData = params.data
       alert(wxData)
