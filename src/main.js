@@ -288,6 +288,7 @@ Vue.http.interceptors.request.use(function (config) {
   // }
   return config
 }, function (error) {
+  alert(error)
   return Promise.reject(error)
 })
 
