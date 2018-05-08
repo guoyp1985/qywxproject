@@ -1,5 +1,5 @@
 <template>
-  <div class="share_success flex_center font14">
+  <div class="share_success flex_center font14" @click="close">
   	<div class="shareinner">
       <div class="btn" @click="close"><i class="al al-guanbi color-gray font20"></i></div>
   		<div class="font20 color-orange2 bold align_center" style="position:relative;">
