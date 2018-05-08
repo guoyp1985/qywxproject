@@ -292,7 +292,7 @@ Vue.http.interceptors.request.use(function (config) {
   // } else if ($vue.$util.isAndroid() && !access) {
   //   return null
   // }
-  alert(config)
+  // alert(config)
   return config
 }, function (error) {
   return Promise.reject(error)
@@ -304,7 +304,7 @@ Vue.http.interceptors.response.use(function (response) {
   // alert(response)
   return response
 }, function (error) {
-  alert(JSON.stringify(error))
+  // alert(JSON.stringify(error))
   // const lUrl = urlParse(location.href, true)
   // const code = lUrl.query.code
   // const access = Access.get()
