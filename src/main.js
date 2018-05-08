@@ -311,11 +311,11 @@ Vue.http.interceptors.response.use(function (response) {
         alert('token')
         // getAddress(res.data.data.weixin_token)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      },
-      error => {
-        alert(error)
       }
     )
+    .catch(res => {
+      alert(JSON.stringify(res))
+    })
     .then(
       res => {
         User.set(res.data)
