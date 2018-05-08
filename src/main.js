@@ -139,25 +139,25 @@ router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
 })
 
-let excludeUrls = [
-  `${ENV.BokaApi}/api/authLogin/*`
+// let excludeUrls = [
+//   `${ENV.BokaApi}/api/authLogin/*`
   // `${ENV.BokaApi}/api/qrcode/login*`,
   // `${ENV.BokaApi}/api/login/*`,
   // `${ENV.BokaApi}/api/scanlogin`
   // `${ENV.BokaApi}/api/weixin/token`
-]
+// ]
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
-const matchExclude = url => {
-  for (let i = 0; i < rExcludeUrls.length; i++) {
-    // alert(`${item.url} ${item.reqMax}`)
-    if (rExcludeUrls[i].test(url)) {
-      return true
-    }
-  }
-  return false
-}
+// const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+// const matchExclude = url => {
+//   for (let i = 0; i < rExcludeUrls.length; i++) {
+//     // alert(`${item.url} ${item.reqMax}`)
+//     if (rExcludeUrls[i].test(url)) {
+//       return true
+//     }
+//   }
+//   return false
+// }
 // localStorage.removeItem('token')
 // let token = null // test
 // 全局请求过滤器
@@ -262,35 +262,37 @@ const matchExclude = url => {
 //   return Promise.reject(error)
 // })
 
-let pending = []
-let removePending = (config) => {
-  for (let p in pending) {
-    if (pending[p].u === config.url + '&' + config.method) {
-      pending[p].f()
-      pending.splice(p, 1)
-    }
-  }
-}
+// let pending = []
+// let removePending = (config) => {
+//   for (let p in pending) {
+//     if (pending[p].u === config.url + '&' + config.method) {
+//       pending[p].f()
+//       pending.splice(p, 1)
+//     }
+//   }
+// }
 
 // Token.remove()
 // 请求拦截器
 Vue.http.interceptors.request.use(function (config) {
-  removePending(config)
+  // removePending(config)
   config.cancelToken = new CancelToken(c => {
-    pending.push({ u: config.url + '&' + config.method, f: c })
+    // pending.push({ u: config.url + '&' + config.method, f: c })
   })
   const token = Token.get()
-  config.headers['Authorization'] = `Bearer ${token}`
-  // alert(JSON.stringify(config))
-  return config
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+    return config
+  } else {
+    return {response: {status: 401}}
+  }
 }, function (error) {
-  // alert(error)
   return Promise.reject(error)
 })
 
 // 响应拦截器
 Vue.http.interceptors.response.use(function (response) {
-  removePending(response.config)
+  // removePending(response.config)
   // alert(response)
   return response
 }, function (error) {
@@ -316,6 +318,7 @@ Vue.http.interceptors.response.use(function (response) {
       res => {
         User.set(res.data)
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
