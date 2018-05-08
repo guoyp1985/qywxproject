@@ -20,7 +20,19 @@ const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
-alert(fetch)
+headers.set("Origin", "https://vux.boka.cn");
+headers.set("Accept", "application/json");
+const reqInit = {
+  method: "GET",
+  headers: headers,
+  mode: "cors",
+  cache: "default"
+};
+fetch(new Request(`${ENV.BokaApi}/api/user/show`, { ...reqInit }))
+.then(res => res.json())
+.then(data => {
+  alert(data)
+})
 // Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.http.defaults.withCredentials = true;
