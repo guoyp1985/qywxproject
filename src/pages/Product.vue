@@ -587,9 +587,16 @@ export default {
           photo: self.photoarr[0],
           lastshareuid: self.query.share_uid
         },
-        successCallback: function () {
-          alert('in success callback')
-          self.showShareSuccess = true
+        successCallback: function (data) {
+          if (data.flag === 1) {
+            self.showShareSuccess = true
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.$util.delay(data.error)
+            })
+          }
         }
       })
       self.submitdata.id = self.productdata.id
