@@ -300,6 +300,7 @@ Vue.http.interceptors.response.use(function (response) {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const access = AndroidAccess.get()
+  alert(access)
   if ($vue.$util.isAndroid() && !access && code) {
     AndroidAccess.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
