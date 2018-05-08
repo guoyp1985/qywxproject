@@ -133,6 +133,8 @@ Util.install = function (Vue, options) {
       }).then(function (res) {
         return res.json()
       }).then(function (data) {
+        alert('in share ajax')
+        alert(data)
         params.wxData.successCallback && params.wxData.successCallback(data);
       })
     },
@@ -209,6 +211,7 @@ Util.install = function (Vue, options) {
             if (isUpdate) {
               alert("微信版本太低，请先升级微信客户端!")
             }
+            alert('in share success')
             self.wxShareSuccess({
               data: wxData,
               type: 'friend'

@@ -514,9 +514,10 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
+        let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
         window.WeixinJSBridge.invoke('imagePreview', {
-          current: self.photoarr[index],
-          urls: self.photoarr
+          current: viewarr[index],
+          urls: viewarr
         })
       }
     },
@@ -572,6 +573,7 @@ export default {
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
           photo: self.photoarr[0],
           successCallback: function () {
+            alert('in share success callback')
             self.showShareSuccess = true
           }
         }
