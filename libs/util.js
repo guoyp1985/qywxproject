@@ -124,8 +124,8 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
-      alert('in ajax')
       alert(params)
+      /*
       let wxData = params.data
       alert(wxData)
       alert(wxData.module)
@@ -142,6 +142,7 @@ Util.install = function (Vue, options) {
         alert(data)
         params.wxData.successCallback && params.wxData.successCallback(data);
       })
+      */
     },
     wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
