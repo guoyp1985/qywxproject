@@ -5,7 +5,7 @@
   		<div class="font20 color-orange2 bold align_center" style="position:relative;">
         <span>分享成功</span>
       </div>
-      <template v-if="data.retailerinfo && data.retailerinfo.uid == loginUser.uid">
+      <template v-if="data.uploader == loginUser.uid">
     		<div class="border-box color-orange2 align_center pt10 pl15 pr15">你的好友查看你的分享，以及好友的好友查看你的分享，都将成为你的客户。</div>
     		<div class="pl15 pr15">
           <div class="align_center">

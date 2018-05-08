@@ -23,6 +23,7 @@
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
+              @on-cancel="onCancel1"
               ref="search">
             </search>
             <div class="scroll_list pl10 pr10">
@@ -58,6 +59,7 @@
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
               @on-change="onChange2"
+              @on-cancel="onCancel2"
               ref="search">
             </search>
             <div class="scroll_list pl10 pr10">
@@ -228,7 +230,6 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         if (!self.isBindScroll1) {
@@ -255,7 +256,6 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.searchword2 = ''
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
@@ -289,6 +289,26 @@ export default {
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
+    },
+    onCancel1 () {
+      const self = this
+      if (!self.$util.isNull(self.searchword1)) {
+        self.searchword1 = ''
+        self.$vux.loading.show()
+        self.tabdata1 = []
+        self.pagestart1 = 0
+        self.getdata1()
+      }
+    },
+    onCancel2 () {
+      const self = this
+      if (!self.$util.isNull(self.searchword2)) {
+        self.searchword2 = ''
+        self.$vux.loading.show()
+        self.tabdata2 = []
+        self.pagestart2 = 0
+        self.getdata2()
+      }
     },
     onChange2 (val) {
       this.searchword2 = val

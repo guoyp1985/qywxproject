@@ -26,6 +26,7 @@
                 :auto-fixed="autofixed"
                 @on-submit="onSubmit"
                 @on-change="onChange"
+                @on-cancel="onCancel"
                 ref="search">
               </search>
               <div class="scroll_list pl10 pr10 mb12" style="position:absolute;top:45px;">
@@ -89,7 +90,7 @@
     </div>
     <div class="s-bottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
-        <router-link class="t-cell item" to="/retailerShop">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
         <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
         <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
       </div>
@@ -193,10 +194,13 @@ export default {
     onChange (val) {
       this.searchword = val
     },
+    onCancel () {
+      this.searchword = ''
+    },
     onSubmit () {
       const self = this
-      let kw = this.searchword.replace(/\s+/g, '')
-      if (self.$util.isNull(kw)) {
+      let kw = self.searchword
+      if (self.$util.trim(kw) === '') {
         self.$vux.alert.show({
           title: '',
           content: '请输入搜索内容'
@@ -211,7 +215,6 @@ export default {
         self.$vux.loading.hide()
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
-        self.searchword = ''
       })
     },
     onFocus () {

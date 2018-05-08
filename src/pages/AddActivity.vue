@@ -60,6 +60,7 @@
               :auto-fixed="autofixed"
               @on-submit="onSubmit"
               @on-change="onChange"
+              @on-cancel="onCancel"
               ref="search">
             </search>
             <div class="scroll_list">
@@ -170,51 +171,6 @@ export default {
       scrollArea1: null
     }
   },
-  created: function () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.activityType = self.query.type
-    let nowdate = new Date().getTime()
-    let startime = self.dateformat(parseInt(nowdate / 1000))
-    let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
-    self.selectdatetxt1 = ''
-    self.selectdatetxt2 = ''
-    if (self.activityType === 'groupbuy') {
-      self.submitdata = {
-        productid: '',
-        starttime: startime,
-        endtime: endtime,
-        param_groupprice: '',
-        param_numbers: '',
-        param_limitbuy: '',
-        param_finishtime: '',
-        param_everybuy: ''
-      }
-    } else if (self.activityType === 'bargainbuy') {
-      self.submitdata = {
-        productid: '',
-        starttime: startime,
-        endtime: endtime,
-        param_minprice: '',
-        param_limitbuy: '',
-        param_finishtime: '',
-        param_everymin: '',
-        param_everymax: ''
-      }
-    } else if (self.activityType === 'discount') {
-      self.submitdata = {
-        productid: '',
-        starttime: startime,
-        endtime: endtime,
-        param_price: '',
-        param_limitcount: '',
-        param_storage: ''
-      }
-    }
-    self.submitdata['type'] = self.query.type
-    self.requireddata = self.submitdata
-  },
   watch: {
     query: function () {
       return this.query
@@ -270,6 +226,16 @@ export default {
     onChange (val) {
       this.searchword = val
     },
+    onCancel () {
+      const self = this
+      if (!self.$util.isNull(self.searchword)) {
+        self.searchword = ''
+        self.$vux.loading.show()
+        self.productdata = []
+        self.pagestart1 = 0
+        self.getProductData()
+      }
+    },
     onSubmit () {
       const self = this
       self.$vux.loading.show()
@@ -305,7 +271,6 @@ export default {
         } else {
           self.searchresult = false
         }
-        self.searchword = ''
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         if (!self.isBindScroll1) {
@@ -400,6 +365,51 @@ export default {
         })
       })
     }
+  },
+  created: function () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.activityType = self.query.type
+    let nowdate = new Date().getTime()
+    let startime = self.dateformat(parseInt(nowdate / 1000))
+    let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
+    self.selectdatetxt1 = ''
+    self.selectdatetxt2 = ''
+    if (self.activityType === 'groupbuy') {
+      self.submitdata = {
+        productid: '',
+        starttime: startime,
+        endtime: endtime,
+        param_groupprice: '',
+        param_numbers: '',
+        param_limitbuy: '',
+        param_finishtime: '',
+        param_everybuy: ''
+      }
+    } else if (self.activityType === 'bargainbuy') {
+      self.submitdata = {
+        productid: '',
+        starttime: startime,
+        endtime: endtime,
+        param_minprice: '',
+        param_limitbuy: '',
+        param_finishtime: '',
+        param_everymin: '',
+        param_everymax: ''
+      }
+    } else if (self.activityType === 'discount') {
+      self.submitdata = {
+        productid: '',
+        starttime: startime,
+        endtime: endtime,
+        param_price: '',
+        param_limitcount: '',
+        param_storage: ''
+      }
+    }
+    self.submitdata['type'] = self.query.type
+    self.requireddata = self.submitdata
   }
 }
 </script>

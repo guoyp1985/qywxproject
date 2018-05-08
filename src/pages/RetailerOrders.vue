@@ -166,7 +166,7 @@
     </div>
     <div class="s-bottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
-        <router-link class="t-cell item" to="/retailerShop">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
         <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
         <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
