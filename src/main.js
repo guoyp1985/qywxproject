@@ -288,7 +288,6 @@ Vue.http.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
-let flag = true
 // 响应拦截器
 Vue.http.interceptors.response.use(function (response) {
   removePending(response.config)
@@ -302,8 +301,7 @@ Vue.http.interceptors.response.use(function (response) {
   // if (matchExclude(rUrl.href)) {
   //   return {}
   // }
-  if (lUrl.query.code && flag) {
-    flag = false
+  if (lUrl.query.code) {
     // alert(lUrl.query.code)
     const code = lUrl.query.code
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
