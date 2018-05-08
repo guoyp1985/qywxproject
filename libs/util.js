@@ -124,6 +124,7 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
+      alert('in ajax')
       let wxData = params.data
       alert(wxData.title)
         /*
