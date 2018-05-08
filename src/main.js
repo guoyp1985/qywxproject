@@ -279,17 +279,16 @@ Vue.http.interceptors.request.use(function (config) {
   // config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
   // })
-  // const token = Token.get()
-  // const access = AndroidAccess.get()
-  // if (token) {
-    config.withCredentials = true
-    config.headers['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzA4MVRmRjh5MVRUZmpnMEEyczd5MURxTDh5MVRmRjhxIiwiaWF0IjoxNTI1NzQzODkyLCJleHAiOjE1MjY2MDc4OTIsIm5iZiI6MTUyNTc0Mzg5MiwianRpIjoiamtTUjVCUXloV050UEN3WiIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.fsIQlE6pDPAPBmApEoBT2wOMvaGn1f__wOVQAQ-lSdQ`
-  // } else if ($vue.$util.isAndroid() && !access) {
-  //   return null
-  // }
+  config.withCredentials = true
+  const token = Token.get()
+  const access = AndroidAccess.get()
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  } else if ($vue.$util.isAndroid() && !access) {
+    return null
+  }
   return config
 }, function (error) {
-  // alert(error)
   return Promise.reject(error)
 })
 
@@ -299,7 +298,6 @@ Vue.http.interceptors.response.use(function (response) {
   // alert(response)
   return response
 }, function (error) {
-  // alert(error)
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const access = AndroidAccess.get()
@@ -315,7 +313,11 @@ Vue.http.interceptors.response.use(function (response) {
         // getAddress(res.data.data.weixin_token)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
-    ).then(
+    )
+    .catch(res => {
+      alert(JSON.stringify(res))
+    })
+    .then(
       res => {
         User.set(res.data)
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
