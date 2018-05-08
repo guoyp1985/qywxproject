@@ -15,9 +15,13 @@ import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
 
+
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
+AjaxPlugin.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+AjaxPlugin.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+AjaxPlugin.defaults.withCredentials = true;
 
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
@@ -237,9 +241,7 @@ router.afterEach(function (to) {
 // function (error) {
 //   return Promise.reject(error)
 // })
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.withCredentials = true;
+
 // Vue.http.interceptors.response.use(function (response) {
 //   return response
 // }, function (error) {
