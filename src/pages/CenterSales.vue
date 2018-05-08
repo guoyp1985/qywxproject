@@ -234,6 +234,7 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
       let data = res.data
       self.retailerInfo = data.data ? data.data : data
@@ -242,6 +243,7 @@ export default {
       self.wximgarr[0] = self.retailerInfo.avatar
       return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
     }).then(function (res) {
+      self.$vux.loading.hide()
       let data = res.data
       self.marquedata = data.data ? data.data : data
     })

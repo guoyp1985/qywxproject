@@ -339,7 +339,7 @@ export default {
   data () {
     return {
       query: {},
-      showShareSuccess: true,
+      showShareSuccess: false,
       showsharetip: true,
       productid: null,
       module: 'product',

@@ -51,8 +51,8 @@
                     <div class="clamp1 font12 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
                     <div class="clamp1 font12 color-gray">时间:{{ item.dateline | dateformat }}</div>
                   </div>
-                  <div class="t-cell align_right" style="width:60px;">
-                    <div class="qbtn bg-green color-white">联系</div>
+                  <div class="t-cell v_middle align_right w60">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-green color-white">联系</router-link>
                   </div>
                 </div>
               </div>
@@ -110,8 +110,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="t-cell align_right" style="width:60px;">
-                    <div class="qbtn bg-green color-white">联系</div>
+                  <div class="t-cell v_middle align_right w60">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-green color-white">联系</router-link>
                   </div>
                 </div>
               </div>
@@ -299,7 +299,10 @@ export default {
     ).then(function (res) {
       let data = res.data
       self.sellerUser = (data.data ? data.data : data)
-      self.getdata1()
+      if (self.sellerUser) {
+        document.title = self.sellerUser.username
+        self.getdata1()
+      }
     })
   }
 }

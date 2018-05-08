@@ -118,14 +118,6 @@
 </template>
 
 <i18n>
-Rebate customer:
-  zh-CN: 返点客户
-Share invite customer:
-  zh-CN: 分享邀请返点客户
-Rebate manage:
-  zh-CN: 返点管理
-Message text:
-  zh-CN: 早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。
 Send text:
   zh-CN: 发送
 </i18n>
