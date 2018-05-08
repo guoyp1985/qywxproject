@@ -20,7 +20,7 @@ Util.install = function (Vue, options) {
     },
     isAndroid: function() {
       const userAgentInfo = navigator.userAgent
-      return Reg.rAndroid.test(userAgentInfo))
+      return Reg.rAndroid.test(userAgentInfo)
     },
     // 判授权
     access: function (response, authorization) {
