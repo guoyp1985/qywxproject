@@ -576,20 +576,18 @@ export default {
       } else if (!self.$util.isNull(self.productdata.seotitle)) {
         sharedesc = self.productdata.seotitle
       }
-      let wxData = {
-        module: 'product',
-        moduleid: self.productdata.id,
-        title: sharetitle,
-        desc: sharedesc,
-        link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-        photo: self.photoarr[0],
+      self.$util.wxShare({
+        data: {
+          module: 'product',
+          moduleid: self.productdata.id,
+          title: sharetitle,
+          desc: sharedesc,
+          link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+          photo: self.photoarr[0]
+        },
         successCallback: function () {
           self.showShareSuccess = true
         }
-      }
-      alert(JSON.stringify(wxData))
-      self.$util.wxShare({
-        data: wxData
       })
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
