@@ -124,11 +124,9 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
-      alert(JSON.stringify(params.data))
-      /*
       let wxData = params.data
-      alert(wxData)
-      alert(wxData.module)
+      alert(wxData.title)
+        /*
       alert(Base64.encode(wxData.title))
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
         params: {
