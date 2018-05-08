@@ -136,6 +136,7 @@ export default {
     }
   },
   created () {
+    alert('user')
     const user = User.get()
     alert(user)
     if (user) {
