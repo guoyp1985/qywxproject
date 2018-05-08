@@ -279,7 +279,7 @@ Vue.http.interceptors.request.use(function (config) {
   // config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
   // })
-  config.withCredentials = true
+  // config.withCredentials = true
   const token = Token.get()
   const access = AndroidAccess.get()
   if (token) {
