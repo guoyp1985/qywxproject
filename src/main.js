@@ -14,12 +14,17 @@ import { Token, User, Access } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
+require('es6-promise').polyfill()
 
 const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
 
-require('es6-promise').polyfill()
+// Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+// Vue.http.defaults.withCredentials = true;
+// Vue.http.defaults.headers.common['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8`
+
 let store = new Vuex.Store({
   modules: {
     i18n: vuexI18n.store
@@ -277,16 +282,17 @@ router.afterEach(function (to) {
 Vue.http.interceptors.request.use(function (config) {
   // removePending(config)
   // config.cancelToken = new CancelToken(c => {
-    // pending.push({ u: config.url + '&' + config.method, f: c })
+  //   pending.push({ u: config.url + '&' + config.method, f: c })
   // })
   // config.withCredentials = true
   const token = Token.get()
-  const access = Access.get()
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`
-  } else if ($vue.$util.isAndroid() && !access) {
-    return null
-  }
+  // const access = Access.get()
+  // if (token) {
+  config.headers['Authorization'] = `Bearer ${token}`
+  // } else if ($vue.$util.isAndroid() && !access) {
+  //   return null
+  // }
+  // alert(config)
   return config
 }, function (error) {
   return Promise.reject(error)
@@ -298,30 +304,32 @@ Vue.http.interceptors.response.use(function (response) {
   // alert(response)
   return response
 }, function (error) {
+  // alert(JSON.stringify(error))
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
-  const access = Access.get()
+  // const access = Access.get()
   // alert($vue.$util.isAndroid()+','+!access+','+code)
-  if ($vue.$util.isAndroid() && !access && code) {
-    Access.set(true)
-    // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
-    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-    .then(
-      res => {
-        Token.set(res.data.data.token)
-        alert('token')
-        // getAddress(res.data.data.weixin_token)
-        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      }
-    )
-    .then(
-      res => {
-        User.set(res.data)
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-      }
-    )
-  } else if (code) {
+  // if ($vue.$util.isAndroid() && !access && code) {
+  //   Access.set(true)
+  //   // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   .then(
+  //     res => {
+  //       Token.set(res.data.data.token)
+  //       // alert('token')
+  //       // getAddress(res.data.data.weixin_token)
+  //       return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+  //     }
+  //   )
+  //   .then(
+  //     res => {
+  //       User.set(res.data)
+  //       // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+  //       location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+  //     }
+  //   )
+  // } else
+  if (code) {
     // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
