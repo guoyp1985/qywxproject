@@ -10,7 +10,7 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import { Token, User, AndroidAccess } from '#/storage'
+import { Token, User, Access } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
@@ -281,7 +281,7 @@ Vue.http.interceptors.request.use(function (config) {
   // })
   // config.withCredentials = true
   const token = Token.get()
-  const access = AndroidAccess.get()
+  const access = Access.get()
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
   } else if ($vue.$util.isAndroid() && !access) {
@@ -300,7 +300,7 @@ Vue.http.interceptors.response.use(function (response) {
 }, function (error) {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
-  const access = AndroidAccess.get()
+  const access = Access.get()
   // alert($vue.$util.isAndroid()+','+!access+','+code)
   if ($vue.$util.isAndroid() && !access && code) {
     AndroidAccess.set(true)
@@ -321,7 +321,8 @@ Vue.http.interceptors.response.use(function (response) {
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else if (code) {
+  } else if (!access && code) {
+    Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
