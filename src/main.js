@@ -307,7 +307,7 @@ Vue.http.interceptors.response.use(function (response) {
   // if (matchExclude(rUrl.href)) {
   //   return {}
   // }
-  if (!access && code) {
+  if ($vue.$util.isAndroid && !access && code) {
     AndroidAccess.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
