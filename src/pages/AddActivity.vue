@@ -228,13 +228,11 @@ export default {
     },
     onCancel () {
       const self = this
-      if (!self.$util.isNull(self.searchword)) {
-        self.searchword = ''
-        self.$vux.loading.show()
-        self.productdata = []
-        self.pagestart1 = 0
-        self.getProductData()
-      }
+      self.searchword = ''
+      self.$vux.loading.show()
+      self.productdata = []
+      self.pagestart1 = 0
+      self.getProductData()
     },
     onSubmit () {
       const self = this

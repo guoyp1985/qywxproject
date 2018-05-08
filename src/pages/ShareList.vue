@@ -21,7 +21,7 @@
         </search>
       </div>
       <div style="position:absolute;left:0;top:44px;right:0;bottom:0;overflow-y:auto;">
-        <div class="scroll_list pl10 pr10">
+        <div v-if="disdata" class="scroll_list pl10 pr10">
           <div v-if="!data || data.length === 0" class="scroll_item  emptyitem flex_center">
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无分享数据</template>
@@ -74,6 +74,7 @@ export default {
       autofixed: false,
       query: Object,
       viewuser: Object,
+      disdata: false,
       data: [],
       searchword1: '',
       searchresult1: false,
@@ -89,18 +90,18 @@ export default {
     },
     onCancel1 () {
       const self = this
-      if (!self.$util.isNull(self.searchword1)) {
-        self.searchword1 = ''
-        self.$vux.loading.show()
-        self.tabdata1 = []
-        self.pagestart1 = 0
-        self.getdata1()
-      }
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.disdata = false
+      self.data = []
+      self.pagestart1 = 0
+      self.getdata1()
     },
     onSubmit1 () {
       const self = this
       self.$vux.loading.show()
-      self.tabdata1 = []
+      self.disdata = false
+      self.data = []
       self.pagestart1 = 0
       self.getdata1()
     },
@@ -132,6 +133,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
+        self.disdata = true
         if (!self.isBindScroll1) {
           self.scrollArea1 = document.querySelector('.rsharelist .s-container')
           self.isBindScroll1 = true

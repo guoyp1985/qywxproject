@@ -26,7 +26,7 @@
               @on-cancel="onCancel1"
               ref="search">
             </search>
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
                 <template v-if="searchresult1">暂无搜索结果</template>
                 <template v-else>暂无线上数据</template>
@@ -56,7 +56,7 @@
               @on-cancel="onCancel2"
               ref="search">
             </search>
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
                 <template v-if="searchresult1">暂无搜索结果</template>
                 <template v-else>暂无线下数据</template>
@@ -119,6 +119,8 @@ export default {
       viewuser: Object,
       tabtxts: [ '线上', '线下' ],
       tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
       tabdata1: [],
       tabdata2: [],
       searchword1: '',
@@ -176,6 +178,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.rsaleslist .swiperitem')
           self.scrollArea1 = items[0]
@@ -201,6 +204,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -214,29 +218,28 @@ export default {
     onSubmit1 () {
       const self = this
       self.$vux.loading.show()
+      self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
     },
     onCancel1 () {
       const self = this
-      if (!self.$util.isNull(self.searchword1)) {
-        self.searchword1 = ''
-        self.$vux.loading.show()
-        self.tabdata1 = []
-        self.pagestart1 = 0
-        self.getdata1()
-      }
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
     },
     onCancel2 () {
       const self = this
-      if (!self.$util.isNull(self.searchword2)) {
-        self.searchword2 = ''
-        self.$vux.loading.show()
-        self.tabdata2 = []
-        self.pagestart2 = 0
-        self.getdata2()
-      }
+      self.searchword2 = ''
+      self.$vux.loading.show()
+      self.distabdata2 = false
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     },
     onChange2 (val) {
       this.searchword2 = val
@@ -244,6 +247,7 @@ export default {
     onSubmit2 () {
       const self = this
       self.$vux.loading.show()
+      self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
       self.getdata2()
