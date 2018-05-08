@@ -314,9 +314,6 @@ Vue.http.interceptors.response.use(function (response) {
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
-    .catch(res => {
-      alert(JSON.stringify(res))
-    })
     .then(
       res => {
         User.set(res.data)
