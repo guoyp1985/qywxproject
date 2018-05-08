@@ -136,9 +136,9 @@ export default {
     }
   },
   created () {
+    alert('center')
     const user = User.get()
     if (user) {
-      alert('center')
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
       this.userCredits = user.credit
