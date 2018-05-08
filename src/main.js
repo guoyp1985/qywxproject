@@ -237,7 +237,8 @@ router.afterEach(function (to) {
 // function (error) {
 //   return Promise.reject(error)
 // })
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 // Vue.http.interceptors.response.use(function (response) {
 //   return response
