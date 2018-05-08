@@ -276,15 +276,15 @@ router.afterEach(function (to) {
 // 请求拦截器
 Vue.http.interceptors.request.use(function (config) {
   // removePending(config)
-  config.cancelToken = new CancelToken(c => {
+  // config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
-  })
+  // })
   const token = Token.get()
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
     return config
   } else {
-    return null // {response: {status: 401}}
+    return config // {response: {status: 401}}
   }
 }, function (error) {
   return Promise.reject(error)
