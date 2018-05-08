@@ -124,6 +124,7 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
+      alert('in ajax')
       let wxData = params.data
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
         params: {
@@ -211,7 +212,6 @@ Util.install = function (Vue, options) {
             if (isUpdate) {
               alert("微信版本太低，请先升级微信客户端!")
             }
-            alert('in share success')
             self.wxShareSuccess({
               data: wxData,
               type: 'friend'
