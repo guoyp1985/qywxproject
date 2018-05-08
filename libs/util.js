@@ -155,6 +155,7 @@ Util.install = function (Vue, options) {
       })
     },
     wxShare: function (params) {
+      alert(JSON.stringify(params))
       const self = this
       let wxData = params.data
       let isUpdate = false
