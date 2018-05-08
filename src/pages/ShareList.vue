@@ -16,6 +16,7 @@
           :auto-fixed="autofixed"
           @on-submit="onSubmit1"
           @on-change="onChange1"
+          @on-cancel="onCancel1"
           ref="search">
         </search>
       </div>
@@ -86,6 +87,16 @@ export default {
     onChange1 (val) {
       this.searchword1 = val
     },
+    onCancel1 () {
+      const self = this
+      if (!self.$util.isNull(self.searchword1)) {
+        self.searchword1 = ''
+        self.$vux.loading.show()
+        self.tabdata1 = []
+        self.pagestart1 = 0
+        self.getdata1()
+      }
+    },
     onSubmit1 () {
       const self = this
       self.$vux.loading.show()
@@ -119,7 +130,6 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/user/shareList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
         if (!self.isBindScroll1) {

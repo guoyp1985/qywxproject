@@ -23,6 +23,7 @@
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
               @on-change="onChange1"
+              @on-cancel="onCancel1"
               ref="search">
             </search>
             <div class="font12 padding10 b_bottom">
@@ -70,6 +71,7 @@
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
               @on-change="onChange2"
+              @on-cancel="onCancel2"
               ref="search">
             </search>
             <div class="font12 padding10 b_bottom">
@@ -268,7 +270,6 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount2 = data.count
-        self.searchword2 = ''
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         if (!self.isBindScroll2) {
@@ -283,6 +284,26 @@ export default {
     },
     onChange2 (val) {
       this.searchword2 = val
+    },
+    onCancel1 () {
+      const self = this
+      if (!self.$util.isNull(self.searchword1)) {
+        self.searchword1 = ''
+        self.$vux.loading.show()
+        self.tabdata1 = []
+        self.pagestart1 = 0
+        self.getdata1()
+      }
+    },
+    onCancel2 () {
+      const self = this
+      if (!self.$util.isNull(self.searchword2)) {
+        self.searchword2 = ''
+        self.$vux.loading.show()
+        self.tabdata2 = []
+        self.pagestart2 = 0
+        self.getdata2()
+      }
     },
     onSubmit1 () {
       const self = this

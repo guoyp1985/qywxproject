@@ -124,7 +124,12 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
+      alert('in ajax')
+      alert(params)
       let wxData = params.data
+      alert(wxData)
+      alert(wxData.module)
+      alert(Base64.encode(wxData.title))
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
         params: {
           id: wxData.moduleid,
@@ -133,6 +138,8 @@ Util.install = function (Vue, options) {
       }).then(function (res) {
         return res.json()
       }).then(function (data) {
+        alert('in share ajax')
+        alert(data)
         params.wxData.successCallback && params.wxData.successCallback(data);
       })
     },
