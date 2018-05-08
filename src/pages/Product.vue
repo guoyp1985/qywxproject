@@ -588,6 +588,7 @@ export default {
           lastshareuid: self.query.share_uid
         },
         successCallback: function (data) {
+          alert('successcallback')
           if (data.flag === 1) {
             self.showShareSuccess = true
           } else {

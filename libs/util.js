@@ -132,6 +132,7 @@ Util.install = function (Vue, options) {
         type: params.type
       }
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
+        alert('in share post ')
         let data = res.data
         params.wxData.successCallback && params.wxData.successCallback(data)
       })
