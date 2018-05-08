@@ -118,8 +118,6 @@
 </template>
 
 <i18n>
-Send text:
-  zh-CN: 发送
 </i18n>
 
 <script>
