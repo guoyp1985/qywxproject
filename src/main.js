@@ -314,11 +314,7 @@ Vue.http.interceptors.response.use(function (response) {
         // getAddress(res.data.data.weixin_token)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
-    )
-    .catch(res => {
-      alert(JSON.stringify(res))
-    })
-    .then(
+    ).then(
       res => {
         User.set(res.data)
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
