@@ -316,7 +316,7 @@ Vue.http.interceptors.response.use(function (response) {
     .then(
       res => {
         Token.set(res.data.data.token)
-        alert('token')
+        // alert('token')
         // getAddress(res.data.data.weixin_token)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
