@@ -286,12 +286,12 @@ Vue.http.interceptors.request.use(function (config) {
   // })
   // config.withCredentials = true
   const token = Token.get()
-  const access = Access.get()
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`
-  } else if ($vue.$util.isAndroid() && !access) {
-    return null
-  }
+  // const access = Access.get()
+  // if (token) {
+  config.headers['Authorization'] = `Bearer ${token}`
+  // } else if ($vue.$util.isAndroid() && !access) {
+  //   return null
+  // }
   // alert(config)
   return config
 }, function (error) {
@@ -309,26 +309,27 @@ Vue.http.interceptors.response.use(function (response) {
   const code = lUrl.query.code
   const access = Access.get()
   // alert($vue.$util.isAndroid()+','+!access+','+code)
-  if ($vue.$util.isAndroid() && !access && code) {
-    Access.set(true)
-    // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
-    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-    .then(
-      res => {
-        Token.set(res.data.data.token)
-        // alert('token')
-        // getAddress(res.data.data.weixin_token)
-        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      }
-    )
-    .then(
-      res => {
-        User.set(res.data)
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-      }
-    )
-  } else if (!access && code) {
+  // if ($vue.$util.isAndroid() && !access && code) {
+  //   Access.set(true)
+  //   // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   .then(
+  //     res => {
+  //       Token.set(res.data.data.token)
+  //       // alert('token')
+  //       // getAddress(res.data.data.weixin_token)
+  //       return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+  //     }
+  //   )
+  //   .then(
+  //     res => {
+  //       User.set(res.data)
+  //       // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+  //       location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+  //     }
+  //   )
+  // } else
+  if (code) {
     Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
