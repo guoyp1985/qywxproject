@@ -566,19 +566,35 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
-      self.$util.wxShare({
-        data: {
-          module: 'product',
-          moduleid: self.productdata.id,
-          title: self.productdata.seotitle || self.productdata.title,
-          desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
-          link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-          photo: self.photoarr[0],
-          successCallback: function () {
-            alert('in share success callback')
-            self.showShareSuccess = true
-          }
+      let sharetitle = self.productdata.title
+      if (self.productdata.seotitle && !self.$util.isNull(self.productdata.seotitle)) {
+        sharetitle = self.productdata.seotitle
+      }
+      let sharedesc = self.productdata.title
+      if (self.productdata.seodescription && !self.$util.isNull(self.productdata.seodescription)) {
+        sharedesc = self.productdata.seodescription
+      } else if (self.productdata.seotitle && !self.$util.isNull(self.productdata.seotitle)) {
+        sharedesc = self.productdata.seotitle
+      }
+      let wxData = {
+        module: 'product',
+        moduleid: self.productdata.id,
+        title: sharetitle,
+        desc: sharedesc,
+        link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        photo: self.photoarr[0],
+        readyCallback: function () {
+        },
+        successCallback: function () {
+          self.showShareSuccess = true
+        },
+        beforeShare: function () {
+          alert('before share')
         }
+      }
+      alert(JSON.stringify(wxData))
+      self.$util.wxShare({
+        data: wxData
       })
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
