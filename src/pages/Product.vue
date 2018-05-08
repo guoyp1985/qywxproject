@@ -281,6 +281,14 @@
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
+      :data="productdata"
+      :loginUser="loginUser"
+      module="product"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
   </div>
 </template>
 
@@ -303,6 +311,7 @@ Another batch:
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -319,7 +328,8 @@ export default {
     Bargainbuyitemplate,
     Popup,
     Marquee,
-    MarqueeItem
+    MarqueeItem,
+    ShareSuccess
   },
   filters: {
     dateformat: function (value) {
@@ -329,6 +339,7 @@ export default {
   data () {
     return {
       query: {},
+      showShareSuccess: false,
       showsharetip: true,
       productid: null,
       module: 'product',
@@ -508,6 +519,9 @@ export default {
           urls: self.photoarr
         })
       }
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {
@@ -556,7 +570,10 @@ export default {
           title: self.productdata.seotitle || self.productdata.title,
           desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-          photo: self.photoarr[0]
+          photo: self.photoarr[0],
+          successCallback: function () {
+            self.showShareSuccess = true
+          }
         }
       })
       self.submitdata.id = self.productdata.id
