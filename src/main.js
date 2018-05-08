@@ -286,6 +286,7 @@ Vue.http.interceptors.request.use(function (config) {
   // } else if ($vue.$util.isAndroid() && !access) {
   //   return null
   // }
+  alert(JSON.stringify(config))
   return config
 }, function (error) {
   alert(error)
