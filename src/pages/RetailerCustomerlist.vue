@@ -32,7 +32,7 @@
                 <div class="t-cell align_right pr10">{{ $t('Percent') }}</div>
               </div>
             </div>
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult1">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -80,7 +80,7 @@
                 <div class="t-cell align_right pr10">{{ $t('Contact customer') }}</div>
               </div>
             </div>
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list pl10 pr10">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult2">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -180,6 +180,8 @@ export default {
       tabcount1: 0,
       tabcount2: 0,
       tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
       tabdata1: [],
       tabdata2: [],
       isshowpopup: false,
@@ -246,6 +248,7 @@ export default {
         self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.rcustomerlist .swiperitem')
           self.scrollArea1 = items[0]
@@ -272,6 +275,7 @@ export default {
         self.tabcount2 = data.count
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)

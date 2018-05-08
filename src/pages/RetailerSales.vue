@@ -26,7 +26,7 @@
               @on-cancel="onCancel1"
               ref="search">
             </search>
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult1">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -39,7 +39,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:50px;">
-                    <img v-if="item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
+                    <img v-if="item.avatar && item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
                     <img v-else :src="item.avatar" class="avatarimg1 imgcover v_middle" />
                   </router-link>
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
@@ -63,7 +63,7 @@
               @on-cancel="onCancel2"
               ref="search">
             </search>
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list pl10 pr10">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <template v-if="searchresult2">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -76,7 +76,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <img v-if="item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
+                    <img v-if="item.avatar && item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
                     <img v-else :src="item.avatar" class="avatarimg1 imgcover v_middle" />
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
@@ -92,15 +92,15 @@
             </div>
           </div>
           <div v-if="(index == 2)">
-          <div class="scroll_list pl10 pr10 cols-2">
+          <div v-if="distabdata3" class="scroll_list pl10 pr10 cols-2">
             <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
               <div><i class="al al-wushuju font60 pt20"></i></div>
               <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
             </div>
-            <router-link :to="{ path: '/accountDetail', query: { uid: item.uid } }" v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
+            <router-link :to="{ path: '/accountDetail', query: { uid: item.uid } }" v-else class="scroll_item db pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:50px;">
-                  <img v-if="item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
+                  <img v-if="item.avatar && item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
                   <img v-else :src="item.avatar" class="avatarimg1 imgcover v_middle" />
                 </div>
                 <div class="t-cell v_middle">
@@ -155,6 +155,9 @@ export default {
       autofixed: false,
       tabtxts: [ '返点客户', '邀请返点客', '返点记录' ],
       tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
+      distabdata3: false,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
@@ -235,6 +238,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.rsales .swiperitem')
           self.scrollArea1 = items[0]
@@ -261,6 +265,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -276,6 +281,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
+        self.distabdata3 = true
         if (!self.isBindScroll3) {
           self.isBindScroll3 = true
           self.scrollArea3.removeEventListener('scroll', self.scroll3)

@@ -101,7 +101,7 @@ export default [
   },
   {
     path: '/retailerCustomerlist',
-    name: 'tRetailerCustomerList',
+    name: 'tRetailerCustomerlist',
     component: RetailerCustomerlist
   },
   {

@@ -402,7 +402,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客户
+  Rebate customer: 返点客
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -648,7 +648,7 @@ zh-CN:
   tCenterSales: 销售中心
   tRetailerSales: 销售中心
   tRetailerSalcechance: 销售机会
-  tRetialerCustomerList: 联系客户
+  tRetailerCustomerlist: 联系客户
   tRetailerAddorder: 订单录入
   tRetailerOrder: 订单列表
   tStore: 我的店铺
