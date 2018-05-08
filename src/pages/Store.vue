@@ -50,20 +50,19 @@
           </div>
         </div>
       </template>
-      <template v-if="productdata.length > 0">
-        <div class="bg-white mt5 padding10 b_top_after">
-    			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
-    		</div>
-        <div class="b_top_after"></div>
-        <div class="productlist squarepic">
-          <Productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
-            <img slot="photo" class="imgcover" :src="item.photo" />
-            <span slot="title">{{ item.title }}</span>
-            <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
-            <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-          </Productitemplate>
-        </div>
-      </template>
+      <div class="bg-white mt5 padding10 b_top_after">
+  			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
+  		</div>
+      <div class="b_top_after"></div>
+      <div class="productlist squarepic">
+        <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
+        <Productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
+          <img slot="photo" class="imgcover" :src="item.photo" />
+          <span slot="title">{{ item.title }}</span>
+          <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
+          <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
+        </Productitemplate>
+      </div>
       <template v-if="toplinedata.length > 0">
         <div class="bg-white mt5 padding10 b_top_after">
           <div class="t-table">
