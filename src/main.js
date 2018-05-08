@@ -22,7 +22,7 @@ Vue.use(Vuex)
 AjaxPlugin.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 AjaxPlugin.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 AjaxPlugin.defaults.withCredentials = true;
-
+console.log(AjaxPlugin.defaults)
 require('es6-promise').polyfill()
 let store = new Vuex.Store({
   modules: {
