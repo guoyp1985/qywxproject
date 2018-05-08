@@ -37,7 +37,7 @@
 import { Grid, GridItem } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
-import { Token, User, AndroidAccess } from '#/storage'
+import { Token, User, Access } from '#/storage'
 
 export default {
   components: {
@@ -106,9 +106,9 @@ export default {
           react: function () {
             Token.remove()
             User.remove()
-            if (self.$util.isAndroid()) {
-              AndroidAccess.remove()
-            }
+            // if (self.$util.isAndroid()) {
+              Access.remove()
+            // }
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
@@ -151,7 +151,6 @@ export default {
         company: user.company
       }
     } else {
-      alert('center')
       this.$http.get(`${ENV.BokaApi}/api/user/show`)
     }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})

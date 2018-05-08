@@ -10,7 +10,7 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import { Token, User, AndroidAccess } from '#/storage'
+import { Token, User, Access } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
@@ -279,33 +279,32 @@ Vue.http.interceptors.request.use(function (config) {
   // config.cancelToken = new CancelToken(c => {
     // pending.push({ u: config.url + '&' + config.method, f: c })
   // })
-  // const token = Token.get()
-  // const access = AndroidAccess.get()
-  // if (token) {
-    config.headers['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzA4MVRmRjh5MVRUZmpnMEEyczd5MURxTDh5MVRmRjhxIiwiaWF0IjoxNTI1NzQzODkyLCJleHAiOjE1MjY2MDc4OTIsIm5iZiI6MTUyNTc0Mzg5MiwianRpIjoiamtTUjVCUXloV050UEN3WiIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.fsIQlE6pDPAPBmApEoBT2wOMvaGn1f__wOVQAQ-lSdQ`
-  // } else if ($vue.$util.isAndroid() && !access) {
-  //   return null
-  // }
+  // config.withCredentials = true
+  const token = Token.get()
+  const access = Access.get()
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`
+  } else if ($vue.$util.isAndroid() && !access) {
+    return null
+  }
   return config
 }, function (error) {
-  alert(error)
   return Promise.reject(error)
 })
 
 // 响应拦截器
 Vue.http.interceptors.response.use(function (response) {
   // removePending(response.config)
-  alert(response)
+  // alert(response)
   return response
 }, function (error) {
-  alert(error)
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
-  const access = AndroidAccess.get()
+  const access = Access.get()
   // alert($vue.$util.isAndroid()+','+!access+','+code)
   if ($vue.$util.isAndroid() && !access && code) {
-    AndroidAccess.set(true)
-    alert(`${ENV.BokaApi}/api/authLogin/${code}`)
+    Access.set(true)
+    // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -315,9 +314,6 @@ Vue.http.interceptors.response.use(function (response) {
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
-    .catch(res => {
-      alert(JSON.stringify(res))
-    })
     .then(
       res => {
         User.set(res.data)
@@ -326,6 +322,7 @@ Vue.http.interceptors.response.use(function (response) {
       }
     )
   } else if (code) {
+    // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
