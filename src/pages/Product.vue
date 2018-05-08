@@ -586,6 +586,9 @@ export default {
           photo: self.photoarr[0],
           successCallback: function () {
             self.showShareSuccess = true
+          },
+          beforeShare: function () {
+            alert('before share')
           }
         }
       })
