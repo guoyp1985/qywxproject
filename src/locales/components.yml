@@ -404,7 +404,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客
+  Rebate customer: 返点客户
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -445,9 +445,9 @@ zh-CN:
   Article: 文章
   Commodity: 商品
   Store: 店铺
-  Share invite customer: 分享邀请返点客
+  Share invite customer: 分享邀请返点客户
   Rebate manage: 返点管理
-  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客,每日只能推送一次。'
+  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。'
   Send text: 发送
   Customer text: 客户
   Percent: 成交概率

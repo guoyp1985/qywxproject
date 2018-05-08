@@ -1,7 +1,7 @@
 <template>
-  <div class="share_success flex_center font14" @click="close">
-  	<div class="shareinner" @click="clickinner">
-      <div class="btn" @click="close"><i class="al al-guanbi color-gray font20"></i></div>
+  <div class="share_success flex_center font14" @click="clickevent">
+  	<div class="shareinner">
+      <div class="btn close"><i class="al al-guanbi color-gray font20"></i></div>
   		<div class="font20 color-orange2 bold align_center" style="position:relative;">
         <span>分享成功</span>
       </div>
@@ -29,7 +29,7 @@
 </i18n>
 
 <script>
-import ENV from 'env'
+import jQuery from 'jquery'
 
 export default {
   name: 'ShareSuccess',
@@ -46,14 +46,23 @@ export default {
   },
   data () {
     return {
+      isinner: false
     }
   },
   methods: {
-    close () {
-      this.onClose && this.onClose()
-    },
-    clickinner () {
-      event.preventDefault()
+    clickevent () {
+      const self = this
+      let node = event.target
+      while (node) {
+        if (node.nodeType === 1) {
+          let curtarget = jQuery(node)
+          if (curtarget.hasClass('close') || curtarget.parents('.shareinner').length === 0) {
+            self.onClose && self.onClose()
+          }
+          break
+        }
+        node = node.parentNode
+      }
     }
   },
   created () {

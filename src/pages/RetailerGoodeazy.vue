@@ -156,10 +156,6 @@ export default {
 
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-  },
   methods: {
     scroll: function () {
       const self = this
@@ -216,10 +212,6 @@ export default {
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
       })
-    },
-    onFocus () {
-    },
-    onCancel () {
     },
     tabitemclick (index) {
       const self = this
@@ -282,6 +274,10 @@ export default {
         })
       })
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
   }
 }
 </script>

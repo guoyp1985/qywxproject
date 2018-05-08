@@ -313,7 +313,6 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
-import Base64 from '#/base64'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -340,7 +339,7 @@ export default {
   data () {
     return {
       query: {},
-      showShareSuccess: false,
+      showShareSuccess: true,
       showsharetip: true,
       productid: null,
       module: 'product',
