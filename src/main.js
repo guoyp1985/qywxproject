@@ -283,6 +283,7 @@ Vue.http.interceptors.request.use(function (config) {
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
   } else if ($vue.$util.isAndroid()) {
+    alert('android')
     return null
   }
   return config
