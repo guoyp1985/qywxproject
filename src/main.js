@@ -282,7 +282,6 @@ Vue.http.interceptors.request.use(function (config) {
   const token = Token.get()
   const access = AndroidAccess.get()
   if (token) {
-    alert(token)
     config.headers['Authorization'] = `Bearer ${token}`
   } else if ($vue.$util.isAndroid() && !access) {
     return null
@@ -298,15 +297,9 @@ Vue.http.interceptors.response.use(function (response) {
   // alert(response)
   return response
 }, function (error) {
-  // alert(JSON.stringify(error))
-  // console.log(error.response)
-  // const rUrl = urlParse(config.url)
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const access = AndroidAccess.get()
-  // if (matchExclude(rUrl.href)) {
-  //   return {}
-  // }
   if ($vue.$util.isAndroid() && !access && code) {
     AndroidAccess.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
