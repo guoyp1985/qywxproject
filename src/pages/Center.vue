@@ -138,6 +138,7 @@ export default {
   created () {
     const user = User.get()
     if (user) {
+      alert('center')
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
       this.userCredits = user.credit
@@ -151,7 +152,6 @@ export default {
         company: user.company
       }
     } else {
-      alert('center')
       this.$http.get(`${ENV.BokaApi}/api/user/show`)
     }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
