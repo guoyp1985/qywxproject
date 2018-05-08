@@ -278,84 +278,85 @@ router.afterEach(function (to) {
 
 // Token.remove()
 // 请求拦截器
-// Vue.http.interceptors.request.use(function (config) {
+Vue.http.interceptors.request.use(function (config) {
   // removePending(config)
   // config.cancelToken = new CancelToken(c => {
-    // pending.push({ u: config.url + '&' + config.method, f: c })
+  //   pending.push({ u: config.url + '&' + config.method, f: c })
   // })
   // config.withCredentials = true
   // const token = Token.get()
   // const access = Access.get()
   // if (token) {
-    // config.headers['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8`
+  //   config.headers['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8`
   // } else if ($vue.$util.isAndroid() && !access) {
   //   return null
   // }
-//   return config
-// }, function (error) {
-//   return Promise.reject(error)
-// })
+  return config
+}, function (error) {
+  return Promise.reject(error)
+})
 
 // 响应拦截器
-// // Vue.http.interceptors.response.use(function (response) {
-//   // removePending(response.config)
-//   // alert(response)
-//   return response
-// }, function (error) {
-//   const lUrl = urlParse(location.href, true)
-//   const code = lUrl.query.code
-//   const access = Access.get()
-//   // alert($vue.$util.isAndroid()+','+!access+','+code)
-//   if ($vue.$util.isAndroid() && !access && code) {
-//     Access.set(true)
-//     // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
-//     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-//     .then(
-//       res => {
-//         Token.set(res.data.data.token)
-//         alert('token')
-//         // getAddress(res.data.data.weixin_token)
-//         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-//       }
-//     )
-//     .then(
-//       res => {
-//         User.set(res.data)
-//         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-//         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-//       }
-//     )
-//   } else if (code) {
-//     // Access.set(true)
-//     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-//     .then(
-//       res => {
-//         Token.set(res.data.data.token)
-//         // getAddress(res.data.data.weixin_token)
-//         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-//       }
-//     )
-//     .then(
-//       res => {
-//         User.set(res.data)
-//         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-//         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-//       }
-//     )
-//   } else {
-//     // alert(error)
-//     $vue.$util.access(error.response, isPC => {
-//       if (isPC) {
-//         router.push({name: 'tLogin'})
-//       } else {
-//         // alert(JSON.stringify(error.response))
-//         const originHref = encodeURIComponent(location.href)
-//         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
-//       }
-//     })
-//   }
-//   return { data: { } }
-// })
+Vue.http.interceptors.response.use(function (response) {
+  // removePending(response.config)
+  // alert(response)
+  return response
+}, function (error) {
+  alert(JSON.stringify(error))
+  // const lUrl = urlParse(location.href, true)
+  // const code = lUrl.query.code
+  // const access = Access.get()
+  // // alert($vue.$util.isAndroid()+','+!access+','+code)
+  // if ($vue.$util.isAndroid() && !access && code) {
+  //   Access.set(true)
+  //   // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   .then(
+  //     res => {
+  //       Token.set(res.data.data.token)
+  //       alert('token')
+  //       // getAddress(res.data.data.weixin_token)
+  //       return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+  //     }
+  //   )
+  //   .then(
+  //     res => {
+  //       User.set(res.data)
+  //       // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+  //       location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+  //     }
+  //   )
+  // } else if (code) {
+  //   // Access.set(true)
+  //   Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+  //   .then(
+  //     res => {
+  //       Token.set(res.data.data.token)
+  //       // getAddress(res.data.data.weixin_token)
+  //       return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+  //     }
+  //   )
+  //   .then(
+  //     res => {
+  //       User.set(res.data)
+  //       // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+  //       location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+  //     }
+  //   )
+  // } else {
+  //   // alert(error)
+  //   $vue.$util.access(error.response, isPC => {
+  //     if (isPC) {
+  //       router.push({name: 'tLogin'})
+  //     } else {
+  //       // alert(JSON.stringify(error.response))
+  //       const originHref = encodeURIComponent(location.href)
+  //       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
+  //     }
+  //   })
+  // }
+  return { data: { } }
+})
 
 const getAddress = (wxToken) => {
   const accessToken = wxToken
