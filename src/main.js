@@ -10,7 +10,7 @@ import router from './router'
 import objectAssign from 'object-assign'
 import vuexI18n from 'vuex-i18n'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import { Token, User } from '#/storage'
+import { Token, User, AndroidAccess } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
@@ -280,10 +280,11 @@ Vue.http.interceptors.request.use(function (config) {
     // pending.push({ u: config.url + '&' + config.method, f: c })
   // })
   const token = Token.get()
+  const access = AndroidAccess.get()
   if (token) {
     config.headers['Authorization'] = `Bearer ${token}`
-  } else if ($vue.$util.isAndroid()) {
-    // alert('android')
+  } else if ($vue.$util.isAndroid() && !access) {
+    AndroidAccess.set(true)
     return null
   }
   return config
