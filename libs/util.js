@@ -124,14 +124,11 @@ Util.install = function (Vue, options) {
       return query
     },
     wxShareSuccess: (params) => {
-      alert(JSON.stringify(params))
-      /*
       let wxData = params.data
-      alert(Base64.encode(wxData.title))
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
         params: {
           id: wxData.moduleid,
-          title: Base64.encode(wxData.title)
+          lastshareuid: wxData.share_uid
         }
       }).then(function (res) {
         return res.json()
@@ -140,7 +137,6 @@ Util.install = function (Vue, options) {
         alert(data)
         params.wxData.successCallback && params.wxData.successCallback(data);
       })
-      */
     },
     wxConfig: function (callback) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,

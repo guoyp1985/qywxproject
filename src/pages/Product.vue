@@ -313,6 +313,7 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
+import Base64 from '#/base64'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -583,7 +584,8 @@ export default {
           title: sharetitle,
           desc: sharedesc,
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-          photo: self.photoarr[0]
+          photo: self.photoarr[0],
+          share_uid: self.loginUser.uid
         },
         successCallback: function () {
           self.showShareSuccess = true
