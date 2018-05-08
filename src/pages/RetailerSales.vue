@@ -143,7 +143,7 @@ export default {
   data () {
     return {
       autofixed: false,
-      tabtxts: [ '返点客户', '邀请返点客', '返点记录' ],
+      tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
       tabmodel: 0,
       distabdata1: false,
       distabdata2: false,
