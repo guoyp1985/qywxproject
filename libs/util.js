@@ -126,11 +126,13 @@ Util.install = function (Vue, options) {
     wxShareSuccess: (params) => {
       let wxData = params.data
       alert(JSON.stringify(wxData))
-      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
+      let postparams = {
         id: wxData.moduleid,
         lastshareuid: wxData.lastshareuid,
         type: params.type
-      }).then(function (res) {
+      }
+      alert(JSON.stringify(postparams))
+      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
         alert(JSON.stringify(res))
         return res.json()
       }).then(function (data) {
