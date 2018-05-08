@@ -216,11 +216,6 @@ Util.install = function (Vue, options) {
             })
           },
           cancel: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'friend',
-              successCallback: params.successCallback
-            })
           }
         })
         Vue.wechat.onMenuShareTimeline({
@@ -243,11 +238,6 @@ Util.install = function (Vue, options) {
             })
           },
           cancel: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'timeline',
-              successCallback: params.successCallback
-            })
           }
         })
         Vue.wechat.onMenuShareQQ({
@@ -271,11 +261,6 @@ Util.install = function (Vue, options) {
             })
           },
           cancel: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'qq',
-              successCallback: params.successCallback
-            })
           }
         })
       })
