@@ -303,7 +303,7 @@ Vue.http.interceptors.response.use(function (response) {
   const access = Access.get()
   // alert($vue.$util.isAndroid()+','+!access+','+code)
   if ($vue.$util.isAndroid() && !access && code) {
-    AndroidAccess.set(true)
+    Access.set(true)
     // alert(`${ENV.BokaApi}/api/authLogin/${code}`)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
