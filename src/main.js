@@ -279,7 +279,7 @@ router.afterEach(function (to) {
 
 // Token.remove()
 // 请求拦截器
-Vue.http.interceptors.request.use(function (config) {
+// Vue.http.interceptors.request.use(function (config) {
   // removePending(config)
   // config.cancelToken = new CancelToken(c => {
   //   pending.push({ u: config.url + '&' + config.method, f: c })
@@ -293,17 +293,17 @@ Vue.http.interceptors.request.use(function (config) {
   //   return null
   // }
   // alert(config)
-  return config
-}, function (error) {
-  return Promise.reject(error)
-})
+//   return config
+// }, function (error) {
+//   return Promise.reject(error)
+// })
 
 // 响应拦截器
-Vue.http.interceptors.response.use(function (response) {
+// Vue.http.interceptors.response.use(function (response) {
   // removePending(response.config)
   // alert(response)
-  return response
-}, function (error) {
+//   return response
+// }, function (error) {
   // alert(JSON.stringify(error))
   // const lUrl = urlParse(location.href, true)
   // const code = lUrl.query.code
@@ -357,8 +357,8 @@ Vue.http.interceptors.response.use(function (response) {
   //     }
   //   })
   // }
-  return { data: { } }
-})
+//   return { data: { } }
+// })
 
 const getAddress = (wxToken) => {
   const accessToken = wxToken
