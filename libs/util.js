@@ -134,7 +134,7 @@ Util.install = function (Vue, options) {
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
         alert('in share post ')
         let data = res.data
-        params.wxData.successCallback && params.wxData.successCallback(data)
+        params.successCallback && params.successCallback(data)
       })
     },
     wxConfig: function (callback) {
@@ -201,7 +201,8 @@ Util.install = function (Vue, options) {
             if (res.shareTo == "favorite") {
               self.wxShareSuccess({
                 data: wxData,
-                type: 'favorite'
+                type: 'favorite',
+                successCallback: params.successCallback
               })
             }
           },
@@ -211,13 +212,15 @@ Util.install = function (Vue, options) {
             }
             self.wxShareSuccess({
               data: wxData,
-              type: 'friend'
+              type: 'friend',
+              successCallback: params.successCallback
             })
           },
           cancel: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'friend'
+              type: 'friend',
+              successCallback: params.successCallback
             })
           }
         })
@@ -236,13 +239,15 @@ Util.install = function (Vue, options) {
           success: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'timeline'
+              type: 'timeline',
+              successCallback: params.successCallback
             })
           },
           cancel: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'timeline'
+              type: 'timeline',
+              successCallback: params.successCallback
             })
           }
         })
@@ -262,13 +267,15 @@ Util.install = function (Vue, options) {
           success: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'qq'
+              type: 'qq',
+              successCallback: params.successCallback
             })
           },
           cancel: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'qq'
+              type: 'qq',
+              successCallback: params.successCallback
             })
           }
         })
