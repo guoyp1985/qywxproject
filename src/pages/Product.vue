@@ -166,7 +166,7 @@
 				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
 					<i class="al font12 mr3"></i>
         </div>
-        <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
+        <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
 			</div>
 		</div>
     <template v-else>
@@ -195,7 +195,7 @@
     				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
     					<i class="al font12 mr3"></i>
     				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
+            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
     				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
     				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
     			</div>
@@ -205,7 +205,7 @@
     				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
     					<i class="al font12 mr3"></i>
     				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
+            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
     			</div>
     		</div>
       </template>

@@ -48,7 +48,7 @@
                     <img :src="item.avatar" class="avatarimg1" />
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
-                    <div class="clamp1 font14"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 font14"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                     <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
                   </router-link>
                   <div class="t-cell v_middle w60 h_100 align_right">
@@ -96,7 +96,7 @@
                     <img :src="item.avatar" class="avatarimg1" />
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
-                    <div class="clamp1 font14"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 font14"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                     <div class="clamp1 mt5 font12 color-gray">返点客户：{{item.uploadname}}</div>
                   </router-link>
                   <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">

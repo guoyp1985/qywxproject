@@ -185,7 +185,7 @@ export default {
     getData () {
       const self = this
       const id = this.$route.params.id
-      let infoparams = { id: id }
+      let infoparams = { id: id, module: 'news' }
       if (self.$route.query.from === 'poster') {
         infoparams.from = 'poster'
       }
