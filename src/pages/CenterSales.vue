@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14">
+  <div v-show="showcontainer" class="containerarea font14">
     <div class="bk-salestop">
       <div class="img-cell">
         <img :src="retailerInfo.avatar" @click="showBigimg(0)" />
@@ -31,7 +31,7 @@
       <marquee :item-height=40 :interval=5000 :duration=1000>
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
-            <router-link :to="{path: `/${item.module}Stat`, query: {id: item.id}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
+            <router-link :to="{path: '/stat', query: {id: item.moduleid, module: item.module}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
               <div class="t-cell v_middle h_100">
                 <div class="clamp1">
                   <span class="v_middle color-blue mr3">{{item.username}}</span>
@@ -176,6 +176,7 @@ With the customer rebate money together!:
 import { Previewer, TransferDom, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -201,6 +202,8 @@ export default {
   },
   data () {
     return {
+      showcontainer: false,
+      loginUser: Object,
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       marquedata: [],
       imgarr: [{
@@ -235,18 +238,39 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
-    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-      let data = res.data
-      self.retailerInfo = data.data ? data.data : data
-      self.imgarr[0].msrc = self.retailerInfo.avatar
-      self.imgarr[0].src = self.retailerInfo.avatar
-      self.wximgarr[0] = self.retailerInfo.avatar
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-    }).then(function (res) {
+    self.loginUser = User.get()
+    let iscontinue = true
+    if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
+      self.showcontainer = false
+    } else if (self.loginUser.usergroup) {
+      let usergroup = self.loginUser.usergroup
+      for (let i = 0; i < usergroup.length; i++) {
+        let g = usergroup[i]
+        if (g === 3) {
+          iscontinue = true
+          break
+        }
+      }
+    }
+    if (!iscontinue) {
       self.$vux.loading.hide()
-      let data = res.data
-      self.marquedata = data.data ? data.data : data
-    })
+      self.$router.push('/retailerApply')
+    } else {
+      self.$vux.loading.hide()
+      self.showcontainer = true
+      self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+        let data = res.data
+        self.retailerInfo = data.data ? data.data : data
+        self.imgarr[0].msrc = self.retailerInfo.avatar
+        self.imgarr[0].src = self.retailerInfo.avatar
+        self.wximgarr[0] = self.retailerInfo.avatar
+        self.$vux.loading.hide()
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+      }).then(function (res) {
+        let data = res.data
+        self.marquedata = data.data ? data.data : data
+      })
+    }
   }
 }
 </script>

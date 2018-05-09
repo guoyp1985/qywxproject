@@ -39,8 +39,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:50px;">
-                    <img v-if="item.avatar && item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
-                    <img v-else :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                    <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
                   </router-link>
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
@@ -76,8 +75,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <img v-if="item.avatar && item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
-                    <img v-else :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                    <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
@@ -100,8 +98,7 @@
             <router-link :to="{ path: '/accountDetail', query: { uid: item.uid } }" v-else class="scroll_item db pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:50px;">
-                  <img v-if="item.avatar && item.avatar != ''" src='../assets/images/user.jpg' class="avatarimg1 imgcover v_middle" />
-                  <img v-else :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                  <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.linkman}}</div>

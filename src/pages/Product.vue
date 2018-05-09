@@ -11,7 +11,7 @@
             <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
           </router-link>
           <div class="t-cell v_middle align_center" style="width:65px;">
-            <router-link class="db-in" style="position:relative;" :to="{path:'retailerMessagelist'}">
+            <router-link class="db-in" style="position:relative;" :to="{path:'/retailerMessagelist'}">
               <i class="al al-pinglun color-black" style="font-size:24px;"></i>
               <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
             </router-link>
@@ -24,15 +24,15 @@
     </template>
     <div class="pagemiddle">
       <swiper
+        class="pic-swiper notitle"
+        v-if="flashdata && flashdata.length > 0"
+        :list="flashdata"
         dots-position="center"
         :interval=6000
         :show-dots="isshowdot"
-        :aspect-ratio="1/1"
+        :aspect-ratio="500/900"
         auto
         loop>
-        <swiper-item v-for="(item, index) in photoarr" :key="index">
-          <img :src="item" class="imgcover" style="width:100%;height:100%;" />
-        </swiper-item>
       </swiper>
       <div class="grouptitle flex_left" v-if="activityInfo && activityInfo.type == 'groupbuy'">
 				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
@@ -166,7 +166,7 @@
 				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
 					<i class="al font12 mr3"></i>
         </div>
-        <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
+        <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
 			</div>
 		</div>
     <template v-else>
@@ -195,7 +195,7 @@
     				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
     					<i class="al font12 mr3"></i>
     				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
+            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
     				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
     				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
     			</div>
@@ -205,7 +205,7 @@
     				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
     					<i class="al font12 mr3"></i>
     				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" to="/centerSales">我要咨询</router-link>
+            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
     			</div>
     		</div>
       </template>
@@ -356,6 +356,7 @@ export default {
       isfavorite: false,
       productdata: {},
       retailerinfo: {},
+      flashdata: [],
       photoarr: [],
       contentphotoarr: [],
       previewerPhotoarr: [],
@@ -549,6 +550,9 @@ export default {
     if (self.query.share_uid) {
       infoparams['share_uid'] = self.query.share_uid
     }
+    if (self.query.from === 'poster') {
+      infoparams.from = 'poster'
+    }
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
@@ -559,6 +563,11 @@ export default {
       self.activityInfo = self.productdata.activityinfo
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
+      }
+      for (let i = 0; i < self.photoarr.length; i++) {
+        self.flashdata[i] = {
+          img: self.photoarr[i]
+        }
       }
       if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)

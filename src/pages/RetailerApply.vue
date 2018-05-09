@@ -242,44 +242,6 @@ export default {
       requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' }
     }
   },
-  created: function () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.loginUser = User.get()
-    let iscontinue = true
-    if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-      self.$vux.loading.hide()
-      self.showcontainer = true
-    } else if (self.loginUser.usergroup) {
-      let usergroup = self.loginUser.usergroup
-      for (let i = 0; i < usergroup.length; i++) {
-        let g = usergroup[i]
-        if (g === 3) {
-          iscontinue = false
-          break
-        }
-      }
-    }
-    if (!iscontinue) {
-      self.$vux.loading.hide()
-      self.$router.push('/centerSales')
-    } else {
-      self.$vux.loading.hide()
-      self.showcontainer = true
-      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-        { params: { limit: 100 } }
-      ).then(function (res) {
-        let data = res.data
-        data = data.data ? data.data : data
-        for (let i = 0; i < data.length; i++) {
-          let d = data[i]
-          d.checked = false
-        }
-        self.classdata = data
-      })
-    }
-  },
   watch: {
     submitdata: function () {
       return this.submitdata
@@ -390,6 +352,44 @@ export default {
           })
         })
       }
+    }
+  },
+  created: function () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.loginUser = User.get()
+    let iscontinue = true
+    if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
+      self.$vux.loading.hide()
+      self.showcontainer = true
+    } else if (self.loginUser.usergroup) {
+      let usergroup = self.loginUser.usergroup
+      for (let i = 0; i < usergroup.length; i++) {
+        let g = usergroup[i]
+        if (g === 3) {
+          iscontinue = false
+          break
+        }
+      }
+    }
+    if (!iscontinue) {
+      self.$vux.loading.hide()
+      self.$router.push('/centerSales')
+    } else {
+      self.$vux.loading.hide()
+      self.showcontainer = true
+      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+        { params: { limit: 100 } }
+      ).then(function (res) {
+        let data = res.data
+        data = data.data ? data.data : data
+        for (let i = 0; i < data.length; i++) {
+          let d = data[i]
+          d.checked = false
+        }
+        self.classdata = data
+      })
     }
   }
 }

@@ -61,7 +61,7 @@ export default {
       while (node) {
         if (node.nodeType === 1) {
           let curtarget = jQuery(node)
-          if (curtarget.hasClass('close') || curtarget.parents('.shareinner').length === 0) {
+          if (curtarget.hasClass('.close') || curtarget.parents('.close').length > 0 || curtarget.parents('.shareinner').length === 0) {
             self.onClose && self.onClose()
           }
           break

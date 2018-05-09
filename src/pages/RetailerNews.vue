@@ -17,7 +17,7 @@
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
                 <div class="t-table">
                   <div class="t-cell v_middle">
@@ -48,7 +48,7 @@
             </div>
           </template>
           <template v-if="(index == 1)">
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list pl10 pr10">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
                 <div class="t-table">
                   <div class="t-cell v_middle">
@@ -191,6 +191,8 @@ export default {
     return {
       tabtxts: [ '我的文章', '采集记录' ],
       tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
       tabdata1: [],
       tabdata2: [],
       controldata: [
@@ -252,6 +254,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.rnews .swiperitem')
           self.scrollArea1 = items[0]
@@ -270,6 +273,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)

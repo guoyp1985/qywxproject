@@ -115,7 +115,7 @@ export default {
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: {},
+      reward: { headimgurl: '/src/assets/images/user.jpg', avatar: '/src/assets/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       comments: []
     }
@@ -185,10 +185,20 @@ export default {
     getData () {
       const self = this
       const id = this.$route.params.id
-      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'}) // 获取文章
+      let infoparams = { id: id, module: 'news' }
+      if (self.query.from === 'poster') {
+        infoparams.from = 'poster'
+      }
+      if (self.query.share_uid) {
+        infoparams['share_uid'] = self.query.share_uid
+      }
+      self.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
+        self.$vux.loading.hide()
         if (res.data.flag) {
           self.article = res.data.data
+          document.title = self.article.title
           self.reward = User.get()
           self.$util.handleWxShare({
             data: self.article,
@@ -261,9 +271,9 @@ export default {
   },
   created () {
     const self = this
-    this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
+    this.getData()
     if (self.query.newadd) {
       setTimeout(function () {
         self.showsharetip = false

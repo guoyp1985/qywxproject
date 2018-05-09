@@ -195,6 +195,12 @@ export default {
       clickTabIndex: 0
     }
   },
+  watch: {
+    datalist: function () {
+      console.log(this.datalist)
+      return this.datalist
+    }
+  },
   methods: {
     scroll: function () {
       const self = this
@@ -226,6 +232,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
+        console.log(self.datalist[index])
         if (self.isFirst) {
           self.isFirst = false
           self.tabtop = document.querySelector('.productstat .tabarea').offsetTop + 44
@@ -260,9 +267,15 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.module = self.query.module
-    self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
-        { params: { id: self.query.id } }
-    ).then(function (res) {
+    self.$vux.loading.show()
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: self.module, action: 'stat', id: self.query.id
+    }).then(function (res) {
+      return self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
+          { params: { id: self.query.id } }
+      )
+    }).then(function (res) {
+      self.$vux.loading.hide()
       let data = res.data
       self.statData = data.data ? data.data : data
       self.tabsdata = data.detail
