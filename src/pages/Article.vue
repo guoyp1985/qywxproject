@@ -186,8 +186,11 @@ export default {
       const self = this
       const id = this.$route.params.id
       let infoparams = { id: id, module: 'news' }
-      if (self.$route.query.from === 'poster') {
+      if (self.query.from === 'poster') {
         infoparams.from = 'poster'
+      }
+      if (self.query.share_uid) {
+        infoparams['share_uid'] = self.query.share_uid
       }
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
@@ -268,9 +271,9 @@ export default {
   },
   created () {
     const self = this
-    this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
+    this.getData()
     if (self.query.newadd) {
       setTimeout(function () {
         self.showsharetip = false

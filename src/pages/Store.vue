@@ -307,7 +307,7 @@ export default {
         p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
       }
       self.addata = retdata
-      let params = { params: { pagestart: 0, limit: 20, wid: self.query.wid } }
+      let params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
       return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
     }).then(function (res) {
       let data = res.data

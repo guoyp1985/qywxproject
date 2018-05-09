@@ -157,9 +157,6 @@ export default {
         let data = res.data
         self.cutData = data.data ? data.data : data
       })
-    },
-    closeShareSuccess () {
-      this.showShareSuccess = false
     }
   },
   created () {
