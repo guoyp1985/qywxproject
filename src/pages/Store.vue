@@ -50,20 +50,19 @@
           </div>
         </div>
       </template>
-      <template v-if="productdata.length > 0">
-        <div class="bg-white mt5 padding10 b_top_after">
-    			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
-    		</div>
-        <div class="b_top_after"></div>
-        <div class="productlist squarepic">
-          <Productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
-            <img slot="photo" class="imgcover" :src="item.photo" />
-            <span slot="title">{{ item.title }}</span>
-            <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
-            <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-          </Productitemplate>
-        </div>
-      </template>
+      <div class="bg-white mt5 padding10 b_top_after">
+  			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
+  		</div>
+      <div class="b_top_after"></div>
+      <div class="productlist squarepic">
+        <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
+        <Productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
+          <img slot="photo" class="imgcover" :src="item.photo" />
+          <span slot="title">{{ item.title }}</span>
+          <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
+          <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
+        </Productitemplate>
+      </div>
       <template v-if="toplinedata.length > 0">
         <div class="bg-white mt5 padding10 b_top_after">
           <div class="t-table">
@@ -108,6 +107,14 @@
         </div>
       </popup>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
+      :data="retailerInfo"
+      :loginUser="loginUser"
+      module="store"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
   </div>
 </template>
 
@@ -134,8 +141,10 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -147,7 +156,8 @@ export default {
     Bargainbuyitemplate,
     Productitemplate,
     Newsitemplate,
-    Popup
+    Popup,
+    ShareSuccess
   },
   filters: {
     dateformat: function (value) {
@@ -157,6 +167,9 @@ export default {
   data () {
     return {
       query: Object,
+      loginUser: Object,
+      showShareSuccess: false,
+      wid: null,
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       showqrcode: false,
       showdot: true,
@@ -252,11 +265,15 @@ export default {
     },
     closepopup () {
       this.showqrcode = false
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.loginUser = User.get()
     self.query = self.$route.query
     self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
       params: { uid: self.query.wid }
@@ -264,6 +281,19 @@ export default {
       let data = res.data
       self.retailerInfo = data.data ? data.data : data
       document.title = self.retailerInfo.title
+      self.wid = self.retailerInfo.uid
+      self.$util.handleWxShare({
+        module: 'store',
+        moduleid: self.wid,
+        lastshareuid: self.query.share_uid,
+        title: self.retailerInfo.title,
+        desc: self.retailerInfo.title,
+        photo: self.retailerInfo.avatar,
+        link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
+        successCallback: function () {
+          self.showShareSuccess = true
+        }
+      })
       return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
     }).then(function (res) {
       let data = res.data

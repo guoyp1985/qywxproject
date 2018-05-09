@@ -143,7 +143,7 @@ export default {
   data () {
     return {
       autofixed: false,
-      tabtxts: [ '返点客户', '邀请返点客', '返点记录' ],
+      tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
       tabmodel: 0,
       distabdata1: false,
       distabdata2: false,
@@ -285,29 +285,28 @@ export default {
     onSubmit1 () {
       const self = this
       self.$vux.loading.show()
+      self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
     },
     onCancel1 () {
       const self = this
-      if (!self.$util.isNull(self.searchword1)) {
-        self.searchword1 = ''
-        self.$vux.loading.show()
-        self.tabdata1 = []
-        self.pagestart1 = 0
-        self.getdata1()
-      }
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
     },
     onCancel2 () {
       const self = this
-      if (!self.$util.isNull(self.searchword2)) {
-        self.searchword2 = ''
-        self.$vux.loading.show()
-        self.tabdata2 = []
-        self.pagestart2 = 0
-        self.getdata2()
-      }
+      self.searchword2 = ''
+      self.$vux.loading.show()
+      self.distabdata2 = false
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     },
     onChange2 (val) {
       this.searchword2 = val
@@ -315,6 +314,7 @@ export default {
     onSubmit2 () {
       const self = this
       self.$vux.loading.show()
+      self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
       self.getdata2()

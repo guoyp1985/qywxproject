@@ -228,13 +228,11 @@ export default {
     },
     onCancel () {
       const self = this
-      if (!self.$util.isNull(self.searchword)) {
-        self.searchword = ''
-        self.$vux.loading.show()
-        self.productdata = []
-        self.pagestart1 = 0
-        self.getProductData()
-      }
+      self.searchword = ''
+      self.$vux.loading.show()
+      self.productdata = []
+      self.pagestart1 = 0
+      self.getProductData()
     },
     onSubmit () {
       const self = this
@@ -334,8 +332,7 @@ export default {
         return false
       }
       if (self.activityType === 'bargainbuy') {
-        let priceinput = document.querySelector('.addActivity .addForm .minprice')
-        let priceval = parseFloat(priceinput.value)
+        let priceval = parseFloat(self.selectpopupdata.price)
         let mininput = document.querySelector('.addActivity .addForm .everymin')
         let minval = parseFloat(mininput.value)
         let maxinput = document.querySelector('.addActivity .addForm .everymax')
@@ -348,21 +345,26 @@ export default {
           return false
         }
       }
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
-        self.$vux.toast.show({
-          text: data.error,
-          type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push('/retailerActivitylist')
-            }
-          }
-        })
+      self.$vux.confirm.show({
+        content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            let toasttype = data.flag !== 1 ? 'warn' : 'success'
+            self.$vux.toast.show({
+              text: data.error,
+              type: toasttype,
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.$router.push('/retailerActivitylist')
+                }
+              }
+            })
+          })
+        }
       })
     }
   },

@@ -263,7 +263,59 @@ Util.install = function (Vue, options) {
           }
         })
       })
-      // })
+    },
+    handleWxShare: function (os) {
+      const self = this
+      let data = os.data
+      let sharetitle = os.title
+      let sharedesc = os.desc
+      let sharephoto = os.photo
+      if (data) {
+        sharetitle = !self.isNull(data.seotitle) ? data.seotitle : data.title
+        sharedesc = data.title
+        if (!self.isNull(data.seodescription)) {
+          sharedesc = data.seodescription
+        } else if (!self.isNull(data.summary)) {
+          sharedesc = data.summary
+        } else if (!self.isNull(data.seotitle)) {
+          sharedesc = data.seotitle
+        }
+        sharephoto = data.photo
+        let photoarr = []
+        if (!self.isNull(data.photo)) {
+          photoarr = data.photo.split(',')
+        } else if (!self.isNull(data.contentphoto)) {
+          photoarr = data.contentphoto.split(',')
+        }
+        if (photoarr.length > 0) {
+          sharephoto = photoarr[0]
+        }
+      }
+      let wxData = {
+        module: os.module,
+        moduleid: os.moduleid,
+        title: sharetitle,
+        desc: sharedesc,
+        link: os.link,
+        photo: sharephoto
+      }
+      if (os.lastshareuid) {
+        wxData.lastshareuid = os.lastshareuid
+      }
+      self.wxShare({
+        data: wxData,
+        successCallback: function (data) {
+          if (data.flag === 1) {
+            os.successCallback && os.successCallback(data)
+          } else {
+            Vue.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.delay(data.error)
+            })
+          }
+        }
+      })
     },
     wxPreviewImage: function(viewId) {
       const triggerView = document.getElementById(viewId)

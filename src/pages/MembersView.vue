@@ -249,9 +249,11 @@ export default {
     const self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
       { params: { customeruid: self.query.uid } }
     ).then(function (res) {
+      self.$vux.loading.hide()
       let data = res.data
       if (data) {
         self.viewuser = data.data ? data.data : data

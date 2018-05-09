@@ -245,7 +245,6 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount1 = data.count
-        self.searchword1 = ''
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
@@ -291,27 +290,27 @@ export default {
     },
     onCancel1 () {
       const self = this
-      if (!self.$util.isNull(self.searchword1)) {
-        self.searchword1 = ''
-        self.$vux.loading.show()
-        self.tabdata1 = []
-        self.pagestart1 = 0
-        self.getdata1()
-      }
+      self.searchword1 = ''
+      console.log('in cancel1')
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
     },
     onCancel2 () {
       const self = this
-      if (!self.$util.isNull(self.searchword2)) {
-        self.searchword2 = ''
-        self.$vux.loading.show()
-        self.tabdata2 = []
-        self.pagestart2 = 0
-        self.getdata2()
-      }
+      self.searchword2 = ''
+      self.$vux.loading.show()
+      self.distabdata2 = false
+      self.tabdata2 = []
+      self.pagestart2 = 0
+      self.getdata2()
     },
     onSubmit1 () {
       const self = this
       self.$vux.loading.show()
+      self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
@@ -319,6 +318,7 @@ export default {
     onSubmit2 () {
       const self = this
       self.$vux.loading.show()
+      self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
       self.getdata2()
@@ -348,23 +348,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.percentlayer{z-index:10;position:absolute;left:0;right:0;bottom:0;top:0;}
-.percentlayer .bg{position:absolute;left:0;right:0;bottom:0;top:0;background:rgba(0,0,0,0.6);}
-.percentlayer .layerinner{
-	width:80%;padding-bottom:100%;position:relative;
-}
-.percentlayer .layerinner .inner{
-	z-index:10;position:absolute;left:0;top:0;right:0;bottom:0;
-	padding:10px;box-sizing: border-box;
-}
-.percentlayer .probability{background:url(../assets/images/bgletter.png) center center no-repeat;background-size:85% 100%; margin: 0 auto;}
-.percentlayer .pro-sucess{ width: 90%; margin: 0 auto; text-align: left; padding-left: 5px;  }
-.percentlayer .pro-sucess p{margin-top: 1px;margin-bottom: 5px;}
-.percentlayer .span1{vertical-align:middle;color:#1e98f9;}
-.percentlayer .pro{width: 70%; margin: 0 auto; vertical-align:middle;  height: 60%; }
-.percentlayer .pro-push{width: 90%; margin: 0 auto; text-align: left; padding-left: 5px;}
-
-.percentlayer .encourade{width:80%;  color: #00a0e9;text-align: center;  position: absolute; left:10%; top: 85%; }
-.percentlayer .pro-know{position: absolute;width:100%;text-align: center;bottom: -40px;}
-.percentlayer .pro-know span{color:#fff;background:#00a0e9;padding: 5px 10px;border-radius: 5px;}
 </style>

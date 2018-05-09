@@ -566,36 +566,14 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
-      let sharetitle = self.productdata.title
-      if (!self.$util.isNull(self.productdata.seotitle)) {
-        sharetitle = self.productdata.seotitle
-      }
-      let sharedesc = self.productdata.title
-      if (!self.$util.isNull(self.productdata.seodescription)) {
-        sharedesc = self.productdata.seodescription
-      } else if (!self.$util.isNull(self.productdata.seotitle)) {
-        sharedesc = self.productdata.seotitle
-      }
-      self.$util.wxShare({
-        data: {
-          module: 'product',
-          moduleid: self.productdata.id,
-          title: sharetitle,
-          desc: sharedesc,
-          link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-          photo: self.photoarr[0],
-          lastshareuid: self.query.share_uid
-        },
-        successCallback: function (data) {
-          if (data.flag === 1) {
-            self.showShareSuccess = true
-          } else {
-            self.$vux.toast.show({
-              text: data.error,
-              type: 'warn',
-              time: self.$util.delay(data.error)
-            })
-          }
+      self.$util.handleWxShare({
+        data: self.productdata,
+        module: 'product',
+        moduleid: self.productdata.id,
+        lastshareuid: self.query.share_uid,
+        link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        successCallback: function () {
+          self.showShareSuccess = true
         }
       })
       self.submitdata.id = self.productdata.id

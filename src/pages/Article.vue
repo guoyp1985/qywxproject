@@ -70,6 +70,14 @@
         <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
       </comment>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
+      :data="article"
+      :loginUser="reward"
+      module="news"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
     <editor elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
@@ -82,6 +90,7 @@ import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
 import Editor from '@/components/Editor'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -95,11 +104,13 @@ export default {
     Comment,
     Reply,
     CommentPopup,
-    Editor
+    Editor,
+    ShareSuccess
   },
   data () {
     return {
       query: Object,
+      showShareSuccess: false,
       showsharetip: true,
       commentPopupShow: false,
       replyPopupShow: false,
@@ -179,12 +190,14 @@ export default {
         if (res.data.flag) {
           self.article = res.data.data
           self.reward = User.get()
-          self.$util.wxShare({
-            data: {
-              title: self.article.seotitle || self.article.title,
-              desc: self.article.seodescription || self.article.seotitle || self.article.title,
-              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
-              photo: self.article.photo.split(',')[0]
+          self.$util.handleWxShare({
+            data: self.article,
+            module: 'news',
+            moduleid: self.article.id,
+            lastshareuid: self.query.share_uid,
+            link: `${ENV.Host}/#/articles/${self.article.id}?wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+            successCallback: function () {
+              self.showShareSuccess = true
             }
           })
         }
@@ -225,16 +238,12 @@ export default {
       }
     },
     onAdvisory () {
-
     },
     onStore () {
-
     },
     onShare () {
-
     },
     editSave () {
-
     },
     editSetting () {
       this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
@@ -245,6 +254,9 @@ export default {
         onCancel () {},
         onConfirm () {}
       })
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {

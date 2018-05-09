@@ -48,6 +48,14 @@
         </div>
       </template>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
+      :data="retailerInfo"
+      :loginUser="loginUser"
+      module="shop"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
   </div>
 </template>
 
@@ -74,8 +82,10 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -83,7 +93,8 @@ export default {
     Groupbuyitemplate,
     Bargainbuyitemplate,
     Productitemplate,
-    Newsitemplate
+    Newsitemplate,
+    ShareSuccess
   },
   filters: {
     dateformat: function (value) {
@@ -92,6 +103,10 @@ export default {
   },
   data () {
     return {
+      query: Object,
+      loginUser: Object,
+      retailerInfo: { avatar: '/src/assets/images/user.jpg' },
+      showShareSuccess: false,
       showdot: true,
       addata: [],
       activitydata: [],
@@ -141,12 +156,35 @@ export default {
           self.scrollArea1.addEventListener('scroll', self.scroll1)
         }
       })
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' }).then(function (res) {
+    self.query = self.$route.query
+    self.loginUser = User.get()
+    self.$util.handleWxShare({
+      module: 'shop',
+      moduleid: 0,
+      lastshareuid: self.query.share_uid,
+      title: '共销宝商城',
+      desc: '一款能买能卖的销售平台，你要的都在这里！',
+      photo: self.loginUser.avatar,
+      link: `${ENV.Host}/#/userproducts?wid=${self.loginUser.uid}&share_uid=${self.loginUser.uid}`,
+      successCallback: function () {
+        self.showShareSuccess = true
+      }
+    })
+    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+      params: { uid: self.loginUser.uid }
+    }).then(function (res) {
+      let data = res.data
+      self.retailerInfo = data.data ? data.data : data
+      return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
+    }).then(function (res) {
       let data = res.data
       let retdata = data.data ? data.data : data
       for (let i = 0; i < retdata.length; i++) {

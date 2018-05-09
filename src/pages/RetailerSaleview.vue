@@ -10,7 +10,7 @@
             </router-link>
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle font18">{{ sellerUser.username }}</router-link>
             <div class="t-cell v_middle w70 align_center">
-              <div class="qbtn2">联系</div>
+              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn2">联系</router-link>
               <a class="db-in mt5" v-if="sellerUser.mobile && sellerUser.mobile != ''" :href="`tel:${sellerUser.mobile}`"><i class="al al-fuwuzhongxin font16"></i></a>
             </div>
           </div>
@@ -43,14 +43,14 @@
               </div>
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
-                  <div class="t-cell v_middle w50" style="width:50px;">
+                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
                     <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
-                  </div>
-                  <div class="t-cell v_middle">
+                  </router-link>
+                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
                     <div class="clamp1 font12 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
                     <div class="clamp1 font12 color-gray">时间:{{ item.dateline | dateformat }}</div>
-                  </div>
+                  </router-link>
                   <div class="t-cell v_middle align_right w60">
                     <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-green color-white">联系</router-link>
                   </div>
@@ -65,7 +65,7 @@
                 <div class="mt5">该返点客还没有分享过</div>
                 <div>积极与返点客沟通可调动TA的积极性哦！</div>
               </div>
-              <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata2" :key="item.id">
+              <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
                   <div class="t-cell v_middle w80">
                     <img :src="item.photo" class="imgcover v_middle" style="width:70px;height:70px;" />
@@ -95,16 +95,16 @@
               </div>
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                 <div class="t-table">
-                  <div class="t-cell v_middle w50">
+                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
                     <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
-                  </div>
-                  <div class="t-cell v_middle">
+                  </router-link>
+                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
                     <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-                  </div>
-                  <div class="t-cell w60 h_100">
+                  </router-link>
+                  <div class="t-cell v_middle w60 h_100">
                     <div class="w_100 h_100 flex_right">
-                      <div class="percentarea db-in">
+                      <div class="percentarea db-in" @click="percentclick">
                         <div class="inner" :style="`width:${item.percent}%`"></div>
                         <div class="txt font12">{{ item.percent }}%</div>
                       </div>
@@ -120,6 +120,41 @@
         </swiper-item>
       </swiper>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="isshowpopup" height="100%">
+        <div class="popup1 font14">
+          <div class="percentlayer">
+            <div class="bg"></div>
+            <div class="w_100 h_100 flex_center">
+              <div class="layerinner align_left probability">
+                <div class="inner">
+                  <div class="pro" >
+                    <div class="pro-sucess">
+                      <div class="flex_left">
+                        <img class="v_middle" src="../assets/images/infor.png"/>
+                        <div class="color-blue">什么是成交概率</div>
+                      </div>
+                      <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为购买客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
+                    </div>
+                    <div class="pro-push">
+                      <div class="flex_left">
+                        <img class="v_middle" src="../assets/images/infor.png"/>
+                        <div class="color-blue">如何提升成交概率</div>
+                      </div>
+                      <div class="font12">1、推送客户感兴趣的文章;</div>
+                      <div class="font12">2、发展更多的返点客。</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pro-know">
+                  <span class="close" @click="closepopup">知道了</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -127,17 +162,21 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDomDirective as TransferDom } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
     Tab,
     TabItem,
     Swiper,
     SwiperItem,
-    Group
+    Group,
+    Popup
   },
   filters: {
     dateformat: function (value) {
@@ -148,6 +187,7 @@ export default {
     return {
       query: {},
       sellerUser: { avatar: '/src/assets/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
+      isshowpopup: false,
       tabtxts: [ '带来消费', '分享记录', '带来客户' ],
       tabmodel: 0,
       distabdata1: false,
@@ -278,12 +318,19 @@ export default {
           self.getdata3()
         }
       }
+    },
+    percentclick () {
+      this.isshowpopup = true
+    },
+    closepopup () {
+      this.isshowpopup = false
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
       { params: { selleruid: self.query.uid } }
     ).then(function (res) {
