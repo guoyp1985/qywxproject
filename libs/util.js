@@ -7,7 +7,7 @@ const Util = {}
 Util.install = function (Vue, options) {
   Vue.prototype.$util = {
     // 去空格
-    trim: (str) => str.replace(Reg.rSpace, ''),
+    trim: (str) => str ? str.replace(Reg.rSpace, '') : '',
     // 判空
     isNull: function (str) {
       return !Reg.rNoSpace.test(this.trim(str))
@@ -37,13 +37,18 @@ Util.install = function (Vue, options) {
       }
       return re ? re : (stop = failHandle(model))
     },
-    validateQueue: function (maps, failHandle) {
+    validateQueue: function (items, failHandle) {
       let re = true
       failHandle = failHandle ? failHandle : () => false
-      for(let i in maps) {
-        const k = i
-        const v = maps[i]
-        let rs = this.validate({key: k, value: v}, Reg.rHas, failHandle)
+      for (let item of items) {
+        let rs = null
+        for (let n in item) {
+          if (n !== 'r') {
+            const k = n
+            const v = item[n]
+            rs = this.validate({key: k, value: v}, Reg[`r${item.r}`] || Reg.rHas, failHandle)
+          }
+        }
         !rs && (re = false)
         if (rs === false) return false
       }

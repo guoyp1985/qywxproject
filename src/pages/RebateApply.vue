@@ -61,6 +61,10 @@
         </div>
       </x-dialog>
     </div>
+    <box gap="10px">
+      <x-button type="primary">{{$t('Apply')}}</x-button>
+      <x-button>{{$t('Cancel')}}</x-button>
+    </box>
   </div>
 </template>
 <script>
@@ -78,7 +82,8 @@ import {
   Popup,
   PopupHeader,
   XDialog,
-  TransferDom
+  TransferDom,
+  Box
 } from 'vux'
 export default {
   directives: {
@@ -97,7 +102,8 @@ export default {
     ViewBox,
     Popup,
     PopupHeader,
-    XDialog
+    XDialog,
+    Box
   },
   data () {
     return {
