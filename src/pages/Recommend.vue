@@ -7,8 +7,8 @@
   <div id="to-recommend">
     <sticky scroll-box="to-recommend">
       <tab v-model="selectedIndex">
-        <tab-item class="font14" selected>{{$t('My Return Stores')}}</tab-item>
-        <tab-item class="font14">{{$t('Bought Stores')}}</tab-item>
+        <tab-item class="font14" selected @on-item-click="clickTabItem">{{$t('My Return Stores')}}</tab-item>
+        <tab-item class="font14" @on-item-click="clickTabItem">{{$t('Bought Stores')}}</tab-item>
       </tab>
     </sticky>
     <div v-show="selectedIndex===0">
@@ -52,6 +52,7 @@
 </template>
 <script>
 import { Tab, TabItem, Group, CellBox, XImg, Sticky, XButton } from 'vux'
+import ENV from 'env'
 
 export default {
   components: {
@@ -89,9 +90,36 @@ export default {
   methods: {
     applyClick (id) {
       this.$router.push({name: 'tRebateApply'})
+    },
+    getMyRetailer () {
+      this.$http.get(`${ENV.BokaApi}/api/seller/myRetailerList`)
+      .then(res => {
+        if (res.data.flag) {
+          this.list = res.data.data
+        }
+      })
+    },
+    getBuyRetailer () {
+      this.$http.get(`${ENV.BokaApi}/api/seller/buyRetailerList`)
+      .then(res => {
+        if (res.data.flag) {
+          this.list1 = res.data.data
+        }
+      })
+    },
+    clickTabItem (index) {
+      switch (index) {
+        case 0:
+          this.getMyRetailer()
+          break
+        case 1:
+          this.getBuyRetailer()
+          break
+      }
     }
   },
   created () {
+    this.getMyRetailer()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }

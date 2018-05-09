@@ -54,7 +54,7 @@ export default {
       const self = this
       this.$http.get(`${ENV.BokaApi}/api/user/creditsList`)
       .then(res => {
-        if(res.data.flag) {
+        if (res.data.flag) {
           self.items = res.data.data
         }
       })
