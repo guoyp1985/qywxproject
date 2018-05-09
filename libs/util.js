@@ -43,10 +43,14 @@ Util.install = function (Vue, options) {
       for (let item of items) {
         let rs = null
         for (let n in item) {
-          if (n !== 'r') {
+          if (!/^r|required$/.test(n)) {
             const k = n
             const v = item[n]
-            rs = this.validate({key: k, value: v}, Reg[`r${item.r}`] || Reg.rHas, failHandle)
+            if (item.required == undefined || item.required || ( item.required === false && (this.trim(v) !== '') )) {
+              rs = this.validate({key: k, value: v}, Reg[`r${item.r}`] || Reg.rHas, failHandle)
+            } else if (!item.required && (this.trim(v) == '')) {
+              rs = true
+            }
           }
         }
         !rs && (re = false)
