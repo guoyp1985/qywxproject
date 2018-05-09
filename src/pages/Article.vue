@@ -185,7 +185,11 @@ export default {
     getData () {
       const self = this
       const id = this.$route.params.id
-      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, {id: id, module: 'news'}) // 获取文章
+      let infoparams = { id: id }
+      if (self.$route.query.from === 'poster') {
+        infoparams.from = 'poster'
+      }
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
         if (res.data.flag) {
           self.article = res.data.data

@@ -549,6 +549,9 @@ export default {
     if (self.query.share_uid) {
       infoparams['share_uid'] = self.query.share_uid
     }
+    if (self.query.from === 'poster') {
+      infoparams.from = 'poster'
+    }
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
