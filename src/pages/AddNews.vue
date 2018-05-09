@@ -69,27 +69,6 @@ export default {
       requireddata: { title: '', 'photo': '' }
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    const query = self.$route.query
-    if (query.id) {
-      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-        params: { id: query.id, module: 'news' }
-      }).then(function (res) {
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        if (retdata) {
-          for (let key in self.submitdata) {
-            self.submitdata[key] = retdata[key]
-          }
-          if (!self.$util.isNull(self.submitdata.photo)) {
-            self.photoarr = self.submitdata.photo.split(',')
-          }
-        }
-      })
-    }
-  },
   computed: {
   },
   methods: {
@@ -172,6 +151,28 @@ export default {
     },
     popupCancel () {
       this.popupShow = false
+    }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    const query = self.$route.query
+    if (query.id) {
+      document.title = '更多设置'
+      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+        params: { id: query.id, module: 'news' }
+      }).then(function (res) {
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        if (retdata) {
+          for (let key in self.submitdata) {
+            self.submitdata[key] = retdata[key]
+          }
+          if (!self.$util.isNull(self.submitdata.photo)) {
+            self.photoarr = self.submitdata.photo.split(',')
+          }
+        }
+      })
     }
   }
 }

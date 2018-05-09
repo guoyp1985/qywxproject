@@ -32,7 +32,7 @@
           				</div>
                 </template>
                 <template v-else>
-                {{ item.content }}
+                  <div v-html="item.content"></div>
                 </template>
               </div>
             </div>

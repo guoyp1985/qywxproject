@@ -258,21 +258,20 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
-    let getparams = { params: Object }
-    if (self.query.wid) {
-      getparams.params.uid = self.query.wid
-    }
-    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, getparams).then(function (res) {
+    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+      params: { uid: self.query.wid }
+    }).then(function (res) {
       let data = res.data
       self.retailerInfo = data.data ? data.data : data
       document.title = self.retailerInfo.title
-      let params = { wid: self.query.wid }
-      return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, params)
+      return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
     }).then(function (res) {
       let data = res.data
       let retdata = data.data ? data.data : data
       for (let i = 0; i < retdata.length; i++) {
-        retdata[i].img = retdata[i].photo
+        let p = retdata[i]
+        p.img = p.photo
+        p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
       }
       self.addata = retdata
       let params = { params: { pagestart: 0, limit: 20, wid: self.query.wid } }

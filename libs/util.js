@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Reg from './reg'
 import ENV from 'env'
 import SHA1 from 'js-sha1'
-import Base64 from './base64'
 import Time from './time'
 const Util = {}
 Util.install = function (Vue, options) {
@@ -16,11 +15,11 @@ Util.install = function (Vue, options) {
     // 判终端
     isPC: function () {
       const userAgentInfo = navigator.userAgent
-      alert(Reg.rPlatfrom.test(userAgentInfo))
-      if (Reg.rPlatfrom.test(userAgentInfo)) {
-        return false
-      }
-      return true
+      return !Reg.rPlatfrom.test(userAgentInfo)
+    },
+    isAndroid: function() {
+      const userAgentInfo = navigator.userAgent
+      return Reg.rAndroid.test(userAgentInfo)
     },
     // 判授权
     access: function (response, authorization) {
@@ -123,17 +122,17 @@ Util.install = function (Vue, options) {
       }
       return query
     },
-    wxShareSuccess: (params) => {
+    wxShareSuccess: function (params) {
+      let self = this
       let wxData = params.data
-      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`,{
-        params: {
-          id: wxData.moduleid,
-          title: Base64.encode(wxData.title)
-        }
-      }).then(function (res) {
-        return res.json()
-      }).then(function (data) {
-        params.wxData.successCallback && params.wxData.successCallback(data);
+      let postparams = {
+        id: wxData.moduleid,
+        lastshareuid: wxData.lastshareuid,
+        type: params.type
+      }
+      Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
+        let data = res.data
+        params.successCallback && params.successCallback(data)
       })
     },
     wxConfig: function (callback) {
@@ -151,7 +150,6 @@ Util.install = function (Vue, options) {
       const self = this
       let wxData = params.data
       let isUpdate = false
-      // this.wxConfig(function() {
       Vue.wechat.ready(function () {
         params.readyCallback && params.readyCallback()
         Vue.wechat.showMenuItems({
@@ -201,7 +199,8 @@ Util.install = function (Vue, options) {
             if (res.shareTo == "favorite") {
               self.wxShareSuccess({
                 data: wxData,
-                type: 'favorite'
+                type: 'favorite',
+                successCallback: params.successCallback
               })
             }
           },
@@ -211,14 +210,11 @@ Util.install = function (Vue, options) {
             }
             self.wxShareSuccess({
               data: wxData,
-              type: 'friend'
+              type: 'friend',
+              successCallback: params.successCallback
             })
           },
           cancel: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'friend'
-            })
           }
         })
         Vue.wechat.onMenuShareTimeline({
@@ -236,14 +232,11 @@ Util.install = function (Vue, options) {
           success: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'timeline'
+              type: 'timeline',
+              successCallback: params.successCallback
             })
           },
           cancel: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'timeline'
-            })
           }
         })
         Vue.wechat.onMenuShareQQ({
@@ -262,14 +255,11 @@ Util.install = function (Vue, options) {
           success: function (resp) {
             self.wxShareSuccess({
               data: wxData,
-              type: 'qq'
+              type: 'qq',
+              successCallback: params.successCallback
             })
           },
           cancel: function (resp) {
-            self.wxShareSuccess({
-              data: wxData,
-              type: 'qq'
-            })
           }
         })
       })

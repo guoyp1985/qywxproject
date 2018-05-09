@@ -33,7 +33,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.rebate" type="text" class="input" name="rebate" :placeholder="$t('Goods sold to customer rebate Commission')" />
+            <input v-model="submitdata.rebate" type="text" class="input" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
         </div>
@@ -131,30 +131,6 @@
 </template>
 
 <i18n>
-Product name:
-  zh-CN: 商品名称
-Product price:
-  zh-CN: 商品价格
-User final purchase price:
-  zh-CN: 用户最终购买价格
-Rebate Commission:
-  zh-CN: 返点佣金
-Goods sold to customer rebate Commission:
-  zh-CN: 返点客售出商品后给予的佣金
-Rebate user provide commision:
-  zh-CN: 返点客售出商品后给予的佣金
-Product share title placeholder:
-  zh-CN: 如不填写默认调用商品标题
-Product share description placeholder:
-  zh-CN: 如不填写自动截取商品介绍
-Save:
-  zh-CN: 保存
-Save and up:
-  zh-CN: 保存并上架
-More:
-  zh-CN: 更多
-Up text:
-  zh-CN: 收起
 </i18n>
 
 <script>
@@ -210,8 +186,12 @@ export default {
         for (let key in self.submitdata) {
           self.submitdata[key] = self.data[key]
         }
-        self.photoarr = self.submitdata.photo.split(',')
-        self.photoarr1 = self.submitdata.contentphoto.split(',')
+        if (!self.$util.isNull(self.submitdata.photo)) {
+          self.photoarr = self.submitdata.photo.split(',')
+        }
+        if (!self.$util.isNull(self.submitdata.contentphoto)) {
+          self.photoarr1 = self.submitdata.contentphoto.split(',')
+        }
         document.title = self.data.title
       })
     }

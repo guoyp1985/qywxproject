@@ -20,7 +20,7 @@
       <div class="padding10 align_center btnlist">
         <div class="t-table">
           <div class="t-cell v_middle">
-            <div class="btn bg-orange color-white">联系</div>
+            <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="btn bg-orange color-white">联系</router-link>
           </div>
           <div class="t-cell v_middle" v-if="!viewuser.isseller">
             <div class="btn bg-orange color-white" @click="inviteevent">返点客</div>
@@ -91,7 +91,7 @@
     </div>
     <div class="s-bottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
-        <router-link class="t-cell item" to="/retailerShop">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
         <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
         <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
       </div>

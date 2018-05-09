@@ -281,6 +281,14 @@
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
+      :data="productdata"
+      :loginUser="loginUser"
+      module="product"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
   </div>
 </template>
 
@@ -303,6 +311,7 @@ Another batch:
 import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -319,7 +328,8 @@ export default {
     Bargainbuyitemplate,
     Popup,
     Marquee,
-    MarqueeItem
+    MarqueeItem,
+    ShareSuccess
   },
   filters: {
     dateformat: function (value) {
@@ -329,6 +339,7 @@ export default {
   data () {
     return {
       query: {},
+      showShareSuccess: false,
       showsharetip: true,
       productid: null,
       module: 'product',
@@ -503,11 +514,15 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
+        let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
         window.WeixinJSBridge.invoke('imagePreview', {
-          current: self.photoarr[index],
-          urls: self.photoarr
+          current: viewarr[index],
+          urls: viewarr
         })
       }
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {
@@ -551,12 +566,36 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
+      let sharetitle = self.productdata.title
+      if (!self.$util.isNull(self.productdata.seotitle)) {
+        sharetitle = self.productdata.seotitle
+      }
+      let sharedesc = self.productdata.title
+      if (!self.$util.isNull(self.productdata.seodescription)) {
+        sharedesc = self.productdata.seodescription
+      } else if (!self.$util.isNull(self.productdata.seotitle)) {
+        sharedesc = self.productdata.seotitle
+      }
       self.$util.wxShare({
         data: {
-          title: self.productdata.seotitle || self.productdata.title,
-          desc: self.productdata.seodescription || self.productdata.seotitle || self.productdata.title,
+          module: 'product',
+          moduleid: self.productdata.id,
+          title: sharetitle,
+          desc: sharedesc,
           link: `${ENV.Host}/#/product?id=${self.productdata.id}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
-          photo: self.photoarr[0]
+          photo: self.photoarr[0],
+          lastshareuid: self.query.share_uid
+        },
+        successCallback: function (data) {
+          if (data.flag === 1) {
+            self.showShareSuccess = true
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.$util.delay(data.error)
+            })
+          }
         }
       })
       self.submitdata.id = self.productdata.id

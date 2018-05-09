@@ -35,7 +35,7 @@
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有带来消费</div>
@@ -51,15 +51,15 @@
                     <div class="clamp1 font12 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
                     <div class="clamp1 font12 color-gray">时间:{{ item.dateline | dateformat }}</div>
                   </div>
-                  <div class="t-cell align_right" style="width:60px;">
-                    <div class="qbtn bg-green color-white">联系</div>
+                  <div class="t-cell v_middle align_right w60">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-green color-white">联系</router-link>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div v-if="(index == 1)">
-            <div class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list pl10 pr10">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有分享过</div>
@@ -87,7 +87,7 @@
                 <div class="t-cell align_right pr10">{{ $t('Percent') }}</div>
               </div>
             </div>
-            <div class="scroll_list pl10 pr10 cols-2">
+            <div v-if="distabdata3" class="scroll_list pl10 pr10 cols-2">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有带来客户</div>
@@ -110,8 +110,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="t-cell align_right" style="width:60px;">
-                    <div class="qbtn bg-green color-white">联系</div>
+                  <div class="t-cell v_middle align_right w60">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-green color-white">联系</router-link>
                   </div>
                 </div>
               </div>
@@ -124,16 +124,6 @@
 </template>
 
 <i18n>
-Rebate customer:
-  zh-CN: 返点客户
-Share invite customer:
-  zh-CN: 分享邀请返点客户
-Rebate manage:
-  zh-CN: 返点管理
-Message text:
-  zh-CN: 早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。
-Send text:
-  zh-CN: 发送
 </i18n>
 
 <script>
@@ -160,6 +150,9 @@ export default {
       sellerUser: { avatar: '/src/assets/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
       tabtxts: [ '带来消费', '分享记录', '带来客户' ],
       tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
+      distabdata3: false,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
@@ -174,18 +167,6 @@ export default {
       scrollArea2: null,
       scrollArea3: null
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
-      { params: { selleruid: self.query.uid } }
-    ).then(function (res) {
-      let data = res.data
-      self.sellerUser = (data.data ? data.data : data)
-      self.getdata1()
-    })
   },
   methods: {
     scroll1: function () {
@@ -235,6 +216,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.rsaleview .swiperitem')
           self.scrollArea1 = items[0]
@@ -254,6 +236,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -269,6 +252,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
+        self.distabdata3 = true
         if (!self.isBindScroll3) {
           self.isBindScroll3 = true
           self.scrollArea3.removeEventListener('scroll', self.scroll3)
@@ -295,6 +279,21 @@ export default {
         }
       }
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
+      { params: { selleruid: self.query.uid } }
+    ).then(function (res) {
+      let data = res.data
+      self.sellerUser = (data.data ? data.data : data)
+      if (self.sellerUser) {
+        document.title = self.sellerUser.username
+        self.getdata1()
+      }
+    })
   }
 }
 </script>

@@ -284,6 +284,8 @@ en:
   Subtitle: Subtitle
   Input subtitle: Input subtitle
   Upload images: Upload images
+  Goods sold to rebate user rebate Commission: Goods sold to rebate user rebate Commission
+  Goods sold to rebate user commission: Goods sold to rebate user commission
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -536,7 +538,7 @@ zh-CN:
   Storage: 库存
   Product description: 商品介绍
   Save and up: 保存并上架
-  Up text: 收起
+  Up text: 收起更多设置
   Select product: 选择商品
   Activity product: 活动商品
   Please select product: 请选择商品
@@ -594,7 +596,7 @@ zh-CN:
   Product price: 商品价格
   User final purchase price: 用户最终购买价格
   Rebate Commission: 返点佣金
-  Goods sold to customer rebate Commission: 返点客售出商品后给予的佣金
+  Goods sold to rebate user commission: 返点客售出商品后给予的佣金
   Product share title placeholder: 如不填写默认调用商品标题
   Product share description placeholder: 如不填写自动截取商品介绍
   Product Rater: 商品评分
@@ -646,9 +648,10 @@ zh-CN:
   tLogin: 扫码登录
   tCenter: 个人中心
   tCenterSales: 销售中心
-  tRetailerSales: 销售中心
-  tRetailerSalcechance: 销售机会
-  tRetialerCustomerList: 联系客户
+  tRetailerSales: 返点客
+  tRetailerSaleview: 返点客
+  tRetailerSalechance: 销售机会
+  tRetailerCustomerlist: 联系客户
   tRetailerAddorder: 订单录入
   tRetailerOrder: 订单列表
   tStore: 我的店铺
@@ -678,7 +681,7 @@ zh-CN:
   tAddActivity: 创建活动
   tAddProduct: 添加商品
   tRetailerGoodeazy: 易采集
-  tServiceAddnews: 创建文章
+  tAddNews: 创建文章
   tRetailerMessagelist: 消息
   tAddOrder: 确认订单
   tSalesList: 返点客
@@ -690,6 +693,7 @@ zh-CN:
   tSaleProducts: 精品促销
   tUserPoster: 生成海报
   tStat: 统计
+  tPoster: 生成海报
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中

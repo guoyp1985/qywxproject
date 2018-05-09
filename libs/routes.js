@@ -31,8 +31,6 @@ import Product from '@/pages/Product'
 import Pay from '@/pages/Pay'
 import Poster from '@/pages/Poster'
 import PosterDetail from '@/pages/PosterDetail'
-import Poster from '@/pages/Poster'
-import PosterDetail from '@/pages/PosterDetail'
 import QrLogin from '@/pages/QrLogin'
 import RetailerSales from '@/pages/RetailerSales'
 import RetailerSalechance from '@/pages/RetailerSalechance'
@@ -63,10 +61,6 @@ import SaleProducts from '@/pages/SaleProducts'
 import Timeline from '@/pages/Timeline'
 import Userproducts from '@/pages/Userproducts'
 import UserRebateInfo from '@/pages/UserRebateInfo'
-import Poster from '@/pages/Poster'
-import PosterDetail from '@/pages/PosterDetail'
-import Stat from '@/pages/Stat'
-import Knowledge from '@/pages/Knowledge'
 
 export default [
   {
@@ -101,7 +95,7 @@ export default [
   },
   {
     path: '/retailerCustomerlist',
-    name: 'tRetailerCustomerList',
+    name: 'tRetailerCustomerlist',
     component: RetailerCustomerlist
   },
   {
@@ -142,16 +136,6 @@ export default [
   // {
   //   path: '/pages/',
   //   component: List
-  // },
-  // {
-  //   path: '/retailerSales',
-  //   name: 'tRetailerSales',
-  //   component: RetailerSales
-  // },
-  // {
-  //   path: '/retailerSalechance',
-  //   name: 'tRetailerSalechance',
-  //   component: RetailerSalechance
   // },
   {
     path: '/profile',
@@ -254,7 +238,7 @@ export default [
     component: RetailerGoodeazy
   },
   {
-    path: '/AddNews',
+    path: '/addNews',
     name: 'tAddNews',
     component: AddNews
   },

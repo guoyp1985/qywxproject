@@ -14,11 +14,32 @@ import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import WeixinJSBridge from 'WeixinJSBridge'
+require('es6-promise').polyfill()
 
-const CancelToken = AjaxPlugin.$http.CancelToken
+// const CancelToken = AjaxPlugin.$http.CancelToken
 Vue.use(AjaxPlugin)
 Vue.use(Vuex)
-require('es6-promise').polyfill()
+
+// const headers = new Headers();
+// headers.set('Origin', 'https://vux.boka.cn')
+// headers.set('Accept', 'application/json')
+// headers.set('Authorization', 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8')
+// const reqInit = {
+//   method: "GET",
+//   headers: headers,
+//   mode: "cors",
+//   cache: "default"
+// };
+// fetch(new Request(`${ENV.BokaApi}/api/user/show`, { ...reqInit }))
+// .then(res => res.json())
+// .then(data => {
+//   alert(data)
+// })
+// Vue.http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
+// Vue.http.defaults.withCredentials = true;
+// Vue.http.defaults.headers.common['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8`
+
 let store = new Vuex.Store({
   modules: {
     i18n: vuexI18n.store
@@ -139,10 +160,10 @@ router.afterEach(function (to) {
 })
 
 // let excludeUrls = [
-//   `${ENV.BokaApi}/api/authLogin/*`,
-//   `${ENV.BokaApi}/api/qrcode/login*`,
-//   `${ENV.BokaApi}/api/login/*`,
-//   `${ENV.BokaApi}/api/scanlogin`
+//   `${ENV.BokaApi}/api/authLogin/*`
+  // `${ENV.BokaApi}/api/qrcode/login*`,
+  // `${ENV.BokaApi}/api/login/*`,
+  // `${ENV.BokaApi}/api/scanlogin`
   // `${ENV.BokaApi}/api/weixin/token`
 // ]
 
@@ -261,15 +282,15 @@ router.afterEach(function (to) {
 //   return Promise.reject(error)
 // })
 
-let pending = []
-let removePending = (config) => {
-  for (let p in pending) {
-    if (pending[p].u === config.url + '&' + config.method) {
-      pending[p].f()
-      pending.splice(p, 1)
-    }
-  }
-}
+// let pending = []
+// let removePending = (config) => {
+//   for (let p in pending) {
+//     if (pending[p].u === config.url + '&' + config.method) {
+//       pending[p].f()
+//       pending.splice(p, 1)
+//     }
+//   }
+// }
 
 // Token.remove()
 // 请求拦截器
@@ -282,19 +303,18 @@ Vue.http.interceptors.request.use(config => {
   config.headers['Authorization'] = `Bearer ${token}`
   return config
 }, error => {
-  alert(JSON.stringify(error))
   return Promise.reject(error)
 })
 
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
-  alert(JSON.stringify(response))
   // removePending(response.config)
   return response
 }, error => {
   const lUrl = urlParse(location.href, true)
-  if (lUrl.query.code) {
-    const code = lUrl.query.code
+  const code = lUrl.query.code
+  if (code) {
+    // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -306,7 +326,8 @@ Vue.http.interceptors.response.use(response => {
     .then(
       res => {
         User.set(res.data)
-        location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
@@ -315,8 +336,7 @@ Vue.http.interceptors.response.use(response => {
         router.push({name: 'tLogin'})
       } else {
         const originHref = encodeURIComponent(location.href)
-        alert(originHref)
-        location.href = `${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
       }
     })
   }
