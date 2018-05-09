@@ -125,7 +125,7 @@ export default {
           }, 3000)
         })
       } else {
-        self.$vux.toast.text('未填必选项', 'middle')
+        this.$vux.toast.text('未填必选项', 'middle')
       }
     },
     onCancel () {

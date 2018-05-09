@@ -7,12 +7,12 @@
   <div id="view-articles">
     <sticky scroll-box="view-articles">
       <tab v-model="selectedIndex" bar-active-color="#04be02">
-        <tab-item active-class="active-green" v-for="(tab, index) in tabs" :key="index" :selected="index===0" @on-item-click="onItemClick">{{ tab.title }}</tab-item>
+        <tab-item active-class="active-green" v-for="(tab, index) in tabs" :key="index" :selected="index===0" @on-item-click="onItemClick(tab.id)">{{ tab.title }}</tab-item>
       </tab>
     </sticky>
-    <swiper :list="headlines" v-model="swiperIndex" @on-index-change="onIndexChange"></swiper>
+    <swiper :list="headlines | convertHeadlines" v-model="swiperIndex" @on-index-change="onIndexChange" auto></swiper>
     <div v-for="(tab, index) in tabs" :key="index" v-show="selectedIndex===index">
-      <panel v-if="oArticles.length" :list="oArticles | convert" type="5" @on-img-error="onImgError" @on-click-item="clickArticle"></panel>
+      <panel v-if="oArticles.length" :list="oArticles | convertArticles" type="5" @on-img-error="onImgError" @on-click-item="clickArticle"></panel>
       <div v-else class="no-related-x color-gray">
         <span>{{$t('No Related Articles')}}</span>
       </div>
@@ -23,6 +23,7 @@
 import { Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import urlParse from 'url-parse'
 
 export default {
   components: {
@@ -71,7 +72,17 @@ export default {
   //   }
   // },
   filters: {
-    convert (articles) {
+    convertHeadlines (headlines) {
+      return headlines.map((item) => {
+        return {
+          id: item.id,
+          url: item.url,
+          title: item.title,
+          img: item.photo
+        }
+      })
+    },
+    convertArticles (articles) {
       return articles.map((article) => {
         return {
           id: article.id,
@@ -105,15 +116,19 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
       .then(res => {
         self.tabs = res.data.data
-        self.getAritcles(self.selectedIndex)
-        return self.$http.get(`${ENV.BokaApi}/api/common/getAd`)
+        self.getAritcles(self.tabs[self.selectedIndex].id)
+        const lUrl = urlParse(location.href, true)
+        return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, {useforurl: lUrl.hash.replace(/#/, '')})
       })
       .then(res => {
+        if (res.data.flag) {
+          self.headlines = res.data.data
+        }
       })
     },
-    getAritcles (index) {
+    getAritcles (id) {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/list/news?classid=0`) // ${this.tabs[index].id}
+      this.$http.get(`${ENV.BokaApi}/api/list/news?classid=${id}`) // ${this.tabs[index].id}
       .then(res => {
         self.oArticles = res.data
       })
