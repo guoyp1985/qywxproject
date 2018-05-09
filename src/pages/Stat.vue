@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 notop nobottom statpage productstat bg-white">
+  <div v-if="showcontainer" class="containerarea font14 notop nobottom statpage productstat bg-white">
     <div class="pagemiddle">
       <div class="bannerbg border-box padding10 flex_left font18 color-white">{{ data.title }}</div>
       <div v-if="statData && statData.length > 0" class="radiusarea mt12">
@@ -18,9 +18,9 @@
           <swiper v-model="tabmodel" class="x-swiper no-indicator">
             <swiper-item class="swiperitem" v-for="(tabitem, index) in tabsdata" :key="index">
               <div class="scroll_list padding10">
-                <div v-if="!getListdata(index) || getListdata(index).length == 0" class="emptyitem flex_center">暂无数据</div>
-                <div v-else v-for="(item,index1) in getListdata(index)" :key="item.id" class="scroll_item pt10 pb10">
-                  <div v-if="item.type == 'shareview '" class="t-table">
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                  <div v-if="tabitem.type == 'shareview'" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
                     </div>
@@ -28,51 +28,73 @@
                       <div class="clamp1">{{ item.linkman }}</div>
                       <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
                       <div class="clamp1">阅读次数:{{ item.number }}次</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="t-cell v_middle align_right" style="width:60px;">
                       <span class="qbtn1 bg-green color-white">联系</span>
                     </div>
                   </div>
-                  <div v-else-if="item.type == 'buylist'" class="t-table">
+                  <div v-else-if="tabitem.type == 'buylist'" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
                     </div>
                     <div class="t-cell">
                       <div class="clamp1">{{ item.linkman }}</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="t-cell v_middle align_right" style="width:60px;">
                       <span class="qbtn1 bg-green color-white">联系</span>
                     </div>
                   </div>
-                  <div v-else-if="item.type == 'sharelist'" class="t-table">
+                  <div v-else-if="tabitem.type == 'sharelist'" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
                     </div>
                     <div class="t-cell">
                       <div class="clamp1">{{ item.username }}</div>
                       <div class="clamp1">传播级别:{{ item.level }}人</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="t-cell v_middle align_right" style="width:60px;">
                       <span class="qbtn1 bg-green color-white">联系</span>
                     </div>
                   </div>
-                  <div v-else-if="item.type == 'asklist'" class="t-table">
+                  <div v-else-if="tabitem.type == 'asklist'" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
                     </div>
                     <div class="t-cell">
                       <div class="clamp1">{{ item.linkman }}</div>
                       <div class="clamp1 font13">{{ item.content }}</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="t-cell v_middle align_right" style="width:60px;">
                       <span class="qbtn1 bg-green color-white">联系</span>
                     </div>
                   </div>
-                  <div v-else-if="item.type == 'viewlist'" class="t-table">
+                  <template v-else-if="tabitem.type == 'viewlist'">
+                    <div class="t-table">
+                      <div class="t-cell v_middle w50">
+                        <img class="avatarimg1" :src="item.avatar" />
+                      </div>
+                      <div class="t-cell">
+                        <div class="clamp1">{{ item.username }}</div>
+                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                      </div>
+                      <div class="t-cell v_middle align_right" style="width:60px;">
+                        <span class="qbtn1 bg-green color-white">联系</span>
+                      </div>
+                    </div>
+                    <div class="t-table mt5">
+                      <div class="t-cell align_left">
+                        <div class="clamp1">停留: {{ item.staytime }}秒</div>
+                      </div>
+                      <div class="t-cell align_right">
+                        <div class="clamp1">阅读: {{ item.number }}次</div>
+                      </div>
+                    </div>
+                  </template>
+                  <div v-else-if="tabitem.type == 'second'" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
                     </div>
@@ -80,13 +102,13 @@
                       <div class="clamp1">{{ item.linkman }}</div>
                       <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
                       <div class="clamp1">阅读次数:{{ item.number }}次</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="t-cell v_middle align_right" style="width:60px;">
                       <span class="qbtn1 bg-green color-white">联系</span>
                     </div>
                   </div>
-                  <div v-else-if="item.type == 'second'" class="t-table">
+                  <div v-else-if="tabitem.type == 'crowdlist'" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
                     </div>
@@ -94,21 +116,7 @@
                       <div class="clamp1">{{ item.linkman }}</div>
                       <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
                       <div class="clamp1">阅读次数:{{ item.number }}次</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                    </div>
-                    <div class="t-cell v_middle align_right" style="width:60px;">
-                      <span class="qbtn1 bg-green color-white">联系</span>
-                    </div>
-                  </div>
-                  <div v-else-if="item.type == 'crowdlist'" class="t-table">
-                    <div class="t-cell v_middle w50">
-                      <img class="avatarimg1" :src="item.avatar" />
-                    </div>
-                    <div class="t-cell">
-                      <div class="clamp1">{{ item.linkman }}</div>
-                      <div class="clamp1">停留时间:{{ item.staytime }}秒</div>
-                      <div class="clamp1">阅读次数:{{ item.number }}次</div>
-                      <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                     <div class="t-cell v_middle align_right" style="width:60px;">
                       <span class="qbtn1 bg-green color-white">联系</span>
@@ -164,13 +172,14 @@ export default {
   },
   data () {
     return {
+      showcontainer: false,
       query: Object,
       module: '',
       data: Object,
+      arrData: [],
       tabmodel: 0,
       statData: [],
       tabsdata: [],
-      tabstype: [ 'buylist', 'viewlist', 'asklist', 'sharelist' ],
       tabtop: 'auto',
       tabdata1: [],
       tabdata2: [],
@@ -206,14 +215,13 @@ export default {
   methods: {
     getListdata: function (index) {
       const self = this
-      let ret = self.datalist[index]
-      return ret
+      return self.datalist[index]
     },
     scroll: function () {
       const self = this
       let index = self.clickTabIndex
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.scrollData[index].scrollArea,
         callback: function () {
           if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * self.limit) {
             self.scrollData[index].pagestart++
@@ -239,8 +247,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
-        console.log(self.datalist)
-        console.log(self.datalist[index])
+        self.arrData = self.datalist[index]
         if (self.isFirst) {
           self.isFirst = false
           self.tabtop = document.querySelector('.productstat .tabarea').offsetTop + 44
@@ -264,6 +271,7 @@ export default {
       const self = this
       self.clickTabitem = item
       self.clickTabIndex = index
+      self.arrData = self.datalist[index]
       if (self.scrollData[index].pagestart === 0 && !self.scrollData[index].isBindScroll) {
         self.$vux.loading.show()
         self.getdata()
@@ -283,7 +291,7 @@ export default {
           { params: { id: self.query.id } }
       )
     }).then(function (res) {
-      self.$vux.loading.hide()
+      self.showcontainer = true
       let data = res.data
       self.statData = data.data ? data.data : data
       self.tabsdata = data.detail
