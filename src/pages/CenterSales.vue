@@ -241,7 +241,6 @@ export default {
     self.loginUser = User.get()
     let iscontinue = true
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-      self.$vux.loading.hide()
       self.showcontainer = false
     } else if (self.loginUser.usergroup) {
       let usergroup = self.loginUser.usergroup

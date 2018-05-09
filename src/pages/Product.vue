@@ -11,7 +11,7 @@
             <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
           </router-link>
           <div class="t-cell v_middle align_center" style="width:65px;">
-            <router-link class="db-in" style="position:relative;" :to="{path:'retailerMessagelist'}">
+            <router-link class="db-in" style="position:relative;" :to="{path:'/retailerMessagelist'}">
               <i class="al al-pinglun color-black" style="font-size:24px;"></i>
               <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
             </router-link>
@@ -528,11 +528,21 @@ export default {
   },
   created () {
     const self = this
-    self.$vux.loading.show()
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.productid = self.query.id
     self.loginUser = User.get()
+    if (self.loginUser) {
+      self.isshowtop = true
+      setTimeout(function () {
+        self.isshowtop = false
+      }, 5000)
+    }
+    if (self.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
+    }
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -546,18 +556,6 @@ export default {
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
-      self.$vux.loading.hide()
-      if (self.loginUser) {
-        self.isshowtop = true
-        setTimeout(function () {
-          self.isshowtop = false
-        }, 5000)
-      }
-      if (self.query.newadd) {
-        setTimeout(function () {
-          self.showsharetip = false
-        }, 10000)
-      }
       let data = res.data
       self.productdata = data.data ? data.data : data
       document.title = self.productdata.title
