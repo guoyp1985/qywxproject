@@ -468,7 +468,7 @@ Util.install = function (Vue, options) {
         if (state === '今') {
           ret += 'today'
         } else if (state === '昨') {
-          ret += 'yestoday'
+          ret += 'yesterday'
         } else if (state === '前') {
           ret += ''
         } else {
