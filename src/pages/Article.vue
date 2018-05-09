@@ -115,7 +115,7 @@ export default {
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: {},
+      reward: { headimgurl: '/src/assets/images/user.jpg', avatar: '/src/assets/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       comments: []
     }
@@ -189,10 +189,13 @@ export default {
       if (self.$route.query.from === 'poster') {
         infoparams.from = 'poster'
       }
+      self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
+        self.$vux.loading.hide()
         if (res.data.flag) {
           self.article = res.data.data
+          document.title = self.article.title
           self.reward = User.get()
           self.$util.handleWxShare({
             data: self.article,
