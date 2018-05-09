@@ -41,7 +41,7 @@ export default {
     return {
       addressData: ChinaAddressV4Data,
       initItem: {},
-      switcher: false
+      switcher: true
     }
   },
   computed: {
@@ -54,7 +54,11 @@ export default {
     },
     getSwitcher: {
       get () {
-        return this.initItem.isdefault !== 0
+        if (this.initItem.isdefault !== undefined) {
+          return this.initItem.isdefault !== 0
+        } else {
+          return this.switcher
+        }
       },
       set (value) {
         this.switcher = value
@@ -64,9 +68,7 @@ export default {
   methods: {
     save () {
       this.initItem.area = value2name(this.initItem.area || [], ChinaAddressV4Data).split(' ')
-      console.log(this.switcher)
       this.initItem.isdefault = this.switcher ? 1 : 0
-      console.log(this.initItem.isdefault)
       const address = {
         id: this.item.id,
         linkman: this.item.linkman,
