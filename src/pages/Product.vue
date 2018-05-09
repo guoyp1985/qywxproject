@@ -575,8 +575,7 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
-      self.$util.handleWxShare({
-        data: self.productdata,
+      let shareData = {
         module: 'product',
         moduleid: self.productdata.id,
         lastshareuid: self.query.share_uid,
@@ -584,7 +583,15 @@ export default {
         successCallback: function () {
           self.showShareSuccess = true
         }
-      })
+      }
+      if (self.activityInfo.id) {
+        shareData.title = self.productdata.title
+        shareData.desc = `${self.loginUser.linkman}向你推荐团购商品，参团购买可立享优惠，了解详情`
+        shareData.photo = self.photoarr[0]
+      } else {
+        shareData.data = self.productdata
+      }
+      self.$util.handleWxShare(shareData)
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
       let buyparams = {}

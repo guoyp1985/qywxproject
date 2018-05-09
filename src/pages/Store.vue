@@ -277,8 +277,15 @@ export default {
     self.loginUser = User.get()
     self.query = self.$route.query
     self.$vux.loading.show()
+    let infoparams = { uid: self.query.wid }
+    if (self.query.share_uid) {
+      infoparams.share_uid = self.query.share_uid
+    }
+    if (self.query.lastshareuid) {
+      infoparams.lastshareuid = self.query.lastshareuid
+    }
     self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-      params: { uid: self.query.wid }
+      params: infoparams
     }).then(function (res) {
       self.$vux.loading.hide()
       let data = res.data
