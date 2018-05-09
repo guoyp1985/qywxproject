@@ -22,7 +22,7 @@
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
-            <div class="scroll_list">
+            <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
@@ -60,7 +60,7 @@
             </div>
           </div>
           <div v-if="(index == 1)">
-            <div class="scroll_list">
+            <div v-if="distabdata2" class="scroll_list">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
@@ -92,7 +92,7 @@
             </div>
           </div>
           <div v-if="(index == 2)">
-            <div class="scroll_list">
+            <div v-if="distabdata3" class="scroll_list">
               <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
@@ -127,7 +127,7 @@
             </div>
           </div>
           <div v-if="(index == 3)">
-            <div class="scroll_list">
+            <div v-if="distabdata4" class="scroll_list">
               <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
@@ -252,6 +252,10 @@ export default {
     return {
       tabtxts: [ '全部', '待付款', '待发货', '已发货' ],
       tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
+      distabdata3: false,
+      distabdata4: false,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
@@ -275,12 +279,6 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' }
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.getdata1()
   },
   methods: {
     scroll1: function () {
@@ -343,6 +341,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.retailerordes .swiperitem')
           self.scrollArea1 = items[0]
@@ -363,6 +362,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -378,6 +378,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
+        self.distabdata3 = true
         if (!self.isBindScroll3) {
           self.isBindScroll3 = true
           self.scrollArea3.removeEventListener('scroll', self.scroll3)
@@ -393,6 +394,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata4 = self.tabdata4.concat(retdata)
+        self.distabdata4 = true
         if (!self.isBindScroll4) {
           self.isBindScroll4 = true
           self.scrollArea4.removeEventListener('scroll', self.scroll4)
@@ -513,6 +515,12 @@ export default {
         })
       }
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.getdata1()
   }
 }
 </script>

@@ -101,18 +101,6 @@ export default {
           self.crowduser = self.data.crowduser
           sharelink = `${sharelink}&crowduserid=${self.crowduser.crowdowner}`
         }
-        self.$util.handleWxShare({
-          module: 'activity',
-          moduleid: self.data.id,
-          lastshareuid: self.query.share_uid,
-          title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-          desc: '好友帮帮忙，优惠享更多！',
-          photo: self.loginUser.avatar,
-          link: sharelink,
-          successCallback: function () {
-            self.showShareSuccess = true
-          }
-        })
         self.product = self.data.product
         let inpage = ''
         if (self.crowduserid && self.crowduser) {
@@ -132,9 +120,25 @@ export default {
             inpage = 'main'
           }
         }
+        let sharetitle = self.data.title
+        let sharedesc = self.data.title
         if (inpage === 'view' || inpage === 'detail') {
           self.getCudata()
+          sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+          sharedesc = '好友帮帮忙，优惠享更多！'
         }
+        self.$util.handleWxShare({
+          module: 'activity',
+          moduleid: self.data.id,
+          lastshareuid: self.query.share_uid,
+          title: sharetitle,
+          desc: sharedesc,
+          photo: self.loginUser.avatar,
+          link: sharelink,
+          successCallback: function () {
+            self.showShareSuccess = true
+          }
+        })
       })
     },
     joinSuccess (crowduserid) {

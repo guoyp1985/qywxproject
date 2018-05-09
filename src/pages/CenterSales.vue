@@ -31,7 +31,7 @@
       <marquee :item-height=40 :interval=5000 :duration=1000>
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
-            <router-link :to="{path: `/${item.module}Stat`, query: {id: item.id}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
+            <router-link :to="{path: '/stat', query: {id: item.id, module: item.module}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
               <div class="t-cell v_middle h_100">
                 <div class="clamp1">
                   <span class="v_middle color-blue mr3">{{item.username}}</span>
