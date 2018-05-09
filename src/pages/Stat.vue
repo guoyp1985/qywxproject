@@ -18,8 +18,8 @@
           <swiper v-model="tabmodel" class="x-swiper no-indicator">
             <swiper-item class="swiperitem" v-for="(tabitem, index) in tabsdata" :key="index">
               <div class="scroll_list padding10">
-                <div v-if="!datalist[index] || datalist[index].length == 0" class="emptyitem flex_center">暂无数据</div>
-                <div v-else v-for="(item,index1) in datalist[index]" :key="item.id" class="scroll_item pt10 pb10">
+                <div v-if="!getListdata(index) || getListdata(index).length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in getListdata(index)" :key="item.id" class="scroll_item pt10 pb10">
                   <div v-if="item.type == 'shareview '" class="t-table">
                     <div class="t-cell v_middle w50">
                       <img class="avatarimg1" :src="item.avatar" />
@@ -148,6 +148,7 @@ import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import Listplate from '@/components/Listplate'
 import Time from '#/time'
 import ENV from 'env'
+
 export default {
   components: {
     Tab,
@@ -197,11 +198,17 @@ export default {
   },
   watch: {
     datalist: function () {
-      console.log(this.datalist)
       return this.datalist
     }
   },
+  computed: {
+  },
   methods: {
+    getListdata: function (index) {
+      const self = this
+      let ret = self.datalist[index]
+      return ret
+    },
     scroll: function () {
       const self = this
       let index = self.clickTabIndex
@@ -232,6 +239,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
+        console.log(self.datalist)
         console.log(self.datalist[index])
         if (self.isFirst) {
           self.isFirst = false
