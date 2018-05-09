@@ -9,6 +9,14 @@
     <template v-if="showBargianbuyDetail">
       <BargainbuyDetail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></BargainbuyDetail>
     </template>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="data.uploader == loginUser.uid || query.wid == loginUser.uid || data.identity != 'user'"
+      :data="data"
+      :loginUser="loginUser"
+      module="activity"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
   </div>
 </template>
 
@@ -19,6 +27,7 @@
 import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -27,10 +36,12 @@ export default {
   components: {
     Bargainbuy,
     BargainbuyView,
-    BargainbuyDetail
+    BargainbuyDetail,
+    ShareSuccess
   },
   data () {
     return {
+      showShareSuccess: false,
       showBargainbuy: false,
       showBargainbuyView: false,
       showBargianbuyDetail: false,
@@ -72,6 +83,9 @@ export default {
       self.showBargainbuyView = false
       self.showBargianbuyDetail = true
     },
+    closeShareSuccess () {
+      this.showShareSuccess = false
+    },
     getInfo () {
       const self = this
       let params = { params: { id: self.query.id } }
@@ -81,17 +95,22 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/activity/info`, params).then(function (res) {
         let data = res.data
         self.data = data.data ? data.data : data
+        document.title = self.data.title
+        let sharelink = `${ENV.Host}/#/bargainbuy?id=${self.data.id}&share_uid=${self.loginUser.uid}`
         if (self.data.crowduser && self.data.crowduser.length !== 0) {
           self.crowduser = self.data.crowduser
+          sharelink = `${sharelink}&crowduserid=${self.crowduser.crowdowner}`
         }
-        document.title = self.data.title
-        let host = self.$util.getHost()
-        self.$util.wxShare({
-          data: {
-            title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
-            desc: '好友帮帮忙，优惠享更多！',
-            link: `${host}/bargainbuy?id=${self.data.id}&crowduserid=${self.crowduser.crowdowner}&share_uid=${self.loginUser.uid}`,
-            imgUrl: self.data.photo
+        self.$util.handleWxShare({
+          module: 'activity',
+          moduleid: self.data.id,
+          lastshareuid: self.query.share_uid,
+          title: `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`,
+          desc: '好友帮帮忙，优惠享更多！',
+          photo: self.loginUser.avatar,
+          link: sharelink,
+          successCallback: function () {
+            self.showShareSuccess = true
           }
         })
         self.product = self.data.product
