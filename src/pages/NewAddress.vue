@@ -63,30 +63,34 @@ export default {
   },
   methods: {
     save () {
-      this.initItem.area = value2name(this.initItem.area, ChinaAddressV4Data).split(' ')
+      this.initItem.area = value2name(this.initItem.area || [], ChinaAddressV4Data).split(' ')
       console.log(this.switcher)
       this.initItem.isdefault = this.switcher ? 1 : 0
       console.log(this.initItem.isdefault)
       const address = {
-        id: this.initItem.id,
-        linkman: this.initItem.linkman,
-        telephone: this.initItem.telephone,
-        address: this.initItem.address,
-        isdefault: this.initItem.isdefault,
-        province: this.initItem.area[0],
-        city: this.initItem.area[1],
-        counties: this.initItem.area[2],
-        do: this.initItem.id ? 'update' : 'add'
+        id: this.item.id,
+        linkman: this.item.linkman,
+        telephone: this.item.telephone,
+        address: this.item.address,
+        isdefault: this.item.isdefault,
+        province: this.item.area[0],
+        city: this.item.area[1],
+        counties: this.item.area[2],
+        do: this.item.id ? 'update' : 'add'
       }
-      this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
-      .then(res => {
-        this.$router.go(-1)
-        // this.$router.push({ name: 'tAddress',
-        //   params: {
-        //     data: address
-        //   }
-        // })
-      })
+      if (this.$util.validateQueue({
+        linkman: this.item.linkman,
+        telephone: this.item.telephone,
+        address: this.item.address,
+        area: this.item.area.join('')
+      })) {
+        this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
+        .then(res => {
+          this.$router.go(-1)
+        })
+      } else {
+        this.$vux.toast.text('未填必选项', 'middle')
+      }
     }
   }
 }
