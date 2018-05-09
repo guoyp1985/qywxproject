@@ -15,9 +15,14 @@
     			     <img class="w_100" src="../assets/images/icon-guanxi.gif" >
           </div>
     		</div>
-    		<router-link :to="{path: '/stat', query: {id: data.id, module: module}}" class="db color-orange2 align_center pt10 pl15 pr15 border-box" >系统已向你推送了【分享统计】，也可以 点击此处查看统计</router-link>
+    		<router-link v-if="module != 'store' && module != 'shop'" :to="{path: '/stat', query: {id: data.id, module: module}}" class="db color-orange2 align_center pt10 pl15 pr15 border-box" >系统已向你推送了【分享统计】，也可以 点击此处查看统计</router-link>
       </template>
-  		<div v-if="data.identity != 'user' && data.retailerinfo && data.retailerinfo.uid != loginUser.uid" class="color-orange2 align_center pt10 pl15 pr15 border-box">凡是查看你分享文章或商品的用户，购买成功后都会给你返点。</div>
+      <template v-if="module == 'store' || module == 'shop'">
+        <div v-if="data.identity != 'user' && data.uploader != loginUser.uid" class="color-orange2 align_center pt10 pl15 pr15 border-box">凡是查看你分享文章或商品的用户，购买成功后都会给你返点。</div>
+  		</template>
+      <template v-else>
+        <div v-if="data.identity != 'user' && data.retailerinfo && data.retailerinfo.uid != loginUser.uid" class="color-orange2 align_center pt10 pl15 pr15 border-box">凡是查看你分享文章或商品的用户，购买成功后都会给你返点。</div>
+  		</template>
   		<div v-if="loginUser.subscribe != 1" class="color-orange2 align_center border-box pl15 pr15 pt10">
   			亲，您还没有关注啊，等关注了再分享金币就到您碗里了，点<a class="font16" style="color:#0598e0;">这里</a>关注吧。
   		</div>

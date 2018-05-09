@@ -107,6 +107,14 @@
         </div>
       </popup>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
+      :data="retailerInfo"
+      :loginUser="loginUser"
+      module="store"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
   </div>
 </template>
 
@@ -133,8 +141,10 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
 import Newsitemplate from '@/components/Newsitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -146,7 +156,8 @@ export default {
     Bargainbuyitemplate,
     Productitemplate,
     Newsitemplate,
-    Popup
+    Popup,
+    ShareSuccess
   },
   filters: {
     dateformat: function (value) {
@@ -156,6 +167,9 @@ export default {
   data () {
     return {
       query: Object,
+      loginUser: Object,
+      showShareSuccess: false,
+      wid: null,
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       showqrcode: false,
       showdot: true,
@@ -251,11 +265,15 @@ export default {
     },
     closepopup () {
       this.showqrcode = false
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.loginUser = User.get()
     self.query = self.$route.query
     self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
       params: { uid: self.query.wid }
@@ -263,6 +281,19 @@ export default {
       let data = res.data
       self.retailerInfo = data.data ? data.data : data
       document.title = self.retailerInfo.title
+      self.wid = self.retailerInfo.uid
+      self.$util.handleWxShare({
+        module: 'store',
+        moduleid: self.wid,
+        lastshareuid: self.query.share_uid,
+        title: self.retailerInfo.title,
+        desc: self.retailerInfo.title,
+        photo: self.retailerInfo.avatar,
+        link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
+        successCallback: function () {
+          self.showShareSuccess = true
+        }
+      })
       return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
     }).then(function (res) {
       let data = res.data
