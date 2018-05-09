@@ -16,7 +16,6 @@
   "dependencies": {
     "es6-promise": "^4.2.4",
     "fastclick": "^1.0.6",
-    "js-md5": "^0.7.3",
     "js-sha1": "^0.6.0",
     "url-parse": "^1.4.0",
     "vue": "^2.5.16",
