@@ -2,6 +2,7 @@
   <div class="containerarea bg-page font14 s-havebottom store">
     <div class="s-container" style="top:0px;">
       <swiper
+        class="pic-swiper notitle"
         v-if="addata && addata.length > 0"
         :list="addata"
         dots-position="center"
@@ -275,9 +276,11 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.loginUser = User.get()
     self.query = self.$route.query
+    self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
       params: { uid: self.query.wid }
     }).then(function (res) {
+      self.$vux.loading.hide()
       let data = res.data
       self.retailerInfo = data.data ? data.data : data
       document.title = self.retailerInfo.title

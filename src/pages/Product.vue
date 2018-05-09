@@ -24,15 +24,15 @@
     </template>
     <div class="pagemiddle">
       <swiper
+        class="pic-swiper notitle"
+        v-if="flashdata && flashdata.length > 0"
+        :list="flashdata"
         dots-position="center"
         :interval=6000
         :show-dots="isshowdot"
-        :aspect-ratio="1/1"
+        :aspect-ratio="500/900"
         auto
         loop>
-        <swiper-item v-for="(item, index) in photoarr" :key="index">
-          <img :src="item" class="imgcover" style="width:100%;height:100%;" />
-        </swiper-item>
       </swiper>
       <div class="grouptitle flex_left" v-if="activityInfo && activityInfo.type == 'groupbuy'">
 				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
@@ -356,6 +356,7 @@ export default {
       isfavorite: false,
       productdata: {},
       retailerinfo: {},
+      flashdata: [],
       photoarr: [],
       contentphotoarr: [],
       previewerPhotoarr: [],
@@ -527,21 +528,11 @@ export default {
   },
   created () {
     const self = this
+    self.$vux.loading.show()
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.productid = self.query.id
     self.loginUser = User.get()
-    if (self.loginUser) {
-      self.isshowtop = true
-      setTimeout(function () {
-        self.isshowtop = false
-      }, 5000)
-    }
-    if (self.query.newadd) {
-      setTimeout(function () {
-        self.showsharetip = false
-      }, 10000)
-    }
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -555,6 +546,18 @@ export default {
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
+      self.$vux.loading.hide()
+      if (self.loginUser) {
+        self.isshowtop = true
+        setTimeout(function () {
+          self.isshowtop = false
+        }, 5000)
+      }
+      if (self.query.newadd) {
+        setTimeout(function () {
+          self.showsharetip = false
+        }, 10000)
+      }
       let data = res.data
       self.productdata = data.data ? data.data : data
       document.title = self.productdata.title
@@ -562,6 +565,11 @@ export default {
       self.activityInfo = self.productdata.activityinfo
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
+      }
+      for (let i = 0; i < self.photoarr.length; i++) {
+        self.flashdata[i] = {
+          img: self.photoarr[i]
+        }
       }
       if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
