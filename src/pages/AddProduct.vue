@@ -277,20 +277,21 @@ export default {
     },
     savedata (postdata) {
       const self = this
+      let validateData = []
       for (let key in self.requireddata) {
-        self.requireddata[key] = postdata[key]
+        let v = {}
+        v[key] = self.submitdata[key]
+        validateData.push(v)
       }
-      self.allowsubmit = self.$util.validateQueue(self.requireddata)
-      if (!self.allowsubmit) {
-        self.$vux.alert.show({
-          title: '',
-          content: '必填项不能为空',
-          onShow () {
-          },
-          onHide () {
-            self.allowsubmit = true
+      let iscontinue = self.$util.validateQueue(validateData,
+        model => {
+          switch (model.key) {
+            default:
+              self.$vux.toast.text('必填项不能为空', 'middle')
           }
-        })
+        }
+      )
+      if (!iscontinue) {
         return false
       }
       if (isNaN(postdata.price) || postdata.price < 0) {

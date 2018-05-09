@@ -49,10 +49,13 @@
         <div class="form-item padding10 font16">
           <div class="t-table">
             <div class="t-cell align_right v_middle">
+              <check-icon class="blue" style="vertical-align: 3px;" :value.sync="isagree" @click.native.stop="clickagree">在线支付</check-icon>
+              <!--
               <label class="qcheckbox1 font16 color-gray" style="width:33px;">
                 <input type="checkbox" @click="clickagree">同意
                 <i class="al"></i>
               </label>
+            -->
             </div>
             <div class="t-cell align_left v_middle color-blue" @click="showpopup">卖家入驻协议</div>
           </div>
@@ -204,7 +207,7 @@ Required item not empty:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDomDirective as TransferDom, Alert, Popup, Loading, Checker, CheckerItem } from 'vux'
+import { Group, XInput, TransferDomDirective as TransferDom, Alert, Popup, Loading, Checker, CheckerItem, CheckIcon } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -219,7 +222,8 @@ export default {
     Popup,
     Loading,
     Checker,
-    CheckerItem
+    CheckerItem,
+    CheckIcon
   },
   data () {
     return {
@@ -253,19 +257,20 @@ export default {
     getcode () {
       event.preventDefault()
       const self = this
-      if (self.$util.isNull(self.submitdata.mobile)) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入手机号'
-        })
-        return false
-      }
-      let mobile = self.$util.trim(self.submitdata.mobile)
-      if (!self.$util.checkMobile(mobile)) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入正确的手机号'
-        })
+      let iscontinue = self.$util.validateQueue([
+        { telephone: self.submitdata.mobile, r: 'Phone' }
+      ],
+        model => {
+          switch (model.key) {
+            case 'telephone':
+              self.$vux.toast.text('请输入正确的手机号', 'middle')
+              break
+            default:
+              self.$vux.toast.text('必填项不能为空', 'middle')
+          }
+        }
+      )
+      if (!iscontinue) {
         return false
       }
       self.$vux.loading.show()
@@ -294,7 +299,6 @@ export default {
     },
     clickagree () {
       const self = this
-      self.isagree = !self.isagree
       if (self.isagree) {
         self.bottomcss = 'active'
         self.allowsubmit = true
@@ -312,28 +316,28 @@ export default {
     submitevent () {
       const self = this
       if (self.allowsubmit) {
+        let validateData = []
         for (let key in self.requireddata) {
-          self.requireddata[key] = self.submitdata[key]
+          let v = {}
+          if (key === 'mobile') {
+            v = { telephone: self.submitdata.mobile, r: 'Phone' }
+          } else {
+            v[key] = self.submitdata[key]
+          }
+          validateData.push(v)
         }
-        self.allowsubmit = self.$util.validateQueue(self.requireddata)
-        if (!self.allowsubmit) {
-          self.$vux.alert.show({
-            title: '',
-            content: '必填项不能为空',
-            onShow () {
-            },
-            onHide () {
-              self.allowsubmit = true
+        let iscontinue = self.$util.validateQueue(validateData,
+          model => {
+            switch (model.key) {
+              case 'telephone':
+                self.$vux.toast.text('请输入正确的手机号', 'middle')
+                break
+              default:
+                self.$vux.toast.text('必填项不能为空', 'middle')
             }
-          })
-          return false
-        }
-        let mobile = self.$util.trim(self.submitdata.mobile)
-        if (!self.$util.checkMobile(mobile)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的手机号'
-          })
+          }
+        )
+        if (!iscontinue) {
           return false
         }
         self.$vux.loading.show()
@@ -373,6 +377,7 @@ export default {
         }
       }
     }
+    iscontinue = true
     if (!iscontinue) {
       self.$vux.loading.hide()
       self.$router.push('/centerSales')

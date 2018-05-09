@@ -44,20 +44,6 @@
           <div>
             <check-icon :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
             <check-icon :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
-            <!--
-            <label style="display:inline-block;" class="btnbuyonline" template=".template4">
-              <div class="qradio">
-                <input v-model="submitdata.buyonline" type="radio" name="buyonline" value="1" @click="online" >
-                <i></i><span style="vertical-align:-3px;">在线支付</span>
-              </div>
-            </label>
-            <label style="display:inline-block;margin-left:5px;" class="btnbuyonline" template=".template5">
-              <div class="qradio">
-                <input v-model="submitdata.buyonline" type="radio" name="buyonline" value="0" @click="offline" >
-                <i></i><span style="vertical-align:-3px;">线下支付</span>
-              </div>
-            </label>
-          -->
           </div>
         </Forminputplate>
         <div v-show="showmore">
@@ -184,7 +170,7 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Group, XTextarea, XInput, TransferDom, Loading, Popup, CheckIcon } from 'vux'
+import { Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
 
@@ -198,7 +184,6 @@ export default {
     XTextarea,
     XInput,
     TransferDom,
-    Loading,
     Popup,
     CheckIcon
   },
@@ -235,13 +220,13 @@ export default {
     filechange (e) {
       const self = this
       let files = e.target.files
-      if (files.length > 0 && !self.isShowLoading) {
+      if (files.length > 0) {
         let fileform = document.querySelector('.fileform')
         let filedata = new FormData(fileform)
-        self.isShowLoading = true
+        self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           let data = res.data
-          self.isShowLoading = false
+          self.$vux.loading.hide()
           if (data.flag === 1) {
             self.photoarr.push(data.data)
             self.submitdata.qrcode = self.photoarr.join(',')
@@ -280,26 +265,27 @@ export default {
     },
     submitevent () {
       const self = this
+      let validateData = []
       for (let key in self.requireddata) {
-        self.requireddata[key] = self.submitdata[key]
+        let v = {}
+        v[key] = self.submitdata[key]
+        validateData.push(v)
       }
-      self.allowsubmit = self.$util.validateQueue(self.requireddata)
-      if (!self.allowsubmit) {
-        self.$vux.alert.show({
-          title: '',
-          content: '必填项不能为空',
-          onShow () {
-          },
-          onHide () {
-            self.allowsubmit = true
+      let iscontinue = self.$util.validateQueue(validateData,
+        model => {
+          switch (model.key) {
+            default:
+              self.$vux.toast.text('必填项不能为空', 'middle')
           }
-        })
+        }
+      )
+      if (!iscontinue) {
         return false
       }
-      self.isShowLoading = true
+      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/changeInfo`, self.submitdata).then(function (res) {
         let data = res.data
-        self.isShowLoading = false
+        self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
