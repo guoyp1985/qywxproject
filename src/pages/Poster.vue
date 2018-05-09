@@ -222,6 +222,8 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.submitdata.type = self.query.module
+    self.submitdata.id = self.query.id
     self.$vux.loading.show()
     let params = { params: { id: self.query.id, module: self.query.module } }
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {

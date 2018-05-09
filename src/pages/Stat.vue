@@ -260,9 +260,11 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.module = self.query.module
+    self.$vux.loading.show()
     self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
         { params: { id: self.query.id } }
     ).then(function (res) {
+      self.$vux.loading.hide()
       let data = res.data
       self.statData = data.data ? data.data : data
       self.tabsdata = data.detail
