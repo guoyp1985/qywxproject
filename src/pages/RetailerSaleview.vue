@@ -65,7 +65,7 @@
                 <div class="mt5">该返点客还没有分享过</div>
                 <div>积极与返点客沟通可调动TA的积极性哦！</div>
               </div>
-              <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id">
+              <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
                 <div class="t-table">
                   <div class="t-cell v_middle w80">
                     <img :src="item.photo" class="imgcover v_middle" style="width:70px;height:70px;" />
@@ -324,6 +324,10 @@ export default {
     },
     closepopup () {
       this.isshowpopup = false
+    },
+    clickItem (item) {
+      const self = this
+      self.$router.push(`/${item.module}?id=${item.moduleid}&wid=${item.kefuid}`)
     }
   },
   created () {

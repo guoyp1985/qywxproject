@@ -155,7 +155,6 @@ export default {
     if (self.data) {
       self.product = self.data.product
     }
-    console.log(self.crowduser)
     if (self.crowduser) {
       self.lefthour = self.crowduser.timeleft.hour
       self.leftminute = self.crowduser.timeleft.minute
