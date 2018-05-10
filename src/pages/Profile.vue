@@ -9,10 +9,10 @@
       <cell :inline-desc="$t('Sync From Wx')" @click.native="syncWxProfile">
         <img class="avatar" slot="icon" :src="getProfile.avatar"/>
       </cell>
-      <x-input :title="$t('Name')" :placeholder="`${$t('Necessary')}${$t('Name')}`" v-model="getProfile.linkman"></x-input>
+      <x-input :title="$t('Name')" required :placeholder="`${$t('Necessary')}${$t('Name')}`" v-model="getProfile.linkman"></x-input>
       <popup-radio :title="$t('Gendar')" :options="options" v-model="getProfile.sex" :placeholder="$t('Gendar')"></popup-radio>
       <x-input :title="$t('Company Name')" :placeholder="$t('Company Name')" v-model="getProfile.company"></x-input>
-      <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" mask="999 9999 9999" :max="13" is-type="china-mobile" v-model="getProfile.mobile"></x-input>
+      <x-input :title="$t('Cell Phone Number')" :placeholder="$t('Cell Phone Number')" :max="11" is-type="china-mobile" v-model="getProfile.mobile"></x-input>
     </group>
     <box gap="15px 15px">
       <x-button type="primary" @click.native="onConfirm">{{ $t('Confirm') }}</x-button>
@@ -80,7 +80,8 @@ export default {
       set: function (profile) {
         this.profile = {
           ...this.profile,
-          ...profile
+          ...profile,
+          mobile: this.$util.trim(profile.mobile)
         }
       }
     }
@@ -111,7 +112,20 @@ export default {
     },
     onConfirm () {
       const self = this
-      if (this.$util.validateQueue({linkman: this.getProfile.linkman})) {
+      this.getProfile.mobile = this.$util.trim(this.getProfile.mobile)
+      if (this.$util.validateQueue([
+        {linkman: this.getProfile.linkman},
+        {mobile: this.getProfile.mobile, r: 'Phone', required: false}
+      ],
+      model => {
+        switch (model.key) {
+          case 'mobile':
+            self.$vux.toast.text('手机号错误', 'middle')
+            break
+          default:
+            self.$vux.toast.text('未填必选项', 'middle')
+        }
+      })) {
         this.$http.post(`${ENV.BokaApi}/api/user/update/0`, this.getProfile)
         .then(res => {
           const user = User.get()
@@ -122,10 +136,8 @@ export default {
           self.$vux.toast.text(res.data.error, 'middle')
           setTimeout(() => {
             self.$router.go(-1)
-          }, 3000)
+          }, 1000)
         })
-      } else {
-        this.$vux.toast.text('未填必选项', 'middle')
       }
     },
     onCancel () {
