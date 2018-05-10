@@ -30,7 +30,7 @@
         dots-position="center"
         :interval=6000
         :show-dots="isshowdot"
-        :aspect-ratio="500/900"
+        :aspect-ratio="900/900"
         auto
         loop>
       </swiper>
