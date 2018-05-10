@@ -35,8 +35,7 @@ let webpackConfig = {
   },
   externals: {
     'env': 'ENV',
-    'jquery': 'jQuery',
-    'WeixinJSBridge': 'WeixinJSBridge',
+    'jquery': 'jQuery'
   },
   module: {
     rules: [
