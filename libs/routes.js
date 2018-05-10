@@ -323,7 +323,7 @@ export default [
     component: Chat
   },
   {
-    path: '/pay/:id',
+    path: '/pay',
     name: 'tPay',
     component: Pay
   },
