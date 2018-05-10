@@ -6,6 +6,6 @@ var ENV = {
   WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
-  BokaCDN: 'http://vue.boka.cn/',
+  BokaCDN: 'http://vue.boka.cn',
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg'
 }
