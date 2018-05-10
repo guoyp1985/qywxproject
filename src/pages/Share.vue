@@ -1,0 +1,93 @@
+/*
+* @description: 分享明细页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
+<template>
+  <div id="personal-credit">
+    <!-- <c-title :link-info="{path:'/profile'}"
+            :link-credit="{path:'/credit'}">
+    </c-title> -->
+    <group>
+      <group-title slot="title">{{$t('Sharing Details')}}</group-title>
+      <cell v-for="(item, index) in list"
+      :key="item.id"
+      class="share-item font14"
+      align-items
+      :title="item.title"
+      :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
+        <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.photo"></x-img>
+        <div slot="inline-desc">
+          {{item.dateline | dateFormat}} {{item.typestr}}
+        </div>
+        <div slot="child">
+          <span class="al al-jinbi color-gold"></span>
+          <span class="color-red credit-txt">{{ item.credits | valueFormat }}</span>
+        </div>
+      </cell>
+    </group>
+  </div>
+</template>
+
+<i18n>
+Sharing Details:
+  zh-CN: 分享明细
+</i18n>
+
+<script>
+import { Group, GroupTitle, Cell, XImg } from 'vux'
+import Time from '#/time'
+import ENV from 'env'
+export default {
+  components: {
+    Group,
+    GroupTitle,
+    Cell,
+    XImg
+  },
+  data () {
+    return {
+      type: '1',
+      list: []
+    }
+  },
+  filters: {
+    dateFormat: function (isoDate) {
+      return `${new Time(isoDate * 1000).dateFormat('yyyy-MM-dd hh:mm')} 分享给朋友`
+    },
+    valueFormat: function (value) {
+      return Number(value) < 0 ? `${value}` : `+${value}`
+    }
+  },
+  methods: {
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/list/share`)
+      .then(res => {
+        self.list = res.data
+      })
+    }
+  },
+  created () {
+    this.getData()
+  }
+}
+</script>
+
+<style lang="less">
+#personal-credit .share-item img {
+  width: 60px;
+  float: left;
+}
+#personal-credit .credit-txt {
+  vertical-align: super;
+}
+
+/* weui css hack */
+#personal-credit .vux-cell-primary {
+  margin-left: 10px;
+}
+#personal-credit .weui-cell__ft {
+  padding-right: 20px;
+}
+</style>

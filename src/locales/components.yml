@@ -234,6 +234,58 @@ en:
   Eazy get order: Eazy get order
   Close: Close
   Stat: Stat
+  To seller message: To seller message
+  Please select address: Please select address
+  Orders: Orders
+  Userinfo: Userinfo
+  Behavior: Behavior
+  Behavior analysis in the last month: Behavior analysis in the last month
+  Decoration shop: Decoration shop
+  Add product: Add product
+  Back go shop: Back go shop
+  Rolling show: Rolling show
+  Please upload rolling show photo: Please upload rolling show photo
+  Please input telphone: Please input telphone
+  Required item not empty: Required item not empty
+  With the customer rebate money together!: With the customer rebate money together!
+  Product name: Product name
+  Product price: Product price
+  User final purchase price: User final purchase price
+  Rebate Commission: Rebate Commission
+  Goods sold to customer rebate Commission: Goods sold to customer rebate Commission
+  Product share title placeholder: Product share title placeholder
+  Product share description placeholder: Product share description placeholder
+  cancel_text: cancel
+  confirm_text: done
+  loading: loading
+  week_day_0: Su
+  week_day_1: Mo
+  week_day_2: Tu
+  week_day_3: We
+  week_day_4: Th
+  week_day_5: Fr
+  week_day_6: Sa
+  cancel: cancel
+  button_text: OK
+  back_text: Back
+  placeholder: Search
+  Groupprice: Groupprice
+  Group numbers: Group numbers
+  Person: Person
+  I am the seller: I am the seller
+  Sales Assistant: Sales Assistant
+  Newcomer Guide: Newcomer Guide
+  Selected: Selected
+  Promotion: Promotion
+  Generating poster: Generating poster
+  Choice cover photo: Choice cover photo
+  Main title: Main title
+  Input main title: Input main title
+  Subtitle: Subtitle
+  Input subtitle: Input subtitle
+  Upload images: Upload images
+  Goods sold to rebate user rebate Commission: Goods sold to rebate user rebate Commission
+  Goods sold to rebate user commission: Goods sold to rebate user commission
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -337,6 +389,7 @@ zh-CN:
   Home: 首页
   Message: 消息
   Favorite: 收藏
+  Has Favorite: 已收藏
   Center: 个人中心
   Personal Center: 个人中心
   Search Orders: 查订单
@@ -372,6 +425,7 @@ zh-CN:
   Credits Details: 个人中心
   Credit Details: 金币明细
   Credit: 金币
+  Gain Credit: 获取金币
   Edit: 编辑
   Delete: 删除
   Address: 地址
@@ -389,7 +443,7 @@ zh-CN:
   Sharing Details: 分享明细
   Share To Friend: 分享给好友
   Article: 文章
-  Goods: 商品
+  Commodity: 商品
   Store: 店铺
   Share invite customer: 分享邀请返点客户
   Rebate manage: 返点管理
@@ -419,7 +473,7 @@ zh-CN:
   Add order1: 返点客户
   Selection promotion: 精选促销
   All products: 全部商品
-  Online consulting: 在线咨询
+  Contact Seller: 联系卖家
   Wechat contact: 微信联系
   Shop topline: 店铺头条
   Another batch: 换一批
@@ -445,12 +499,13 @@ zh-CN:
   View Details: 查看详情
   Shipping Address: 收货地址
   No Related Orders: 您还没有相关订单
+  No Related Data: 没有相关数据
+  No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
+  No Related Articles: 没有相关文章
   To Recommend: 去推荐
   My Return Stores: 我的返点店铺
   Bought Stores: 购买过的店铺
-  No Related Ruturn Stores: 您还没有申请成为任何店铺的返点客
   No Bought Stores: 您还没有买过东西
-  No Related Articles: 没有相关文章
   Reading: 阅读
   Dig: 点赞
   Comment: 留言
@@ -459,6 +514,7 @@ zh-CN:
   Review: 审核
   Writing Discussion: 写留言
   Reply Discussion: 回复评论
+  Writing Evaluation: 写评论
   News title: 文章标题
   Cover photo: 封面图像
   Expand more options: 展开更多选项
@@ -513,3 +569,161 @@ zh-CN:
   Go to create: 立即创建
   Summary: 摘要
   Stat: 统计
+  RMB: ￥
+  To seller message: 给卖家留言
+  Deliver goods: 发货
+  View deliver: 查看物流
+  Add order: 新增订单
+  Myrevenue: 我的收入
+  My shop: 我的店铺
+  Please select address: 请选择地址
+  Orders: 订单
+  Userinfo: 用户信息
+  Behavior: 行为
+  Behavior analysis in the last month: 最近一个月行为分析
+  Decoration shop: 装修店铺
+  Add product: 添加商品
+  Back go shop: 返回店铺
+  Rolling show: 滚动展示
+  Wx Login: 微信登录
+  Scan To Login: 请使用微信扫码登录
+  Boka Authorization Center: 博卡授权中心
+  Please upload rolling show photo: 请上传滚动展示图像
+  Please input telphone: 请输入手机号
+  Required item not empty: 必填项不能为空
+  With the customer rebate money together!: 与返点客一起赚钱!
+  Product name: 商品名称
+  Product price: 商品价格
+  User final purchase price: 用户最终购买价格
+  Rebate Commission: 返点佣金
+  Goods sold to rebate user commission: 返点客售出商品后给予的佣金
+  Product share title placeholder: 如不填写默认调用商品标题
+  Product share description placeholder: 如不填写自动截取商品介绍
+  Product Rater: 商品评分
+  Evaluation Of Logistics: 物流评价
+  Express Package: 快递包装
+  Delivery Speed: 送货速度
+  Service Attitude: 配送员服务态度
+  To Give Five Stars: 满意请给5分
+  Add To Contacts With Scan Qrcode: 长按识别二维码添加联系人
+  Shop Owner: 店主
+  To Write Application Info: 填写申请信息
+  Get Verify Code: 获取验证码
+  Verify Code: 验证码
+  Real Name: 真实姓名
+  Application Reason: 申请理由
+  Must: 必填
+  Agree: 同意
+  Disagree: 不同意
+  Rebate Agreement: 返点客协议
+  Total Sales: 销售总额
+  Rebate Amount: 待返点金额
+  Waiting To Rebate: 待返点
+  Waiting To Return Money: 待提现
+  Already Return Money: 已提现
+  Coming Customer: 带来客户
+  Make Money By Sharing: 分享赚佣金
+  Current Store: 当前店铺
+  To Recommend Store: 推荐店铺
+  Total Income: 累计收入
+  Bring Customer: 带来客户
+  Save Picture To Sharing: 保存图片分享给好友
+  All Checked: 全选
+  Setting Default Success For Address: 默认地址设置成功
+  Favorite Success: 收藏成功
+  Cancel Favorite: 取消收藏
+  Receivables: 收款方
+  Wechat Safe Payment: 微信安全支付
+  Photo: 照片
+  Image Text: 图文
+  User Info: 用户信息
+  Delete Succss: 删除成功
+  Press And Talk: 按住 说话
+  Actual Payment: 实付款
+  Menu: 菜单
+  Setting: 设置
+  Entry Edit Mode: 进入编辑模式
+  Delete Article Confirm: 是否确认删除？
+  Apply: 申请
+  tIndex: 共销宝
+  tLogin: 扫码登录
+  tCenter: 个人中心
+  tCenterSales: 销售中心
+  tRetailerSales: 返点客
+  tRetailerSaleview: 返点客
+  tRetailerSalechance: 销售机会
+  tRetailerCustomerlist: 联系客户
+  tRetailerAddorder: 订单录入
+  tRetailerOrder: 订单列表
+  tStore: 我的店铺
+  tRetailerNews: 文章
+  tRetailerProductlist: 商品
+  tRetailerActivitylist: 活动
+  tRetailerRevenue: 我的收入
+  tRetailerOrderDetail: 订单详情
+  tDeliverinfo: 物流信息
+  tGroupbuy: 团购商品
+  tProfile: 个人资料
+  tCredit: 金币详情
+  tShare: 我的分享
+  tSharingDetail: 分享详情
+  tAddress: 我的地址
+  tNewAddress: 新建地址
+  tFavorite: 我的收藏
+  tMessages: 消息列表
+  tOrderSearch: 订单列表
+  tOrderDetail: 订单详情
+  tShippingDetails: 物流详情
+  tRecommend: 返点客
+  tArticles: 新闻
+  tEvaluation: 评价
+  tRetailerSetting: 卖家信息设置
+  tUserproducts: 共销宝
+  tAddActivity: 创建活动
+  tAddProduct: 添加商品
+  tRetailerGoodeazy: 易采集
+  tAddNews: 创建文章
+  tRetailerMessagelist: 消息
+  tAddOrder: 确认订单
+  tSalesList: 返点客
+  tDecorationShop: 滚动展示
+  tRetailerApply: 申请入驻
+  tRebateApply: 返点客申请
+  tPay: 微信安全支付
+  tKnowdedgeClass: 知识库
+  tSaleProducts: 精品促销
+  tUserPoster: 生成海报
+  tStat: 统计
+  tPoster: 生成海报
+  tPosterDetail: 海报
+  tNews: 文章详情
+  cancel_text: 取消
+  confirm_text: 确定
+  loading: 加载中
+  week_day_0: 日
+  week_day_1: 一
+  week_day_2: 二
+  week_day_3: 三
+  week_day_4: 四
+  week_day_5: 五
+  week_day_6: 六
+  cancel: 取消
+  button_text: 确定
+  back_text: 返回
+  placeholder: 搜索
+  Groupprice: 团购价
+  Group numbers: 成团人数
+  Person: 人
+  Online consulting: 在线咨询
+  I am the seller: 我是卖家
+  Sales Assistant: 销售助手
+  Newcomer Guide: 新手指南
+  Selected: 精选
+  Promotion: 促销
+  Generating poster: 生成海报
+  Choice cover photo: 选择已有封面图
+  Main title: 主标题
+  Input main title: 请输入主标题 30字以内
+  Subtitle: 副标题
+  Input subtitle: 请输入副标题 30字以内
+  Upload images: 上传图像

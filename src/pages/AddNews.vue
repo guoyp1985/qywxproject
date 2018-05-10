@@ -1,0 +1,238 @@
+<template>
+  <div id="article-info-edit">
+    <group label-width="6em">
+      <x-input :title="$t('News title')" :placeholder="`${$t('Necessary')}${$t('Title')}`" v-model="submitdata.title" class="font14"></x-input>
+      <cell :title="$t('Cover photo')" class="font14">
+        {{$t('Necessary')}}上传图像后可点击<i class="al al-set font14"></i>进行剪裁
+      </cell>
+    </group>
+    <div class="img-operate-area">
+      <input v-model="submitdata.photo" type="hidden" name="photo" />
+      <div class="q_photolist align_left">
+        <template v-if="photoarr.length > 0">
+          <div v-for="(item, index) in photoarr" :key="index" class="img-box">
+            <img class="img" :src="item"/>
+            <a class="setting-btn" @click="clipPhoto(item)">
+              <i class="al al-set font16"></i>
+            </a>
+            <a class="delete-btn" @click="deletePhoto(item, index)">
+              <i class="al al-guanbi font16"></i>
+            </a>
+          </div>
+        </template>
+        <div v-if="photoarr.length < maxnum" class="img-box upload-box">
+          <div class="img">
+            <form class="fileform" enctype="multipart/form-data">
+              <input class="fileinput" type="file" name="files" @change="fileChange" />
+            </form>
+            <div class="img-info-box">
+              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+              <div class="font12 color-gray"><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <group class="option-area" label-width="6em">
+      <x-textarea class="font14" :title="$t('Share description')" :placeholder="$t('Share description placeholder')" v-model="submitdata.seodescription" :rows="1" autosize></x-textarea>
+      <x-textarea class="font14" :title="$t('Summary')" :placeholder="$t('Summary')" v-model="submitdata.summary" :rows="1" autosize></x-textarea>
+    </group>
+    <div class="submit-area">
+      <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
+      <x-button @click.native="cancel">{{$t('Cancel')}}</x-button>
+    </div>
+    <clip-popup :show="popupShow" :img="currentImg" @on-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+  </div>
+</template>
+<script>
+import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
+import ClipPopup from '@/components/ClipPopup'
+import ENV from 'env'
+export default {
+  components: {
+    Group,
+    XInput,
+    XTextarea,
+    Cell,
+    XButton,
+    ClipPopup
+  },
+  data () {
+    return {
+      currentImg: '',
+      popupShow: false,
+      allowsubmit: true,
+      photoarr: ['/src/assets/_images/lion.jpg'],
+      maxnum: 1,
+      havenum: 0,
+      submitdata: { title: '', photo: '', seodescription: '', summary: '' },
+      requireddata: { title: '', 'photo': '' }
+    }
+  },
+  computed: {
+  },
+  methods: {
+    fileChange (e) {
+      const self = this
+      let files = e.target.files
+      if (files.length > 0) {
+        let fileform = document.querySelector('.fileform')
+        let filedata = new FormData(fileform)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1) {
+            self.photoarr.push(data.data)
+            self.submitdata.photo = self.photoarr.join(',')
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
+    },
+    clipPhoto (item) {
+      this.popupShow = true
+      this.currentImg = item
+    },
+    deletePhoto (item, index) {
+      this.photoarr.splice(index, 1)
+      this.submitdata.photo = this.photoarr.join(',')
+    },
+    cancel () {
+      this.$router.go(-1)
+    },
+    save () {
+      const self = this
+      const query = self.$route.query
+      let validateData = []
+      for (let key in self.requireddata) {
+        let v = {}
+        v[key] = self.submitdata[key]
+        validateData.push(v)
+      }
+      let iscontinue = self.$util.validateQueue(validateData,
+        model => {
+          switch (model.key) {
+            default:
+              self.$vux.toast.text('必填项不能为空', 'middle')
+          }
+        }
+      )
+      if (!iscontinue) {
+        return false
+      }
+      self.$vux.loading.show()
+      if (query.id) {
+        self.submitdata['id'] = query.id
+      } else {
+        delete self.submitdata['id']
+      }
+      self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
+        self.$vux.toast.show({
+          text: data.error,
+          type: toasttype,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.$router.push({ path: '/news', query: { id: data.data, newadd: 1 } })
+            }
+          }
+        })
+      })
+    },
+    popupSubmit () {
+    },
+    popupCancel () {
+      this.popupShow = false
+    }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    const query = self.$route.query
+    if (query.id) {
+      document.title = '更多设置'
+      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+        params: { id: query.id, module: 'news' }
+      }).then(function (res) {
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        if (retdata) {
+          for (let key in self.submitdata) {
+            self.submitdata[key] = retdata[key]
+          }
+          if (!self.$util.isNull(self.submitdata.photo)) {
+            self.photoarr = self.submitdata.photo.split(',')
+          }
+        }
+      })
+    }
+  }
+}
+</script>
+<style lang="less">
+.img-operate-area {
+  padding: 20px;
+  display: flex;
+}
+.img-box {
+  position: relative;
+  display: flex;
+  float: left;
+  margin-right: 10px;
+  text-align: center;
+}
+.img-box.upload-box {
+  border: #ccc 1px dashed;
+}
+.img-box .img {
+  width: 90px;
+  height: 90px;
+}
+.img-box input[type=file] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  width: 100%;
+}
+.setting-btn,
+.delete-btn {
+  position: absolute;
+  top: -10px;
+  background-color: #ffffff;
+  border: 1px solid #c0c0c0;
+  padding: 4px;
+  border-radius: 50%;
+  display: block;
+  line-height: 16px;
+}
+.setting-btn {
+  left: -10px;
+}
+.delete-btn {
+  right: -10px;
+}
+.img-info-box {
+  margin: 20px;
+}
+.option-area .weui-cells {
+  margin-top: 0;
+}
+.submit-area {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+}
+</style>

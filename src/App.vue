@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;">
+  <div id="app" style="height:100%;" v-cloak>
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
@@ -10,24 +10,24 @@
         <router-view class="router-view"></router-view>
       </transition>
 
-      <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
-        <tabbar-item :link="{path:'/home'}" :selected="route.path=='/home'">
+      <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="toggleTabbar" slot="bottom">
+        <tabbar-item :link="{name: 'tIndex'}" :selected="route.path=='/'">
           <span class="al al-home1 font20" slot="icon" style="position:relative;top: -2px;"></span>
           <span slot="label">{{ $t('Home') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/sales'}" :selected="route.path=='/sales'">
+        <tabbar-item :link="{name: 'tSalesList'}" :selected="route.path=='/salesList'">
           <span class="al al-tag font20" slot="icon"></span>
           <span slot="label">{{ $t('Sales') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/message'}" :selected="route.path=='/message'">
+        <tabbar-item :link="{name: 'tMessages'}" :selected="route.path=='/messages'">
           <span class="al al-mark font20" slot="icon"></span>
           <span slot="label">{{ $t('Message') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/favorite'}" :selected="route.path=='/favorite'">
+        <tabbar-item :link="{name: 'tFavorite'}" :selected="route.path=='/favorite'">
           <span class="al al-favor font20" slot="icon"></span>
           <span slot="label">{{ $t('Favorite') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/center'}" :selected="route.path=='/center'">
+        <tabbar-item :link="{name: 'tCenter'}" :selected="route.path=='/center'">
           <span class="al al-peoplefill font20" slot="icon"></span>
           <span slot="label">{{ $t('Center') }}</span>
         </tabbar-item>
@@ -53,6 +53,11 @@ Center:
 <script>
 import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
+import routes from '#/routes'
+// import ENV from '#/env'
+// import { User } from '#/storage'
+
+// Util.share()
 
 export default {
   name: 'app',
@@ -71,6 +76,9 @@ export default {
       if (path === '/component/demo') {
         this.$router.replace('/demo')
       }
+    },
+    '$route' (to, from) {
+      document.title = this.getTitle(to.path)
     }
   },
   computed: {
@@ -78,7 +86,8 @@ export default {
       route: state => state.route,
       path: state => state.route.path,
       isLoading: state => state.vux.isLoading,
-      direction: state => state.vux.direction
+      direction: state => state.vux.direction,
+      toggleTabbar: state => state.vux.toggleTabbar
     }),
     leftOptions () {
       return {
@@ -90,39 +99,21 @@ export default {
         showMore: true
       }
     },
-    headerTransition () {
-      if (!this.direction) return ''
-      return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
-    },
-    componentName () {
-      if (this.route.path) {
-        const parts = this.route.path.split('/')
-        if (/component/.test(this.route.path) && parts[2]) return parts[2]
-      }
-    },
-    isDemo () {
-      console.log(this.route.path)
-      // return /component|demo/.test(this.route.path)
-      switch (this.route.path) {
-        case '/centerOperating' :
-          break
-        case '/centerSales' :
-          break
-        case '/centerService' :
-          break
-        default:
-          return false
-      }
-      return true
-    },
-    isTabbarDemo () {
-      return /tabbar/.test(this.route.path)
-    },
-    title () {
-      if (this.route.path === '/') return 'Home'
-      if (this.route.path === '/components') return 'Demo list'
-      return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
-    },
+    // headerTransition () {
+    //   if (!this.direction) return ''
+    //   return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
+    // },
+    // componentName () {
+    //   if (this.route.path) {
+    //     const parts = this.route.path.split('/')
+    //     if (/component/.test(this.route.path) && parts[2]) return parts[2]
+    //   }
+    // },
+    // title () {
+    //   if (this.route.path === '/') return 'Home'
+    //   if (this.route.path === '/components') return 'Demo list'
+    //   return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
+    // },
     viewTransition () {
       console.log(this.direction)
       if (!this.direction) return ''
@@ -130,18 +121,29 @@ export default {
     }
   },
   created () {
-    this.$http.get('https://laravel.boka.cn/api/list/news?uploader=1', {}).then(response => {
-      // get status
-      console.log(response.status)
-      // get status text
-      console.log(response.statusText)
-      // get 'Expires' header
-      console.log(response.headers.get('Expires'))
-      // get body data
-      this.someData = response.body
-    }, response => {
-      // error callback
-    })
+    document.title = this.$t('tIndex')
+    this.$util.wxConfig()
+    // this.getData()
+  },
+  methods: {
+    getTitle (path) {
+      for (let route of routes) {
+        if (path === route.path) {
+          let title = this.$t(route.name)
+          return title || '$$'
+        }
+      }
+    }
+    // getData () {
+    //   this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    //   .then(
+    //     res => {
+    //       console.log()
+    //       User.set(res.data)
+    //       console.log(User.get())
+    //     }
+    //   )
+    // }
   }
 }
 </script>
@@ -173,6 +175,10 @@ html, body {
   /** backdrop-filter: blur(10px);
   background-color: none;
   background: rgba(247, 247, 250, 0.5);**/
+}
+#app .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon,
+#app .weui-tabbar__item.weui-bar__item_on .weui-tabbar__label {
+  color: #1aad19
 }
 .vux-demo-tabbar .weui-bar__item_on .demo-icon-22 {
   color: #F70968;

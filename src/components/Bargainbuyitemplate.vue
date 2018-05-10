@@ -1,5 +1,5 @@
 <template>
-  <div class="bk-bargainbuyitem scroll_item bg-white mb5">
+  <router-link :to="{path:'/bargainbuy',query:{id:data.id}}" class="bk-bargainbuyitem scroll_item bg-white mb5 db">
 		<div class="t-table pt10 pb10">
 			<div class="t-cell pl10 v_middle" style="width:90px;">
         <slot name="photo"></slot>
@@ -20,12 +20,15 @@
           </div>
 				</div>
 			</div>
-  </div>
+  </router-link>
 </template>
 
 <script>
 export default {
-  name: 'Bargainbuyitemplate'
+  name: 'Bargainbuyitemplate',
+  props: {
+    data: Object
+  }
 }
 </script>
 

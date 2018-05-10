@@ -1,5 +1,5 @@
 <template>
-  <div class="bk-groupbuyitem scroll_item mb5 font14 bg-white">
+  <router-link :to="{path:'/product',query:{wid:data.wid,id:data.productid}}" class="bk-groupbuyitem scroll_item mb5 font14 bg-white db">
 		<div class="t-table pt10 pb10">
 			<div class="t-cell pl10 v_middle" style="width:90px;">
         <slot name="photo"></slot>
@@ -16,17 +16,20 @@
   					<span class="color-gray2 font12 middle-cell ml5" style="text-decoration:line-through;">{{ $t('RMB') }} <slot name="price"></slot></span>
   				</div>
   				<div class="align_right pr10 db-in fr">
-  					<div class="qbtn5 bg-red color-white">一键开团</div>
+  					<div class="qbtn5 bg-red color-white">一键拼团</div>
   				</div>
         </div>
 			</div>
 		</div>
-  </div>
+  </router-link>
 </template>
 
 <script>
 export default {
-  name: 'Groupbuyitemplate'
+  name: 'Groupbuyitemplate',
+  props: {
+    data: Object
+  }
 }
 </script>
 
