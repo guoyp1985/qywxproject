@@ -353,8 +353,6 @@ export default {
   min-width: 18px;
   text-align: center;
 }
-.marqueeitem .weui-cells{margin-top:0;}
-.marqueeitem .vux-no-group-title{margin-top:0;}
 .grid-title {
   background-color: #efeff4;
   color: #716f76;
