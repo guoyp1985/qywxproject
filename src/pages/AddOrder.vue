@@ -299,7 +299,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              location.replace(`${ENV.BokaCDN}/#/pay/${data.id}`)
+              location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
             }
           }
         })

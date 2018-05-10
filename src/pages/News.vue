@@ -254,6 +254,27 @@ export default {
     onShare () {
     },
     editSave () {
+      const self = this
+      console.log('save')
+      let editorContent = document.querySelector('#editor-content')
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
+        id: self.query.id,
+        content: editorContent.innerHTML
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
+        self.$vux.toast.show({
+          text: data.error,
+          type: toasttype,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+            }
+          }
+        })
+      })
     },
     editSetting () {
       this.$router.push({name: 'tAddNews', params: {id: this.article.id}})

@@ -256,7 +256,6 @@ export default {
       self.$vux.loading.hide()
       self.$router.push('/retailerApply')
     } else {
-      self.$vux.loading.hide()
       self.showcontainer = true
       self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
         let data = res.data

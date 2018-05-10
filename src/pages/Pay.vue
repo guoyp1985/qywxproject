@@ -55,7 +55,7 @@ export default {
     },
     initPay () {
       const self = this
-      const orderId = this.$route.params.id
+      const orderId = this.$route.query.id
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => {
         if (res.data.flag) {
