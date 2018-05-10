@@ -171,6 +171,7 @@ export default {
   display: block;
   text-align: center;
   line-height: 40px;
+  z-index: 100;
 }
 .option-area {
   position: absolute;
