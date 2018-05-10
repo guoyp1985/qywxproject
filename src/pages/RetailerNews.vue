@@ -27,7 +27,7 @@
                   </div>
                 </div>
               </div>
-              <router-link :to="{path: `/articles/${item.id}`}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
+              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w50">
                     <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
@@ -59,7 +59,7 @@
                   </div>
                 </div>
               </div>
-              <router-link :to="{path: `/articles/${item.id}`}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10">
+              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w50">
                     <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />

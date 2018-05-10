@@ -4,7 +4,6 @@ import AddActivity from '@/pages/AddActivity'
 import AddNews from '@/pages/AddNews'
 import AddProduct from '@/pages/AddProduct'
 import Articles from '@/pages/Articles'
-import Article from '@/pages/Article'
 import AddOrder from '@/pages/AddOrder'
 import Bargainbuy from '@/pages/Bargainbuy'
 import BringCustomer from '@/pages/BringCustomer'
@@ -24,6 +23,7 @@ import Knowledge from '@/pages/Knowledge'
 import MembersView from '@/pages/MembersView'
 import Messages from '@/pages/Messages'
 import NewAddress from '@/pages/NewAddress'
+import News from '@/pages/News'
 import OrderSearch from '@/pages/OrderSearch'
 import OrderDetail from '@/pages/OrderDetail'
 import Profile from '@/pages/Profile'
@@ -168,6 +168,11 @@ export default [
     component: NewAddress
   },
   {
+    path: '/news',
+    name: 'tNews',
+    component: News
+  },
+  {
     path: '/favorite',
     name: 'tFavorite',
     component: Favorite
@@ -201,11 +206,6 @@ export default [
     path: '/articles',
     name: 'tArticles',
     component: Articles
-  },
-  {
-    path: '/articles/:id',
-    name: 'tArticle',
-    component: Article
   },
   {
     path: '/evaluation',

@@ -199,7 +199,7 @@ export default {
       })
     },
     articleItemClick (item) {
-      this.$router.push({path: `/articles/${item.id}`})
+      this.$router.push({ path: '/news', query: { id: item.id } })
     },
     commodityItemClick (item) {
       this.$router.push({path: `/product`, query: {id: item.id, wid: item.wid}})

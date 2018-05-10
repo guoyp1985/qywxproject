@@ -12,20 +12,25 @@
         auto
         loop>
       </swiper>
-      <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
-    		<div class="t-table">
-    			<div class="t-cell v_middle w50">
-    				<img class="avatarimg1" :src="retailerInfo.avatar"/>
+      <template v-if="retailerInfo.uid">
+        <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
+      		<div class="t-table">
+      			<div class="t-cell v_middle w50">
+      				<img class="avatarimg1" :src="retailerInfo.avatar"/>
+      			</div>
+      			<div class="t-cell v_middle shopkeeper_txt">
+      				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
+      			</div>
+      				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
+                <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
+                <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Sales center')}}</router-link>
+      				</div>
+              <div v-else class="t-cell v_middle align_right w100">
+                <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
+              </div>
     			</div>
-    			<div class="t-cell v_middle shopkeeper_txt">
-    				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
-    			</div>
-  				<div class="t-cell v_middle align_right" style="width:160px;">
-            <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
-            <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Sales center')}}</router-link>
-  				</div>
-  			</div>
-  		</div>
+    		</div>
+      </template>
       <template v-if="activitydata && activitydata.length > 0">
         <div class="bg-white mt5 padding10 b_top_after">
     			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
@@ -167,6 +172,7 @@ export default {
   },
   data () {
     return {
+      module: 'store',
       query: Object,
       loginUser: Object,
       showShareSuccess: false,
@@ -184,7 +190,28 @@ export default {
       newspagestart: 0,
       newslimit: 3,
       isgetnews: true,
-      toplinedata: []
+      toplinedata: [],
+      favoritecss: 'none',
+      isfavorite: false,
+      hideloading: false
+    }
+  },
+  watch: {
+    favoritecss: function () {
+      if (this.isfavorite) {
+        this.favoritecss = 'have'
+      } else {
+        this.favoritecss = 'none'
+      }
+      return this.favoritecss
+    },
+    isfavorite: function () {
+      if (this.isfavorite) {
+        this.favoritecss = 'have'
+      } else {
+        this.favoritecss = 'none'
+      }
+      return this.isfavorite
     }
   },
   computed: {
@@ -221,7 +248,9 @@ export default {
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
         let data = res.data
-        self.$vux.loading.hide()
+        if (self.hideloading) {
+          self.$vux.loading.hide()
+        }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         if (!self.isBindScroll1) {
@@ -269,6 +298,57 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+    },
+    getCollectStaus () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+        { params: { module: self.module, id: self.query.wid } }
+      ).then(function (res) {
+        let data = res.data
+        if (data.flag === 1) {
+          self.isfavorite = true
+        } else {
+          self.isfavorite = false
+        }
+      })
+    },
+    favoriteevent () {
+      const self = this
+      if (self.isfavorite) {
+        self.$vux.loading.show()
+        self.$http.get(`${ENV.BokaApi}/api/user/favorite/delete`,
+          { params: { module: self.module, id: self.query.wid } }
+        ).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1) {
+            self.isfavorite = false
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      } else {
+        let cururl = `/store?wid=${self.query.wid}`
+        self.$vux.loading.show()
+        self.$http.get(`${ENV.BokaApi}/api/user/favorite/add`,
+          { params: { module: self.module, id: self.query.wid, currenturl: encodeURIComponent(cururl) } }
+        ).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1) {
+            self.isfavorite = true
+          } else if (data.error) {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
+      self.isfavorite = !self.isfavorite
     }
   },
   created () {
@@ -288,6 +368,7 @@ export default {
       params: infoparams
     }).then(function (res) {
       self.$vux.loading.hide()
+      self.hideloading = true
       let data = res.data
       self.retailerInfo = data.data ? data.data : data
       document.title = self.retailerInfo.title
@@ -304,6 +385,9 @@ export default {
           self.showShareSuccess = true
         }
       })
+      if (self.retailerInfo.uid !== self.loginUser.uid) {
+        self.getCollectStaus()
+      }
       return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
     }).then(function (res) {
       let data = res.data
@@ -339,4 +423,13 @@ export default {
   left: -1px;
   background-color: #ff6600;
 }
+
+.store .collect{
+  display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
+  padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
+}
+.store .collect.have{background: #67cccc;}
+.store .collect .txt:after{content:"收藏";}
+.store .collect.have .txt:after{content:"已收藏"}
+.store .staricon{margin-top:-2px;display:inline-block;}
 </style>

@@ -239,7 +239,7 @@ export default {
               onHide: function () {
                 if (data.flag === 1) {
                   // self.searchdata.splice(index, 1)
-                  self.$router.push(`/articles/${data.data.id}`)
+                  self.$router.push({path: '/news', query: {id: data.data.id}})
                 }
               }
             })
@@ -268,7 +268,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               // self.newsdata.push(data.data)
-              self.$router.push(`/articles/${data.data.id}`)
+              self.$router.push({path: '/news', query: {id: data.data.id}})
             }
           }
         })

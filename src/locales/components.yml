@@ -404,7 +404,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客
+  Rebate customer: 返点客户
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -696,6 +696,7 @@ zh-CN:
   tStat: 统计
   tPoster: 生成海报
   tPosterDetail: 海报
+  tNews: 文章详情
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
