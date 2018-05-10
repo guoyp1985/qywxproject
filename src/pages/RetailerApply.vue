@@ -350,6 +350,7 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1 || data.flag === 2) {
+                User.set()
                 self.$router.push('/centerSales')
               }
             }
