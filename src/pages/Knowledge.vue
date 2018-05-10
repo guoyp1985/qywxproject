@@ -149,16 +149,6 @@ export default {
           self.reward = User.get()
           self.$util.wxShare({
             data: {
-              module: 'knowledge',
-              moduleid: id,
-              link: `${host}/#/knowledge?id=${id}&share_uid=${self.reward.uid}`,
-              title: self.article.seotitle || self.article.title,
-              desc: self.article.seodescription,
-              photo: self.article.photo
-            }
-          })
-          self.$util.wxShare({
-            data: {
               title: self.article.seotitle || self.article.title,
               desc: self.article.seodescription || self.article.seotitle || self.article.title,
               link: `${ENV.Host}/#/knowledge?id=${self.productdata.id}&share_uid=${self.reward.uid}`,
