@@ -19,7 +19,7 @@
 import { Box, XButton } from 'vux'
 import ENV from 'env'
 import WeixinJSBridge from 'WeixinJSBridge'
-console.log(WeixinJSBridge)
+console.log(window.WeixinJSBridge)
 export default {
   components: {
     Box,
