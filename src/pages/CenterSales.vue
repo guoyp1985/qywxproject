@@ -239,14 +239,10 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
-    console.log('loginUser')
-    console.log(self.loginUser)
     let iscontinue = true
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-      console.log(1)
       self.showcontainer = false
     } else if (self.loginUser.usergroup) {
-      console.log(2)
       let usergroup = self.loginUser.usergroup
       for (let i = 0; i < usergroup.length; i++) {
         let g = usergroup[i]
@@ -257,18 +253,13 @@ export default {
       }
     }
     if (!iscontinue) {
-      console.log(3)
       self.$vux.loading.hide()
       self.$router.push('/retailerApply')
     } else {
-      console.log(4)
       self.$vux.loading.hide()
       self.showcontainer = true
-      console.log(5)
       self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-        console.log(6)
         let data = res.data
-        console.log(data)
         self.retailerInfo = data.data ? data.data : data
         self.imgarr[0].msrc = self.retailerInfo.avatar
         self.imgarr[0].src = self.retailerInfo.avatar
@@ -363,6 +354,7 @@ export default {
   text-align: center;
 }
 .marqueeitem .weui-cells{margin-top:0;}
+.marqueeitem .vux-no-group-title{margin-top:0;}
 .grid-title {
   background-color: #efeff4;
   color: #716f76;
