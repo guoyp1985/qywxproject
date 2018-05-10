@@ -235,6 +235,7 @@ export default {
     }
   },
   created () {
+    console.log('in centersales')
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
