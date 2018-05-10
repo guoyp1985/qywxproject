@@ -27,7 +27,7 @@
         <span class="ml3">{{$t('Myrevenue')}}</span>
       </router-link>
     </div>
-    <div class="vux-marquee">
+    <div class="center-marquee" style="height:40px;position:relative;">
       <marquee :item-height=40 :interval=5000 :duration=1000>
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
@@ -353,7 +353,6 @@ export default {
   min-width: 18px;
   text-align: center;
 }
-.marqueeitem .weui-cells{margin-top:0;}
 .grid-title {
   background-color: #efeff4;
   color: #716f76;

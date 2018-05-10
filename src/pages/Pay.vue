@@ -18,7 +18,6 @@
 <script>
 import { Box, XButton } from 'vux'
 import ENV from 'env'
-import WeixinJSBridge from 'WeixinJSBridge'
 export default {
   components: {
     Box,
@@ -59,9 +58,12 @@ export default {
       const orderId = this.$route.params.id
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => {
-        self.payPrice = res.data.money
-        self.receivables = res.data.weixinname
-        self.payParams = res.data.data
+        console.log(res.data.data)
+        if (res.data.flag) {
+          self.payPrice = res.data.money
+          self.receivables = res.data.weixinname
+          self.payParams = res.data.data
+        }
       })
     }
   },

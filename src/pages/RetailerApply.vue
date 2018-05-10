@@ -49,7 +49,7 @@
         <div class="form-item padding10 font16">
           <div class="t-table">
             <div class="t-cell align_right v_middle">
-              <check-icon class="blue" style="vertical-align: 3px;" :value.sync="isagree" @click.native.stop="clickagree">在线支付</check-icon>
+              <check-icon class="blue" style="vertical-align: 3px;" :value.sync="isagree" @click.native.stop="clickagree">同意</check-icon>
               <!--
               <label class="qcheckbox1 font16 color-gray" style="width:33px;">
                 <input type="checkbox" @click="clickagree">同意
@@ -378,7 +378,6 @@ export default {
         }
       }
     }
-    iscontinue = true
     if (!iscontinue) {
       self.$vux.loading.hide()
       self.$router.push('/centerSales')

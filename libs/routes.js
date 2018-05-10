@@ -1,11 +1,11 @@
 import AccountDetail from '@/pages/AccountDetail'
+import Activity from '@/pages/Activity'
 import Address from '@/pages/Address'
 import AddActivity from '@/pages/AddActivity'
 import AddNews from '@/pages/AddNews'
 import AddProduct from '@/pages/AddProduct'
 import Articles from '@/pages/Articles'
 import AddOrder from '@/pages/AddOrder'
-import Bargainbuy from '@/pages/Bargainbuy'
 import BringCustomer from '@/pages/BringCustomer'
 import Center from '@/pages/Center'
 import CenterSales from '@/pages/CenterSales'
@@ -263,11 +263,6 @@ export default [
     component: Product
   },
   {
-    path: '/bargainbuy',
-    name: 'tBargainbuy',
-    component: Bargainbuy
-  },
-  {
     path: '/addOrder',
     name: 'tAddOrder',
     component: AddOrder
@@ -386,5 +381,10 @@ export default [
     path: '/knowledge',
     name: 'tKnowledge',
     component: Knowledge
+  },
+  {
+    path: '/activity',
+    name: 'tActivity',
+    component: Activity
   }
 ]
