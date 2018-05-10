@@ -9,7 +9,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">活动价格<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_minprice" type="text" class="input minprice" name="param_minprice" placeholder="活动价格" />
+          <input v-model="minprice" type="text" class="input minprice" name="param_minprice" placeholder="活动价格" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
       </div>
@@ -36,7 +36,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">最小可砍<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_everymin" type="text" class="input everymin" name="param_everymin" placeholder="用户砍价最小金额" />
+          <input v-model="everymin" type="text" class="input everymin" name="param_everymin" placeholder="用户砍价最小金额" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
       </div>
@@ -45,7 +45,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">最大可砍<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_everymax" type="text" class="input everymax" name="param_everymax" placeholder="用户砍价最大金额" />
+          <input v-model="everymax" type="text" class="input everymax" name="param_everymax" placeholder="用户砍价最大金额" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">元</div>
       </div>
@@ -88,19 +88,25 @@ export default {
   watch: {
     minprice: function () {
       const self = this
-      self.minprice = self.submitdata.param_minprice
+      // self.minprice = self.submitdata.param_minprice
+      self.price = self.data.price
+      self.submitdata.param_minprice = self.minprice
       self.getNum()
       return self.minprice
     },
     everymin: function () {
       const self = this
-      self.everymin = self.submitdata.param_everymin
+      // self.everymin = self.submitdata.param_everymin
+      self.price = self.data.price
+      self.submitdata.param_everymin = self.everymin
       self.getNum()
       return self.everymin
     },
     everymax: function () {
       const self = this
-      self.everymax = self.submitdata.param_everymax
+      // self.everymax = self.submitdata.param_everymax
+      self.price = self.data.price
+      self.submitdata.param_everymax = self.everymax
       self.getNum()
       return self.everymax
     },
@@ -114,24 +120,27 @@ export default {
   methods: {
     getNum: function () {
       const self = this
+      self.price = self.data.price
       let minprice = self.minprice
       let everymin = self.everymin
       let everymax = self.everymax
       let price = self.price
-      if (!self.$util.isNull(minprice)) {
+      if (self.$util.trim(price) !== '' && self.$util.trim(minprice) !== '') {
         let cha = parseFloat(price) - parseFloat(minprice)
-        if (!self.$util.isNull(everymin) && !self.$util.isNull(everymax)) {
+        if (self.$util.trim(everymin) !== '' && self.$util.trim(everymax) !== '') {
           self.neednum = Math.ceil((cha / parseFloat(everymin) + cha / parseFloat(everymax)) / 2)
           self.showtip = true
-        } else if (!self.$util.isNull(everymin)) {
+        } else if (self.$util.trim(everymin) !== '') {
           self.neednum = Math.ceil(cha / parseFloat(everymin))
           self.showtip = true
-        } else if (!self.$util.isNull(everymax)) {
+        } else if (self.$util.trim(everymax) !== '') {
           self.neednum = Math.ceil(cha / parseFloat(everymax))
           self.showtip = true
         } else {
           self.showtip = false
         }
+      } else {
+        self.showtip = false
       }
     }
   },
