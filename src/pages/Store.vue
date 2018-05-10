@@ -34,7 +34,7 @@
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
             <Groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
-				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
+				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
@@ -42,7 +42,7 @@
               <span slot="price">{{ item.price }}</span>
             </Groupbuyitemplate>
             <Bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
-				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
+				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{ item.minprice }}</span>

@@ -147,7 +147,6 @@ export default {
         if (res.data.flag) {
           self.article = res.data.data
           self.reward = User.get()
-          let host = self.$util.getHost()
           self.$util.wxShare({
             data: {
               module: 'knowledge',
