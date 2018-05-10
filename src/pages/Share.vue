@@ -16,7 +16,7 @@
       align-items
       :title="item.title"
       :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
-        <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.photo"></x-img>
+        <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
         <div slot="inline-desc">
           {{item.dateline | dateFormat}} {{item.typestr}}
         </div>
@@ -62,14 +62,17 @@ export default {
   methods: {
     getData () {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/list/share`)
+      this.$http.get(`${ENV.BokaApi}/api/user/shareList`)
       .then(res => {
-        self.list = res.data
+        if (res.data.flag) {
+          self.list = res.data.data
+        }
       })
     }
   },
   created () {
     this.getData()
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>
