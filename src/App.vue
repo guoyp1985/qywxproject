@@ -3,7 +3,7 @@
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="1"></loading>
     </div>
-    <view-box ref="viewBox" body-padding-bottom="0">
+    <view-box ref="viewBox" body-padding-bottom="53px">
       <transition
       :name="viewTransition"
       :css="!!direction">
