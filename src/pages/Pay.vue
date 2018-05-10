@@ -63,6 +63,7 @@ export default {
       const orderId = this.$route.params.id
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => {
+        console.log(res.data.data)
         if (res.data.flag) {
           self.payPrice = res.data.data.money
           self.receivables = res.data.data.weixinname
