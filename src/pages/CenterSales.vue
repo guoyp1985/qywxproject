@@ -260,6 +260,7 @@ export default {
       self.showcontainer = true
       self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
         let data = res.data
+        console.log(JSON.stringify(data))
         self.retailerInfo = data.data ? data.data : data
         self.imgarr[0].msrc = self.retailerInfo.avatar
         self.imgarr[0].src = self.retailerInfo.avatar
