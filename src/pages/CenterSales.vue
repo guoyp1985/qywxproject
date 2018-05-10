@@ -29,8 +29,8 @@
     </div>
     <div style="height:40px;position:relative;">
       <marquee :item-height=40 :interval=5000 :duration=1000 style="position:absolute;left:0;top:0;right:0;bottom:0;">
-        <marquee-item v-for="(item,index) in marquedata" :key="item.id" style="margin-top:0;">
-          <group class="marqueeitem" style="margin-top:0;">
+        <marquee-item v-for="(item,index) in marquedata" :key="item.id">
+          <group class="marqueeitem">
             <router-link :to="{path: '/stat', query: {id: item.moduleid, module: item.module}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
               <div class="t-cell v_middle h_100">
                 <div class="clamp1">
