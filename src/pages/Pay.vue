@@ -36,16 +36,16 @@ export default {
       console.log('ok')
       const params = this.payParams
       console.log(params)
-      if (typeof WeixinJSBridge === 'undefined') {
-        if (document.addEventListener) {
-          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
-        } else if (document.attachEvent) {
-          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
-          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
-        }
-      } else {
-        this.wxPayApi(params)
-      }
+      // if (typeof WeixinJSBridge === 'undefined') {
+      //   if (document.addEventListener) {
+      //     document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
+      //   } else if (document.attachEvent) {
+      //     document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
+      //     document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
+      //   }
+      // } else {
+      //   this.wxPayApi(params)
+      // }
     },
     wxPayApi (params) {
       WeixinJSBridge.invoke(
