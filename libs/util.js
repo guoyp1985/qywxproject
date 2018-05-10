@@ -488,6 +488,15 @@ Util.install = function (Vue, options) {
       }
       return ret
     },
+    getHost: function (url) {
+      if (!url) {
+        url = location.href
+      }
+      url = url.replace(/\?from=singlemessage&isappinstalled=0/g,'')
+      let index = url.indexOf('/#/')
+      let ret = url.substr(0, index)
+      return ret
+    },
     previewerImgdata: function (arr) {
       let ret = []
       for (let i = 0; i < arr.length; i++) {

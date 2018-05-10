@@ -33,7 +33,7 @@ export default {
   methods: {
     pay () {
       const params = this.payParams
-      if (typeof WeixinJSBridge === 'undefined') {
+      if (typeof window.WeixinJSBridge === 'undefined') {
         if (document.addEventListener) {
           document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
         } else if (document.attachEvent) {
@@ -58,7 +58,6 @@ export default {
       const orderId = this.$route.params.id
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => {
-        console.log(res.data.data)
         if (res.data.flag) {
           self.payPrice = res.data.money
           self.receivables = res.data.weixinname
