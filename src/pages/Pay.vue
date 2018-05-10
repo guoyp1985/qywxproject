@@ -18,8 +18,6 @@
 <script>
 import { Box, XButton } from 'vux'
 import ENV from 'env'
-import WeixinJSBridge from 'WeixinJSBridge'
-console.log(window.WeixinJSBridge)
 export default {
   components: {
     Box,
@@ -35,7 +33,6 @@ export default {
   methods: {
     pay () {
       const params = this.payParams
-      console.log(params)
       if (typeof WeixinJSBridge === 'undefined') {
         if (document.addEventListener) {
           document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
