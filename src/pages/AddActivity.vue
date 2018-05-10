@@ -342,6 +342,13 @@ export default {
         let minval = parseFloat(self.submitdata.param_everymin)
         let maxval = parseFloat(self.submitdata.param_everymax)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
+        if (isNaN(minprice) || minprice < 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的活动价格'
+          })
+          return false
+        }
         if (minprice > priceval) {
           self.$vux.alert.show({
             title: '',
@@ -368,6 +375,13 @@ export default {
         let numbers = parseInt(self.submitdata.param_numbers)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
+        if (isNaN(groupprice) || groupprice < 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的团购价格'
+          })
+          return false
+        }
         if (groupprice > priceval) {
           self.$vux.alert.show({
             title: '',

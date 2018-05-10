@@ -125,7 +125,7 @@ export default {
       let everymin = self.everymin
       let everymax = self.everymax
       let price = self.price
-      if (self.$util.trim(price) !== '' && self.$util.trim(minprice) !== '') {
+      if (self.$util.trim(price) !== '' && self.$util.trim(minprice) !== '' && !isNaN(minprice)) {
         let cha = parseFloat(price) - parseFloat(minprice)
         if (self.$util.trim(everymin) !== '' && self.$util.trim(everymax) !== '') {
           self.neednum = Math.ceil((cha / parseFloat(everymin) + cha / parseFloat(everymax)) / 2)
