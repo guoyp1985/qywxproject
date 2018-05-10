@@ -45,7 +45,7 @@ export default {
       }
     },
     wxPayApi (params) {
-      WeixinJSBridge.invoke(
+      window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {

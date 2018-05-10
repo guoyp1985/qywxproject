@@ -307,6 +307,7 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         self.customerdata = data.data ? data.data : data
+        console.log(self.customerdata)
         if (!self.isBindCustomerScroll) {
           self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
           self.isBindCustomerScroll = true

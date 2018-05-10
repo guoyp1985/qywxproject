@@ -26,10 +26,10 @@
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无分享数据</template>
           </div>
-          <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item padding10">
+          <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.kefuid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;height:50px;">
-                <img :src="item.photo" style="width:40px;height:40px;" />
+                <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
@@ -39,7 +39,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
     </div>

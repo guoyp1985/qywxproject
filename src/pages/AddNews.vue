@@ -1,6 +1,6 @@
 <template>
   <div id="article-info-edit">
-    <group label-width="6em">
+    <group label-width="5em">
       <x-input :title="$t('News title')" :placeholder="`${$t('Necessary')}${$t('Title')}`" v-model="submitdata.title" class="font14"></x-input>
       <cell :title="$t('Cover photo')" class="font14">
         {{$t('Necessary')}}上传图像后可点击<i class="al al-set font14"></i>进行剪裁
@@ -59,6 +59,7 @@ export default {
   },
   data () {
     return {
+      query: Object,
       currentImg: '',
       popupShow: false,
       allowsubmit: true,
@@ -141,7 +142,11 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: '/news', query: { id: data.data, newadd: 1 } })
+              let params = { id: data.data }
+              if (self.query.id) {
+                params.newadd = 1
+              }
+              self.$router.push({ path: '/news', query: params })
             }
           }
         })
@@ -156,11 +161,11 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    const query = self.$route.query
-    if (query.id) {
+    self.query = self.$route.query
+    if (self.query.id) {
       document.title = '更多设置'
       self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-        params: { id: query.id, module: 'news' }
+        params: { id: self.query.id, module: 'news' }
       }).then(function (res) {
         let data = res.data
         let retdata = data.data ? data.data : data
@@ -173,6 +178,10 @@ export default {
           }
         }
       })
+    } else {
+      if (self.photoarr.length > 0) {
+        self.submitdata.photo = self.photoarr[0]
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container" style="top:0px;">
+    <div v-show="disproductdata" class="s-container" style="top:0px;">
       <template v-if="!productdata || productdata.length == 0">
         <div class="scroll_list bg-page">
           <div class="emptyitem">
@@ -52,7 +52,7 @@
     </div>
     <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup1" @on-hide="popupevent('hide')" @on-show="popupevent('show')">
+      <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item">
@@ -70,18 +70,58 @@
             <div class="item">
               <router-link class="inner" :to="{path: '/poster', query: {id: clickdata.id, module: 'product'}}">生成海报</router-link>
             </div>
-
-            <!--
-            <div class="item" v-for="(row,index1) in controldata1" :key="index1">
-              <div class="inner" @click="clickpopup(row.key)" v-if="row.key == 'up' && clickdata.moderate == 0">{{ row.title }}</div>
-              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key == 'down' && clickdata.moderate == 1">{{ row.title }}</div>
-              <router-link class="inner" to="/productStat" v-else-if="row.key == 'stat'">{{ row.title }}</router-link>
-              <div class="inner" @click="clickpopup(row.key)" v-else-if="row.key != 'up' && row.key != 'down' && row.key != 'stat'">{{ row.title }}</div>
+            <div class="item">
+              <div class="inner" @click="clickpopup('push')">推送给返点客</div>
             </div>
-          -->
             <div class="item close mt10" @click="clickpopup('row.key')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom class="x-popup popupCustomer">
+      <popup v-model="showpush" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">选择返点客</div>
+          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
+            <div class="w_100">
+              <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
+                <div class="flex_left">全选</div>
+              </check-icon>
+            </div>
+          </div>
+          <div class="popup-middle font14" style="top:85px;bottom:86px;">
+            <div class="padding10">
+              <div v-show="discustomerdata" class="scroll_list">
+                <template v-if="customerdata.length == 0">
+                  <div class="scroll_item emptyitem">
+          					<div class="t-table">
+          						<div class="t-cell" style="padding:10px;">暂无返点客</div>
+          					</div>
+          				</div>
+                </template>
+                <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img :src="item.avatar" class="avatarimg imgcover" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                    </div>
+                  </div>
+                </check-icon>
+              </div>
+  					</div>
+          </div>
+          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+            <div class="w_100">
+              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
           </div>
         </div>
       </popup>
@@ -97,7 +137,7 @@ Back go shop:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon } from 'vux'
 import ENV from 'env'
 
 export default {
@@ -106,7 +146,8 @@ export default {
   },
   components: {
     Popup,
-    Confirm
+    Confirm,
+    CheckIcon
   },
   data () {
     return {
@@ -125,7 +166,16 @@ export default {
       limit: 20,
       pagestart1: 0,
       isBindScroll1: false,
-      scrollArea1: null
+      scrollArea1: null,
+      showpush: false,
+      customerdata: [],
+      pushdata: [],
+      checkAll: false,
+      customerPagestart: 0,
+      isBindCustomerScroll: false,
+      scrollCustomerArea: null,
+      disproductdata: false,
+      discustomerdata: false
     }
   },
   created: function () {
@@ -166,6 +216,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
+        self.disproductdata = true
         if (!self.isBindScroll1) {
           self.scrollArea1 = document.querySelector('.rproductlist .s-container')
           self.isBindScroll1 = true
@@ -179,8 +230,6 @@ export default {
       this.showpopup1 = !this.showpopup1
       this.clickdata = item
       this.clickindex = index
-    },
-    popupevent (status) {
     },
     clickpopup (key) {
       const self = this
@@ -233,8 +282,102 @@ export default {
       } else if (key === 'edit') {
         self.showpopup1 = false
         self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
+      } else if (key === 'push') {
+        self.showpopup1 = false
+        self.showpush = true
+        if (self.customerdata.length === 0) {
+          self.getCustomerdata()
+        } else {
+          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+          self.isBindCustomerScroll = true
+          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+        }
       } else {
-        this.showpopup1 = false
+        self.showpopup1 = false
+      }
+    },
+    scrollCustomer: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollCustomerArea,
+        callback: function () {
+          if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
+            self.customerPagestart++
+            self.$vux.loading.show()
+            self.getCustomerdata()
+          }
+        }
+      })
+    },
+    getCustomerdata () {
+      const self = this
+      self.$vux.loading.show()
+      let params = { params: { pagestart: self.customerPagestart, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.customerdata = data.data ? data.data : data
+        self.discustomerdata = true
+        if (!self.isBindCustomerScroll) {
+          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+          self.isBindCustomerScroll = true
+          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+        }
+      })
+    },
+    closepush () {
+      this.showpush = false
+      self.isBindCustomerScroll = false
+    },
+    submitpush () {
+      const self = this
+      if (self.pushdata.length === 0) {
+        self.$vux.toast.show({
+          text: '请选择返点客'
+        })
+        return false
+      }
+      self.$vux.loading.show()
+      let subdata = { id: self.clickdata.id, sendmodule: 'product', uid: self.pushdata }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showpush = false
+            }
+          }
+        })
+      })
+      self.isBindCustomerScroll = false
+    },
+    radioclick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.pushdata.push(data.uid)
+      } else {
+        self.checkAll = false
+        for (let i = 0; i < self.pushdata.length; i++) {
+          if (self.pushdata[i] === data.uid) {
+            self.pushdata.splice(i, 1)
+            break
+          }
+        }
+      }
+    },
+    checkAllEvent () {
+      const self = this
+      for (let i = 0; i < self.customerdata.length; i++) {
+        if (self.checkAll) {
+          self.customerdata[i].checked = true
+        } else {
+          delete self.customerdata[i].checked
+        }
       }
     }
   }
