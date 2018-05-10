@@ -36,7 +36,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img :src="article.photo"></x-img>
+              <x-img :src="article.photo" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
