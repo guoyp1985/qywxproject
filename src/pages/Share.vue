@@ -22,7 +22,7 @@
         </div>
         <div slot="child">
           <span class="al al-jinbi color-gold"></span>
-          <span class="color-red credit-txt">{{ item.credits | valueFormat }}</span>
+          <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
         </div>
       </cell>
     </group>

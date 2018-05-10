@@ -56,10 +56,11 @@ export default {
       const self = this
       const id = this.$route.query.id
       const module = this.$route.query.module
-      this.$http.get(`${ENV.BokaApi}/api/stat/shareview?module=${module}&id=${id}`)
+      this.$http.get(`${ENV.BokaApi}/api/user/creditsList`)
       .then(res => {
-        // console.log(res.data)
-        self.list = res.data.data
+        if (res.data.flag) {
+          self.list = res.data.data
+        }
       })
     }
   },
