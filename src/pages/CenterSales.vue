@@ -28,9 +28,9 @@
       </router-link>
     </div>
     <div class="vux-marquee">
-      <marquee :item-height=40 :interval=5000 :duration=1000>
-        <marquee-item v-for="(item,index) in marquedata" :key="item.id">
-          <group class="marqueeitem">
+      <marquee :item-height=40 :interval=5000 :duration=1000 style="margin-top:0;">
+        <marquee-item v-for="(item,index) in marquedata" :key="item.id" style="margin-top:0;">
+          <group class="marqueeitem" style="margin-top:0;">
             <router-link :to="{path: '/stat', query: {id: item.moduleid, module: item.module}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
               <div class="t-cell v_middle h_100">
                 <div class="clamp1">
