@@ -13,7 +13,6 @@ import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertP
 import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
-import WeixinJSBridge from 'WeixinJSBridge'
 require('es6-promise').polyfill()
 
 // const CancelToken = AjaxPlugin.$http.CancelToken
@@ -351,7 +350,7 @@ const getAddress = (wxToken) => {
   const url = currentUrl.href.replace(/#\/\w*/g, '')
   alert(`${accessToken}, ${ENV.AppId}, ${nonceStr}, ${timeStamp}, ${url}`)
   const addrSign = $vue.$util.wxSign(accessToken, ENV.AppId, nonceStr, timeStamp, url)
-  WeixinJSBridge.invoke('editAddress', {
+  window.WeixinJSBridge.invoke('editAddress', {
     appId: ENV.AppId,
     scope: 'jsapi_address',
     signType: 'sha1',
