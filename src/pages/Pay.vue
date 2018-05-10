@@ -33,6 +33,7 @@ export default {
   },
   methods: {
     pay () {
+      console.log('ok')
       const params = this.payParams
       console.log(params)
       if (typeof WeixinJSBridge === 'undefined') {
