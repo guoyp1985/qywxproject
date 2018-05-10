@@ -109,7 +109,7 @@ export default {
 
     },
     clickArticle (item) {
-      this.$router.push({path: `/articles/${item.id}`})
+      this.$router.push({ path: '/news', query: { id: item.id } })
     },
     getData () {
       const self = this

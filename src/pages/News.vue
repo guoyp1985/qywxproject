@@ -1,10 +1,17 @@
 /*
-* @description: 知识库详情页
-* @auther: gyp
-* @created_date: 2018-05-05
+* @description: 文章详情页
+* @auther: simon
+* @created_date: 2018-4-20
 */
 <template>
   <div id="article-content">
+    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+			<div class="ico"><i class="al al-feiji"></i></div>
+			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+			<div class="pic">
+				<img src="../assets/images/share1.jpg" />
+			</div>
+		</div>
     <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
     <div class="article-view">
       <div class="article-title">
@@ -28,10 +35,28 @@
           <span class="fa fa-user"></span>
           <span>{{$t('Advisory')}}</span>
         </x-button>
+        <x-button mini plain type="primary" @click.native="onStore">
+          <span class="fa fa-user"></span>
+          <span>{{$t('Store')}}</span>
+        </x-button>
+        <!-- <x-button mini plain type="primary" @click.native="onShare">
+          <span class="fa fa-share"></span>
+          <span>{{$t('Share')}}</span>
+        </x-button> -->
       </div>
       <div class="reading-info">
         <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
         <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
+      </div>
+      <div class="qrcode-area">
+        <div class="qrcode-bg">
+          <div class="qrcode">
+            <img src="../assets/_images/fingerprint.gif"/>
+            <div class="scan-area">
+              <img :src="article.qrcode"/>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="comment-area">
@@ -45,6 +70,15 @@
         <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
       </comment>
     </div>
+    <ShareSuccess
+      v-show="showShareSuccess"
+      v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
+      :data="article"
+      :loginUser="reward"
+      module="news"
+      :on-close="closeShareSuccess">
+    </ShareSuccess>
+    <editor elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
@@ -56,6 +90,7 @@ import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
 import Editor from '@/components/Editor'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -69,16 +104,18 @@ export default {
     Comment,
     Reply,
     CommentPopup,
-    Editor
+    Editor,
+    ShareSuccess
   },
   data () {
     return {
       query: Object,
+      showShareSuccess: false,
       showsharetip: true,
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: {},
+      reward: { headimgurl: '/src/assets/images/user.jpg', avatar: '/src/assets/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       comments: []
     }
@@ -118,10 +155,16 @@ export default {
       this.replyPopupShow = false
     },
     commentSubmit (value) { // 留言提交
-      console.log(value)
       this.commentPopupShow = false
+      // let comment = {
+      //   userName: 'simon',
+      //   userAvatar: '/src/assets/images/user.jpg',
+      //   content: value,
+      //   date: new Date().getTime(),
+      //   diggCount: 0
+      // }
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'knowledge', message: value})
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'news', message: value})
       .then(res => {
         if (res.data.flag) {
           self.comments.push(res.data.data)
@@ -142,27 +185,39 @@ export default {
     getData () {
       const self = this
       const id = self.query.id
-      this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, { params: { id: self.query.id, module: 'knowledge' } }) // 获取文章
+      let infoparams = { id: id, module: 'news' }
+      if (self.query.from === 'poster') {
+        infoparams.from = 'poster'
+      }
+      if (self.query.share_uid) {
+        infoparams['share_uid'] = self.query.share_uid
+      }
+      self.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
+        self.$vux.loading.hide()
         if (res.data.flag) {
           self.article = res.data.data
+          document.title = self.article.title
           self.reward = User.get()
-          self.$util.wxShare({
-            data: {
-              title: self.article.seotitle || self.article.title,
-              desc: self.article.seodescription || self.article.seotitle || self.article.title,
-              link: `${ENV.Host}/#/knowledge?id=${self.productdata.id}&share_uid=${self.reward.uid}`,
-              photo: self.article.photo.split(',')[0]
+          self.$util.handleWxShare({
+            data: self.article,
+            module: 'news',
+            moduleid: self.article.id,
+            lastshareuid: self.query.share_uid,
+            link: `${ENV.Host}/#/news?id=${self.article.id}?wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+            successCallback: function () {
+              self.showShareSuccess = true
             }
           })
         }
-        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'knowledge'}) // 获取评论
+        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
       .then(res => {
         if (res.data) {
           self.comments = res.data
         }
-        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'knowledge'})
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
       })
       .then(res => {
         if (res.data.flag < 1) {
@@ -176,7 +231,7 @@ export default {
       const self = this
       if (this.notFavorite) {
         this.notFavorite = false
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'knowledge'})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -184,7 +239,7 @@ export default {
         })
       } else {
         this.notFavorite = true
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: 'knowledge'})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: 'news'})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Cancel Favorite'))
@@ -193,16 +248,15 @@ export default {
       }
     },
     onAdvisory () {
-
+    },
+    onStore () {
     },
     onShare () {
-
     },
     editSave () {
-
     },
     editSetting () {
-      this.$router.push({name: 'tArticleInfoEdit', params: {id: this.article.id}})
+      this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
     },
     editDelete () {
       this.$vux.confirm.show({
@@ -210,13 +264,21 @@ export default {
         onCancel () {},
         onConfirm () {}
       })
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
     }
   },
   created () {
     const self = this
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
     this.getData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    if (self.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
+    }
   }
 }
 </script>
@@ -283,6 +345,12 @@ export default {
 #article-content .comment-op {
   text-align: right;
   color: #1aad19;
+}
+#editor-content {
+  overflow: hidden;
+}
+#editor-content img {
+  max-width: 100% !important;
 }
 
 /* vui css hack */

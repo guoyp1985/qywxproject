@@ -258,7 +258,7 @@ export default {
       event.preventDefault()
       const self = this
       let iscontinue = self.$util.validateQueue([
-        { telephone: self.submitdata.mobile, r: 'Phone' }
+        { telephone: self.$util.trim(self.submitdata.mobile), r: 'Phone' }
       ],
         model => {
           switch (model.key) {
@@ -320,7 +320,7 @@ export default {
         for (let key in self.requireddata) {
           let v = {}
           if (key === 'mobile') {
-            v = { telephone: self.submitdata.mobile, r: 'Phone' }
+            v = { telephone: self.$util.trim(self.submitdata.mobile), r: 'Phone' }
           } else {
             v[key] = self.submitdata[key]
           }
@@ -350,6 +350,7 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1 || data.flag === 2) {
+                User.set()
                 self.$router.push('/centerSales')
               }
             }

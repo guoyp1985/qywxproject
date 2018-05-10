@@ -62,7 +62,7 @@ export default {
       currentImg: '',
       popupShow: false,
       allowsubmit: true,
-      photoarr: ['../src/assets/_images/lion.jpg'],
+      photoarr: ['/src/assets/_images/lion.jpg'],
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
@@ -141,7 +141,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: `/articles/${data.data}`, query: { newadd: 1 } })
+              self.$router.push({ path: '/news', query: { id: data.data, newadd: 1 } })
             }
           }
         })

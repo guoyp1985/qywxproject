@@ -41,7 +41,7 @@
           <FormGroupbuy :submitdata="submitdata"></FormGroupbuy>
         </template>
         <template v-if="activityType == 'bargainbuy'">
-          <FormBargainbuy :submitdata="submitdata"></FormBargainbuy>
+          <FormBargainbuy :data="selectproduct" :submitdata="submitdata"></FormBargainbuy>
         </template>
         <template v-if="activityType == 'discount'">
           <FormDiscount :submitdata="submitdata"></FormDiscount>
@@ -183,6 +183,9 @@ export default {
     },
     requireddata: function () {
       return this.requireddata
+    },
+    selectproduct: function () {
+      return this.selectproduct
     }
   },
   computed: {
@@ -332,16 +335,78 @@ export default {
       if (!iscontinue) {
         return false
       }
+      const priceval = parseFloat(self.selectproduct.price)
+      const storage = parseInt(self.selectproduct.storage)
       if (self.activityType === 'bargainbuy') {
-        let priceval = parseFloat(self.selectpopupdata.price)
-        let mininput = document.querySelector('.addActivity .addForm .everymin')
-        let minval = parseFloat(mininput.value)
-        let maxinput = document.querySelector('.addActivity .addForm .everymax')
-        let maxval = parseFloat(maxinput.value)
+        let minprice = parseFloat(self.submitdata.param_minprice)
+        let minval = parseFloat(self.submitdata.param_everymin)
+        let maxval = parseFloat(self.submitdata.param_everymax)
+        let limitbuy = parseInt(self.submitdata.param_limitbuy)
+        if (isNaN(minprice) || minprice < 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的活动价格'
+          })
+          return false
+        }
+        if (minprice > priceval) {
+          self.$vux.alert.show({
+            title: '',
+            content: '活动价格不能大于原价'
+          })
+          return false
+        }
+        if (limitbuy > storage) {
+          self.$vux.alert.show({
+            title: '',
+            content: '投放总数不能大于商品库存'
+          })
+          return false
+        }
         if (minval > priceval || maxval > priceval) {
           self.$vux.alert.show({
             title: '',
             content: '可砍金额不能大于活动价格'
+          })
+          return false
+        }
+      } else if (self.activityType === 'groupbuy') {
+        let groupprice = parseFloat(self.submitdata.param_groupprice)
+        let numbers = parseInt(self.submitdata.param_numbers)
+        let limitbuy = parseInt(self.submitdata.param_limitbuy)
+        let everybuy = parseInt(self.submitdata.param_everybuy)
+        if (isNaN(groupprice) || groupprice < 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的团购价格'
+          })
+          return false
+        }
+        if (groupprice > priceval) {
+          self.$vux.alert.show({
+            title: '',
+            content: '团购价不能大于原价'
+          })
+          return false
+        }
+        if (numbers <= 1) {
+          self.$vux.alert.show({
+            title: '',
+            content: '成团人数应大于1人'
+          })
+          return false
+        }
+        if (limitbuy > storage) {
+          self.$vux.alert.show({
+            title: '',
+            content: '投放商品数量不能大于商品库存'
+          })
+          return false
+        }
+        if (limitbuy < numbers * everybuy) {
+          self.$vux.alert.show({
+            title: '',
+            content: '投放商品数量应大于<br/>成团人数×限购件数'
           })
           return false
         }

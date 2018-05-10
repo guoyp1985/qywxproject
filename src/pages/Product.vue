@@ -584,7 +584,7 @@ export default {
           self.showShareSuccess = true
         }
       }
-      if (self.activityInfo.id) {
+      if (self.activityInfo && self.activityInfo.id) {
         shareData.title = self.productdata.title
         shareData.desc = `${self.loginUser.linkman}向你推荐团购商品，参团购买可立享优惠，了解详情`
         shareData.photo = self.photoarr[0]

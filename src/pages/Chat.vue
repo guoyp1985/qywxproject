@@ -22,7 +22,7 @@
                 <template v-else-if="item.msgtype == 'news'">
                   <div class="scroll_item">
           					<div class="con">
-          						<router-link :to="{path: '/articles/'}">
+          						<router-link :to="{path: '/news'}">
           							<div class="pic">
           								<div class="img_background v_bottom" style="background-image: url(http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg);"></div>
           								<span class="title">诚挚邀请你成为我的返点客户，为你带来更多收益！</span>
