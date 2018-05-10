@@ -41,7 +41,7 @@
           <FormGroupbuy :submitdata="submitdata"></FormGroupbuy>
         </template>
         <template v-if="activityType == 'bargainbuy'">
-          <FormBargainbuy :submitdata="submitdata"></FormBargainbuy>
+          <FormBargainbuy :data="selectproduct" :submitdata="submitdata"></FormBargainbuy>
         </template>
         <template v-if="activityType == 'discount'">
           <FormDiscount :submitdata="submitdata"></FormDiscount>
