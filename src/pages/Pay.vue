@@ -50,7 +50,6 @@ export default {
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
-          alert(JSON.stringify(res))
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
           }
         }
