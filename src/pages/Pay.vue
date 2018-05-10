@@ -34,20 +34,18 @@ export default {
   },
   methods: {
     pay () {
-      alert('ok')
-      console.log('ok')
       const params = this.payParams
       console.log(params)
-      // if (typeof WeixinJSBridge === 'undefined') {
-      //   if (document.addEventListener) {
-      //     document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
-      //   } else if (document.attachEvent) {
-      //     document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
-      //     document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
-      //   }
-      // } else {
-      //   this.wxPayApi(params)
-      // }
+      if (typeof WeixinJSBridge === 'undefined') {
+        if (document.addEventListener) {
+          document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
+        } else if (document.attachEvent) {
+          document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
+          document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
+        }
+      } else {
+        this.wxPayApi(params)
+      }
     },
     wxPayApi (params) {
       WeixinJSBridge.invoke(
@@ -65,9 +63,9 @@ export default {
       .then(res => {
         console.log(res.data.data)
         if (res.data.flag) {
-          self.payPrice = res.data.data.money
-          self.receivables = res.data.data.weixinname
-          self.payParams = res.data.data.data
+          self.payPrice = res.data.money
+          self.receivables = res.data.weixinname
+          self.payParams = res.data.data
         }
       })
     }
