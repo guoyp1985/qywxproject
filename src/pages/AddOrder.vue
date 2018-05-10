@@ -284,7 +284,6 @@ export default {
     },
     submitOrder () {
       const self = this
-      console.log(self.submitdata.postdata)
       if (!self.submitdata.addressid) {
         self.$vux.toast.show({
           text: '请选择地址'
@@ -300,7 +299,8 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              location.replace(`${ENV.BokaCDN}/#/pay/${data.id}`)
+              // location.replace(`${ENV.BokaCDN}/#/pay/${data.id}`)
+              location.href = `${ENV.BokaCDN}/#/pay/${data.id}`
             }
           }
         })
