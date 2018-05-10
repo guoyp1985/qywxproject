@@ -35,7 +35,7 @@ export default {
   methods: {
     pay () {
       const params = this.payParams
-      // alert(WeixinJSBridge)
+      alert(WeixinJSBridge)
       if (typeof WeixinJSBridge === 'undefined') {
         if (document.addEventListener) {
           document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
