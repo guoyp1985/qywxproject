@@ -35,7 +35,6 @@ export default {
   methods: {
     pay () {
       const params = this.payParams
-      console.log(WeixinJSBridge)
       if (typeof WeixinJSBridge === 'undefined') {
         if (document.addEventListener) {
           document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
@@ -51,6 +50,7 @@ export default {
       WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
+          alert(JSON.stringify(res))
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
           }
         }
