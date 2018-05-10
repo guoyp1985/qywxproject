@@ -18,8 +18,6 @@
 <script>
 import { Box, XButton } from 'vux'
 import ENV from 'env'
-// import WeixinJSBridge from 'WeixinJSBridge'
-// console.log(WeixinJSBridge)
 export default {
   components: {
     Box,
