@@ -106,7 +106,7 @@ export default {
           let sharelink = `${ENV.Host}/#/activity?id=${self.data.id}&share_uid=${self.loginUser.uid}`
           if (self.data.crowduser && self.data.crowduser.length !== 0) {
             self.crowduser = self.data.crowduser
-            sharelink = `${sharelink}&crowduserid=${self.crowduser.crowdowner}`
+            sharelink = `${sharelink}&crowduserid=${self.crowduser.id}`
           }
           self.product = self.data.product
           let inpage = ''
