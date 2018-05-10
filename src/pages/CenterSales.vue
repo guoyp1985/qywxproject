@@ -252,19 +252,14 @@ export default {
         }
       }
     }
-    console.log(1)
     if (!iscontinue) {
-      console.log(2)
       self.$vux.loading.hide()
       self.$router.push('/retailerApply')
     } else {
-      console.log(3)
       self.$vux.loading.hide()
       self.showcontainer = true
       self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
         let data = res.data
-        console.log(4)
-        console.log(JSON.stringify(data))
         self.retailerInfo = data.data ? data.data : data
         self.imgarr[0].msrc = self.retailerInfo.avatar
         self.imgarr[0].src = self.retailerInfo.avatar
