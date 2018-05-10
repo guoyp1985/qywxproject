@@ -19,6 +19,7 @@
 import { Box, XButton } from 'vux'
 import ENV from 'env'
 import WeixinJSBridge from 'WeixinJSBridge'
+console.log(WeixinJSBridge)
 export default {
   components: {
     Box,
@@ -33,6 +34,7 @@ export default {
   },
   methods: {
     pay () {
+      alert('ok')
       console.log('ok')
       const params = this.payParams
       console.log(params)
