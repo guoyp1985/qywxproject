@@ -302,6 +302,7 @@ export default {
             if (data.flag === 1) {
               // self.$router.push(`/pay/${data.id}`)
               location.replace(`${ENV.BokaCDN}/#/pay/${data.id}`)
+              console.log('here')
             }
           }
         })
