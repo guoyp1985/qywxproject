@@ -529,6 +529,7 @@ export default {
     }
   },
   created () {
+    /*
     console.log('in product created')
     const self = this
     console.log('in before commit')
@@ -542,7 +543,6 @@ export default {
     console.log('in 2')
     console.log(self.productid)
     self.loginUser = User.get()
-    /*
     if (self.loginUser) {
       self.isshowtop = true
       setTimeout(function () {
@@ -554,7 +554,6 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
-    */
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -655,6 +654,7 @@ export default {
         self.activitydata = data.data ? data.data : data
       }
     })
+    */
   }
 }
 </script>

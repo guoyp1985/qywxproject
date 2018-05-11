@@ -117,7 +117,7 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon } from 'vux'
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
@@ -136,7 +136,6 @@ export default {
     TransferDom,
     Popup,
     Alert,
-    Loading,
     Datetime,
     Search,
     FormGroupbuy,
