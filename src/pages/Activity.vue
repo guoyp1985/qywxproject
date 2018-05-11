@@ -168,6 +168,7 @@ export default {
     }
   },
   created () {
+    console.log('in ll')
     const self = this
     self.$vux.loading.show()
     self.$store.commit('updateToggleTabbar', {toggleBar: false})

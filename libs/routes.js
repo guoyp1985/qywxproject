@@ -128,6 +128,11 @@ export default [
     component: RetailerActivitylist
   },
   {
+    path: '/activity',
+    name: 'tActivity',
+    component: Activity
+  },
+  {
     path: '/retailerRevenue',
     name: 'tRetailerRevenue',
     component: RetailerRevenue
