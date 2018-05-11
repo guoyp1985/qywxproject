@@ -25,7 +25,7 @@
         </div>
       </div>
       <div class="mt12 b_bottom_after padding10 bg-white">{{ viewuser.linkman }}{{ $t('Behavior analysis in the last month') }}</div>
-      <div class="bg-white scroll_list">
+      <div v-show="disdatalist" class="bg-white scroll_list">
         <div class="emptyitem flex_center" v-if="!data || data.length == 0">暂无行为数据</div>
         <div v-else v-for="item in data" :key="item.id" class="scroll_item padding10">
           <div class="t-table">
@@ -75,8 +75,13 @@ export default {
     return {
       query: Object,
       viewuser: Object,
-      data: []
+      data: [],
+      disdatalist: false
     }
+  },
+  computed: {
+  },
+  methods: {
   },
   created: function () {
     let self = this
@@ -97,11 +102,8 @@ export default {
       self.$vux.loading.hide()
       let retdata = data.data ? data.data : data
       self.data = retdata
+      self.disdatalist = true
     })
-  },
-  computed: {
-  },
-  methods: {
   }
 }
 </script>
