@@ -19,16 +19,17 @@
             </div>
           </div>
         </div>
-        <router-link v-else class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
+        <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
       <div class="pagemiddle">
         <swiper
-          class="pic-swiper notitle"
-          v-show="photoarr && photoarr.length > 0"
+          v-show="showFlash"
+          class="pic-swiper notitle border-box"
+          style="padding-bottom:100%;"
           dots-position="center"
           :interval=6000
           :show-dots="isshowdot"
-          :aspect-ratio="900/900"
+          :aspect-ratio="1/1"
           auto
           loop>
           <swiper-item v-for="(item,index) in photoarr">
@@ -352,10 +353,11 @@ export default {
       productdata: {},
       retailerinfo: {},
       activityInfo: {},
-      showtopcss: '',
       loginUser: {},
+      showtopcss: '',
       isshowtop: false,
       waitgetcredit: 100,
+      showFlash: false,
       showdot: true,
       showpopup: false,
       showevluate: false,
@@ -423,7 +425,14 @@ export default {
       return this.isfavorite
     },
     photoarr: function () {
+      const self = this
+      if (self.photoarr.length > 0) {
+        self.showFlash = true
+      }
       return this.photoarr
+    },
+    showFlash: function () {
+      return this.showFlash
     },
     evluatedata: function () {
       return this.evluatedata
@@ -618,6 +627,9 @@ export default {
           if (photo && self.$util.trim(photo) !== '') {
             self.photoarr = photo.split(',')
           }
+          if (self.photoarr.length > 0) {
+            self.showFlash = true
+          }
           const content = self.productdata.content
           const contetnphoto = self.productdata.contentphoto
           if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
@@ -676,7 +688,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .vline{position:relative;}
 .vline:after {
   content: " ";
@@ -728,6 +740,9 @@ export default {
     font-size: 10px;
     min-width: 18px;
     text-align: center;
+}
+.product .vux-swiper{
+  position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
 }
 .product .vux-swiper-desc{display:none !important;}
 .product .grouptitle{
