@@ -36,7 +36,7 @@
           <img :src="item" class="imgcover w_100 h_100" />
         </swiper-item>
       </swiper>
-      <div class="grouptitle flex_left" v-if="activityInfo && activityInfo.type == 'groupbuy'">
+      <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
 				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
 				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
 				<div class="col3">已团{{ productdata.havetuan }}件</div>
@@ -61,7 +61,7 @@
 					</div>
 				</div>
   		</div>
-			<div class="groupbuarea" v-if="activityInfo && activityInfo.type == 'groupbuy' && activitydata.length > 0">
+			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
 				<div class="bg-page" style="height:10px;"></div>
 				<div class="bg-white">
 					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
@@ -172,7 +172,7 @@
 			</div>
 		</div>
     <template v-else>
-  		<div v-if="activityInfo && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
+  		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
   			<div class="t-table h_100">
           <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
             <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
@@ -498,7 +498,7 @@ export default {
     buyevent (buytype) {
       const self = this
       self.$vux.loading.show()
-      if (buytype === 'groupbuy' && self.activityInfo) {
+      if (buytype === 'groupbuy' && self.activityInfo.id) {
         self.submitdata['activityid'] = self.activityInfo.id
       }
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
@@ -567,8 +567,9 @@ export default {
       self.showcontainer = true
       document.title = self.productdata.title
       self.retailerinfo = self.productdata.retailerinfo
-      alert(JSON.stringify(self.retailerinfo))
-      self.activityInfo = self.productdata.activityinfo
+      if (self.productdata.activityinfo) {
+        self.activityInfo = self.productdata.activityinfo
+      }
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
       }
@@ -634,7 +635,7 @@ export default {
       if (data.flag === 1) {
         self.evluatedata = (data.data ? data.data : data)
       }
-      if (self.activityInfo && self.activityInfo.type === 'groupbuy') {
+      if (self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
         return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
           { params: { id: self.productid } }
         )
