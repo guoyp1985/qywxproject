@@ -31,8 +31,8 @@
             :aspect-ratio="1/1"
             auto
             loop>
-            <swiper-item v-for="(item,index) in photoarr" style="border:blue 1px solid;">
-              <img :src="item" class="imgcover w_100 h_100" style="border:red 1px solid;" />
+            <swiper-item v-for="(item,index) in photoarr">
+              <img :src="item" class="imgcover w_100 h_100"/>
             </swiper-item>
           </swiper>
         </template>
@@ -742,11 +742,13 @@ export default {
     min-width: 18px;
     text-align: center;
 }
-.product .pic-swiper1{padding-bottom:100%;box-sizing: border-box;border:orange 1px solid;}
-.product .vux-swiper1{
+.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;border:orange 1px solid;}
+.product .vux-swiper{
   position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
   border:black 1px solid;
 }
+.product .vux-swiper-item {border: blue 1px solid;}
+.product .vux-swiper-item img{border: red 1px solid;display:block;}
 .product .vux-swiper-desc{display:none !important;}
 .product .grouptitle{
   width:100%;
