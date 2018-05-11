@@ -742,9 +742,10 @@ export default {
     min-width: 18px;
     text-align: center;
 }
-.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
+.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;border:orange 1px solid;}
 .product .vux-swiper{
   position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
+  border:black 1px solid;
 }
 .product .vux-swiper-desc{display:none !important;}
 .product .grouptitle{
