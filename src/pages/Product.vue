@@ -1,5 +1,6 @@
 <template>
   <div v-show="showcontainer" :class="`containerarea bg-white font14 product ${showtopcss}`">
+    <!--
     <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
@@ -289,6 +290,7 @@
       module="product"
       :on-close="closeShareSuccess">
     </ShareSuccess>
+  -->
   </div>
 </template>
 
