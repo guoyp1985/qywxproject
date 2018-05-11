@@ -553,8 +553,7 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
-    console.log(self.loginUser)
-      /*
+    console.log(JSON.stringify(self.loginUser))
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -566,7 +565,8 @@ export default {
       infoparams.from = 'poster'
     }
     console.log('in 3')
-    console.log(infoparams)
+    console.log(JSON.stringify(infoparams))
+      /*
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
