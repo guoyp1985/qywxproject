@@ -27,13 +27,8 @@
       <div class="mt12 b_bottom_after padding10 bg-white">{{ viewuser.linkman }}{{ $t('Behavior analysis in the last month') }}</div>
       <div v-show="disdatalist" class="bg-white scroll_list">
         <div class="emptyitem flex_center" v-if="!data || data.length == 0">暂无行为数据</div>
-        <div v-else v-for="item in data" :key="item.id" class="scroll_item padding10">
+        <div v-else v-for="item in data" :key="item.id" @click="clickItem(item)" class="scroll_item padding10 db">
           <div class="t-table">
-            <!--
-            <div class="t-cell w50 align_left v_top">
-              <img class="avatarimg1 imgcover" :src="item.avatar">
-            </div>
-          -->
             <div class="t-cell align_left v_top">
               <div class="color-gray">{{ item.linkman }}</div>
               <div class="">{{ item.title }}</div>
@@ -82,10 +77,17 @@ export default {
   computed: {
   },
   methods: {
+    clickItem: function (item) {
+      const self = this
+      if (item.module === 'product' || item.module === 'news') {
+        self.$router.push({path: `/${item.module}`, query:{ id: item.moduleid, wid: item.wid } })
+      }
+    }
   },
   created: function () {
     let self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.query = self.$route.query
     self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
       { params: { customeruid: self.query.uid } }

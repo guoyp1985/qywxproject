@@ -506,6 +506,7 @@ export default {
       if (buytype === 'groupbuy' && self.activityInfo.id) {
         self.submitdata['activityid'] = self.activityInfo.id
       }
+      self.submitdata.wid = self.retailerinfo.uid
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -572,7 +573,6 @@ export default {
       self.showcontainer = true
       document.title = self.productdata.title
       // self.retailerinfo = self.productdata.retailerinfo
-      // self.teststr = JSON.stringify(self.retailerinfo)
       if (self.productdata.activityinfo) {
         self.activityInfo = self.productdata.activityinfo
       }
@@ -620,10 +620,9 @@ export default {
         params: infoparams
       })
     }).then(function (res) {
+      self.teststr = JSON.stringify(res)
       let data = res.data
       self.retailerinfo = data.data ? data.data : data
-      // self.retailerinfo = self.productdata.retailerinfo
-      self.teststr = JSON.stringify(self.retailerinfo)
       let buyparams = {}
       if (self.query.wid) {
         buyparams['wid'] = self.query.wid
