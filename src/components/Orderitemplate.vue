@@ -6,13 +6,6 @@
     </div>
     <slot name="productlist"></slot>
     <div class="bg-white padding10 b_top_after b_bottom_after color-gray5">
-        <div class="clear">
-          <div class="fl">
-            <slot name="avatar"></slot>
-            <slot name="username"></slot>
-          </div>
-          <slot name="seller"></slot>
-        </div>
         <slot name="receivearea"></slot>
     </div>
   </router-link>
