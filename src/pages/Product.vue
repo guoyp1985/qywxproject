@@ -553,6 +553,7 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
+    console.log(self.loginUser)
       /*
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
