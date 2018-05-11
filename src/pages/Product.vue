@@ -1,7 +1,7 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
     <template v-show="showcontainer">
-      <template v-show="loginUser && loginUser.uid && isshowtop">
+      <template v-show="isshowtop">
         <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
           <div class="t-table h_100">
             <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
@@ -688,6 +688,7 @@ export default {
 </script>
 
 <style lang="less">
+.notop .pagetop{display:none;}
 .vline{position:relative;}
 .vline:after {
   content: " ";
