@@ -157,6 +157,8 @@
         </router-link>
       </div>
       <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
+      <div class="padding10" style="border:red 1px solid;">{{ teststr }}
+      </div>
       <div class="productcontent">
         <div v-html="productdata.content"></div>
         <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
@@ -368,7 +370,8 @@ export default {
       evluatedata: [],
       ingdata: [],
       activitydata: [],
-      submitdata: { flag: 1, quantity: 1 }
+      submitdata: { flag: 1, quantity: 1 },
+      teststr: ''
     }
   },
   watch: {
@@ -567,6 +570,7 @@ export default {
       self.showcontainer = true
       document.title = self.productdata.title
       self.retailerinfo = self.productdata.retailerinfo
+      self.teststr = JSON.stringify(self.retailerinfo)
       if (self.productdata.activityinfo) {
         self.activityInfo = self.productdata.activityinfo
       }
