@@ -579,7 +579,7 @@ export default {
           img: self.photoarr[i]
         }
       }
-      if ((!self.productdata.content || self.$util.trim(self.productdata.content) === '') && (!self.productdata.contentphoto || self.$util.trim(self.contentphoto.content) === '')) {
+      if ((!self.productdata.content || self.$util.trim(self.productdata.content) === '') && (!self.productdata.contentphoto || self.$util.trim(self.productdata.contentphoto) === '')) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
       } else if (self.productdata.contentphoto && self.$util.trim(self.productdata.contentphoto) !== '') {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
