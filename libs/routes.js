@@ -48,6 +48,7 @@ import RebateApply from '@/pages/RebateApply'
 import RebateStore from '@/pages/RebateStore'
 import RetailerSaleview from '@/pages/RetailerSaleview'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
+import Sos from '@/pages/Sos'
 import Store from '@/pages/Store'
 import Share from '@/pages/Share'
 import Stat from '@/pages/Stat'
@@ -371,8 +372,8 @@ export default [
     component: Knowledge
   },
   {
-    path: '/activity',
-    name: 'tActivity',
-    component: Activity
+    path: '/sos',
+    name: 'tSos',
+    component: Sos
   }
 ]
