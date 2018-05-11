@@ -559,9 +559,9 @@ export default {
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
-      alert(JSON.stringify(res))
       let data = res.data
       self.productdata = data.data ? data.data : data
+      alert(JSON.stringify(self.productdata))
       self.$vux.loading.hide()
       self.showcontainer = true
       document.title = self.productdata.title
@@ -575,6 +575,7 @@ export default {
           img: self.photoarr[i]
         }
       }
+      alert(JSON.stringify(self.photoarr))
       if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
       } else if (!self.$util.isNull(self.productdata.contentphoto)) {
