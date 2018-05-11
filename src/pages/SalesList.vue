@@ -167,7 +167,7 @@ export default {
       const self = this
       let params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
@@ -193,7 +193,7 @@ export default {
       const self = this
       let params = { params: { uid: self.query.uid, buyonline: 0, pagestart: self.pagestart2, limit: self.limit } }
       let keyword = self.searchword2
-      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult2 = true
         params.params.keyword = keyword
       } else {

@@ -23,7 +23,6 @@
       <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
     </template>
     <div class="pagemiddle">
-      <!--
       <swiper
         class="pic-swiper notitle"
         v-if="photoarr && photoarr.length > 0"
@@ -37,7 +36,6 @@
           <img :src="item" class="imgcover w_100 h_100" />
         </swiper-item>
       </swiper>
-    -->
       <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
 				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
 				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
@@ -159,8 +157,6 @@
         </router-link>
       </div>
       <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
-      <div class="padding10" style="border:red 1px solid;word-break: break-word;">{{ teststr }}
-      </div>
       <div class="productcontent">
         <div v-html="productdata.content"></div>
         <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
@@ -372,8 +368,7 @@ export default {
       evluatedata: [],
       ingdata: [],
       activitydata: [],
-      submitdata: { flag: 1, quantity: 1 },
-      teststr: ''
+      submitdata: { flag: 1, quantity: 1 }
     }
   },
   watch: {
@@ -569,14 +564,14 @@ export default {
     }).then(function (res) {
       let data = res.data
       self.productdata = data.data ? data.data : data
+      self.retailerinfo = self.productdata.retailerinfo
       self.$vux.loading.hide()
       self.showcontainer = true
       document.title = self.productdata.title
-      // self.retailerinfo = self.productdata.retailerinfo
       if (self.productdata.activityinfo) {
         self.activityInfo = self.productdata.activityinfo
       }
-      if (!self.$util.isNull(self.productdata.photo)) {
+      if (self.productdata.photo && self.$util.trim(self.productdata.photo) !== '') {
         self.photoarr = self.productdata.photo.split(',')
       }
       for (let i = 0; i < self.photoarr.length; i++) {
@@ -584,9 +579,9 @@ export default {
           img: self.photoarr[i]
         }
       }
-      if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
+      if ((!self.productdata.content || self.$util.trim(self.productdata.content) === '') && (!self.productdata.contentphoto || self.$util.trim(self.contentphoto.content) === '')) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
-      } else if (!self.$util.isNull(self.productdata.contentphoto)) {
+      } else if (self.productdata.contentphoto && self.$util.trim(self.productdata.contentphoto) !== '') {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
@@ -616,13 +611,6 @@ export default {
       if (self.query.lastshareuid) {
         infoparams.lastshareuid = self.query.lastshareuid
       }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-        params: infoparams
-      })
-    }).then(function (res) {
-      self.teststr = JSON.stringify(res)
-      let data = res.data
-      self.retailerinfo = data.data ? data.data : data
       let buyparams = {}
       if (self.query.wid) {
         buyparams['wid'] = self.query.wid
