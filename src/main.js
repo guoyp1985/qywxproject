@@ -18,7 +18,6 @@ require('es6-promise').polyfill()
 
 // const CancelToken = AjaxPlugin.$http.CancelToken
 
-
 // const headers = new Headers();
 // headers.set('Origin', 'https://vux.boka.cn')
 // headers.set('Accept', 'application/json')
@@ -38,7 +37,6 @@ require('es6-promise').polyfill()
 // Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.http.defaults.withCredentials = true;
 // Vue.http.defaults.headers.common['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8`
-
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')

@@ -53,7 +53,7 @@ export default {
       currentImg: '',
       popupShow: false,
       allowsubmit: true,
-      photoarr: ['/src/assets/_images/lion.jpg'],
+      photoarr: [],
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
@@ -163,7 +163,7 @@ export default {
           for (let key in self.submitdata) {
             self.submitdata[key] = retdata[key]
           }
-          if (!self.$util.isNull(self.submitdata.photo)) {
+          if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
           }
         }

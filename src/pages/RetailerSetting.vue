@@ -303,7 +303,7 @@ export default {
         self.submitdata[key] = retailerInfo[key]
       }
       let qrcode = self.submitdata.qrcode
-      if (!self.$util.isNull(qrcode)) {
+      if (qrcode && self.$util.trim(qrcode) !== '') {
         self.photoarr = qrcode.split(',')
       }
       self.havenum = self.photoarr.length

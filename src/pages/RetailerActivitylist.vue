@@ -35,7 +35,7 @@
                       <div class="clamp1 color-999 middle-cell">已领取:{{ item.getcount }}人/{{ $t('RMB') }}{{ item.getmoney }}</div>
                       <div class="clamp1 color-999 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
                     </div>
-                    <div class="t-cell align_right v_middle" style="width:60px;">
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
                       <router-link v-if="item.moderate == 0" class="qbtn1 bg-orange1 color-white" :to="`/pay/${item.orderid}`">支支付</router-link>
                       <router-link class="qbtn1 bg-orange1 color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
                       <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.moderate != 0">补钱</div>
@@ -55,7 +55,7 @@
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Groupprice') }} {{ $t('RMB') }} {{ item.groupprice }}</div>
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
                     </div>
-                    <div class="t-cell align_right v_middle" style="width:60px;">
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
                       <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
                       <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
@@ -73,7 +73,7 @@
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Min buy price') }} {{ $t('RMB') }} {{ item.minprice }}</div>
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Limitbuy count') }} {{ item.limitbuy }}</div>
                     </div>
-                    <div class="t-cell align_right v_middle" style="width:60px;">
+                    <div class="t-cell align_right v_middle font0" style="width:60px;">
                       <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
                       <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>

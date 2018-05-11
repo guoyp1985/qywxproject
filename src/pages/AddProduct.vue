@@ -176,10 +176,10 @@ export default {
         for (let key in self.submitdata) {
           self.submitdata[key] = self.data[key]
         }
-        if (!self.$util.isNull(self.submitdata.photo)) {
+        if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
           self.photoarr = self.submitdata.photo.split(',')
         }
-        if (!self.$util.isNull(self.submitdata.contentphoto)) {
+        if (self.submitdata.contentphoto && self.$util.trim(self.submitdata.contentphoto) !== '') {
           self.photoarr1 = self.submitdata.contentphoto.split(',')
         }
         document.title = self.data.title
@@ -291,7 +291,7 @@ export default {
         })
         return false
       }
-      if (self.$util.isNull(postdata.content) && self.$util.isNull(postdata.contentphoto)) {
+      if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
         self.$vux.alert.show({
           title: '',
           content: '请完善商品介绍或者详情图片'

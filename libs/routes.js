@@ -16,8 +16,6 @@ import DecorationShop from '@/pages/DecorationShop'
 import Deliverinfo from '@/pages/Deliverinfo'
 import Evaluation from '@/pages/Evaluation'
 import Favorite from '@/pages/Favorite'
-import GroupbuyStat from '@/pages/GroupbuyStat'
-import Groupbuy from '@/pages/Groupbuy'
 import KnowledgeClass from '@/pages/KnowledgeClass'
 import Knowledge from '@/pages/Knowledge'
 import MembersView from '@/pages/MembersView'
@@ -50,6 +48,7 @@ import RebateApply from '@/pages/RebateApply'
 import RebateStore from '@/pages/RebateStore'
 import RetailerSaleview from '@/pages/RetailerSaleview'
 import RetailerOrderDetail from '@/pages/RetailerOrderDetail'
+import Sos from '@/pages/Sos'
 import Store from '@/pages/Store'
 import Share from '@/pages/Share'
 import Stat from '@/pages/Stat'
@@ -253,11 +252,6 @@ export default [
     component: DefaultStat
   },
   {
-    path: '/groupbuyStat',
-    name: 'tGroupbuyStat',
-    component: GroupbuyStat
-  },
-  {
     path: '/product',
     name: 'tProduct',
     component: Product
@@ -348,11 +342,6 @@ export default [
     component: Deliverinfo
   },
   {
-    path: '/groupbuy',
-    name: 'tGroupbuy',
-    component: Groupbuy
-  },
-  {
     path: '/knowledgeClass',
     name: 'tKnowledgeClass',
     component: KnowledgeClass
@@ -383,8 +372,8 @@ export default [
     component: Knowledge
   },
   {
-    path: '/activity',
-    name: 'tActivity',
-    component: Activity
+    path: '/sos',
+    name: 'tSos',
+    component: Sos
   }
 ]

@@ -232,7 +232,7 @@ export default {
       self.$vux.loading.hide()
       self.data = data.data ? data.data : data
       self.submitdata.title = self.data.title
-      if (!self.$util.isNull(self.data.photo)) {
+      if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
         let arr = self.data.photo.split(',')
         for (let i = 0; i < arr.length; i++) {
           self.coverphotoarr.push({ photo: arr[i], checked: false })

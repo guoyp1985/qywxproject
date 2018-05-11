@@ -186,7 +186,7 @@ export default {
     onSubmit () {
       const self = this
       let kw = self.searchword
-      if (self.$util.trim(kw) === '') {
+      if (!kw || self.$util.trim(kw) === '') {
         self.$vux.alert.show({
           title: '',
           content: '请输入搜索内容'
@@ -239,7 +239,7 @@ export default {
     },
     collect1 () {
       const self = this
-      if (self.$util.isNull(self.collecturl)) {
+      if (!self.collecturl || self.$util.trim(self.collecturl) === '') {
         self.$vux.alert.show({
           title: '',
           content: '请输入采集链接'

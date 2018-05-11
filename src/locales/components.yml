@@ -404,7 +404,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客
+  Rebate customer: 返点客户
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -470,7 +470,7 @@ zh-CN:
   Deliver commpany: 物流公司
   Cancel txt: 取消
   Confirm txt: 提交
-  Add order1: 返点客户
+  Add order1: 返点客
   Selection promotion: 精选促销
   All products: 全部商品
   Contact Seller: 联系卖家
@@ -698,6 +698,7 @@ zh-CN:
   tPosterDetail: 海报
   tNews: 文章详情
   tActivity: 活动
+  tSos: 您要找的内容不见了
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中

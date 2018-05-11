@@ -11,7 +11,7 @@
             <div class="font12">成交概率{{ viewuser.percent }}</div>
           </div>
           <div class="t-cell v_middle w50 align_right">
-            <router-link :to="{ name: '', query: {uid: viewuser.uid} }" class="qbtn bg-green color-white">{{ $t('Contact') }}</router-link>
+            <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn bg-green color-white">{{ $t('Contact') }}</router-link>
           </div>
         </div>
       </div>
@@ -25,15 +25,10 @@
         </div>
       </div>
       <div class="mt12 b_bottom_after padding10 bg-white">{{ viewuser.linkman }}{{ $t('Behavior analysis in the last month') }}</div>
-      <div class="bg-white scroll_list">
+      <div v-show="disdatalist" class="bg-white scroll_list">
         <div class="emptyitem flex_center" v-if="!data || data.length == 0">暂无行为数据</div>
-        <div v-else v-for="item in data" :key="item.id" class="scroll_item padding10">
+        <div v-else v-for="item in data" :key="item.id" class="scroll_item padding10 db">
           <div class="t-table">
-            <!--
-            <div class="t-cell w50 align_left v_top">
-              <img class="avatarimg1 imgcover" :src="item.avatar">
-            </div>
-          -->
             <div class="t-cell align_left v_top">
               <div class="color-gray">{{ item.linkman }}</div>
               <div class="">{{ item.title }}</div>
@@ -75,12 +70,18 @@ export default {
     return {
       query: Object,
       viewuser: Object,
-      data: []
+      data: [],
+      disdatalist: false
     }
+  },
+  computed: {
+  },
+  methods: {
   },
   created: function () {
     let self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.query = self.$route.query
     self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
       { params: { customeruid: self.query.uid } }
@@ -97,11 +98,8 @@ export default {
       self.$vux.loading.hide()
       let retdata = data.data ? data.data : data
       self.data = retdata
+      self.disdatalist = true
     })
-  },
-  computed: {
-  },
-  methods: {
   }
 }
 </script>

@@ -39,10 +39,6 @@
           <span class="fa fa-user"></span>
           <span>{{$t('Store')}}</span>
         </x-button>
-        <!-- <x-button mini plain type="primary" @click.native="onShare">
-          <span class="fa fa-share"></span>
-          <span>{{$t('Share')}}</span>
-        </x-button> -->
       </div>
       <div class="reading-info">
         <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
