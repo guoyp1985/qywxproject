@@ -387,7 +387,6 @@ export default {
       return this.productdata
     },
     retailerinfo: function () {
-      this.retailerinfo = this.productdata.retailerinfo
       return this.retailerinfo
     },
     buyuserdata: function () {
@@ -572,8 +571,8 @@ export default {
       self.$vux.loading.hide()
       self.showcontainer = true
       document.title = self.productdata.title
-      self.retailerinfo = self.productdata.retailerinfo
-      self.teststr = JSON.stringify(self.retailerinfo)
+      // self.retailerinfo = self.productdata.retailerinfo
+      // self.teststr = JSON.stringify(self.retailerinfo)
       if (self.productdata.activityinfo) {
         self.activityInfo = self.productdata.activityinfo
       }
@@ -610,6 +609,21 @@ export default {
       self.$util.handleWxShare(shareData)
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
+      let infoparams = { uid: self.query.wid }
+      if (self.query.share_uid) {
+        infoparams.share_uid = self.query.share_uid
+      }
+      if (self.query.lastshareuid) {
+        infoparams.lastshareuid = self.query.lastshareuid
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: infoparams
+      })
+    }).then(function (res) {
+      let data = res.data
+      self.retailerinfo = data.data ? data.data : data
+      // self.retailerinfo = self.productdata.retailerinfo
+      self.teststr = JSON.stringify(self.retailerinfo)
       let buyparams = {}
       if (self.query.wid) {
         buyparams['wid'] = self.query.wid
