@@ -242,6 +242,7 @@ export default {
     let iscontinue = true
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
       self.showcontainer = false
+      iscontinue = false
     } else if (self.loginUser.usergroup) {
       let usergroup = self.loginUser.usergroup
       for (let i = 0; i < usergroup.length; i++) {
