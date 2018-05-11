@@ -556,8 +556,7 @@ export default {
     if (self.query.from === 'poster') {
       infoparams.from = 'poster'
     }
-    console.log('in 3')
-    console.log(JSON.stringify(infoparams))
+    alert(JSON.stringify(infoparams))
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
