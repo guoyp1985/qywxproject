@@ -567,6 +567,7 @@ export default {
       self.showcontainer = true
       document.title = self.productdata.title
       self.retailerinfo = self.productdata.retailerinfo
+      alert(JSON.stringify(self.retailerinfo))
       self.activityInfo = self.productdata.activityinfo
       if (!self.$util.isNull(self.productdata.photo)) {
         self.photoarr = self.productdata.photo.split(',')
