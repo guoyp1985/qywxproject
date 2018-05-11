@@ -1,6 +1,6 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
-    <template v-show="showcontainer">
+    <template v-if="showcontainer">
       <template v-show="isshowtop">
         <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
           <div class="t-table h_100">
@@ -22,7 +22,7 @@
         <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
       <div class="pagemiddle">
-        <template v-show="showFlash">
+        <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
             dots-position="center"
