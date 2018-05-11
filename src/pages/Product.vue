@@ -25,14 +25,16 @@
     <div class="pagemiddle">
       <swiper
         class="pic-swiper notitle"
-        v-if="flashdata && flashdata.length > 0"
-        :list="flashdata"
+        v-if="photoarr && photoarr.length > 0"
         dots-position="center"
         :interval=6000
         :show-dots="isshowdot"
         :aspect-ratio="900/900"
         auto
         loop>
+        <swiper-item v-for="(item,index) in photoarr">
+          <img :src="item" class="imgcover w_100 h_100" />
+        </swiper-item>
       </swiper>
       <div class="grouptitle flex_left" v-if="activityInfo && activityInfo.type == 'groupbuy'">
 				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
@@ -574,7 +576,6 @@ export default {
           img: self.photoarr[i]
         }
       }
-      alert(JSON.stringify(self.flashdata))
       if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
       } else if (!self.$util.isNull(self.productdata.contentphoto)) {
