@@ -45,47 +45,9 @@
 </i18n>
 
 <script>
-import {
-  Group,
-  Cell,
-  CellBox,
-  ViewBox,
-  // Popup,
-  // PopupHeader,
-  // XInput,
-  // XAddress,
-  CheckIcon,
-  XSwitch,
-  XButton,
-  Box,
-  Swipeout,
-  SwipeoutItem,
-  SwipeoutButton
-} from 'vux'
-import CTitle from '@/components/CTitle'
 import ENV from 'env'
-// import _ from 'lodash'
-// import WeixinJSBridge from 'WeixinJSBridge'
 
 export default {
-  components: {
-    Group,
-    Cell,
-    CellBox,
-    ViewBox,
-    // Popup,
-    // PopupHeader,
-    // XInput,
-    // XAddress,
-    CheckIcon,
-    XSwitch,
-    XButton,
-    Box,
-    Swipeout,
-    SwipeoutItem,
-    SwipeoutButton,
-    CTitle
-  },
   data () {
     return {
       items: [

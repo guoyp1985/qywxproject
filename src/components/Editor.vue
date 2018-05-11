@@ -84,23 +84,11 @@
 </template>
 
 <script>
-import { Flexbox, FlexboxItem, XButton, CheckIcon, Popup, Search, TransferDom } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 let editor = null
 export default {
   name: 'Editor',
-  directives: {
-    TransferDom
-  },
-  components: {
-    Flexbox,
-    FlexboxItem,
-    XButton,
-    CheckIcon,
-    Popup,
-    Search
-  },
   props: {
     elem: String
   },
@@ -123,8 +111,6 @@ export default {
       isBindScroll1: false,
       scrollArea1: null
     }
-  },
-  computed: {
   },
   methods: {
     clickEditHandle () {

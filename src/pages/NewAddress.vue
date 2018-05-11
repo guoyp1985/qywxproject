@@ -26,17 +26,9 @@
   </div>
 </template>
 <script>
-import { Group, XInput, XAddress, ChinaAddressV4Data, Value2nameFilter as value2name, XSwitch, Box, XButton } from 'vux'
+import { ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 import ENV from 'env'
 export default {
-  components: {
-    Group,
-    XInput,
-    XAddress,
-    XSwitch,
-    Box,
-    XButton
-  },
   data () {
     return {
       addressData: ChinaAddressV4Data,

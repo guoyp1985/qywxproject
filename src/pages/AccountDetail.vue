@@ -59,14 +59,9 @@
 </i18n>
 
 <script>
-import { } from 'vux'
-import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 
 export default {
-  components: {
-    Orderproductplate
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

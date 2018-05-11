@@ -63,7 +63,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img :src="commodity.photo"></x-img>
+              <x-img :src="commodity.photo" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -90,7 +90,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo"></x-img>
+              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -128,24 +128,10 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 export default {
-  components: {
-    Grid,
-    GridItem,
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Swipeout,
-    SwipeoutItem,
-    SwipeoutButton,
-    XImg,
-    Sticky
-  },
   data () {
     return {
       selectedIndex: 0,

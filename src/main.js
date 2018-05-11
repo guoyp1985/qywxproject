@@ -1,23 +1,22 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-import Vuex from 'vuex'
 import FastClick from 'fastclick'
 import { sync } from 'vuex-router-sync'
 import urlParse from 'url-parse'
-import App from './App'
 import router from './router'
+import store from './store'
+import './coms'
+import App from './App'
 import objectAssign from 'object-assign'
-import vuexI18n from 'vuex-i18n'
-import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
+
+Vue.use(Util)
 require('es6-promise').polyfill()
 
 // const CancelToken = AjaxPlugin.$http.CancelToken
-Vue.use(AjaxPlugin)
-Vue.use(Vuex)
 
 // const headers = new Headers();
 // headers.set('Origin', 'https://vux.boka.cn')
@@ -38,49 +37,6 @@ Vue.use(Vuex)
 // Vue.http.defaults.headers.get['Content-Type'] = 'application/x-www-form-urlencoded';
 // Vue.http.defaults.withCredentials = true;
 // Vue.http.defaults.headers.common['Authorization'] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2xhcmF2ZWwuYm9rYS5jbi9hcGkvYXV0aExvZ2luLzAwMWdkQ0hsMU1WS1RsMGo1d0ZsMWpEVkhsMWdkQ0hsIiwiaWF0IjoxNTI1NzQ5NzQ1LCJleHAiOjE1MjY2MTM3NDUsIm5iZiI6MTUyNTc0OTc0NSwianRpIjoiR0xNbFVEekhSVGNHc2ZleCIsInN1YiI6MTA4LCJwcnYiOiI4NjY1YWU5Nzc1Y2YyNmY2YjhlNDk2Zjg2ZmE1MzZkNjhkZDcxODE4In0.5vUDv3gTyGhY_kMf0DVezf-8rHunFBMhwJ_YzWp6az8`
-
-let store = new Vuex.Store({
-  modules: {
-    i18n: vuexI18n.store
-  }
-})
-
-store.registerModule('vux', {
-  state: {
-    demoScrollTop: 0,
-    isLoading: false,
-    direction: 'forward',
-    toggleTabbar: true
-  },
-  mutations: {
-    updateDemoPosition (state, payload) {
-      state.demoScrollTop = payload.top
-    },
-    updateLoadingStatus (state, payload) {
-      state.isLoading = payload.isLoading
-    },
-    updateDirection (state, payload) {
-      state.direction = payload.direction
-    },
-    updateToggleTabbar (state, payload) {
-      state.toggleTabbar = payload.toggleTabbar
-    }
-  },
-  actions: {
-    updateDemoPosition ({commit}, top) {
-      commit({type: 'updateDemoPosition', top: top})
-    }
-  }
-})
-
-Vue.use(vuexI18n.plugin, store)
-Vue.use(WechatPlugin)
-Vue.use(Util)
-Vue.use(BusPlugin)
-Vue.use(LoadingPlugin)
-Vue.use(ToastPlugin)
-Vue.use(AlertPlugin)
-Vue.use(ConfirmPlugin)
 
 const vuxLocales = require('./locales/all.yml')
 const componentsLocales = require('./locales/components.yml')

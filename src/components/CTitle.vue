@@ -42,15 +42,8 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Badge } from 'vux'
-
 export default {
   name: 'CTitle',
-  components: {
-    Grid,
-    GridItem,
-    Badge
-  },
   props: {
     // linkInfo: [String, Object],
     // linkCredit: [String, Object],

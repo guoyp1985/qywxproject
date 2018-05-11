@@ -60,9 +60,6 @@
 <i18n>
 </i18n>
 <script>
-import { TransferDom, Popup, Group, XTextarea, Swiper, SwiperItem, WechatEmotion as Emotion, Box, XButton } from 'vux'
-// import Cursor from '#/cursor'
-import EmotionBox from './EmotionBox'
 // const emotions = [
 //   [
 //     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
@@ -95,20 +92,6 @@ import EmotionBox from './EmotionBox'
 
 export default {
   name: 'CommentPopup',
-  directives: {
-    TransferDom
-  },
-  components: {
-    Popup,
-    Group,
-    XTextarea,
-    Swiper,
-    SwiperItem,
-    Emotion,
-    Box,
-    XButton,
-    EmotionBox
-  },
   props: {
     show: {
       type: Boolean,

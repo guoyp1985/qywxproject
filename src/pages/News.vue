@@ -80,29 +80,11 @@
   </div>
 </template>
 <script>
-import { Popup, XButton, Divider } from 'vux'
-import TitleTip from '@/components/TitleTip'
-import Comment from '@/components/Comment'
-import Reply from '@/components/Reply'
-import CommentPopup from '@/components/CommentPopup'
-import Editor from '@/components/Editor'
-import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
-  components: {
-    Popup,
-    XButton,
-    Divider,
-    TitleTip,
-    Comment,
-    Reply,
-    CommentPopup,
-    Editor,
-    ShareSuccess
-  },
   data () {
     return {
       query: Object,

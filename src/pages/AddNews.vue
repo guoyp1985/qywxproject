@@ -45,18 +45,8 @@
   </div>
 </template>
 <script>
-import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
-import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 export default {
-  components: {
-    Group,
-    XInput,
-    XTextarea,
-    Cell,
-    XButton,
-    ClipPopup
-  },
   data () {
     return {
       query: Object,

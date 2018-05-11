@@ -68,21 +68,9 @@ View more promotion:
 </i18n>
 
 <script>
-import { Swiper } from 'vux'
-import Groupbuyitemplate from './Groupbuyitemplate'
-import Bargainbuyitemplate from './Bargainbuyitemplate'
-import Productitemplate from './Productitemplate'
-import Newsitemplate from './Newsitemplate'
-import Time from '../../libs/time'
+import Time from '#/time'
 
 export default {
-  components: {
-    Swiper,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Productitemplate,
-    Newsitemplate
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

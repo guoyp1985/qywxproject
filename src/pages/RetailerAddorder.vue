@@ -152,27 +152,9 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Group, XNumber, Datetime, XButton, XTextarea, XInput, TransferDom, Popup, Search, Radio, XAddress, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
+import { ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Group,
-    XNumber,
-    Forminputplate,
-    Datetime,
-    XButton,
-    XTextarea,
-    XInput,
-    TransferDom,
-    Popup,
-    Search,
-    Radio,
-    XAddress
-  },
   created () {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
   },

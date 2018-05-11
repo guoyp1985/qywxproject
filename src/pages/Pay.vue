@@ -16,13 +16,8 @@
 </template>
 
 <script>
-import { Box, XButton } from 'vux'
 import ENV from 'env'
 export default {
-  components: {
-    Box,
-    XButton
-  },
   data () {
     return {
       payPrice: 0,
@@ -45,10 +40,12 @@ export default {
       }
     },
     wxPayApi (params) {
+      const self = this
       window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
+            self.$router.push({path: '/orderSearch'})
           }
         }
       )
@@ -56,7 +53,6 @@ export default {
     initPay () {
       const self = this
       const orderId = this.$route.query.id
-      console.log(orderId)
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => {
         if (res.data.flag) {

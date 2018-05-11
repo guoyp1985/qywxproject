@@ -38,7 +38,7 @@
       </div>
     </router-link>
     <div class="pay-info">
-      <span class="font12">共{{item.quantity}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
+      <span class="font12">共{{total}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
     <div class="operate-area" v-if="item.buttons.length">
       <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
@@ -47,14 +47,8 @@
 </template>
 
 <script>
-import { XImg, XButton } from 'vux'
-
 export default {
   name: 'OrderInfo',
-  components: {
-    XImg,
-    XButton
-  },
   props: {
     item: {
       type: Object,
@@ -90,6 +84,13 @@ export default {
           icon = 'al-weidian1'
       }
       return icon
+    },
+    total () {
+      let count = 0
+      for (let o of this.item.orderlist) {
+        count += o.quantity
+      }
+      return count
     }
   },
   methods: {
