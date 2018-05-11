@@ -22,19 +22,20 @@
         <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
       <div class="pagemiddle">
-        <swiper
-          v-show="showFlash"
-          class="pic-swiper notitle"
-          dots-position="center"
-          :interval=6000
-          :show-dots="isshowdot"
-          :aspect-ratio="1/1"
-          auto
-          loop>
-          <swiper-item v-for="(item,index) in photoarr">
-            <img :src="item" class="imgcover w_100 h_100" />
-          </swiper-item>
-        </swiper>
+        <template v-show="showFlash">
+          <swiper
+            class="pic-swiper notitle"
+            dots-position="center"
+            :interval=6000
+            :show-dots="isshowdot"
+            :aspect-ratio="1/1"
+            auto
+            loop>
+            <swiper-item v-for="(item,index) in photoarr">
+              <img :src="item" class="imgcover w_100 h_100" style="border:red 1px solid;" />
+            </swiper-item>
+          </swiper>
+        </template>
         <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
   				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
   				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
