@@ -530,6 +530,12 @@ export default {
   },
   created () {
     const self = this
+    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+      params: { id: 261, module: 'product', wid: 51, share_uid: 51 }
+    }).then(function (res) {
+      console.log(JSON.stringify(res))
+    })
+    /*
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.query = self.$route.query
@@ -646,6 +652,7 @@ export default {
         self.activitydata = data.data ? data.data : data
       }
     })
+    */
   }
 }
 </script>
