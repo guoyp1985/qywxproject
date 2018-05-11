@@ -186,10 +186,10 @@ export default {
         for (let key in self.submitdata) {
           self.submitdata[key] = self.data[key]
         }
-        if (!self.$util.isNull(self.submitdata.photo)) {
+        if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
           self.photoarr = self.submitdata.photo.split(',')
         }
-        if (!self.$util.isNull(self.submitdata.contentphoto)) {
+        if (self.submitdata.contentphoto && self.$util.trim(self.submitdata.contentphoto) !== '') {
           self.photoarr1 = self.submitdata.contentphoto.split(',')
         }
         document.title = self.data.title

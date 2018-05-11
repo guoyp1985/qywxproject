@@ -173,7 +173,7 @@ export default {
           for (let key in self.submitdata) {
             self.submitdata[key] = retdata[key]
           }
-          if (!self.$util.isNull(self.submitdata.photo)) {
+          if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
           }
         }

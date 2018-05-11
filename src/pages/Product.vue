@@ -571,7 +571,7 @@ export default {
       if (self.productdata.activityinfo) {
         self.activityInfo = self.productdata.activityinfo
       }
-      if (!self.$util.isNull(self.productdata.photo)) {
+      if (self.productdata.photo && self.$util.trim(self.productdata.photo) !== '') {
         self.photoarr = self.productdata.photo.split(',')
       }
       for (let i = 0; i < self.photoarr.length; i++) {
@@ -579,9 +579,9 @@ export default {
           img: self.photoarr[i]
         }
       }
-      if (self.$util.isNull(self.productdata.content) && self.$util.isNull(self.productdata.contentphoto)) {
+      if ((!self.productdata.content || self.$util.trim(self.productdata.content) === '') && (!self.productdata.contentphoto || self.$util.trim(self.contentphoto.content) === '')) {
         self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
-      } else if (!self.$util.isNull(self.productdata.contentphoto)) {
+      } else if (self.productdata.contentphoto && self.$util.trim(self.productdata.contentphoto) !== '') {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }

@@ -432,7 +432,7 @@ export default {
       self.deliveritem = item
       self.deliverindex = index
       for (let key in self.deliverdata) {
-        if (!self.$util.isNull(self.deliveritem[key])) {
+        if (self.deliveritem[key] && self.$util.trim(self.deliveritem[key] !== '')) {
           self.deliverdata[key] = self.deliveritem[key]
         }
       }
@@ -446,7 +446,7 @@ export default {
     },
     confirmpopup () {
       const self = this
-      if (self.deliverdata.delivercompany !== '-1' && self.$util.isNull(self.deliverdata.delivercode)) {
+      if (self.deliverdata.delivercompany !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
         self.$vux.alert.show({
           title: '',
           content: '请输入物流单号'

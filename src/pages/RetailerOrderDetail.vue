@@ -164,7 +164,7 @@ export default {
           total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
         }
         self.totalPrice = total.toFixed(2)
-        if (!self.$util.isNull(self.data.delivercompany)) {
+        if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
           self.deliverdata.delivercompany = self.data.delivercompany
           self.deliverdata.delivercode = self.data.delivercode
         }
@@ -220,7 +220,7 @@ export default {
     },
     confirmpopup () {
       const self = this
-      if (self.deliverdata.delivercompany !== '-1' && self.$util.isNull(self.deliverdata.delivercode)) {
+      if (self.deliverdata.delivercompany !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
         self.$vux.alert.show({
           title: '',
           content: '请输入物流单号'

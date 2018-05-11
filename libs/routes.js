@@ -16,8 +16,6 @@ import DecorationShop from '@/pages/DecorationShop'
 import Deliverinfo from '@/pages/Deliverinfo'
 import Evaluation from '@/pages/Evaluation'
 import Favorite from '@/pages/Favorite'
-import GroupbuyStat from '@/pages/GroupbuyStat'
-import Groupbuy from '@/pages/Groupbuy'
 import KnowledgeClass from '@/pages/KnowledgeClass'
 import Knowledge from '@/pages/Knowledge'
 import MembersView from '@/pages/MembersView'
@@ -253,11 +251,6 @@ export default [
     component: DefaultStat
   },
   {
-    path: '/groupbuyStat',
-    name: 'tGroupbuyStat',
-    component: GroupbuyStat
-  },
-  {
     path: '/product',
     name: 'tProduct',
     component: Product
@@ -346,11 +339,6 @@ export default [
     path: '/deliverinfo',
     name: 'tDeliverinfo',
     component: Deliverinfo
-  },
-  {
-    path: '/groupbuy',
-    name: 'tGroupbuy',
-    component: Groupbuy
   },
   {
     path: '/knowledgeClass',
