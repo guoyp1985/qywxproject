@@ -37,12 +37,15 @@
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
                 </Orderproductplate>
-                <img slot="avatar" :src="item.avatar" class="avatarimg imgcover" />
-                <span slot="username">{{ item.username }}</span>
-                <div v-if="(item.seller && item.seller.length > 0)" slot="seller">
-                  <div class="fr sellerarea">{{ $t('Rebate customer') }} <span>{{ item.seller.username }}</span></div>
-                </div>
                 <div slot="receivearea">
+                  <div class="t-table">
+                    <div class="t-cell v_middle">
+                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                    </div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                      <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                    </div>
+                  </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
@@ -75,12 +78,15 @@
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
                 </Orderproductplate>
-                <img slot="avatar" :src="item.avatar" class="avatarimg" />
-                <span slot="username">{{ item.username }}</span>
-                <div v-if="(item.seller && item.seller.length > 0)" slot="seller">
-                  <div class="fr sellerarea">{{ $t('Rebate customer') }} <span>{{ item.seller.username }}</span></div>
-                </div>
                 <div slot="receivearea">
+                  <div class="t-table">
+                    <div class="t-cell v_middle">
+                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                    </div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                      <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                    </div>
+                  </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
@@ -107,12 +113,15 @@
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
                 </Orderproductplate>
-                <img slot="avatar" :src="item.avatar" class="avatarimg" />
-                <span slot="username">{{ item.username }}</span>
-                <div v-if="(item.seller && item.seller.length > 0)" slot="seller">
-                  <div class="fr sellerarea">{{ $t('Rebate customer') }} <span>{{ item.seller.username }}</span></div>
-                </div>
                 <div slot="receivearea">
+                  <div class="t-table">
+                    <div class="t-cell v_middle">
+                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                    </div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                      <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                    </div>
+                  </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
@@ -142,12 +151,15 @@
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
                 </Orderproductplate>
-                <img slot="avatar" :src="item.avatar" class="avatarimg" />
-                <span slot="username">{{ item.username }}</span>
-                <div v-if="(item.seller && item.seller.length > 0)" slot="seller">
-                  <div class="fr sellerarea">{{ $t('Rebate customer') }} <span>{{ item.seller.username }}</span></div>
-                </div>
                 <div slot="receivearea">
+                  <div class="t-table">
+                    <div class="t-cell v_middle">
+                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                    </div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                      <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                    </div>
+                  </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
@@ -215,7 +227,7 @@
 
 <i18n>
 Add order1:
-  zh-CN: 返点客户
+  zh-CN: 返点客
 My orders:
   zh-CN: 我的订单
 </i18n>

@@ -658,7 +658,7 @@ export default {
       if (res && res.status === 200) {
         let data = res.data
         if (data.flag === 1) {
-          self.evluatedata = (data.data ? data.data : data)
+          self.evluatedata = data.data
         }
         if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
           return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
