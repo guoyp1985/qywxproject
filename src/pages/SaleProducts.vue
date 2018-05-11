@@ -37,15 +37,7 @@ Promotion:
 
 <script>
 import ENV from 'env'
-import Groupbuyitemplate from '@/components/Groupbuyitemplate'
-import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 export default {
-  components: {
-    Groupbuyitemplate,
-    Bargainbuyitemplate
-  },
-  filters: {
-  },
   data () {
     return {
       tabdata1: [],

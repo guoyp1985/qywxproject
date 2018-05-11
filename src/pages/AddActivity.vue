@@ -117,33 +117,10 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
-import FormGroupbuy from '@/components/FormGroupbuy'
-import FormBargainbuy from '@/components/FormBargainbuy'
-import FormDiscount from '@/components/FormDiscount'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Group,
-    Forminputplate,
-    XInput,
-    TransferDom,
-    Popup,
-    Alert,
-    Loading,
-    Datetime,
-    Search,
-    FormGroupbuy,
-    FormBargainbuy,
-    FormDiscount,
-    CheckIcon
-  },
   data () {
     return {
       autofixed: false,

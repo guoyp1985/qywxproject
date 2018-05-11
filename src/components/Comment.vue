@@ -42,14 +42,10 @@
 </i18n>
 
 <script>
-import { XImg } from 'vux'
 import Time from '#/time'
 
 export default {
   name: 'Comment',
-  components: {
-    XImg
-  },
   props: {
     item: {
       type: Object,
@@ -65,8 +61,6 @@ export default {
       }
     },
     params: Object
-  },
-  computed: {
   },
   filters: {
     dateFormat (date) {

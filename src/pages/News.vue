@@ -84,29 +84,11 @@
   </div>
 </template>
 <script>
-import { Popup, XButton, Divider } from 'vux'
-import TitleTip from '@/components/TitleTip'
-import Comment from '@/components/Comment'
-import Reply from '@/components/Reply'
-import CommentPopup from '@/components/CommentPopup'
-import Editor from '@/components/Editor'
-import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
-  components: {
-    Popup,
-    XButton,
-    Divider,
-    TitleTip,
-    Comment,
-    Reply,
-    CommentPopup,
-    Editor,
-    ShareSuccess
-  },
   data () {
     return {
       query: Object,
@@ -254,6 +236,27 @@ export default {
     onShare () {
     },
     editSave () {
+      const self = this
+      console.log('save')
+      let editorContent = document.querySelector('#editor-content')
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
+        id: self.query.id,
+        content: editorContent.innerHTML
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
+        self.$vux.toast.show({
+          text: data.error,
+          type: toasttype,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+            }
+          }
+        })
+      })
     },
     editSetting () {
       this.$router.push({name: 'tAddNews', params: {id: this.article.id}})

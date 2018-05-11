@@ -23,18 +23,10 @@
   </div>
 </template>
 <script>
-import { Group, Cell, XImg } from 'vux'
-import CTitle from '@/components/CTitle'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
-  components: {
-    CTitle,
-    Group,
-    Cell,
-    XImg
-  },
   data () {
     return {
       type: '1',

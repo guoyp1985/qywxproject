@@ -28,17 +28,9 @@
   </div>
 </template>
 <script>
-import { ViewBox, Group, Cell, XImg, Sticky } from 'vux'
 import Time from '#/time'
 
 export default {
-  components: {
-    ViewBox,
-    Group,
-    Cell,
-    XImg,
-    Sticky
-  },
   data () {
     return {
       list: [

@@ -82,20 +82,8 @@ More Features:
 </i18n>
 
 <script>
-import { Group, Cell, XButton, Box, Card, Grid, GridItem } from 'vux'
-import Nameplate from './Nameplate'
 import { mapState } from 'vuex'
 export default {
-  components: {
-    Group,
-    Cell,
-    XButton,
-    Box,
-    Card,
-    Grid,
-    GridItem,
-    Nameplate
-  },
   data () {
     return {
       a1: 0

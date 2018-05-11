@@ -10,21 +10,26 @@
     </c-title> -->
     <group>
       <group-title slot="title">{{$t('Sharing Details')}}</group-title>
-      <cell v-for="(item, index) in list"
-      :key="item.id"
-      class="share-item font14"
-      align-items
-      :title="item.title"
-      :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
-        <x-img slot="icon" default-src="../assets/_images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
-        <div slot="inline-desc">
-          {{item.dateline | dateFormat}} {{item.typestr}}
-        </div>
-        <div slot="child">
-          <span class="al al-jinbi color-gold"></span>
-          <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
-        </div>
-      </cell>
+      <template v-if="list.length">
+        <cell v-for="(item, index) in list"
+        :key="item.id"
+        class="share-item font14"
+        align-items
+        :title="item.title"
+        :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
+          <x-img slot="icon" default-src="../src/assets/_images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
+          <div slot="inline-desc">
+            {{item.dateline | dateFormat}} {{item.typestr}}
+          </div>
+          <div slot="child">
+            <span class="al al-jinbi color-gold"></span>
+            <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+          </div>
+        </cell>
+      </template>
+      <div v-else class="no-related-x color-gray">
+        <span>{{$t('No Related Data')}}</span>
+      </div>
     </group>
   </div>
 </template>
@@ -35,16 +40,9 @@ Sharing Details:
 </i18n>
 
 <script>
-import { Group, GroupTitle, Cell, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 export default {
-  components: {
-    Group,
-    GroupTitle,
-    Cell,
-    XImg
-  },
   data () {
     return {
       type: '1',

@@ -34,17 +34,10 @@
 </i18n>
 
 <script>
-import { Grid, GridItem } from 'vux'
-import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import { Token, User } from '#/storage'
 
 export default {
-  components: {
-    Grid,
-    GridItem,
-    CTitle
-  },
   data () {
     const self = this
     return {

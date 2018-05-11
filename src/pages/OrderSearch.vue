@@ -6,12 +6,12 @@
 <template>
   <div id="order-search">
     <sticky scroll-box="vux_view_box_body">
-      <Tab v-model="selectedIndex">
+      <tab v-model="selectedIndex">
         <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
-      </Tab>
+      </tab>
     </sticky>
     <div v-show="selectedIndex===0">
       <template v-if="list.length">
@@ -60,17 +60,9 @@
 </i18n>
 
 <script>
-import { Sticky, Tab, TabItem } from 'vux'
-import OrderInfo from '@/components/OrderInfo'
 import ENV from 'env'
 
 export default {
-  components: {
-    Sticky,
-    Tab,
-    TabItem,
-    OrderInfo
-  },
   data () {
     return {
       selectedIndex: 0,

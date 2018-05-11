@@ -170,23 +170,9 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Group,
-    Forminputplate,
-    XTextarea,
-    XInput,
-    TransferDom,
-    Popup,
-    CheckIcon
-  },
   data () {
     return {
       isOnline: false,

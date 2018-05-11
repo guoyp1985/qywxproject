@@ -221,28 +221,10 @@ My orders:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDomDirective as TransferDom, Popup } from 'vux'
-import Orderitemplate from '@/components/Orderitemplate'
-import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    XTextarea,
-    Group,
-    XButton,
-    Orderitemplate,
-    Orderproductplate,
-    Popup
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

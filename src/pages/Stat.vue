@@ -157,19 +157,10 @@ Message:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
-import Listplate from '@/components/Listplate'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
-  components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Listplate
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

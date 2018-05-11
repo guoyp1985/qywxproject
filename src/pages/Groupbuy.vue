@@ -269,27 +269,11 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, Loading } from 'vux'
-import Groupbuyitemplate from '@/components/Groupbuyitemplate'
-import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Swiper,
-    SwiperItem,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Popup,
-    Marquee,
-    MarqueeItem,
-    Loading
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')

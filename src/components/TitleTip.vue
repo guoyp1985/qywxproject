@@ -28,12 +28,8 @@
 <i18n>
 </i18n>
 <script>
-import { Sticky } from 'vux'
 export default {
   name: 'TitleTip',
-  components: {
-    Sticky
-  },
   props: {
     scrollBox: String,
     avatarHref: {

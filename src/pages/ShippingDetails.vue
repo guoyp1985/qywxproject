@@ -36,14 +36,8 @@
 </i18n>
 
 <script>
-import { Sticky, Timeline, TimelineItem } from 'vux'
 import ENV from 'env'
 export default {
-  components: {
-    Sticky,
-    Timeline,
-    TimelineItem
-  },
   data () {
     return {
       expressStatus: '',

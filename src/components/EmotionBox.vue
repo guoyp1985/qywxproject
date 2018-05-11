@@ -35,7 +35,6 @@
   </div>
 </template>
 <script>
-import { Swiper, SwiperItem, WechatEmotion as Emotion } from 'vux'
 import Cursor from '#/cursor'
 const emotions = [
   [
@@ -69,11 +68,6 @@ const rEmotion = RegExp(`(.*)(\\[(?:${str})\\])$`)
 
 export default {
   name: 'emotionBox',
-  components: {
-    Swiper,
-    SwiperItem,
-    Emotion
-  },
   props: {
     bindTextarea: String
     // value: Boolean

@@ -142,22 +142,9 @@ Please select address:
 </i18n>
 
 <script>
-import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon } from 'vux'
 import ENV from 'env'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Group,
-    XNumber,
-    XTextarea,
-    XInput,
-    Popup,
-    Alert,
-    CheckIcon
-  },
   data () {
     return {
       checkvalue: ['b'],
@@ -284,7 +271,6 @@ export default {
     },
     submitOrder () {
       const self = this
-      console.log(self.submitdata.postdata)
       if (!self.submitdata.addressid) {
         self.$vux.toast.show({
           text: '请选择地址'

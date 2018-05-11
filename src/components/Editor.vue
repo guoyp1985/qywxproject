@@ -41,17 +41,11 @@
 </template>
 
 <script>
-import { Flexbox, FlexboxItem, XButton } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 let editor = null
 export default {
   name: 'Editor',
-  components: {
-    Flexbox,
-    FlexboxItem,
-    XButton
-  },
   props: {
     elem: String
   },
@@ -60,8 +54,6 @@ export default {
       showBtnArea: false,
       showMenuArea: false
     }
-  },
-  computed: {
   },
   methods: {
     clickEditHandle () {
@@ -85,7 +77,6 @@ export default {
         el: this.elem,
         insertImageCallback: function (callback) {
           if (self.$util.isPC()) {
-            console.log(1)
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
             fileInput.click()
@@ -97,8 +88,8 @@ export default {
                 self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
                   let data = res.data
                   self.$vux.loading.hide()
-                  if (data.flag === 1 && data && data[0]) {
-                    callback && callback(data[0].url)
+                  if (data.flag === 1 && data.data) {
+                    callback && callback(data.data)
                   } else if (data.error) {
                     self.$vux.toast.show({
                       text: data.error,
@@ -112,8 +103,8 @@ export default {
             self.$util.wxUploadImage({
               maxnum: 1,
               handleCallback: function (data) {
-                if (data.flag === 1 && data && data[0]) {
-                  callback && callback(data[0].url)
+                if (data.flag === 1 && data.data) {
+                  callback && callback(data.data)
                 } else if (data.error) {
                   self.$vux.toast.show({
                     text: 'data.error',

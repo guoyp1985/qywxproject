@@ -76,21 +76,6 @@ More Features:
 </i18n>
 
 <script>
-import { Group, Cell, XButton, Box, Card, Grid, GridItem } from 'vux'
-import Nameplate from './Nameplate'
-
-export default {
-  components: {
-    Group,
-    Cell,
-    XButton,
-    Box,
-    Card,
-    Grid,
-    GridItem,
-    Nameplate
-  }
-}
 </script>
 
 <style lang="less" scoped>

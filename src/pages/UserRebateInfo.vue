@@ -110,21 +110,8 @@
   </div>
 </template>
 <script>
-import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
 import Time from '#/time'
 export default {
-  components: {
-    ViewBox,
-    Group,
-    Cell,
-    CellBox,
-    Tab,
-    TabItem,
-    Sticky,
-    XImg,
-    CheckIcon,
-    XButton
-  },
   data () {
     return {
       userName: 'simon',

@@ -111,23 +111,10 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDomDirective as TransferDom, Popup } from 'vux'
-import OrderInfo from '@/components/OrderInfo'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Group,
-    Cell,
-    Sticky,
-    XDialog,
-    OrderInfo,
-    Popup
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

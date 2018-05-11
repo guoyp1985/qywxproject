@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea bg-white font14 product ${showtopcss}`">
+  <div v-show="showcontainer" :class="`containerarea bg-white font14 product ${showtopcss}`">
     <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
@@ -308,29 +308,11 @@ Another batch:
 </i18n>
 
 <script>
-import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
-import Groupbuyitemplate from '@/components/Groupbuyitemplate'
-import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
-import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
-  directives: {
-    TransferDom
-  },
-  components: {
-    Previewer,
-    Swiper,
-    SwiperItem,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Popup,
-    Marquee,
-    MarqueeItem,
-    ShareSuccess
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
@@ -339,6 +321,8 @@ export default {
   data () {
     return {
       query: {},
+      disTimeout: true,
+      showcontainer: false,
       showShareSuccess: false,
       showsharetip: true,
       productid: null,
@@ -529,6 +513,7 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
     self.query = self.$route.query
     self.productid = self.query.id
     self.loginUser = User.get()
@@ -558,6 +543,8 @@ export default {
     }).then(function (res) {
       let data = res.data
       self.productdata = data.data ? data.data : data
+      self.$vux.loading.hide()
+      self.showcontainer = true
       document.title = self.productdata.title
       self.retailerinfo = self.productdata.retailerinfo
       self.activityInfo = self.productdata.activityinfo

@@ -114,7 +114,6 @@
 </i18n>
 
 <script>
-import { TransferDom, Popup } from 'vux'
 import ENV from 'env'
 
 export default {
@@ -130,12 +129,6 @@ export default {
       default: { 'avatar': '/src/assets/images/user.jpg' }
     },
     onJoin: Function
-  },
-  directives: {
-    TransferDom
-  },
-  components: {
-    Popup
   },
   data () {
     return {
