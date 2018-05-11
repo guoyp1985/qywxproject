@@ -1,248 +1,96 @@
 <template>
-  <div v-show="showcontainer" :class="`containerarea bg-white font14 product ${showtopcss}`">
-    <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
-      <div v-if="isshowtop" class="pagetop">
-        <div class="t-table h_100">
-          <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
-            <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
-          </router-link>
-          <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
-            <div>{{ loginUser.linkman }}</div>
-            <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
-          </router-link>
-          <div class="t-cell v_middle align_center" style="width:65px;">
-            <router-link class="db-in" style="position:relative;" :to="{path:'/retailerMessagelist'}">
-              <i class="al al-pinglun color-black" style="font-size:24px;"></i>
-              <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
+  <div :class="`containerarea bg-white font14 product ${showtopcss}`">
+    <template v-show="showcontainer">
+      <template v-show="loginUser && loginUser.uid && isshowtop">
+        <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
+          <div class="t-table h_100">
+            <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
+              <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
             </router-link>
-          </div>
-        </div>
-      </div>
-    </template>
-    <template v-else-if="loginUser">
-      <router-link v-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
-    </template>
-    <div class="pagemiddle">
-      <swiper
-        class="pic-swiper notitle"
-        v-if="photoarr && photoarr.length > 0"
-        dots-position="center"
-        :interval=6000
-        :show-dots="isshowdot"
-        :aspect-ratio="900/900"
-        auto
-        loop>
-        <swiper-item v-for="(item,index) in photoarr">
-          <img :src="item" class="imgcover w_100 h_100" />
-        </swiper-item>
-      </swiper>
-      <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
-				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
-				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
-				<div class="col3">已团{{ productdata.havetuan }}件</div>
-			</div>
-      <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
-    		<div class="clamp2">
-          <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
-          <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
-        </div>
-        <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
-        <div class="t-table font12 mt5 color-gray2">
-          <template v-if="productdata.postage">
-  					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
-  					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}件</div>
-          </template>
-          <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}件</div>
-          <div v-if="(loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user'" class="t-cell v_middle border-box align_right">
-            <span>佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
-          </div>
-					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
-						<span class="help-icon">?</span>了解购买流程
-					</div>
-				</div>
-  		</div>
-			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
-				<div class="bg-page" style="height:10px;"></div>
-				<div class="bg-white">
-					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
-          <div class="vux-marquee" item-height=110 duration=2000>
-            <marquee>
-              <marquee-item v-for="(item,index) in activitydata" :key="item.id">
-                <Groupbuyitemplate style="margin-bottom:0 !important;">
-                  <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
-                  <span slot="title">{{ item.title }}</span>
-                  <span slot="numbers">{{ item.numbers }}</span>
-                  <span slot="havetuan">{{ item.havetuan }}</span>
-                  <span slot="groupprice">{{ item.groupprice }}</span>
-                  <span slot="price">{{ item.price }}</span>
-                </Groupbuyitemplate>
-              </marquee-item>
-            </marquee>
-          </div>
-				</div>
-			</div>
-			<div class="evluatearea" v-if="productdata.buyonline >= 1 && evluatedata.length > 0">
-				<div class="bg-page" style="height:10px;"></div>
-				<div class="bg-white">
-					<div class="b_bottom_after pl10 pr10 pt5 pb5">
-						<div class="t-table">
-							<div class="t-cell">宝贝评价</div>
-							<div class="t-cell align_right">
-								<div class="font12 color-red padding5" @click="popupevluate">查看更多></div>
-							</div>
-						</div>
-					</div>
-          <div class="scroll_list">
-            <template v-if="evluatedata.length == 0">
-              <div class="scroll_item emptyitem">
-      					<div class="t-table">
-      						<div class="t-cell" style="padding:10px;">暂无评价</div>
-      					</div>
-      				</div>
-            </template>
-            <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
-    					<div class="t-table">
-    						<div class="t-cell pic" style="width:40px;">
-    							<img class="avatarimg" :src="item.avatar" />
-    						</div>
-    						<div class="t-cell">{{ item.username }}</div>
-    						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
-    					</div>
-    					<div class="mt5">{{ item.message }}</div>
-    					<div class="mt5 align_right">
-                <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
-    					</div>
-    					<div class="mt5" v-if="item.comment && item.comment.length > 0">
-        				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
-        					<div class="title clear pt5 pb5">
-        						<div class="color-gray font12" style="padding-left:6px;position:relative;">
-        							<div class="bg-green" style="position: absolute;left: 0;top: 0px;bottom: 0px;width: 2px;"></div>
-        							<span class="color-orange">{{ citem.username }}</span> 回复 :<span>{{ citem.message }}</span>
-        						</div>
-        					</div>
-        				</div>
-        			</div>
-    				</div>
-          </div>
-				</div>
-			</div>
-      <template v-if="buyuserdata.length > 0">
-        <div class="bg-page" style="height:10px;"></div>
-        <div class="bg-white b_bottom_after">
-          <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
-          <div class="buylist pt10 pb15 pl10 pr10">
-            <router-link class="item" :to="{path:'/product',query:{id:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
-              <div class="align_center">
-    						<img class="avatarimg" :src="item.avatar">
-    					</div>
-    					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
+            <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
+              <div>{{ loginUser.linkman }}</div>
+              <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
             </router-link>
+            <div class="t-cell v_middle align_center" style="width:65px;">
+              <router-link class="db-in" style="position:relative;" :to="{path:'/retailerMessagelist'}">
+                <i class="al al-pinglun color-black" style="font-size:24px;"></i>
+                <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
+              </router-link>
+            </div>
           </div>
         </div>
+        <router-link v-else class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
-      <div class="bg-page" style="height:10px;"></div>
-      <div class="b_top_after"></div>
-      <div class="padding10 b_bottom_after">
-        <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
-  				<div class="t-cell v_middle" style="width:70px;">
-  					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
+      <div class="pagemiddle">
+        <swiper
+          class="pic-swiper notitle"
+          v-if="photoarr && photoarr.length > 0"
+          dots-position="center"
+          :interval=6000
+          :show-dots="isshowdot"
+          :aspect-ratio="900/900"
+          auto
+          loop>
+          <swiper-item v-for="(item,index) in photoarr">
+            <img :src="item" class="imgcover w_100 h_100" />
+          </swiper-item>
+        </swiper>
+        <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
+  				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
+  				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
+  				<div class="col3">已团{{ productdata.havetuan }}件</div>
+  			</div>
+        <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
+      		<div class="clamp2">
+            <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
+            <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
+          </div>
+          <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
+          <div class="t-table font12 mt5 color-gray2">
+            <template v-if="productdata.postage">
+    					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
+    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}件</div>
+            </template>
+            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}件</div>
+            <div v-if="(loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user'" class="t-cell v_middle border-box align_right">
+              <span>佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+            </div>
+  					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
+  						<span class="help-icon">?</span>了解购买流程
+  					</div>
   				</div>
-  				<div class="t-cell v_middle">
-  					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
-  					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerinfo.productcount }}件</div>
-  				</div>
-  				<div class="t-cell v_middle align_right">
-  					<div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
-  				</div>
-        </router-link>
-      </div>
-      <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
-      <div class="productcontent">
-        <div v-html="productdata.content"></div>
-        <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
-      </div>
-      <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
-    </div>
-		<div class="pagebottom b_top_after" v-if="productdata.moderate != 1">
-			<div class="t-table h_100">
-				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
-					<i class="al font12 mr3"></i>
-        </div>
-        <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
-			</div>
-		</div>
-    <template v-else>
-  		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
-  			<div class="t-table h_100">
-          <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
-            <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
-            <div class="font12">咨询</div>
-          </router-link>
-  				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
-  					<i class="al font18 mr3"></i>
-  				</div>
-  				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
-  					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
-  					<div>原价购买</div>
-  				</div>
-  				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent('groupbuy')">
-  					<div>{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
-  					<div>一键拼团</div>
+    		</div>
+  			<div class="groupbuarea" v-if="activityInfo.id && activityInfo.type == 'groupbuy' && activitydata.length > 0">
+  				<div class="bg-page" style="height:10px;"></div>
+  				<div class="bg-white">
+  					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
+            <div class="vux-marquee" item-height=110 duration=2000>
+              <marquee>
+                <marquee-item v-for="(item,index) in activitydata" :key="item.id">
+                  <Groupbuyitemplate style="margin-bottom:0 !important;">
+                    <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
+                    <span slot="title">{{ item.title }}</span>
+                    <span slot="numbers">{{ item.numbers }}</span>
+                    <span slot="havetuan">{{ item.havetuan }}</span>
+                    <span slot="groupprice">{{ item.groupprice }}</span>
+                    <span slot="price">{{ item.price }}</span>
+                  </Groupbuyitemplate>
+                </marquee-item>
+              </marquee>
+            </div>
   				</div>
   			</div>
-  		</div>
-      <template v-else>
-    		<div v-if="productdata.buyonline >= 1" class="pagebottom b_top_after">
-    			<div class="t-table h_100">
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-    					<i class="al font12 mr3"></i>
-    				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
-    				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
-    				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
-    			</div>
-    		</div>
-        <div v-else class="pagebottom b_top_after">
-    			<div class="t-table h_100">
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-    					<i class="al font12 mr3"></i>
-    				</div>
-            <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
-    			</div>
-    		</div>
-      </template>
-    </template>
-    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
-			<div class="ico"><i class="al al-feiji"></i></div>
-			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
-			<div class="pic">
-				<img src="../assets/images/share1.jpg" />
-			</div>
-		</div>
-    <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
-      <popup v-model="showpopup" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">购买流程</div>
-          <div class="popup-middle font14">
-            <div class="padding10">
-  						<div class="mt12 color-gray2">您可以点击下方《我要咨询》，与卖家互加微信好友，以传统类似微商交易模式通过微信沟通咨询下单支付即可。</div>
-  						<div class="mt12 color-gray2">温馨提示：</div>
-  						<div class="mt12 color-gray2">1. 长按下方二维码关注公众号即可查询订单物流信息。</div>
-  						<div class="mt12 color-gray2">2. 平台仅提供商品展示，线下交易出现任何纠纷平台概不负责。</div>
-  						<div class="align_center">
-  							<img style="max-width:50%;" :src="weixin_qrcode" />
+  			<div class="evluatearea" v-if="productdata.buyonline >= 1 && evluatedata.length > 0">
+  				<div class="bg-page" style="height:10px;"></div>
+  				<div class="bg-white">
+  					<div class="b_bottom_after pl10 pr10 pt5 pb5">
+  						<div class="t-table">
+  							<div class="t-cell">宝贝评价</div>
+  							<div class="t-cell align_right">
+  								<div class="font12 color-red padding5" @click="popupevluate">查看更多></div>
+  							</div>
   						</div>
   					</div>
-          </div>
-          <div class="popup-bottom flex_center bg-orange color-white" @click="closepopup">{{ $t('Know txt') }}</div>
-        </div>
-      </popup>
-    </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showevluate" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">评价</div>
-          <div class="popup-middle font14">
             <div class="scroll_list">
               <template v-if="evluatedata.length == 0">
                 <div class="scroll_item emptyitem">
@@ -275,23 +123,175 @@
           			</div>
       				</div>
             </div>
+  				</div>
+  			</div>
+        <template v-if="buyuserdata.length > 0">
+          <div class="bg-page" style="height:10px;"></div>
+          <div class="bg-white b_bottom_after">
+            <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
+            <div class="buylist pt10 pb15 pl10 pr10">
+              <router-link class="item" :to="{path:'/product',query:{id:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
+                <div class="align_center">
+      						<img class="avatarimg" :src="item.avatar">
+      					</div>
+      					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
+              </router-link>
+            </div>
           </div>
-          <div class="popup-bottom flex_center bg-gray color-white" @click="closepopup1">{{ $t('Close') }}</div>
+        </template>
+        <div class="bg-page" style="height:10px;"></div>
+        <div class="b_top_after"></div>
+        <div class="padding10 b_bottom_after">
+          <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
+    				<div class="t-cell v_middle" style="width:70px;">
+    					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
+    				</div>
+    				<div class="t-cell v_middle">
+    					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
+    					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerinfo.productcount }}件</div>
+    				</div>
+    				<div class="t-cell v_middle align_right">
+    					<div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
+    				</div>
+          </router-link>
         </div>
-      </popup>
-    </div>
-    <div v-transfer-dom>
-      <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
-    </div>
-    <template v-if="loginUser">
-      <ShareSuccess
-        v-show="showShareSuccess"
-        v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
-        :data="productdata"
-        :loginUser="loginUser"
-        module="product"
-        :on-close="closeShareSuccess">
-      </ShareSuccess>
+        <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
+        <div class="productcontent">
+          <div v-html="productdata.content"></div>
+          <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
+        </div>
+        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+      </div>
+  		<div class="pagebottom b_top_after" v-if="productdata.moderate != 1">
+  			<div class="t-table h_100">
+  				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
+  					<i class="al font12 mr3"></i>
+          </div>
+          <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
+  			</div>
+  		</div>
+      <template v-else>
+    		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
+    			<div class="t-table h_100">
+            <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
+              <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
+              <div class="font12">咨询</div>
+            </router-link>
+    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
+    					<i class="al font18 mr3"></i>
+    				</div>
+    				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
+    					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
+    					<div>原价购买</div>
+    				</div>
+    				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent('groupbuy')">
+    					<div>{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
+    					<div>一键拼团</div>
+    				</div>
+    			</div>
+    		</div>
+        <template v-else>
+      		<div v-if="productdata.buyonline >= 1" class="pagebottom b_top_after">
+      			<div class="t-table h_100">
+      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
+      					<i class="al font12 mr3"></i>
+      				</div>
+              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
+      				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
+      				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
+      			</div>
+      		</div>
+          <div v-else class="pagebottom b_top_after">
+      			<div class="t-table h_100">
+      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
+      					<i class="al font12 mr3"></i>
+      				</div>
+              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}">我要咨询</router-link>
+      			</div>
+      		</div>
+        </template>
+      </template>
+      <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+  			<div class="ico"><i class="al al-feiji"></i></div>
+  			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+  			<div class="pic">
+  				<img src="../assets/images/share1.jpg" />
+  			</div>
+  		</div>
+      <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
+        <popup v-model="showpopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">购买流程</div>
+            <div class="popup-middle font14">
+              <div class="padding10">
+    						<div class="mt12 color-gray2">您可以点击下方《我要咨询》，与卖家互加微信好友，以传统类似微商交易模式通过微信沟通咨询下单支付即可。</div>
+    						<div class="mt12 color-gray2">温馨提示：</div>
+    						<div class="mt12 color-gray2">1. 长按下方二维码关注公众号即可查询订单物流信息。</div>
+    						<div class="mt12 color-gray2">2. 平台仅提供商品展示，线下交易出现任何纠纷平台概不负责。</div>
+    						<div class="align_center">
+    							<img style="max-width:50%;" :src="weixin_qrcode" />
+    						</div>
+    					</div>
+            </div>
+            <div class="popup-bottom flex_center bg-orange color-white" @click="closepopup">{{ $t('Know txt') }}</div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showevluate" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">评价</div>
+            <div class="popup-middle font14">
+              <div class="scroll_list">
+                <template v-if="evluatedata.length == 0">
+                  <div class="scroll_item emptyitem">
+          					<div class="t-table">
+          						<div class="t-cell" style="padding:10px;">暂无评价</div>
+          					</div>
+          				</div>
+                </template>
+                <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
+        					<div class="t-table">
+        						<div class="t-cell pic" style="width:40px;">
+        							<img class="avatarimg" :src="item.avatar" />
+        						</div>
+        						<div class="t-cell">{{ item.username }}</div>
+        						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
+        					</div>
+        					<div class="mt5">{{ item.message }}</div>
+        					<div class="mt5 align_right">
+                    <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+        					</div>
+        					<div class="mt5" v-if="item.comment && item.comment.length > 0">
+            				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
+            					<div class="title clear pt5 pb5">
+            						<div class="color-gray font12" style="padding-left:6px;position:relative;">
+            							<div class="bg-green" style="position: absolute;left: 0;top: 0px;bottom: 0px;width: 2px;"></div>
+            							<span class="color-orange">{{ citem.username }}</span> 回复 :<span>{{ citem.message }}</span>
+            						</div>
+            					</div>
+            				</div>
+            			</div>
+        				</div>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center bg-gray color-white" @click="closepopup1">{{ $t('Close') }}</div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+      </div>
+      <template v-if="loginUser">
+        <ShareSuccess
+          v-show="showShareSuccess"
+          v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
+          :data="productdata"
+          :loginUser="loginUser"
+          module="product"
+          :on-close="closeShareSuccess">
+        </ShareSuccess>
+      </template>
     </template>
   </div>
 </template>
