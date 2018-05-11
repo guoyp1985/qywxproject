@@ -365,7 +365,6 @@ export default {
     self.$vux.loading.show()
     self.loginUser = User.get()
     let iscontinue = true
-    alert(JSON.stringify(self.loginUser.usergroup))
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
       self.$vux.loading.hide()
       self.showcontainer = true

@@ -301,7 +301,7 @@ export default {
         })
         return false
       }
-      if (self.$util.isNull(postdata.content) && self.$util.isNull(postdata.contentphoto)) {
+      if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
         self.$vux.alert.show({
           title: '',
           content: '请完善商品介绍或者详情图片'
