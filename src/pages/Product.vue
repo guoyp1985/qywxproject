@@ -541,7 +541,6 @@ export default {
     self.productid = self.query.id
     console.log('in 2')
     console.log(self.productid)
-      /*
     self.loginUser = User.get()
     if (self.loginUser) {
       self.isshowtop = true
@@ -554,6 +553,7 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
+      /*
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
