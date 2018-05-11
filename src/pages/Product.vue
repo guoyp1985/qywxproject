@@ -24,7 +24,7 @@
       <div class="pagemiddle">
         <swiper
           class="pic-swiper notitle"
-          v-if="photoarr && photoarr.length > 0"
+          v-show="photoarr && photoarr.length > 0"
           dots-position="center"
           :interval=6000
           :show-dots="isshowdot"
