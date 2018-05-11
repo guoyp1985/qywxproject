@@ -529,12 +529,12 @@ export default {
     }
   },
   created () {
-    /*
     console.log('in product created')
     const self = this
     console.log('in before commit')
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     console.log('in before show')
+      /*
     self.$vux.loading.show()
     self.query = self.$route.query
     console.log('in 1')
