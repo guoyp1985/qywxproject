@@ -606,14 +606,14 @@ export default {
         self.$vux.loading.hide()
         if (data.flag === 1) {
           self.showcontainer = true
-          document.title = self.productdata.title
-          self.handleTop()
-          self.handleNewAdd()
           self.productdata = data.data
           self.retailerinfo = self.productdata.retailerinfo
           if (self.productdata.activityinfo) {
             self.activityInfo = self.productdata.activityinfo
           }
+          document.title = self.productdata.title
+          self.handleTop()
+          self.handleNewAdd()
           const photo = self.productdata.photo
           if (photo && self.$util.trim(photo) !== '') {
             self.photoarr = photo.split(',')
