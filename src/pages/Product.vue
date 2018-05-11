@@ -533,8 +533,13 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.query = self.$route.query
+    console.log('in 1')
+    console.log(self.query)
     self.productid = self.query.id
+    console.log('in 2')
+    console.log(self.productid)
     self.loginUser = User.get()
+    /*
     if (self.loginUser) {
       self.isshowtop = true
       setTimeout(function () {
@@ -546,6 +551,7 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
+    */
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -556,9 +562,13 @@ export default {
     if (self.query.from === 'poster') {
       infoparams.from = 'poster'
     }
+    console.log('in 3')
+    console.log(infoparams)
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
+      console.log('in 4')
+      console.log(res)
       let data = res.data
       self.productdata = data.data ? data.data : data
       self.$vux.loading.hide()
