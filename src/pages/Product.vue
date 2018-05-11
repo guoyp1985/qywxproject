@@ -537,7 +537,6 @@ export default {
     self.query = self.$route.query
     self.productid = self.query.id
     self.loginUser = User.get()
-    /*
     if (self.loginUser) {
       self.isshowtop = true
       setTimeout(function () {
@@ -549,7 +548,6 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
-    */
     let infoparams = { id: self.productid, module: 'product' }
     if (self.query.wid) {
       infoparams['wid'] = self.query.wid
@@ -584,7 +582,6 @@ export default {
         self.contentphotoarr = self.productdata.contentphoto.split(',')
         self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
       }
-      /*
       let shareData = {
         module: 'product',
         moduleid: self.productdata.id,
@@ -613,10 +610,7 @@ export default {
       return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
         params: buyparams
       })
-      */
-    })
-    /*
-    .then(function (res) {
+    }).then(function (res) {
       let data = res.data
       if (data.flag === 1) {
         self.buyuserdata = (data.data ? data.data : data)
@@ -650,7 +644,6 @@ export default {
         self.activitydata = data.data ? data.data : data
       }
     })
-    */
   }
 }
 </script>
