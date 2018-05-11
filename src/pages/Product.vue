@@ -1,6 +1,5 @@
 <template>
   <div v-show="showcontainer" :class="`containerarea bg-white font14 product ${showtopcss}`">
-    <!--
     <template v-if="loginUser && (loginUser.subscribe == 1 || loginUser.subscribe == 2)">
       <div v-if="isshowtop" class="pagetop">
         <div class="t-table h_100">
@@ -290,7 +289,6 @@
       module="product"
       :on-close="closeShareSuccess">
     </ShareSuccess>
-  -->
   </div>
 </template>
 
@@ -532,12 +530,6 @@ export default {
   },
   created () {
     const self = this
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-      params: { id: 261, module: 'product', wid: 51, share_uid: 51 }
-    }).then(function (res) {
-      console.log(JSON.stringify(res))
-    })
-    /*
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.query = self.$route.query
@@ -654,7 +646,6 @@ export default {
         self.activitydata = data.data ? data.data : data
       }
     })
-    */
   }
 }
 </script>
