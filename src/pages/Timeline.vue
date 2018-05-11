@@ -11,7 +11,7 @@
             <div class="font12">成交概率{{ viewuser.percent }}</div>
           </div>
           <div class="t-cell v_middle w50 align_right">
-            <router-link :to="{ name: '', query: {uid: viewuser.uid} }" class="qbtn bg-green color-white">{{ $t('Contact') }}</router-link>
+            <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn bg-green color-white">{{ $t('Contact') }}</router-link>
           </div>
         </div>
       </div>
@@ -27,7 +27,7 @@
       <div class="mt12 b_bottom_after padding10 bg-white">{{ viewuser.linkman }}{{ $t('Behavior analysis in the last month') }}</div>
       <div v-show="disdatalist" class="bg-white scroll_list">
         <div class="emptyitem flex_center" v-if="!data || data.length == 0">暂无行为数据</div>
-        <div v-else v-for="item in data" :key="item.id" @click="clickItem(item)" class="scroll_item padding10 db">
+        <div v-else v-for="item in data" :key="item.id" class="scroll_item padding10 db">
           <div class="t-table">
             <div class="t-cell align_left v_top">
               <div class="color-gray">{{ item.linkman }}</div>
@@ -77,12 +77,6 @@ export default {
   computed: {
   },
   methods: {
-    clickItem: function (item) {
-      const self = this
-      if (item.module === 'product' || item.module === 'news') {
-        self.$router.push({path: `/${item.module}`, query:{ id: item.moduleid, wid: item.wid } })
-      }
-    }
   },
   created: function () {
     let self = this
