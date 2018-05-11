@@ -534,7 +534,6 @@ export default {
     console.log('in before commit')
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     console.log('in before show')
-      /*
     self.$vux.loading.show()
     self.query = self.$route.query
     console.log('in 1')
@@ -542,6 +541,7 @@ export default {
     self.productid = self.query.id
     console.log('in 2')
     console.log(self.productid)
+      /*
     self.loginUser = User.get()
     if (self.loginUser) {
       self.isshowtop = true
