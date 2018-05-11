@@ -61,8 +61,13 @@
 </i18n>
 
 <script>
+import { XInput } from 'vux'
+
 export default {
   name: 'FormBargainbuy',
+  components: {
+    XInput
+  },
   props: {
     data: Object,
     submitdata: Object

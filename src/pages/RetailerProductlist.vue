@@ -137,9 +137,18 @@ Back go shop:
 </i18n>
 
 <script>
+import { TransferDom, Popup, Confirm, CheckIcon } from 'vux'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup,
+    Confirm,
+    CheckIcon
+  },
   data () {
     return {
       loginuser: { uid: 187 },

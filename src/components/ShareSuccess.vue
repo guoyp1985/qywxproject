@@ -47,6 +47,8 @@ export default {
     module: String,
     onClose: Function
   },
+  components: {
+  },
   data () {
     return {
       isinner: false

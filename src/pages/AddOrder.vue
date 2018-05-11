@@ -142,9 +142,22 @@ Please select address:
 </i18n>
 
 <script>
+import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon } from 'vux'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group,
+    XNumber,
+    XTextarea,
+    XInput,
+    Popup,
+    Alert,
+    CheckIcon
+  },
   data () {
     return {
       checkvalue: ['b'],
@@ -286,7 +299,8 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({path: '/pay', query: {id: data.id}})
+              // self.$router.push({path: '/pay', query: {id: data.id}})
+              location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
             }
           }
         })

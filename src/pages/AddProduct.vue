@@ -134,9 +134,19 @@
 </i18n>
 
 <script>
+import { Group, XInput, XTextarea, Loading, TransferDomDirective as TransferDom } from 'vux'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group,
+    XInput,
+    XTextarea,
+    Loading
+  },
   data () {
     return {
       query: {},

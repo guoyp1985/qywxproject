@@ -52,9 +52,13 @@ Newcomer Guide:
 </i18n>
 
 <script>
+import { Popover } from 'vux'
 import ENV from 'env'
 
 export default {
+  components: {
+    Popover
+  },
   data () {
     return {
       query: {},

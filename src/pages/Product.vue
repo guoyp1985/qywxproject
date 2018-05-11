@@ -31,7 +31,7 @@
             :aspect-ratio="1/1"
             auto
             loop>
-            <swiper-item v-for="(item,index) in photoarr" :key="item.id">
+            <swiper-item v-for="(item,index) in photoarr">
               <img :src="item" class="imgcover w_100 h_100"/>
             </swiper-item>
           </swiper>
@@ -313,11 +313,29 @@ Another batch:
 </i18n>
 
 <script>
+import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
+import Groupbuyitemplate from '@/components/Groupbuyitemplate'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer,
+    Swiper,
+    SwiperItem,
+    Groupbuyitemplate,
+    Bargainbuyitemplate,
+    Popup,
+    Marquee,
+    MarqueeItem,
+    ShareSuccess
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')

@@ -142,11 +142,29 @@ Another batch:
 </i18n>
 
 <script>
+import { Swiper, TransferDomDirective as TransferDom, Popup } from 'vux'
+import Groupbuyitemplate from '@/components/Groupbuyitemplate'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import Productitemplate from '@/components/Productitemplate'
+import Newsitemplate from '@/components/Newsitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Swiper,
+    Groupbuyitemplate,
+    Bargainbuyitemplate,
+    Productitemplate,
+    Newsitemplate,
+    Popup,
+    ShareSuccess
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

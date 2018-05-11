@@ -56,10 +56,14 @@ Percent:
 </i18n>
 
 <script>
+import { Search } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  components: {
+    Search
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

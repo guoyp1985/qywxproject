@@ -274,10 +274,23 @@ Stat:
 </i18n>
 
 <script>
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Tab,
+    TabItem,
+    Swiper,
+    SwiperItem,
+    TransferDom,
+    Confirm,
+    Popup
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

@@ -57,8 +57,13 @@
 </i18n>
 
 <script>
+import { XInput } from 'vux'
+
 export default {
   name: 'FormGroupbuy',
+  components: {
+    XInput
+  },
   props: {
     submitdata: Object
   },

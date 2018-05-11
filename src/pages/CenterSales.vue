@@ -173,11 +173,28 @@ With the customer rebate money together!:
 </i18n>
 
 <script>
+import { Previewer, TransferDom, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer,
+    Group,
+    Cell,
+    XButton,
+    Box,
+    Card,
+    Grid,
+    GridItem,
+    Marquee,
+    MarqueeItem,
+    CellBox
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')

@@ -26,11 +26,21 @@
 </i18n>
 
 <script>
+import Bargainbuy from '@/components/Bargainbuy'
+import BargainbuyView from '@/components/BargainbuyView'
+import BargainbuyDetail from '@/components/BargainbuyDetail'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  components: {
+    Bargainbuy,
+    BargainbuyView,
+    BargainbuyDetail,
+    ShareSuccess
+  },
   data () {
     return {
       bargainbuyType: false,

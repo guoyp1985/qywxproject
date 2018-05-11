@@ -59,6 +59,8 @@ export default {
     },
     onJoin: Function
   },
+  components: {
+  },
   data () {
     return {
       loginUser: Object,
