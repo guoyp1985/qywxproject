@@ -387,6 +387,7 @@ export default {
       return this.productdata
     },
     retailerinfo: function () {
+      this.retailerinfo = this.productdata.retailerinfo
       return this.retailerinfo
     },
     buyuserdata: function () {
