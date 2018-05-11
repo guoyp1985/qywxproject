@@ -556,12 +556,10 @@ export default {
     if (self.query.from === 'poster') {
       infoparams.from = 'poster'
     }
-    alert(JSON.stringify(infoparams))
     self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
       params: infoparams
     }).then(function (res) {
-      console.log('in 4')
-      console.log(res)
+      alert(JSON.stringify(res))
       let data = res.data
       self.productdata = data.data ? data.data : data
       self.$vux.loading.hide()
