@@ -24,8 +24,7 @@
       <div class="pagemiddle">
         <swiper
           v-show="showFlash"
-          class="pic-swiper notitle border-box"
-          style="padding-bottom:100%;"
+          class="pic-swiper notitle"
           dots-position="center"
           :interval=6000
           :show-dots="isshowdot"
@@ -741,6 +740,7 @@ export default {
     min-width: 18px;
     text-align: center;
 }
+.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
 .product .vux-swiper{
   position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
 }
