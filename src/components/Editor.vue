@@ -5,7 +5,7 @@
 */
 <template>
   <div class="editor">
-    <form class="editorImageForm" enctype="multipart/form-data">
+    <form class="editorImageForm hide" enctype="multipart/form-data">
       <input style="opacity:0;" type="file" name="files" />
     </form>
     <div class="editor-icon">
@@ -151,7 +151,7 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         insertImageCallback: function (callback) {
-          if (self.$util.isPC()) {
+          if (typeof window.WeixinJSBridge !== 'undefined') {
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
             fileInput.click()
