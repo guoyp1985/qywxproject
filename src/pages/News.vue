@@ -293,6 +293,7 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
+    alert(typeof window.WeixinJSBridge)
   }
 }
 </script>

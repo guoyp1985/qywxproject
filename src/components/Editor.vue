@@ -151,7 +151,7 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         insertImageCallback: function (callback) {
-          if (typeof window.WeixinJSBridge !== 'undefined') {
+          if (typeof window.WeixinJSBridge === 'undefined' || typeof window.WeixinJSBridge === undefined) {
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
             fileInput.click()
