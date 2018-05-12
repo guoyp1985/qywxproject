@@ -373,9 +373,11 @@ Util.install = function (Vue, options) {
       const self = this
       let maxnum = os.maxnum ? os.maxnum : 9
       Vue.wechat.ready(function(){
+        alert('wxready')
         Vue.wechat.chooseImage({
           count:maxnum,
           success: function (res) {
+            alert(JSON.stringify(res))
             let localIds = res.localIds
             if(localIds.length > maxnum){
               localIds = localIds.slice(0, maxnum)
