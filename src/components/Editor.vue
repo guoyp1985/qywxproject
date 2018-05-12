@@ -131,7 +131,7 @@ export default {
   computed: {
   },
   watch: {
-    selectproduct: function (){
+    selectproduct: function () {
       return this.selectproduct
     }
   },
@@ -248,9 +248,7 @@ export default {
       this.selectproduct = this.selectpopupdata
       this.showpopup = false
       this.showselectproduct = false
-      let productHTML = document.querySelector('.insertProductArea').innerHTML
       self.insertProductCallback && self.insertProductCallback(self.selectproduct)
-      // self.insertProductCallback && self.insertProductCallback(productHTML)
     },
     onChange (val) {
       this.searchword = val

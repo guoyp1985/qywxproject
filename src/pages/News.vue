@@ -67,9 +67,6 @@
           <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
         </comment>
       </div>
-      <editor elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
-      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </div>
     <share-success
       v-show="showShareSuccess"
