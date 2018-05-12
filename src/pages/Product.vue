@@ -31,7 +31,7 @@
             :aspect-ratio="1/1"
             auto
             loop>
-            <swiper-item v-for="(item,index) in photoarr">
+            <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img :src="item" class="imgcover w_100 h_100"/>
             </swiper-item>
           </swiper>
@@ -284,14 +284,14 @@
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
       <template v-if="loginUser">
-        <ShareSuccess
+        <share-success
           v-show="showShareSuccess"
-          v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
+          v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
           module="product"
           :on-close="closeShareSuccess">
-        </ShareSuccess>
+        </share-success>
       </template>
     </template>
   </div>
@@ -326,15 +326,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer,
-    Swiper,
-    SwiperItem,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Popup,
-    Marquee,
-    MarqueeItem,
-    ShareSuccess
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess
   },
   filters: {
     dateformat: function (value) {

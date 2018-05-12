@@ -145,9 +145,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup,
-    Confirm,
-    CheckIcon
+    Popup, Confirm, CheckIcon
   },
   data () {
     return {

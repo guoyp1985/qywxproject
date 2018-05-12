@@ -17,8 +17,12 @@
   </div>
 </template>
 <script>
+import { GroupTitle, Group, Cell } from 'vux'
 import Time from '#/time'
 export default {
+  components: {
+    GroupTitle, Group, Cell
+  },
   data () {
     return {
       list: [

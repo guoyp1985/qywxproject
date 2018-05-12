@@ -97,15 +97,8 @@ import Time from '#/time'
 import ENV from 'env'
 
 export default {
-  directives: {
-  },
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Group,
-    Search
+    Tab, TabItem, Swiper, SwiperItem, Group, Search
   },
   filters: {
     dateformat: function (value) {

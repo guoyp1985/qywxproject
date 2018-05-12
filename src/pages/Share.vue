@@ -17,7 +17,7 @@
         align-items
         :title="item.title"
         :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
-          <x-img slot="icon" default-src="../src/assets/_images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
+          <x-img slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
           <div slot="inline-desc">
             {{item.dateline | dateFormat}} {{item.typestr}}
           </div>
@@ -40,9 +40,13 @@ Sharing Details:
 </i18n>
 
 <script>
+import { Group, GroupTitle, Cell, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 export default {
+  components: {
+    Group, GroupTitle, Cell, XImg
+  },
   data () {
     return {
       type: '1',

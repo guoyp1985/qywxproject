@@ -162,7 +162,7 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDomDirective as TransferDom } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -171,12 +171,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Group,
-    Popup
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup
   },
   filters: {
     dateformat: function (value) {

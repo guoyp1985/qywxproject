@@ -98,13 +98,7 @@ import ENV from 'env'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Card,
-    Timeline,
-    TimelineItem
+    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem
   },
   filters: {
     dateformat: function (dt) {

@@ -10,7 +10,7 @@
     </c-title> -->
     <group :title="$t('Credit Details')" v-if="items.length">
       <cell v-for="(item, index) in items" :key="index" class="credit-item" align-items :title="item.title" :inline-desc="item.ldate">
-        <!-- <x-img slot="icon" :src="photo" default-src="../src/assets/_images/nopic.jpg"/> -->
+        <!-- <x-img slot="icon" :src="photo" default-src="../src/assets/images/nopic.jpg"/> -->
         <div slot="child">
           <span class="al al-jinbi color-gold"></span>
           <span class="color-red">{{ item.credit | valueFormat }}</span>
@@ -23,10 +23,15 @@
   </div>
 </template>
 <script>
+import { Group, Cell, XImg } from 'vux'
+import CTitle from '@/components/CTitle'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  components: {
+    Group, Cell, XImg, CTitle
+  },
   data () {
     return {
       type: '1',

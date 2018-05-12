@@ -45,9 +45,14 @@
 </i18n>
 
 <script>
+import { Group, Cell, CellBox, ViewBox, CheckIcon, XSwitch, XButton, Box, Swipeout, SwipeoutItem, SwipeoutButton } from 'vux'
+import CTitle from '@/components/CTitle'
 import ENV from 'env'
 
 export default {
+  components: {
+    Group, Cell, CellBox, ViewBox, CheckIcon, XSwitch, XButton, Box, Swipeout, SwipeoutItem, SwipeoutButton, CTitle
+  },
   data () {
     return {
       items: [

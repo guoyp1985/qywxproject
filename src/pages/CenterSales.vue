@@ -28,7 +28,7 @@
       </router-link>
     </div>
     <div class="center-marquee" style="height:40px;position:relative;">
-      <marquee :item-height=40 :interval=5000 :duration=1000>
+      <marquee :item-height="40" :interval="5000" :duration="1000">
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
             <router-link :to="{path: '/stat', query: {id: item.moduleid, module: item.module}}" class="t-table font12 pl10 pr10 border-box" style="height:40px;">
@@ -183,17 +183,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer,
-    Group,
-    Cell,
-    XButton,
-    Box,
-    Card,
-    Grid,
-    GridItem,
-    Marquee,
-    MarqueeItem,
-    CellBox
+    Previewer, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox
   },
   filters: {
     dateformat: function (value) {

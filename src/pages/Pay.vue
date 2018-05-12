@@ -16,8 +16,12 @@
 </template>
 
 <script>
+import { Box, XButton } from 'vux'
 import ENV from 'env'
 export default {
+  components: {
+    Box, XButton
+  },
   data () {
     return {
       payPrice: 0,

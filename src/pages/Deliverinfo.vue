@@ -29,10 +29,14 @@
 </i18n>
 
 <script>
+import { Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  components: {
+    Timeline, TimelineItem
+  },
   filters: {
     dateformat: function (dt) {
       let newtime = new Time(dt * 1000)

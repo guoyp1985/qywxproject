@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { Flexbox, FlexboxItem, XButton, CheckIcon, Popup, Search, TransferDom } from 'vux'
+import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 let editor = null
@@ -102,12 +102,7 @@ export default {
     TransferDom
   },
   components: {
-    Flexbox,
-    FlexboxItem,
-    XButton,
-    CheckIcon,
-    Popup,
-    Search
+    Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon
   },
   props: {
     elem: String

@@ -69,15 +69,15 @@
                 <div class="mt5">暂无相关订单！</div>
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
-              <Orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
+              <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                </Orderproductplate>
+                </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
@@ -94,7 +94,7 @@
                     </div>
                   </div>
                 </div>
-              </Orderitemplate>
+              </orderitemplate>
             </div>
           </div>
           <div v-if="(index == 2)">
@@ -104,15 +104,15 @@
                 <div class="mt5">暂无相关订单！</div>
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
-              <Orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
+              <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                </Orderproductplate>
+                </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
@@ -132,7 +132,7 @@
                     </div>
                   </div>
                 </div>
-              </Orderitemplate>
+              </orderitemplate>
             </div>
           </div>
           <div v-if="(index == 3)">
@@ -142,15 +142,15 @@
                 <div class="mt5">暂无相关订单！</div>
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
-              <Orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
+              <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
-                <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
-                </Orderproductplate>
+                </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
@@ -170,7 +170,7 @@
                     </div>
                   </div>
                 </div>
-              </Orderitemplate>
+              </orderitemplate>
             </div>
           </div>
         </swiper-item>
@@ -233,7 +233,7 @@ My orders:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDomDirective as TransferDom, Popup } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
@@ -244,16 +244,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    XTextarea,
-    Group,
-    XButton,
-    Orderitemplate,
-    Orderproductplate,
-    Popup
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate
   },
   filters: {
     dateformat: function (value) {

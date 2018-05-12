@@ -37,10 +37,14 @@ Confirm:
 </i18n>
 
 <script>
+import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  components: {
+    Group, Cell, Box, XInput, PopupRadio, XButton
+  },
   data () {
     return {
       option: '',

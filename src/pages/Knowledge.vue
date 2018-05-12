@@ -62,14 +62,7 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Popup,
-    XButton,
-    Divider,
-    TitleTip,
-    Comment,
-    Reply,
-    CommentPopup,
-    Editor
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor
   },
   data () {
     return {
@@ -249,7 +242,7 @@ export default {
   padding: 15px;
   position: relative;
   vertical-align: middle;
-  background: url(../assets/_images/qrbg.gif);
+  background: url(../assets/images/qrbg.gif);
 }
 #article-content .qrcode-bg {
   margin: 0 auto;

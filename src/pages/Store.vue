@@ -38,21 +38,21 @@
         <div class="b_top_after"></div>
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
-            <Groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
+            <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
               <span slot="groupprice">{{ item.groupprice }}</span>
               <span slot="price">{{ item.price }}</span>
-            </Groupbuyitemplate>
-            <Bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
+            </groupbuyitemplate>
+            <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{ item.minprice }}</span>
               <span slot="price">{{ item.price }}</span>
-            </Bargainbuyitemplate>
+            </bargainbuyitemplate>
           </div>
         </div>
       </template>
@@ -62,12 +62,12 @@
       <div class="b_top_after"></div>
       <div class="productlist squarepic">
         <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
-        <Productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
+        <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
           <img slot="photo" class="imgcover" :src="item.photo" />
           <span slot="title">{{ item.title }}</span>
           <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
           <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-        </Productitemplate>
+        </productitemplate>
       </div>
       <template v-if="toplinedata.length > 0">
         <div class="bg-white mt5 padding10 b_top_after">
@@ -84,11 +84,11 @@
     		</div>
         <div class="b_top_after"></div>
         <div class="productlist">
-          <Newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
+          <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
             <img slot="photo" :src="item.photo" class="v_middle" style="width: 70px; height: 50px;" />
             <span slot="title">{{ item.title }}</span>
             <span slot="date">{{ item.dateline | dateformat }}</span>
-          </Newsitemplate>
+          </newsitemplate>
         </div>
       </template>
     </div>
@@ -113,14 +113,14 @@
         </div>
       </popup>
     </div>
-    <ShareSuccess
+    <share-success
       v-show="showShareSuccess"
       v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
       :data="retailerInfo"
       :loginUser="loginUser"
       module="store"
       :on-close="closeShareSuccess">
-    </ShareSuccess>
+    </share-success>
   </div>
 </template>
 
@@ -142,7 +142,7 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper, TransferDomDirective as TransferDom, Popup } from 'vux'
+import { Swiper, TransferDom, Popup } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
@@ -157,13 +157,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Productitemplate,
-    Newsitemplate,
-    Popup,
-    ShareSuccess
+    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess
   },
   filters: {
     dateformat: function (value) {

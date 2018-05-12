@@ -98,7 +98,12 @@
   </div>
 </template>
 <script>
+import { ViewBox, Group, XTextarea, Grid, GridItem, XButton } from 'vux'
+import EmotionBox from '@/components/EmotionBox'
 export default {
+  components: {
+    ViewBox, Group, XTextarea, Grid, GridItem, XButton, EmotionBox
+  },
   data () {
     return {
       intervalId: null,

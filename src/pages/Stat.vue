@@ -164,11 +164,7 @@ import ENV from 'env'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Listplate
+    Tab, TabItem, Swiper, SwiperItem, Listplate
   },
   filters: {
     dateformat: function (value) {

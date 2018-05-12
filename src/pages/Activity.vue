@@ -2,22 +2,22 @@
   <div class="containerarea font14">
     <div v-show="bargainbuyType" class="h_100">
       <template v-if="showBargainbuy">
-        <Bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></Bargainbuy>
+        <bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></bargainbuy>
       </template>
       <template v-if="showBargainbuyView">
-        <BargainbuyView :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData"></BargainbuyView>
+        <bargainbuy-view :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
       </template>
       <template v-if="showBargianbuyDetail">
-        <BargainbuyDetail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></BargainbuyDetail>
+        <bargainbuy-detail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
       </template>
-      <ShareSuccess
+      <share-success
         v-show="showShareSuccess"
         v-if="data.uploader == loginUser.uid || query.wid == loginUser.uid || data.identity != 'user'"
         :data="data"
         :loginUser="loginUser"
         module="activity"
         :on-close="closeShareSuccess">
-      </ShareSuccess>
+      </share-success>
     </div>
   </div>
 </template>
@@ -36,10 +36,7 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Bargainbuy,
-    BargainbuyView,
-    BargainbuyDetail,
-    ShareSuccess
+    Bargainbuy, BargainbuyView, BargainbuyDetail, ShareSuccess
   },
   data () {
     return {

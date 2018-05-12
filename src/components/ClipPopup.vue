@@ -23,9 +23,16 @@
 <i18n>
 </i18n>
 <script>
+import { TransferDom, Popup, XButton } from 'vux'
 import Clip from '#/Clip'
 export default {
   name: 'ClipPopup',
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup, XButton
+  },
   props: {
     show: {
       type: Boolean,
