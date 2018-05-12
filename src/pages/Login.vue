@@ -36,6 +36,7 @@ export default {
     //   this.requestLogin()
     //   this.polling()
     // }
+    this.$vux.loading.hide()
     this.requestLogin()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },

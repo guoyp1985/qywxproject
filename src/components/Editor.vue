@@ -119,6 +119,8 @@ export default {
       scrollArea1: null
     }
   },
+  computed: {
+  },
   methods: {
     clickEditHandle () {
       this.showMenuArea = false

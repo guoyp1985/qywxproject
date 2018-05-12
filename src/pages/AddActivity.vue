@@ -38,13 +38,13 @@
         </forminputplate>
         <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
         <template v-if="activityType == 'groupbuy'">
-          <formGroupbuy :submitdata="submitdata"></formGroupbuy>
+          <form-groupbuy :submitdata="submitdata"></form-groupbuy>
         </template>
         <template v-if="activityType == 'bargainbuy'">
-          <formBargainbuy :data="selectproduct" :submitdata="submitdata"></formBargainbuy>
+          <form-bargainbuy :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
         </template>
         <template v-if="activityType == 'discount'">
-          <formDiscount :submitdata="submitdata"></formDiscount>
+          <form-discount :submitdata="submitdata"></form-discount>
         </template>
       </form>
     </div>
@@ -117,7 +117,7 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon } from 'vux'
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
@@ -130,7 +130,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Alert, Datetime, Search, Loading, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount
+    Group, XInput, Popup, Alert, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount
   },
   data () {
     return {

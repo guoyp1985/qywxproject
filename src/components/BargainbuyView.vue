@@ -137,6 +137,12 @@ export default {
     },
     onJoin: Function
   },
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup
+  },
   data () {
     return {
       query: {},

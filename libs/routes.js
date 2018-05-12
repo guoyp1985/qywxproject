@@ -1,3 +1,6 @@
+/*
+* 此文件废弃
+*/
 import AccountDetail from '@/pages/AccountDetail'
 import Activity from '@/pages/Activity'
 import Address from '@/pages/Address'
@@ -126,6 +129,11 @@ export default [
     path: '/retailerActivitylist',
     name: 'tRetailerActivitylist',
     component: RetailerActivitylist
+  },
+  {
+    path: '/activity',
+    name: 'tActivity',
+    component: Activity
   },
   {
     path: '/retailerRevenue',

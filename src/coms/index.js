@@ -1,3 +1,6 @@
+/*
+* 此文件废弃
+*/
 import Vue from 'vue'
 import {
   AjaxPlugin,

@@ -47,11 +47,11 @@
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
+        <div v-if="data.leftstorage <= 0" class="align_center">
+          <div class="btn db">商品已售罄，本次活动结束</div>
+        </div>
         <div class="t-table">
-          <div v-if="data.leftstorage <= 0" class="t-cell">
-            <div class="btn db">商品已售罄，本次活动结束</div>
-          </div>
-          <template v-else>
+          <template v-if="data.leftstorage > 0">
             <div v-if="crowduser.isovertime && !crowduser.isfull" class="t-cell">
               <div class="btn db">砍价失败</div>
             </div>
@@ -62,14 +62,14 @@
               <div v-else-if="!crowduser.isovertime" class="t-cell">
                 <div class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
-              <div v-if="data.havecreate" class="t-cell">
-                <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
-              </div>
-              <div v-else-if="!data.isfinished && !data.havecreate" class="t-cell">
+              <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
                 <div class="btn db" @click="joinin">我要参与</div>
               </div>
             </template>
           </template>
+          <div v-if="data.havecreate" class="t-cell">
+            <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -110,6 +110,8 @@
 </i18n>
 
 <script>
+
+import { Countdown } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -128,6 +130,9 @@ export default {
     cutData: Array,
     onJoin: Function,
     onCut: Function
+  },
+  components: {
+    Countdown
   },
   data () {
     return {

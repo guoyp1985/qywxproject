@@ -40,6 +40,8 @@ import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  components: {
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
