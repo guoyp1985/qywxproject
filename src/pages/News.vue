@@ -293,6 +293,9 @@ export default {
         self.showsharetip = false
       }, 10000)
     }
+    self.$wechat.ready(function () {
+      alert('in wx ready')
+    })
   }
 }
 </script>
