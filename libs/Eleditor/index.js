@@ -528,7 +528,8 @@ var Eleditor = function(){
 
 	var _editorModuleEvents = {
     insertProduct: function(){
-        _args.insertProductCallback && _args.insertProductCallback(function(rethtml){
+        _args.insertProductCallback && _args.insertProductCallback(function(data){
+		      let rethtml = '<a href="#/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+data.price+' | 查看详情</div></a>'
             var _buildWordHtml = '';
             var _buildWordHtml = $(rethtml);
 

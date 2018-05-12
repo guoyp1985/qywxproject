@@ -4,81 +4,89 @@
 * @created_date: 2018-5-3
 */
 <template>
-  <div class="editor">
-    <form class="editorImageForm" enctype="multipart/form-data">
-      <input style="opacity:0;" type="file" name="files" />
-    </form>
-    <div class="edit-btn-box" v-show="!showBtnArea">
-      <a class="edit-btn" @click="clickEditHandle">
-        <span class="color-white font16">{{$t('Edit')}}</span>
-      </a>
-    </div>
-    <div class="menu-btn-box" v-show="!showMenuArea">
-      <a class="menu-btn" @click="clickMenuHandle">
-        <span class="color-white font16">{{$t('Menu')}}</span>
-      </a>
-    </div>
-    <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
-      <flexbox-item>
-        <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
-      </flexbox-item>
-    </flexbox>
-    <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
-      <flexbox-item>
-        <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button @click.native="onClose">{{$t('Close')}}</x-button>
-      </flexbox-item>
-    </flexbox>
-    <div v-transfer-dom class="x-popup popup-selectproduct">
-      <popup v-model="showpopup" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div class="popup-middle">
-            <search
-              class="x-search"
-              v-model="searchword"
-              :auto-fixed="autofixed"
-              @on-submit="onSubmit"
-              @on-change="onChange"
-              @on-cancel="onCancelSearch"
-              ref="search">
-            </search>
-            <div class="scroll_list">
-              <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
-                <template v-if="searchresult">
-                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                </template>
-                <template v-else>
-                  <div class="flex_center" style="height:80px;">暂无商品</div>
-                </template>
-              </div>
-              <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                <div class="t-table">
-                  <div class="t-cell pic v_middle w50">
-                    <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
-                  </div>
-                  <div class="t-cell v_middle" style="color:inherit;">
-                    <div class="clamp1">{{item.title}}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                  </div>
+  <div>
+    <div class="editor">
+      <form class="editorImageForm" enctype="multipart/form-data">
+        <input style="opacity:0;" type="file" name="files" />
+      </form>
+      <div class="edit-btn-box" v-show="!showBtnArea">
+        <a class="edit-btn" @click="clickEditHandle">
+          <span class="color-white font16">{{$t('Edit')}}</span>
+        </a>
+      </div>
+      <div class="menu-btn-box" v-show="!showMenuArea">
+        <a class="menu-btn" @click="clickMenuHandle">
+          <span class="color-white font16">{{$t('Menu')}}</span>
+        </a>
+      </div>
+      <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
+        <flexbox-item>
+          <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
+        </flexbox-item>
+        <flexbox-item>
+          <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
+        </flexbox-item>
+      </flexbox>
+      <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
+        <flexbox-item>
+          <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
+        </flexbox-item>
+        <flexbox-item>
+          <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
+        </flexbox-item>
+        <flexbox-item>
+          <x-button @click.native="onClose">{{$t('Close')}}</x-button>
+        </flexbox-item>
+      </flexbox>
+      <div v-transfer-dom class="x-popup popup-selectproduct">
+        <popup v-model="showpopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">{{ $t('Select product') }}</div>
+            <div class="popup-middle">
+              <search
+                class="x-search"
+                v-model="searchword"
+                :auto-fixed="autofixed"
+                @on-submit="onSubmit"
+                @on-change="onChange"
+                @on-cancel="onCancelSearch"
+                ref="search">
+              </search>
+              <div class="scroll_list">
+                <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                  <template v-if="searchresult">
+                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                  </template>
+                  <template v-else>
+                    <div class="flex_center" style="height:80px;">暂无商品</div>
+                  </template>
                 </div>
-              </check-icon>
+                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50">
+                      <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.title}}</div>
+                      <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                    </div>
+                  </div>
+                </check-icon>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
+              <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
             </div>
           </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
-            <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
-          </div>
-        </div>
-      </popup>
+        </popup>
+      </div>
+    </div>
+    <div class="insertProductArea hide">
+      <router-link :to="{path: '/product', query: {id: selectproduct.id, wid: selectproduct.uploader}}" class="insertproduct db">
+        <img class="v_middle imgcover" :src="selectproduct.photo" />
+        <div class="iteminfo">{{ $t('RMB') }}{{ selectproduct.price }} | 查看详情</div>
+      </router-link>
     </div>
   </div>
 </template>
@@ -121,10 +129,16 @@ export default {
       limit: 20,
       pagestart1: 0,
       isBindScroll1: false,
-      scrollArea1: null
+      scrollArea1: null,
+      insertProductCallback: Function
     }
   },
   computed: {
+  },
+  watch: {
+    selectproduct: function (){
+      return this.selectproduct
+    }
   },
   methods: {
     clickEditHandle () {
@@ -187,7 +201,9 @@ export default {
           }
         },
         insertProductCallback: function (callback) {
+          self.insertProductCallback = callback
           self.showpopup = true
+          self.getProductData()
         }
       })
     },
@@ -235,10 +251,11 @@ export default {
         return false
       }
       this.selectproduct = this.selectpopupdata
-      self.submitdata.productid = self.selectproduct.id
       this.showpopup = false
       this.showselectproduct = false
-      this.showproductitem = true
+      let productHTML = document.querySelector('.insertProductArea').innerHTML
+      self.insertProductCallback && self.insertProductCallback(self.selectproduct)
+      // self.insertProductCallback && self.insertProductCallback(productHTML)
     },
     onChange (val) {
       this.searchword = val
