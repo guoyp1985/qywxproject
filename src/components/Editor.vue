@@ -175,7 +175,7 @@ export default {
               }
             })
           } else {
-            self.wechat.ready(function () {
+            self.$wechat.ready(function () {
               self.$util.wxUploadImage({
                 maxnum: 1,
                 handleCallback: function (data) {
