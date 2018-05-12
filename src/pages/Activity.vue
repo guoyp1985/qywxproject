@@ -91,12 +91,20 @@ export default {
     },
     getInfo () {
       const self = this
-      let params = { params: { id: self.query.id } }
-      if (self.crowduserid) {
-        params.params.crowduserid = self.crowduserid
-      }
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/activity/info`, params).then(function (res) {
+      let infoparams = { id: self.query.id }
+      if (self.crowduserid) {
+        infoparams.crowduserid = self.crowduserid
+      }
+      if (self.query.share_uid) {
+        infoparams.share_uid = self.query.share_uid
+      }
+      if (self.query.lastshareuid) {
+        infoparams.lastshareuid = self.query.lastshareuid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
+        params: infoparams
+      }).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
         self.data = data.data ? data.data : data
@@ -168,7 +176,6 @@ export default {
     }
   },
   created () {
-    console.log('in ll')
     const self = this
     self.$vux.loading.show()
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
