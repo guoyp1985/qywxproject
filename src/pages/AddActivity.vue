@@ -2,7 +2,7 @@
   <div class="containerarea s-havebottom bg-white font14 addActivity">
     <div class="s-container" style="top:0;">
       <form class="addForm">
-        <Forminputplate class="required">
+        <forminputplate class="required">
           <span slot="title">{{ $t('Activity product') }}</span>
           <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
             <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
@@ -21,30 +21,30 @@
               </div>
             </div>
           </div>
-        </Forminputplate>
-        <Forminputplate class="required">
+        </forminputplate>
+        <forminputplate class="required">
           <span slot="title">{{ $t('Starttime') }}</span>
           <group class="x-datetime">
             <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
           </group>
           <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
-        </Forminputplate>
-        <Forminputplate class="required">
+        </forminputplate>
+        <forminputplate class="required">
           <span slot="title">{{ $t('Endtime') }}</span>
           <group class="x-datetime">
             <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
           </group>
           <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
-        </Forminputplate>
+        </forminputplate>
         <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
         <template v-if="activityType == 'groupbuy'">
-          <FormGroupbuy :submitdata="submitdata"></FormGroupbuy>
+          <formGroupbuy :submitdata="submitdata"></formGroupbuy>
         </template>
         <template v-if="activityType == 'bargainbuy'">
-          <FormBargainbuy :data="selectproduct" :submitdata="submitdata"></FormBargainbuy>
+          <formBargainbuy :data="selectproduct" :submitdata="submitdata"></formBargainbuy>
         </template>
         <template v-if="activityType == 'discount'">
-          <FormDiscount :submitdata="submitdata"></FormDiscount>
+          <formDiscount :submitdata="submitdata"></formDiscount>
         </template>
       </form>
     </div>
@@ -117,10 +117,21 @@ Go to create:
 </i18n>
 
 <script>
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, Loading, CheckIcon } from 'vux'
+import Forminputplate from '@/components/Forminputplate'
+import FormGroupbuy from '@/components/FormGroupbuy'
+import FormBargainbuy from '@/components/FormBargainbuy'
+import FormDiscount from '@/components/FormDiscount'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group, XInput, Popup, Alert, Datetime, Search, Loading, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount
+  },
   data () {
     return {
       autofixed: false,

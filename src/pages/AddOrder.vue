@@ -142,9 +142,16 @@ Please select address:
 </i18n>
 
 <script>
+import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon } from 'vux'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group, XNumber, XTextarea, XInput, Popup, Alert, CheckIcon
+  },
   data () {
     return {
       checkvalue: ['b'],

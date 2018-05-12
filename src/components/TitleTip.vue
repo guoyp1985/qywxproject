@@ -28,13 +28,17 @@
 <i18n>
 </i18n>
 <script>
+import { Sticky } from 'vux'
 export default {
   name: 'TitleTip',
+  components: {
+    Sticky
+  },
   props: {
     scrollBox: String,
     avatarHref: {
       type: String,
-      default: '../../assets/_images/nopic.jpg'
+      default: '../../assets/images/nopic.jpg'
     },
     userName: {
       type: String,

@@ -47,7 +47,7 @@
       <div class="qrcode-area">
         <div class="qrcode-bg">
           <div class="qrcode">
-            <img src="../assets/_images/fingerprint.gif"/>
+            <img src="../assets/images/fingerprint.gif"/>
             <div class="scan-area">
               <img :src="article.qrcode"/>
             </div>
@@ -66,25 +66,35 @@
         <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
       </comment>
     </div>
-    <ShareSuccess
+    <share-success
       v-show="showShareSuccess"
       v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
       :data="article"
       :loginUser="reward"
       module="news"
       :on-close="closeShareSuccess">
-    </ShareSuccess>
+    </share-success>
     <editor elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
     <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
 </template>
 <script>
+import { Popup, XButton, Divider } from 'vux'
+import TitleTip from '@/components/TitleTip'
+import Comment from '@/components/Comment'
+import Reply from '@/components/Reply'
+import CommentPopup from '@/components/CommentPopup'
+import Editor from '@/components/Editor'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  components: {
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess
+  },
   data () {
     return {
       query: Object,
@@ -192,8 +202,8 @@ export default {
         return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
       })
       .then(res => {
-        if (res.data) {
-          self.comments = res.data
+        if (res.data.flag) {
+          self.comments = res.data.data
         }
         return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
       })
@@ -310,7 +320,7 @@ export default {
   padding: 15px;
   position: relative;
   vertical-align: middle;
-  background: url(../assets/_images/qrbg.gif);
+  background: url(../assets/images/qrbg.gif);
 }
 #article-content .qrcode-bg {
   margin: 0 auto;

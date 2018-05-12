@@ -51,9 +51,9 @@ Center:
 </i18n>
 
 <script>
-import { ViewBox, XHeader, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
+import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import routes from '#/routes'
+// import routes from '#/routes'
 // import ENV from '#/env'
 // import { User } from '#/storage'
 
@@ -66,7 +66,6 @@ export default {
   },
   components: {
     ViewBox,
-    XHeader,
     Loading,
     Tabbar,
     TabbarItem
@@ -127,12 +126,10 @@ export default {
   },
   methods: {
     getTitle (path) {
-      for (let route of routes) {
-        if (path === route.path) {
-          let title = this.$t(route.name)
-          return title || '$$'
-        }
-      }
+      const name = path.substr(1).replace(/([a-z])(.*)/, (match, p1, p2) => `t${p1.toUpperCase()}${p2}`)
+      console.log(name)
+      const title = this.$t(name)
+      return title || '$$'
     }
     // getData () {
     //   this.$http.get(`${ENV.BokaApi}/api/user/show`)

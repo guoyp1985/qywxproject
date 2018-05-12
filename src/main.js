@@ -2,18 +2,29 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import FastClick from 'fastclick'
+import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import urlParse from 'url-parse'
-import router from './router'
+// import router from './router'
 import store from './store'
-import './coms'
+// import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
 import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
+import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 
+Vue.use(VueRouter)
 Vue.use(Util)
+Vue.use(AjaxPlugin)
+Vue.use(WechatPlugin)
+Vue.use(BusPlugin)
+Vue.use(LoadingPlugin)
+Vue.use(ToastPlugin)
+Vue.use(AlertPlugin)
+Vue.use(ConfirmPlugin)
+
 require('es6-promise').polyfill()
 
 // const CancelToken = AjaxPlugin.$http.CancelToken
@@ -55,6 +66,19 @@ Vue.i18n.set('zh-CN')
 FastClick.attach(document.body)
 
 Vue.config.productionTip = false
+
+// The following line will be replaced with by vux-loader with routes in ./components_list.json
+const routes = []
+
+routes.push({
+  path: '/',
+  name: 'tIndex',
+  component: () => import('./pages/Userproducts').then(m => m.default)
+})
+
+const router = new VueRouter({
+  routes
+})
 
 sync(store, router)
 

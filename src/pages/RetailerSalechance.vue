@@ -92,10 +92,14 @@ Contact:
 </i18n>
 
 <script>
+import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  components: {
+    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem
+  },
   filters: {
     dateformat: function (dt) {
       let newtime = new Time(dt * 1000)

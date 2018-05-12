@@ -7,21 +7,21 @@
     <div class="activitylist scroll_list">
       <div v-if="!tabdata1 || tabdata1.length == 0" class="emptyitem flex_center">暂无促销商品</div>
       <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="bg-page">
-        <Groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
+        <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
           <img slot="photo" style="width:80px;height:80px;object-fit: cover;" :src="item.photo" />
           <span slot="title">{{item.title}}</span>
           <span slot="numbers">{{ item.numbers }}</span>
           <span slot="havetuan">{{ item.havetuan }}</span>
           <span slot="groupprice">{{item.groupprice}}</span>
           <span slot="price">{{item.price}}</span>
-        </Groupbuyitemplate>
-        <Bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#f6f6f6 !important;">
+        </groupbuyitemplate>
+        <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#f6f6f6 !important;">
           <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
           <span slot="title">{{item.title}}</span>
           <span slot="saveprice">{{ item.saveprice }}</span>
           <span slot="minprice">{{item.minprice}}</span>
           <span slot="price">{{item.price}}</span>
-        </Bargainbuyitemplate>
+        </bargainbuyitemplate>
       </div>
     </div>
   </div>
@@ -36,8 +36,13 @@ Promotion:
 </i18n>
 
 <script>
+import Groupbuyitemplate from '@/components/Groupbuyitemplate'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ENV from 'env'
 export default {
+  components: {
+    Groupbuyitemplate, Bargainbuyitemplate
+  },
   data () {
     return {
       tabdata1: [],

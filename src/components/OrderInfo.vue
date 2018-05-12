@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <router-link :to="`/store/${item.storeId}`">
+    <router-link :to="{path:'/store',query:{id:item.storeId}}">
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
@@ -17,7 +17,7 @@
         </div>
       </div>
     </router-link>
-    <router-link :to="{path:`/orderDetail/${item.id}`}">
+    <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
           <x-img v-for="(order, index) in item.orderlist" :src="order.photo" :key="index" container="#vux_view_box_body"></x-img>
@@ -47,8 +47,12 @@
 </template>
 
 <script>
+import { XImg, XButton } from 'vux'
 export default {
   name: 'OrderInfo',
+  components: {
+    XImg, XButton
+  },
   props: {
     item: {
       type: Object,
@@ -61,7 +65,7 @@ export default {
           storeType: 1,
           storeName: 'unkown',
           status: 0,
-          imgs: ['../assets/_images/nopic.jpg'],
+          imgs: ['../assets/images/nopic.jpg'],
           desc: undefined,
           num: 0,
           pay: 0

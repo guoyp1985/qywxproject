@@ -24,10 +24,15 @@
       </div>
     </sticky>
     <timeline class="timeline font12">
-			<timeline-item v-for="(timeline, index) in timelines" :key="index">
-				<h4>{{timeline.status}}</h4>
-				<p>{{timeline.time}}</p>
-			</timeline-item>
+      <template v-if="timelines.length">
+        <timeline-item v-for="(timeline, index) in timelines" :key="index">
+          <h4>{{timeline.status}}</h4>
+          <p>{{timeline.time}}</p>
+        </timeline-item>
+      </template>
+      <div v-else class="no-related-x color-gray">
+        <span>{{$t('No Related Data')}}</span>
+      </div>
 		</timeline>
   </div>
 </template>
@@ -36,15 +41,19 @@
 </i18n>
 
 <script>
+import { Sticky, Timeline, TimelineItem } from 'vux'
 import ENV from 'env'
 export default {
+  components: {
+    Sticky, Timeline, TimelineItem
+  },
   data () {
     return {
       expressStatus: '',
       expressCompany: '',
       expressNumber: '',
       expressPhone: '',
-      orderImg: '../../asset/_images/nopic.png',
+      orderImg: '../../asset/images/nopic.png',
       timelines: []
     }
   },
@@ -56,7 +65,7 @@ export default {
   methods: {
     getData () {
       const self = this
-      const id = this.$route.params.id
+      const id = this.$route.query.id
       this.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, {id: id})
       .then(res => {
         console.log(res.data)

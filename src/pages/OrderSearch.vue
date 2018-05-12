@@ -25,7 +25,7 @@
     </div>
     <div v-show="selectedIndex===1">
       <template v-if="list1.length">
-        <order-info v-for="(item, index) in getList1" :key="index" @on-process="orderProcess"></order-info>
+        <order-info v-for="(item, index) in getList1" :item="item" :key="index" @on-process="orderProcess"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -35,7 +35,7 @@
     </div>
     <div v-show="selectedIndex===2">
       <template v-if="list2.length">
-        <order-info v-for="(item, index) in getList2" :key="index" @on-process="orderProcess"></order-info>
+        <order-info v-for="(item, index) in getList2" :item="item" :key="index" @on-process="orderProcess"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -45,7 +45,7 @@
     </div>
     <div v-show="selectedIndex===3">
       <template v-if="list3.length">
-        <order-info v-for="(item, index) in getList3" :key="index" @on-process="orderProcess"></order-info>
+        <order-info v-for="(item, index) in getList3" :item="item" :key="index" @on-process="orderProcess"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -60,9 +60,14 @@
 </i18n>
 
 <script>
+import { Sticky, Tab, TabItem } from 'vux'
+import OrderInfo from '@/components/OrderInfo'
 import ENV from 'env'
 
 export default {
+  components: {
+    Sticky, Tab, TabItem, OrderInfo
+  },
   data () {
     return {
       selectedIndex: 0,
@@ -174,7 +179,7 @@ export default {
 
     },
     viewShipping (order) {
-      this.$router.push({path: `/shippingDetails/${order.id}`})
+      this.$router.push({path: `/shippingDetails`, query: {id: order.id}})
     },
     afterSale (order) {
 
@@ -229,6 +234,7 @@ export default {
       })
     },
     toggleTab () {
+      const self = this
       switch (this.selectedIndex) {
         case 0:
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
@@ -242,6 +248,7 @@ export default {
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user?flag=2`)
           .then(res => {
             if (res.data.flag) {
+              console.log(res.data.data)
               self.list1 = res.data.data
             }
           })

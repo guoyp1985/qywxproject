@@ -20,11 +20,15 @@
   </div>
 </template>
 <script>
+import { Tab, TabItem, Sticky, Swiper, Panel } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import urlParse from 'url-parse'
 
 export default {
+  components: {
+    Tab, TabItem, Sticky, Swiper, Panel
+  },
   data () {
     return {
       tabs: [],

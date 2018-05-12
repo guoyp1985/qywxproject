@@ -114,10 +114,17 @@
 </i18n>
 
 <script>
+import { TransferDom, Popup } from 'vux'
 import ENV from 'env'
 
 export default {
   name: 'BargainbuyView',
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup
+  },
   props: {
     data: Object,
     crowduser: {

@@ -123,9 +123,16 @@
   </div>
 </template>
 <script>
+import { Group, Cell, Card, Tab, TabItem, ViewBox, XImg, Sticky, XDialog, TransferDom } from 'vux'
 import Time from '#/time'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group, Cell, Card, Tab, TabItem, ViewBox, XImg, Sticky, XDialog
+  },
   data () {
     return {
       totalSales: 0,

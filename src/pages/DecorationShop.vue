@@ -100,9 +100,16 @@ Please upload rolling show photo:
 </i18n>
 
 <script>
+import { TransferDom, Popup, Confirm, Alert } from 'vux'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup, Confirm, Alert
+  },
   data () {
     return {
       loginuser: { uid: 187 },

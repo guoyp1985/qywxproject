@@ -65,6 +65,7 @@ import Orderproductplate from '@/components/Orderproductplate'
 import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
 import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
@@ -136,13 +137,14 @@ Vue.component('radio', Radio)
 Vue.component('checker', Checker)
 Vue.component('checker-item', CheckerItem)
 Vue.component('countdown', Countdown)
-Vue.component('wechat-emotion', WechatEmotion)
+Vue.component('emotion', WechatEmotion)
 Vue.component('badge', Badge)
 
 Vue.component('orderproductplate', Orderproductplate)
 Vue.component('bargainbuy', Bargainbuy)
 Vue.component('bargainbuy-view', BargainbuyView)
 Vue.component('bargainbuy-detail', BargainbuyDetail)
+Vue.component('bargainbuyitemplate', Bargainbuyitemplate)
 Vue.component('share-success', ShareSuccess)
 Vue.component('forminputplate', Forminputplate)
 Vue.component('form-groupbuy', FormGroupbuy)

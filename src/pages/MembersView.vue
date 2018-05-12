@@ -105,10 +105,17 @@ Behavior:
 </i18n>
 
 <script>
+import { Previewer, TransferDom } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

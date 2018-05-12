@@ -15,7 +15,7 @@
               <div class="clamp1 font13 color-red3">剩余：<span class="font16 bold">{{ data.leftstorage }}</span> 件</div>
             </div>
             <div class="t-cell v_middle align_center" style="width:40px;">
-                    <i class="al al-mjiantou-copy color-gray font20"></i>
+              <i class="al al-mjiantou-copy color-gray font20"></i>
             </div>
         </router-link>
       </div>

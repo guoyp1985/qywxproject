@@ -6,7 +6,7 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
-      <x-img :src="item.avatar" container="#vux_view_box_body"></x-img>
+      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body"></x-img>
     </div>
     <div class="detail-cell">
       <div class="header-area">
@@ -42,16 +42,20 @@
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Time from '#/time'
 
 export default {
   name: 'Comment',
+  components: {
+    XImg
+  },
   props: {
     item: {
       type: Object,
       default: () => {
         return {
-          userAvatar: '../assets/_images/nopic.jpg',
+          userAvatar: '../src/assets/images/nopic.jpg',
           userName: 'unkown',
           date: 1522659301220,
           diggCount: 0,

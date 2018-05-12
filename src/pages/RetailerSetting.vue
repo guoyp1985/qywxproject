@@ -3,10 +3,10 @@
     <div class="s-container" style="top:0;">
       <div class="padding10 font16 bg-gray4">{{ $t('Seller info setting') }}</div>
       <form>
-        <Forminputplate class="required">
+        <forminputplate class="required">
           <span slot="title">{{ $t('Shop name') }}</span>
           <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
-        </Forminputplate>
+        </forminputplate>
         <div class="form-item required">
           <div class="pt10 pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
           <div>
@@ -39,26 +39,26 @@
             <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
           </div>
         </div>
-        <Forminputplate class="required">
+        <forminputplate class="required">
           <span slot="title">{{ $t('Pay type') }}</span>
           <div>
             <check-icon :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
             <check-icon :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
           </div>
-        </Forminputplate>
+        </forminputplate>
         <div v-show="showmore">
-          <Forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Shop description') }}</span>
             <group class="textarea-outer" style="padding:0;">
               <x-textarea v-model="submitdata.content" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Shop description')" :show-counter="false" :rows="1" autosize></x-textarea>
             </group>
-          </Forminputplate>
-          <Forminputplate>
+          </forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Auto reply') }}</span>
             <group class="textarea-outer" style="padding:0;">
               <x-textarea v-model="submitdata.fastreply" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Auto reply')" :show-counter="false" :rows="1" autosize></x-textarea>
             </group>
-          </Forminputplate>
+          </forminputplate>
         </div>
         <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
         <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
@@ -170,9 +170,17 @@ Confirm txt:
 </i18n>
 
 <script>
+import { Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
+import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group, XTextarea, XInput, Popup, CheckIcon, Forminputplate
+  },
   data () {
     return {
       isOnline: false,

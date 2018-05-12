@@ -134,9 +134,13 @@
 </i18n>
 
 <script>
+import { Group, XInput, XTextarea, Loading } from 'vux'
 import ENV from 'env'
 
 export default {
+  components: {
+    Group, XInput, XTextarea, Loading
+  },
   data () {
     return {
       query: {},

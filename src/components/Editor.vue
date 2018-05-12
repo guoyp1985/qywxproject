@@ -84,11 +84,18 @@
 </template>
 
 <script>
+import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 let editor = null
 export default {
   name: 'Editor',
+  directives: {
+    TransferDom
+  },
+  components: {
+    Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon
+  },
   props: {
     elem: String
   },

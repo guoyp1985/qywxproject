@@ -284,14 +284,14 @@
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
       <template v-if="loginUser">
-        <ShareSuccess
+        <share-success
           v-show="showShareSuccess"
-          v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
+          v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
           module="product"
           :on-close="closeShareSuccess">
-        </ShareSuccess>
+        </share-success>
       </template>
     </template>
   </div>
@@ -313,11 +313,21 @@ Another batch:
 </i18n>
 
 <script>
+import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
+import Groupbuyitemplate from '@/components/Groupbuyitemplate'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')

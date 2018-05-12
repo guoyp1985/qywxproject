@@ -207,10 +207,17 @@ Required item not empty:
 </i18n>
 
 <script>
+import { Group, XInput, TransferDom, Alert, Popup, Loading, Checker, CheckerItem, CheckIcon } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Group, XInput, Alert, Popup, Loading, Checker, CheckerItem, CheckIcon
+  },
   data () {
     return {
       showcontainer: false,

@@ -2,7 +2,7 @@
 
 const path = require('path')
 const fs = require('fs')
-// const demoPath = path.resolve(__dirname, '../src/demo_list.json')
+const componentsPath = path.resolve(__dirname, '../src/page_list.json')
 
 const argv = require('yargs').argv
 argv.simulate = argv.simulate || false
@@ -26,40 +26,42 @@ module.exports = {
     },
     {
       name: 'js-parser',
-      test: /main\.js/
-//       fn: function (source) {
-//         this.addDependency(demoPath)
-//         let list = fs.readFileSync(demoPath, 'utf-8')
-//         list = JSON.parse(list)
-//         if (argv.demo) {
-//           list = list.filter(item => {
-//             return item.indexOf(argv.demo) > -1
-//           })
-//         }
-//         let str = []
-//         list.forEach(one => {
-//           let filename = one
-//           let path = `/component/${toDash(one)}`
-//           if (/#/.test(one)) {
-//             filename = one.split('#')[0]
-//             path = one.split('#')[1]
-//           }
-//           str.push(`{
-//   path: '${path}',
-//   component: () => import('./demos/${filename}.vue').then(m => m.default)
-// }`)
-//         })
-//
-//         // 404 page
+      test: /main\.js/,
+      fn: function (source) {
+        this.addDependency(componentsPath)
+        let list = fs.readFileSync(componentsPath, 'utf-8')
+        list = JSON.parse(list)
+        if (argv.demo) {
+          list = list.filter(item => {
+            return item.indexOf(argv.demo) > -1
+          })
+        }
+        let str = []
+        list.forEach(one => {
+          let filename = one
+          let path = `/${toDash(one)}`
+          if (/#/.test(one)) {
+            filename = one.split('#')[0]
+            path = one.split('#')[1]
+          }
+          console.log(path)
+          str.push(`{
+  path: '${path}',
+  name: 't${filename}',
+  component: () => import('./pages/${filename}.vue').then(m => m.default)
+}`)
+        })
+
+        // 404 page
 //         str.push(`{
 //   path: '*',
 //   component: () => import('./demos/NotFoundComponent.vue').then(m => m.default)
 // }`)
-//
-//         str = `[${str.join(',\n')}]`
-//         source = source.replace('const routes = []', 'const routes = ' + str)
-//         return source
-//       }
+
+        str = `[${str.join(',\n')}]`
+        source = source.replace('const routes = []', 'const routes = ' + str)
+        return source
+      }
     },
     {
       name: 'i18n',
@@ -76,7 +78,7 @@ module.exports = {
 }
 
 function toDash(str) {
-  return str.replace(/([A-Z])/g, function (m, w) {
-    return '-' + w.toLowerCase();
-  }).replace('-', '')
+  return str.replace(/^([A-Z])/, function (m, w) {
+    return w.toLowerCase();
+  })// .replace('-', '')
 }

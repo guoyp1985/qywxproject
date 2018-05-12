@@ -51,9 +51,13 @@
   </div>
 </template>
 <script>
+import { Tab, TabItem, Group, CellBox, XImg, Sticky, XButton } from 'vux'
 import ENV from 'env'
 
 export default {
+  components: {
+    Tab, TabItem, Group, CellBox, XImg, Sticky, XButton
+  },
   data () {
     return {
       selectedIndex: 0,
