@@ -4,11 +4,11 @@
 * @created_date: 2018-5-3
 */
 <template>
-  <div>
-    <div class="editor">
-      <form class="editorImageForm" enctype="multipart/form-data">
-        <input style="opacity:0;" type="file" name="files" />
-      </form>
+  <div class="editor">
+    <form class="editorImageForm" enctype="multipart/form-data">
+      <input style="opacity:0;" type="file" name="files" />
+    </form>
+    <div class="editor-icon">
       <div class="edit-btn-box" v-show="!showBtnArea">
         <a class="edit-btn" @click="clickEditHandle">
           <span class="color-white font16">{{$t('Edit')}}</span>
@@ -19,68 +19,68 @@
           <span class="color-white font16">{{$t('Menu')}}</span>
         </a>
       </div>
-      <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
-        <flexbox-item>
-          <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
-        </flexbox-item>
-        <flexbox-item>
-          <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
-        </flexbox-item>
-      </flexbox>
-      <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
-        <flexbox-item>
-          <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
-        </flexbox-item>
-        <flexbox-item>
-          <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
-        </flexbox-item>
-        <flexbox-item>
-          <x-button @click.native="onClose">{{$t('Close')}}</x-button>
-        </flexbox-item>
-      </flexbox>
-      <div v-transfer-dom class="x-popup popup-selectproduct">
-        <popup v-model="showpopup" height="100%">
-          <div class="popup1">
-            <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-            <div class="popup-middle">
-              <search
-                class="x-search"
-                v-model="searchword"
-                :auto-fixed="autofixed"
-                @on-submit="onSubmit"
-                @on-change="onChange"
-                @on-cancel="onCancelSearch"
-                ref="search">
-              </search>
-              <div class="scroll_list">
-                <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
-                  <template v-if="searchresult">
-                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                  </template>
-                  <template v-else>
-                    <div class="flex_center" style="height:80px;">暂无商品</div>
-                  </template>
-                </div>
-                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w50">
-                      <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.title}}</div>
-                      <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                    </div>
-                  </div>
-                </check-icon>
+    </div>
+    <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
+      <flexbox-item>
+        <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
+      </flexbox-item>
+      <flexbox-item>
+        <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
+      </flexbox-item>
+    </flexbox>
+    <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
+      <flexbox-item>
+        <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
+      </flexbox-item>
+      <flexbox-item>
+        <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
+      </flexbox-item>
+      <flexbox-item>
+        <x-button @click.native="onClose">{{$t('Close')}}</x-button>
+      </flexbox-item>
+    </flexbox>
+    <div v-transfer-dom class="x-popup popup-selectproduct">
+      <popup v-model="showpopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">{{ $t('Select product') }}</div>
+          <div class="popup-middle">
+            <search
+              class="x-search"
+              v-model="searchword"
+              :auto-fixed="autofixed"
+              @on-submit="onSubmit"
+              @on-change="onChange"
+              @on-cancel="onCancelSearch"
+              ref="search">
+            </search>
+            <div class="scroll_list">
+              <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                <template v-if="searchresult">
+                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                </template>
+                <template v-else>
+                  <div class="flex_center" style="height:80px;">暂无商品</div>
+                </template>
               </div>
-            </div>
-            <div class="popup-bottom flex_center">
-              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
-              <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+              <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                <div class="t-table">
+                  <div class="t-cell pic v_middle w50">
+                    <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                  </div>
+                  <div class="t-cell v_middle" style="color:inherit;">
+                    <div class="clamp1">{{item.title}}</div>
+                    <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                  </div>
+                </div>
+              </check-icon>
             </div>
           </div>
-        </popup>
-      </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
+            <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+          </div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
@@ -138,6 +138,7 @@ export default {
       this.$emit('on-edit')
     },
     onSave () {
+      this.showBtnArea = false
       this.$emit('on-save')
     },
     onCancel () {
@@ -315,14 +316,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;}
 .edit-btn-box {
   position: absolute;
-  bottom: 150px;
+  bottom: 80px;
   right: 20px;
 }
 .menu-btn-box {
   position: absolute;
-  bottom: 80px;
+  bottom: 0px;
   right: 20px;
 }
 
@@ -341,7 +343,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.55);
 }
 .edit-btn{
-  background-color: rgba(248, 100, 0, 0.55);
+  background-color: rgba(248, 100, 0, 1);
 }
 .option-area {
   position: absolute;

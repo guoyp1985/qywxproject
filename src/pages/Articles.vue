@@ -31,6 +31,7 @@ export default {
   },
   data () {
     return {
+      query: Object,
       tabs: [],
       headlines: [
         {
@@ -131,6 +132,7 @@ export default {
     }
   },
   created () {
+    this.query = this.$route.query
     this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }

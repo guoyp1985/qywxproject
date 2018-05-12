@@ -55,7 +55,7 @@
             <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
             <template v-if="crowduser.isfull == 0">
               <div class="btn db" @click="inviteevent">邀请好友砍价</div>
-              <div v-if="crowduser" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+              <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
                 <span class="v_middle db-in">还剩</span>
                 <span class="v_middle db-in">{{ lefthour }}</span>
                 <span class="v_middle db-in">:</span>
@@ -135,7 +135,8 @@ export default {
       type: Object,
       default: { 'avatar': '/src/assets/images/user.jpg' }
     },
-    onJoin: Function
+    onJoin: Function,
+    cutdownEnd: Function
   },
   data () {
     return {
@@ -155,7 +156,7 @@ export default {
     if (self.data) {
       self.product = self.data.product
     }
-    if (self.crowduser) {
+    if (self.crowduser && self.crowduser.timeleft) {
       self.lefthour = self.crowduser.timeleft.hour
       self.leftminute = self.crowduser.timeleft.minute
       self.leftsecond = self.crowduser.timeleft.second
@@ -207,6 +208,7 @@ export default {
         if (h === 0 && m === 0 && s === 0) {
           clearInterval(cutdownInterval)
           self.isfinish = true
+          self.cutdownEnd && self.cutdownEnd()
         }
       }, 1000)
     },

@@ -5,7 +5,7 @@
         <bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></bargainbuy>
       </template>
       <template v-if="showBargainbuyView">
-        <bargainbuy-view :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
+        <bargainbuy-view :data="data" :crowduser="crowduser" :cutdown-end="cutdownCallback" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
       </template>
       <template v-if="showBargianbuyDetail">
         <bargainbuy-detail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
@@ -170,10 +170,13 @@ export default {
         let data = res.data
         self.cutData = data.data ? data.data : data
       })
+    },
+    cutdownCallback () {
+      self.getInfo()
     }
   },
   created () {
-    console.log('in activity')
+    console.log('activity')
     const self = this
     self.$vux.loading.show()
     self.$store.commit('updateToggleTabbar', {toggleBar: false})

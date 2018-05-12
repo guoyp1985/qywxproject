@@ -13,11 +13,14 @@ var _notctname = ['INPUT', 'IMG', 'TEXTAREA'];
 var _toolnames = {
 	insertProduct: '插商品',
 	insertText: '插文字',
+	editText: '改文字',
 	insertImage: '插图片',
 	insertLink: '插链接',
 	insertHr: '水平线',
-	editText: '改文字',
-	"delete": '删除',
+	// "delete": '删除',
+	// deleteBefore: '删除前',
+	// deleteAfter: '删除后',
+	deleteThis: '删除',
 	undo: '撤销',
 	cancel: '取消',
 };
@@ -230,12 +233,14 @@ var Eleditor = function(){
 			'insertImage',
 			'insertLink',
 			'insertHr',
-			'delete',
+			//'delete',
+			//'deleteBefore',
+			//'deleteAfter',
+			'deleteThis',
 			'undo',
-			'cancel',
+			'cancel'
 		];
 	}
-
 	if( _args.el instanceof jQuery ){
 		var _$wrap = _args.el;
 	}else{
@@ -605,6 +610,59 @@ var Eleditor = function(){
 			_hideEditorControllerLayer();
 			_correctHtmlStructure(_$wrap, _placeHolder);
 		},
+    deleteThis: function(){
+            _appendHistory({ m: 'deleteNode', node: _$selected, pnode: _$selected.prev() });
+            _$selected.remove();
+            //editnews();
+            _hideEditorControllerLayer();
+            _correctHtmlStructure(_$wrap, _placeHolder);
+    },
+    deleteBefore: function(){
+            var _$prev = _$selected.prev();
+            _appendHistory({ m: 'deleteBeforeNode', node: _$selected, bnode: _$selected.prevAll() });
+            var _$prev_prev;
+            while (_$prev.length > 0) {
+                    _$prev_prev = _$prev.prev();
+                    _$prev.remove();
+                    _$prev = _$prev_prev
+            }
+            var _$parent = _$selected.parent();
+            while (_$parent.length > 0 && !_$parent.hasClass("Eleditor-area")) {
+                    _$prev = _$parent.prev();
+                    while (_$prev.length > 0) {
+                            _$prev_prev = _$prev.prev();
+                            _$prev.remove();
+                            _$prev = _$prev_prev
+                    }
+                    _$parent = _$parent.parent()
+            }
+            //editnews();
+            _hideEditorControllerLayer();
+            _correctHtmlStructure(_$wrap, _placeHolder);
+    },
+    deleteAfter: function(){
+            var _$next = _$selected.next();
+            _appendHistory({ m: 'deleteAfterNode', node: _$selected, anode: _$selected.nextAll() });
+            var _$next_next;
+            while (_$next.length > 0) {
+                    _$next_next = _$next.next();
+                    _$next.remove();
+                    _$next = _$next_next
+            }
+            var _$parent = _$selected.parent();
+            while (_$parent.length > 0 && !_$parent.hasClass("Eleditor-area")) {
+                    _$next = _$parent.next();
+                    while (_$next.length > 0) {
+                            _$next_next = _$next.next();
+                            _$next.remove();
+                            _$next = _$next_next
+                    }
+                    _$parent = _$parent.parent()
+            }
+            //editnews();
+            _hideEditorControllerLayer();
+            _correctHtmlStructure(_$wrap, _placeHolder);
+    },
 		undo: function(){
 			_revokeEdit();
 		},
