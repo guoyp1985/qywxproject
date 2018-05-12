@@ -175,18 +175,20 @@ export default {
               }
             })
           } else {
-            self.$util.wxUploadImage({
-              maxnum: 1,
-              handleCallback: function (data) {
-                if (data.flag === 1 && data.data) {
-                  callback && callback(data.data)
-                } else if (data.error) {
-                  self.$vux.toast.show({
-                    text: 'data.error',
-                    time: self.$util.delay(data.error)
-                  })
+            self.wechat.ready(function () {
+              self.$util.wxUploadImage({
+                maxnum: 1,
+                handleCallback: function (data) {
+                  if (data.flag === 1 && data.data) {
+                    callback && callback(data.data)
+                  } else if (data.error) {
+                    self.$vux.toast.show({
+                      text: 'data.error',
+                      time: self.$util.delay(data.error)
+                    })
+                  }
                 }
-              }
+              })
             })
           }
         },
