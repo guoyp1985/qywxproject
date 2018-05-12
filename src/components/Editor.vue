@@ -151,7 +151,6 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         insertImageCallback: function (callback) {
-          alert(window.WeixinJSBridge)
           if (typeof window.WeixinJSBridge !== 'undefined') {
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
@@ -176,7 +175,6 @@ export default {
               }
             })
           } else {
-            alert('in wx')
             self.$util.wxUploadImage({
               maxnum: 1,
               handleCallback: function (data) {
