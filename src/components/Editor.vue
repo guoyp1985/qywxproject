@@ -82,12 +82,6 @@
         </popup>
       </div>
     </div>
-    <div class="insertProductArea hide">
-      <router-link :to="{path: '/product', query: {id: selectproduct.id, wid: selectproduct.uploader}}" class="insertproduct db">
-        <img class="v_middle imgcover" :src="selectproduct.photo" />
-        <div class="iteminfo">{{ $t('RMB') }}{{ selectproduct.price }} | 查看详情</div>
-      </router-link>
-    </div>
   </div>
 </template>
 
