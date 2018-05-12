@@ -48,7 +48,7 @@
         <div class="qrcode-area">
           <div class="qrcode-bg">
             <div class="qrcode">
-              <img src="../assets/_images/fingerprint.gif"/>
+              <img src="../assets/images/fingerprint.gif"/>
               <div class="scan-area">
                 <img :src="article.qrcode"/>
               </div>
