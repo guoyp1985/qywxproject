@@ -175,6 +175,7 @@ export default {
               }
             })
           } else {
+            alert('in wx')
             self.$util.wxUploadImage({
               maxnum: 1,
               handleCallback: function (data) {
