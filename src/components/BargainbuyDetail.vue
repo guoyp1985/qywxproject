@@ -140,22 +140,13 @@ export default {
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
-      canbuy: true,
-      lefthour: '',
-      leftminute: '',
-      leftsecond: ''
+      canbuy: true
     }
   },
   created () {
     const self = this
     if (self.data) {
       self.product = self.data.product
-    }
-    if (self.crowduser) {
-      self.lefthour = self.crowduser.timeleft.hour
-      self.leftminute = self.crowduser.timeleft.minute
-      self.leftsecond = self.crowduser.timeleft.second
-      self.cutdown()
     }
   },
   filters: {
@@ -188,43 +179,6 @@ export default {
           }
         })
       })
-    },
-    cutdown () {
-      const self = this
-      let cutdownInterval = setInterval(function () {
-        let h = parseInt(self.lefthour)
-        let m = parseInt(self.leftminute)
-        let s = parseInt(self.leftsecond)
-        if (s > 0) {
-          s--
-          if (s < 10) {
-            self.leftsecond = '0' + s
-          } else {
-            self.leftsecond = s
-          }
-        } else if (m > 0) {
-          m--
-          if (m < 10) {
-            self.leftminute = '0' + m
-          } else {
-            self.leftminute = m
-          }
-          self.leftsecond = '59'
-        } else if (h > 0) {
-          h--
-          if (h < 10) {
-            self.lefthour = '0' + h
-          } else {
-            self.lefthour = h
-          }
-          self.leftminute = '59'
-          self.leftsecond = '59'
-        }
-        if (h === 0 && m === 0 && s === 0) {
-          clearInterval(cutdownInterval)
-          self.isfinish = true
-        }
-      }, 1000)
     },
     joinin () {
       const self = this

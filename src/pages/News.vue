@@ -4,79 +4,83 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="article-content">
-    <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
-			<div class="ico"><i class="al al-feiji"></i></div>
-			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
-			<div class="pic">
-				<img src="../assets/images/share1.jpg" />
-			</div>
-		</div>
-    <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
-    <div class="article-view">
-      <div class="article-title">
-        <h2>{{article.title}}</h2>
-      </div>
-      <div class="article-vice-title">
-        <h4>{{article.vicetitle}}</h4>
-      </div>
-      <div class="article-info font14">
-        <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-        <span class="article-ex"></span>
-        <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
-      </div>
-      <div id="editor-content" class="article-content" v-html="article.content"></div>
-      <div class="operate-area">
-        <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-          <span class="fa fa-star-o"></span>
-          <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
-        </x-button>
-        <x-button mini plain type="primary" @click.native="onAdvisory">
-          <span class="fa fa-user"></span>
-          <span>{{$t('Advisory')}}</span>
-        </x-button>
-        <x-button mini plain type="primary" @click.native="onStore">
-          <span class="fa fa-user"></span>
-          <span>{{$t('Store')}}</span>
-        </x-button>
-      </div>
-      <div class="reading-info">
-        <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-        <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
-      </div>
-      <div class="qrcode-area">
-        <div class="qrcode-bg">
-          <div class="qrcode">
-            <img src="../assets/images/fingerprint.gif"/>
-            <div class="scan-area">
-              <img :src="article.qrcode"/>
+  <div class="containerarea font14 bg-white news notop nobottom">
+    <template v-if="showContainer">
+      <div id="article-content" class="pagemiddle">
+        <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+    			<div class="ico"><i class="al al-feiji"></i></div>
+    			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+    			<div class="pic">
+    				<img src="../assets/images/share1.jpg" />
+    			</div>
+    		</div>
+        <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <div class="article-view">
+          <div class="article-title">
+            <h2>{{article.title}}</h2>
+          </div>
+          <div class="article-vice-title">
+            <h4>{{article.vicetitle}}</h4>
+          </div>
+          <div class="article-info font14">
+            <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
+            <span class="article-ex"></span>
+            <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+          </div>
+          <div id="editor-content" class="article-content" v-html="article.content"></div>
+          <div class="operate-area">
+            <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
+              <span class="fa fa-star-o"></span>
+              <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
+            </x-button>
+            <x-button mini plain type="primary" @click.native="onAdvisory">
+              <span class="fa fa-user"></span>
+              <span>{{$t('Advisory')}}</span>
+            </x-button>
+            <x-button mini plain type="primary" @click.native="onStore">
+              <span class="fa fa-user"></span>
+              <span>{{$t('Store')}}</span>
+            </x-button>
+          </div>
+          <div class="reading-info">
+            <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+            <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
+          </div>
+          <div class="qrcode-area">
+            <div class="qrcode-bg">
+              <div class="qrcode">
+                <img src="../assets/images/fingerprint.gif"/>
+                <div class="scan-area">
+                  <img :src="article.qrcode"/>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <div class="comment-area">
+          <div class="comment-op font14">
+            <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
+          </div>
+          <template v-if="article.comments">
+            <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
+          </template>
+          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
+            <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
+          </comment>
+        </div>
       </div>
-    </div>
-    <div class="comment-area">
-      <div class="comment-op font14">
-        <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
-      </div>
-      <template v-if="article.comments">
-        <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
-      </template>
-      <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
-        <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
-      </comment>
-    </div>
-    <share-success
-      v-show="showShareSuccess"
-      v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
-      :data="article"
-      :loginUser="reward"
-      module="news"
-      :on-close="closeShareSuccess">
-    </share-success>
-    <editor elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
-    <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <share-success
+        v-show="showShareSuccess"
+        v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
+        :data="article"
+        :loginUser="reward"
+        module="news"
+        :on-close="closeShareSuccess">
+      </share-success>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+    </template>
   </div>
 </template>
 <script>
@@ -98,6 +102,7 @@ export default {
   data () {
     return {
       query: Object,
+      showContainer: false,
       showShareSuccess: false,
       showsharetip: true,
       commentPopupShow: false,
@@ -184,6 +189,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
         self.$vux.loading.hide()
+        self.showContainer = true
         if (res.data.flag) {
           self.article = res.data.data
           document.title = self.article.title
@@ -243,7 +249,6 @@ export default {
     },
     editSave () {
       const self = this
-      console.log('save')
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
@@ -366,4 +371,17 @@ export default {
 #article-content .weui-btn_mini {
   padding: 0 13px;
 }
+
+
+.news .insertproduct{
+  display:block;padding:5px !important;position:relative;text-indent: 0 !important;
+  color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;
+}
+.news .insertproduct img{vertical-align: middle !important;}
+.news .insertproduct .iteminfo{
+  text-align:right;position:absolute;color:#fff;padding-left:10px;padding-right:10px;
+  font-size:12px;
+  bottom: 15px;right: 9px;border-radius: 15px;background-image: linear-gradient(90deg, #f26f12 0%, #fa3f06 99%);
+}
+.news .editor{}
 </style>
