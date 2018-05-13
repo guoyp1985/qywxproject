@@ -67,7 +67,7 @@ FastClick.attach(document.body)
 
 Vue.config.productionTip = false
 
-// The following line will be replaced with by vux-loader with routes in ./components_list.json
+// The following line will be replaced with by vux-loader with routes in ./page_list.json
 const routes = []
 
 routes.push({
