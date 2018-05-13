@@ -126,8 +126,11 @@ export default {
   },
   methods: {
     getTitle (path) {
-      const name = path.substr(1).replace(/([a-z])(.*)/, (match, p1, p2) => `t${p1.toUpperCase()}${p2}`)
+      let name = path.substr(1).replace(/([a-z])(.*)/, (match, p1, p2) => `t${p1.toUpperCase()}${p2}`)
       console.log(name)
+      if (name == '') {
+        name = 'tIndex'
+      }
       const title = this.$t(name)
       return title || '$$'
     }

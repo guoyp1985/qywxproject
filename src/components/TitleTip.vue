@@ -47,6 +47,10 @@ export default {
     userCredit: {
       type: Number,
       default: 0
+    },
+    delay: {
+      type: Number,
+      default: 5000
     }
   },
   data () {
@@ -58,7 +62,7 @@ export default {
     const self = this
     setTimeout(() => {
       self.show = false
-    }, 5000)
+    }, this.delay)
   }
 }
 </script>

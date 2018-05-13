@@ -65,7 +65,7 @@ export default {
           storeType: 1,
           storeName: 'unkown',
           status: 0,
-          imgs: ['../assets/images/nopic.jpg'],
+          imgs: ['../src/assets/images/nopic.jpg'],
           desc: undefined,
           num: 0,
           pay: 0

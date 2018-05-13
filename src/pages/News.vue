@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle">
+      <div id="article-content" class="pagemiddle" @click="testRedirect">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
@@ -101,7 +101,7 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      query: {},
       showContainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -175,15 +175,16 @@ export default {
         }
       })
     },
-    getData () {
+    getData (option) {
       const self = this
-      const id = self.query.id
+      const id = option.id
+      console.log(id)
       let infoparams = { id: id, module: 'news' }
-      if (self.query.from === 'poster') {
+      if (option.from === 'poster') {
         infoparams.from = 'poster'
       }
-      if (self.query.share_uid) {
-        infoparams['share_uid'] = self.query.share_uid
+      if (option.share_uid) {
+        infoparams['share_uid'] = option.share_uid
       }
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
@@ -198,7 +199,7 @@ export default {
             data: self.article,
             module: 'news',
             moduleid: self.article.id,
-            lastshareuid: self.query.share_uid,
+            lastshareuid: option.share_uid,
             link: `${ENV.Host}/#/news?id=${self.article.id}?wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
             successCallback: function () {
               self.showShareSuccess = true
@@ -281,18 +282,33 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+    },
+    testRedirect () {
+      this.$router.push({path: '/news', query: {id: 1}})
     }
   },
   created () {
     const self = this
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.query = self.$route.query
-    this.getData()
-    if (self.query.newadd) {
+    this.query = this.$route.query
+    this.getData(this.query)
+    if (this.query.newadd) {
       setTimeout(function () {
         self.showsharetip = false
       }, 10000)
     }
+  },
+  beforeRouteUpdate (to, from, next) {
+    console.log(to)
+    const self = this
+    this.query = to.query
+    this.getData(to.query)
+    if (this.query.newadd) {
+      setTimeout(function () {
+        self.showsharetip = false
+      }, 10000)
+    }
+    next()
   }
 }
 </script>
