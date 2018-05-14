@@ -388,9 +388,11 @@ Util.install = function (Vue, options) {
           if(localIds.length > maxnum){
             localIds = localIds.slice(0, maxnum)
           }
-          let arr = localIds
+          let arr = []
           if (maxnum === 1) {
-            arr = [localIds]
+            arr.push(localIds)
+          } else {
+            arr = localIds
           }
           alert(arr)
           Vue.$vux.loading.show()
