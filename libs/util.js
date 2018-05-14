@@ -392,6 +392,7 @@ Util.install = function (Vue, options) {
           if (maxnum === 1) {
             arr = [localIds]
           }
+          alert(arr)
           Vue.$vux.loading.show()
           self.taskData({
             data: arr,
@@ -400,6 +401,7 @@ Util.install = function (Vue, options) {
             },
             handleFunction: function (d) {
               return function (done) {
+                alert(d)
                 Vue.wechat.uploadImage({
                   localId: d,
                   isShowProgressTips: 0,
