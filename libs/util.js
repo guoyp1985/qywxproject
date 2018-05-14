@@ -388,6 +388,7 @@ Util.install = function (Vue, options) {
           if(localIds.length > maxnum){
             localIds = localIds.slice(0, maxnum)
           }
+          alert(localIds)
           Vue.$vux.loading.show()
           self.taskData({
             data: localIds,
