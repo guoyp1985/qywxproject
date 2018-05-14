@@ -48,7 +48,7 @@
           </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray"><span :class="`digicon ${getDigCss}`"></span> {{article.dig}}</span>
+            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${digStatus}`"></span> {{article.dig}}</span>
           </div>
           <div class="qrcode-area">
             <div class="qrcode-bg">
@@ -136,7 +136,8 @@ export default {
       retailerInfo: {},
       comments: [],
       showSubscribe: false,
-      WeixinQrcode: ENV.WeixinQrcode
+      WeixinQrcode: ENV.WeixinQrcode,
+      digStatus: ''
     }
   },
   filters: {
@@ -145,6 +146,11 @@ export default {
     },
     readingCountFormat: function (count) {
       return count > 100000 ? '100000+' : count
+    }
+  },
+  watch: {
+    digStatus: function () {
+      return this.digStatus
     }
   },
   methods: {
@@ -241,6 +247,16 @@ export default {
               self.showShareSuccess = true
             }
           })
+          return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
+            params: {id: id, module: self.module}
+          })
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.digStatus = 'diged'
+          }
           return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: self.module}) // 获取评论
         }
       })
@@ -323,6 +339,36 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
+    clickDig () {
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: self.query.id,
+        module: self.module
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (self.digStatus === 'diged') {
+            self.digStatus = ''
+            self.article.dig = self.article.dig - 1
+          } else {
+            self.digStatus = 'diged'
+            self.article.dig = self.article.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
     createdFun (to, from, next) {
       const self = this
       self.showsharetip = false
@@ -335,10 +381,6 @@ export default {
         }, 10000)
       }
       next && next()
-    },
-    getDigCss () {
-      let css = ''
-      return css
     }
   },
   created () {

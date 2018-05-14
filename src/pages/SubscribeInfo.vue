@@ -1,11 +1,11 @@
 <template>
-  <div class="containerarea font14 bg-page">
+  <div class="containerarea font14 bg-page sinfo">
 		<div class="align_center pt10 pb10">
 			<img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
 		</div>
 		<div class="padding10 bg-white">
 			<div class="pb10 border font16 color-gray b_bottom_after">我推荐的用户</div>
-			<div class="scroll_list">
+			<div v-if="disData" class="scroll_list">
         <div v-if="!data || data.length == 0" class="flex_center emptyitem">您还没有好友关注，去分享给好友关注吧</div>
         <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db">
           <div class="t-table">
@@ -36,8 +36,12 @@ export default {
     return {
       loginUser: Object,
       data: [],
-      disdatalist: false,
-      WeixinQrcode: ENV.WeixinQrcode
+      disData: false,
+      WeixinQrcode: ENV.WeixinQrcode,
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   filters: {
@@ -58,11 +62,42 @@ export default {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
+    },
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.data.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/user/uploadByMe`).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.data = self.data.concat(retdata)
+        self.disData = true
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('.containerarea.sinfo')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
+      })
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.$vux.loading.show()
+    self.getdata1()
   }
 }
 </script>

@@ -21,7 +21,7 @@
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
-              <div class="scroll_list listarea">
+              <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
                   <div class="mt5">暂无待提现金额记录！</div>
@@ -80,7 +80,7 @@
             </div>
           </template>
           <template v-if="(index == 1)">
-            <div class="scroll_list listarea">
+            <div v-if="disData2" class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
                 <div class="mt5">暂无待提现金额记录！</div>
@@ -129,13 +129,13 @@
             </div>
           </template>
           <template v-if="(index == 2)">
-            <div class="scroll_list">
-              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+            <div v-if="disData3" class="scroll_list">
+              <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
                 <div class="mt5">暂无待结算订单记录！</div>
                 <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
               </div>
-              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
+              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
                   <div class="b_bottom_after padding5">
                     <div class="t-table">
@@ -253,6 +253,9 @@ export default {
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
+      disData1: false,
+      disData2: false,
+      disData3: false,
       totalPrice: '0.00',
       checkedData: [],
       checkedAll: true,
@@ -331,6 +334,7 @@ export default {
           }
         }
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.disData1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.retailerrevenue .swiperitem')
           self.scrollArea1 = items[0]
@@ -350,6 +354,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.disData2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -365,6 +370,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
+        self.disData3 = true
         if (!self.isBindScroll3) {
           self.isBindScroll3 = true
           self.scrollArea3.removeEventListener('scroll', self.scroll3)
