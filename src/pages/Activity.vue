@@ -62,6 +62,12 @@ export default {
   watch: {
     data: function () {
       return this.data
+    },
+    crowduser: function () {
+      return this.crowduser
+    },
+    crowduserid: function () {
+      return this.crowduserid
     }
   },
   methods: {
@@ -109,7 +115,7 @@ export default {
         if (self.data.type === 'bargainbuy') {
           self.bargainbuyType = true
           let sharelink = `${ENV.Host}/#/activity?id=${self.data.id}&share_uid=${self.loginUser.uid}`
-          if (self.data.crowduser && self.data.crowduser.length !== 0) {
+          if (self.data.crowduser && self.data.crowduser.id) {
             self.crowduser = self.data.crowduser
             sharelink = `${sharelink}&crowduserid=${self.crowduser.id}`
           }

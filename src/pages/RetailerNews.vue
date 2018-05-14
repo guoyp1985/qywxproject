@@ -314,14 +314,14 @@ export default {
       this.showpopup = false
       if (key === 'push') {
         this.showpush = true
-      }
-      if (self.customerdata.length === 0) {
-        self.getCustomerdata()
-      } else {
-        self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-        self.isBindCustomerScroll = true
-        self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-        self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+        if (self.customerdata.length === 0) {
+          self.getCustomerdata()
+        } else {
+          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+          self.isBindCustomerScroll = true
+          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+        }
       }
     },
     tabitemclick (index) {

@@ -17,12 +17,12 @@
       </div>
     </div>
     <div class="s-container">
-      <div class="padding10 align_center btnlist">
+      <div v-if="showContainer" class="padding10 align_center btnlist">
         <div class="t-table">
           <div class="t-cell v_middle">
             <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="btn bg-orange color-white">联系</router-link>
           </div>
-          <div class="t-cell v_middle" v-if="!viewuser.isseller">
+          <div class="t-cell v_middle" v-if="!viewuser.isseller || viewuser.isseller == '0'">
             <div class="btn bg-orange color-white" @click="inviteevent">返点客</div>
           </div>
           <div class="t-cell v_middle" v-else>
@@ -129,7 +129,8 @@ export default {
         msrc: '/src/assets/images/user.jpg',
         src: '/src/assets/images/user.jpg'
       }],
-      wximgarr: ['/src/assets/images/user.jpg']
+      wximgarr: ['/src/assets/images/user.jpg'],
+      showContainer: false
     }
   },
   computed: {
@@ -262,6 +263,7 @@ export default {
         self.wximgarr[0] = self.viewuser.avatar
         document.title = self.viewuser.linkman
       }
+      self.showContainer = true
     })
   }
 }

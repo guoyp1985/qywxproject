@@ -6,16 +6,6 @@
           <div class="content_tile mg">
             <span class="">{{ $t('tSos') }}</span>
           </div>
-          <div class="t-center back_year posi_r">
-            <a href="javascript:history.go(-1);" class="back_btn posi_a bd_in t-table link back"><span class="t-cell middle-cell">←&nbsp;返回</span></a>
-          </div>
-        </div>
-        <div class="meeting_title1 meetint_titlepc" style="display:none">
-          <div class="content_tile mg"><span class="">$error</span></div>
-          <div class="t-center back_year posi_r">
-            <a href="javascript:history.go(-1);" class="back_btn posi_a bd_in t-table link back"><span class="t-cell middle-cell">←&nbsp;知道了</span></a>
-            <a href="javascript:history.go(-1);" class="back_btn posi_a bd_in t-table link back"><span class="t-cell middle-cell">←&nbsp;返回</span></a>
-          </div>
         </div>
       </div>
     </div>
@@ -28,6 +18,7 @@
 <script>
 export default {
   data () {
+    return {}
   },
   filters: {
   },
