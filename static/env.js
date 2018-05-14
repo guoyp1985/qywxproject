@@ -8,7 +8,7 @@ var ENV = {
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
   BokaCDN: 'http://vue.boka.cn',
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',
-  WeixinName: '博卡授权中心' //vue: 博卡授权中心 // vux: 共销宝
+  WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
