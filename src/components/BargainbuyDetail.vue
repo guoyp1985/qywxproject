@@ -143,12 +143,6 @@ export default {
       canbuy: true
     }
   },
-  created () {
-    const self = this
-    if (self.data) {
-      self.product = self.data.product
-    }
-  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd')
@@ -196,6 +190,16 @@ export default {
           }
         })
       })
+    },
+    toMyActivity () {
+      const self = this
+      self.$router.push({path: '/activity', query: {id: self.data.id, crowduserid: self.data.havecreate}})
+    }
+  },
+  created () {
+    const self = this
+    if (self.data) {
+      self.product = self.data.product
     }
   }
 }

@@ -172,19 +172,29 @@ export default {
       })
     },
     cutdownCallback () {
+      const self = this
       self.getInfo()
+    },
+    createdFun (to, from, next) {
+      const self = this
+      self.$vux.loading.show()
+      self.$store.commit('updateToggleTabbar', {toggleBar: false})
+      self.query = to.query
+      if (self.query.crowduserid) {
+        self.crowduserid = self.query.crowduserid
+      }
+      self.loginUser = User.get()
+      self.getInfo()
+      next && next()
     }
+  },
+  beforeRouteUpdate (to, from, next) {
+    const self = this
+    self.createdFun(to, from, next)
   },
   created () {
     const self = this
-    self.$vux.loading.show()
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    if (self.query.crowduserid) {
-      self.crowduserid = self.query.crowduserid
-    }
-    self.loginUser = User.get()
-    self.getInfo()
+    self.createdFun(self.$route)
   }
 }
 </script>
