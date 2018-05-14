@@ -37,18 +37,18 @@
               <span class="fa fa-star-o"></span>
               <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
             </x-button>
-            <x-button mini plain type="primary" @click.native="onAdvisory">
+            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
               <span class="fa fa-user"></span>
               <span>{{$t('Advisory')}}</span>
             </x-button>
-            <x-button mini plain type="primary" @click.native="onStore">
+            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
               <span class="fa fa-user"></span>
               <span>{{$t('Store')}}</span>
             </x-button>
           </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${digStatus}`"></span> {{article.dig}}</span>
+            <span class="font14 color-gray" @click="clickDig('news',query.id,article)"><span :class="`digicon ${digStatus}`"></span> {{article.dig}}</span>
           </div>
           <div class="qrcode-area">
             <div class="qrcode-bg">
@@ -195,6 +195,7 @@ export default {
       //   date: new Date().getTime(),
       //   diggCount: 0
       // }
+      console.log(value)
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
         if (res.data.flag) {
@@ -299,8 +300,10 @@ export default {
       }
     },
     onAdvisory () {
+      this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid}})
     },
     onStore () {
+      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
     },
     onShare () {
     },
@@ -339,7 +342,7 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    clickDig () {
+    clickDig (digmodule, digid, data) {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
       if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
@@ -347,18 +350,24 @@ export default {
       }
       self.$vux.loading.show()
       self.$http.post(url, {
-        id: self.query.id,
-        module: self.module
+        id: digid,
+        module: digmodule
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          if (self.digStatus === 'diged') {
-            self.digStatus = ''
-            self.article.dig = self.article.dig - 1
+          if (data.digStatus === 'diged') {
+            if (digmodule === 'news') {
+              self.digStatus = ''
+            }
+            delete data.digStatus
+            data.dig = self.article.dig - 1
           } else {
-            self.digStatus = 'diged'
-            self.article.dig = self.article.dig + 1
+            if (digmodule === 'news') {
+              self.digStatus = 'diged'
+            }
+            data.digStatus = 'diged'
+            data.dig = self.article.dig + 1
           }
         } else {
           self.$vux.toast.show({

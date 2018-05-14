@@ -128,7 +128,8 @@ export default {
     },
     cutData: Array,
     onJoin: Function,
-    onCut: Function
+    onCut: Function,
+    cuting: false
   },
   components: {
     Countdown
@@ -158,20 +159,24 @@ export default {
   methods: {
     cutevent () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.onCut && self.onCut()
+      if (!self.cuting) {
+        self.$vux.loading.show()
+        self.cuting = true
+        self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.onCut && self.onCut()
+              }
             }
-          }
+          })
+          self.cuting = false
         })
-      })
+      }
     },
     joinin () {
       const self = this
