@@ -133,12 +133,14 @@ export default {
           case 4:
             item.buttons = [4, 6]
             break
+          case 100:
+            item.buttons = [4]
         }
       }
       return list
     },
     evaluate (order) {
-      this.$router.push({name: 'tEvaluation', params: {order: order}})
+      this.$router.push({name: 'tEvaluation', query: {id: order.id}})
     },
     confirm (order) {
       const self = this

@@ -8,7 +8,7 @@
     <sticky scroll-box="order-detail">
       <div class="order-service">
         <div class="seller-cell">
-          <span class="font14">卖家: {{retailertitle}}</span>
+          <span class="font14">卖家: {{retailerTitle}}</span>
         </div>
         <div class="contact-cell">
           <div class="ol-contact">
@@ -79,7 +79,7 @@ export default {
   data () {
     return {
       id: 0,
-      retailertitle: 'unkown',
+      retailerTitle: 'unkown',
       receiver: 'unkown',
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
@@ -112,9 +112,9 @@ export default {
         if (res.data.flag) {
           self.orders = res.data.data.orderlist
           self.special = res.data.data.special
-          self.retailertitle = res.data.data.retailer.title
+          self.retailerTitle = res.data.data.retailer.title
           self.shippingAddress = res.data.data.address
-          self.receiver = res.data.data.username
+          self.receiver = res.data.data.linkman
           self.receiverPhone = res.data.data.telephone
           self.expressCompany = res.data.data.delivercompanyname
           self.expressNumber = res.data.data.delivercode
