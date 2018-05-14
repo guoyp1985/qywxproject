@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle" @click="testRedirect">
+      <div id="article-content" class="pagemiddle">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
@@ -74,7 +74,7 @@
         v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
         :data="article"
         :loginUser="reward"
-        module="news"
+        :module="module"
         :on-close="closeShareSuccess">
       </share-success>
       <editor v-if="reward.uid == article.uploader" elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
@@ -102,6 +102,7 @@ export default {
   data () {
     return {
       query: {},
+      module: 'news',
       showContainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -148,6 +149,7 @@ export default {
       this.replyPopupShow = false
     },
     commentSubmit (value) { // 留言提交
+      const self = this
       this.commentPopupShow = false
       // let comment = {
       //   userName: 'simon',
@@ -156,8 +158,7 @@ export default {
       //   date: new Date().getTime(),
       //   diggCount: 0
       // }
-      const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'news', message: value})
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
         if (res.data.flag) {
           self.comments.push(res.data.data)
@@ -175,16 +176,16 @@ export default {
         }
       })
     },
-    getData (option) {
+    getData () {
       const self = this
-      const id = option.id
+      const id = self.query.id
       console.log(id)
-      let infoparams = { id: id, module: 'news' }
-      if (option.from === 'poster') {
+      let infoparams = { id: id, module: self.module }
+      if (self.query.from === 'poster') {
         infoparams.from = 'poster'
       }
-      if (option.share_uid) {
-        infoparams['share_uid'] = option.share_uid
+      if (self.query.share_uid) {
+        infoparams['share_uid'] = self.query.share_uid
       }
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
@@ -197,22 +198,22 @@ export default {
           self.reward = User.get()
           self.$util.handleWxShare({
             data: self.article,
-            module: 'news',
+            module: self.module,
             moduleid: self.article.id,
-            lastshareuid: option.share_uid,
+            lastshareuid: self.query.share_uid,
             link: `${ENV.Host}/#/news?id=${self.article.id}?wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
             successCallback: function () {
               self.showShareSuccess = true
             }
           })
         }
-        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'news'}) // 获取评论
+        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: self.module}) // 获取评论
       })
       .then(res => {
         if (res.data.flag) {
           self.comments = res.data.data
         }
-        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'news'})
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
       })
       .then(res => {
         if (res.data.flag < 1) {
@@ -226,7 +227,7 @@ export default {
       const self = this
       if (this.notFavorite) {
         this.notFavorite = false
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'news'})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -234,7 +235,7 @@ export default {
         })
       } else {
         this.notFavorite = true
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: 'news'})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: self.module})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Cancel Favorite'))
@@ -283,32 +284,27 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    testRedirect () {
-      this.$router.push({path: '/news', query: {id: 1}})
+    createdFun (to, from, next) {
+      const self = this
+      self.showsharetip = false
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.query = to.query
+      self.getData()
+      if (self.query.newadd) {
+        setTimeout(function () {
+          self.showsharetip = false
+        }, 10000)
+      }
+      next && next()
     }
   },
   created () {
     const self = this
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    this.query = this.$route.query
-    this.getData(this.query)
-    if (this.query.newadd) {
-      setTimeout(function () {
-        self.showsharetip = false
-      }, 10000)
-    }
+    self.createdFun(self.$route)
   },
   beforeRouteUpdate (to, from, next) {
-    console.log(to)
     const self = this
-    this.query = to.query
-    this.getData(to.query)
-    if (this.query.newadd) {
-      setTimeout(function () {
-        self.showsharetip = false
-      }, 10000)
-    }
-    next()
+    self.createdFun(to, from, next)
   }
 }
 </script>
