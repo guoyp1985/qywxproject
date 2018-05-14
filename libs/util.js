@@ -403,10 +403,11 @@ Util.install = function (Vue, options) {
                 })
               },
               fail: function (res2) {
+                alert(JSON.stringify(res2))
                 Vue.$vux.toast.show({
                   text: '上传失败'
                 })
-                done()
+                Vue.$vux.loading.hide()
               }
             })
           } else {
@@ -434,6 +435,7 @@ Util.install = function (Vue, options) {
                       Vue.$vux.toast.show({
                         text: '上传失败'
                       })
+                      Vue.$vux.loading.hide()
                       done()
                     }
                   })
