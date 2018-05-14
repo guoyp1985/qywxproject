@@ -388,44 +388,59 @@ Util.install = function (Vue, options) {
           if(localIds.length > maxnum){
             localIds = localIds.slice(0, maxnum)
           }
-          let arr = []
-          if (maxnum === 1) {
-            arr.push(localIds)
-          } else {
-            arr = localIds
-          }
-          alert(arr)
           Vue.$vux.loading.show()
-          self.taskData({
-            data: arr,
-            callback: function () {
-              Vue.$vux.loading.hide()
-            },
-            handleFunction: function (d) {
-              return function (done) {
-                alert(d)
-                Vue.wechat.uploadImage({
-                  localId: d,
-                  isShowProgressTips: 0,
-                  success: function (res1) {
-                    self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
-                      imgid: res1.serverId
-                    }).then(function (res) {
-                      let data = res.data
-                      os.handleCallback && os.handelCallback(data)
-                      done()
-                    })
-                  },
-                  fail: function (res2) {
-                    Vue.$vux.toast.show({
-                      text: '上传失败'
-                    })
-                    done()
-                  }
+          if (maxnum === 1) {
+            Vue.wechat.uploadImage({
+              localId: localIds,
+              isShowProgressTips: 0,
+              success: function (res1) {
+                self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
+                  imgid: res1.serverId
+                }).then(function (res) {
+                  let data = res.data
+                  os.handleCallback && os.handelCallback(data)
+                  done()
                 })
+              },
+              fail: function (res2) {
+                Vue.$vux.toast.show({
+                  text: '上传失败'
+                })
+                done()
               }
-            }
-          })
+            })
+          } else {
+            self.taskData({
+              data: arr,
+              callback: function () {
+                Vue.$vux.loading.hide()
+              },
+              handleFunction: function (d) {
+                return function (done) {
+                  alert(d)
+                  Vue.wechat.uploadImage({
+                    localId: d,
+                    isShowProgressTips: 0,
+                    success: function (res1) {
+                      self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
+                        imgid: res1.serverId
+                      }).then(function (res) {
+                        let data = res.data
+                        os.handleCallback && os.handelCallback(data)
+                        done()
+                      })
+                    },
+                    fail: function (res2) {
+                      Vue.$vux.toast.show({
+                        text: '上传失败'
+                      })
+                      done()
+                    }
+                  })
+                }
+              }
+            })
+          }
         },
         fail: function (r) {
         }
