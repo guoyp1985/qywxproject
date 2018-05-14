@@ -58,6 +58,13 @@ Util.install = function (Vue, options) {
       }
       return re;
     },
+    getItem: function(list, id) {
+      for (let item of list) {
+        if (item.id === id) {
+          return item
+        }
+      }
+    },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
@@ -69,10 +76,12 @@ Util.install = function (Vue, options) {
     changeItem: function (list, id, callback) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
-          callback(list[i])
+          let item = callback(list[i])
+          list.splice(i, 1, item)
           break
         }
       }
+      return list
     },
     checkMobile : function(mobile) {
       if (isNaN(mobile)) return false;

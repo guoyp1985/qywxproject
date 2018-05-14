@@ -7,5 +7,13 @@ var ENV = {
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
   BokaCDN: 'http://vue.boka.cn',
-  WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg'
+  WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',
+  OrderStatus: [
+    {id: 0, status: '订单取消'},
+    {id: 1, status: '已确认订单'},
+    {id: 2, status: '待发货'},
+    {id: 3, status: '已发货'},
+    {id: 4, status: '已确认收货'},
+    {id: 100, status: '已完成'}
+  ]
 }

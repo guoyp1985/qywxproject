@@ -96,7 +96,7 @@ export default {
     //   return this.items
     // }
     getList () {
-      console.log(this.list)
+      // console.log(this.list)
       return this.setListButton(this.list)
     },
     getList1 () {
@@ -122,28 +122,16 @@ export default {
             item.buttons = []
             break
           case 1:
-            item.buttons = [
-              {id: 1, name: '取消订单'},
-              {id: 2, name: '去支付'}
-            ]
+            item.buttons = [0, 1]
             break
           case 2:
-            item.buttons = [
-              {id: 3, name: '申请退款'}
-            ]
+            item.buttons = [2]
             break
           case 3:
-            item.buttons = [
-              {id: 4, name: '查看物流'},
-              {id: 5, name: '申请售后'},
-              {id: 6, name: '确认收货'}
-            ]
+            item.buttons = [3, 4, 5]
             break
           case 4:
-            item.buttons = [
-              {id: 5, name: '申请售后'},
-              {id: 7, name: '评价'}
-            ]
+            item.buttons = [4, 6]
             break
         }
       }
@@ -153,12 +141,18 @@ export default {
       this.$router.push({name: 'tEvaluation', params: {order: order}})
     },
     confirm (order) {
-      // const self = this
+      const self = this
       this.$vux.confirm.show({
         title: '您是否确认收货？',
         content: '请确认货物已收到',
         onConfirm () {
-
+          self.$http.post(`${ENV.BokaApi}/api/order/receive`, {id: order.id})
+          .then(res => {
+            if (res.data.flag) {
+              self.$vux.toast.text(res.data.error)
+              self.changeOrderView(order, 4, [4, 6])
+            }
+          })
         }
       })
     },
@@ -170,13 +164,23 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id: order.id})
           .then(res => {
             self.$vux.toast.text(res.data.error)
-            self.changeOrderView(order)
+            self.changeOrderView(order, 0, [])
           })
         }
       })
     },
     refund (order) {
-
+      const self = this
+      this.$vux.confirm.show({
+        title: '您是否要申请退款？',
+        onConfirm () {
+          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: order.id})
+          .then(res => {
+            self.$vux.toast.text(res.data.error)
+            self.changeOrderView(order, 0, [])
+          })
+        }
+      })
     },
     viewShipping (order) {
       this.$router.push({path: `/shippingDetails`, query: {id: order.id}})
@@ -185,7 +189,7 @@ export default {
 
     },
     payment (order) {
-      this.$router.push({path: `/pay/${order.id}`})
+      this.$router.push({path: '/pay', query: {id: order.id}})
     },
     orderProcess (type, order) {
       switch (type) {
@@ -212,7 +216,8 @@ export default {
           break
       }
     },
-    changeOrderView (order) {
+    changeOrderView (order, status, buttons) {
+      const self = this
       let list = []
       switch (this.selectedIndex) {
         case 0:
@@ -229,8 +234,7 @@ export default {
           break
       }
       this.$util.changeItem(list, order.id, function (m) {
-        m.flag = 0
-        m.buttons = []
+        return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons}
       })
     },
     toggleTab () {
@@ -248,7 +252,7 @@ export default {
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user?flag=2`)
           .then(res => {
             if (res.data.flag) {
-              console.log(res.data.data)
+              // console.log(res.data.data)
               self.list1 = res.data.data
             }
           })
