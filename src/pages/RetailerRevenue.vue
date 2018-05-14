@@ -319,7 +319,7 @@ export default {
     getdata1 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, {
-        params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit }
+        params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit, cashed: 0 }
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -344,7 +344,7 @@ export default {
     },
     getdata2 () {
       const self = this
-      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit } }
+      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit, cashed: 2 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -359,7 +359,7 @@ export default {
     },
     getdata3 () {
       const self = this
-      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit } }
+      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit, cashed: 1 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
