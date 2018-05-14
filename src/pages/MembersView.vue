@@ -11,7 +11,7 @@
           </div>
           <div class="t-cell v_middle">
             <div class="font17">{{ viewuser.linkman }}</div>
-            <div class="font14" v-if="viewuser.isseller == 1">返点客：{{ viewuser.uploadname }}</div>
+            <div class="font14" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
           </div>
         </div>
       </div>
