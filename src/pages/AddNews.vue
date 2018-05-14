@@ -50,12 +50,7 @@ import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 export default {
   components: {
-    Group,
-    XInput,
-    XTextarea,
-    Cell,
-    XButton,
-    ClipPopup
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup
   },
   data () {
     return {

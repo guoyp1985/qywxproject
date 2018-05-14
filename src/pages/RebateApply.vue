@@ -68,42 +68,13 @@
   </div>
 </template>
 <script>
-import {
-  Group,
-  GroupTitle,
-  Cell,
-  XButton,
-  XInput,
-  XTextarea,
-  CheckIcon,
-  Flexbox,
-  FlexboxItem,
-  ViewBox,
-  Popup,
-  PopupHeader,
-  XDialog,
-  TransferDom,
-  Box
-} from 'vux'
+import { Group, GroupTitle, Cell, XButton, XInput, XTextarea, CheckIcon, Flexbox, FlexboxItem, ViewBox, Popup, PopupHeader, XDialog, TransferDom, Box } from 'vux'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Group,
-    GroupTitle,
-    Cell,
-    XButton,
-    XInput,
-    XTextarea,
-    CheckIcon,
-    Flexbox,
-    FlexboxItem,
-    ViewBox,
-    Popup,
-    PopupHeader,
-    XDialog,
-    Box
+    Group, GroupTitle, Cell, XButton, XInput, XTextarea, CheckIcon, Flexbox, FlexboxItem, ViewBox, Popup, PopupHeader, XDialog, Box
   },
   data () {
     return {

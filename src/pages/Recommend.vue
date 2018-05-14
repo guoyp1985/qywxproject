@@ -13,13 +13,13 @@
     </sticky>
     <div v-show="selectedIndex===0">
       <group v-if="list.length">
-        <cell-box v-for="(item, index) in list" :key="index" :link="{name: 'tRebateStore', params: {id: item.id}}">
+        <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', params: {id: item.id}}">
           <div class="store-img">
-            <x-img :src="item.img"></x-img>
+            <x-img :src="item.photo"></x-img>
           </div>
-          <div class="store-info">
+          <div class="store-info font14">
             <div class="store-name">
-              {{item.name}}
+              {{item.title}}
             </div>
           </div>
         </cell-box>
@@ -30,21 +30,21 @@
     </div>
     <div v-show="selectedIndex===1">
       <group v-if="list1.length">
-        <cell-box v-for="(item, index) in list1" :key="index">
+        <cell-box v-for="(item, index) in list1" :key="item.id">
           <div class="store-img">
-            <x-img :src="item.img"></x-img>
+            <x-img :src="item.photo"></x-img>
           </div>
           <div class="store-info font14">
             <div class="store-name">
-              {{item.name}}
+              {{item.title}}
             </div>
           </div>
-          <div class="operate-cell">
+          <!-- <div class="operate-cell">
             <x-button class="font12" mini type="primary" @click.native="applyClick">申请返点客</x-button>
-          </div>
+          </div> -->
         </cell-box>
       </group>
-      <div v-else class="no-related-stores color-gray">
+      <div v-else class="no-related-x color-gray">
         <span>{{$t('No Bought Stores')}}</span>
       </div>
     </div>
@@ -56,35 +56,13 @@ import ENV from 'env'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Group,
-    CellBox,
-    XImg,
-    Sticky,
-    XButton
+    Tab, TabItem, Group, CellBox, XImg, Sticky, XButton
   },
   data () {
     return {
       selectedIndex: 0,
-      list: [
-        {
-          id: '1',
-          img: '../../assets/_images/nopic.jpg',
-          name: 'adidas'
-        }
-      ],
-      list1: [
-        {
-          id: '1',
-          img: '../../assets/_images/nopic.jpg',
-          name: 'adidas'
-        }
-      ]
-    }
-  },
-  computed: {
-    getItems () {
+      list: [],
+      list1: []
     }
   },
   methods: {
@@ -94,17 +72,13 @@ export default {
     getMyRetailer () {
       this.$http.get(`${ENV.BokaApi}/api/seller/myRetailerList`)
       .then(res => {
-        if (res.data.flag) {
-          this.list = res.data.data
-        }
+        this.list = res.data
       })
     },
     getBuyRetailer () {
       this.$http.get(`${ENV.BokaApi}/api/seller/buyRetailerList`)
       .then(res => {
-        if (res.data.flag) {
-          this.list1 = res.data.data
-        }
+        this.list1 = res.data
       })
     },
     clickTabItem (index) {

@@ -43,12 +43,7 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Group,
-    Cell,
-    Box,
-    XInput,
-    PopupRadio,
-    XButton
+    Group, Cell, Box, XInput, PopupRadio, XButton
   },
   data () {
     return {

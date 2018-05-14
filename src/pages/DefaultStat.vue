@@ -88,14 +88,10 @@ Message:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import Listplate from '@/components/Listplate'
-import Time from '../../libs/time'
+import Time from '#/time'
 export default {
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Listplate
+    Tab, TabItem, Swiper, SwiperItem, Listplate
   },
   filters: {
     dateformat: function (value) {

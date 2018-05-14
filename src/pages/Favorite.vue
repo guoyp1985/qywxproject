@@ -9,7 +9,7 @@
       <div class="top-banner">
         <div class="f-title">
           <div class="user-avatar">
-            <img :src="avatar"/>
+            <x-img :src="avatar" default-src="../src/assets/images/user.jpg"></x-img>
           </div>
           <div class="user-info">
             <div class="font16 color-white">{{ name }}</div>
@@ -63,7 +63,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img :src="commodity.photo"></x-img>
+              <x-img :src="commodity.photo" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -90,7 +90,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/_images/nopic.jpg" :src="store.photo"></x-img>
+              <x-img  default-src="../assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -109,17 +109,6 @@
         </div>
       </template>
     </swipeout>
-      <!-- <swiper v-model="selectedIndex" height="100px" :show-dots="false">
-        <swiper-item key="0">
-          12123
-        </swiper-item>
-        <swiper-item key="1">
-          2312
-        </swiper-item>
-        <swiper-item key="2">
-          233
-        </swiper-item>
-      </swiper> -->
   </div>
 </template>
 
@@ -134,22 +123,12 @@ import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
-    Grid,
-    GridItem,
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Swipeout,
-    SwipeoutItem,
-    SwipeoutButton,
-    XImg,
-    Sticky
+    Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky
   },
   data () {
     return {
       selectedIndex: 0,
-      avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
+      avatar: '',
       name: '黄一萌',
       coins: 50,
       articles: [],

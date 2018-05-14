@@ -15,21 +15,21 @@
         <div class="padding5 align_center color-red bold font16 bg-white" style="line-height: 37px;"><i class="al al-tagfill font18 mr10"></i>{{ $t('Selection promotion') }}</div>
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
-            <Groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#efeff4 !important;">
+            <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#efeff4 !important;">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
               <span slot="groupprice">{{ item.groupprice }}</span>
               <span slot="price">{{ item.price }}</span>
-            </Groupbuyitemplate>
-            <Bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#efeff4 !important;">
+            </groupbuyitemplate>
+            <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#efeff4 !important;">
 				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{ item.minprice }}</span>
               <span slot="price">{{ item.price }}</span>
-            </Bargainbuyitemplate>
+            </bargainbuyitemplate>
           </div>
         </div>
         <router-link to="/saleProducts" class="padding10 flex_center color-gray">{{ $t('View more promotion') }}</router-link>
@@ -39,23 +39,23 @@
         <div class="padding5 align_center color-red bold font16 bg-white" style="line-height: 37px;"><i class="al al-goodsnewfill font18 mr10"></i>{{ $t('New products') }}</div>
         <div class="b_top_after"></div>
         <div class="productlist squarepic mb12">
-          <Productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
+          <productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" :src="item.photo" />
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-          </Productitemplate>
+          </productitemplate>
         </div>
       </template>
     </div>
-    <ShareSuccess
+    <share-success
       v-show="showShareSuccess"
       v-if="retailerInfo.uploader == loginUser.uid || retailerInfo.identity != 'user'"
       :data="retailerInfo"
       :loginUser="loginUser"
       module="shop"
       :on-close="closeShareSuccess">
-    </ShareSuccess>
+    </share-success>
   </div>
 </template>
 
@@ -89,12 +89,7 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Productitemplate,
-    Newsitemplate,
-    ShareSuccess
+    Swiper, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess
   },
   filters: {
     dateformat: function (value) {

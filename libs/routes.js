@@ -1,3 +1,6 @@
+/*
+* 此文件废弃
+*/
 import AccountDetail from '@/pages/AccountDetail'
 import Activity from '@/pages/Activity'
 import Address from '@/pages/Address'
@@ -29,7 +32,7 @@ import Product from '@/pages/Product'
 import Pay from '@/pages/Pay'
 import Poster from '@/pages/Poster'
 import PosterDetail from '@/pages/PosterDetail'
-import QrLogin from '@/pages/QrLogin'
+import Login from '@/pages/Login'
 import RetailerSales from '@/pages/RetailerSales'
 import RetailerSalechance from '@/pages/RetailerSalechance'
 import RetailerCustomerlist from '@/pages/RetailerCustomerlist'
@@ -70,7 +73,7 @@ export default [
   {
     path: '/login',
     name: 'tLogin',
-    component: QrLogin
+    component: Login
   },
   {
     path: '/center',
@@ -126,6 +129,11 @@ export default [
     path: '/retailerActivitylist',
     name: 'tRetailerActivitylist',
     component: RetailerActivitylist
+  },
+  {
+    path: '/activity',
+    name: 'tActivity',
+    component: Activity
   },
   {
     path: '/retailerRevenue',

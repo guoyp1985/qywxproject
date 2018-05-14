@@ -108,9 +108,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup,
-    Confirm,
-    Alert
+    Popup, Confirm, Alert
   },
   data () {
     return {

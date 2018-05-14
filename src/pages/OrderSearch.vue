@@ -6,12 +6,12 @@
 <template>
   <div id="order-search">
     <sticky scroll-box="vux_view_box_body">
-      <Tab v-model="selectedIndex">
+      <tab v-model="selectedIndex">
         <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
-      </Tab>
+      </tab>
     </sticky>
     <div v-show="selectedIndex===0">
       <template v-if="list.length">
@@ -25,7 +25,7 @@
     </div>
     <div v-show="selectedIndex===1">
       <template v-if="list1.length">
-        <order-info v-for="(item, index) in getList1" :key="index" @on-process="orderProcess"></order-info>
+        <order-info v-for="(item, index) in getList1" :item="item" :key="index" @on-process="orderProcess"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -35,7 +35,7 @@
     </div>
     <div v-show="selectedIndex===2">
       <template v-if="list2.length">
-        <order-info v-for="(item, index) in getList2" :key="index" @on-process="orderProcess"></order-info>
+        <order-info v-for="(item, index) in getList2" :item="item" :key="index" @on-process="orderProcess"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -45,7 +45,7 @@
     </div>
     <div v-show="selectedIndex===3">
       <template v-if="list3.length">
-        <order-info v-for="(item, index) in getList3" :key="index" @on-process="orderProcess"></order-info>
+        <order-info v-for="(item, index) in getList3" :item="item" :key="index" @on-process="orderProcess"></order-info>
       </template>
       <template v-else>
         <div class="no-related-x color-gray">
@@ -66,10 +66,7 @@ import ENV from 'env'
 
 export default {
   components: {
-    Sticky,
-    Tab,
-    TabItem,
-    OrderInfo
+    Sticky, Tab, TabItem, OrderInfo
   },
   data () {
     return {
@@ -182,7 +179,7 @@ export default {
 
     },
     viewShipping (order) {
-      this.$router.push({path: `/shippingDetails/${order.id}`})
+      this.$router.push({path: `/shippingDetails`, query: {id: order.id}})
     },
     afterSale (order) {
 
@@ -237,6 +234,7 @@ export default {
       })
     },
     toggleTab () {
+      const self = this
       switch (this.selectedIndex) {
         case 0:
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
@@ -250,6 +248,7 @@ export default {
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user?flag=2`)
           .then(res => {
             if (res.data.flag) {
+              console.log(res.data.data)
               self.list1 = res.data.data
             }
           })

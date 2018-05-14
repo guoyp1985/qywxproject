@@ -26,10 +26,7 @@ import Time from '#/time'
 import ENV from 'env'
 export default {
   components: {
-    Group,
-    GroupTitle,
-    Cell,
-    XImg
+    Group, GroupTitle, Cell, XImg
   },
   data () {
     return {

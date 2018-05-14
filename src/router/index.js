@@ -1,6 +1,9 @@
+/*
+* 此文件废弃
+*/
 import Vue from 'vue'
 import Router from 'vue-router'
-import routes from '#/routes'
+// import routes from '#/routes'
 Vue.use(Router)
 
 // const demos = DemoList.map((com) => {
@@ -14,7 +17,7 @@ Vue.use(Router)
 // })
 //
 // routes = routes.concat(demos)
-
+const routes = []
 export default new Router({
   routes
 })

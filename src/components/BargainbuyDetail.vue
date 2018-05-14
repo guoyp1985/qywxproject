@@ -47,11 +47,11 @@
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
+        <div v-if="data.leftstorage <= 0" class="align_center">
+          <div class="btn db">商品已售罄，本次活动结束</div>
+        </div>
         <div class="t-table">
-          <div v-if="data.leftstorage <= 0" class="t-cell">
-            <div class="btn db">商品已售罄，本次活动结束</div>
-          </div>
-          <template v-else>
+          <template v-if="data.leftstorage > 0">
             <div v-if="crowduser.isovertime && !crowduser.isfull" class="t-cell">
               <div class="btn db">砍价失败</div>
             </div>
@@ -62,14 +62,14 @@
               <div v-else-if="!crowduser.isovertime" class="t-cell">
                 <div class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
-              <div v-if="data.havecreate" class="t-cell">
-                <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
-              </div>
-              <div v-else-if="!data.isfinished && !data.havecreate" class="t-cell">
+              <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
                 <div class="btn db" @click="joinin">我要参与</div>
               </div>
             </template>
           </template>
+          <div v-if="data.havecreate" class="t-cell">
+            <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -140,22 +140,13 @@ export default {
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
-      canbuy: true,
-      lefthour: '',
-      leftminute: '',
-      leftsecond: ''
+      canbuy: true
     }
   },
   created () {
     const self = this
     if (self.data) {
       self.product = self.data.product
-    }
-    if (self.crowduser) {
-      self.lefthour = self.crowduser.timeleft.hour
-      self.leftminute = self.crowduser.timeleft.minute
-      self.leftsecond = self.crowduser.timeleft.second
-      self.cutdown()
     }
   },
   filters: {
@@ -188,43 +179,6 @@ export default {
           }
         })
       })
-    },
-    cutdown () {
-      const self = this
-      let cutdownInterval = setInterval(function () {
-        let h = parseInt(self.lefthour)
-        let m = parseInt(self.leftminute)
-        let s = parseInt(self.leftsecond)
-        if (s > 0) {
-          s--
-          if (s < 10) {
-            self.leftsecond = '0' + s
-          } else {
-            self.leftsecond = s
-          }
-        } else if (m > 0) {
-          m--
-          if (m < 10) {
-            self.leftminute = '0' + m
-          } else {
-            self.leftminute = m
-          }
-          self.leftsecond = '59'
-        } else if (h > 0) {
-          h--
-          if (h < 10) {
-            self.lefthour = '0' + h
-          } else {
-            self.lefthour = h
-          }
-          self.leftminute = '59'
-          self.leftsecond = '59'
-        }
-        if (h === 0 && m === 0 && s === 0) {
-          clearInterval(cutdownInterval)
-          self.isfinish = true
-        }
-      }, 1000)
     },
     joinin () {
       const self = this

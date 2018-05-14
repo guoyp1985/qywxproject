@@ -2,7 +2,7 @@
   <div class="containerarea s-havebottom bg-white">
     <div class="s-container" style="top:0;">
       <form>
-        <Forminputplate class="required">
+        <forminputplate class="required">
           <span slot="title">{{ $t('Buy user') }}</span>
           <input type="text" class="input border-box" required :placeholder="$t('Select user')" @click="getpopup" :value="checkedusername" />
           <div v-transfer-dom class="x-popup">
@@ -30,8 +30,8 @@
               </div>
             </popup>
           </div>
-        </Forminputplate>
-        <Forminputplate class="required">
+        </forminputplate>
+        <forminputplate class="required">
           <span slot="title">{{ $t('Buy product') }}</span>
           <div>
             <div class="db-flex mb12" v-for="(row1,index1) in rowdata" :key="index1">
@@ -47,31 +47,31 @@
               <div class="qbtn2 flex_cell" @click="addrow">增加更多商品</div>
             </div>
           </div>
-        </Forminputplate>
-        <Forminputplate>
+        </forminputplate>
+        <forminputplate>
           <span slot="title">{{ $t('Order price') }}</span>
           <div class="color-orange">{{ $t('RMB') }}{{ totalprice }}</div>
-        </Forminputplate>
-        <Forminputplate>
+        </forminputplate>
+        <forminputplate>
           <span slot="title">{{ $t('Visit date') }}</span>
           <group class="x-datetime">
             <datetime :show.sync="visibility" @on-change="datechange" @on-cancel="datecancel" @on-confirm="dateconfirm" v-model='nexttime'></datetime>
           </group>
           <div @click="showxdate" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt }}</div>
-        </Forminputplate>
+        </forminputplate>
         <div v-show="showmore">
           <div class="padding10 font16 bg-gray4">{{ $t('Receiver info') }}</div>
-          <Forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Receiver') }}</span>
             <input type="text" name="linkman" class="input border-box" :placeholder="$t('Receiver placeholder')" />
-          </Forminputplate>
-          <Forminputplate>
+          </forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Mobile') }}</span>
             <group>
               <x-input class="font14" :placeholder="$t('Mobile placeholder')" mask="999 9999 9999" :max="11" is-type="china-mobile"></x-input>
             </group>
-          </Forminputplate>
-          <Forminputplate>
+          </forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Buyer address') }}</span>
             <group>
               <x-address
@@ -87,20 +87,20 @@
                 :show.sync="showAddress">
               </x-address>
             </group>
-          </Forminputplate>
-          <Forminputplate>
+          </forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Detail address') }}</span>
             <group class="textarea-outer" style="padding:0;">
               <x-textarea style="padding:5px;" class="x-textarea" :placeholder="$t('Detail address placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
             </group>
-          </Forminputplate>
+          </forminputplate>
           <div class="padding10 font16 bg-gray4">{{ $t('Deliver info') }}</div>
-          <Forminputplate>
+          <forminputplate>
             <span slot="title">{{ $t('Deliver commpany') }}</span>
             <select class="w_100" style="height:27px;">
               <option v-for="(item,index) in deliverdata" :key="index" value="item.id">{{ item.value }}</option>
             </select>
-          </Forminputplate>
+          </forminputplate>
         </div>
         <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">收起<i class="al al-jiantou2-up font14 middle-cell"></i></div>
         <div v-else class="padding15 font14 align_center color-red"  @click="expandevent"><i class="al al-yijianfankui font16"></i>点击填写快递信息，买家可以在线查询订单状态</div>
@@ -154,24 +154,12 @@ Confirm txt:
 <script>
 import { Group, XNumber, Datetime, XButton, XTextarea, XInput, TransferDom, Popup, Search, Radio, XAddress, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
-
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Group,
-    XNumber,
-    Forminputplate,
-    Datetime,
-    XButton,
-    XTextarea,
-    XInput,
-    TransferDom,
-    Popup,
-    Search,
-    Radio,
-    XAddress
+    Group, XNumber, Datetime, XButton, XTextarea, XInput, Popup, Search, Radio, XAddress, Forminputplate
   },
   created () {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})

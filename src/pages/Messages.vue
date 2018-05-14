@@ -18,12 +18,10 @@
 </template>
 <script>
 import { GroupTitle, Group, Cell } from 'vux'
-import Time from '../../libs/time'
+import Time from '#/time'
 export default {
   components: {
-    GroupTitle,
-    Group,
-    Cell
+    GroupTitle, Group, Cell
   },
   data () {
     return {

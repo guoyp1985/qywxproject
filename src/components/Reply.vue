@@ -33,7 +33,7 @@
 <i18n>
 </i18n>
 <script>
-import Time from '../../libs/time'
+import Time from '#/time'
 export default {
   name: 'Reply',
   props: {

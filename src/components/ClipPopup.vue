@@ -31,9 +31,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup,
-    XButton,
-    Clip
+    Popup, XButton
   },
   props: {
     show: {

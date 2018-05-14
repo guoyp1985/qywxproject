@@ -131,16 +131,7 @@ export default {
     TransferDom
   },
   components: {
-    Group,
-    Cell,
-    Card,
-    Tab,
-    TabItem,
-    ViewBox,
-    XImg,
-    Sticky,
-    XDialog,
-    TransferDom
+    Group, Cell, Card, Tab, TabItem, ViewBox, XImg, Sticky, XDialog
   },
   data () {
     return {

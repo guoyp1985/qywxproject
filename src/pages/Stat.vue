@@ -116,7 +116,7 @@
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
                       </router-link>
                       <div class="t-cell v_middle align_right w60">
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
@@ -130,7 +130,7 @@
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
                       </router-link>
                       <div class="t-cell v_middle align_right w60">
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
@@ -164,11 +164,7 @@ import ENV from 'env'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Listplate
+    Tab, TabItem, Swiper, SwiperItem, Listplate
   },
   filters: {
     dateformat: function (value) {

@@ -38,14 +38,7 @@
 import { Group, GroupTitle, Cell, XImg, Rater, XTextarea, XButton, Box } from 'vux'
 export default {
   components: {
-    Group,
-    GroupTitle,
-    Cell,
-    XImg,
-    Rater,
-    XTextarea,
-    XButton,
-    Box
+    Group, GroupTitle, Cell, XImg, Rater, XTextarea, XButton, Box
   },
   data () {
     return {

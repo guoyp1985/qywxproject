@@ -35,8 +35,7 @@ import ENV from 'env'
 
 export default {
   components: {
-    Timeline,
-    TimelineItem
+    Timeline, TimelineItem
   },
   filters: {
     dateformat: function (dt) {

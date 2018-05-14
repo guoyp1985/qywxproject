@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <router-link :to="`/store/${item.storeId}`">
+    <router-link :to="{path:'/store',query:{id:item.storeId}}">
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
@@ -17,7 +17,7 @@
         </div>
       </div>
     </router-link>
-    <router-link :to="{path:`/orderDetail/${item.id}`}">
+    <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
           <x-img v-for="(order, index) in item.orderlist" :src="order.photo" :key="index" container="#vux_view_box_body"></x-img>
@@ -38,7 +38,7 @@
       </div>
     </router-link>
     <div class="pay-info">
-      <span class="font12">共{{item.quantity}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
+      <span class="font12">共{{total}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
     <div class="operate-area" v-if="item.buttons.length">
       <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
@@ -48,12 +48,10 @@
 
 <script>
 import { XImg, XButton } from 'vux'
-
 export default {
   name: 'OrderInfo',
   components: {
-    XImg,
-    XButton
+    XImg, XButton
   },
   props: {
     item: {
@@ -67,7 +65,7 @@ export default {
           storeType: 1,
           storeName: 'unkown',
           status: 0,
-          imgs: ['../assets/_images/nopic.jpg'],
+          imgs: ['../src/assets/images/nopic.jpg'],
           desc: undefined,
           num: 0,
           pay: 0
@@ -90,6 +88,13 @@ export default {
           icon = 'al-weidian1'
       }
       return icon
+    },
+    total () {
+      let count = 0
+      for (let o of this.item.orderlist) {
+        count += o.quantity
+      }
+      return count
     }
   },
   methods: {

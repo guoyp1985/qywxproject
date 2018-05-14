@@ -150,13 +150,7 @@ export default {
     TransferDom
   },
   components: {
-    Group,
-    XNumber,
-    XTextarea,
-    XInput,
-    Popup,
-    Alert,
-    CheckIcon
+    Group, XNumber, XTextarea, XInput, Popup, Alert, CheckIcon
   },
   data () {
     return {

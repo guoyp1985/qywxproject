@@ -3,8 +3,8 @@
     <div class="bg-white">
       <div class="b_bottom_after padding10">
         <div class="t-table">
-                <div class="t-cell w80">返点给</div>
-                <div class="t-cell align_right color-gray">{{ data.linkman }}</div>
+          <div class="t-cell w80">返点给</div>
+          <div class="t-cell align_right color-gray">{{ data.linkman }}</div>
         </div>
       </div>
       <div class="b_bottom_after padding10">
@@ -41,12 +41,12 @@
         <div class="bg-white padding10 b_bottom_after flex_left">
             <i class="al al-goumaiguodehuiyuan icon-red font20"></i><span class="ml3 v_middle font15">{{ data.username }}</span>
         </div>
-        <Orderproductplate v-for="(product,pindex) in item.orderlist" :key="product.id">
+        <orderproductplate v-for="(product,pindex) in item.orderlist" :key="product.id">
           <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
           <span slot="name">{{ product.name }}</span>
           <span slot="special">{{ product.special }}</span>
           <span slot="quantity" class="font12">{{ product.quantity }}</span>
-        </Orderproductplate>
+        </orderproductplate>
         <div class="bg-white b_bottom_after padding10 flex_left">
           <div>合计：<span class="color-orange">{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></span></div>
         </div>
@@ -59,7 +59,6 @@
 </i18n>
 
 <script>
-import { } from 'vux'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 

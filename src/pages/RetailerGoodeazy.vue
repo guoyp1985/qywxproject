@@ -126,13 +126,7 @@ import ENV from 'env'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Search,
-    XTextarea,
-    Group
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group
   },
   filters: {
     dateformat: function (value) {

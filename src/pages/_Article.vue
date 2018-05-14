@@ -51,7 +51,7 @@
       <div class="qrcode-area">
         <div class="qrcode-bg">
           <div class="qrcode">
-            <img src="../assets/_images/fingerprint.gif"/>
+            <img src="../assets/images/fingerprint.gif"/>
             <div class="scan-area">
               <img :src="article.qrcode"/>
             </div>
@@ -311,7 +311,7 @@ export default {
   padding: 15px;
   position: relative;
   vertical-align: middle;
-  background: url(../assets/_images/qrbg.gif);
+  background: url(../assets/images/qrbg.gif);
 }
 #article-content .qrcode-bg {
   margin: 0 auto;

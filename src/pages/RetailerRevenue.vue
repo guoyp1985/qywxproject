@@ -239,12 +239,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab,
-    TabItem,
-    Swiper,
-    SwiperItem,
-    Popup,
-    CheckIcon
+    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon
   },
   filters: {
     dateformat: function (value) {

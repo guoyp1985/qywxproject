@@ -102,13 +102,7 @@ import { ViewBox, Group, XTextarea, Grid, GridItem, XButton } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
 export default {
   components: {
-    ViewBox,
-    Group,
-    XTextarea,
-    EmotionBox,
-    Grid,
-    GridItem,
-    XButton
+    ViewBox, Group, XTextarea, Grid, GridItem, XButton, EmotionBox
   },
   data () {
     return {

@@ -27,7 +27,7 @@
       </div>
     </sticky>
     <group class="shipping-card">
-      <cell class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: `/shippingDetails/${id}` }"></cell>
+      <cell v-if="expressNumber" class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/shippingDetails', query: {id: id}}"></cell>
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
     </group>
@@ -66,7 +66,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDomDirective as TransferDom } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import ENV from 'env'
 export default {
@@ -74,12 +74,7 @@ export default {
     TransferDom
   },
   components: {
-    Group,
-    Cell,
-    Sticky,
-    XDialog,
-    OrderInfo,
-    CellFormPreview
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo
   },
   data () {
     return {
@@ -111,7 +106,7 @@ export default {
     },
     getData () {
       const self = this
-      this.id = this.$route.params.id
+      this.id = this.$route.query.id
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
       .then(res => {
         if (res.data.flag) {
@@ -121,7 +116,7 @@ export default {
           self.shippingAddress = res.data.data.address
           self.receiver = res.data.data.username
           self.receiverPhone = res.data.data.telephone
-          self.expressCompany = res.data.data.delivercompany
+          self.expressCompany = res.data.data.delivercompanyname
           self.expressNumber = res.data.data.delivercode
         }
       })

@@ -2,22 +2,22 @@
   <div class="containerarea font14">
     <div v-show="bargainbuyType" class="h_100">
       <template v-if="showBargainbuy">
-        <Bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></Bargainbuy>
+        <bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></bargainbuy>
       </template>
       <template v-if="showBargainbuyView">
-        <BargainbuyView :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData"></BargainbuyView>
+        <bargainbuy-view :data="data" :crowduser="crowduser" :cutdown-end="cutdownCallback" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
       </template>
       <template v-if="showBargianbuyDetail">
-        <BargainbuyDetail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></BargainbuyDetail>
+        <bargainbuy-detail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
       </template>
-      <ShareSuccess
+      <share-success
         v-show="showShareSuccess"
         v-if="data.uploader == loginUser.uid || query.wid == loginUser.uid || data.identity != 'user'"
         :data="data"
         :loginUser="loginUser"
         module="activity"
         :on-close="closeShareSuccess">
-      </ShareSuccess>
+      </share-success>
     </div>
   </div>
 </template>
@@ -36,10 +36,7 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Bargainbuy,
-    BargainbuyView,
-    BargainbuyDetail,
-    ShareSuccess
+    Bargainbuy, BargainbuyView, BargainbuyDetail, ShareSuccess
   },
   data () {
     return {
@@ -91,12 +88,20 @@ export default {
     },
     getInfo () {
       const self = this
-      let params = { params: { id: self.query.id } }
-      if (self.crowduserid) {
-        params.params.crowduserid = self.crowduserid
-      }
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/activity/info`, params).then(function (res) {
+      let infoparams = { id: self.query.id }
+      if (self.crowduserid) {
+        infoparams.crowduserid = self.crowduserid
+      }
+      if (self.query.share_uid) {
+        infoparams.share_uid = self.query.share_uid
+      }
+      if (self.query.lastshareuid) {
+        infoparams.lastshareuid = self.query.lastshareuid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
+        params: infoparams
+      }).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
         self.data = data.data ? data.data : data
@@ -165,6 +170,9 @@ export default {
         let data = res.data
         self.cutData = data.data ? data.data : data
       })
+    },
+    cutdownCallback () {
+      self.getInfo()
     }
   },
   created () {

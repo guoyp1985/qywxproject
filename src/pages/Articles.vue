@@ -27,14 +27,11 @@ import urlParse from 'url-parse'
 
 export default {
   components: {
-    Tab,
-    TabItem,
-    Sticky,
-    Swiper,
-    Panel
+    Tab, TabItem, Sticky, Swiper, Panel
   },
   data () {
     return {
+      query: Object,
       tabs: [],
       headlines: [
         {
@@ -135,6 +132,7 @@ export default {
     }
   },
   created () {
+    this.query = this.$route.query
     this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }

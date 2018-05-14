@@ -41,9 +41,7 @@ import { Token, User } from '#/storage'
 
 export default {
   components: {
-    Grid,
-    GridItem,
-    CTitle
+    Grid, GridItem, CTitle
   },
   data () {
     const self = this

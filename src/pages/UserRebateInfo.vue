@@ -114,16 +114,7 @@ import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, X
 import Time from '#/time'
 export default {
   components: {
-    ViewBox,
-    Group,
-    Cell,
-    CellBox,
-    Tab,
-    TabItem,
-    Sticky,
-    XImg,
-    CheckIcon,
-    XButton
+    ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton
   },
   data () {
     return {

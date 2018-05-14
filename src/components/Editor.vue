@@ -5,18 +5,20 @@
 */
 <template>
   <div class="editor">
-    <form class="editorImageForm" enctype="multipart/form-data">
+    <form class="editorImageForm hide" enctype="multipart/form-data">
       <input style="opacity:0;" type="file" name="files" />
     </form>
-    <div class="edit-btn-box" v-show="!showBtnArea">
-      <a class="edit-btn" @click="clickEditHandle">
-        <span class="color-white font16">{{$t('Edit')}}</span>
-      </a>
-    </div>
-    <div class="menu-btn-box" v-show="!showMenuArea">
-      <a class="menu-btn" @click="clickMenuHandle">
-        <span class="color-white font16">{{$t('Menu')}}</span>
-      </a>
+    <div class="editor-icon">
+      <div class="edit-btn-box" v-show="!showBtnArea">
+        <a class="edit-btn" @click="clickEditHandle">
+          <span class="color-white font16">{{$t('Edit')}}</span>
+        </a>
+      </div>
+      <div class="menu-btn-box" v-show="!showMenuArea">
+        <a class="menu-btn" @click="clickMenuHandle">
+          <span class="color-white font16">{{$t('Menu')}}</span>
+        </a>
+      </div>
     </div>
     <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
       <flexbox-item>
@@ -84,7 +86,7 @@
 </template>
 
 <script>
-import { Flexbox, FlexboxItem, XButton, CheckIcon, Popup, Search, TransferDom } from 'vux'
+import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
 let editor = null
@@ -94,12 +96,7 @@ export default {
     TransferDom
   },
   components: {
-    Flexbox,
-    FlexboxItem,
-    XButton,
-    CheckIcon,
-    Popup,
-    Search
+    Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon
   },
   props: {
     elem: String
@@ -121,10 +118,16 @@ export default {
       limit: 20,
       pagestart1: 0,
       isBindScroll1: false,
-      scrollArea1: null
+      scrollArea1: null,
+      insertProductCallback: Function
     }
   },
   computed: {
+  },
+  watch: {
+    selectproduct: function () {
+      return this.selectproduct
+    }
   },
   methods: {
     clickEditHandle () {
@@ -135,6 +138,7 @@ export default {
       this.$emit('on-edit')
     },
     onSave () {
+      this.showBtnArea = false
       this.$emit('on-save')
     },
     onCancel () {
@@ -147,7 +151,7 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         insertImageCallback: function (callback) {
-          if (self.$util.isPC()) {
+          if (typeof window.WeixinJSBridge === 'undefined' || typeof window.WeixinJSBridge === undefined) {
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
             fileInput.click()
@@ -171,23 +175,27 @@ export default {
               }
             })
           } else {
-            self.$util.wxUploadImage({
-              maxnum: 1,
-              handleCallback: function (data) {
-                if (data.flag === 1 && data.data) {
-                  callback && callback(data.data)
-                } else if (data.error) {
-                  self.$vux.toast.show({
-                    text: 'data.error',
-                    time: self.$util.delay(data.error)
-                  })
+            self.$wechat.ready(function () {
+              self.$util.wxUploadImage({
+                maxnum: 1,
+                handleCallback: function (data) {
+                  if (data.flag === 1 && data.data) {
+                    callback && callback(data.data)
+                  } else if (data.error) {
+                    self.$vux.toast.show({
+                      text: 'data.error',
+                      time: self.$util.delay(data.error)
+                    })
+                  }
                 }
-              }
+              })
             })
           }
         },
         insertProductCallback: function (callback) {
+          self.insertProductCallback = callback
           self.showpopup = true
+          self.getProductData()
         }
       })
     },
@@ -235,10 +243,9 @@ export default {
         return false
       }
       this.selectproduct = this.selectpopupdata
-      self.submitdata.productid = self.selectproduct.id
       this.showpopup = false
       this.showselectproduct = false
-      this.showproductitem = true
+      self.insertProductCallback && self.insertProductCallback(self.selectproduct)
     },
     onChange (val) {
       this.searchword = val
@@ -311,14 +318,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;}
 .edit-btn-box {
   position: absolute;
-  bottom: 150px;
+  bottom: 80px;
   right: 20px;
 }
 .menu-btn-box {
   position: absolute;
-  bottom: 80px;
+  bottom: 0px;
   right: 20px;
 }
 
@@ -337,7 +345,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.55);
 }
 .edit-btn{
-  background-color: rgba(248, 100, 0, 0.55);
+  background-color: rgba(248, 100, 0, 1);
 }
 .option-area {
   position: absolute;

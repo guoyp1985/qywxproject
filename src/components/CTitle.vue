@@ -22,7 +22,7 @@
           </div>
           <div class="user-credits">
             <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-              <img src="../assets/_images/jb_icon.png"/>
+              <img src="../assets/images/jb_icon.png"/>
               <span class="u-credits color-yellow1">{{ credits }}</span>
             </router-link>
           </div>
@@ -43,13 +43,10 @@
 
 <script>
 import { Grid, GridItem, Badge } from 'vux'
-
 export default {
   name: 'CTitle',
   components: {
-    Grid,
-    GridItem,
-    Badge
+    Grid, GridItem, Badge
   },
   props: {
     // linkInfo: [String, Object],

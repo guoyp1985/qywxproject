@@ -33,11 +33,7 @@ import Time from '#/time'
 
 export default {
   components: {
-    ViewBox,
-    Group,
-    Cell,
-    XImg,
-    Sticky
+    ViewBox, Group, Cell, XImg, Sticky
   },
   data () {
     return {

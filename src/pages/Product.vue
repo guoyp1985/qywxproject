@@ -1,6 +1,6 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
-    <template v-show="showcontainer">
+    <template v-if="showcontainer">
       <template v-show="isshowtop">
         <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
           <div class="t-table h_100">
@@ -22,7 +22,7 @@
         <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
       <div class="pagemiddle">
-        <template v-show="showFlash">
+        <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
             dots-position="center"
@@ -31,7 +31,7 @@
             :aspect-ratio="1/1"
             auto
             loop>
-            <swiper-item v-for="(item,index) in photoarr">
+            <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img :src="item" class="imgcover w_100 h_100"/>
             </swiper-item>
           </swiper>
@@ -284,14 +284,14 @@
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
       <template v-if="loginUser">
-        <ShareSuccess
+        <share-success
           v-show="showShareSuccess"
-          v-if="productdata.uploader == loginUser.uid || query.wid == loginUser.uid || productdata.identity != 'user'"
+          v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
           module="product"
           :on-close="closeShareSuccess">
-        </ShareSuccess>
+        </share-success>
       </template>
     </template>
   </div>
@@ -326,15 +326,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer,
-    Swiper,
-    SwiperItem,
-    Groupbuyitemplate,
-    Bargainbuyitemplate,
-    Popup,
-    Marquee,
-    MarqueeItem,
-    ShareSuccess
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess
   },
   filters: {
     dateformat: function (value) {
@@ -742,13 +734,12 @@ export default {
     min-width: 18px;
     text-align: center;
 }
-.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;border:orange 1px solid;}
+.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
 .product .vux-swiper{
   position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
-  border:black 1px solid;
 }
-.product .vux-swiper-item {border: blue 1px solid;}
-.product .vux-swiper-item img{border: red 1px solid;display:block;}
+.product .vux-swiper-item {}
+.product .vux-swiper-item img{}
 .product .vux-swiper-desc{display:none !important;}
 .product .grouptitle{
   width:100%;
