@@ -405,9 +405,11 @@ Util.install = function (Vue, options) {
                   localId: d.toString(),
                   isShowProgressTips: 0,
                   success: function (res1) {
+                    alert(JSON.stringify(res1))
                     self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
                       imgid: res1.serverId
                     }).then(function (res) {
+                      alert(JSON.stringify(res))
                       let data = res.data
                       os.handleCallback && os.handelCallback(data)
                       done()
