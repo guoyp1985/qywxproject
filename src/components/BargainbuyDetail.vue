@@ -110,7 +110,6 @@
 </i18n>
 
 <script>
-import { Countdown } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -132,7 +131,6 @@ export default {
     cuting: false
   },
   components: {
-    Countdown
   },
   data () {
     return {

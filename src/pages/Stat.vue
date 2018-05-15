@@ -109,6 +109,20 @@
                     </div>
                     <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime }}秒</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                   </template>
+                  <template v-else-if="tabitem.type == 'crowdlist'">
+                    <div class="t-table">
+                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                        <img class="avatarimg1" :src="item.avatar" />
+                      </router-link>
+                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                        <div class="clamp1">{{ item.linkman }}</div>
+                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                      </router-link>
+                      <div class="t-cell v_middle align_right w60">
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                      </div>
+                    </div>
+                  </template>
                   <template v-else-if="tabitem.type == 'crowdlist_isdeliver_1'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">

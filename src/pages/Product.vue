@@ -68,14 +68,25 @@
             <div class="vux-marquee" item-height=110 duration=2000>
               <marquee>
                 <marquee-item v-for="(item,index) in activitydata" :key="item.id">
-                  <Groupbuyitemplate style="margin-bottom:0 !important;">
-                    <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
-                    <span slot="title">{{ item.title }}</span>
-                    <span slot="numbers">{{ item.numbers }}</span>
-                    <span slot="havetuan">{{ item.havetuan }}</span>
-                    <span slot="groupprice">{{ item.groupprice }}</span>
-                    <span slot="price">{{ item.price }}</span>
-                  </Groupbuyitemplate>
+                  <div class="scroll_item padding10">
+          					<div class="t-table">
+          						<div class="t-cell v_middle w50">
+          							<img class="v_middle avatarimg1" :src="item.avatar" />
+          						</div>
+          						<div class="t-cell v_middle align_left">
+          							<div class="clamp1">{{ item.username }}</div>
+          						</div>
+          						<div class="t-cell v_middle align_right font12" style="width:150px;">
+          							<div class="align_center">还差{{ item.leftnumber }}人成团</div>
+          							<div class="align_center color-gray">
+          								<span style="margin-right:3px;">剩余时间</span><span class="day"></span><span class="hour"></span><span class="minute"></span><span class="second"></span>
+          							</div>
+          						</div>
+          						<div class="t-cell v_middle align_right addgrouparea" style="width:65px;">
+          							<div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;">去参团</div>
+          						</div>
+          					</div>
+          				</div>
                 </marquee-item>
               </marquee>
             </div>
