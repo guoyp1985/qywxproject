@@ -395,6 +395,18 @@ export default {
   created () {
     const self = this
     self.createdFun(self.$route)
+    self.$util.taskData({
+      data: [1,2,3],
+      callback: function () {
+        console.log('in callback')
+      },
+      handleFunction: function (d) {
+        return function (done) {
+          console.log(d)
+          done()
+        }
+      }
+    })
   },
   beforeRouteUpdate (to, from, next) {
     const self = this
