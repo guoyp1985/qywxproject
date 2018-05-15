@@ -379,6 +379,7 @@ Util.install = function (Vue, options) {
       }
     },
     wxUploadImage: function (os) {
+      alert(JSON.stringify(os))
       const self = this
       let maxnum = os.maxnum ? os.maxnum : 9
       Vue.wechat.chooseImage({
@@ -409,7 +410,7 @@ Util.install = function (Vue, options) {
                     }).then(function (res) {
                       let data = res.data
                       alert(JSON.stringify(data))
-                      os.handleCallback && os.handelCallback(data)
+                      os.handleCallback && os.handleCallback(data)
                       done()
                     })
                   },
