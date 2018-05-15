@@ -6,14 +6,12 @@
 <template>
   <div class="reply">
     <div class="header-area">
-      <div class="name-cell">
+      <div class="name-cell" @click="testclick">
         {{item.userName}} {{$t('Reply')}}
       </div>
-      <div class="digg-cell color-gray">
-        <a @click="diggClick(item.diggUrl)">
-          <span class="digicon"></span>
-          <span class="digg-count">{{item.diggCount}}</span>
-        </a>
+      <div class="digg-cell color-gray" @click="diggClick('comment',item.id,item)">
+        <span class="digicon"></span>
+        <span class="digg-count">{{item.diggCount}}</span>
       </div>
     </div>
     <div class="reply-content">
@@ -34,6 +32,7 @@
 </i18n>
 <script>
 import Time from '#/time'
+import ENV from 'env'
 export default {
   name: 'Reply',
   props: {
@@ -61,8 +60,45 @@ export default {
     onDelete () {
       this.$emit('on-delete')
     },
-    diggClick () {
-
+    testclick () {
+      console.log('test click')
+    },
+    diggClick (digmodule, digid, data) {
+      console.log('in click')
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: digid,
+        module: digmodule
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (data.digStatus === 'diged') {
+            if (digmodule === 'news') {
+              self.digStatus = ''
+            }
+            delete data.digStatus
+            data.dig = self.article.dig - 1
+          } else {
+            if (digmodule === 'news') {
+              self.digStatus = 'diged'
+            }
+            data.digStatus = 'diged'
+            data.dig = self.article.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   }
 }

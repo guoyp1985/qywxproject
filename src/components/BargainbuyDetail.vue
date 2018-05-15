@@ -62,10 +62,10 @@
               <div v-else-if="!crowduser.isovertime" class="t-cell">
                 <div class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
-              <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
-                <div class="btn db" @click="joinin">我要参与</div>
-              </div>
             </template>
+            <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
+              <div class="btn db" @click="joinin">我要参与</div>
+            </div>
           </template>
           <div v-if="data.havecreate" class="t-cell">
             <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
@@ -110,8 +110,6 @@
 </i18n>
 
 <script>
-
-import { Countdown } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -129,10 +127,10 @@ export default {
     },
     cutData: Array,
     onJoin: Function,
-    onCut: Function
+    onCut: Function,
+    cuting: false
   },
   components: {
-    Countdown
   },
   data () {
     return {
@@ -159,20 +157,24 @@ export default {
   methods: {
     cutevent () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.onCut && self.onCut()
+      if (!self.cuting) {
+        self.$vux.loading.show()
+        self.cuting = true
+        self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.onCut && self.onCut()
+              }
             }
-          }
+          })
+          self.cuting = false
         })
-      })
+      }
     },
     joinin () {
       const self = this

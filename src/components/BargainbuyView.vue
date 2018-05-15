@@ -49,7 +49,7 @@
         </div>
         <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
         <template v-else>
-          <div v-if="data.isovertime" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <div v-if="crowduser.isovertime" class="btn">指定时间内未完成砍价，砍价失败</div>
           <template v-else>
             <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
             <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>

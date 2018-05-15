@@ -10,7 +10,7 @@
       </div>
     </div>
     <box gap="10px">
-      <x-button type="primary" @click.native="pay">{{$t('Wechat Safe Payment')}}</x-button>
+      <x-button type="primary" :disabled="disabled" @click.native="pay">{{$t('Wechat Safe Payment')}}</x-button>
     </box>
   </div>
 </template>
@@ -26,7 +26,8 @@ export default {
     return {
       payPrice: 0,
       receivables: '',
-      payParams: null
+      payParams: null,
+      disabled: false
     }
   },
   methods: {
@@ -60,9 +61,13 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
       .then(res => {
         if (res.data.flag) {
+          self.disabled = false
           self.payPrice = res.data.money
           self.receivables = res.data.weixinname
           self.payParams = res.data.data
+        } else {
+          self.disabled = true
+          self.$vux.toast.text(res.data.error)
         }
       })
     }

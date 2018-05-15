@@ -11,7 +11,7 @@
           <h4>{{title}}</h4>
         </div>
         <group>
-          <x-textarea ref="textarea" id="comment-textarea" v-model="value" class="font14" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
+          <x-textarea ref="textarea" id="comment-textarea" v-model="value" @on-change="valueChange" class="font14" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
         </group>
         <emotion-box bind-textarea="comment-textarea">
         </emotion-box>
@@ -114,13 +114,26 @@ export default {
       // emotions3: emotions[2],
       // emotions4: emotions[3],
       // emotions5: emotions[4],
-      value: ''
+      value: '',
+      textarea: null
       // rangeData: undefined
     }
   },
+  watch: {
+    value () {
+      return this.value
+    }
+  },
   methods: {
+    valueChange (val) {
+      console.log('in change  ' + val)
+      this.value = val
+    },
     onSubmit () {
-      this.$emit('on-submit', this.value)
+      if (!this.textarea) {
+        this.textarea = document.getElementById('comment-textarea').querySelector('textarea')
+      }
+      this.$emit('on-submit', this.textarea.value)
     },
     onCancel () {
       this.$emit('on-cancel')

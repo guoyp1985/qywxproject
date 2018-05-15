@@ -22,10 +22,14 @@
           <div class="article-vice-title">
             <h4>{{article.vicetitle}}</h4>
           </div>
-          <div class="article-info font14">
+          <div class="article-info" style="position:relative;">
             <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-            <span class="article-ex"></span>
+            <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
+            <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+            <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
+              <router-link :to="{path: '/store', query: {wid: retailerInfo.uid}}" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</router-link>
+            </div>
           </div>
           <div id="editor-content" class="article-content" v-html="article.content"></div>
           <div class="operate-area">
@@ -33,25 +37,26 @@
               <span class="fa fa-star-o"></span>
               <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
             </x-button>
-            <x-button mini plain type="primary" @click.native="onAdvisory">
+            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
               <span class="fa fa-user"></span>
               <span>{{$t('Advisory')}}</span>
             </x-button>
-            <x-button mini plain type="primary" @click.native="onStore">
+            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
               <span class="fa fa-user"></span>
               <span>{{$t('Store')}}</span>
             </x-button>
           </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
+            <span class="font14 color-gray" @click="clickDig('news',query.id,article)"><span :class="`digicon ${digStatus}`"></span> {{article.dig}}</span>
           </div>
           <div class="qrcode-area">
             <div class="qrcode-bg">
               <div class="qrcode">
                 <img src="../assets/images/fingerprint.gif"/>
                 <div class="scan-area">
-                  <img :src="article.qrcode"/>
+                  <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
+                  <img v-else :src="WeixinQrcode">
                 </div>
               </div>
             </div>
@@ -77,14 +82,30 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showSubscribe" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">关注</div>
+            <div class="popup-middle font14 flex_center">
+          			<img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeSubscribe">{{ $t('Close') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+      </div>
     </template>
   </div>
 </template>
 <script>
-import { Popup, XButton, Divider } from 'vux'
+import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
@@ -96,12 +117,16 @@ import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer
   },
   data () {
     return {
       query: {},
+      WeixinName: ENV.WeixinName,
       module: 'news',
       showContainer: false,
       showShareSuccess: false,
@@ -111,18 +136,35 @@ export default {
       notFavorite: true,
       reward: { headimgurl: '/src/assets/images/user.jpg', avatar: '/src/assets/images/user.jpg', linkman: '', credit: 0 },
       article: {},
-      comments: []
+      retailerInfo: {},
+      comments: [],
+      showSubscribe: false,
+      WeixinQrcode: ENV.WeixinQrcode,
+      digStatus: '',
+      photoarr: [],
+      previewerPhotoarr: []
     }
   },
   filters: {
     dateFormat: function (date) {
-      return new Time(date * 1000).dateFormat('yyyy-MM-dd hh:mm')
+      return new Time(date * 1000).dateFormat('yyyy-MM-dd')
     },
     readingCountFormat: function (count) {
       return count > 100000 ? '100000+' : count
     }
   },
+  watch: {
+    digStatus: function () {
+      return this.digStatus
+    }
+  },
   methods: {
+    popupSubscribe () {
+      this.showSubscribe = true
+    },
+    closeSubscribe () {
+      this.showSubscribe = false
+    },
     closeSharetip () {
       this.showsharetip = false
     },
@@ -158,6 +200,7 @@ export default {
       //   date: new Date().getTime(),
       //   diggCount: 0
       // }
+      console.log(value)
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
         if (res.data.flag) {
@@ -179,7 +222,6 @@ export default {
     getData () {
       const self = this
       const id = self.query.id
-      console.log(id)
       let infoparams = { id: id, module: self.module }
       if (self.query.from === 'poster') {
         infoparams.from = 'poster'
@@ -191,11 +233,16 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
         self.$vux.loading.hide()
+        if (res.data.flag === 0) {
+          self.$router.push('/sos')
+          return false
+        }
         self.showContainer = true
         if (res.data.flag) {
           self.article = res.data.data
           document.title = self.article.title
           self.reward = User.get()
+          self.retailerInfo = self.article.retailerinfo
           self.$util.handleWxShare({
             data: self.article,
             module: self.module,
@@ -206,20 +253,35 @@ export default {
               self.showShareSuccess = true
             }
           })
+          return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
+            params: {id: id, module: self.module}
+          })
         }
-        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: self.module}) // 获取评论
+      }).then(function (res) {
+        self.handleImg()
+        if (res) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.digStatus = 'diged'
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: self.module}) // 获取评论
+        }
       })
       .then(res => {
-        if (res.data.flag) {
-          self.comments = res.data.data
+        if (res) {
+          if (res.data.flag) {
+            self.comments = res.data.data
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
-        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
       })
       .then(res => {
-        if (res.data.flag < 1) {
-          self.notFavorite = true
-        } else {
-          self.notFavorite = false
+        if (res) {
+          if (res.data.flag < 1) {
+            self.notFavorite = true
+          } else {
+            self.notFavorite = false
+          }
         }
       })
     },
@@ -244,8 +306,10 @@ export default {
       }
     },
     onAdvisory () {
+      this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid}})
     },
     onStore () {
+      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
     },
     onShare () {
     },
@@ -266,6 +330,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
+              self.handleImg()
             }
           }
         })
@@ -283,6 +348,74 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+    },
+    clickDig (digmodule, digid, data) {
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: digid,
+        module: digmodule
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (data.digStatus === 'diged') {
+            if (digmodule === 'news') {
+              self.digStatus = ''
+            }
+            delete data.digStatus
+            data.dig = self.article.dig - 1
+          } else {
+            if (digmodule === 'news') {
+              self.digStatus = 'diged'
+            }
+            data.digStatus = 'diged'
+            data.dig = self.article.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    handleImg () {
+      const self = this
+      self.photoarr = []
+      self.previewerPhotoarr = []
+      let imgTags = document.querySelectorAll('.news .article-content img')
+      if (imgTags.length > 0) {
+        for (let i = 0; i < imgTags.length; i++) {
+          let curimg = imgTags[i]
+          self.photoarr.push(imgTags[i].getAttribute('src'))
+          curimg.removeEventListener('click', function () {
+            return self.showBigimg(i)
+          })
+          curimg.addEventListener('click', function () {
+            return self.showBigimg(i)
+          })
+        }
+      }
+      self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+    },
+    showBigimg (index) {
+      const self = this
+      if (!document.querySelector('.Eleditor-area')) {
+        if (self.$util.isPC()) {
+          self.$refs.previewer.show(index)
+        } else {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: self.photoarr[index],
+            urls: self.photoarr
+          })
+        }
+      }
     },
     createdFun (to, from, next) {
       const self = this

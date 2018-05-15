@@ -85,7 +85,7 @@
           <div class="popup-bottom flex_center">
             <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepopup">{{ $t('Close') }}</div>
             <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitaddress">提交</div>
-            <router-link :to="{ path: '/address/0', query: {lasturl: 'addOrder'} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
+            <router-link :to="{ path: '/newAddress', query: {lasturl: `/addOrder?id=${query.id}`} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
           </div>
         </div>
       </popup>
@@ -293,8 +293,8 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              // self.$router.push({path: '/pay', query: {id: data.id}})
-              location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
+              self.$router.push({path: '/pay', query: {id: data.id}})
+              // location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
             }
           }
         })

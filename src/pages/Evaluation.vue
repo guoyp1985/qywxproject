@@ -5,63 +5,96 @@
 */
 <template>
   <div id="product-evaluation">
-    <group>
-      <cell title="productName" class="product-rater">
-        <x-img class="product-img" slot="icon" :src="productImg"></x-img>
-        <div slot="inline-desc">
-          <rater v-model="stars"></rater>
-        </div>
-      </cell>
-    </group>
-    <group>
-      <x-textarea v-model="value" class="font14" :max="500" :placeholder="$t('Writing Evaluation')"></x-textarea>
-    </group>
-    <group>
-      <group-title slot="title">{{$t('Evaluation Of Logistics')}}<span style="float:right;">{{$t('To Give Five Stars')}}</span></group-title>
-      <cell class="font14" :title="$t('Express Package')">
-        <rater v-model="stars1"></rater>
-      </cell>
-      <cell class="font14" :title="$t('Delivery Speed')">
-        <rater v-model="stars2"></rater>
-      </cell>
-      <cell class="font14" :title="$t('Service Attitude')">
-        <rater v-model="stars3"></rater>
-      </cell>
-    </group>
-    <box gap="20px">
-      <x-button type="primary" @click.native="onSubmit">{{$t('Confirm')}}</x-button>
-      <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
-    </box>
+    <div class="evaluation" v-for="(item, index) in list" :key="item.id">
+      <group>
+        <cell :title="item.name" class="product-rater font14">
+          <x-img class="product-img" slot="icon" :src="item.photo"></x-img>
+          <div slot="inline-desc">
+            <rater v-model="item.stars"></rater>
+          </div>
+        </cell>
+      </group>
+      <group>
+        <x-textarea v-model="item.comment" class="font14" :max="500" :placeholder="`${$t('Necessary')}${$t('Writing Evaluation')}`"></x-textarea>
+      </group>
+      <group>
+        <group-title slot="title">{{$t('Evaluation Of Logistics')}}<span style="float:right;">{{$t('To Give Five Stars')}}</span></group-title>
+        <cell class="font14" :title="$t('Express Package')">
+          <rater v-model="item.stars1"></rater>
+        </cell>
+        <cell class="font14" :title="$t('Delivery Speed')">
+          <rater v-model="item.stars2"></rater>
+        </cell>
+        <cell class="font14" :title="$t('Service Attitude')">
+          <rater v-model="item.stars3"></rater>
+        </cell>
+      </group>
+      <div class="operate-area">
+        <x-button mini @click.native="onSubmit(item)">{{$t('Submit')}}</x-button>
+      </div>
+      <!-- <box gap="20px">
+        <x-button type="primary" @click.native="onSubmit">{{$t('Confirm')}}</x-button>
+        <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
+      </box> -->
+    </div>
   </div>
 </template>
 <script>
 import { Group, GroupTitle, Cell, XImg, Rater, XTextarea, XButton, Box } from 'vux'
+import ENV from 'env'
 export default {
   components: {
     Group, GroupTitle, Cell, XImg, Rater, XTextarea, XButton, Box
   },
   data () {
     return {
-      productName: '',
-      productImg: '',
-      stars: 1,
-      stars1: 1,
-      stars2: 1,
-      stars3: 1,
-      value: ''
+      // productName: '',
+      // productImg: '',
+      // stars: 1,
+      // stars1: 1,
+      // stars2: 1,
+      // stars3: 1,
+      // value: '',
+      list: []
     }
   },
   methods: {
-    onSubmit () {
-
+    onSubmit (product) {
+      const self = this
+      const orderId = this.$route.query.id
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {message: product.comment, module: 'product', nid: product.pid, type: 'orders', orderid: orderId})
+      .then(res => {
+        if (res.data.flag) {
+          self.$vux.toast.text(res.data.error)
+          setTimeout(() => {
+            self.$router.go(-1)
+          }, 2000)
+        } else {
+          self.$vux.toast.text(res.data.error)
+        }
+      })
     },
     onCancel () {
       this.$router.go(-1)
+    },
+    getData () {
+      const self = this
+      const id = this.$route.query.id
+      console.log(id)
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${id}`)
+      .then(res => {
+        if (res.data.flag) {
+          self.list = res.data.data.orderlist
+        }
+      })
     }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 #product-evaluation .product-img {
   width: 60px;
   height: 60px;
@@ -74,5 +107,20 @@ export default {
 #product-evaluation .product-rater .vux-label {
   padding-left: 5px;
   padding-bottom: 5px;
+}
+
+#product-evaluation .operate-area {
+  position: relative;
+  background-color: #ffffff;
+  text-align: right;
+  padding: 8px 10px;
+}
+
+/* vux css hack */
+#product-evaluation .weui-cell__hd {
+  display: flex;
+}
+#product-evaluation .vux-cell-primary {
+  margin-left: 10px;
 }
 </style>

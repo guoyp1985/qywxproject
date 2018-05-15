@@ -567,10 +567,9 @@ var Eleditor = function(){
 			*/
 			_args.insertImageCallback && _args.insertImageCallback(function(returl){
 				console.log('in insertimg callback')
-        var _buildWordHtml = '';
         var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
 
-        _$selected.after(_buildWordHtml);
+        _$selected && _$selected.after(_buildWordHtml);
         _flushEditorControllerLayerPosi();
         _appendHistory({ m: 'insertNode', node: _buildWordHtml });
 

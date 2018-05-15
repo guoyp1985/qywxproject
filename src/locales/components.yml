@@ -654,6 +654,7 @@ zh-CN:
   Entry Edit Mode: 进入编辑模式
   Delete Article Confirm: 是否确认删除？
   Apply: 申请
+  Submit: 提交
   tIndex: 共销宝
   tLogin: 扫码登录
   tCenter: 个人中心
@@ -663,7 +664,7 @@ zh-CN:
   tRetailerSalechance: 销售机会
   tRetailerCustomerlist: 联系客户
   tRetailerAddorder: 订单录入
-  tRetailerOrder: 订单列表
+  tRetailerOrders: 订单列表
   tStore: 我的店铺
   tRetailerNews: 文章
   tRetailerProductlist: 商品
@@ -738,3 +739,5 @@ zh-CN:
   Subtitle: 副标题
   Input subtitle: 请输入副标题 30字以内
   Upload images: 上传图像
+  tSubscribeInfo: 我
+  Shelf sale: 上架出售

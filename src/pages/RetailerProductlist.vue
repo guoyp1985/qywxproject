@@ -242,6 +242,7 @@ export default {
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
                 onHide: function () {
                   if (data.flag === 1) {
@@ -265,6 +266,7 @@ export default {
               self.$vux.loading.hide()
               self.$vux.toast.show({
                 text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
                 time: self.$util.delay(data.error),
                 onHide: function () {
                   if (data.flag === 1) {

@@ -41,7 +41,7 @@
       <span class="font12">共{{total}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
     <div class="operate-area" v-if="item.buttons.length">
-      <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+      <x-button v-for="index in item.buttons" :key="statusButtons[index].id" @click.native="buttonClick(statusButtons[index].id)" mini class="font12">{{statusButtons[index].name}}</x-button>
     </div>
   </div>
 </template>
@@ -75,6 +75,19 @@ export default {
     buttons: {
       type: Array,
       default: () => []
+    }
+  },
+  data () {
+    return {
+      statusButtons: [
+        {id: 1, name: '取消订单'},
+        {id: 2, name: '去支付'},
+        {id: 3, name: '申请退款'},
+        {id: 4, name: '查看物流'},
+        {id: 5, name: '申请售后'},
+        {id: 6, name: '确认收货'},
+        {id: 7, name: '评价'}
+      ]
     }
   },
   computed: {
