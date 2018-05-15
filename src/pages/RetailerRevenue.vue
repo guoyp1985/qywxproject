@@ -24,7 +24,7 @@
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5">暂无待提现金额记录！</div>
+                  <div class="mt5">暂无待提现记录！</div>
                   <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white">
@@ -45,7 +45,7 @@
                       </div>
                     </check-icon>
                     <div class="padding10 border-box">
-                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">订单收入</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                       <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
                       <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
                     </div>
@@ -83,7 +83,7 @@
             <div v-if="disData2" class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
-                <div class="mt5">暂无待结算订单记录！</div>
+                <div class="mt5">暂无待结算记录！</div>
                 <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
@@ -104,7 +104,7 @@
                     </div>
                   </div>
                   <div class="padding10 border-box">
-                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">订单收入</span><span>{{ item.products }}</span></div>
+                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                     <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
                     <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
                   </div>
@@ -132,7 +132,7 @@
             <div v-if="disData3" class="scroll_list">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
-                <div class="mt5">暂无已提现订单记录！</div>
+                <div class="mt5">暂无已提现记录！</div>
                 <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
               </div>
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white">
@@ -153,7 +153,7 @@
                     </div>
                   </div>
                   <div class="padding10 border-box">
-                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">订单收入</span><span>{{ item.products }}</span></div>
+                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                     <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
                     <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
                   </div>
