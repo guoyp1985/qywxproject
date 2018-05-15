@@ -400,23 +400,19 @@ Util.install = function (Vue, options) {
             },
             handleFunction: function (d) {
               return function (done) {
-                alert(d)
                 Vue.wechat.uploadImage({
                   localId: d.toString(),
                   isShowProgressTips: 0,
                   success: function (res1) {
-                    alert(JSON.stringify(res1))
                     self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
                       imgid: res1.serverId
                     }).then(function (res) {
-                      alert(JSON.stringify(res))
                       let data = res.data
                       os.handleCallback && os.handelCallback(data)
                       done()
                     })
                   },
                   fail: function (res2) {
-                    alert(JSON.stringify(res2))
                     Vue.$vux.toast.show({
                       text: '上传失败'
                     })
