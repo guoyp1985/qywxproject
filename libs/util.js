@@ -396,7 +396,7 @@ Util.install = function (Vue, options) {
           self.taskData({
             data: arr,
             callback: function () {
-              Vue.$vux.loading.hide()
+              Vue.vux.loading.hide()
             },
             handleFunction: function (d) {
               return function (done) {
@@ -404,21 +404,19 @@ Util.install = function (Vue, options) {
                   localId: d.toString(),
                   isShowProgressTips: 0,
                   success: function (res1) {
-                    alert(JSON.stringify(res1))
                     Vue.http.post(`${ENV.BokaApi}/api/weixinUpload`, {
                       imgid: res1.serverId
                     }).then(function (res) {
-                      alert(JSON.stringify(res))
                       let data = res.data
                       os.handleCallback && os.handelCallback(data)
                       done()
                     })
                   },
                   fail: function (res2) {
-                    Vue.$vux.toast.show({
+                    Vue.vux.toast.show({
                       text: '上传失败'
                     })
-                    Vue.$vux.loading.hide()
+                    Vue.vux.loading.hide()
                     done()
                   }
                 })
