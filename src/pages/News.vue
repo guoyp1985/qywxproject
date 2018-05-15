@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle">
+      <div id="article-content" class="pagemiddle scroll-container">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
@@ -70,8 +70,8 @@
           <template v-if="article.comments">
             <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
           </template>
-          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
-            <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
+          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
+            <reply v-if="comment.comments > 0" slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
           </comment>
         </div>
       </div>
@@ -84,8 +84,8 @@
         :on-close="closeShareSuccess">
       </share-success>
       <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
-      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <comment-popup class-name="commentPopup" :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+      <comment-popup class-name="replyPopup" :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -148,7 +148,8 @@ export default {
       commentsArea: null,
       isBindScroll: null,
       pagestart: 0,
-      limit: 10
+      limit: 10,
+      replyData: null
     }
   },
   filters: {
@@ -174,7 +175,8 @@ export default {
     closeSharetip () {
       this.showsharetip = false
     },
-    onReplyShow () {
+    onReplyShow (item) {
+      this.replyData = item
       this.replyPopupShow = true
     },
     onCommentShow () {
@@ -182,11 +184,26 @@ export default {
     },
     onCommentDelete (comment) {
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
-      .then(res => {
-        if (res.data.flag) {
-          self.$util.deleteItem(self.comments, comment.id)
-          self.$vux.toast.text(self.$t('Delete Success'))
+
+      self.$vux.confirm.show({
+        title: '确定要删除该评论吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.$util.deleteItem(self.comments, comment.id)
+                }
+              }
+            })
+          })
         }
       })
     },
@@ -199,27 +216,21 @@ export default {
     commentSubmit (value) { // 留言提交
       const self = this
       this.commentPopupShow = false
-      // let comment = {
-      //   userName: 'simon',
-      //   userAvatar: '/src/assets/images/user.jpg',
-      //   content: value,
-      //   date: new Date().getTime(),
-      //   diggCount: 0
-      // }
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
         self.$vux.loading.hide()
-        if (res.data.flag) {
-          self.comments.push(res.data.data)
+        if (res.status === 200) {
+          if (res.data.flag) {
+            self.comments.push(res.data.data)
+          }
         }
       })
-      // this.comments.push(comment)
     },
     replySubmit (value) { // 回复提交
-      this.replyPopupShow = false
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'comments', message: value})
+      this.replyPopupShow = false
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         if (res.data.flag) {
           self.comments.replies.push(res.data.data)
