@@ -62,10 +62,10 @@
               <div v-else-if="!crowduser.isovertime" class="t-cell">
                 <div class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
-              <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
-                <div class="btn db" @click="joinin">我要参与</div>
-              </div>
             </template>
+            <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
+              <div class="btn db" @click="joinin">我要参与</div>
+            </div>
           </template>
           <div v-if="data.havecreate" class="t-cell">
             <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
