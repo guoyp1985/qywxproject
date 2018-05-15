@@ -684,6 +684,13 @@ export default {
     }).then(function (res) {
       if (res && res.status === 200) {
         let data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let d = retdata[i]
+          d.lefthour = 0
+          d.leftminute = 0
+          d.leftsecond = 0
+        }
         self.activitydata = data.data ? data.data : data
       }
     })

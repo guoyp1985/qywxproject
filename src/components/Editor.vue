@@ -84,22 +84,31 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showMenuArea" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">菜单</div>
-          <div class="popup-middle flex_center">
-            <div class="controlmenu">
-              <div class="item" @click="pushEvent">推送给返点客</div>
-              <router-link :to="{path: '/stat', query: {id: query.id,module:'news'}}" class="item">文章统计</router-link>
-              <router-link to="/addNews" class="item">创建文章</router-link>
-              <router-link :to="{path: '/addNews', query: {id: query.id}}" class="item">更多设置</router-link>
-              <router-link :to="{path:'/poster',query:{id:query.id, module:'news'}}" class="item">生成海报</router-link>
-              <div class="item" @click="deleteNews">删除文章</div>
+    <div v-transfer-dom>
+      <popup class="menuwrap" v-model="showMenuArea">
+        <div class="popup0">
+          <div class="list">
+            <div class="item">
+              <div class="inner" @click="pushEvent">推送给返点客</div>
             </div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeMenuPopup">{{ $t('Close') }}</div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/stat', query: {id: query.id,module:'news'}}">文章统计</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" to="/addNews">创建文章</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/addNews', query: {id: query.id}}">更多设置</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path:'/poster',query:{id:query.id, module:'news'}}">生成海报</router-link>
+            </div>
+            <div class="item">
+              <div class="inner" @click="deleteNews">删除文章</div>
+            </div>
+            <div class="item close mt10" @click="closeMenuPopup">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
           </div>
         </div>
       </popup>
