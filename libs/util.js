@@ -408,8 +408,8 @@ Util.install = function (Vue, options) {
                     self.$http.post(`${ENV.BokaApi}/api/weixinUpload`, {
                       imgid: res1.serverId
                     }).then(function (res) {
+                      alert(JSON.stringify(res))
                       let data = res.data
-                      alert(JSON.stringify(data))
                       os.handleCallback && os.handelCallback(data)
                       done()
                     })
