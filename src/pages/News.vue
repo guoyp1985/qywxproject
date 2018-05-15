@@ -48,7 +48,7 @@
           </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray" @click="clickDig('news',query.id,article)"><span :class="`digicon ${digStatus}`"></span> {{article.dig}}</span>
+            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
           </div>
           <div class="qrcode-area">
             <div class="qrcode-bg">
@@ -59,6 +59,7 @@
                   <img v-else :src="WeixinQrcode">
                 </div>
               </div>
+              <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
             </div>
           </div>
         </div>
@@ -140,9 +141,14 @@ export default {
       comments: [],
       showSubscribe: false,
       WeixinQrcode: ENV.WeixinQrcode,
-      digStatus: '',
+      isdig: 0,
       photoarr: [],
-      previewerPhotoarr: []
+      previewerPhotoarr: [],
+      disComments: false,
+      commentsArea: null,
+      isBindScroll: null,
+      pagestart: 0,
+      limit: 10
     }
   },
   filters: {
@@ -154,8 +160,8 @@ export default {
     }
   },
   watch: {
-    digStatus: function () {
-      return this.digStatus
+    isdig: function () {
+      return this.isdig
     }
   },
   methods: {
@@ -200,9 +206,10 @@ export default {
       //   date: new Date().getTime(),
       //   diggCount: 0
       // }
-      console.log(value)
+      self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
+        self.$vux.loading.hide()
         if (res.data.flag) {
           self.comments.push(res.data.data)
         }
@@ -216,6 +223,36 @@ export default {
       .then(res => {
         if (res.data.flag) {
           self.comments.replies.push(res.data.data)
+        }
+      })
+    },
+    scrollComments: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.commentsArea,
+        callback: function () {
+          if (self.comments.length === self.pagestart * self.limit) {
+            self.$vux.loading.show()
+            self.getCommentsList()
+            self.pagestart++
+          }
+        }
+      })
+    },
+    getCommentsList () {
+      const self = this
+      let params = { nid: self.query.id, module: self.module, pagestart: self.pagestart, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/comment/list`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.comments = self.comments.concat(retdata)
+        self.disComments = true
+        if (!self.isBindScroll) {
+          self.commentsArea = document.querySelector('.news .pagemiddle')
+          self.isBindScroll = true
+          self.commentsArea.removeEventListener('scroll', self.scrollComments)
+          self.commentsArea.addEventListener('scroll', self.scrollComments)
         }
       })
     },
@@ -262,15 +299,13 @@ export default {
         if (res) {
           let data = res.data
           if (data.flag === 1) {
-            self.digStatus = 'diged'
+            self.isdig = 1
           }
-          return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: self.module}) // 获取评论
-        }
-      })
-      .then(res => {
-        if (res) {
-          if (res.data.flag) {
-            self.comments = res.data.data
+          if (!self.isBindScroll) {
+            self.commentsArea = document.querySelector('.news .pagemiddle')
+            self.isBindScroll = true
+            self.commentsArea.removeEventListener('scroll', self.scrollComments)
+            self.commentsArea.addEventListener('scroll', self.scrollComments)
           }
           return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
@@ -349,32 +384,26 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    clickDig (digmodule, digid, data) {
+    clickDig () {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
-      if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
+      if (self.isdig) {
         url = `${ENV.BokaApi}/api/user/digs/delete`
       }
       self.$vux.loading.show()
       self.$http.post(url, {
-        id: digid,
-        module: digmodule
+        id: self.query.id,
+        module: 'news'
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          if (data.digStatus === 'diged') {
-            if (digmodule === 'news') {
-              self.digStatus = ''
-            }
-            delete data.digStatus
-            data.dig = self.article.dig - 1
+          if (self.isdig) {
+            self.isdig = 0
+            self.article.dig = self.article.dig - 1
           } else {
-            if (digmodule === 'news') {
-              self.digStatus = 'diged'
-            }
-            data.digStatus = 'diged'
-            data.dig = self.article.dig + 1
+            self.isdig = 1
+            self.article.dig = self.article.dig + 1
           }
         } else {
           self.$vux.toast.show({

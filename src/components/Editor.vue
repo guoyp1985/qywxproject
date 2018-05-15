@@ -619,7 +619,6 @@ export default {
     let end = !self.$util.isPC() ? 'touchend' : 'mouseup'
     let editorIcon = document.querySelector('.editor-icon')
     if (editorIcon) {
-      console.log(editorIcon)
       editorIcon.removeEventListener(start, self.startEvent)
       editorIcon.addEventListener(start, self.startEvent)
       editorIcon.removeEventListener(move, self.moveEvent)

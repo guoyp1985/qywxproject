@@ -150,7 +150,7 @@
       					</div>
       					<div class="mt5">{{ item.message }}</div>
       					<div class="mt5 align_right">
-                  <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+                  <div class="bg-orange color-white qbtn" style="width:50px;padding:0px;line-height:25px;" @click="onReply(item)">回复</div>
       					</div>
       					<div class="mt5" v-if="item.comment && item.comment.length > 0">
           				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
@@ -301,7 +301,7 @@
         					</div>
         					<div class="mt5">{{ item.message }}</div>
         					<div class="mt5 align_right">
-                    <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+                    <div class="bg-orange color-white qbtn" style="width:50px;padding:0px;line-height:25px;" @click="onReply(item)">回复</div>
         					</div>
         					<div class="mt5" v-if="item.comment && item.comment.length > 0">
             				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
@@ -333,6 +333,7 @@
           :on-close="closeShareSuccess">
         </share-success>
       </template>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </template>
   </div>
 </template>
@@ -357,6 +358,7 @@ import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
+import CommentPopup from '@/components/CommentPopup'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -366,7 +368,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup
   },
   filters: {
     dateformat: function (value) {
@@ -402,6 +404,7 @@ export default {
       previewerPhotoarr: [],
       buyuserdata: [],
       evluatedata: [],
+      replyPopupShow: false,
       ingdata: [],
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 }
@@ -670,6 +673,22 @@ export default {
             text: data.error,
             time: self.$util.delay(data.error)
           })
+        }
+      })
+    },
+    onReply (item) {
+      this.replyPopupShow = true
+    },
+    replyPopupCancel () {
+      this.replyPopupShow = false
+    },
+    replySubmit (value) { // 回复提交
+      this.replyPopupShow = false
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'comments', message: value})
+      .then(res => {
+        if (res.data.flag) {
+          self.comments.replies.push(res.data.data)
         }
       })
     }

@@ -116,12 +116,14 @@
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                        <div class="clamp1 font12 color-gray">{{ item.isfull }}</div>
                       </router-link>
                       <div class="t-cell v_middle align_right w60">
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
                       </div>
                     </div>
+                    <div class="mt5 clamp1 color-gray font13">团员: {{ item.otherusers }}</div>
+                    <div class="clamp1 color-gray font13">开团时间: {{ item.dateline }}</div>
                   </template>
                   <template v-else-if="tabitem.type == 'crowdlist_isdeliver_1'">
                     <div class="t-table">

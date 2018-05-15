@@ -72,7 +72,7 @@
                   <div class="t-cell">您还没有采集过文章</div>
                 </div>
               </div>
-              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: 'article', query: {id: item.id}}">
+              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:40px;">
                     <img class="imgcover v_middle" :src="item.photo" style="width:30px;height:30px;" />

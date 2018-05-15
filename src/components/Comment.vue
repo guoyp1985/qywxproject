@@ -13,11 +13,9 @@
         <div class="name-cell">
           {{item.username}}
         </div>
-        <div class="digg-cell color-gray">
-          <a @click="diggClick(item.dig)">
-            <span class="digicon"></span>
-            <span class="digg-count">{{item.dig}}</span>
-          </a>
+        <div class="digg-cell color-gray" @click="diggClick(item)">
+          <span :class="`digicon ${item.isdig ? 'diged' : ''}`"></span>
+          <span class="digg-count">{{item.dig}}</span>
         </div>
       </div>
       <div class="comment-content" v-html="item.message"></div>
@@ -43,6 +41,7 @@
 
 <script>
 import { XImg } from 'vux'
+import ENV from 'env'
 import Time from '#/time'
 
 export default {
@@ -81,8 +80,35 @@ export default {
     onDelete () {
       this.$emit('on-delete')
     },
-    diggClick () {
-
+    diggClick (item) {
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (item.isdig) {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: item.id,
+        module: 'comments'
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (item.isdig) {
+            item.isdig = 0
+            item.dig = item.dig - 1
+          } else {
+            item.isdig = 1
+            item.dig = item.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   }
 }
