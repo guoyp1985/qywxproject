@@ -402,7 +402,7 @@ Util.install = function (Vue, options) {
               return function (done) {
                 alert(d)
                 Vue.wechat.uploadImage({
-                  localId: d,
+                  localId: d.toString(),
                   isShowProgressTips: 0,
                   success: function (res1) {
                     self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
