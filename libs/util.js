@@ -405,7 +405,7 @@ Util.install = function (Vue, options) {
                   isShowProgressTips: 0,
                   success: function (res1) {
                     alert(JSON.stringify(res1))
-                    Vue.$http.post(`${ENV.BokaApi}/api/weixinUpload`, {
+                    Vue.http.post(`${ENV.BokaApi}/api/weixinUpload`, {
                       imgid: res1.serverId
                     }).then(function (res) {
                       alert(JSON.stringify(res))
