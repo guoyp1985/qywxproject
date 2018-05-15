@@ -407,15 +407,15 @@ export default {
     },
     getcash () {
       const self = this
+      if (self.checkedData.length === 0) {
+        self.$vux.toast.show({
+          text: '请选择提现数据'
+        })
+        return false
+      }
       self.$vux.confirm.show({
-        content: '确定要提现吗？',
+        content: `本次提现金额为<span class='color-orange'>${self.totalPrice}元</span>，确认提现吗？`,
         onConfirm () {
-          if (self.checkedData.length === 0) {
-            self.$vux.toast.show({
-              text: '请选择提现数据'
-            })
-            return false
-          }
           self.$vux.loading.show()
           let subdata = { ids: self.checkedData }
           self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
