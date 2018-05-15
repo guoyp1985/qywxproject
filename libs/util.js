@@ -379,7 +379,6 @@ Util.install = function (Vue, options) {
       }
     },
     wxUploadImage: function (os) {
-      alert(JSON.stringify(os))
       const self = this
       let maxnum = os.maxnum ? os.maxnum : 9
       Vue.wechat.chooseImage({
@@ -397,7 +396,7 @@ Util.install = function (Vue, options) {
           self.taskData({
             data: arr,
             callback: function () {
-              Vue.vux.loading.hide()
+              Vue.$vux.loading.hide()
             },
             handleFunction: function (d) {
               return function (done) {
@@ -409,16 +408,15 @@ Util.install = function (Vue, options) {
                       imgid: res1.serverId
                     }).then(function (res) {
                       let data = res.data
-                      alert(JSON.stringify(data))
                       os.handleCallback && os.handleCallback(data)
                       done()
                     })
                   },
                   fail: function (res2) {
-                    Vue.vux.toast.show({
+                    Vue.$vux.toast.show({
                       text: '上传失败'
                     })
-                    Vue.vux.loading.hide()
+                    Vue.$vux.loading.hide()
                     done()
                   }
                 })
