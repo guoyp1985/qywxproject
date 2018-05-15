@@ -395,6 +395,21 @@ export default {
   created () {
     const self = this
     self.createdFun(self.$route)
+    let os = {
+      maxnum: 1,
+      handleCallback: function (data) {
+        alert(JSON.stringify(data))
+        if (data.flag === 1 && data.data) {
+          callback && callback(data.data)
+        } else if (data.error) {
+          self.$vux.toast.show({
+            text: 'data.error',
+            time: self.$util.delay(data.error)
+          })
+        }
+      }
+    }
+    console.log(os)
   },
   beforeRouteUpdate (to, from, next) {
     const self = this

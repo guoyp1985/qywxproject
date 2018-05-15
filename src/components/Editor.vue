@@ -363,7 +363,7 @@ export default {
             })
           } else {
             self.$wechat.ready(function () {
-              self.$util.wxUploadImage({
+              let os = {
                 maxnum: 1,
                 handleCallback: function (data) {
                   alert(JSON.stringify(data))
@@ -376,7 +376,9 @@ export default {
                     })
                   }
                 }
-              })
+              }
+              alert(JSON.stringify(os))
+              self.$util.wxUploadImage(os)
             })
           }
         },
