@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-show="selectedIndex===1">
-      <div class="bg-gray4 border-box">
+      <div class="bg-gray4 border-box posi_r">
         <card class="x-card">
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
@@ -49,6 +49,7 @@
             </div>
           </div>
         </card>
+        <a class="btn-show">{{$t('To Make Presentation')}}</a>
       </div>
     </div>
     <div class="return-shop bg-white">
@@ -60,7 +61,7 @@
           </div>
           <div class="store-info font14">
             <div class="store-name">
-              1{{item.title}}
+              {{item.title}}
             </div>
             <div class="store-money color-gray mt5 font12">
               <span class="color-red">1</span>件商品可赚拥金
