@@ -139,10 +139,7 @@ export default {
     cutData: Array,
     onJoin: Function,
     onCut: Function,
-    cuting: false,
-    lefthour: '',
-    leftminute: '',
-    leftsecond: ''
+    cuting: false
   },
   components: {
   },
@@ -152,7 +149,10 @@ export default {
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
-      canbuy: true
+      canbuy: true,
+      lefthour: '',
+      leftminute: '',
+      leftsecond: ''
     }
   },
   filters: {
