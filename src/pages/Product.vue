@@ -65,7 +65,31 @@
   				<div class="bg-page" style="height:10px;"></div>
   				<div class="bg-white">
   					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
-            <div class="vux-marquee" item-height=110 duration=2000>
+            <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
+              <div class="t-table">
+                <div class="t-cell v_middle w50">
+                  <img class="v_middle avatarimg1" :src="item.avatar" />
+                </div>
+                <div class="t-cell v_middle align_left">
+                  <div class="clamp1">{{ item.username }}</div>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:150px;">
+                  <div class="align_center">差{{ item.leftnumber }}人成团</div>
+                  <div class="align_center color-gray">
+                    <span class="v_middle db-in">还剩</span>
+                    <span class="v_middle db-in">{{ item.lefthour }}</span>
+                    <span class="v_middle db-in">:</span>
+                    <span class="v_middle db-in">{{ item.leftminute }}</span>
+                    <span class="v_middle db-in">:</span>
+                    <span class="v_middle db-in">{{ item.leftsecond }}</span>
+                  </div>
+                </div>
+                <div class="t-cell v_middle align_right addgrouparea" style="width:65px;">
+                  <div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;" @click="addGroup(item)">去参团</div>
+                </div>
+              </div>
+            </div>
+            <div v-else-if="activitydata.length > 2" class="vux-marquee" item-height=110 duration=2000>
               <marquee>
                 <marquee-item v-for="(item,index) in activitydata" :key="item.id">
                   <div class="scroll_item padding10">
@@ -77,13 +101,18 @@
           							<div class="clamp1">{{ item.username }}</div>
           						</div>
           						<div class="t-cell v_middle align_right font12" style="width:150px;">
-          							<div class="align_center">还差{{ item.leftnumber }}人成团</div>
+          							<div class="align_center">差{{ item.leftnumber }}人成团</div>
           							<div class="align_center color-gray">
-          								<span style="margin-right:3px;">剩余时间</span><span class="day"></span><span class="hour"></span><span class="minute"></span><span class="second"></span>
+                          <span class="v_middle db-in">还剩</span>
+                          <span class="v_middle db-in">{{ item.lefthour }}</span>
+                          <span class="v_middle db-in">:</span>
+                          <span class="v_middle db-in">{{ item.leftminute }}</span>
+                          <span class="v_middle db-in">:</span>
+                          <span class="v_middle db-in">{{ item.leftsecond }}</span>
           							</div>
           						</div>
           						<div class="t-cell v_middle align_right addgrouparea" style="width:65px;">
-          							<div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;">去参团</div>
+          							<div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;" @click="addGroup(item)">去参团</div>
           						</div>
           					</div>
           				</div>
@@ -526,7 +555,7 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.$router.push({ path: '/addOrder', query: { id: self.productid } })
+          self.$router.push({ path: '/addOrder', query: { id: data.data } })
         } else if (data.error) {
           self.$vux.toast.show({
             text: data.error,
@@ -588,6 +617,61 @@ export default {
         shareData.data = self.productdata
       }
       self.$util.handleWxShare(shareData)
+    },
+    cutdown (item, interval) {
+      const self = this
+      interval = setInterval(function () {
+        let h = parseInt(item.lefthour)
+        let m = parseInt(item.leftminute)
+        let s = parseInt(item.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            item.leftsecond = '0' + s
+          } else {
+            item.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            item.leftminute = '0' + m
+          } else {
+            item.leftminute = m
+          }
+          item.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            item.lefthour = '0' + h
+          } else {
+            item.lefthour = h
+          }
+          item.leftminute = '59'
+          item.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(interval)
+        }
+      }, 1000)
+    },
+    addGroup (item) {
+      const self = this
+      self.$vux.loading.show()
+      let postdata = self.submitdata
+      postdata.crowdowner = item.uid
+      postdata.activityid = item.activityid
+      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.$router.push({ path: '/addOrder', query: { id: data.data } })
+        } else if (data.error) {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   },
   created () {
@@ -687,11 +771,14 @@ export default {
         let retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
           let d = retdata[i]
-          d.lefthour = 0
-          d.leftminute = 0
-          d.leftsecond = 0
+          let lefttime = d.lefttime
+          d.lefthour = lefttime.hour
+          d.leftminute = lefttime.minute
+          d.leftsecond = lefttime.second
+          d.interval = null
+          self.cutdown(d, d.interval)
         }
-        self.activitydata = data.data ? data.data : data
+        self.activitydata = retdata
       }
     })
   }
