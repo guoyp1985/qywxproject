@@ -5,108 +5,119 @@
 */
 <template>
   <div id="rebate-store">
-    <sticky scroll-box="rebate-store">
-      <div class="rebate-store-title font14 color-white">
-        <span>{{$t('Current Store')}}: {{storeName}}</span>
-        <a @click="onShareCard" style="float:right"><i class="al al-a166 font15"></i> {{$t('To Recommend Store')}}</a>
-      </div>
-    </sticky>
-    <card>
-      <div slot="content" class="card-flex card-content">
-        <div class="vux-1px-r" @click="totalSalesClick">
-          <span>{{totalSales}}</span>
-          <br/>
-          {{ $t('Total Sales') }}
+    <div class="bg-white">
+      <div class="sharing-title">{{$t('Current Store')}}</div>
+      <sticky scroll-box="rebate-store">
+        <div class="pt5 pb5 pl15 pr15 flex_table">
+          <div class="store-photo"><img src="../assets/images/bargainbuy.jpg"/></div>
+          <div class="store-details flex_cell pl10">
+            <span class="db font14">{{storeName}}数据没调到</span>
+            <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
+          </div>
         </div>
-        <div class="vux-1px-r" @click="rebateAmountClick">
-          <span>{{rebateAmount}}</span>
-          <br/>
-          {{ $t('Rebate Amount') }}
+        <div class="rebate-store-title flex_table">
+          <div class="flex_cell align_right pr20">
+            <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
+          </div>
+          <div class="flex_cell align_left pl20">
+            <a @click="commingCustomerClick" class="qbtn4">{{$t('Bring Customer')}}：1</a>
+          </div>
         </div>
-        <div @click="commingCustomerClick">
-          <span>{{commingCustomer}}</span>
-          <br/>
-          {{ $t('Coming Customer') }}
-        </div>
-      </div>
-    </card>
-    <div class="sharing-title color-gray">
-      {{$t('Make Money By Sharing')}}
+      </sticky>
     </div>
-    <tab v-model="selectedIndex">
-      <tab-item selected @on-item-click="onItemClick">{{$t('Article')}}</tab-item>
-      <tab-item @on-item-click="onItemClick">{{$t('Product')}}</tab-item>
-      <tab-item @on-item-click="onItemClick">{{$t('Activity')}}</tab-item>
-    </tab>
-    <view-box v-show="selectedIndex===0">
-      <template v-if="list.length">
-        <group v-for="(item, index) in list" :key="index">
-          <cell :title="item.productName" class="list-item font14" is-link>
-            <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
-            <div slot="inline-desc" class="inline-desc font13 color-gray">
-              <span class="info-cell">
-                <i class="al al-chakan font13"></i><span>{{item.viewCounts}}</span>
-                <i class="al al-ai-share font13"></i><span>{{item.sharingCounts}}</span>
-              </span>
-              <span class="date-cell">
-                {{item.dateLine | dateFormat}}
-              </span>
-            </div>
-          </cell>
-        </group>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
+    <div class="mt10 bg-white">
+      <div class="sharing-title">{{$t('I Am In The Store')}}</div>
+      <card>
+        <div slot="content" class="card-flex card-content">
+          <div class="vux-1px-r" @click="totalSalesClick">
+            <span class="font18 db color-red">{{totalSales}}</span>
+            <span class="font14 db color-gray">{{$t('Income Of Our Shop')}}</span>
+          </div>
+          <div class="vux-1px-r" @click="rebateAmountClick">
+            <span class="font18 db color-red">{{rebateAmount}}</span>
+            <span class="font14 db color-gray">{{$t('Waiting To Rebate')}}</span>
+          </div>
+          <div @click="rebateAmountClick">
+            <span class="font18 db color-red">{{commingCustomer}}</span>
+            <span class="font14 db color-gray">{{$t('Waiting To Return Money')}}</span>
+          </div>
         </div>
-      </template>
-    </view-box>
-    <view-box v-show="selectedIndex===1">
-      <template v-if="list1.length">
-        <group v-for="(item, index) in list" :key="index">
-          <cell :title="item.productName" class="list-item font14" is-link>
-            <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
-            <div slot="inline-desc" class="inline-desc font13 color-gray">
-              <span class="info-cell">
-                <i class="al al-chakan font13"></i><span>{{item.viewCounts}}</span>
-                <i class="al al-ai-share font13"></i><span>{{item.sharingCounts}}</span>
-              </span>
-              <span class="date-cell">
-                {{item.dateLine | dateFormat}}
-              </span>
-            </div>
-          </cell>
-        </group>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
-        </div>
-      </template>
-    </view-box>
-    <view-box v-show="selectedIndex===2">
-      <template v-if="list2.length">
-        <group v-for="(item, index) in list" :key="index">
-          <cell :title="item.productName" class="list-item font14" is-link>
-            <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
-            <div slot="inline-desc" class="inline-desc font13 color-gray">
-              <span class="info-cell">
-                <i class="al al-chakan font13"></i><span>{{item.viewCounts}}</span>
-                <i class="al al-ai-share font13"></i><span>{{item.sharingCounts}}</span>
-              </span>
-              <span class="date-cell">
-                {{item.dateLine | dateFormat}}
-              </span>
-            </div>
-          </cell>
-        </group>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
-        </div>
-      </template>
-    </view-box>
+      </card>
+    </div>
+    <div class="mt10 bg-white">
+      <div class="sharing-title color-red b_bottom_after">{{$t('Immediately Make Money By Sharing')}}</div>
+      <tab v-model="selectedIndex">
+        <tab-item class="b_right_after" selected @on-item-click="onItemClick">{{$t('Product')}}</tab-item>
+        <tab-item class="b_right_after" @on-item-click="onItemClick">{{$t('Activity')}}</tab-item>
+        <tab-item @on-item-click="onItemClick">{{$t('Article')}}</tab-item>
+      </tab>
+      <view-box v-show="selectedIndex===0">
+        <template v-if="list.length">
+          <group v-for="(item, index) in list" :key="index">
+            <cell :title="item.productName" class="list-item font14 clamp2" is-link>
+              <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
+              <div slot="inline-desc" class="inline-desc font12 color-gray">
+                <span class="info-cell">
+                  零售价：<span>{{item.sharingCounts}}</span>
+                </span>
+                <span class="date-cell color-red">
+                  佣金：<span>{{item.sharingCounts}}</span>
+                </span>
+              </div>
+            </cell>
+          </group>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>{{$t('No Related Orders')}}</span>
+          </div>
+        </template>
+      </view-box>
+      <view-box v-show="selectedIndex===1">
+        <template v-if="list1.length">
+          <group v-for="(item, index) in list" :key="index">
+            <cell :title="item.productName" class="list-item font14 clamp2" is-link>
+              <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
+              <div slot="inline-desc" class="inline-desc font12 color-gray">
+                <span class="info-cell">
+                  零售价：<span>{{item.sharingCounts}}</span>
+                </span>
+                <span class="date-cell color-red">
+                  佣金：<span>{{item.sharingCounts}}</span>
+                </span>
+              </div>
+            </cell>
+          </group>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>{{$t('No Related Orders')}}</span>
+          </div>
+        </template>
+      </view-box>
+      <view-box v-show="selectedIndex===2">
+        <template v-if="list2.length">
+          <group v-for="(item, index) in list" :key="index">
+            <cell :title="item.productName" class="list-item font14 clamp2" is-link>
+              <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
+              <div slot="inline-desc" class="inline-desc font12 color-gray">
+                <span class="info-cell">
+                  零售价：<span>{{item.sharingCounts}}</span>
+                </span>
+                <span class="date-cell color-red">
+                  佣金：<span>{{item.sharingCounts}}</span>
+                </span>
+              </div>
+            </cell>
+          </group>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>{{$t('No Related Orders')}}</span>
+          </div>
+        </template>
+      </view-box>
+    </div>
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="storeCardShow">
         <div class="img-box">
@@ -200,14 +211,23 @@ export default {
 </script>
 <style lang="less">
 #rebate-store .rebate-store-title {
-  padding: 10px;
-  background-image: url('../assets/images/bannerbg2.png');
+  padding:10px 15px 20px 15px;
+}
+#rebate-store .rebate-store-title .qbtn4{
+  color:red;
+  font-size:12px;
+  border:1px solid red;
+  width:100px;
+  text-align:center;
+  display:inline-block;
+  box-sizing:border-box;
+  line-height:1.4;
 }
 #rebate-store .card-flex {
   display: flex;
 }
 #rebate-store .card-content {
-  padding: 10px 0;
+  padding: 0px 0 20px 0;
 }
 #rebate-store .card-flex > div {
   flex: 1;
@@ -218,8 +238,21 @@ export default {
   color: #67b8e1;
 }
 #rebate-store .sharing-title {
-  padding: 10px;
-  font-size: 14px
+  padding: 10px 15px 10px 22px;
+  font-size: 16px;
+  position: relative;
+  color:inherit;
+}
+#rebate-store .sharing-title:before{
+  content: " ";
+  position: absolute;
+  left: 0px;
+  top: 13px;
+  bottom: 13px;
+  width: 0px;
+  border-left: 2px solid red;
+  color: #D9D9D9;
+  left: 15px;
 }
 #rebate-store .list-item .inline-desc {
   margin-top: 8px;
@@ -259,4 +292,22 @@ export default {
   height: 0;
   border-top: none;
 }
+#rebate-store .weui-panel{margin-top:0px}
+#rebate-store .weui-panel:before{display:none}
+#rebate-store .vux-1px-r:after{top:10%;bottom:10%;}
+#rebate-store .store-photo{width:50px;}
+#rebate-store .store-photo img{width:50px;height:50px;object-fit:cover;display:block;}
+#rebate-store .store-details{align-self:center;}
+#rebate-store .vux-tab .vux-tab-item.vux-tab-selected{color:red;background:transparent;border-bottom:0px;}
+#rebate-store .vux-tab-ink-bar{height:1px !important;background-color:red;}
+#rebate-store .vux-tab-item{background:#f7f7f7;}
+#rebate-store .weui-cell__ft{display:none;}
+#rebate-store .vux-cell-primary p{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  white-space: normal;
+  -webkit-line-clamp: 2;
+  }
 </style>
