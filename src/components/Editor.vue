@@ -366,7 +366,6 @@ export default {
               self.$util.wxUploadImage({
                 maxnum: 1,
                 handleCallback: function (data) {
-                  alert(JSON.stringify(data))
                   if (data.flag === 1 && data.data) {
                     callback && callback(data.data)
                   } else if (data.error) {
