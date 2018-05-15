@@ -400,6 +400,7 @@ Util.install = function (Vue, options) {
             },
             handleFunction: function (d) {
               return function (done) {
+                alert(d)
                 Vue.wechat.uploadImage({
                   localId: d,
                   isShowProgressTips: 0,
@@ -413,6 +414,7 @@ Util.install = function (Vue, options) {
                     })
                   },
                   fail: function (res2) {
+                    alert(JSON.stringify(res2))
                     Vue.$vux.toast.show({
                       text: '上传失败'
                     })
