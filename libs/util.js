@@ -408,6 +408,7 @@ Util.install = function (Vue, options) {
                       imgid: res1.serverId
                     }).then(function (res) {
                       let data = res.data
+                      alert(JSON.stringify(data))
                       os.handleCallback && os.handelCallback(data)
                       done()
                     })
