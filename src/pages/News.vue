@@ -258,20 +258,7 @@ export default {
           })
         }
       }).then(function (res) {
-        let imgTags = document.querySelectorAll('.news .article-content img')
-        if (imgTags.length > 0) {
-          for (let i = 0; i < imgTags.length; i++) {
-            let curimg = imgTags[i]
-            self.photoarr.push(imgTags[i].getAttribute('src'))
-            curimg.removeEventListener('click', function () {
-              return self.showBigimg(i)
-            })
-            curimg.addEventListener('click', function () {
-              return self.showBigimg(i)
-            })
-          }
-        }
-        self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+        self.handleImg()
         if (res) {
           let data = res.data
           if (data.flag === 1) {
@@ -343,6 +330,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
+              self.handleImg()
             }
           }
         })
@@ -397,18 +385,24 @@ export default {
         }
       })
     },
-    createdFun (to, from, next) {
+    handleImg () {
       const self = this
-      self.showsharetip = false
-      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      self.query = to.query
-      self.getData()
-      if (self.query.newadd) {
-        setTimeout(function () {
-          self.showsharetip = false
-        }, 10000)
+      self.photoarr = []
+      self.previewerPhotoarr = []
+      let imgTags = document.querySelectorAll('.news .article-content img')
+      if (imgTags.length > 0) {
+        for (let i = 0; i < imgTags.length; i++) {
+          let curimg = imgTags[i]
+          self.photoarr.push(imgTags[i].getAttribute('src'))
+          curimg.removeEventListener('click', function () {
+            return self.showBigimg(i)
+          })
+          curimg.addEventListener('click', function () {
+            return self.showBigimg(i)
+          })
+        }
       }
-      next && next()
+      self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
     },
     showBigimg (index) {
       const self = this
@@ -422,10 +416,22 @@ export default {
           })
         }
       }
+    },
+    createdFun (to, from, next) {
+      const self = this
+      self.showsharetip = false
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.query = to.query
+      self.getData()
+      if (self.query.newadd) {
+        setTimeout(function () {
+          self.showsharetip = false
+        }, 10000)
+      }
+      next && next()
     }
   },
   created () {
-    console.log('in created')
     const self = this
     self.createdFun(self.$route)
   },

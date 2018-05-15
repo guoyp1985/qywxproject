@@ -666,7 +666,7 @@ export default {
         }
         if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
           return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
-            { params: { id: self.productid } }
+            { params: { id: self.activityInfo.id } }
           )
         }
       }

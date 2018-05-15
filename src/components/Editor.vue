@@ -326,6 +326,7 @@ export default {
     },
     onSave () {
       this.showBtnArea = false
+      editor.destory()
       this.$emit('on-save')
     },
     onCancel () {
