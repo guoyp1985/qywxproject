@@ -330,6 +330,7 @@ export default {
         if (self.checkedAll) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true
+            self.checkedData.push(retdata[i].id)
             self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(retdata[i].money.replace(/,/g, ''))).toFixed(2)
           }
         }
