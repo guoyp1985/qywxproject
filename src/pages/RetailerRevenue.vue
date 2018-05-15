@@ -83,8 +83,8 @@
             <div v-if="disData2" class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
-                <div class="mt5">暂无待提现金额记录！</div>
-                <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
+                <div class="mt5">暂无待结算订单记录！</div>
+                <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
@@ -132,8 +132,8 @@
             <div v-if="disData3" class="scroll_list">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
-                <div class="mt5">暂无待结算订单记录！</div>
-                <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
+                <div class="mt5">暂无已提现订单记录！</div>
+                <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
               </div>
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
