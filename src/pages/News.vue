@@ -98,11 +98,14 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+      </div>
     </template>
   </div>
 </template>
 <script>
-import { Popup, TransferDom, XButton, Divider } from 'vux'
+import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
@@ -118,7 +121,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer
   },
   data () {
     return {
@@ -137,7 +140,9 @@ export default {
       comments: [],
       showSubscribe: false,
       WeixinQrcode: ENV.WeixinQrcode,
-      digStatus: ''
+      digStatus: '',
+      photoarr: [],
+      previewerPhotoarr: []
     }
   },
   filters: {
@@ -253,6 +258,20 @@ export default {
           })
         }
       }).then(function (res) {
+        let imgTags = document.querySelectorAll('.news .article-content img')
+        if (imgTags.length > 0) {
+          for (let i = 0; i < imgTags.length; i++) {
+            let curimg = imgTags[i]
+            self.photoarr.push(imgTags[i].getAttribute('src'))
+            curimg.removeEventListener('click', function () {
+              return self.showBigimg(i)
+            })
+            curimg.addEventListener('click', function () {
+              return self.showBigimg(i)
+            })
+          }
+        }
+        self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
         if (res) {
           let data = res.data
           if (data.flag === 1) {
@@ -390,9 +409,23 @@ export default {
         }, 10000)
       }
       next && next()
+    },
+    showBigimg (index) {
+      const self = this
+      if (!document.querySelector('.Eleditor-area')) {
+        if (self.$util.isPC()) {
+          self.$refs.previewer.show(index)
+        } else {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: self.photoarr[index],
+            urls: self.photoarr
+          })
+        }
+      }
     }
   },
   created () {
+    console.log('in created')
     const self = this
     self.createdFun(self.$route)
   },
