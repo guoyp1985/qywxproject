@@ -404,7 +404,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客户
+  Rebate customer: 返点客
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -683,7 +683,7 @@ zh-CN:
   tMessages: 消息列表
   tOrderSearch: 订单列表
   tOrderDetail: 订单详情
-  tShippingDetails: 物流详情
+  tShippingDetails: 物流信息
   tRecommend: 返点客
   tArticles: 新闻
   tEvaluation: 评价
@@ -709,6 +709,7 @@ zh-CN:
   tNews: 文章详情
   tActivity: 活动
   tSos: 您要找的内容不见了
+  tRebateStore: 返点店铺
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
