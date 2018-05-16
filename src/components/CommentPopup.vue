@@ -6,14 +6,14 @@
 <template>
   <div v-transfer-dom>
     <popup v-show="show" height="100%">
-      <div class="comment-popup">
+      <div :class="`comment-popup ${className}`">
         <div class="comment-article-title">
           <h4>{{title}}</h4>
         </div>
         <group>
           <x-textarea ref="textarea" id="comment-textarea" v-model="value" @on-change="valueChange" class="font14" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
         </group>
-        <emotion-box bind-textarea="comment-textarea">
+        <emotion-box bind-textarea="comment-textarea" :class-name="className">
         </emotion-box>
         <!-- <div class="emotion-area">
           <swiper :show-desc-mask="false" dots-position="center" height="160px">
@@ -105,7 +105,8 @@ export default {
       default: false
     },
     id: String,
-    title: String
+    title: String,
+    className: ''
   },
   data () {
     return {
@@ -130,8 +131,9 @@ export default {
       this.value = val
     },
     onSubmit () {
+      const self = this
       if (!this.textarea) {
-        this.textarea = document.getElementById('comment-textarea').querySelector('textarea')
+        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
       }
       this.$emit('on-submit', this.textarea.value)
     },

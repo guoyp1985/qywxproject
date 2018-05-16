@@ -74,7 +74,7 @@ export default {
       ],
       btns1: [
         {
-          name: 'Sales center',
+          name: 'Manage center',
           icon: 'al-fuwu',
           color: 'color-sales',
           link: '/centerSales'

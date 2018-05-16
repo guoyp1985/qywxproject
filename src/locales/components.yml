@@ -658,7 +658,7 @@ zh-CN:
   tIndex: 共销宝
   tLogin: 扫码登录
   tCenter: 个人中心
-  tCenterSales: 销售中心
+  tCenterSales: 卖家管理中心
   tRetailerSales: 返点客
   tRetailerSaleview: 返点客
   tRetailerSalechance: 销售机会
@@ -683,7 +683,7 @@ zh-CN:
   tMessages: 消息列表
   tOrderSearch: 订单列表
   tOrderDetail: 订单详情
-  tShippingDetails: 物流详情
+  tShippingDetails: 物流信息
   tRecommend: 返点客
   tArticles: 新闻
   tEvaluation: 评价
@@ -709,6 +709,7 @@ zh-CN:
   tNews: 文章详情
   tActivity: 活动
   tSos: 您要找的内容不见了
+  tRebateStore: 返点店铺
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
@@ -741,3 +742,5 @@ zh-CN:
   Upload images: 上传图像
   tSubscribeInfo: 我
   Shelf sale: 上架出售
+  Manage center: 管理中心
+  Rolling display: 滚动展示

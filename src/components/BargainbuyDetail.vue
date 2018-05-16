@@ -47,6 +47,17 @@
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
+        <template v-if="data.leftstorage > 0 && crowduser.isfull == 0 && !crowduser.isovertime">
+          <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+            <span class="v_middle db-in">还剩</span>
+            <span class="v_middle db-in">{{ lefthour }}</span>
+            <span class="v_middle db-in">:</span>
+            <span class="v_middle db-in">{{ leftminute }}</span>
+            <span class="v_middle db-in">:</span>
+            <span class="v_middle db-in">{{ leftsecond }}</span>
+            <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+          </div>
+        </template>
         <div v-if="data.leftstorage <= 0" class="align_center">
           <div class="btn db">商品已售罄，本次活动结束</div>
         </div>
@@ -60,7 +71,8 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div class="btn db" @click="cutevent">帮TA砍价</div>
+                <div v-if="loginUser.subscribe === 0" class="btn db" @click="toRedirect">帮TA砍价</div>
+                <div v-else class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
             </template>
             <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
@@ -138,7 +150,10 @@ export default {
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
-      canbuy: true
+      canbuy: true,
+      lefthour: '',
+      leftminute: '',
+      leftsecond: ''
     }
   },
   filters: {
@@ -155,6 +170,12 @@ export default {
     }
   },
   methods: {
+    toRedirect () {
+      const self = this
+      let url = `${ENV.Host}/#/activity?id=${self.data.id}&crowduserid=${self.crowduser.id}`
+      url = encodeURI(url)
+      location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&response_type=code&scope=snsapi_userinfo&state=${url}#wechat_redirect`
+    },
     cutevent () {
       const self = this
       if (!self.cuting) {
@@ -196,12 +217,56 @@ export default {
     toMyActivity () {
       const self = this
       self.$router.push({path: '/activity', query: {id: self.data.id, crowduserid: self.data.havecreate}})
+    },
+    cutdown () {
+      const self = this
+      let cutdownInterval = setInterval(function () {
+        let h = parseInt(self.lefthour)
+        let m = parseInt(self.leftminute)
+        let s = parseInt(self.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            self.leftsecond = '0' + s
+          } else {
+            self.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            self.leftminute = '0' + m
+          } else {
+            self.leftminute = m
+          }
+          self.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            self.lefthour = '0' + h
+          } else {
+            self.lefthour = h
+          }
+          self.leftminute = '59'
+          self.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(cutdownInterval)
+          self.isfinish = true
+          self.cutdownEnd && self.cutdownEnd()
+        }
+      }, 1000)
     }
   },
   created () {
     const self = this
     if (self.data) {
       self.product = self.data.product
+      if (self.crowduser && self.crowduser.timeleft) {
+        self.lefthour = self.crowduser.timeleft.hour
+        self.leftminute = self.crowduser.timeleft.minute
+        self.leftsecond = self.crowduser.timeleft.second
+        self.cutdown()
+      }
     }
   }
 }

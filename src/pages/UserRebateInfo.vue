@@ -8,8 +8,8 @@
     <view-box>
       <sticky scroll-box="user-rebate" class="sticky-area">
         <group class="rebate-title">
-          <cell :title="userName" class="user-info font14">
-            <img slot="icon" :src="avatar" class="radius50"/>
+          <cell :title="user.linkman" class="user-info font14">
+            <x-img slot="icon" :src="user.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body" class="radius50"></x-img>
             <div slot="inline-desc" class="rebate-money color-gray">
               <span>{{$t('Total Income')}}:</span><span> ¥{{totalIncome}}</span>
             </div>
@@ -112,14 +112,16 @@
 <script>
 import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
 import Time from '#/time'
+import { User } from '#/storage'
 export default {
   components: {
     ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton
   },
   data () {
     return {
-      userName: 'simon',
-      avatar: '',
+      user: {},
+      // userName: 'simon',
+      // avatar: '',
       totalIncome: 0,
       total: 0,
       list: [
@@ -204,6 +206,7 @@ export default {
     }
   },
   created () {
+    this.user = User.get()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }

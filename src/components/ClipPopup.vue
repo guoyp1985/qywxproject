@@ -4,7 +4,7 @@
 * @created_date: 2018-5-5
 */
 <template>
-  <div v-transfer-dom>
+  <div v-transfer-dom style="position:relative;z-index:510;">
     <popup v-show="show" height="100%">
       <div id="clip-view">
         <div id="photo-box" class="swapanim">
@@ -25,6 +25,7 @@
 <script>
 import { TransferDom, Popup, XButton } from 'vux'
 import Clip from '#/Clip'
+import ENV from 'env'
 export default {
   name: 'ClipPopup',
   directives: {
@@ -38,7 +39,8 @@ export default {
       type: Boolean,
       default: false
     },
-    img: String
+    img: String,
+    afterSubmit: Function
   },
   data () {
     return {
@@ -47,10 +49,33 @@ export default {
   },
   methods: {
     onSubmit () {
+      const self = this
       this.$emit('on-submit')
-      console.log(this.clip.value)
+      let clipVal = self.clip.value
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/common/cutImage`, {
+        srcimg: self.img,
+        cut_x: clipVal.left,
+        cut_y: clipVal.top,
+        cut_width: clipVal.width,
+        cut_height: clipVal.height
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.afterSubmit(data.data)
+          self.$emit('on-cancel')
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     },
     onCancel () {
+      this.clip.destroy()
       this.$emit('on-cancel')
     },
     imgLoad () {

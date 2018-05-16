@@ -41,7 +41,7 @@
       <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
       <x-button @click.native="cancel">{{$t('Cancel')}}</x-button>
     </div>
-    <clip-popup :show="popupShow" :img="currentImg" @on-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+    <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
   </div>
 </template>
 <script>
@@ -55,7 +55,7 @@ export default {
   data () {
     return {
       query: Object,
-      currentImg: '',
+      cutImg: '',
       popupShow: false,
       allowsubmit: true,
       photoarr: [],
@@ -92,7 +92,8 @@ export default {
     },
     clipPhoto (item) {
       this.popupShow = true
-      this.currentImg = item
+      let index = item.indexOf('?')
+      this.cutImg = item.substring(0, index)
     },
     deletePhoto (item, index) {
       this.photoarr.splice(index, 1)
@@ -130,10 +131,9 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
-          type: toasttype,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
@@ -147,7 +147,9 @@ export default {
         })
       })
     },
-    popupSubmit () {
+    popupSubmit (cutimg) {
+      this.photoarr = [ cutimg ]
+      this.submitdata.photo = this.$util.setPhoto(cutimg)
     },
     popupCancel () {
       this.popupShow = false
@@ -169,13 +171,16 @@ export default {
             self.submitdata[key] = retdata[key]
           }
           if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
-            self.photoarr = self.submitdata.photo.split(',')
+            let parr = self.submitdata.photo.split(',')
+            for (let i = 0; i < parr.length; i++) {
+              self.photoarr.push(self.$util.getPhoto(parr[i]))
+            }
           }
         }
       })
     } else {
       if (self.photoarr.length > 0) {
-        self.submitdata.photo = self.photoarr[0]
+        self.submitdata.photo = self.$util.setPhoto(self.photoarr[0])
       }
     }
   }

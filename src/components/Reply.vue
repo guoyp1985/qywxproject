@@ -7,19 +7,19 @@
   <div class="reply">
     <div class="header-area">
       <div class="name-cell" @click="testclick">
-        {{item.userName}} {{$t('Reply')}}
+        <span class="color-orange mr5">{{item.username}}</span><span>{{$t('Reply')}}</span>
       </div>
+      <!--
       <div class="digg-cell color-gray" @click="diggClick('comment',item.id,item)">
         <span class="digicon"></span>
         <span class="digg-count">{{item.diggCount}}</span>
       </div>
+    -->
     </div>
-    <div class="reply-content">
-      {{item.content}}
-    </div>
+    <div class="reply-content" v-html="item.message"></div>
     <div class="date-area">
       <div class="date-cell">
-        {{item.date | dateFormat}}
+        {{item.dateline | dateFormat}}
       </div>
       <div class="btns-cell">
         <a v-if="item.authority>2" @click="onReview">{{$t('Review')}}</a>
@@ -50,7 +50,12 @@ export default {
   },
   filters: {
     dateFormat (date) {
-      return new Time(date).format()
+      return new Time(date * 1000).format()
+    }
+  },
+  watch: {
+    item: function () {
+      return this.item
     }
   },
   methods: {

@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle">
+      <div id="article-content" class="pagemiddle scroll-container">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
@@ -48,7 +48,7 @@
           </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray" @click="clickDig('news',query.id,article)"><span :class="`digicon ${digStatus}`"></span> {{article.dig}}</span>
+            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
           </div>
           <div class="qrcode-area">
             <div class="qrcode-bg">
@@ -59,6 +59,7 @@
                   <img v-else :src="WeixinQrcode">
                 </div>
               </div>
+              <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
             </div>
           </div>
         </div>
@@ -69,8 +70,8 @@
           <template v-if="article.comments">
             <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
           </template>
-          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
-            <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
+          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
+            <reply v-if="comment.comments > 0" slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
           </comment>
         </div>
       </div>
@@ -83,8 +84,8 @@
         :on-close="closeShareSuccess">
       </share-success>
       <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
-      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <comment-popup class-name="commentPopup" :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+      <comment-popup class-name="replyPopup" :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -140,9 +141,15 @@ export default {
       comments: [],
       showSubscribe: false,
       WeixinQrcode: ENV.WeixinQrcode,
-      digStatus: '',
+      isdig: 0,
       photoarr: [],
-      previewerPhotoarr: []
+      previewerPhotoarr: [],
+      disComments: false,
+      commentsArea: null,
+      isBindScroll: null,
+      pagestart: 0,
+      limit: 10,
+      replyData: null
     }
   },
   filters: {
@@ -154,8 +161,8 @@ export default {
     }
   },
   watch: {
-    digStatus: function () {
-      return this.digStatus
+    isdig: function () {
+      return this.isdig
     }
   },
   methods: {
@@ -168,7 +175,8 @@ export default {
     closeSharetip () {
       this.showsharetip = false
     },
-    onReplyShow () {
+    onReplyShow (item) {
+      this.replyData = item
       this.replyPopupShow = true
     },
     onCommentShow () {
@@ -176,11 +184,26 @@ export default {
     },
     onCommentDelete (comment) {
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
-      .then(res => {
-        if (res.data.flag) {
-          self.$util.deleteItem(self.comments, comment.id)
-          self.$vux.toast.text(self.$t('Delete Success'))
+
+      self.$vux.confirm.show({
+        title: '确定要删除该评论吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.$util.deleteItem(self.comments, comment.id)
+                }
+              }
+            })
+          })
         }
       })
     },
@@ -193,29 +216,54 @@ export default {
     commentSubmit (value) { // 留言提交
       const self = this
       this.commentPopupShow = false
-      // let comment = {
-      //   userName: 'simon',
-      //   userAvatar: '/src/assets/images/user.jpg',
-      //   content: value,
-      //   date: new Date().getTime(),
-      //   diggCount: 0
-      // }
-      console.log(value)
+      self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
-        if (res.data.flag) {
-          self.comments.push(res.data.data)
+        self.$vux.loading.hide()
+        if (res.status === 200) {
+          if (res.data.flag) {
+            self.comments.push(res.data.data)
+          }
         }
       })
-      // this.comments.push(comment)
     },
     replySubmit (value) { // 回复提交
-      this.replyPopupShow = false
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'comments', message: value})
+      this.replyPopupShow = false
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         if (res.data.flag) {
           self.comments.replies.push(res.data.data)
+        }
+      })
+    },
+    scrollComments: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.commentsArea,
+        callback: function () {
+          if (self.comments.length === self.pagestart * self.limit) {
+            self.$vux.loading.show()
+            self.getCommentsList()
+            self.pagestart++
+          }
+        }
+      })
+    },
+    getCommentsList () {
+      const self = this
+      let params = { nid: self.query.id, module: self.module, pagestart: self.pagestart, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/comment/list`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.comments = self.comments.concat(retdata)
+        self.disComments = true
+        if (!self.isBindScroll) {
+          self.commentsArea = document.querySelector('.news .pagemiddle')
+          self.isBindScroll = true
+          self.commentsArea.removeEventListener('scroll', self.scrollComments)
+          self.commentsArea.addEventListener('scroll', self.scrollComments)
         }
       })
     },
@@ -262,15 +310,13 @@ export default {
         if (res) {
           let data = res.data
           if (data.flag === 1) {
-            self.digStatus = 'diged'
+            self.isdig = 1
           }
-          return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: self.module}) // 获取评论
-        }
-      })
-      .then(res => {
-        if (res) {
-          if (res.data.flag) {
-            self.comments = res.data.data
+          if (!self.isBindScroll) {
+            self.commentsArea = document.querySelector('.news .pagemiddle')
+            self.isBindScroll = true
+            self.commentsArea.removeEventListener('scroll', self.scrollComments)
+            self.commentsArea.addEventListener('scroll', self.scrollComments)
           }
           return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
@@ -349,32 +395,26 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    clickDig (digmodule, digid, data) {
+    clickDig () {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
-      if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
+      if (self.isdig) {
         url = `${ENV.BokaApi}/api/user/digs/delete`
       }
       self.$vux.loading.show()
       self.$http.post(url, {
-        id: digid,
-        module: digmodule
+        id: self.query.id,
+        module: 'news'
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          if (data.digStatus === 'diged') {
-            if (digmodule === 'news') {
-              self.digStatus = ''
-            }
-            delete data.digStatus
-            data.dig = self.article.dig - 1
+          if (self.isdig) {
+            self.isdig = 0
+            self.article.dig = self.article.dig - 1
           } else {
-            if (digmodule === 'news') {
-              self.digStatus = 'diged'
-            }
-            data.digStatus = 'diged'
-            data.dig = self.article.dig + 1
+            self.isdig = 1
+            self.article.dig = self.article.dig + 1
           }
         } else {
           self.$vux.toast.show({
@@ -393,13 +433,15 @@ export default {
       if (imgTags.length > 0) {
         for (let i = 0; i < imgTags.length; i++) {
           let curimg = imgTags[i]
-          self.photoarr.push(imgTags[i].getAttribute('src'))
-          curimg.removeEventListener('click', function () {
-            return self.showBigimg(i)
-          })
-          curimg.addEventListener('click', function () {
-            return self.showBigimg(i)
-          })
+          if (jQuery(curimg).parents('.insertproduct').length === 0) {
+            self.photoarr.push(imgTags[i].getAttribute('src'))
+            curimg.removeEventListener('click', function () {
+              return self.showBigimg(i)
+            })
+            curimg.addEventListener('click', function () {
+              return self.showBigimg(i)
+            })
+          }
         }
       }
       self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
