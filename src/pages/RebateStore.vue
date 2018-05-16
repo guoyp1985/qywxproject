@@ -9,9 +9,9 @@
       <div class="sharing-title">{{$t('Current Store')}}</div>
       <sticky scroll-box="rebate-store">
         <div class="pt5 pb5 pl15 pr15 flex_table">
-          <div class="store-photo"><img src="../assets/images/bargainbuy.jpg"/></div>
+          <div class="store-photo"><x-img :src="photo" default-src="../src/assets/images/nopic.jpg"></x-img></div>
           <div class="store-details flex_cell pl10">
-            <span class="db font14">{{storeName}}数据没调到</span>
+            <span class="db font14">{{title}}</span>
             <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
           </div>
         </div>
@@ -20,7 +20,7 @@
             <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
           </div>
           <div class="flex_cell align_left pl20">
-            <a @click="commingCustomerClick" class="qbtn4">{{$t('Bring Customer')}}：1</a>
+            <a @click="commingCustomerClick" class="qbtn4">{{$t('Bring Customer')}}：{{customers}}</a>
           </div>
         </div>
       </sticky>
@@ -30,15 +30,15 @@
       <card>
         <div slot="content" class="card-flex card-content">
           <div class="vux-1px-r" @click="totalSalesClick">
-            <span class="font18 db color-red">{{totalSales}}</span>
+            <span class="font18 db color-red">{{income}}</span>
             <span class="font14 db color-gray">{{$t('Income Of Our Shop')}}</span>
           </div>
           <div class="vux-1px-r" @click="rebateAmountClick">
-            <span class="font18 db color-red">{{rebateAmount}}</span>
+            <span class="font18 db color-red">{{torebate}}</span>
             <span class="font14 db color-gray">{{$t('Waiting To Rebate')}}</span>
           </div>
           <div @click="rebateAmountClick">
-            <span class="font18 db color-red">{{commingCustomer}}</span>
+            <span class="font18 db color-red">{{towithdraw}}</span>
             <span class="font14 db color-gray">{{$t('Waiting To Return Money')}}</span>
           </div>
         </div>
@@ -146,11 +146,13 @@ export default {
   },
   data () {
     return {
-      totalSales: 0,
-      rebateAmount: 0,
-      commingCustomer: 0,
+      income: 0,
+      torebate: 0,
+      towithdraw: 0,
+      customers: 0,
+      title: '',
+      photo: '',
       selectedIndex: 0,
-      storeName: '',
       storeCardShow: false,
       storeQrCode: '',
       list: [
@@ -192,7 +194,17 @@ export default {
   },
   methods: {
     onItemClick () {
-
+      switch (this.selectedIndex) {
+        case 0:
+          this.getList()
+          break
+        case 1:
+          this.getList1()
+          break
+        case 2:
+          this.getList2()
+          break
+      }
     },
     onShareCard () {
       this.storeCardShow = true
@@ -205,7 +217,47 @@ export default {
     },
     commingCustomerClick () {
       this.$router.push({name: 'tBringCustomer'})
+    },
+    getData () {
+      const self = this
+      const uid = this.$route.query.uid
+      this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`, {wid: uid})
+      .then(res => {
+        self.income = res.data.income
+        self.torebate = res.data.torebate
+        self.towithdraw = res.data.towithdraw
+        self.customers = res.data.customers
+        self.title = res.data.title
+      })
+    },
+    getList () {
+      const self = this
+      const uid = this.$route.query.uid
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, {wid: uid})
+      .then(res => {
+        console.log(res.data)
+      })
+    },
+    getList1 () {
+      const self = this
+      const uid = this.$route.query.uid
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, {wid: uid})
+      .then(res => {
+
+      })
+    },
+    getList2 () {
+      const self = this
+      const uid = this.$route.query.uid
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, {wid: uid})
+      .then(res => {
+
+      })
     }
+  },
+  created () {
+    this.getData()
+    this.getList()
   }
 }
 </script>
@@ -309,5 +361,8 @@ export default {
   display: -webkit-box;
   white-space: normal;
   -webkit-line-clamp: 2;
-  }
+}
+#rebate-store .weui-tab__panel {
+  padding-bottom: 0;
+}
 </style>
