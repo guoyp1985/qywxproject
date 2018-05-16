@@ -15,7 +15,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.price" type="text" class="input" name="price" :placeholder="$t('User final purchase price')" />
+            <input v-model="submitdata.price" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
         </div>
@@ -24,7 +24,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.storage" type="text" class="input" name="storage" :placeholder="$t('Storage')" />
+            <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
           </div>
         </div>
       </div>
@@ -40,7 +40,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.rebate" type="text" class="input" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+            <input v-model="submitdata.rebate" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
         </div>
@@ -200,6 +200,17 @@ export default {
       })
     }
   },
+  mounted: function () {
+    const self = this
+    let priceInput = document.querySelector('.priceInput')
+    this.priceChange(priceInput, function (val) {
+      self.submitdata.price = val
+    })
+    let rebateInput = document.querySelector('.rebateInput')
+    this.priceChange(rebateInput, function (val) {
+      self.submitdata.rebate = val
+    })
+  },
   watch: {
     submitdata: function () {
       return this.submitdata
@@ -298,7 +309,7 @@ export default {
       if (!iscontinue) {
         return false
       }
-      if (isNaN(postdata.price) || postdata.price < 0) {
+      if (isNaN(postdata.price) || postdata.price < 0 || (self.$util.trim(postdata.rebate) !== '' && (isNaN(postdata.rebate) || postdata.rebate < 0))) {
         self.$vux.alert.show({
           title: '',
           content: '请输入正确的价格'
@@ -342,6 +353,19 @@ export default {
       let postdata = self.submitdata
       postdata['moderate'] = 1
       self.savedata(postdata)
+    },
+    priceChange (input, callback) {
+      const self = this
+      input.addEventListener('keyup', function () {
+        let val = input.value
+        let dotindex = val.lastIndexOf('.')
+        let vallen = val.length
+        let cha = vallen - 1 - dotindex
+        if (dotindex > -1 && cha > 2) {
+          val = val.substr(0, vallen - cha + 2)
+        }
+        callback && callback(val)
+      })
     }
   }
 }
