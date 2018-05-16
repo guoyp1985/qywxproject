@@ -71,8 +71,8 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div v-if="loginUser.subscribe == 0" class="btn db" @click="toRedirect">帮TA砍价{{loginUser.subscribe}}</div>
-                <div v-else class="btn db" @click="cutevent">帮TA砍价{{loginUser.subscribe}}</div>
+                <div v-if="!loginUser || loginUser.subscribe == 0" class="btn db" @click="toRedirect">0帮TA砍价{{loginUser.subscribe}}</div>
+                <div v-else class="btn db" @click="cutevent">1帮TA砍价{{loginUser.subscribe}}</div>
               </div>
             </template>
             <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
