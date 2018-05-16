@@ -29,7 +29,16 @@
                 @on-cancel="onCancel"
                 ref="search">
               </search>
-              <div class="scroll_list pl10 pr10 mb12" style="position:absolute;top:45px;">
+              <checker
+              class="x-checker"
+              type="radio"
+              v-model="keyword"
+              default-item-class="ck-item"
+              selected-item-class="ck-item-selected"
+              @on-change="searchEvent">
+                <checker-item v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">{{ kw }}</checker-item>
+              </checker>
+              <div class="scroll_list pl10 pr10 mb12">
                 <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
                   <div class="t-table">
                     <div class="t-cell">暂无搜索结果</div>
@@ -120,13 +129,13 @@ My orders:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem
   },
   filters: {
     dateformat: function (value) {
@@ -146,8 +155,9 @@ export default {
       limit: 20,
       pagestart: 0,
       isBindScroll: false,
-      scrollArea: null
-
+      scrollArea: null,
+      keywordsData: [],
+      keyword: ''
     }
   },
   methods: {
@@ -197,15 +207,21 @@ export default {
         })
         return false
       }
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-        { do: 'get_sogou_list', keyword: kw }
-      ).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.searchdata = (data.data ? data.data : data)
-        self.showSearchEmpty = true
-      })
+      if (self.$util.trim(kw) !== '') {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+          { do: 'get_sogou_list', keyword: kw }
+        ).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.searchdata = (data.data ? data.data : data)
+          self.showSearchEmpty = true
+        })
+      }
+    },
+    searchEvent (kw) {
+      const self = this
+      self.searchword = kw
     },
     tabitemclick (index) {
       const self = this
@@ -232,7 +248,6 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  // self.searchdata.splice(index, 1)
                   self.$router.push({path: '/news', query: {id: data.data.id}})
                 }
               }
@@ -261,7 +276,6 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              // self.newsdata.push(data.data)
               self.$router.push({path: '/news', query: {id: data.data.id}})
             }
           }
@@ -272,6 +286,12 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+      { do: 'history' }
+    ).then(function (res) {
+      let data = res.data
+      self.keywordsData = data.data ? data.data : data
+    })
   }
 }
 </script>
@@ -279,4 +299,9 @@ export default {
 <style lang="less" scoped>
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
+.keylist .item{
+  display:inline-block; padding:5px 10px;border:@list-border-color 1px solid;
+  border-radius:5px;
+}
+.keylist .item.active{border-color:green;}
 </style>
