@@ -172,7 +172,7 @@ export default {
     toRedirect () {
       const self = this
       let url = `${ENV.Host}/#/activity?id=${self.data.id}&crowduserid=${self.crowduser.id}`
-      url = encodeURI(url)
+      url = encodeURIComponent(url)
       location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&response_type=code&scope=snsapi_userinfo&redirect_uri=${url}&state=123456#wechat_redirect`)
     },
     cutevent () {
