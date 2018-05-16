@@ -173,7 +173,7 @@ export default {
       const self = this
       let url = `${ENV.Host}/#/activity?id=${self.data.id}&crowduserid=${self.crowduser.id}`
       url = encodeURIComponent(url)
-      location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&response_type=code&scope=snsapi_userinfo&redirect_uri=${url}&state=123456#wechat_redirect`
+      location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=123456#wechat_redirect`)
     },
     cutevent () {
       const self = this
