@@ -71,8 +71,8 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div v-if="!loginUser || loginUser.subscribes == 0" class="btn db" @click="toRedirect">0帮TA砍价{{loginUser.subscribes}}</div>
-                <div v-else class="btn db" @click="cutevent">1帮TA砍价{{loginUser.subscribes}}</div>
+                <div v-if="!user || user.subscribes == 0" class="btn db" @click="toRedirect">0帮TA砍价{{user.subscribes}}</div>
+                <div v-else class="btn db" @click="cutevent">1帮TA砍价{{user.subscribes}}</div>
               </div>
             </template>
             <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
@@ -146,7 +146,6 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
@@ -259,9 +258,9 @@ export default {
   },
   created () {
     const self = this
-    alert(JSON.stringify(self.loginUser))
-    alert(JSON.stringify(self.loginUser.subscribe))
-    alert(JSON.stringify(self.loginUser.subscribes))
+    alert(JSON.stringify(self.user))
+    alert(JSON.stringify(self.user.subscribe))
+    alert(JSON.stringify(self.user.subscribes))
     if (self.data) {
       self.product = self.data.product
       if (self.crowduser && self.crowduser.timeleft) {
