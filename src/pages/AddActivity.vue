@@ -323,7 +323,7 @@ export default {
       if (!iscontinue) {
         return false
       }
-      const priceval = parseFloat(self.selectproduct.price)
+      const priceval = parseFloat(self.selectproduct.price.replace(/,/g, ''))
       const storage = parseInt(self.selectproduct.storage)
       if (self.activityType === 'bargainbuy') {
         let minprice = parseFloat(self.submitdata.param_minprice)

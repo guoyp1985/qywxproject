@@ -41,7 +41,7 @@
                         <img class="avatarimg1" :src="item.avatar" />
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
+                        <div class="clamp1">{{ item.username }}</div>
                         <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                       </router-link>
                       <div class="t-cell v_middle align_right w60">
