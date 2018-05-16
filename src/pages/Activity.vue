@@ -108,7 +108,6 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
         params: infoparams
       }).then(function (res) {
-        alert(JSON.stringify(res))
         self.$vux.loading.hide()
         let data = res.data
         self.data = data.data ? data.data : data
