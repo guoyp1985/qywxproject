@@ -111,7 +111,9 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         self.data = data.data ? data.data : data
-        document.title = self.data.title
+        if (self.data.title) {
+          document.title = self.data.title
+        }
         if (self.data.type === 'bargainbuy') {
           self.bargainbuyType = true
           let sharelink = `${ENV.Host}/#/activity?id=${self.data.id}&share_uid=${self.loginUser.uid}`

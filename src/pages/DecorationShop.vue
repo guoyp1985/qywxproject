@@ -19,7 +19,7 @@
           <router-link :to="{path:'/product',query:{id:item.id,wid:loginuser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
             <div class="t-table bg-white pt10 pb10">
         			<div class="t-cell pl10 v_middle" style="width:90px;">
-    		          <img style="width:80px;height:80px;" :src="item.photo" />
+    		          <img style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
         			</div>
         			<div class="t-cell v_middle">
                 <div class="clamp2 font15 pr10">{{item.title}}</div>
@@ -55,7 +55,7 @@
                     <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                       <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
                         <div class="close" @click="deletephoto(item,index)">×</div>
-                        <div class="clip"><i class="al al-set"></i></div>
+                        <div class="clip" @click="clipPhoto(item)"><i class="al al-set"></i></div>
                       </div>
                     </div>
                   </template>
@@ -84,6 +84,7 @@
           </div>
         </div>
       </popup>
+      <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
     </div>
   </div>
 </template>
@@ -101,6 +102,7 @@ Please upload rolling show photo:
 
 <script>
 import { TransferDom, Popup, Confirm, Alert } from 'vux'
+import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 
 export default {
@@ -108,7 +110,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, Alert
+    Popup, Confirm, Alert, ClipPopup
   },
   data () {
     return {
@@ -124,7 +126,9 @@ export default {
       pagestart1: 0,
       isBindScroll1: false,
       scrollArea1: null,
-      rollingData: null
+      rollingData: null,
+      cutImg: '',
+      popupShow: false
     }
   },
   watch: {
@@ -186,7 +190,10 @@ export default {
         let retdata = data.data ? data.data : data
         if (retdata && retdata.photo) {
           self.rollingData = retdata
-          self.photoarr = retdata.photo.split(',')
+          let parr = retdata.photo.split(',')
+          for (let i = 0; i < parr.length; i++) {
+            self.photoarr.push(self.$util.getPhoto(parr[i]))
+          }
         }
       })
     },
@@ -252,7 +259,11 @@ export default {
         return false
       } else {
         self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'add', id: self.clickdata.id, topbanner: self.photoarr.join(',') }).then(function (res) {
+        let parr = []
+        for (let i = 0; i < self.photoarr.length; i++) {
+          parr.push(self.$util.setPhoto(self.photoarr[i]))
+        }
+        self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'add', id: self.clickdata.id, topbanner: parr.join(',') }).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
           let toasttype = data.flag !== 1 ? 'warn' : 'success'
@@ -270,6 +281,17 @@ export default {
           })
         })
       }
+    },
+    clipPhoto (item) {
+      this.popupShow = true
+      let index = item.indexOf('?')
+      this.cutImg = item.substring(0, index)
+    },
+    popupSubmit (cutimg) {
+      this.photoarr = [ cutimg ]
+    },
+    popupCancel () {
+      this.popupShow = false
     }
   },
   created: function () {

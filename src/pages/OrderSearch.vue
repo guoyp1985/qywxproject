@@ -4,54 +4,64 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="order-search">
-    <sticky scroll-box="vux_view_box_body">
+  <div id="order-search" class="containerarea font14 nobottom">
+    <div class="pagetop">
       <tab v-model="selectedIndex">
         <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
-    </sticky>
-    <div v-show="selectedIndex===0">
-      <template v-if="list.length">
-        <order-info v-for="(item, index) in getList" :item="item" :key="index" @on-process="orderProcess"></order-info>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
-        </div>
-      </template>
     </div>
-    <div v-show="selectedIndex===1">
-      <template v-if="list1.length">
-        <order-info v-for="(item, index) in getList1" :item="item" :key="index" @on-process="orderProcess"></order-info>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
-        </div>
-      </template>
-    </div>
-    <div v-show="selectedIndex===2">
-      <template v-if="list2.length">
-        <order-info v-for="(item, index) in getList2" :item="item" :key="index" @on-process="orderProcess"></order-info>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
-        </div>
-      </template>
-    </div>
-    <div v-show="selectedIndex===3">
-      <template v-if="list3.length">
-        <order-info v-for="(item, index) in getList3" :item="item" :key="index" @on-process="orderProcess"></order-info>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Orders')}}</span>
-        </div>
-      </template>
+    <div class="pagemiddle scroll-container">
+      <div v-show="selectedIndex===0">
+        <template v-if="distabdata1">
+          <template v-if="tabdata1.length">
+            <order-info v-for="(item, index) in tabdata1" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
+        </template>
+      </div>
+      <div v-show="selectedIndex===1">
+        <template v-if="distabdata2">
+          <template v-if="tabdata2.length">
+            <order-info v-for="(item, index) in tabdata2" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
+        </template>
+      </div>
+      <div v-show="selectedIndex===2">
+        <template v-if="distabdata3">
+          <template v-if="tabdata3.length">
+            <order-info v-for="(item, index) in tabdata3" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
+        </template>
+      </div>
+      <div v-show="selectedIndex===3">
+        <template v-if="distabdata4">
+          <template v-if="tabdata4.length">
+            <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -74,29 +84,33 @@ export default {
       list: [],
       list1: [],
       list2: [],
-      list3: []
+      list3: [],
+      scrollContainer: null,
+      distabdata1: false,
+      distabdata2: false,
+      distabdata3: false,
+      distabdata4: false,
+      tabdata1: [],
+      tabdata2: [],
+      tabdata3: [],
+      tabdata4: [],
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      pagestart4: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      isBindScroll3: false,
+      isBindScroll4: false,
+      scrollArea1: null,
+      scrollArea2: null,
+      scrollArea3: null,
+      scrollArea4: null
     }
   },
   computed: {
-    // getItems () {
-    //   let data = this.$route.query.data
-    //   if (typeof data === 'object') {
-    //     let match = false
-    //     this.items = this.items.map(item => {
-    //       if (item.id === data.id) {
-    //         match = true
-    //         return data
-    //       }
-    //       return item
-    //     })
-    //     if (!match) {
-    //       this.items.push(data)
-    //     }
-    //   }
-    //   return this.items
-    // }
     getList () {
-      // console.log(this.list)
       return this.setListButton(this.list)
     },
     getList1 () {
@@ -138,6 +152,29 @@ export default {
         }
       }
       return list
+    },
+    setButton (item) {
+      let buttons = []
+      switch (item.flag) {
+        case 0:
+          item.buttons = []
+          break
+        case 1:
+          item.buttons = [0, 1]
+          break
+        case 2:
+          item.buttons = [2]
+          break
+        case 3:
+          item.buttons = [3, 4, 5]
+          break
+        case 4:
+          item.buttons = [4, 6]
+          break
+        case 100:
+          item.buttons = [4]
+      }
+      return buttons
     },
     evaluate (order) {
       this.$router.push({name: 'tEvaluation', query: {id: order.id}})
@@ -188,7 +225,6 @@ export default {
       this.$router.push({path: `/shippingDetails`, query: {id: order.id}})
     },
     afterSale (order) {
-
     },
     payment (order) {
       this.$router.push({path: '/pay', query: {id: order.id}})
@@ -243,37 +279,68 @@ export default {
       const self = this
       switch (this.selectedIndex) {
         case 0:
+        /*
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
           .then(res => {
             if (res.data.flag) {
               self.list = res.data.data
             }
           })
+          */
+          self.scrollContainer.removeEventListener('scroll', self.scroll1)
+          self.scrollContainer.addEventListener('scroll', self.scroll1)
+          if (self.pagestart1 > 0) {
+            self.$vux.loading.show()
+            self.getdata1()
+          }
           break
         case 1:
+        /*
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user?flag=2`)
           .then(res => {
             if (res.data.flag) {
-              // console.log(res.data.data)
               self.list1 = res.data.data
             }
           })
+          */
+          self.scrollContainer.removeEventListener('scroll', self.scroll2)
+          self.scrollContainer.addEventListener('scroll', self.scroll2)
+          if (self.pagestart2 === 0 && !self.isBindScroll2) {
+            self.$vux.loading.show()
+            self.getdata2()
+          }
           break
         case 2:
+        /*
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user?flag=3`)
           .then(res => {
             if (res.data.flag) {
               self.list2 = res.data.data
             }
           })
+          */
+          self.scrollContainer.removeEventListener('scroll', self.scroll3)
+          self.scrollContainer.addEventListener('scroll', self.scroll3)
+          if (self.pagestart3 === 0 && !self.isBindScroll3) {
+            self.$vux.loading.show()
+            self.getdata3()
+          }
           break
         case 3:
+        /*
           this.$http.get(`${ENV.BokaApi}/api/order/orderList/user?flag=4`)
           .then(res => {
             if (res.data.flag) {
               self.list3 = res.data.data
             }
           })
+          */
+          self.scrollContainer.removeEventListener('scroll', self.scroll4)
+          self.scrollContainer.addEventListener('scroll', self.scroll4)
+          if (self.pagestart4 === 0 && !self.isBindScroll4) {
+            self.$vux.loading.show()
+            self.getdata4()
+          }
           break
       }
     },
@@ -285,11 +352,142 @@ export default {
           self.list = res.data.data
         }
       })
+    },
+    getScrollContainer () {
+      this.scrollContainer = document.querySelector('.scroll-container')
+    },
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    scroll3: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.pagestart3++
+            self.$vux.loading.show()
+            self.getdata3()
+          }
+        }
+      })
+    },
+    scroll4: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
+            self.pagestart4++
+            self.$vux.loading.show()
+            self.getdata4()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
+        if (!self.isBindScroll1) {
+          self.getScrollContainer()
+          self.isBindScroll1 = true
+          self.scrollContainer.removeEventListener('scroll', self.scroll1)
+          self.scrollContainer.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { params: { flag: 2, pagestart: self.pagestart2, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
+        if (!self.isBindScroll2) {
+          self.getScrollContainer()
+          self.isBindScroll2 = true
+          self.scrollContainer.removeEventListener('scroll', self.scroll2)
+          self.scrollContainer.addEventListener('scroll', self.scroll2)
+        }
+      })
+    },
+    getdata3 () {
+      const self = this
+      let params = { params: { flag: 3, pagestart: self.pagestart3, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata3 = self.tabdata3.concat(retdata)
+        self.distabdata3 = true
+        if (!self.isBindScroll3) {
+          self.getScrollContainer()
+          self.isBindScroll3 = true
+          self.scrollContainer.removeEventListener('scroll', self.scroll3)
+          self.scrollContainer.addEventListener('scroll', self.scroll3)
+        }
+      })
+    },
+    getdata4 () {
+      const self = this
+      let params = { params: { flag: 4, pagestart: self.pagestart4, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata4 = self.tabdata4.concat(retdata)
+        self.distabdata4 = true
+        if (!self.isBindScroll4) {
+          self.getScrollContainer()
+          self.isBindScroll4 = true
+          self.scrollContainer.removeEventListener('scroll', self.scroll4)
+          self.scrollContainer.addEventListener('scroll', self.scroll4)
+        }
+      })
     }
   },
   created () {
-    this.getData()
+    const self = this
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.$vux.loading.show()
+    this.getdata1()
+    self.getScrollContainer()
+    if (!self.isBindScroll1 && self.scrollContainer) {
+      self.isBindScroll1 = true
+      self.scrollContainer.removeEventListener('scroll', self.scroll1)
+      self.scrollContainer.addEventListener('scroll', self.scroll1)
+    }
   }
 }
 </script>

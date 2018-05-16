@@ -309,6 +309,7 @@ Util.install = function (Vue, options) {
           sharephoto = photoarr[0]
         }
       }
+      sharephoto = self.getPhoto(sharephoto)
       let wxData = {
         module: os.module,
         moduleid: os.moduleid,
@@ -519,6 +520,12 @@ Util.install = function (Vue, options) {
         })
       }
       return ret
+    },
+    setPhoto: function (src) {
+      return src.replace(/,/g, '||')
+    },
+    getPhoto: function (src) {
+      return src.replace(/\|\|/g, ',')
     }
   }
 }

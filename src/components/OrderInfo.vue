@@ -20,7 +20,7 @@
     <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
-          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" default-src="../src/assets/images/nopic.jpg" :key="index" container="#vux_view_box_body"></x-img>
+          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" default-src="../src/assets/images/nopic.jpg" :key="index" container=".scroll-container"></x-img>
         </div>
       </div>
       <div class="product-info" v-else>
@@ -40,8 +40,8 @@
     <div class="pay-info">
       <span class="font12">共{{total}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
-    <div class="operate-area" v-if="item.buttons.length">
-      <x-button v-for="index in item.buttons" :key="statusButtons[index].id" @click.native="buttonClick(statusButtons[index].id)" mini class="font12">{{statusButtons[index].name}}</x-button>
+    <div class="operate-area" v-if="buttons && buttons.length">
+      <x-button v-for="index in buttons" :key="statusButtons[index].id" @click.native="buttonClick(statusButtons[index].id)" mini class="font12">{{statusButtons[index].name}}</x-button>
     </div>
   </div>
 </template>

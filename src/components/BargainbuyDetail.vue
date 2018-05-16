@@ -71,7 +71,8 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div class="btn db" @click="cutevent">帮TA砍价</div>
+                <div v-if="!user || user.subscribes == 0" class="btn db" @click="toRedirect">帮TA砍价</div>
+                <div v-else class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
             </template>
             <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
@@ -145,7 +146,6 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
@@ -169,6 +169,12 @@ export default {
     }
   },
   methods: {
+    toRedirect () {
+      const self = this
+      let url = `${ENV.Host}/#/activity?id=${self.data.id}&crowduserid=${self.crowduser.id}`
+      url = encodeURIComponent(url)
+      location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&redirect_uri=${url}&response_type=code&scope=snsapi_userinfo&state=123456#wechat_redirect`)
+    },
     cutevent () {
       const self = this
       if (!self.cuting) {

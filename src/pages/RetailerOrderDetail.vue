@@ -23,10 +23,11 @@
           </div>
         </div>
         <div class="t-table">
-          <div class="t-cell v_middle">收货人：{{ data.linkman ? data.linkman : '无' }}</div>
+          <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
           <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
         </div>
-        <div class="font12 color-gray mt5">收货地址：{{ data.address ? data.address : '无' }}</div>
+        <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
+        <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
       </div>
       <div class="mt10 bg-white padding10 b_bottom_after">
         <div class="t-table">

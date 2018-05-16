@@ -15,11 +15,11 @@
         :key="item.id"
         class="share-item font14"
         align-items
-        :title="item.title"
         :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
-          <x-img slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
+          <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
           <div slot="inline-desc">
-            {{item.dateline | dateFormat}} {{item.typestr}}
+            <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+            <div class="clamp1 font12 mt5 color-gray">{{item.dateline | dateFormat}} {{item.typestr}}</div>
           </div>
           <div slot="child">
             <span class="al al-jinbi color-gold"></span>
@@ -70,6 +70,14 @@ export default {
           self.list = res.data.data
         }
       })
+    },
+    getDateState: function (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass: function (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
     }
   },
   created () {

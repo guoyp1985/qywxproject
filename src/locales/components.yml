@@ -286,6 +286,8 @@ en:
   Upload images: Upload images
   Goods sold to rebate user rebate Commission: Goods sold to rebate user rebate Commission
   Goods sold to rebate user commission: Goods sold to rebate user commission
+  Pre Sale: Pre Sale
+  Complaint: Complaint
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -334,8 +336,8 @@ zh-CN:
   Http link: 站外链接
   Money: 余额
   Collapse: 折叠
-  Title 001: 标题一
-  Title 002: 标题二
+  Title 001: 售前
+  Title 002: 投诉
   Title 003: 标题三
   Animated: 动画效果
   Withdraw: 提现
@@ -359,6 +361,7 @@ zh-CN:
   Month Sharing Goal: 月分享目标
   Had Shared: 已分享
   Had Contacted: 已联系
+  Contacted: 联系
   Sharing Material: 分享素材
   Sharing Qrcode: 分享二维码
   Gain Consumers: 获取客户
@@ -404,7 +407,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客
+  Rebate customer: 返点客户
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -744,3 +747,7 @@ zh-CN:
   Shelf sale: 上架出售
   Manage center: 管理中心
   Rolling display: 滚动展示
+  Order Number: 订单编号
+  Pre Sale: 售前
+  Complaint: 投诉
+  Storage unit: 库存单位

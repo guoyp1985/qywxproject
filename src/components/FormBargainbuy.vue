@@ -89,7 +89,7 @@ export default {
     minprice: function () {
       const self = this
       // self.minprice = self.submitdata.param_minprice
-      self.price = self.data.price
+      self.price = self.data.price.replace(/,/g, '')
       self.submitdata.param_minprice = self.minprice
       self.getNum()
       return self.minprice
@@ -97,7 +97,7 @@ export default {
     everymin: function () {
       const self = this
       // self.everymin = self.submitdata.param_everymin
-      self.price = self.data.price
+      self.price = self.data.price.replace(/,/g, '')
       self.submitdata.param_everymin = self.everymin
       self.getNum()
       return self.everymin
@@ -105,14 +105,14 @@ export default {
     everymax: function () {
       const self = this
       // self.everymax = self.submitdata.param_everymax
-      self.price = self.data.price
+      self.price = self.data.price.replace(/,/g, '')
       self.submitdata.param_everymax = self.everymax
       self.getNum()
       return self.everymax
     },
     price: function () {
       const self = this
-      self.price = self.data.price
+      self.price = self.data.price.replace(/,/g, '')
       self.getNum()
       return self.price
     }
@@ -120,7 +120,7 @@ export default {
   methods: {
     getNum: function () {
       const self = this
-      self.price = self.data.price
+      self.price = self.data.price.replace(/,/g, '')
       let minprice = self.minprice
       let everymin = self.everymin
       let everymax = self.everymax
@@ -149,7 +149,7 @@ export default {
     self.minprice = self.submitdata.param_minprice
     self.everymin = self.submitdata.param_everymin
     self.everymax = self.submitdata.param_everymax
-    self.price = self.data.price
+    self.price = self.data.price.replace(/,/g, '')
   }
 }
 </script>

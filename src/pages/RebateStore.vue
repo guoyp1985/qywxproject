@@ -136,6 +136,7 @@
 <script>
 import { Group, Cell, Card, Tab, TabItem, ViewBox, XImg, Sticky, XDialog, TransferDom } from 'vux'
 import Time from '#/time'
+import ENV from 'env'
 
 export default {
   directives: {
@@ -243,7 +244,6 @@ export default {
       const uid = this.$route.query.uid
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, {wid: uid})
       .then(res => {
-
       })
     },
     getList2 () {
@@ -251,7 +251,6 @@ export default {
       const uid = this.$route.query.uid
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, {wid: uid})
       .then(res => {
-
       })
     }
   },
