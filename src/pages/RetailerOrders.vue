@@ -50,6 +50,7 @@
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
                       <div class="mt3">{{ item.address }}</div>
+                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2">
                       <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
@@ -91,6 +92,7 @@
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
                       <div class="mt3">{{ item.address }}</div>
+                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
                     </div>
                   </div>
                 </div>
@@ -126,6 +128,7 @@
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
                       <div class="mt3">{{ item.address }}</div>
+                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80">
                       <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
@@ -164,6 +167,7 @@
                     <div class="t-cell middle-cell">
                       <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
                       <div class="mt3">{{ item.address }}</div>
+                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80">
                       <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
@@ -203,7 +207,7 @@
                 <div class="t-table">
                   <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell">
-                    <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
+                    <input v-model="deliverdata.delivercode" type="text" class="input" placeholder="运单号" />
                   </div>
                   <div class="t-cell align_right w50" style="position:relative;">
                     <i class="al al-scanning color-blue"></i>
