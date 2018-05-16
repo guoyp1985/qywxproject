@@ -259,6 +259,9 @@ export default {
   },
   created () {
     const self = this
+    alert(JSON.stringify(self.loginUser))
+    alert(JSON.stringify(self.loginUser.subscribe))
+    alert(JSON.stringify(self.loginUser.subscribes))
     if (self.data) {
       self.product = self.data.product
       if (self.crowduser && self.crowduser.timeleft) {
