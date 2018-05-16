@@ -192,6 +192,7 @@ export default {
         self.crowduserid = self.query.crowduserid
       }
       self.loginUser = User.get()
+      alert(JSON.stringify(self.loginUser))
       self.getInfo()
       next && next()
     }
