@@ -71,7 +71,6 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div class="btn db" @click="toBaidu">去百度</div>
                 <div v-if="!user || user.subscribes == 0" class="btn db" @click="toRedirect">帮TA砍价</div>
                 <div v-else class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
@@ -170,14 +169,11 @@ export default {
     }
   },
   methods: {
-    toBaidu () {
-      location.href = 'http://www.baidu.com'
-    },
     toRedirect () {
       const self = this
       let url = `${ENV.Host}/#/activity?id=${self.data.id}&crowduserid=${self.crowduser.id}`
       url = encodeURIComponent(url)
-      location.replace(`https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&response_type=code&scope=snsapi_userinfo&redirect_uri=${url}&state=123456#wechat_redirect`)
+      location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${ENV.AppId}&response_type=code&scope=snsapi_userinfo&redirect_uri=${url}&state=123456#wechat_redirect`
     },
     cutevent () {
       const self = this
