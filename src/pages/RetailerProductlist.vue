@@ -36,8 +36,8 @@
                   <div class="t-cell color-gray font12">
                     <div class="clamp1">售价: {{ $t('RMB') }}{{ item.price }}</div>
                     <div class="clamp1">
-                        <span class="v_middle db-in">库存: {{ item.storage }}件</span>
-                        <span class="v_middle db-in ml5">已售: {{ item.saled }}件</span>
+                        <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
+                        <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
                     </div>
                   </div>
                   <div class="align_right t-cell v_bottom w80">
