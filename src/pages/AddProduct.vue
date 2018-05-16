@@ -26,7 +26,14 @@
           <div class="t-cell input-cell v_middle" style="position:relative;">
             <input v-model="submitdata.storage" type="text" class="input" name="storage" :placeholder="$t('Storage')" />
           </div>
-          <div class="t-cell v_middle align_right font12" style="width:20px;">件</div>
+        </div>
+      </div>
+      <div class="form-item required">
+        <div class="t-table">
+          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+          <div class="t-cell input-cell v_middle" style="position:relative;">
+            <input v-model="submitdata.unit" type="text" class="input" name="unit" :placeholder="$t('Storage unit')" />
+          </div>
         </div>
       </div>
       <div class="form-item">
@@ -158,6 +165,7 @@ export default {
         title: '',
         price: '',
         storage: '',
+        unit: '件',
         rebate: '',
         photo: '',
         content: '',

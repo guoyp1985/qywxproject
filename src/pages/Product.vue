@@ -50,9 +50,9 @@
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
     					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
-    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}件</div>
+    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
-            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}件</div>
+            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             <div v-if="(loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user'" class="t-cell v_middle border-box align_right">
               <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
