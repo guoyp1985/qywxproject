@@ -141,7 +141,6 @@ export default {
   data () {
     return {
       query: {},
-      loginUser: Object,
       product: Object,
       showpopup: false,
       lefthour: '',

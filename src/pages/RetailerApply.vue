@@ -29,7 +29,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.verifycode" type="text" class="input" name="verifycode" required placeholder="验证码"/>
+              <input v-model="submitdata.verifycode" type="tel" class="input" name="verifycode" required placeholder="验证码"/>
             </div>
           </div>
         </div>
