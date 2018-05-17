@@ -95,15 +95,10 @@ export default {
         if (!retdata.status) {
           for (let i = 0; i < retdata.length; i++) {
             let d = retdata[i]
-            if (i === 0) {
-              alert(Date.parse(d.time.replace(/-/g, '/')))
-            }
             d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
           }
           self.data = retdata
         }
-        console.log(self.data)
-        alert(JSON.stringify(self.data))
         self.showData = true
       })
     }
