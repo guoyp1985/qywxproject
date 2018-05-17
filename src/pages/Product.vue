@@ -1,5 +1,8 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
+    <template v-if="showSos">
+      <Sos></Sos>
+    </template>
     <template v-if="showcontainer">
       <template v-show="isshowtop">
         <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
@@ -359,6 +362,7 @@ import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
 import CommentPopup from '@/components/CommentPopup'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -368,7 +372,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos
   },
   filters: {
     dateformat: function (value) {
@@ -379,6 +383,7 @@ export default {
     return {
       query: {},
       disTimeout: true,
+      showSos: false,
       showcontainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -724,7 +729,9 @@ export default {
       if (res && res.status === 200) {
         let data = res.data
         self.$vux.loading.hide()
-        if (data.flag === 1) {
+        if (data.flag !== 1) {
+          self.showSos = true
+        } else {
           self.showcontainer = true
           self.productdata = data.data
           self.retailerinfo = self.productdata.retailerinfo

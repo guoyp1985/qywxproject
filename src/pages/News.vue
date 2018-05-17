@@ -5,6 +5,9 @@
 */
 <template>
   <div class="containerarea font14 bg-white news notop nobottom">
+    <template v-if="showSos">
+      <Sos></Sos>
+    </template>
     <template v-if="showContainer">
       <div id="article-content" class="pagemiddle scroll-container">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
@@ -113,6 +116,7 @@ import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
 import Editor from '@/components/Editor'
 import ShareSuccess from '@/components/ShareSuccess'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
@@ -123,13 +127,14 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos
   },
   data () {
     return {
       query: {},
       WeixinName: ENV.WeixinName,
       module: 'news',
+      showSos: false,
       showContainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -281,8 +286,8 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
         self.$vux.loading.hide()
-        if (res.data.flag === 0) {
-          self.$router.push('/sos')
+        if (res.data.flag !== 1) {
+          self.showSos = true
           return false
         }
         self.showContainer = true

@@ -8,10 +8,10 @@
     <view-box>
       <sticky scroll-box="user-rebate" class="sticky-area">
         <group class="rebate-title">
-          <cell :title="user.linkman" class="user-info font14">
-            <x-img slot="icon" :src="user.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body" class="radius50"></x-img>
+          <cell :title="rebateInfo.linkman" class="user-info font14">
+            <x-img slot="icon" :src="rebateInfo.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body" class="radius50"></x-img>
             <div slot="inline-desc" class="rebate-money color-gray">
-              <span>{{$t('Total Income')}}:</span><span> ¥{{totalIncome}}</span>
+              <span>{{$t('Total Income')}}:</span><span> {{$t('RMB')}}{{rebateInfo.special}}</span>
             </div>
           </cell>
         </group>
@@ -127,48 +127,12 @@ export default {
   data () {
     return {
       user: {},
-      // userName: 'simon',
-      // avatar: '',
+      rebateInfo: {},
       totalIncome: 0,
-      total: 0,
-      list: [
-        {
-          id: '1',
-          storename: 'abc',
-          avatar: '',
-          dateline: 1523446874216,
-          income: 10000,
-          checked: false
-        },
-        {
-          id: '1',
-          storename: 'abc',
-          avatar: '',
-          dateline: 1523446874216,
-          income: 10000,
-          checked: false
-        },
-        {
-          id: '1',
-          storename: 'abc',
-          avatar: '',
-          dateline: 1523446874216,
-          income: 10000,
-          checked: false
-        }
-      ],
-      list1: [
-        {
-          id: '1',
-          storename: 'abc',
-          avatar: '',
-          dateline: 1523446874216,
-          income: 10000
-        }
-      ],
-      list2: [],
+      total: '0.00',
       selectedIndex: 0,
-      globalChecked: false,
+      globalChecked: true,
+      checkedData: [],
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
@@ -240,6 +204,14 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        if (self.globalChecked) {
+          for (let i = 0; i < retdata.length; i++) {
+            retdata[i].checked = true
+            self.checkedData.push(retdata[i].id)
+            self.total = (parseFloat(self.total) + parseFloat(retdata[i].money.replace(/,/g, ''))).toFixed(2)
+          }
+        }
+        self.rebateInfo = data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
@@ -296,16 +268,15 @@ export default {
       this.itemCheck(item)
     },
     itemCheck (item) {
+      const self = this
+      let curmoney = parseFloat(item.money.replace(/,/g, ''))
       if (item.checked) {
-        let prev = true
-        for (let item of this.list) {
-          prev = prev && item.checked
-        }
-        this.globalChecked = prev
-        this.total += item.income
+        self.checkedData.push(item.id)
+        self.total = (parseFloat(self.total) + curmoney).toFixed(2)
       } else {
-        this.globalChecked = item.checked
-        this.total -= item.income
+        self.globalChecked = false
+        self.$util.deleteValue(self.checkedData, item.id)
+        self.total = (parseFloat(self.total) - curmoney).toFixed(2)
       }
     },
     checkedAll () {
