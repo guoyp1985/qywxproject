@@ -96,9 +96,9 @@ export default {
           for (let i = 0; i < retdata.length; i++) {
             let d = retdata[i]
             if (i === 0) {
-              alert(Date.parse(d.time))
+              alert(Date.parse(d.time.replace(/-/g, '/')))
             }
-            d.dateline = parseInt(Date.parse(d.time) / 1000)
+            d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
           }
           self.data = retdata
         }
