@@ -115,6 +115,7 @@ import Editor from '@/components/Editor'
 import ShareSuccess from '@/components/ShareSuccess'
 import Time from '#/time'
 import ENV from 'env'
+import jQuery from 'jquery'
 import { User } from '#/storage'
 
 export default {
@@ -184,7 +185,6 @@ export default {
     },
     onCommentDelete (comment) {
       const self = this
-
       self.$vux.confirm.show({
         title: '确定要删除该评论吗？',
         onConfirm () {
@@ -461,21 +461,44 @@ export default {
     },
     createdFun (to, from, next) {
       const self = this
-      self.showsharetip = false
-      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      self.query = to.query
-      self.getData()
-      if (self.query.newadd) {
+      this.showsharetip = false
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = to.query
+      this.getData()
+      if (this.query.newadd) {
         setTimeout(function () {
           self.showsharetip = false
         }, 10000)
       }
       next && next()
+    },
+    wsConnect () {
+      const self = this
+      const id = this.$route.query.id
+      const websocket = new WebSocket('ws://124.207.246.109:7272')
+      websocket.onopen = function () {
+        var strLoginData = JSON.stringify({type: 'login', room_id: `laravel.boka.cn-news-${id}`})
+        // console.log("websocket:" + strLoginData)
+        websocket.send(strLoginData)
+      }
+      websocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        if (data.type === 'login') {
+          console.log(e)
+        }
+      }
+      websocket.onclose = function () {
+        console.log('ws closed')
+        self.wsConnect()
+      }
+      websocket.onerror = function () {
+        console.log('ws error')
+      }
     }
   },
   created () {
-    const self = this
-    self.createdFun(self.$route)
+    this.createdFun(this.$route)
+    this.wsConnect()
   },
   beforeRouteUpdate (to, from, next) {
     const self = this
