@@ -30,6 +30,7 @@ import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import ShareSuccess from '@/components/ShareSuccess'
+import urlParse from 'url-parse'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -184,13 +185,6 @@ export default {
       self.getInfo()
     },
     createdFun (to, from, next) {
-      const user = User.get()
-      if (user && !user.subscribe) {
-        const originHref = encodeURIComponent(location.href)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-      } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      }
       this.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleBar: false})
       this.query = to.query
@@ -200,6 +194,31 @@ export default {
       this.loginUser = User.get()
       this.getInfo()
       next()
+    },
+    access () {
+      const user = User.get()
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      if (code) {
+        alert(code)
+        this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
+        .then(
+          res => {
+            // TODO
+            User.set({
+              ...user,
+              ...res.data
+            })
+            location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+          }
+        )
+      }
+      if (user && !user.subscribe) {
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+      } else {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      }
     }
   },
   beforeRouteUpdate (to, from, next) {
