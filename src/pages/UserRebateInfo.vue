@@ -111,6 +111,7 @@
 </template>
 <script>
 import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
+import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 export default {
@@ -203,10 +204,19 @@ export default {
         }
       }
       this.total = totalCount
+    },
+    getData () {
+      const self = this
+      const uid = this.$route.query.uid
+      this.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, {uid: uid})
+      .then(res => {
+        self.totalIncome = res.data.special
+      })
     }
   },
   created () {
     this.user = User.get()
+    this.getData()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }

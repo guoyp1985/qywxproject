@@ -211,13 +211,16 @@ export default {
       this.storeCardShow = true
     },
     totalSalesClick () {
-      this.$router.push({name: 'tUserRebateInfo'})
+      const uid = this.$route.query.uid
+      this.$router.push({path: '/userRebateInfo', query: {uid: uid}})
     },
     rebateAmountClick () {
-      this.$router.push({name: 'tUserRebateInfo'})
+      const uid = this.$route.query.uid
+      this.$router.push({path: '/userRebateInfo', query: {uid: uid}})
     },
     commingCustomerClick () {
-      this.$router.push({name: 'tBringCustomer'})
+      const uid = this.$route.query.uid
+      this.$router.push({path: '/bringCustomer', query: {uid: uid}})
     },
     getData () {
       const self = this

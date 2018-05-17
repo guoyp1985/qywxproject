@@ -29,6 +29,7 @@
 </template>
 <script>
 import { ViewBox, Group, Cell, XImg, Sticky } from 'vux'
+import ENV from 'env'
 import Time from '#/time'
 
 export default {
@@ -50,6 +51,18 @@ export default {
     dateFormat (date) {
       return new Time(date).format()
     }
+  },
+  methods: {
+    getData () {
+      const uid = this.$route.query.uid
+      this.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, {uid: uid})
+      .then(res => {
+        this.list = res.data
+      })
+    }
+  },
+  created () {
+    this.getData()
   }
 }
 </script>
