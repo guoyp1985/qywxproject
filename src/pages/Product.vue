@@ -90,7 +90,7 @@
                     <span class="v_middle db-in">{{ item.leftsecond }}</span>
                   </div>
                 </div>
-                <div class="t-cell v_middle align_right addgrouparea" style="width:65px;">
+                <div v-if="item.uid != loginUser.uid" class="t-cell v_middle align_right addgrouparea" style="width:65px;">
                   <div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;" @click="addGroup(item)">去参团</div>
                 </div>
               </div>
@@ -117,7 +117,7 @@
                           <span class="v_middle db-in">{{ item.leftsecond }}</span>
           							</div>
           						</div>
-          						<div class="t-cell v_middle align_right addgrouparea" style="width:65px;">
+          						<div v-if="item.uid != loginUser.uid" class="t-cell v_middle align_right addgrouparea" style="width:65px;">
           							<div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;" @click="addGroup(item)">去参团</div>
           						</div>
           					</div>
