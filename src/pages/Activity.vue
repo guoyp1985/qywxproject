@@ -225,6 +225,7 @@ export default {
     this.createdFun(to, from, next)
   },
   created () {
+    this.access()
     this.createdFun(this.$route)
   }
 }
