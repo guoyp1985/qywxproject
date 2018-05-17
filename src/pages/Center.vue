@@ -96,22 +96,6 @@ export default {
           icon: 'al-qietu19',
           color: 'color-favorite',
           link: '/favorite'
-        },
-        {
-          name: 'Exit',
-          icon: 'al-tuichu3',
-          color: 'color-exit',
-          react: function () {
-            Token.remove()
-            User.remove()
-            // if (self.$util.isAndroid()) {
-            // }
-            if (self.$util.isPC()) {
-              self.$router.push({name: 'tLogin'})
-            } else {
-              self.$router.push({name: 'tIndex'})
-            }
-          }
         }
       ],
       avatarHref: '',
@@ -133,6 +117,7 @@ export default {
     }
   },
   created () {
+    const self = this
     const user = User.get()
     if (user) {
       this.avatarHref = user.avatar
@@ -151,6 +136,24 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/user/show`)
     }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+    if (self.$util.isPC()) {
+      self.btns1.push({
+        name: 'Exit',
+        icon: 'al-tuichu3',
+        color: 'color-exit',
+        react: function () {
+          Token.remove()
+          User.remove()
+          // if (self.$util.isAndroid()) {
+          // }
+          if (self.$util.isPC()) {
+            self.$router.push({name: 'tLogin'})
+          } else {
+            self.$router.push({name: 'tIndex'})
+          }
+        }
+      })
+    }
   }
 }
 </script>
