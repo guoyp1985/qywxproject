@@ -293,7 +293,8 @@ export default {
               self.deliverdata.delivercode = result[1]
             } else {
               self.$vux.toast.show({
-                text: '请扫描物流条形码'
+                text: '请扫描物流条形码',
+                time: 1500
               })
             }
           }
