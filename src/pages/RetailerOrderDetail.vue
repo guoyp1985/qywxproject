@@ -287,7 +287,15 @@ export default {
         needResult: 1,
         desc: '识别物流信息',
         success: function (res) {
-          alert(JSON.stringify(res));
+          if (res.errMsg === 'scanQRCode:ok') {
+            let result = res.resultStr.split(',')
+            self.deliverdata.delivercode = result[1]
+          }
+        },
+        failed: function () {
+          self.$vux.toast.show({
+            text: '扫描失败'
+          })
         }
       });
     }
