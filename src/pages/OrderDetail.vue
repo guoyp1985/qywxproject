@@ -30,6 +30,7 @@
       <cell v-if="expressNumber" class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/shippingDetails', query: {id: id}}"></cell>
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
+      <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
     </group>
     <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
     <group>
@@ -85,6 +86,7 @@ export default {
       expressCompany: '未知快递',
       expressNumber: '100000000000',
       shippingAddress: '北京市市辖区',
+      shippingOrderon: 'unkown',
       special: 0,
       orders: [],
       priceInfos: [],
@@ -114,6 +116,7 @@ export default {
           self.special = res.data.data.special
           self.retailerTitle = res.data.data.retailer.title
           self.shippingAddress = res.data.data.address
+          self.shippingOrderon = res.data.data.orderno
           self.receiver = res.data.data.linkman
           self.receiverPhone = res.data.data.telephone
           self.expressCompany = res.data.data.delivercompanyname
@@ -196,7 +199,10 @@ export default {
   border-top: none;
 }
 #order-detail .shipping-card .weui-cell {
-  padding: 8px 10px;
+  padding: 5px 10px 0px 0px
+}
+#order-detail .shipping-card .weui-cells{
+  padding:5px 0 10px 0
 }
 #order-detail .express-info .weui-cell__ft{
   font-size: 12px;
