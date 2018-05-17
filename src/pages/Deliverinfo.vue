@@ -93,12 +93,14 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         if (!retdata.status) {
-          for (let i = 0; i < self.data.length; i++) {
-            let d = self.data[i]
+          for (let i = 0; i < retdata.length; i++) {
+            let d = retdata[i]
             d.dateline = parseInt(Date.parse(d.time) / 1000)
           }
           self.data = retdata
         }
+        console.log(self.data)
+        alert(JSON.stringify(self.data))
         self.showData = true
       })
     }

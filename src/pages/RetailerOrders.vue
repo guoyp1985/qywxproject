@@ -516,7 +516,7 @@ export default {
             text: '扫描失败'
           })
         }
-      });
+      })
     }
   },
   created () {
