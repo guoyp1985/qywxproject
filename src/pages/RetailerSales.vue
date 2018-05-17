@@ -95,7 +95,7 @@
               <div><i class="al al-wushuju font60 pt20"></i></div>
               <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
             </div>
-            <router-link :to="{ path: '/accountDetail', query: { uid: item.uid } }" v-else class="scroll_item db pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
+            <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:50px;">
                   <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />

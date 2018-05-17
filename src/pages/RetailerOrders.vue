@@ -467,6 +467,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
+              /*
               let updatedata = self.tabdata1[self.deliverindex]
               updatedata.delivercompany = self.deliverdata.delivercompany
               updatedata.delivercode = self.deliverdata.delivercode
@@ -478,6 +479,13 @@ export default {
                   td.delivercode = self.deliverdata.delivercode
                 }
               }
+              */
+              self.deliveritem.flag = 3
+              self.deliveritem.delivercompany = self.deliverdata.delivercompany
+              self.deliveritem.delivercode = self.deliverdata.delivercode
+              self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
+              self.tabdata4.push(self.deliveritem)
+
               self.showpopup = false
               self.deliveritem = null
               self.deliverindex = 0

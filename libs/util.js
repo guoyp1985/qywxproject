@@ -291,11 +291,11 @@ Util.install = function (Vue, options) {
       if (data) {
         sharetitle = !self.isNull(data.seotitle) ? data.seotitle : data.title
         sharedesc = data.title
-        if (!self.isNull(data.seodescription)) {
+        if (data.seodescription && self.trim(data.seodescription) !== '') {
           sharedesc = data.seodescription
-        } else if (!self.isNull(data.summary)) {
+        } else if (data.summary && self.trim(data.summary) !== '') {
           sharedesc = data.summary
-        } else if (!self.isNull(data.seotitle)) {
+        } else if (data.seotitle && self.trim(data.seotitle) !== '') {
           sharedesc = data.seotitle
         }
         sharephoto = data.photo
