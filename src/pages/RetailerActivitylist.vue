@@ -71,7 +71,7 @@
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
                       <div class="clamp1 font12 color-gray mt5">{{ $t('Min buy price') }} {{ $t('RMB') }} {{ item.minprice }}</div>
-                      <div class="clamp1 font12 color-gray mt5">{{ $t('Limitbuy count') }} {{ item.limitbuy }}</div>
+                      <div class="clamp1 font12 color-gray mt5">{{ $t('Delivery of goods') }} {{ item.limitbuy }}</div>
                     </div>
                     <div class="t-cell align_right v_middle font0" style="width:60px;">
                       <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
@@ -249,6 +249,8 @@ Min buy price:
   zh-CN: 最低成交价
 Limitbuy count:
   zh-CN: 限购数量
+Delivery of goods:
+  zh-CN: 投放商品数量
 Groupbuy:
   zh-CN: 团购
 Groupbuy description:

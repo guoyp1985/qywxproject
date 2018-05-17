@@ -42,7 +42,8 @@
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.username }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        <div class="clamp1 font12 color-gray">订单金额：{{ item.special }}</div>
+                        <div class="clamp1 font12 color-gray">创建时间：{{ item.dateline | dateformat }}</div>
                       </router-link>
                       <div class="t-cell v_middle align_right w60">
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
@@ -335,5 +336,6 @@ export default {
 .radiusarea .item:nth-child(5) .radius{background-color:#ea8482;}
 
 .statpage .x-swiper{height:auto;}
-.statpage .vux-tab{background-color:@page-bg-color}
+.statpage .vux-tab{background-color:@tab-background-color}
+.statpage .vux-tab .vux-tab-item.vux-tab-selected{background-color:@tab-active-background-color}
 </style>
