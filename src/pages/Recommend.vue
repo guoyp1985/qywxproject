@@ -18,15 +18,15 @@
         <card @click.native="withdrawClick">
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
-              <div class="color-red font18">￥200.00</div>
+              <div class="color-red font18">{{ $t('RMB' )}}200.00</div>
               <div class="color-gray font14 mt5">{{$t('Total Amount')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="color-red font18">￥10.00</div>
+              <div class="color-red font18">{{ $t('RMB' )}}10.00</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Rebate')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="color-red font18">￥5.00</div>
+              <div class="color-red font18">{{ $t('RMB' )}}5.00</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Return Money')}}</div>
             </div>
           </div>
