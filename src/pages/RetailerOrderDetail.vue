@@ -69,7 +69,7 @@
         <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
       </div>
     </div>
-    <div v-if="data.flag == 2" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">上传物流信息</div>
+    <div v-if="data.flag == 2 || data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">上传物流信息</div>
     <div v-transfer-dom class="x-popup popup-deliver">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 font14">
@@ -92,11 +92,13 @@
                   <div class="t-cell">
                     <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
                   </div>
-                  <div class="t-cell align_right w50" style="position:relative;">
+                  <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                     <i class="al al-scanning color-blue"></i>
+                    <!--
                     <form class="fileform1" enctype="multipart/form-data">
                       <input class="fileinput" type="file" name="files" @change="filechange" />
                     </form>
+                  -->
                   </div>
                 </div>
               </div>
@@ -278,6 +280,15 @@ export default {
           self.deliverdata.delivercode = data.data
         })
       }
+    },
+    scanClick () {
+      self.$wechat.scanQRCode({
+        needResult: 1,
+        desc: '识别物流信息',
+        success: function (res) {
+          alert(JSON.stringify(res));
+        }
+      });
     }
   }
 }
