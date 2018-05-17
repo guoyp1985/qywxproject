@@ -29,16 +29,16 @@
       <div class="sharing-title">{{$t('I Am In The Store')}}</div>
       <card>
         <div slot="content" class="card-flex card-content">
-          <div class="vux-1px-r" @click="totalSalesClick">
-            <span class="font18 db color-red">{{rebateInfo.income}}</span>
+          <div class="vux-1px-r">
+            <span class="font18 db color-black">{{rebateInfo.income}}</span>
             <span class="font14 db color-gray">{{$t('Income Of Our Shop')}}</span>
           </div>
-          <div class="vux-1px-r" @click="rebateAmountClick">
-            <span class="font18 db color-red">{{rebateInfo.torebate}}</span>
+          <div class="vux-1px-r">
+            <span class="font18 db color-black">{{rebateInfo.torebate}}</span>
             <span class="font14 db color-gray">{{$t('Waiting To Rebate')}}</span>
           </div>
-          <div @click="rebateAmountClick">
-            <span class="font18 db color-red">{{rebateInfo.towithdraw}}</span>
+          <div>
+            <span class="font18 db color-black">{{rebateInfo.towithdraw}}</span>
             <span class="font14 db color-gray">{{$t('Waiting To Return Money')}}</span>
           </div>
         </div>
