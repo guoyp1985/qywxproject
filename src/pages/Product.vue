@@ -41,8 +41,11 @@
         </template>
         <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
   				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
-  				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
-  				<div class="col3">已团{{ productdata.havetuan }}件</div>
+  				<div class="col2">
+            <div class="colicon">{{ activityInfo.numbers }}人团</div>
+            <span class="db-in">限购{{activityInfo.everybuy}}{{productdata.unit}}</span>
+          </div>
+  				<div class="col3">已团{{ productdata.havetuan }}{{productdata.unit}}</div>
   			</div>
         <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
       		<div class="clamp2">
