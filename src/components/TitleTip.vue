@@ -6,9 +6,9 @@
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
     <div class="title-tip">
-      <div class="avatar-cell">
-        <img :src="avatarHref"/>
-      </div>
+      <router-link class="avatar-cell" to="/center">
+        <img :src="avatarHref" class="imgavatar"/>
+      </router-link>
       <div class="info-cell">
         <div class="user-name">
           {{userName}}
@@ -17,11 +17,9 @@
           {{$t('Gain Credit')}}: {{userCredit}}
         </div>
       </div>
-      <div class="op-cell">
-        <a>
-          <span class="al al-pinglun color-black font24"></span>
-        </a>
-      </div>
+      <router-link class="op-cell" to="/retailerMessagelist">
+        <span class="al al-pinglun color-black font24"></span>
+      </router-link>
     </div>
   </sticky>
 </template>
