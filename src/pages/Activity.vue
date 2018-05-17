@@ -200,6 +200,8 @@ export default {
   },
   created () {
     this.createdFun(this.$route)
+    const originHref = encodeURIComponent(location.href)
+    location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
   }
 }
 </script>
