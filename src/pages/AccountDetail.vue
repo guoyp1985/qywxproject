@@ -30,7 +30,7 @@
           <div class="t-cell">暂无相关订单</div>
         </div>
       </div>
-      <router-link :to="{ path: '/orderDetail', query: { id: item.id } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
+      <router-link :to="{ path: '/orderDetail', query: { id: item.orderid } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
         <div class="padding10">
           <div class="t-table">
             <div class="t-cell w60">
