@@ -9,14 +9,14 @@
       <router-link class="avatar-cell" to="/center">
         <img :src="avatarHref" class="imgavatar"/>
       </router-link>
-      <div class="info-cell">
+      <router-link class="info-cell" to="/center">
         <div class="user-name">
           {{userName}}
         </div>
         <div class="user-credit">
           {{$t('Gain Credit')}}: {{userCredit}}
         </div>
-      </div>
+      </router-link>
       <router-link class="op-cell" to="/retailerMessagelist">
         <span class="al al-pinglun color-black font24"></span>
       </router-link>
