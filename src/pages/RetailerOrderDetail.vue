@@ -282,6 +282,7 @@ export default {
       }
     },
     scanClick () {
+      const self = this
       self.$wechat.scanQRCode({
         needResult: 1,
         desc: '识别物流信息',
