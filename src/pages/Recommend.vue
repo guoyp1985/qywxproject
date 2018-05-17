@@ -15,36 +15,36 @@
           <i class="al al-gantanhaozhong font20 v_middle"></i>
           <span class="v_middle">{{$t('Point Of Return')}}</span>
         </div>
-        <card>
+        <card @click.native="withdrawClick">
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
-              <div class="font18">{{ $t('RMB' )}}{{ rebateInfo.income }}</div>
+              <div class="color-red font18">{{ $t('RMB' )}}{{ rebateInfo.income }}</div>
               <div class="color-gray font14 mt5">{{$t('Total Amount')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="font18">{{ $t('RMB' )}}{{ rebateInfo.torebate }}</div>
+              <div class="color-red font18">{{ $t('RMB' )}}{{ rebateInfo.torebate }}</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Rebate')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="font18">{{ $t('RMB' )}}{{ rebateInfo.towithdraw }}</div>
+              <div class="color-red font18">{{ $t('RMB' )}}{{ rebateInfo.towithdraw }}</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Return Money')}}</div>
             </div>
           </div>
         </card>
       </div>
       <div class="border-box posi_r" v-show="selectedIndex===1">
-        <card>
+        <card @click.native="bringCustomerClick">
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
-              <div class="font18">{{ rebateInfo.bringCustomers }}人</div>
+              <div class="color-red font18">{{ rebateInfo.bringCustomers }}人</div>
               <div class="color-gray font14 mt5">{{$t('Total Number')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="font18">{{ rebateInfo.buyPeople }}人</div>
+              <div class="color-red font18">{{ rebateInfo.buyPeople }}人</div>
               <div class="color-gray font14 mt5">{{$t('Purchase Number')}}</div>
             </div>
             <div>
-              <div class="font18">{{ rebateInfo.buyPercent }}%</div>
+              <div class="color-red font18">{{ rebateInfo.buyPercent }}%</div>
               <div class="color-gray font14 mt5">{{$t('Purchase Ratio')}}</div>
             </div>
           </div>
@@ -58,7 +58,7 @@
       <h2 class="return-title b_bottom_after">{{$t('My Return Stores')}}</h2>
       <template v-if="disList">
         <group v-if="list.length">
-          <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {id: item.id, uid: item.uid}}">
+          <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
             <div class="store-img">
               <x-img class="imgcover" :src="item.avatar" default-src="../src/assets/images/nopic.jpg"></x-img>
             </div>
@@ -185,6 +185,12 @@ export default {
     },
     closepopup () {
       this.isshowpopup = false
+    },
+    withdrawClick () {
+      this.$router.push({path: '/userRebateInfo'})
+    },
+    bringCustomerClick () {
+      this.$router.push({path: '/bringCustomer'})
     }
   },
   created () {

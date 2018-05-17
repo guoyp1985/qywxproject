@@ -12,8 +12,8 @@
     </sticky>
     <view-box>
       <group v-if="list.length">
-        <cell class="user-cell" v-for="(item, index) in list" :key="index" :title="item.username">
-          <x-img slot="icon" :src="item.avatar" class="radius50"></x-img>
+        <cell class="user-cell" v-for="(item, index) in list" :key="index" :title="item.linkman">
+          <x-img slot="icon" :src="item.avatar" class="radius50 imgcover"></x-img>
           <div slot="inline-desc">
             <span class="color-gray font13">{{item.dateline | dateFormat}}</span>
           </div>
@@ -38,31 +38,61 @@ export default {
   },
   data () {
     return {
-      list: [
-        {
-          avatar: '',
-          username: 'simon',
-          dateline: 1523446874216
-        }
-      ]
+      query: Object,
+      list: [],
+      limit: 20,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   filters: {
     dateFormat (date) {
-      return new Time(date).format()
+      return new Time(date * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
-    getData () {
-      const uid = this.$route.query.uid
-      this.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, {uid: uid})
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.list.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata()
+          }
+        }
+      })
+    },
+    getdata () {
+      const self = this
+      let params = {}
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      this.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params)
       .then(res => {
-        this.list = res.data
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.list = self.list.concat(retdata)
+        self.disdata = true
+        if (!self.isBindScroll1) {
+          self.scrollArea1 = document.querySelector('#vux_view_box_body')
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
       })
     }
   },
   created () {
-    this.getData()
+    const self = this
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.query = self.$route.query
+    self.$vux.loading.show()
+    this.getdata()
   }
 }
 </script>

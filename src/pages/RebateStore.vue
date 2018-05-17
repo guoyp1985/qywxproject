@@ -9,9 +9,9 @@
       <div class="sharing-title">{{$t('Current Store')}}</div>
       <sticky scroll-box="rebate-store">
         <div class="pt5 pb5 pl15 pr15 flex_table">
-          <div class="store-photo"><x-img :src="photo" default-src="../src/assets/images/nopic.jpg"></x-img></div>
+          <div class="store-photo"><x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover"></x-img></div>
           <div class="store-details flex_cell pl10">
-            <span class="db font14">{{title}}</span>
+            <span class="db font14">{{rebateInfo.title}}</span>
             <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
           </div>
         </div>
@@ -20,7 +20,7 @@
             <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
           </div>
           <div class="flex_cell align_left pl20">
-            <a @click="commingCustomerClick" class="qbtn4">{{$t('Bring Customer')}}：{{customers}}</a>
+            <a @click="commingCustomerClick" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</a>
           </div>
         </div>
       </sticky>
@@ -30,15 +30,15 @@
       <card>
         <div slot="content" class="card-flex card-content">
           <div class="vux-1px-r" @click="totalSalesClick">
-            <span class="font18 db color-red">{{income}}</span>
+            <span class="font18 db color-red">{{rebateInfo.income}}</span>
             <span class="font14 db color-gray">{{$t('Income Of Our Shop')}}</span>
           </div>
           <div class="vux-1px-r" @click="rebateAmountClick">
-            <span class="font18 db color-red">{{torebate}}</span>
+            <span class="font18 db color-red">{{rebateInfo.torebate}}</span>
             <span class="font14 db color-gray">{{$t('Waiting To Rebate')}}</span>
           </div>
           <div @click="rebateAmountClick">
-            <span class="font18 db color-red">{{towithdraw}}</span>
+            <span class="font18 db color-red">{{rebateInfo.towithdraw}}</span>
             <span class="font14 db color-gray">{{$t('Waiting To Return Money')}}</span>
           </div>
         </div>
@@ -52,69 +52,79 @@
         <tab-item @on-item-click="onItemClick">{{$t('Article')}}</tab-item>
       </tab>
       <view-box v-show="selectedIndex===0">
-        <template v-if="list.length">
-          <group v-for="(item, index) in list" :key="index">
-            <cell :title="item.productName" class="list-item font14 clamp2" is-link>
-              <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
-              <div slot="inline-desc" class="inline-desc font12 color-gray">
-                <span class="info-cell">
-                  零售价：<span>{{item.sharingCounts}}</span>
-                </span>
-                <span class="date-cell color-red">
-                  佣金：<span>{{item.sharingCounts}}</span>
-                </span>
-              </div>
-            </cell>
-          </group>
-        </template>
-        <template v-else>
-          <div class="no-related-x color-gray">
-            <span>{{$t('No Related Orders')}}</span>
-          </div>
+        <template v-if="distabdata1">
+          <template v-if="tabdata1.length">
+            <group v-for="(item, index) in tabdata1" :key="index">
+              <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                <div slot="inline-desc" class="inline-desc font12 color-gray">
+                  <span class="info-cell">
+                    零售价：{{$t('RMB')}}{{item.price}}
+                  </span>
+                  <span class="date-cell color-red">
+                    佣金：{{$t('RMB')}}{{item.rebate}}
+                  </span>
+                </div>
+              </cell>
+            </group>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
         </template>
       </view-box>
       <view-box v-show="selectedIndex===1">
-        <template v-if="list1.length">
-          <group v-for="(item, index) in list" :key="index">
-            <cell :title="item.productName" class="list-item font14 clamp2" is-link>
-              <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
-              <div slot="inline-desc" class="inline-desc font12 color-gray">
-                <span class="info-cell">
-                  零售价：<span>{{item.sharingCounts}}</span>
-                </span>
-                <span class="date-cell color-red">
-                  佣金：<span>{{item.sharingCounts}}</span>
-                </span>
-              </div>
-            </cell>
-          </group>
-        </template>
-        <template v-else>
-          <div class="no-related-x color-gray">
-            <span>{{$t('No Related Orders')}}</span>
-          </div>
+        <template v-if="distabdata2">
+          <template v-if="tabdata2.length">
+            <group v-for="(item, index) in tabdata2" :key="index">
+              <template v-if="item.type == 'groupbuy'">
+                <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                  <div slot="inline-desc" class="inline-desc font12 color-gray">
+                    <span class="info-cell">{{item.dateline | dateFormat}}</span>
+                  </div>
+                </cell>
+              </template>
+              <template v-else>
+                <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                  <div slot="inline-desc" class="inline-desc font12 color-gray">
+                    <span class="info-cell">{{item.dateline | dateFormat}}</span>
+                  </div>
+                </cell>
+              </template>
+            </group>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
         </template>
       </view-box>
       <view-box v-show="selectedIndex===2">
-        <template v-if="list2.length">
-          <group v-for="(item, index) in list" :key="index">
-            <cell :title="item.productName" class="list-item font14 clamp2" is-link>
-              <x-img slot="icon" class="product-img" :src="item.imgUrl"></x-img>
-              <div slot="inline-desc" class="inline-desc font12 color-gray">
-                <span class="info-cell">
-                  零售价：<span>{{item.sharingCounts}}</span>
-                </span>
-                <span class="date-cell color-red">
-                  佣金：<span>{{item.sharingCounts}}</span>
-                </span>
-              </div>
-            </cell>
-          </group>
-        </template>
-        <template v-else>
-          <div class="no-related-x color-gray">
-            <span>{{$t('No Related Orders')}}</span>
-          </div>
+        <template v-if="distabdata3">
+          <template v-if="tabdata3.length">
+            <group v-for="(item, index) in tabdata3" :key="index">
+              <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                <div slot="inline-desc" class="inline-desc font12 color-gray">
+                  <div class="clamp1">
+                      <span class="v_middle">{{ item.dateline | dateFormat }}</span>
+                      <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
+                      <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+                  </div>
+                </div>
+              </cell>
+            </group>
+          </template>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No Related Orders')}}</span>
+            </div>
+          </template>
         </template>
       </view-box>
     </div>
@@ -147,64 +157,132 @@ export default {
   },
   data () {
     return {
-      income: 0,
-      torebate: 0,
-      towithdraw: 0,
-      customers: 0,
-      title: '',
-      photo: '',
+      query: Object,
+      rebateInfo: Object,
       selectedIndex: 0,
       storeCardShow: false,
       storeQrCode: '',
-      list: [
-        {
-          id: '1',
-          productName: '清代著名花鸟画家',
-          imgUrl: '',
-          viewCounts: 0,
-          sharingCounts: 0,
-          dateLine: 1523446874216
-        }
-      ],
-      list1: [
-        {
-          id: '1',
-          productName: '清代著名花鸟画家1',
-          imgUrl: '',
-          viewCounts: 0,
-          sharingCounts: 0,
-          dateLine: 1523446874216
-        }
-      ],
-      list2: [
-        {
-          id: '1',
-          productName: '清代著名花鸟画家2',
-          imgUrl: '',
-          viewCounts: 0,
-          sharingCounts: 0,
-          dateLine: 1523446874216
-        }
-      ]
+      distabdata1: false,
+      distabdata2: false,
+      distabdata3: false,
+      tabdata1: [],
+      tabdata2: [],
+      tabdata3: [],
+      limit: 20,
+      pagestart1: 0,
+      pagestart2: 0,
+      pagestart3: 0,
+      isBindScroll1: false,
+      isBindScroll2: false,
+      isBindScroll3: false,
+      scrollContainer: document.querySelector('#vux_view_box_body')
     }
   },
   filters: {
     dateFormat (date) {
-      return new Time(date).format()
+      return new Time(date * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
-    onItemClick () {
-      switch (this.selectedIndex) {
-        case 0:
-          this.getList()
-          break
-        case 1:
-          this.getList1()
-          break
-        case 2:
-          this.getList2()
-          break
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    scroll3: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.pagestart3++
+            self.$vux.loading.show()
+            self.getdata3()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { wid: self.query.wid, pagestart: self.pagestart1, limit: self.limit }
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.rebateInfo = data
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
+      })
+    },
+    getdata2 () {
+      const self = this
+      let params = { wid: self.query.wid, pagestart: self.pagestart2, limit: self.limit }
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
+      })
+    },
+    getdata3 () {
+      const self = this
+      let params = { wid: self.query.wid, pagestart: self.pagestart3, limit: self.limit }
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata3 = self.tabdata3.concat(retdata)
+        self.distabdata3 = true
+      })
+    },
+    onItemClick (index) {
+      const self = this
+      if (index === 0) {
+        self.scrollContainer.removeEventListener('scroll', self.scroll1)
+        self.scrollContainer.addEventListener('scroll', self.scroll1)
+        if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
+      } else if (index === 1) {
+        self.scrollContainer.removeEventListener('scroll', self.scroll2)
+        self.scrollContainer.addEventListener('scroll', self.scroll2)
+        if (self.pagestart2 === 0 && self.tabdata2.length === 0) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
+      } else if (index === 2) {
+        self.scrollContainer.removeEventListener('scroll', self.scroll3)
+        self.scrollContainer.addEventListener('scroll', self.scroll3)
+        if (self.pagestart3 === 0 && self.tabdata3.length === 0) {
+          self.$vux.loading.show()
+          self.getdata3()
+        }
       }
     },
     onShareCard () {
@@ -224,42 +302,24 @@ export default {
     },
     getData () {
       const self = this
-      const uid = this.$route.query.uid
-      this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`, {wid: uid})
+      this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`, {wid: self.query.wid})
       .then(res => {
+        self.rebateInfo = res.data
         self.income = res.data.income
         self.torebate = res.data.torebate
         self.towithdraw = res.data.towithdraw
         self.customers = res.data.customers
         self.title = res.data.title
       })
-    },
-    getList () {
-      const self = this
-      const uid = this.$route.query.uid
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, {wid: uid})
-      .then(res => {
-        console.log(res.data)
-      })
-    },
-    getList1 () {
-      const self = this
-      const uid = this.$route.query.uid
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, {wid: uid})
-      .then(res => {
-      })
-    },
-    getList2 () {
-      const self = this
-      const uid = this.$route.query.uid
-      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, {wid: uid})
-      .then(res => {
-      })
     }
   },
   created () {
+    const self = this
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.query = self.$route.query
+    self.$vux.loading.show()
     this.getData()
-    this.getList()
+    this.getdata1()
   }
 }
 </script>
