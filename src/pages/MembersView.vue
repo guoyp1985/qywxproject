@@ -67,9 +67,9 @@
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">地区</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.province }} {{ viewuser.city }}</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.country }} {{ viewuser.province }} {{ viewuser.city }}</div>
               <div class="t-cell align_right w50">
-                <span class="qbtn1 bg-green color-white">更新</span>
+                <span class="qbtn1 bg-green color-white" @click="updateArea">更新</span>
               </div>
             </div>
           </div>
@@ -252,6 +252,28 @@ export default {
           urls: self.wximgarr
         })
       }
+    },
+    updateArea () {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/user/refreshLocation`,
+        { uid: self.query.uid }
+      ).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let retdata = data.data
+          self.viewuser.country = retdata.country
+          self.viewuser.province = retdata.province
+          self.viewuser.city = retdata.city
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   },
   created: function () {
