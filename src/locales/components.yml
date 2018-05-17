@@ -408,7 +408,7 @@ zh-CN:
   Product: 商品
   News: 文章
   Customer mange: 客户管理
-  Rebate customer: 返点客户
+  Rebate customer: 返点客
   Sale chance: 销售机会
   Contact customer: 联系客户
   Order manage: 订单管理
@@ -753,3 +753,6 @@ zh-CN:
   Pre Sale: 售前
   Complaint: 投诉
   Storage unit: 库存单位
+  Rebate description and rebate customer protocol: 返点说明及返点客协议
+  Agree to share right away: 同意马上分享赚佣金
+  tUserRebateInfo: 我的收入

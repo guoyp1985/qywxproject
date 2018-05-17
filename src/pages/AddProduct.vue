@@ -355,7 +355,6 @@ export default {
       self.savedata(postdata)
     },
     priceChange (input, callback) {
-      const self = this
       input.addEventListener('keyup', function () {
         let val = input.value
         let dotindex = val.lastIndexOf('.')

@@ -1,11 +1,9 @@
 <template>
-  <div class="containerarea font14">
-    <div class="h_100 error404">
-      <div class="content-block">
-        <div class="meeting_title1">
-          <div class="content_tile mg">
-            <span class="">{{ $t('tSos') }}</span>
-          </div>
+  <div class="h_100 error404">
+    <div class="content-block">
+      <div class="meeting_title1">
+        <div class="content_tile mg">
+          <span class="">{{ $t('tSos') }}</span>
         </div>
       </div>
     </div>
@@ -17,6 +15,7 @@
 
 <script>
 export default {
+  name: 'Sos',
   data () {
     return {}
   },

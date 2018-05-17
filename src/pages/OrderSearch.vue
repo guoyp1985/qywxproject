@@ -149,13 +149,13 @@ export default {
           case 3:
             item.buttons = [
               {id: 4, name: '查看物流'},
-              {id: 5, name: '申请售后'},
+              // {id: 5, name: '申请售后'},
               {id: 6, name: '确认收货'}
             ]
             break
           case 4:
             item.buttons = [
-              {id: 5, name: '申请售后'},
+              // {id: 5, name: '申请售后'},
               {id: 7, name: '评价'}
             ]
             break

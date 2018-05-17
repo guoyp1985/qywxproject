@@ -118,8 +118,14 @@ export default {
         return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, {useforurl: lUrl.hash.replace(/#/, '')})
       })
       .then(res => {
-        if (res.data.flag) {
-          self.headlines = res.data.data
+        let data = res.data
+        if (data.flag) {
+          let retdata = data.data
+          for (let i = 0; i < retdata.length; i++) {
+            let d = retdata[i]
+            retdata[i].url = `/news?id=${d.id}&wid=${d.uploader}`
+          }
+          self.headlines = retdata
         }
       })
     },
