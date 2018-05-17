@@ -143,12 +143,12 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea, Loading } from 'vux'
+import { Group, XInput, XTextarea } from 'vux'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Loading
+    Group, XInput, XTextarea
   },
   data () {
     return {
