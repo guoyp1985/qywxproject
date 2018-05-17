@@ -39,8 +39,18 @@
         </div>
         <div class="b_top_after padding10 flex_center bg-white">
           <div class="t-table align_center font15 itemtab">
-            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Share') }}</router-link>
-            <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>
+            <div class="t-cell item v_middle b_right_after">
+              <div>{{viewuser.views}}</div>
+              <div>{{ $t('Views') }}</div>
+            </div>
+            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
+              <div>{{viewuser.shares}}</div>
+              <div>{{ $t('Share') }}</div>
+            </router-link>
+            <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
+              <div>{{viewuser.shares}}</div>
+              <div>{{ $t('Orders') }}</div>
+            </router-link>
             <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">{{ $t('Behavior') }}</router-link>
           </div>
         </div>
