@@ -308,11 +308,11 @@ export default {
               self.showShareSuccess = true
             }
           })
+          self.showContainer = true
           return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
             params: {id: id, module: self.module}
           })
         }
-        self.showContainer = true
       }).then(function (res) {
         self.handleImg()
         if (res) {
