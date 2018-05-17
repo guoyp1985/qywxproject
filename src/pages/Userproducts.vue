@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14 uproducts notop">
+  <div v-if="loginUser" class="containerarea bg-white font14 uproducts notop">
     <div class="pagemiddle" style="bottom:53px;">
       <swiper
         v-if="addata && addata.length > 0"
@@ -158,41 +158,45 @@ export default {
   },
   created () {
     const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$util.handleWxShare({
-      module: 'shop',
-      moduleid: 0,
-      lastshareuid: self.query.share_uid,
-      title: '共销宝商城',
-      desc: '一款能买能卖的销售平台，你要的都在这里！',
-      photo: self.loginUser.avatar,
-      link: `${ENV.Host}/#/userproducts?wid=${self.loginUser.uid}&share_uid=${self.loginUser.uid}`,
-      successCallback: function () {
-        self.showShareSuccess = true
-      }
-    })
-    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-      params: { uid: self.loginUser.uid }
-    }).then(function (res) {
-      let data = res.data
-      self.retailerInfo = data.data ? data.data : data
-      return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
-    }).then(function (res) {
-      let data = res.data
-      let retdata = data.data ? data.data : data
-      for (let i = 0; i < retdata.length; i++) {
-        retdata[i].img = retdata[i].photo
-      }
-      self.addata = retdata
-      let params = { params: { do: 'all', pagestart: 0, limit: 5 } }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-    }).then(function (res) {
-      let data = res.data
-      self.activitydata = data.data ? data.data : data
-      self.getdata1()
-    })
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+    this.query = this.$route.query
+    this.loginUser = User.get()
+    if (this.loginUser) {
+      self.$util.handleWxShare({
+        module: 'shop',
+        moduleid: 0,
+        lastshareuid: this.query.share_uid,
+        title: '共销宝商城',
+        desc: '一款能买能卖的销售平台，你要的都在这里！',
+        photo: this.loginUser.avatar,
+        link: `${ENV.Host}/#/userproducts?wid=${this.loginUser.uid}&share_uid=${this.loginUser.uid}`,
+        successCallback: function () {
+          self.showShareSuccess = true
+        }
+      })
+      this.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: { uid: this.loginUser.uid }
+      }).then(function (res) {
+        let data = res.data
+        self.retailerInfo = data.data ? data.data : data
+        return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
+      }).then(function (res) {
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          retdata[i].img = retdata[i].photo
+        }
+        self.addata = retdata
+        let params = { params: { do: 'all', pagestart: 0, limit: 5 } }
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
+      }).then(function (res) {
+        let data = res.data
+        self.activitydata = data.data ? data.data : data
+        self.getdata1()
+      })
+    } else {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    }
   }
 }
 </script>

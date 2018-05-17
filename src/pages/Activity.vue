@@ -184,25 +184,24 @@ export default {
       self.getInfo()
     },
     createdFun (to, from, next) {
-      const self = this
-      self.$vux.loading.show()
-      self.$store.commit('updateToggleTabbar', {toggleBar: false})
-      self.query = to.query
-      if (self.query.crowduserid) {
-        self.crowduserid = self.query.crowduserid
+      this.$vux.loading.show()
+      this.$store.commit('updateToggleTabbar', {toggleBar: false})
+      this.query = to.query
+      if (this.query.crowduserid) {
+        this.crowduserid = this.query.crowduserid
       }
-      self.loginUser = User.get()
-      self.getInfo()
+      this.loginUser = User.get()
+      this.getInfo()
       next && next()
     }
   },
   beforeRouteUpdate (to, from, next) {
-    const self = this
-    self.createdFun(to, from, next)
+    this.createdFun(to, from, next)
   },
   created () {
-    const self = this
-    self.createdFun(self.$route)
+    this.createdFun(this.$route)
+    const originHref = encodeURIComponent(location.href)
+    location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
   }
 }
 </script>

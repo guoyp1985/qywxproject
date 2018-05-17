@@ -17,7 +17,7 @@
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
-            <order-info v-for="(item, index) in tabdata1" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+            <order-info v-for="(item, index) in getList1" :item="item" :key="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -29,7 +29,7 @@
       <div v-show="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
-            <order-info v-for="(item, index) in tabdata2" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+            <order-info v-for="(item, index) in getList2" :item="item" :key="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -41,7 +41,7 @@
       <div v-show="selectedIndex===2">
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
-            <order-info v-for="(item, index) in tabdata3" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+            <order-info v-for="(item, index) in getList3" :item="item" :key="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -53,7 +53,7 @@
       <div v-show="selectedIndex===3">
         <template v-if="distabdata4">
           <template v-if="tabdata4.length">
-            <order-info v-for="(item, index) in tabdata4" :item="item" :key="index" @on-process="orderProcess" :buttons="setButton(item)"></order-info>
+            <order-info v-for="(item, index) in getList4" :item="item" :key="index" @on-process="orderProcess"></order-info>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -110,17 +110,17 @@ export default {
     }
   },
   computed: {
-    getList () {
-      return this.setListButton(this.list)
-    },
     getList1 () {
-      return this.setListButton(this.list1)
+      return this.setListButton(this.tabdata1)
     },
     getList2 () {
-      return this.setListButton(this.list2)
+      return this.setListButton(this.tabdata2)
     },
     getList3 () {
-      return this.setListButton(this.list3)
+      return this.setListButton(this.tabdata3)
+    },
+    getList4 () {
+      return this.setListButton(this.tabdata4)
     }
   },
   filters: {
@@ -136,45 +136,32 @@ export default {
             item.buttons = []
             break
           case 1:
-            item.buttons = [0, 1]
+            item.buttons = [
+              {id: 1, name: '取消订单'},
+              {id: 2, name: '去支付'}
+            ]
             break
           case 2:
-            item.buttons = [2]
+            item.buttons = [
+              {id: 3, name: '申请退款'}
+            ]
             break
           case 3:
-            item.buttons = [3, 4, 5]
+            item.buttons = [
+              {id: 4, name: '查看物流'},
+              {id: 5, name: '申请售后'},
+              {id: 6, name: '确认收货'}
+            ]
             break
           case 4:
-            item.buttons = [4, 6]
+            item.buttons = [
+              {id: 5, name: '申请售后'},
+              {id: 7, name: '评价'}
+            ]
             break
-          case 100:
-            item.buttons = [4]
         }
       }
       return list
-    },
-    setButton (item) {
-      let buttons = []
-      switch (item.flag) {
-        case 0:
-          item.buttons = []
-          break
-        case 1:
-          item.buttons = [0, 1]
-          break
-        case 2:
-          item.buttons = [2]
-          break
-        case 3:
-          item.buttons = [3, 4, 5]
-          break
-        case 4:
-          item.buttons = [4, 6]
-          break
-        case 100:
-          item.buttons = [4]
-      }
-      return buttons
     },
     evaluate (order) {
       this.$router.push({name: 'tEvaluation', query: {id: order.id}})
@@ -222,7 +209,7 @@ export default {
       })
     },
     viewShipping (order) {
-      this.$router.push({path: `/shippingDetails`, query: {id: order.id}})
+      this.$router.push({path: `/deliverinfo`, query: {id: order.id}})
     },
     afterSale (order) {
     },
