@@ -548,9 +548,10 @@ export default {
   background-color: #fff;
 }
 #article-content .qrcode {
-  text-align: cenrer;
+  text-align: center;
   position: relative;
   margin: 0 auto;
+  display: block;
 }
 #article-content .qrcode>img {
   width: 100%;
@@ -567,6 +568,8 @@ export default {
   max-width: 100%;
   height: 100%;
   vertical-align: middle;
+  display: block;
+  margin:0 auto;
 }
 #article-content .comment-area {
   padding: 20px 15px;
