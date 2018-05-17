@@ -37,7 +37,7 @@
       </div>
       <div class="bg-white">
         <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-          <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.id, wid: item.wid}}" class="scroll_item db padding10 bg-gray4">
+          <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
             <div class="t-table">
               <div class="t-cell v_middle w60 algin_left">
                 <img style="width:50px;height:50px;" class="v_middle imgcover" :src="item.photo" />
@@ -69,7 +69,8 @@
         <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
       </div>
     </div>
-    <div v-if="data.flag == 2" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">上传物流信息</div>
+    <div v-if="data.flag == 2" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
+    <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
     <div v-transfer-dom class="x-popup popup-deliver">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 font14">
@@ -92,11 +93,8 @@
                   <div class="t-cell">
                     <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
                   </div>
-                  <div class="t-cell align_right w50" style="position:relative;">
+                  <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                     <i class="al al-scanning color-blue"></i>
-                    <form class="fileform1" enctype="multipart/form-data">
-                      <input class="fileinput" type="file" name="files" @change="filechange" />
-                    </form>
                   </div>
                 </div>
               </div>
@@ -253,31 +251,30 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    filechange (e) {
+    scanClick () {
       const self = this
-      let files = e.target.files
-      if (files.length > 0) {
-        let fileform = document.querySelector('.popup-deliver .fileform1')
-        let filedata = new FormData(fileform)
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
-          if (data.flag === 1) {
-            let picurl = data.data
-            return self.$http.post(`${ENV.BokaApi}/api/retailer/qrcodeDecode`, { picurl: encodeURIComponent(picurl) })
-          } else if (data.error) {
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
+      self.$wechat.scanQRCode({
+        needResult: 1,
+        desc: '识别物流信息',
+        success: function (res) {
+          if (res.errMsg === 'scanQRCode:ok') {
+            let result = res.resultStr.split(',')
+            if (result[0] === 'CODE_128') {
+              self.deliverdata.delivercode = result[1]
+            } else {
+              self.$vux.toast.show({
+                text: '请扫描物流条形码',
+                time: 1500
+              })
+            }
           }
-        }).then(function (res) {
-          self.$vux.loading.hide()
-          let data = res.data
-          self.deliverdata.delivercode = data.data
-        })
-      }
+        },
+        failed: function () {
+          self.$vux.toast.show({
+            text: '扫描失败'
+          })
+        }
+      })
     }
   }
 }

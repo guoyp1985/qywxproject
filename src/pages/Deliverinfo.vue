@@ -7,20 +7,22 @@
       </div>
     </div>
     <div class="pagemiddle">
-      <div v-if="!data || data.length == 0" class="scroll_item emptyitem">
-        <div class="t-table">
-          <div class="t-cell">暂无物流信息</div>
-        </div>
-      </div>
-      <timeline v-else class="x-timeline">
-        <timeline-item v-for="(item, index) in data" :key="index">
-          <div class="font16 ddate align_right">{{ item.dateline | dateformat }}</div>
-          <div class="font12 dtime align_right">{{ item.dateline | dateformat1 }}</div>
+      <template v-if="showData">
+        <div v-if="!data || data.length == 0" class="scroll_item emptyitem">
           <div class="t-table">
-            <div class="t-cell" style="padding-bottom:30px;">{{ item.status }}</div>
+            <div class="t-cell">暂无物流信息</div>
           </div>
-        </timeline-item>
-      </timeline>
+        </div>
+        <timeline v-else class="x-timeline">
+          <timeline-item v-for="(item, index) in data" :key="index">
+            <div class="font16 ddate align_right">{{ item.dateline | dateformat }}</div>
+            <div class="font12 dtime align_right">{{ item.dateline | dateformat1 }}</div>
+            <div class="t-table">
+              <div class="t-cell" style="padding-bottom:30px;">{{ item.status }}</div>
+            </div>
+          </timeline-item>
+        </timeline>
+      </template>
     </div>
   </div>
 </template>
@@ -71,7 +73,8 @@ export default {
     return {
       query: {},
       deliverinfo: {},
-      data: []
+      data: [],
+      showData: false
     }
   },
   created: function () {
@@ -90,12 +93,13 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         if (!retdata.status) {
-          self.data = retdata
-          for (let i = 0; i < self.data.length; i++) {
-            let d = self.data[i]
-            d.dateline = parseInt(Date.parse(d.time) / 1000)
+          for (let i = 0; i < retdata.length; i++) {
+            let d = retdata[i]
+            d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
           }
+          self.data = retdata
         }
+        self.showData = true
       })
     }
   }

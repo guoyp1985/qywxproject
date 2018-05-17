@@ -209,11 +209,8 @@
                   <div class="t-cell">
                     <input v-model="deliverdata.delivercode" type="text" class="input" placeholder="运单号" />
                   </div>
-                  <div class="t-cell align_right w50" style="position:relative;">
+                  <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                     <i class="al al-scanning color-blue"></i>
-                    <form class="fileform1" enctype="multipart/form-data">
-                      <input class="fileinput" type="file" name="files" @change="filechange" />
-                    </form>
                   </div>
                 </div>
               </div>
@@ -496,31 +493,30 @@ export default {
       self.deliverindex = 0
       self.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
-    filechange (e) {
+    scanClick () {
       const self = this
-      let files = e.target.files
-      if (files.length > 0) {
-        let fileform = document.querySelector('.popup-deliver .fileform1')
-        let filedata = new FormData(fileform)
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
-          if (data.flag === 1) {
-            let picurl = data.data
-            return self.$http.post(`${ENV.BokaApi}/api/retailer/qrcodeDecode`, { picurl: encodeURIComponent(picurl) })
-          } else if (data.error) {
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
+      self.$wechat.scanQRCode({
+        needResult: 1,
+        desc: '识别物流信息',
+        success: function (res) {
+          if (res.errMsg === 'scanQRCode:ok') {
+            let result = res.resultStr.split(',')
+            if (result[0] === 'CODE_128') {
+              self.deliverdata.delivercode = result[1]
+            } else {
+              self.$vux.toast.show({
+                text: '请扫描物流条形码',
+                time: 1500
+              })
+            }
           }
-        }).then(function (res) {
-          self.$vux.loading.hide()
-          let data = res.data
-          self.deliverdata.delivercode = data.data
-        })
-      }
+        },
+        failed: function () {
+          self.$vux.toast.show({
+            text: '扫描失败'
+          })
+        }
+      })
     }
   },
   created () {

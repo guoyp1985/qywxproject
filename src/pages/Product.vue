@@ -1,7 +1,7 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
     <template v-if="showSos">
-      <Sos></Sos>
+      <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showcontainer">
       <template v-show="isshowtop">
@@ -384,6 +384,7 @@ export default {
       query: {},
       disTimeout: true,
       showSos: false,
+      sosTitle: '',
       showcontainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -730,6 +731,7 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag !== 1) {
+          self.sosTitle = data.error
           self.showSos = true
         } else {
           self.showcontainer = true

@@ -711,7 +711,7 @@ zh-CN:
   tStat: 统计
   tPoster: 生成海报
   tPosterDetail: 海报
-  tNews: 文章详情
+  tNews: 文章
   tActivity: 活动
   tSos: 您要找的内容不见了
   tRebateStore: 返点店铺
@@ -756,3 +756,6 @@ zh-CN:
   Rebate description and rebate customer protocol: 返点说明及返点客协议
   Agree to share right away: 同意马上分享赚佣金
   tUserRebateInfo: 我的收入
+  tProduct: 产品
+  tMembersView: 用户
+  Update deliver info: 修改物流信息

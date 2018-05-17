@@ -9,7 +9,7 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -244,6 +244,20 @@ export default {
       self.tabdata2 = []
       self.pagestart2 = 0
       self.getdata2()
+    },
+    tabitemclick (index) {
+      const self = this
+      if (index === 0) {
+        if (self.pagestart1 > 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
+      } else if (index === 1) {
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
+      }
     }
   },
   created () {

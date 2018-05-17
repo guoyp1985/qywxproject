@@ -3,7 +3,7 @@
     <div class="content-block">
       <div class="meeting_title1">
         <div class="content_tile mg">
-          <span class="">{{ $t('tSos') }}</span>
+          <span class="">{{ title }}</span>
         </div>
       </div>
     </div>
@@ -16,16 +16,11 @@
 <script>
 export default {
   name: 'Sos',
-  data () {
-    return {}
-  },
-  filters: {
-  },
-  watch: {
-  },
-  methods: {
-  },
-  created () {
+  props: {
+    title: {
+      type: String,
+      default: '您要找的内容不见了'
+    }
   }
 }
 </script>
