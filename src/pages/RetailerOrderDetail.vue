@@ -287,23 +287,15 @@ export default {
         needResult: 1,
         desc: '识别物流信息',
         success: function (res) {
-          alert(JSON.stringify(res))
           if (res.errMsg === 'scanQRCode:ok') {
-            let rs = res.resultStr
-            self.deliverdata.delivercode = rs
-            /*
-            if (rs.indexOf(',') > -1) {
-              let result = res.resultStr.split(',')
-              if (result[0] === 'CODE_128') {
-                self.deliverdata.delivercode = result[1]
-              }
-            } else if (rs.indexOf('-') > -1) {
-              let result = res.resultStr.split('-')
-              self.deliverdata.delivercode = result[result.length - 1]
+            let result = res.resultStr.split(',')
+            if (result[0] === 'CODE_128') {
+              self.deliverdata.delivercode = result[1]
             } else {
-              self.deliverdata.delivercode = rs
+              self.$vux.toast.show({
+                text: '请扫描物流条形码'
+              })
             }
-            */
           }
         },
         failed: function () {
