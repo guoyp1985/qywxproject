@@ -184,6 +184,13 @@ export default {
       self.getInfo()
     },
     createdFun (to, from, next) {
+      const user = User.get()
+      if (user && !user.subscribe) {
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+      } else {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      }
       this.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleBar: false})
       this.query = to.query
@@ -192,7 +199,7 @@ export default {
       }
       this.loginUser = User.get()
       this.getInfo()
-      next && next()
+      next()
     }
   },
   beforeRouteUpdate (to, from, next) {
