@@ -8,11 +8,11 @@
     <sticky scroll-box="order-detail">
       <div class="order-service">
         <div class="seller-cell">
-          <span class="font14">卖家: {{retailerTitle}}</span>
+          <span class="font14">卖家: {{retailerInfo.title}}</span>
         </div>
         <div class="contact-cell">
           <div class="ol-contact">
-            <router-link to="">
+            <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader}}">
               <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13">{{$t('Contact Seller')}}</span>
             </router-link>
@@ -54,7 +54,7 @@
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
-          <img :src="userQrCode" style="max-width:100%">
+          <img :src="retailerInfo.qrcode" style="max-width:100%">
         </div>
         <div>
           <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
@@ -80,7 +80,7 @@ export default {
   data () {
     return {
       id: 0,
-      retailerTitle: 'unkown',
+      retailerInfo: Object,
       receiver: 'unkown',
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
@@ -111,16 +111,18 @@ export default {
       this.id = this.$route.query.id
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
       .then(res => {
-        if (res.data.flag) {
-          self.orders = res.data.data.orderlist
-          self.special = res.data.data.special
-          self.retailerTitle = res.data.data.retailer.title
-          self.shippingAddress = res.data.data.address
-          self.shippingOrderon = res.data.data.orderno
-          self.receiver = res.data.data.linkman
-          self.receiverPhone = res.data.data.telephone
-          self.expressCompany = res.data.data.delivercompanyname
-          self.expressNumber = res.data.data.delivercode
+        let data = res.data
+        if (data.flag) {
+          let retdata = data.data
+          self.orders = retdata.orderlist
+          self.special = retdata.special
+          self.retailerInfo = retdata.retailer
+          self.shippingAddress = retdata.address
+          self.shippingOrderon = retdata.orderno
+          self.receiver = retdata.linkman
+          self.receiverPhone = retdata.telephone
+          self.expressCompany = retdata.delivercompanyname
+          self.expressNumber = retdata.delivercode
         }
       })
     }
