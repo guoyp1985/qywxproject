@@ -24,7 +24,7 @@
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无订单</template>
           </div>
-          <div v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10">
+          <router-link v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10 db" :to="{path: '/retailerOrderDetail', query: {id: item.id}}">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;height:50px;">
                 <img :src="item.photo" style="width:40px;height:40px;" />
@@ -36,7 +36,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </router-link>
         </div>
       </div>
     </template>
