@@ -289,8 +289,21 @@ export default {
         success: function (res) {
           alert(JSON.stringify(res))
           if (res.errMsg === 'scanQRCode:ok') {
-            let result = res.resultStr.split(',')
-            self.deliverdata.delivercode = result[1]
+            let rs = res.resultStr
+            self.deliverdata.delivercode = rs
+            /*
+            if (rs.indexOf(',') > -1) {
+              let result = res.resultStr.split(',')
+              if (result[0] === 'CODE_128') {
+                self.deliverdata.delivercode = result[1]
+              }
+            } else if (rs.indexOf('-') > -1) {
+              let result = res.resultStr.split('-')
+              self.deliverdata.delivercode = result[result.length - 1]
+            } else {
+              self.deliverdata.delivercode = rs
+            }
+            */
           }
         },
         failed: function () {
