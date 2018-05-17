@@ -34,7 +34,7 @@
     </group>
     <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
     <group>
-      <cell class="order-list font12" v-for="(order, index) in orders" :key="index">
+      <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
         <img slot="icon" :src="order.photo"/>
         <div slot="title">
           {{order.name}}

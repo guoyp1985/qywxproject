@@ -131,7 +131,7 @@
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="storeCardShow">
         <div class="img-box">
-          <img :src="storeQrCode" style="max-width:100%">
+          <img :src="rebateInfo.qrcode" style="max-width:100%">
         </div>
         <div>
           <span>{{$t('Save Picture To Sharing')}}</span>
@@ -161,7 +161,6 @@ export default {
       rebateInfo: Object,
       selectedIndex: 0,
       storeCardShow: false,
-      storeQrCode: '',
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
