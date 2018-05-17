@@ -94,11 +94,6 @@
                   </div>
                   <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                     <i class="al al-scanning color-blue"></i>
-                    <!--
-                    <form class="fileform1" enctype="multipart/form-data">
-                      <input class="fileinput" type="file" name="files" @change="filechange" />
-                    </form>
-                  -->
                   </div>
                 </div>
               </div>
@@ -254,32 +249,6 @@ export default {
     },
     closepopup () {
       this.showpopup = false
-    },
-    filechange (e) {
-      const self = this
-      let files = e.target.files
-      if (files.length > 0) {
-        let fileform = document.querySelector('.popup-deliver .fileform1')
-        let filedata = new FormData(fileform)
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
-          if (data.flag === 1) {
-            let picurl = data.data
-            return self.$http.post(`${ENV.BokaApi}/api/retailer/qrcodeDecode`, { picurl: encodeURIComponent(picurl) })
-          } else if (data.error) {
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
-        }).then(function (res) {
-          self.$vux.loading.hide()
-          let data = res.data
-          self.deliverdata.delivercode = data.data
-        })
-      }
     },
     scanClick () {
       const self = this

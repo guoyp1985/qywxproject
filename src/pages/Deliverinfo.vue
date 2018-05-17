@@ -90,15 +90,14 @@ export default {
         return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
       }).then(function (res) {
         let data = res.data
-        alert(JSON.stringify(data))
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         if (!retdata.status) {
-          self.data = retdata
           for (let i = 0; i < self.data.length; i++) {
             let d = self.data[i]
             d.dateline = parseInt(Date.parse(d.time) / 1000)
           }
+          self.data = retdata
         }
         self.showData = true
       })
