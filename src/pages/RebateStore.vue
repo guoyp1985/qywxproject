@@ -352,9 +352,9 @@ export default {
 #rebate-store .store-photo{width:50px;}
 #rebate-store .store-photo img{width:50px;height:50px;object-fit:cover;display:block;}
 #rebate-store .store-details{align-self:center;}
-#rebate-store .vux-tab .vux-tab-item.vux-tab-selected{color:red;background:transparent;border-bottom:0px;}
-#rebate-store .vux-tab-ink-bar{height:1px !important;background-color:red;}
-#rebate-store .vux-tab-item{background:#f7f7f7;}
+#rebate-store .vux-tab{background-color:@tab-background-color;}
+#rebate-store .vux-tab .vux-tab-item.vux-tab-selected{color:@tab-active-text-color;background:@tab-active-background-color;}
+#rebate-store .vux-tab-ink-bar{height:1px !important;background-color:@tab-background-red;}
 #rebate-store .weui-cell__ft{display:none;}
 #rebate-store .vux-cell-primary p{
   overflow: hidden;

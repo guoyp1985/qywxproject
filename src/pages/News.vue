@@ -543,7 +543,7 @@ export default {
   background-color: #fff;
 }
 #article-content .qrcode {
-  text-align: left;
+  text-align: cenrer;
   position: relative;
   margin: 0 auto;
 }
