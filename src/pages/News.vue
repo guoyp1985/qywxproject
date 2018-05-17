@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showSos">
-      <Sos></Sos>
+      <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
       <div id="article-content" class="pagemiddle scroll-container">
@@ -135,6 +135,7 @@ export default {
       WeixinName: ENV.WeixinName,
       module: 'news',
       showSos: false,
+      sosTitle: '',
       showContainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -285,12 +286,13 @@ export default {
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
+        let data = res.data
         self.$vux.loading.hide()
-        if (res.data.flag !== 1) {
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
           self.showSos = true
           return false
         }
-        self.showContainer = true
         if (res.data.flag) {
           self.article = res.data.data
           document.title = self.article.title
@@ -310,6 +312,7 @@ export default {
             params: {id: id, module: self.module}
           })
         }
+        self.showContainer = true
       }).then(function (res) {
         self.handleImg()
         if (res) {

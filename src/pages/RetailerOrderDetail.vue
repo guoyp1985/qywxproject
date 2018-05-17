@@ -37,7 +37,7 @@
       </div>
       <div class="bg-white">
         <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-          <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.id, wid: item.wid}}" class="scroll_item db padding10 bg-gray4">
+          <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
             <div class="t-table">
               <div class="t-cell v_middle w60 algin_left">
                 <img style="width:50px;height:50px;" class="v_middle imgcover" :src="item.photo" />
