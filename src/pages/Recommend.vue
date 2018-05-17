@@ -15,36 +15,36 @@
           <i class="al al-gantanhaozhong font20 v_middle"></i>
           <span class="v_middle">{{$t('Point Of Return')}}</span>
         </div>
-        <card @click.native="withdrawClick">
+        <card>
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
-              <div class="color-red font18">{{ $t('RMB' )}}200.00</div>
+              <div class="font18">{{ $t('RMB' )}}{{ rebateInfo.income }}</div>
               <div class="color-gray font14 mt5">{{$t('Total Amount')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="color-red font18">{{ $t('RMB' )}}10.00</div>
+              <div class="font18">{{ $t('RMB' )}}{{ rebateInfo.torebate }}</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Rebate')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="color-red font18">{{ $t('RMB' )}}5.00</div>
+              <div class="font18">{{ $t('RMB' )}}{{ rebateInfo.towithdraw }}</div>
               <div class="color-gray font14 mt5">{{$t('Waiting To Return Money')}}</div>
             </div>
           </div>
         </card>
       </div>
       <div class="border-box posi_r" v-show="selectedIndex===1">
-        <card @click.native="bringCustomerClick">
+        <card>
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
-              <div class="color-red font18">20人</div>
+              <div class="font18">{{ rebateInfo.bringCustomers }}人</div>
               <div class="color-gray font14 mt5">{{$t('Total Number')}}</div>
             </div>
             <div class="vux-1px-r">
-              <div class="color-red font18">20人</div>
+              <div class="font18">{{ rebateInfo.buyPeople }}人</div>
               <div class="color-gray font14 mt5">{{$t('Purchase Number')}}</div>
             </div>
             <div>
-              <div class="color-red font18">50%</div>
+              <div class="font18">{{ rebateInfo.buyPercent }}%</div>
               <div class="color-gray font14 mt5">{{$t('Purchase Ratio')}}</div>
             </div>
           </div>
@@ -147,7 +147,8 @@ export default {
       list: [],
       list1: [],
       isshowpopup: false,
-      disList: false
+      disList: false,
+      rebateInfo: Object
     }
   },
   methods: {
@@ -179,12 +180,6 @@ export default {
           break
       }
     },
-    withdrawClick () {
-      this.$router.push({path: '/userRebateInfo'})
-    },
-    bringCustomerClick () {
-      this.$router.push({path: '/bringCustomer'})
-    },
     showpopup () {
       this.isshowpopup = true
     },
@@ -195,6 +190,10 @@ export default {
   created () {
     const self = this
     self.$vux.loading.show()
+    this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`)
+    .then(res => {
+      self.rebateInfo = res.data
+    })
     this.getMyRetailer()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
