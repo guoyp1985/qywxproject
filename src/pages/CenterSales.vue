@@ -230,7 +230,6 @@ export default {
     self.$vux.loading.show()
     self.loginUser = User.get()
     console.log(self.loginUser)
-    console.log(self.loginUser.usergroup)
     let iscontinue = true
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
       self.showcontainer = false
