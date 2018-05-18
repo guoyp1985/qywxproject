@@ -101,6 +101,15 @@
               <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
             </div>
           </div>
+          <div class="item padding10 b_bottom_after">
+            <div class="t-table">
+              <div class="t-cell align_left w100">意向程度</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
+              <div class="t-cell align_right w50">
+                <span class="qbtn1 bg-green color-white" @click="showLevel">更新</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="s-bottom bottomnaviarea b_top_after">
@@ -109,6 +118,19 @@
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
           <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
         </div>
+      </div>
+      <div v-transfer-dom>
+        <popup v-model="showPopupLevel">
+          <popup-header
+          :left-text="$t('Cancel')"
+          :right-text="$t('Submit')"
+          :show-bottom-border="false"
+          @on-click-left="showPopupLevel = false"
+          @on-click-right="updateIntention"></popup-header>
+          <group gutter="0">
+            <radio v-model="userIntention" :options="intentionArr"></radio>
+          </group>
+        </popup>
       </div>
     </template>
   </div>
@@ -120,7 +142,7 @@ Behavior:
 </i18n>
 
 <script>
-import { Previewer, TransferDom } from 'vux'
+import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
@@ -130,7 +152,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Sos
+    Popup, Previewer, Sos, PopupHeader, Radio, Group
   },
   filters: {
     dateformat: function (value) {
@@ -148,7 +170,27 @@ export default {
         msrc: '/src/assets/images/user.jpg',
         src: '/src/assets/images/user.jpg'
       }],
-      wximgarr: ['/src/assets/images/user.jpg']
+      wximgarr: ['/src/assets/images/user.jpg'],
+      showPopupLevel: false,
+      userIntention: 0,
+      userIntentionDesc: '无',
+      intentionObject: {
+        '0': '无',
+        '1': '低',
+        '2': '中',
+        '3': '高',
+      },
+      intentionArr: [
+        { key: 0, value: '无' },
+        { key: 1, value: '低' },
+        { key: 2, value: '中' },
+        { key: 3, value: '高' }
+      ]
+    }
+  },
+  watch: {
+    userIntention: function () {
+      return this.userIntention
     }
   },
   computed: {
@@ -284,6 +326,32 @@ export default {
           })
         }
       })
+    },
+    showLevel () {
+      this.showPopupLevel = true
+    },
+    updateIntention () {
+      const self = this
+      self.showPopupLevel = false
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
+        { action: 'update', customeruid: self.query.uid, char: 'intention', value: self.userIntention }
+      ).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag === 1 ? 'success' : 'warn',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.viewuser.intention = self.userIntention
+              self.viewuser.intentiondesc = self.intentionObject[self.userIntention]
+              // self.userIntentionDesc = self.intentionObject[self.userIntention]
+            }
+          }
+        })
+      })
     }
   },
   created: function () {
@@ -307,6 +375,7 @@ export default {
         self.imgarr[0].src = self.viewuser.avatar
         self.wximgarr[0] = self.viewuser.avatar
         document.title = self.viewuser.linkman
+        self.userIntention = self.viewuser.intention
       }
       self.showContainer = true
     })
