@@ -203,7 +203,7 @@ export default {
       customerPagestart: 0,
       isBindCustomerScroll: false,
       scrollCustomerArea: null,
-      touchElement: null,
+      touchElement: null
     }
   },
   computed: {
@@ -571,7 +571,7 @@ export default {
           _top = self.bottompoint * 2
         }
         // cur.offsetTop = _top
-        jQuery(cur).offset({ top: _top });
+        jQuery(cur).offset({ top: _top })
         self.mx = move.x
         self.my = move.y
       }
