@@ -137,12 +137,12 @@ export default {
     const user = User.get()
     console.log(user)
     if (user) {
-      this.avatarHref = user.avatar
-      this.linkMan = user.linkman
-      this.userCredits = user.credit
-      this.userLevels = user.levels
-      this.messages = user.messages
-      this.profile = {
+      self.avatarHref = user.avatar
+      self.linkMan = user.linkman
+      self.userCredits = user.credit
+      self.userLevels = user.levels
+      self.messages = user.messages
+      self.profile = {
         linkman: user.linkman,
         avatar: user.avatar,
         sex: user.sex,
@@ -150,9 +150,9 @@ export default {
         company: user.company
       }
     } else {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      self.$http.get(`${ENV.BokaApi}/api/user/show`)
     }
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     /*
     if (self.$util.isPC()) {
       self.btns1.push({

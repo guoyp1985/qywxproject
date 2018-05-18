@@ -36,7 +36,7 @@ const User = {
     localStorage.setItem('user', JSON.stringify(user))
   },
   get () {
-    if (typeof localStorage.getItem('user') === 'undefined') {
+    if (localStorage.getItem('user') === 'undefined') {
       return null
     }
     return JSON.parse(localStorage.getItem('user'))
