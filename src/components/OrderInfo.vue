@@ -25,7 +25,7 @@
       </div>
       <div class="product-info" v-else>
         <div class="product-img">
-          <x-img :src="item.orderlist[0].photo" default-src="../src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+          <x-img :src="item.orderlist[0].photo" default-src="../src/assets/images/nopic.jpg" container=".scroll-container"></x-img>
         </div>
         <div class="product-detail">
           <div class="product-name font12">
