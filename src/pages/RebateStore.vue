@@ -20,7 +20,7 @@
             <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
           </div>
           <div class="flex_cell align_left pl20">
-            <a @click="commingCustomerClick" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</a>
+            <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
           </div>
         </div>
       </sticky>
@@ -286,18 +286,6 @@ export default {
     },
     onShareCard () {
       this.storeCardShow = true
-    },
-    totalSalesClick () {
-      const uid = this.$route.query.uid
-      this.$router.push({path: '/userRebateInfo', query: {uid: uid}})
-    },
-    rebateAmountClick () {
-      const uid = this.$route.query.uid
-      this.$router.push({path: '/userRebateInfo', query: {uid: uid}})
-    },
-    commingCustomerClick () {
-      const uid = this.$route.query.uid
-      this.$router.push({path: '/bringCustomer', query: {uid: uid}})
     },
     getData () {
       const self = this
