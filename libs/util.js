@@ -10,6 +10,9 @@ Util.install = function (Vue, options) {
     trim: (str) => str ? str.replace(Reg.rSpace, '') : '',
     // 判空
     isNull: function (str) {
+      if (!str) {
+        return true
+      }
       return !Reg.rNoSpace.test(this.trim(str))
     },
     // 判终端

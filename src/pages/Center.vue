@@ -135,6 +135,7 @@ export default {
   created () {
     const self = this
     const user = User.get()
+    console.log(user)
     if (user) {
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
@@ -152,6 +153,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/user/show`)
     }
     this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+    /*
     if (self.$util.isPC()) {
       self.btns1.push({
         name: 'Exit',
@@ -170,6 +172,7 @@ export default {
         }
       })
     }
+    */
   }
 }
 </script>
