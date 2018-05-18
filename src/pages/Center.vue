@@ -96,6 +96,22 @@ export default {
           icon: 'al-qietu19',
           color: 'color-favorite',
           link: '/favorite'
+        },
+        {
+          name: 'Exit',
+          icon: 'al-tuichu3',
+          color: 'color-exit',
+          react: function () {
+            Token.remove()
+            User.remove()
+            // if (self.$util.isAndroid()) {
+            // }
+            if (self.$util.isPC()) {
+              self.$router.push({name: 'tLogin'})
+            } else {
+              self.$router.push({name: 'tIndex'})
+            }
+          }
         }
       ],
       avatarHref: '',

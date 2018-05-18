@@ -28,19 +28,6 @@
         <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
       </flexbox-item>
     </flexbox>
-    <!--
-    <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
-      <flexbox-item>
-        <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button @click.native="onClose">{{$t('Close')}}</x-button>
-      </flexbox-item>
-    </flexbox>
-  -->
     <div v-transfer-dom class="x-popup popup-selectproduct">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
@@ -215,7 +202,8 @@ export default {
       checkAll: false,
       customerPagestart: 0,
       isBindCustomerScroll: false,
-      scrollCustomerArea: null
+      scrollCustomerArea: null,
+      touchElement: null,
     }
   },
   computed: {
@@ -555,7 +543,7 @@ export default {
     startEvent () {
       const self = this
       let e = event
-      let cur = document.querySelector('.editor-icon')
+      let cur = self.touchElement
       self.isDown = true
       self.x = cur.offsetLeft
       self.y = cur.offsetTop
@@ -567,7 +555,7 @@ export default {
     moveEvent () {
       const self = this
       let e = event
-      let cur = document.querySelector('.editor-icon')
+      let cur = self.touchElement
       if (self.isDown) {
         let move = self.movePoint(e)
         self.mx = move.x - self.sx // 获取鼠标移动了多少
@@ -582,7 +570,8 @@ export default {
         if (_top < self.bottompoint) {
           _top = self.bottompoint
         }
-        cur.offsetTop = _top
+        // cur.offsetTop = _top
+        jQuery(cur).offset({ top: _top });
         self.mx = move.x
         self.my = move.y
       }
@@ -590,7 +579,7 @@ export default {
     },
     endEvent () {
       const self = this
-      let cur = document.querySelector('.editor-icon')
+      let cur = self.touchElement
       // 添加定时器，是因为有的时候move事件还没运行完就运行了这个事件，为了给这个时间添加一个缓冲时间这里定义了10毫秒
       setTimeout(function () {
         if (self.isMove) { // 如果移动了执行移动方法
@@ -612,25 +601,23 @@ export default {
       return false // 取消元素事件向下冒泡
     }
   },
-  created () {
+  mounted () {
     const self = this
     let start = !self.$util.isPC() ? 'touchstart' : 'mousedown'
     let move = !self.$util.isPC() ? 'touchmove' : 'mousemove'
     let end = !self.$util.isPC() ? 'touchend' : 'mouseup'
-    let editorIcon = document.querySelector('.editor-icon')
-    if (editorIcon) {
-      editorIcon.removeEventListener(start, self.startEvent)
-      editorIcon.addEventListener(start, self.startEvent)
-      editorIcon.removeEventListener(move, self.moveEvent)
-      editorIcon.addEventListener(move, self.moveEvent)
-      editorIcon.removeEventListener(end, self.moveEvent)
-      editorIcon.addEventListener(end, self.moveEvent)
-      /*
-      menuicon.unbind("click").click(function(){
-        self.menuClickEvent()
-      })
-      */
-    }
+    self.touchElement = document.querySelector('.editor-icon')
+    self.touchElement.removeEventListener(start, self.startEvent)
+    self.touchElement.addEventListener(start, self.startEvent)
+    self.touchElement.removeEventListener(move, self.moveEvent)
+    self.touchElement.addEventListener(move, self.moveEvent)
+    self.touchElement.removeEventListener(end, self.moveEvent)
+    self.touchElement.addEventListener(end, self.moveEvent)
+    /*
+    menuicon.unbind("click").click(function(){
+      self.menuClickEvent()
+    })
+    */
   }
 }
 </script>
