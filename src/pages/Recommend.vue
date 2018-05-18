@@ -36,7 +36,7 @@
         <card @click.native="bringCustomerClick">
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
-              <div class="color-red font18">{{ rebateInfo.bringCustomers }}人</div>
+              <div class="color-red font18">{{ rebateInfo.customerNumber }}人</div>
               <div class="color-gray font14 mt5">{{$t('Total Number')}}</div>
             </div>
             <div class="vux-1px-r">
