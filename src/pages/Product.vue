@@ -59,7 +59,7 @@
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="(loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user'" class="t-cell v_middle border-box align_right">
+            <div v-if="!activityInfo.id && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
               <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
   					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">

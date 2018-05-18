@@ -128,7 +128,7 @@ export default {
     }
   },
   created () {
-    console.log('this.id')
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
     this.getData()
   }
 }
