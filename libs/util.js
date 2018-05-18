@@ -289,7 +289,7 @@ Util.install = function (Vue, options) {
       let sharedesc = os.desc
       let sharephoto = os.photo
       if (data) {
-        sharetitle = !self.isNull(data.seotitle) ? data.seotitle : data.title
+        sharetitle = (data.seotitle && self.trim(data.seotitle) !== '') ? data.seotitle : data.title
         sharedesc = data.title
         if (data.seodescription && self.trim(data.seodescription) !== '') {
           sharedesc = data.seodescription
@@ -300,9 +300,9 @@ Util.install = function (Vue, options) {
         }
         sharephoto = data.photo
         let photoarr = []
-        if (!self.isNull(data.photo)) {
+        if (data.photo && self.trim(data.photo) !== '') {
           photoarr = data.photo.split(',')
-        } else if (!self.isNull(data.contentphoto)) {
+        } else if (data.contentphoto && self.trim(data.contentphoto) !== '') {
           photoarr = data.contentphoto.split(',')
         }
         if (photoarr.length > 0) {

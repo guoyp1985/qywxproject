@@ -565,10 +565,10 @@ export default {
           self.isMove = true
         }
         let _top = self.y + self.my
-        let maxtop = window.innerHeight - self.menuheight - self.bottompoint
+        let maxtop = window.innerHeight - self.menuheight - self.bottompoint * 2
         _top = _top < 0 ? 0 : (_top > maxtop ? maxtop : _top) // 避免小球移除移出去
-        if (_top < self.bottompoint) {
-          _top = self.bottompoint
+        if (_top < self.bottompoint * 2) {
+          _top = self.bottompoint * 2
         }
         // cur.offsetTop = _top
         jQuery(cur).offset({ top: _top });
