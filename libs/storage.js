@@ -36,6 +36,7 @@ const User = {
     localStorage.setItem('user', JSON.stringify(user))
   },
   get () {
+    console.log(localStorage.getItem('user'))
     return JSON.parse(localStorage.getItem('user'))
   },
   remove () {
