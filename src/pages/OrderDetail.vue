@@ -35,7 +35,7 @@
     <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
     <group>
       <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
-        <img slot="icon" :src="order.photo"/>
+        <x-img slot="icon" class="imgcover" :src="order.photo" default-src="../src/assets/images/nopic.jpg" ></x-img>
         <div slot="title">
           {{order.name}}
         </div>
@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import ENV from 'env'
 export default {
@@ -75,7 +75,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg
   },
   data () {
     return {

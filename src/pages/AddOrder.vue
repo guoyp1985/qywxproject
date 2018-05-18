@@ -21,7 +21,7 @@
     					<div class="b_bottom_after padding10">
     						<div class="t-table">
     							<div class="t-cell v_middle" style="width:65px;">
-    								<img class="imgcover" style="width:45px;height:45px;" :src="product.photo">
+                    <x-img class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:45px;height:45px;" ></x-img>
     							</div>
     							<div class="t-cell v_middle">
     								<div class="name color-black font15">{{ product.name }}</div>
@@ -142,7 +142,7 @@ Please select address:
 </i18n>
 
 <script>
-import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon } from 'vux'
+import { Group, XNumber, XTextarea, XInput, TransferDom, Popup, Alert, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 
 export default {
@@ -150,7 +150,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XNumber, XTextarea, XInput, Popup, Alert, CheckIcon
+    Group, XNumber, XTextarea, XInput, Popup, Alert, CheckIcon, XImg
   },
   data () {
     return {

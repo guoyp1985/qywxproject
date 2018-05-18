@@ -58,7 +58,7 @@
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset='0' container="#vux_view_box_body"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
@@ -83,7 +83,7 @@
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset='0' container="#vux_view_box_body"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <span class="info-cell">{{item.dateline | dateFormat}}</span>
                   </div>
@@ -91,7 +91,7 @@
               </template>
               <template v-else>
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset='0' container="#vux_view_box_body"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <span class="info-cell">{{item.dateline | dateFormat}}</span>
                   </div>
@@ -111,7 +111,7 @@
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset='0' container="#vux_view_box_body"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
                       <span class="v_middle">{{ item.dateline | dateFormat }}</span>
@@ -266,7 +266,7 @@ export default {
       if (index === 0) {
         self.scrollContainer.removeEventListener('scroll', self.scroll1)
         self.scrollContainer.addEventListener('scroll', self.scroll1)
-        if (self.pagestart1 > 0) {
+        if (self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }

@@ -8,7 +8,7 @@
         <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
           <div class="t-table h_100">
             <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
-              <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
+              <x-img class="v_middle imgcover" :src="loginUser.avatar" default-src="../src/assets/images/user.jpg" style="width:36px;height:36px;border-radius:50%"></x-img>
             </router-link>
             <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
               <div>{{ loginUser.linkman }}</div>
@@ -24,7 +24,7 @@
         </div>
         <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
-      <div class="pagemiddle">
+      <div class="pagemiddle scroll-container">
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -35,7 +35,7 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img :src="item" class="imgcover w_100 h_100"/>
+              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg"></x-img>
             </swiper-item>
           </swiper>
         </template>
@@ -74,7 +74,7 @@
             <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w50">
-                  <img class="v_middle avatarimg1" :src="item.avatar" />
+                  <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
                 </div>
                 <div class="t-cell v_middle align_left">
                   <div class="clamp1">{{ item.username }}</div>
@@ -101,7 +101,7 @@
                   <div class="scroll_item padding10">
           					<div class="t-table">
           						<div class="t-cell v_middle w50">
-          							<img class="v_middle avatarimg1" :src="item.avatar" />
+                        <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
           						</div>
           						<div class="t-cell v_middle align_left">
           							<div class="clamp1">{{ item.username }}</div>
@@ -149,7 +149,7 @@
               <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
       					<div class="t-table">
       						<div class="t-cell pic" style="width:40px;">
-      							<img class="avatarimg" :src="item.avatar" />
+                    <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       						</div>
       						<div class="t-cell">{{ item.username }}</div>
       						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -179,7 +179,7 @@
             <div class="buylist pt10 pb15 pl10 pr10">
               <router-link class="item" :to="{path:'/product',query:{id:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
                 <div class="align_center">
-      						<img class="avatarimg" :src="item.avatar">
+                  <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       					</div>
       					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
               </router-link>
@@ -191,7 +191,7 @@
         <div class="padding10 b_bottom_after">
           <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
     				<div class="t-cell v_middle" style="width:70px;">
-    					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
+              <x-img class="v_middle imgcover" :src="retailerinfo.avatar" default-src="../src/assets/images/user.jpg" style="width:60px;height:60px;" container=".scroll-container"></x-img>
     				</div>
     				<div class="t-cell v_middle">
     					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
@@ -288,7 +288,7 @@
         <popup v-model="showevluate" height="100%">
           <div class="popup1">
             <div class="popup-top flex_center">评价</div>
-            <div class="popup-middle font14">
+            <div class="popup-middle font14 evluate-popup-container">
               <div class="scroll_list">
                 <template v-if="evluatedata.length == 0">
                   <div class="scroll_item emptyitem">
@@ -300,7 +300,7 @@
                 <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
         					<div class="t-table">
         						<div class="t-cell pic" style="width:40px;">
-        							<img class="avatarimg" :src="item.avatar" />
+                      <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".evluate-popup-container"></x-img>
         						</div>
         						<div class="t-cell">{{ item.username }}</div>
         						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -360,7 +360,7 @@ Another batch:
 </i18n>
 
 <script>
-import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
+import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
@@ -375,7 +375,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg
   },
   filters: {
     dateformat: function (value) {

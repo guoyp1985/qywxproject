@@ -1,6 +1,6 @@
 <template>
 <div class="containerarea bg-white font14 saleproducts notop">
-  <div class="pagemiddle" style="bottom:53px;">
+  <div class="pagemiddle scroll-container" style="bottom:53px;">
     <div class="padding5 align_center font18 bg-white color-black" style="line-height: 38px;">
       <span>— {{ $t('Selected') }}</span><span class="color-red">{{ $t('Promotion') }}</span> —
     </div>
@@ -8,7 +8,7 @@
       <div v-if="!tabdata1 || tabdata1.length == 0" class="emptyitem flex_center">暂无促销商品</div>
       <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="bg-page">
         <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
-          <img slot="photo" style="width:80px;height:80px;object-fit: cover;" :src="item.photo" />
+          <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
           <span slot="title">{{item.title}}</span>
           <span slot="numbers">{{ item.numbers }}</span>
           <span slot="havetuan">{{ item.havetuan }}</span>
@@ -16,7 +16,7 @@
           <span slot="price">{{item.price}}</span>
         </groupbuyitemplate>
         <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#f6f6f6 !important;">
-          <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
+          <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
           <span slot="title">{{item.title}}</span>
           <span slot="saveprice">{{ item.saveprice }}</span>
           <span slot="minprice">{{item.minprice}}</span>
@@ -36,12 +36,13 @@ Promotion:
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ENV from 'env'
 export default {
   components: {
-    Groupbuyitemplate, Bargainbuyitemplate
+    Groupbuyitemplate, Bargainbuyitemplate, XImg
   },
   data () {
     return {

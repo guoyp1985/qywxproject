@@ -18,7 +18,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
               <div v-if="disData1" class="scroll_list listarea">
@@ -32,7 +32,7 @@
                     <check-icon class="x-check-icon b_bottom_after" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w50">
-                          <img :src="item.avatar" class="avatarimg1" />
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1">{{item.buyername}}</div>
@@ -53,7 +53,7 @@
                   <check-icon v-else class="x-check-icon" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w50">
-                        <img :src="item.avatar" class="avatarimg1" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1">{{item.buyername}}</div>
@@ -91,7 +91,7 @@
                   <div class="b_bottom_after padding5">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w50 pr10 border-box">
-                        <img :src="item.avatar" class="avatarimg1" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1">{{item.buyername}}</div>
@@ -112,7 +112,7 @@
                 <div v-else class="padding5">
                   <div class="t-table">
                     <div class="t-cell pic v_middle w50 pr10 border-box">
-                      <img :src="item.avatar" class="avatarimg1" />
+                      <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{item.buyername}}</div>
@@ -140,7 +140,7 @@
                   <div class="b_bottom_after padding5">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w50 pr10 border-box">
-                        <img :src="item.avatar" class="avatarimg1" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1">{{item.buyername}}</div>
@@ -161,7 +161,7 @@
                 <div v-else class="padding5">
                   <div class="t-table">
                     <div class="t-cell pic v_middle w50 pr10 border-box">
-                      <img :src="item.avatar" class="avatarimg1" />
+                      <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{item.buyername}}</div>
@@ -216,7 +216,7 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -225,7 +225,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon
+    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -438,7 +438,7 @@ export default {
     tabclick (index) {
       const self = this
       if (index === 0) {
-        if (self.pagestart1 > 0) {
+        if (self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }

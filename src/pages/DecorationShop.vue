@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom decorationshop">
-    <div class="s-container" style="top:0px;">
+    <div class="s-container scroll-container" style="top:0px;">
       <div class="scroll_list bg-page">
         <template v-if="!productdata || productdata.length == 0">
           <div class="emptyitem">
@@ -19,7 +19,7 @@
           <router-link :to="{path:'/product',query:{id:item.id,wid:loginuser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
             <div class="t-table bg-white pt10 pb10">
         			<div class="t-cell pl10 v_middle" style="width:90px;">
-    		          <img style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
+                  <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
         			</div>
         			<div class="t-cell v_middle">
                 <div class="clamp2 font15 pr10">{{item.title}}</div>
@@ -101,7 +101,7 @@ Please upload rolling show photo:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, Alert } from 'vux'
+import { TransferDom, Popup, Confirm, Alert, XImg } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 
@@ -110,7 +110,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, Alert, ClipPopup
+    Popup, Confirm, Alert, ClipPopup, XImg
   },
   data () {
     return {

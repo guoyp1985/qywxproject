@@ -8,7 +8,7 @@
     </tab>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="tabdata1.length > 0 && index === 0">
             <div class="scroll_list">
               <div v-if="tabdata1.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
@@ -27,7 +27,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <img :src="item.photo" class="v_middle imgcover" style="width:80px;height:80px;" />
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -48,7 +48,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <img :src="item.photo" class="v_middle imgcover" style="width:80px;height:80px;" />
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -66,7 +66,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <img :src="item.photo" class="v_middle imgcover" style="width:80px;height:80px;" />
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -276,7 +276,7 @@ Stat:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -285,7 +285,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg
   },
   filters: {
     dateformat: function (value) {

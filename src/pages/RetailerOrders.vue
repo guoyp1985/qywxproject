@@ -20,7 +20,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
@@ -32,7 +32,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container0"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -40,7 +40,8 @@
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
-                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                      <span class="v_middle">{{ item.username }}</span>
                     </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
@@ -74,7 +75,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container1"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -82,7 +83,8 @@
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
-                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                      <span class="v_middle">{{ item.username }}</span>
                     </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
@@ -110,7 +112,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container2"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -118,7 +120,8 @@
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
-                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                      <span class="v_middle">{{ item.username }}</span>
                     </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
@@ -149,7 +152,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container3"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -157,7 +160,8 @@
                 <div slot="receivearea">
                   <div class="t-table">
                     <div class="t-cell v_middle">
-                      <img :src="item.avatar" class="avatarimg imgcover v_middle mr5" /><span class="v_middle">{{ item.username }}</span>
+                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                      <span class="v_middle">{{ item.username }}</span>
                     </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
@@ -234,7 +238,7 @@ My orders:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
@@ -245,7 +249,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -409,7 +413,7 @@ export default {
     tabclick (index) {
       const self = this
       if (index === 0) {
-        if (self.pagestart1 > 0) {
+        if (self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }

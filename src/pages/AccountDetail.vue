@@ -34,7 +34,7 @@
         <div class="padding10">
           <div class="t-table">
             <div class="t-cell w60">
-              <img :src="item.photo" style="width:50px;height:50px;" class="imgcover" />
+              <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" ></x-img>
             </div>
             <div class="t-cell v_middle">
               <div class="clamp2 font12 color-gray5">{{ item.name }}</div>
@@ -55,13 +55,14 @@
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Orderproductplate from '@/components/Orderproductplate'
 import ENV from 'env'
 import Time from '#/time'
 
 export default {
   components: {
-    Orderproductplate
+    Orderproductplate, XImg
   },
   filters: {
     dateformat: function (value) {

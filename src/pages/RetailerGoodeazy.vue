@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="pl10 pr10">
             <div class="font15 pt15">搜索关键词采集文章</div>
             <div class="font12 color-gray mt5">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
@@ -84,7 +84,7 @@
               <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:40px;">
-                    <img class="imgcover v_middle" :src="item.photo" style="width:30px;height:30px;" />
+                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:30px;height:30px;" :offset="0" container=".scroll-container1"></x-img>
                   </div>
                   <div class="t-cell">
                     <div class="clamp1 font14">{{item.title}}</div>
@@ -111,13 +111,13 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg
   },
   filters: {
     dateformat: function (value) {

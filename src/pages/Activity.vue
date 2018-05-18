@@ -193,7 +193,7 @@ export default {
       }
       this.loginUser = User.get()
       this.getInfo()
-      next()
+      next && next()
     },
     access () {
       const user = User.get()

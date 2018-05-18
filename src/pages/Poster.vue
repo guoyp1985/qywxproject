@@ -15,7 +15,7 @@
                 <div class="item pic-photo border01">
                   <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
                   <div class="pic-layer">
-                    <img :src="item.photo"/>
+                    <x-img :src="item.photo" default-src="../src/assets/images/nopic.jpg"></x-img>
                   </div>
                 </div>
               </div>
@@ -104,12 +104,12 @@ Upload images:
 </i18n>
 
 <script>
-import { Group, XTextarea } from 'vux'
+import { Group, XTextarea, XImg } from 'vux'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, XTextarea
+    Group, XTextarea, XImg
   },
   data () {
     return {

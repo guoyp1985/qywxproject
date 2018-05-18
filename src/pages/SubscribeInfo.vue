@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea font14 bg-page sinfo">
 		<div class="align_center pt10 pb10">
-			<img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+      <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
 		</div>
 		<div class="padding10 bg-white">
 			<div class="pb10 border font16 color-gray b_bottom_after">我推荐的用户</div>
@@ -10,7 +10,7 @@
         <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db">
           <div class="t-table">
 						<div class="t-cell w50">
-							<img class="avtarimg" :src="item.avatar" />
+              <x-img class="avtarimg" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
 						</div>
 						<div class="t-cell">
 							<div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
@@ -26,11 +26,13 @@
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
+    XImg
   },
   data () {
     return {
@@ -55,6 +57,9 @@ export default {
     }
   },
   methods: {
+    getQrcode () {
+      return ENV.WeixinQrcode
+    },
     getDateState: function (dt) {
       return this.$util.getDateState(dt)
     },

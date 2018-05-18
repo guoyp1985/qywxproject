@@ -16,14 +16,14 @@
             <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index" @on-item-click="tabclick(item,index)">{{ item.title }}</tab-item>
           </tab>
           <swiper v-model="tabmodel" class="x-swiper no-indicator">
-            <swiper-item class="swiperitem" v-for="(tabitem, index) in tabsdata" :key="index">
+            <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabsdata" :key="index">
               <div class="scroll_list padding10">
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
                   <template v-if="tabitem.type == 'shareview'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
@@ -38,7 +38,7 @@
                   <template v-else-if="tabitem.type == 'buylist'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.username }}</div>
@@ -53,7 +53,7 @@
                   <template v-else-if="tabitem.type == 'sharelist'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.username }}</div>
@@ -68,7 +68,7 @@
                   <template v-else-if="tabitem.type == 'asklist'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
@@ -83,7 +83,7 @@
                   <template v-else-if="tabitem.type == 'viewlist'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.username }}</div>
@@ -98,7 +98,7 @@
                   <template v-else-if="tabitem.type == 'second'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
@@ -113,7 +113,7 @@
                   <template v-else-if="tabitem.type == 'crowdlist'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
@@ -129,7 +129,7 @@
                   <template v-else-if="tabitem.type == 'crowdlist_isdeliver_1'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
@@ -143,7 +143,7 @@
                   <template v-else-if="tabitem.type == 'crowdlist_isdeliver_0'">
                     <div class="t-table">
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <img class="avatarimg1" :src="item.avatar" />
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                       </router-link>
                       <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
                         <div class="clamp1">{{ item.linkman }}</div>
@@ -174,14 +174,14 @@ Message:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Listplate from '@/components/Listplate'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Listplate
+    Tab, TabItem, Swiper, SwiperItem, Listplate, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -216,6 +216,7 @@ export default {
       scrollArea2: null,
       scrollArea3: null,
       scrollArea4: null,
+      disDatalist: [],
       scrollData: [],
       datalist: [],
       isFirst: true,
@@ -224,6 +225,9 @@ export default {
     }
   },
   watch: {
+    disDatalist: function () {
+      return this.disDatalist
+    },
     datalist: function () {
       return this.datalist
     }
@@ -257,6 +261,7 @@ export default {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
           self.datalist.push([])
+          self.disDatalist.push(false)
         }
       }
       let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: self.limit } }
@@ -266,7 +271,9 @@ export default {
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
         self.arrData = self.datalist[index]
+        self.disDatalist[index] = true
         if (self.isFirst) {
+          self.disDatalist[0] = true
           self.isFirst = false
           self.tabtop = document.querySelector('.productstat .tabarea').offsetTop + 44
           let swiper = document.querySelector('.productstat .x-swiper')

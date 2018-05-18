@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
               class="x-search"
@@ -39,7 +39,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:50px;">
-                    <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.username}}({{item.linkman}})</div>
@@ -75,7 +75,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
@@ -98,7 +98,7 @@
             <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:50px;">
-                  <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                  <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14">{{item.linkman}}</div>
@@ -118,13 +118,13 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -313,7 +313,7 @@ export default {
     tabclick (index) {
       const self = this
       if (index === 0) {
-        if (self.pagestart1 > 0) {
+        if (self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }

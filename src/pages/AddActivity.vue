@@ -10,7 +10,7 @@
           <div v-if="showproductitem" class="scroll_item border db">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;">
-                <img class="v_middle" :src="selectproduct.photo" style="width:40px;height:40px;" />
+                <x-img class="v_middle imgcover" :src="selectproduct.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" ></x-img>
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1">{{ selectproduct.title }}</div>
@@ -53,7 +53,7 @@
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div class="popup-middle">
+          <div class="popup-middle selectpopup-container">
             <search
               class="x-search"
               v-model="searchword"
@@ -75,7 +75,7 @@
               <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                 <div class="t-table">
                   <div class="t-cell pic v_middle w50">
-                    <img :src="item.photo" style="width:40px;height:40px;" class="v_middle imgcover" />
+                    <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".selectpopup-container" ></x-img>
                   </div>
                   <div class="t-cell v_middle" style="color:inherit;">
                     <div class="clamp1">{{item.title}}</div>
@@ -117,7 +117,7 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, CheckIcon } from 'vux'
+import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, CheckIcon, XImg } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
@@ -130,7 +130,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Alert, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount
+    Group, XInput, Popup, Alert, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg
   },
   data () {
     return {

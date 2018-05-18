@@ -1,53 +1,55 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div v-show="disproductdata" class="s-container" style="top:0px;">
-      <template v-if="!productdata || productdata.length == 0">
-        <div class="scroll_list bg-page">
-          <div class="emptyitem">
-            <div class="t-table" style="padding-top:20%;">
-              <div class="t-cell padding10">
-                <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                <div>还没有添加商品哦，及时添加商品可以：</div>
-                <div>1.创建促销活动 </div>
-                <div>2.分享商品获得客户</div>
-                <div>3.邀请返点客帮你赚钱</div>
+    <div class="s-container scroll-container" style="top:0px;">
+      <template v-if="disproductdata">
+        <template v-if="!productdata || productdata.length == 0">
+          <div class="scroll_list bg-page">
+            <div class="emptyitem">
+              <div class="t-table" style="padding-top:20%;">
+                <div class="t-cell padding10">
+                  <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                  <div>还没有添加商品哦，及时添加商品可以：</div>
+                  <div>1.创建促销活动 </div>
+                  <div>2.分享商品获得客户</div>
+                  <div>3.邀请返点客帮你赚钱</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </template>
-      <template v-else>
-        <div class="bg-orange color-white padding10">悄悄告诉你，立即分享新发布的商品可以：</div>
-        <div class="padding10 border bg-page color-gray b_bottom_after">
-          <div>1. 接收好友查看商品的通知；</div>
-          <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-          <div>3. 获得到更多潜在客户及销售机会。</div>
-        </div>
-        <div class="scroll_list bg-page">
-          <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-            <div v-if="item.moderate == 0" class="icon down"></div>
-        		<div class="t-table bg-white pt10 pb10">
-        			<div class="t-cell pl10 v_middle" style="width:90px;">
-    		          <img class="imgcover" style="width:80px;height:80px;" :src="item.photo" />
-        			</div>
-        			<div class="t-cell v_middle">
-                <div class="clamp2 font15 pr10">{{item.title}}</div>
-                <div class="t-table pr10 border-box mt5">
-                  <div class="t-cell color-gray font12">
-                    <div class="clamp1">售价: {{ $t('RMB') }}{{ item.price }}</div>
-                    <div class="clamp1">
-                        <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
-                        <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
+        </template>
+        <template v-else>
+          <div class="bg-orange color-white padding10">悄悄告诉你，立即分享新发布的商品可以：</div>
+          <div class="padding10 border bg-page color-gray b_bottom_after">
+            <div>1. 接收好友查看商品的通知；</div>
+            <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
+            <div>3. 获得到更多潜在客户及销售机会。</div>
+          </div>
+          <div class="scroll_list bg-page">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+              <div v-if="item.moderate == 0" class="icon down"></div>
+          		<div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl10 v_middle" style="width:90px;">
+                  <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
+          			</div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp2 font15 pr10">{{item.title}}</div>
+                  <div class="t-table pr10 border-box mt5">
+                    <div class="t-cell color-gray font12">
+                      <div class="clamp1">售价: {{ $t('RMB') }}{{ item.price }}</div>
+                      <div class="clamp1">
+                          <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
+                      </div>
+                    </div>
+                    <div class="align_right t-cell v_bottom w80">
+                      <div class="btnicon" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
                     </div>
                   </div>
-                  <div class="align_right t-cell v_bottom w80">
-                    <div class="btnicon" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
-                  </div>
-                </div>
-        			</div>
-        		</div>
-          </router-link>
-        </div>
+          			</div>
+          		</div>
+            </router-link>
+          </div>
+        </template>
       </template>
     </div>
     <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
@@ -91,7 +93,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14" style="top:85px;bottom:86px;">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;">
             <div class="padding10">
               <div v-show="discustomerdata" class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -104,7 +106,7 @@
                 <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                   <div class="t-table">
                     <div class="t-cell v_middle w50">
-                      <img :src="item.avatar" class="avatarimg imgcover" />
+                      <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".customer-popup-container"></x-img>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{ item.linkman }}</div>
@@ -137,7 +139,7 @@ Back go shop:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 
 export default {
@@ -145,7 +147,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon
+    Popup, Confirm, CheckIcon, XImg
   },
   data () {
     return {
@@ -317,7 +319,8 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.customerdata = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        self.customerdata = self.customerdata.concat(retdata)
         self.discustomerdata = true
         if (!self.isBindCustomerScroll) {
           self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')

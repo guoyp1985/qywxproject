@@ -2,7 +2,7 @@
   <div v-show="showcontainer" class="containerarea font14">
     <div class="bk-salestop">
       <div class="img-cell">
-        <img :src="retailerInfo.avatar" @click="showBigimg(0)" />
+        <x-img class="imgcover" :src="retailerInfo.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)" ></x-img>
         <div v-transfer-dom>
           <previewer :list="imgarr" ref="previewer"></previewer>
         </div>
@@ -173,7 +173,7 @@ With the customer rebate money together!:
 </i18n>
 
 <script>
-import { Previewer, TransferDom, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox } from 'vux'
+import { Previewer, TransferDom, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -183,7 +183,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox
+    Previewer, Group, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg
   },
   filters: {
     dateformat: function (value) {

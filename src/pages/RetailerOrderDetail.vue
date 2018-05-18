@@ -1,6 +1,6 @@
 <template>
   <div id="order-detail" :class="`containerarea notop rorderdetail bg-page color-gray5 font14 ${bottomcss}`">
-    <div class="pagemiddle">
+    <div class="pagemiddle scroll-container">
       <div v-if="data.seller && data.seller.username">
         <div class="b_bottom_after padding10 bg-white">
           <div class="t-table">
@@ -40,7 +40,7 @@
           <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
             <div class="t-table">
               <div class="t-cell v_middle w60 algin_left">
-                <img style="width:50px;height:50px;" class="v_middle imgcover" :src="item.photo" />
+                <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_top">
                 <div class="clamp2 font12 align_left">{{ item.name }}</div>
@@ -110,7 +110,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, TransferDom, Popup } from 'vux'
+import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Time from '#/time'
 import ENV from 'env'
@@ -120,7 +120,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg
   },
   filters: {
     dateformat: function (value) {

@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
@@ -30,7 +30,7 @@
               <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w50">
-                    <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
+                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container0"></x-img>
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font16"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
@@ -62,7 +62,7 @@
               <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w50">
-                    <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
+                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1"></x-img>
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font16"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
@@ -116,7 +116,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14" style="top:85px;bottom:86px;">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;">
             <div class="padding10">
               <div class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -129,7 +129,7 @@
                 <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                   <div class="t-table">
                     <div class="t-cell v_middle w50">
-                      <img :src="item.avatar" class="avatarimg imgcover" />
+                      <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".customer-popup-container"></x-img>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{ item.linkman }}</div>
@@ -164,7 +164,7 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -173,7 +173,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup, CheckIcon
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup, CheckIcon, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -299,8 +299,9 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.customerdata = data.data ? data.data : data
-        console.log(self.customerdata)
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        self.customerdata = self.customerdata.concat(retdata)
         if (!self.isBindCustomerScroll) {
           self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
           self.isBindCustomerScroll = true
@@ -327,7 +328,7 @@ export default {
     tabitemclick (index) {
       const self = this
       if (index === 0) {
-        if (self.pagestart1 > 0) {
+        if (self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }

@@ -7,7 +7,7 @@
   <div id="user-profile">
     <group label-width="4em" label-align="left" label-margin-right="2em">
       <cell :inline-desc="$t('Sync From Wx')" @click.native="syncWxProfile">
-        <img class="avatar" slot="icon" :src="getProfile.avatar"/>
+        <x-img slot="icon" class="avatar imgcover" :src="getProfile.avatar" default-src="../src/assets/images/user.jpg"></x-img>
       </cell>
       <x-input :title="$t('Name')" required :placeholder="`${$t('Necessary')}${$t('Name')}`" v-model="getProfile.linkman"></x-input>
       <popup-radio :title="$t('Gendar')" :options="options" v-model="getProfile.sex" :placeholder="$t('Gendar')"></popup-radio>
@@ -37,13 +37,13 @@ Confirm:
 </i18n>
 
 <script>
-import { Group, Cell, Box, XInput, PopupRadio, XButton } from 'vux'
+import { Group, Cell, Box, XInput, PopupRadio, XButton, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Group, Cell, Box, XInput, PopupRadio, XButton
+    Group, Cell, Box, XInput, PopupRadio, XButton, XImg
   },
   data () {
     return {

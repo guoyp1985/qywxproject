@@ -27,7 +27,7 @@
           <router-link v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10 db" :to="{path: '/retailerOrderDetail', query: {id: item.orderid}}">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;height:50px;">
-                <img :src="item.photo" style="width:40px;height:40px;" />
+                <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1">{{ item.title }}</div>
@@ -53,13 +53,13 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, Search } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Search
+    Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg
   },
   filters: {
     dateformat: function (value) {

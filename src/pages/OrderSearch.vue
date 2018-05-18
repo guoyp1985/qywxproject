@@ -276,7 +276,7 @@ export default {
           */
           self.scrollContainer.removeEventListener('scroll', self.scroll1)
           self.scrollContainer.addEventListener('scroll', self.scroll1)
-          if (self.pagestart1 > 0) {
+          if (self.tabdata1.length === 0) {
             self.$vux.loading.show()
             self.getdata1()
           }

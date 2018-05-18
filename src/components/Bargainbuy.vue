@@ -1,13 +1,13 @@
 <template>
   <div class="containerarea font14 bargainbuy notop nobottom">
-    <div class="pagemiddle">
+    <div class="pagemiddle scroll-container">
       <div class="topimg">
         <img src="../assets/images/bargainbuy_bg.png" />
       </div>
       <div class="boxarea productarea">
         <router-link class="t-table" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}" style="color:inherit;">
             <div class="t-cell pic v_middle">
-              <img :src="product.photo" class="imgcover" />
+              <x-img class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
             </div>
             <div class="t-cell pl10 v_middle">
               <div class="clamp2 title font13 color-gray7">{{ product.title }}</div>
@@ -46,6 +46,7 @@
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -60,6 +61,7 @@ export default {
     onJoin: Function
   },
   components: {
+    XImg
   },
   data () {
     return {

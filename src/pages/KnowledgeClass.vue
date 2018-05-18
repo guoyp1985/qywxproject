@@ -5,12 +5,12 @@
 */
 <template>
   <div class="containerarea font14 bg-white knowledgeclass notop">
-    <div class="pagemiddle">
+    <div class="pagemiddle scroll-container">
       <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
       <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
         <div class="pic">
           <div class="inner">
-            <img :src="item.photo" />
+            <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
           </div>
         </div>
         <div class="padding15 border-box">
@@ -52,12 +52,12 @@ Newcomer Guide:
 </i18n>
 
 <script>
-import { Popover } from 'vux'
+import { Popover, XImg } from 'vux'
 import ENV from 'env'
 
 export default {
   components: {
-    Popover
+    Popover, XImg
   },
   data () {
     return {

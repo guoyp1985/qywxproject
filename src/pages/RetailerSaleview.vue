@@ -6,7 +6,7 @@
         <div class="pl10 pr10 h_100">
           <div class="t-table h_100 toprow">
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle w80">
-              <img class="avatarimg4 v_middle" :src="sellerUser.avatar" />
+              <x-img class="avatarimg4 v_middle imgcover" :src="sellerUser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" cotainer="#vux_view_box_body"></x-img>
             </router-link>
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle font18">{{ sellerUser.username }}</router-link>
             <div class="t-cell v_middle w70 align_center">
@@ -33,7 +33,7 @@
     </div>
     <div class="s-container s-container2">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
@@ -44,7 +44,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
@@ -68,7 +68,7 @@
               <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
                 <div class="t-table">
                   <div class="t-cell v_middle w80">
-                    <img :src="item.photo" class="imgcover v_middle" style="width:70px;height:70px;" />
+                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container1"></x-img>
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.title}}</div>
@@ -96,7 +96,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <img :src="item.avatar" class="avatarimg1 imgcover v_middle" />
+                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
@@ -162,7 +162,7 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -171,7 +171,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -298,7 +298,7 @@ export default {
     tabclick (index) {
       const self = this
       if (index === 0) {
-        if (self.pagestart1 > 0) {
+        if (self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }

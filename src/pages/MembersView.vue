@@ -8,7 +8,7 @@
         <div class="pl10 pr10">
           <div class="t-table">
             <div class="t-cell v_middle w80">
-              <img class="avatarimg4" :src="viewuser.avatar" @click="showBigimg(0)" />
+              <x-img class="avatarimg4 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
               <div v-transfer-dom>
                 <previewer :list="imgarr" ref="previewer"></previewer>
               </div>
@@ -142,7 +142,7 @@ Behavior:
 </i18n>
 
 <script>
-import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group } from 'vux'
+import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group, XImg } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
@@ -152,7 +152,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg
   },
   filters: {
     dateformat: function (value) {
