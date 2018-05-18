@@ -16,8 +16,8 @@
           :key="item.id"
           class="share-item font14"
           align-items
-          :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
-            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
+          :link="{path: '/sharingDetail', query: {id: item.moduleid}}">
+            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container="#vux_view_box_body"></x-img>
             <div slot="inline-desc">
               <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
               <div class="clamp1 font12 mt5 color-gray">{{item.dateline | dateFormat}} {{item.typestr}}</div>

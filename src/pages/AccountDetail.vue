@@ -39,6 +39,7 @@
             <div class="t-cell v_middle">
               <div class="clamp2 font12 color-gray5">{{ item.name }}</div>
               <div class="font12"><span class="color-orange">{{ $t('RMB') }}{{ item.special }}</span><span class="color-gray"> × {{ item.quantity }}</span></div>
+              <div class="font12 color-red" v-if="item.flagstr">{{item.flagstr}}</div>
             </div>
           </div>
         </div>

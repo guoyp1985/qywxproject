@@ -178,7 +178,7 @@ export default {
         '0': '无',
         '1': '低',
         '2': '中',
-        '3': '高',
+        '3': '高'
       },
       intentionArr: [
         { key: 0, value: '无' },

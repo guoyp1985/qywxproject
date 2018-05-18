@@ -9,7 +9,7 @@
       <div class="sharing-title">{{$t('Current Store')}}</div>
       <sticky scroll-box="rebate-store">
         <div class="pt5 pb5 pl15 pr15 flex_table">
-          <div class="store-photo"><x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover"></x-img></div>
+          <div class="store-photo"><x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset=0></x-img></div>
           <div class="store-details flex_cell pl10">
             <span class="db font14">{{rebateInfo.title}}</span>
             <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
@@ -56,7 +56,7 @@
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset=0></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
@@ -81,7 +81,7 @@
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset=0></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <span class="info-cell">{{item.dateline | dateFormat}}</span>
                   </div>
@@ -109,7 +109,7 @@
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" :offset=0></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
                       <span class="v_middle">{{ item.dateline | dateFormat }}</span>
