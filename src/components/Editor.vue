@@ -153,6 +153,7 @@
 import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
+import jQuery from 'jquery'
 let editor = null
 export default {
   name: 'Editor',
