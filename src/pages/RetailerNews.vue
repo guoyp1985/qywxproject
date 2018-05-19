@@ -30,7 +30,7 @@
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
-                    <div class="clamp1 font14 color-gray v_middle">
+                    <div class="clamp1 font14 color-gray v_middle mt5">
                         <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
                         <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
                         <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
@@ -434,8 +434,8 @@ export default {
   padding: 1px 8px;
   letter-spacing: 0px;
 }
-.rnews .list_shadow{
-  box-shadow: 0px 0px 3px 1px #edf3f4;
+.list_shadow{
+  box-shadow: 0px 0px 3px 1px #e6ebed;
 }
 
 </style>
