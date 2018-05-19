@@ -4,17 +4,9 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="user-rebate">
+  <div id="user-rebate" class="urebateinfo">
     <view-box>
       <sticky scroll-box="user-rebate" class="sticky-area">
-        <group class="rebate-title">
-          <cell :title="rebateInfo.linkman" class="user-info font14">
-            <x-img slot="icon" :src="rebateInfo.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body" class="radius50"></x-img>
-            <div slot="inline-desc" class="rebate-money color-gray">
-              <span>{{$t('Total Income')}}:</span><span> {{$t('RMB')}}{{rebateInfo.special}}</span>
-            </div>
-          </cell>
-        </group>
         <tab v-model="selectedIndex">
           <tab-item selected @on-item-click="onItemClick">{{$t('Waiting To Return Money')}}</tab-item>
           <tab-item @on-item-click="onItemClick">{{$t('Waiting To Rebate')}}</tab-item>
@@ -38,7 +30,7 @@
                     {{item.dateline | dateFormat}}
                   </div>
                 </div>
-                <div class="value-cell font14 color-orange6 align_center">
+                <div class="value-cell font14 color-red align_center">
                   <div>{{item.content}}</div>
                   <div>{{$t('RMB')}}{{item.money}}</div>
                 </div>
@@ -61,7 +53,7 @@
                 <div slot="inline-desc" class="font12 color-gray">
                   {{item.dateline | dateFormat}}
                 </div>
-                <div slot="child" class="color-orange6 align_center">
+                <div slot="child" class="color-red align_center">
                   <div>{{item.content}}</div>
                   <div>{{$t('RMB')}}{{item.money}}</div>
                 </div>
@@ -84,7 +76,7 @@
                 <div slot="inline-desc" class="font12 color-gray">
                   {{item.dateline | dateFormat}}
                 </div>
-                <div slot="child" class="color-orange6 align_center">
+                <div slot="child" class="color-red align_center">
                   <div>{{item.content}}</div>
                   <div>{{$t('RMB')}}{{item.money}}</div>
                 </div>
@@ -104,7 +96,7 @@
         </div>
         <div class="count-cell">
           <span>{{$t('Total')}}:</span>
-          <span class="color-orange6">¥{{total}}</span>
+          <span class="color-red">¥{{total}}</span>
         </div>
         <div class="button-cell">
           <x-button class="withdraw-btn" @click.native="getCash">{{$t('Withdraw')}}</x-button>
@@ -358,9 +350,6 @@ export default {
 #user-rebate .sticky-area {
   background-color: #f7f7f7;
 }
-#user-rebate .rebate-title {
-  margin-bottom: 10px;
-}
 #user-rebate .user-info img{
   width: 60px;
   height: 60px;
@@ -437,7 +426,7 @@ export default {
 }
 #user-rebate .withdraw-btn {
   border-radius: 0px;
-  background-color: #ff9900;
+  background-color:red;
   color: #ffffff;
   height: 100%
 }
@@ -457,6 +446,19 @@ export default {
 }
 #user-rebate .vux-check-icon > .weui-icon-success:before,
 #user-rebate .vux-check-icon > .weui-icon-success-circle:before {
-  color: #ff9900;
+  color:red;
+}
+
+.urebateinfo .vux-tab .vux-tab-item.vux-tab-selected {
+    color: red;
+    border-bottom: 3px solid red;
+}
+.urebateinfo .vux-tab-ink-bar {
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: red;
+    text-align: center;
 }
 </style>

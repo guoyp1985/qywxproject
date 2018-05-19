@@ -339,7 +339,7 @@ export default {
   line-height:33px;
   border-radius:6px;
   border:1px solid red;
-  color:red;
+  color:#ffffff;
   font-size:14px;
   text-align:center;
   // position: absolute;
@@ -348,7 +348,7 @@ export default {
   // right:0;
   // margin:0 auto;
   box-sizing: border-box;
-  background-color: #ffffff
+  background-color: red
 }
 #to-recommend .weui-panel:after {
   height: 0;
