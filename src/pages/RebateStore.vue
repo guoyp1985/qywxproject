@@ -85,7 +85,7 @@
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
                   <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <span class="info-cell">{{item.dateline | dateFormat}}</span>
+                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
                 </cell>
               </template>
@@ -93,7 +93,7 @@
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
                   <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <span class="info-cell">{{item.dateline | dateFormat}}</span>
+                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
                 </cell>
               </template>
@@ -135,11 +135,9 @@
         <div class="img-box">
           <img :src="storeQrcode" style="max-width:100%;max-height:100%;">
         </div>
-        <div>
-          <span>{{$t('Save Picture To Sharing')}}</span>
-        </div>
+        <div class="padding10 color-white">{{$t('Save Picture To Sharing')}}</div>
         <div @click="storeCardShow=false">
-          <span class="vux-close"></span>
+          <span class="vux-close color-white"></span>
         </div>
       </x-dialog>
     </div>
@@ -437,4 +435,5 @@ export default {
 #rebate-store .weui-tab__panel {
   padding-bottom: 0;
 }
+.qrcode-dialog .weui-dialog{background-color:transparent}
 </style>

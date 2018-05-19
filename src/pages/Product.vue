@@ -220,7 +220,7 @@
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
+            <router-link class="t-cell h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}" style="width:50px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </router-link>
