@@ -198,9 +198,6 @@
               <div class="bold mt5">第五条 奖励金规则</div>
               <div>（1）线上交易的订单，卖家有机会获得平台奖励金，奖励金将在买家确认收货后，与订单金额一起提现。</div>
               <div>（2）若买家对获得奖励金的订单进行了退款，该订单所获得的奖励金将失效。</div>
-              <div class="align_center pt20 pb20">
-                      <a class="color-blue" href="support.php">如有其他疑问或建议，点击此处联系客服</a>
-              </div>
             </div>
           </div>
           <div class="popup-bottom flex_center">
