@@ -85,7 +85,7 @@
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
                   <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <span class="info-cell">{{item.dateline | dateFormat}}</span>
+                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
                 </cell>
               </template>
@@ -93,7 +93,7 @@
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
                   <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <span class="info-cell">{{item.dateline | dateFormat}}</span>
+                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
                 </cell>
               </template>
