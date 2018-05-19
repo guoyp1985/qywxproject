@@ -437,4 +437,5 @@ export default {
 #rebate-store .weui-tab__panel {
   padding-bottom: 0;
 }
+.qrcode-dialog .weui-dialog{background-color:transparent}
 </style>
