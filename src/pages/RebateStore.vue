@@ -133,7 +133,7 @@
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="storeCardShow">
         <div class="img-box">
-          <img :src="rebateInfo.qrcode" style="max-width:100%">
+          <img :src="storeQrcode" style="max-width:100%;max-height:100%;">
         </div>
         <div>
           <span>{{$t('Save Picture To Sharing')}}</span>
@@ -176,7 +176,8 @@ export default {
       isBindScroll1: false,
       isBindScroll2: false,
       isBindScroll3: false,
-      scrollContainer: document.querySelector('#vux_view_box_body')
+      scrollContainer: document.querySelector('#vux_view_box_body'),
+      storeQrcode: null
     }
   },
   filters: {
@@ -287,7 +288,27 @@ export default {
       }
     },
     onShareCard () {
-      this.storeCardShow = true
+      const self = this
+      if (self.storeQrcode) {
+        self.storeCardShow = true
+      } else {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/seller/recommend_qrcode`, {wid: self.query.wid})
+        .then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag === 1) {
+            self.storeQrcode = data.data
+            self.storeCardShow = true
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
     getData () {
       const self = this
