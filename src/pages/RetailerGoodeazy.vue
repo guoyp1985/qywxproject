@@ -177,7 +177,9 @@ export default {
       this.searchword = val
     },
     onCancel () {
-      this.searchword = ''
+      const self = this
+      self.searchword = ''
+      self.searchdata = []
     },
     onSubmit () {
       const self = this
@@ -190,20 +192,28 @@ export default {
         return false
       }
       if (self.$util.trim(kw) !== '') {
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-          { do: 'get_sogou_list', keyword: kw }
-        ).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          self.searchdata = (data.data ? data.data : data)
-          self.showSearchEmpty = true
-        })
+        self.searchFun(kw)
       }
+    },
+    searchFun (kw) {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+        { do: 'get_sogou_list', keyword: kw }
+      ).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.searchdata = (data.data ? data.data : data)
+        self.showSearchEmpty = true
+      })
     },
     searchEvent (kw) {
       const self = this
-      self.searchword = kw
+      // self.searchword = kw
+      self.searchdata = []
+      if (self.$util.trim(kw) !== '') {
+        self.searchFun(kw)
+      }
     },
     tabitemclick (index) {
       const self = this
@@ -269,7 +279,7 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-      { do: 'history' }
+      { do: 'history', pagestart: 0, limit: 15 }
     ).then(function (res) {
       let data = res.data
       self.keywordsData = data.data ? data.data : data
