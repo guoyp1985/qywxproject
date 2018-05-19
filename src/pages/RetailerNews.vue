@@ -36,7 +36,7 @@
                         <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
                     </div>
                   </div>
-                  <div class="align_right t-cell v_bottom w80">
+                  <div class="align_right t-cell v_bottom w80 pb8">
                       <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">●●●</div>
                   </div>
                 </div>
