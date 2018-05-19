@@ -343,7 +343,11 @@ export default {
       const self = this
       if (this.notFavorite) {
         this.notFavorite = false
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module})
+        let cururl = `/news?id=${self.query.id}`
+        if (self.query.wid) {
+          cururl = `${cururl}&wid=${self.query.wid}`
+        }
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
