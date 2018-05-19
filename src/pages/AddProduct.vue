@@ -309,7 +309,12 @@ export default {
       if (!iscontinue) {
         return false
       }
-      if (isNaN(postdata.price) || postdata.price < 0 || (self.$util.trim(postdata.rebate) !== '' && (isNaN(postdata.rebate) || postdata.rebate < 0))) {
+      let price = postdata.price.replace(/,/g, '')
+      let rebate = postdata.rebate
+      if (self.$util.trim(rebate) !== '') {
+        rebate = rebate.replace(/,/g, '')
+      }
+      if (isNaN(price) || price < 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
         self.$vux.alert.show({
           title: '',
           content: '请输入正确的价格'
