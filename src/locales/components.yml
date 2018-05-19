@@ -286,6 +286,9 @@ en:
   Upload images: Upload images
   Goods sold to rebate user rebate Commission: Goods sold to rebate user rebate Commission
   Goods sold to rebate user commission: Goods sold to rebate user commission
+  Pre Sale: Pre Sale
+  Complaint: Complaint
+  Delivery of goods: Delivery of goods
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -334,8 +337,8 @@ zh-CN:
   Http link: 站外链接
   Money: 余额
   Collapse: 折叠
-  Title 001: 标题一
-  Title 002: 标题二
+  Title 001: 售前
+  Title 002: 投诉
   Title 003: 标题三
   Animated: 动画效果
   Withdraw: 提现
@@ -359,6 +362,7 @@ zh-CN:
   Month Sharing Goal: 月分享目标
   Had Shared: 已分享
   Had Contacted: 已联系
+  Contacted: 联系
   Sharing Material: 分享素材
   Sharing Qrcode: 分享二维码
   Gain Consumers: 获取客户
@@ -445,9 +449,9 @@ zh-CN:
   Article: 文章
   Commodity: 商品
   Store: 店铺
-  Share invite customer: 分享邀请返点客户
+  Share invite customer: 分享邀请返点客
   Rebate manage: 返点管理
-  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。'
+  Message text: '早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客,每日只能推送一次。'
   Send text: 发送
   Customer text: 客户
   Percent: 成交概率
@@ -486,6 +490,7 @@ zh-CN:
   Are you sure stop?: 确定要停止吗？
   Min buy price: 最低成交价
   Limitbuy count: 限购数量
+  Delivery of goods: 投放商品数量
   Get cash explain: 提现说明
   Saled txt: 销量
   Contact: 联系
@@ -618,15 +623,24 @@ zh-CN:
   Rebate Agreement: 返点客协议
   Total Sales: 销售总额
   Rebate Amount: 待返点金额
+  Total Amount: 总收入
+  Point Of Return: 返点说明
   Waiting To Rebate: 待返点
   Waiting To Return Money: 待提现
   Already Return Money: 已提现
+  To Make Presentation: 去提现
   Coming Customer: 带来客户
   Make Money By Sharing: 分享赚佣金
+  Immediately Make Money By Sharing: 立即分享赚佣金
   Current Store: 当前店铺
   To Recommend Store: 推荐店铺
   Total Income: 累计收入
+  Income Of Our Shop: 本店收入
+  I Am In The Store: 我在本店收入
   Bring Customer: 带来客户
+  Total Number: 总人数
+  Purchase Number: 购买人数
+  Purchase Ratio: 购买比例
   Save Picture To Sharing: 保存图片分享给好友
   All Checked: 全选
   Setting Default Success For Address: 默认地址设置成功
@@ -645,16 +659,17 @@ zh-CN:
   Entry Edit Mode: 进入编辑模式
   Delete Article Confirm: 是否确认删除？
   Apply: 申请
+  Submit: 提交
   tIndex: 共销宝
   tLogin: 扫码登录
   tCenter: 个人中心
-  tCenterSales: 销售中心
+  tCenterSales: 卖家管理中心
   tRetailerSales: 返点客
   tRetailerSaleview: 返点客
   tRetailerSalechance: 销售机会
   tRetailerCustomerlist: 联系客户
   tRetailerAddorder: 订单录入
-  tRetailerOrder: 订单列表
+  tRetailerOrders: 订单列表
   tStore: 我的店铺
   tRetailerNews: 文章
   tRetailerProductlist: 商品
@@ -673,7 +688,7 @@ zh-CN:
   tMessages: 消息列表
   tOrderSearch: 订单列表
   tOrderDetail: 订单详情
-  tShippingDetails: 物流详情
+  tShippingDetails: 物流信息
   tRecommend: 返点客
   tArticles: 新闻
   tEvaluation: 评价
@@ -696,9 +711,10 @@ zh-CN:
   tStat: 统计
   tPoster: 生成海报
   tPosterDetail: 海报
-  tNews: 文章详情
+  tNews: 文章
   tActivity: 活动
   tSos: 您要找的内容不见了
+  tRebateStore: 返点店铺
   cancel_text: 取消
   confirm_text: 确定
   loading: 加载中
@@ -729,3 +745,23 @@ zh-CN:
   Subtitle: 副标题
   Input subtitle: 请输入副标题 30字以内
   Upload images: 上传图像
+  tSubscribeInfo: 我
+  Shelf sale: 上架出售
+  Manage center: 管理中心
+  Rolling display: 滚动展示
+  Order Number: 订单编号
+  Pre Sale: 售前
+  Complaint: 投诉
+  Storage unit: 库存单位
+  Rebate description and rebate customer protocol: 返点说明及返点客协议
+  Agree to share right away: 同意马上分享赚佣金
+  tUserRebateInfo: 我的收入
+  tProduct: 产品
+  tMembersView: 用户
+  Update deliver info: 修改物流信息
+  tBringCustomer: 带来客户
+  Views: 浏览
+  tAccountDetail: 返点记录
+  Share view user: 分享查看的用户
+  Degree of intention: 意向程度
+  tChat: 联系

@@ -8,18 +8,20 @@
     <!-- <c-title :link-info="{path:'/profile'}"
             :link-credit="{path:'/credit'}">
     </c-title> -->
-    <group :title="$t('Credit Details')" v-if="items.length">
-      <cell v-for="(item, index) in items" :key="index" class="credit-item" align-items :title="item.title" :inline-desc="item.ldate">
-        <!-- <x-img slot="icon" :src="photo" default-src="../src/assets/images/nopic.jpg"/> -->
-        <div slot="child">
-          <span class="al al-jinbi color-gold"></span>
-          <span class="color-red">{{ item.credit | valueFormat }}</span>
-        </div>
-      </cell>
-    </group>
-    <div v-else class="no-related-x color-gray">
-      <span>{{$t('No Related Data')}}</span>
-    </div>
+    <template v-if="disList">
+      <group :title="$t('Credit Details')" v-if="list.length">
+        <cell v-for="(item, index) in list" :key="index" class="credit-item" align-items :title="item.title" :inline-desc="item.ldate">
+          <x-img slot="icon" :src="item.photo" class="imgcover" default-src="../src/assets/images/nopic.jpg" container="#vux_view_box_body"/>
+          <div slot="child">
+            <span class="al al-jinbi color-gold"></span>
+            <span class="color-red">{{ item.credit | valueFormat }}</span>
+          </div>
+        </cell>
+      </group>
+      <div v-else class="no-related-x color-gray">
+        <span>{{$t('No Related Data')}}</span>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -34,8 +36,13 @@ export default {
   },
   data () {
     return {
-      type: '1',
-      items: []
+      query: Object,
+      disList: false,
+      list: [],
+      pagestart: 0,
+      limit: 10,
+      isBindScroll: false,
+      scrollContainer: document.querySelector('#vux_view_box_body')
     }
   },
   filters: {
@@ -47,18 +54,43 @@ export default {
     }
   },
   methods: {
+    scroll: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.list.length === (self.pagestart + 1) * self.limit) {
+            self.pagestart++
+            self.$vux.loading.show()
+            self.getData()
+          }
+        }
+      })
+    },
     getData () {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/user/creditsList`)
+      let params = { pagestart: self.pagestart, limit: self.limit }
+      this.$http.get(`${ENV.BokaApi}/api/user/creditsList`, {
+        params: params
+      })
       .then(res => {
-        if (res.data.flag) {
-          self.items = res.data.data
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.list = self.list.concat(retdata)
+        self.disList = true
+        if (!self.isBindScroll) {
+          self.isBindScroll = true
+          self.scrollContainer.removeEventListener('scroll', self.scroll)
+          self.scrollContainer.addEventListener('scroll', self.scroll)
         }
       })
     }
   },
   created () {
-    this.getData()
+    const self = this
+    self.$vux.loading.show()
+    self.getData()
   }
 }
 </script>

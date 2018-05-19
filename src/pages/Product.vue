@@ -1,11 +1,14 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
     <template v-if="showcontainer">
       <template v-show="isshowtop">
         <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
           <div class="t-table h_100">
             <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
-              <img class="v_middle" style="width:36px;height:36px;border-radius:50%" :src="loginUser.avatar" />
+              <x-img class="v_middle imgcover" :src="loginUser.avatar" default-src="../src/assets/images/user.jpg" style="width:36px;height:36px;border-radius:50%"></x-img>
             </router-link>
             <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
               <div>{{ loginUser.linkman }}</div>
@@ -21,7 +24,7 @@
         </div>
         <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
-      <div class="pagemiddle">
+      <div class="pagemiddle scroll-container">
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -32,14 +35,17 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img :src="item" class="imgcover w_100 h_100"/>
+              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg"></x-img>
             </swiper-item>
           </swiper>
         </template>
         <div class="grouptitle flex_left" v-if="activityInfo.id && activityInfo.type == 'groupbuy'">
   				<div class="col1"><span>{{ $t('RMB') }}</span><span class="font20 bold">{{ activityInfo.groupprice }}</span></div>
-  				<div class="col2"><div class="colicon">{{ activityInfo.numbers }}人团</div></div>
-  				<div class="col3">已团{{ productdata.havetuan }}件</div>
+  				<div class="col2">
+            <div class="colicon">{{ activityInfo.numbers }}人团</div>
+            <span class="db-in">限购{{activityInfo.everybuy}}{{productdata.unit}}</span>
+          </div>
+  				<div class="col3">已团{{ productdata.havetuan }}{{productdata.unit}}</div>
   			</div>
         <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
       		<div class="clamp2">
@@ -50,11 +56,11 @@
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
     					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
-    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}件</div>
+    					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
-            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}件</div>
-            <div v-if="(loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user'" class="t-cell v_middle border-box align_right">
-              <span>佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
+            <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
+            <div v-if="!activityInfo.id && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
+              <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
   					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
   						<span class="help-icon">?</span>了解购买流程
@@ -65,17 +71,57 @@
   				<div class="bg-page" style="height:10px;"></div>
   				<div class="bg-white">
   					<div class="b_bottom_after padding10">正在开团，可直接参与</div>
-            <div class="vux-marquee" item-height=110 duration=2000>
+            <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
+              <div class="t-table">
+                <div class="t-cell v_middle w50">
+                  <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                </div>
+                <div class="t-cell v_middle align_left">
+                  <div class="clamp1">{{ item.username }}</div>
+                </div>
+                <div class="t-cell v_middle align_right font12" style="width:150px;">
+                  <div class="align_center">差{{ item.leftnumber }}人成团</div>
+                  <div class="align_center color-gray">
+                    <span class="v_middle db-in">还剩</span>
+                    <span class="v_middle db-in">{{ item.lefthour }}</span>
+                    <span class="v_middle db-in">:</span>
+                    <span class="v_middle db-in">{{ item.leftminute }}</span>
+                    <span class="v_middle db-in">:</span>
+                    <span class="v_middle db-in">{{ item.leftsecond }}</span>
+                  </div>
+                </div>
+                <div v-if="item.uid != loginUser.uid" class="t-cell v_middle align_right addgrouparea" style="width:65px;">
+                  <div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;" @click="addGroup(item)">去参团</div>
+                </div>
+              </div>
+            </div>
+            <div v-else-if="activitydata.length > 2" class="vux-marquee" item-height=110 duration=2000>
               <marquee>
                 <marquee-item v-for="(item,index) in activitydata" :key="item.id">
-                  <Groupbuyitemplate style="margin-bottom:0 !important;">
-                    <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
-                    <span slot="title">{{ item.title }}</span>
-                    <span slot="numbers">{{ item.numbers }}</span>
-                    <span slot="havetuan">{{ item.havetuan }}</span>
-                    <span slot="groupprice">{{ item.groupprice }}</span>
-                    <span slot="price">{{ item.price }}</span>
-                  </Groupbuyitemplate>
+                  <div class="scroll_item padding10">
+          					<div class="t-table">
+          						<div class="t-cell v_middle w50">
+                        <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+          						</div>
+          						<div class="t-cell v_middle align_left">
+          							<div class="clamp1">{{ item.username }}</div>
+          						</div>
+          						<div class="t-cell v_middle align_right font12" style="width:150px;">
+          							<div class="align_center">差{{ item.leftnumber }}人成团</div>
+          							<div class="align_center color-gray">
+                          <span class="v_middle db-in">还剩</span>
+                          <span class="v_middle db-in">{{ item.lefthour }}</span>
+                          <span class="v_middle db-in">:</span>
+                          <span class="v_middle db-in">{{ item.leftminute }}</span>
+                          <span class="v_middle db-in">:</span>
+                          <span class="v_middle db-in">{{ item.leftsecond }}</span>
+          							</div>
+          						</div>
+          						<div v-if="item.uid != loginUser.uid" class="t-cell v_middle align_right addgrouparea" style="width:65px;">
+          							<div class="qbtn bg-red color-white btnaddgroup" style="line-height:1;" @click="addGroup(item)">去参团</div>
+          						</div>
+          					</div>
+          				</div>
                 </marquee-item>
               </marquee>
             </div>
@@ -103,21 +149,21 @@
               <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
       					<div class="t-table">
       						<div class="t-cell pic" style="width:40px;">
-      							<img class="avatarimg" :src="item.avatar" />
+                    <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       						</div>
       						<div class="t-cell">{{ item.username }}</div>
       						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
       					</div>
-      					<div class="mt5">{{ item.message }}</div>
-      					<div class="mt5 align_right">
-                  <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+      					<div class="mt5" v-html="item.message"></div>
+      					<div class="mt5 align_right" v-if="productdata.uploader == loginUser.uid">
+                  <div class="bg-orange color-white qbtn" style="width:50px;padding:0px;line-height:25px;" @click="onReply(item)">回复</div>
       					</div>
       					<div class="mt5" v-if="item.comment && item.comment.length > 0">
           				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
           					<div class="title clear pt5 pb5">
           						<div class="color-gray font12" style="padding-left:6px;position:relative;">
           							<div class="bg-green" style="position: absolute;left: 0;top: 0px;bottom: 0px;width: 2px;"></div>
-          							<span class="color-orange">{{ citem.username }}</span> 回复 :<span>{{ citem.message }}</span>
+          							<span class="color-orange">卖家</span> 回复 :<span v-html="citem.message"></span>
           						</div>
           					</div>
           				</div>
@@ -131,9 +177,9 @@
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
             <div class="buylist pt10 pb15 pl10 pr10">
-              <router-link class="item" :to="{path:'/product',query:{id:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
+              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
                 <div class="align_center">
-      						<img class="avatarimg" :src="item.avatar">
+                  <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       					</div>
       					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
               </router-link>
@@ -145,7 +191,7 @@
         <div class="padding10 b_bottom_after">
           <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
     				<div class="t-cell v_middle" style="width:70px;">
-    					<img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerinfo.avatar" />
+              <x-img class="v_middle imgcover" :src="retailerinfo.avatar" default-src="../src/assets/images/user.jpg" style="width:60px;height:60px;" container=".scroll-container"></x-img>
     				</div>
     				<div class="t-cell v_middle">
     					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
@@ -174,7 +220,7 @@
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <router-link class="t-cell h_100 v_middle align_center" to="/centerSales" style="width:50px;">
+            <router-link class="t-cell h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid}}" style="width:50px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </router-link>
@@ -242,7 +288,7 @@
         <popup v-model="showevluate" height="100%">
           <div class="popup1">
             <div class="popup-top flex_center">评价</div>
-            <div class="popup-middle font14">
+            <div class="popup-middle font14 evluate-popup-container">
               <div class="scroll_list">
                 <template v-if="evluatedata.length == 0">
                   <div class="scroll_item emptyitem">
@@ -254,21 +300,21 @@
                 <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
         					<div class="t-table">
         						<div class="t-cell pic" style="width:40px;">
-        							<img class="avatarimg" :src="item.avatar" />
+                      <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".evluate-popup-container"></x-img>
         						</div>
         						<div class="t-cell">{{ item.username }}</div>
         						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
         					</div>
-        					<div class="mt5">{{ item.message }}</div>
-        					<div class="mt5 align_right">
-                    <router-link class="bg-orange color-white qbtn" to="/store" style="width:50px;padding:0px;line-height:25px;">回复</router-link>
+        					<div class="mt5" v-html="item.message"></div>
+        					<div class="mt5 align_right" v-if="productdata.uploader == loginUser.uid">
+                    <div class="bg-orange color-white qbtn" style="width:50px;padding:0px;line-height:25px;" @click="onReply(item)">回复</div>
         					</div>
         					<div class="mt5" v-if="item.comment && item.comment.length > 0">
             				<div v-for="(citem,index1) in item.comment" :key="citem.id" class="border-box p0" style="background-color:#f7f7f7;">
             					<div class="title clear pt5 pb5">
             						<div class="color-gray font12" style="padding-left:6px;position:relative;">
             							<div class="bg-green" style="position: absolute;left: 0;top: 0px;bottom: 0px;width: 2px;"></div>
-            							<span class="color-orange">{{ citem.username }}</span> 回复 :<span>{{ citem.message }}</span>
+            							<span class="color-orange">卖家</span> 回复 :<span v-html="citem.message"></span>
             						</div>
             					</div>
             				</div>
@@ -293,6 +339,7 @@
           :on-close="closeShareSuccess">
         </share-success>
       </template>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </template>
   </div>
 </template>
@@ -313,10 +360,12 @@ Another batch:
 </i18n>
 
 <script>
-import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem } from 'vux'
+import { Previewer, Swiper, SwiperItem, TransferDom, Popup, Marquee, MarqueeItem, XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
+import CommentPopup from '@/components/CommentPopup'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -326,7 +375,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -337,6 +386,8 @@ export default {
     return {
       query: {},
       disTimeout: true,
+      showSos: false,
+      sosTitle: '',
       showcontainer: false,
       showShareSuccess: false,
       showsharetip: true,
@@ -362,9 +413,11 @@ export default {
       previewerPhotoarr: [],
       buyuserdata: [],
       evluatedata: [],
+      replyPopupShow: false,
       ingdata: [],
       activitydata: [],
-      submitdata: { flag: 1, quantity: 1 }
+      submitdata: { flag: 1, quantity: 1 },
+      replyData: null
     }
   },
   watch: {
@@ -515,7 +568,7 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.$router.push({ path: '/addOrder', query: { id: self.productid } })
+          self.$router.push({ path: '/addOrder', query: { id: data.data } })
         } else if (data.error) {
           self.$vux.toast.show({
             text: data.error,
@@ -577,6 +630,81 @@ export default {
         shareData.data = self.productdata
       }
       self.$util.handleWxShare(shareData)
+    },
+    cutdown (item, interval) {
+      interval = setInterval(function () {
+        let h = parseInt(item.lefthour)
+        let m = parseInt(item.leftminute)
+        let s = parseInt(item.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            item.leftsecond = '0' + s
+          } else {
+            item.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            item.leftminute = '0' + m
+          } else {
+            item.leftminute = m
+          }
+          item.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            item.lefthour = '0' + h
+          } else {
+            item.lefthour = h
+          }
+          item.leftminute = '59'
+          item.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(interval)
+        }
+      }, 1000)
+    },
+    addGroup (item) {
+      const self = this
+      self.$vux.loading.show()
+      let postdata = self.submitdata
+      postdata.crowdowner = item.uid
+      postdata.activityid = item.activityid
+      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.$router.push({ path: '/addOrder', query: { id: data.data } })
+        } else if (data.error) {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    onReply (item) {
+      this.replyData = item
+      console.log(this.replyData)
+      this.replyPopupShow = true
+    },
+    replyPopupCancel () {
+      this.replyPopupShow = false
+    },
+    replySubmit (value) { // 回复提交
+      this.replyPopupShow = false
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.replyData.id, module: 'comments', message: value})
+      .then(res => {
+        if (res.data.flag) {
+          if (!self.replyData.comment) {
+            self.replyData.comment = []
+          }
+          self.replyData.comment.push(res.data.data)
+        }
+      })
     }
   },
   created () {
@@ -605,7 +733,10 @@ export default {
       if (res && res.status === 200) {
         let data = res.data
         self.$vux.loading.hide()
-        if (data.flag === 1) {
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+        } else {
           self.showcontainer = true
           self.productdata = data.data
           self.retailerinfo = self.productdata.retailerinfo
@@ -666,14 +797,24 @@ export default {
         }
         if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
           return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
-            { params: { id: self.productid } }
+            { params: { id: self.activityInfo.id } }
           )
         }
       }
     }).then(function (res) {
       if (res && res.status === 200) {
         let data = res.data
-        self.activitydata = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let d = retdata[i]
+          let lefttime = d.lefttime
+          d.lefthour = lefttime.hour
+          d.leftminute = lefttime.minute
+          d.leftsecond = lefttime.second
+          d.interval = null
+          self.cutdown(d, d.interval)
+        }
+        self.activitydata = retdata
       }
     })
   }

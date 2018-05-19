@@ -8,7 +8,7 @@
     <sticky scroll-box="vux_view_box_body">
       <div class="express-info">
         <div class="goods-cell">
-          <img :src="orderImg"></img>
+          <x-img :src="orderImg" default-src="../src/assets/images/nopic.jpg"></x-img>
         </div>
         <div class="express-cell font13">
           <div class="express-status">
@@ -41,11 +41,11 @@
 </i18n>
 
 <script>
-import { Sticky, Timeline, TimelineItem } from 'vux'
+import { Sticky, Timeline, TimelineItem, XImg } from 'vux'
 import ENV from 'env'
 export default {
   components: {
-    Sticky, Timeline, TimelineItem
+    Sticky, Timeline, TimelineItem, XImg
   },
   data () {
     return {
@@ -53,7 +53,7 @@ export default {
       expressCompany: '',
       expressNumber: '',
       expressPhone: '',
-      orderImg: '../../asset/images/nopic.png',
+      orderImg: '',
       timelines: []
     }
   },

@@ -1,21 +1,9 @@
 <template>
-  <div class="containerarea font14">
-    <div class="h_100 error404">
-      <div class="content-block">
-        <div class="meeting_title1">
-          <div class="content_tile mg">
-            <span class="">{{ $t('tSos') }}</span>
-          </div>
-          <div class="t-center back_year posi_r">
-            <a href="javascript:history.go(-1);" class="back_btn posi_a bd_in t-table link back"><span class="t-cell middle-cell">←&nbsp;返回</span></a>
-          </div>
-        </div>
-        <div class="meeting_title1 meetint_titlepc" style="display:none">
-          <div class="content_tile mg"><span class="">$error</span></div>
-          <div class="t-center back_year posi_r">
-            <a href="javascript:history.go(-1);" class="back_btn posi_a bd_in t-table link back"><span class="t-cell middle-cell">←&nbsp;知道了</span></a>
-            <a href="javascript:history.go(-1);" class="back_btn posi_a bd_in t-table link back"><span class="t-cell middle-cell">←&nbsp;返回</span></a>
-          </div>
+  <div class="h_100 error404">
+    <div class="content-block">
+      <div class="meeting_title1">
+        <div class="content_tile mg">
+          <span class="">{{ title }}</span>
         </div>
       </div>
     </div>
@@ -27,15 +15,12 @@
 
 <script>
 export default {
-  data () {
-  },
-  filters: {
-  },
-  watch: {
-  },
-  methods: {
-  },
-  created () {
+  name: 'Sos',
+  props: {
+    title: {
+      type: String,
+      default: '您要找的内容不见了'
+    }
   }
 }
 </script>

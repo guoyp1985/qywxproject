@@ -8,7 +8,7 @@
         </div>
       </div>
     </div>
-    <div class="s-container s-container1">
+    <div class="s-container s-container1 scroll-container">
       <div style="position:absolute;left:0;top:0;right:0;">
         <search
           class="x-search"
@@ -26,10 +26,10 @@
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无分享数据</template>
           </div>
-          <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.kefuid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
+          <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;height:50px;">
-                <img :src="item.photo" style="width:40px;height:40px;" class="imgcover" />
+                <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
@@ -56,13 +56,13 @@ Percent:
 </i18n>
 
 <script>
-import { Search } from 'vux'
+import { Search, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Search
+    Search, XImg
   },
   filters: {
     dateformat: function (value) {

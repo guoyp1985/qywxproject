@@ -34,6 +34,7 @@ export default {
   },
   data () {
     return {
+      query: Object,
       addressData: ChinaAddressV4Data,
       initItem: {},
       switcher: true
@@ -95,10 +96,19 @@ export default {
       )) {
         this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
         .then(res => {
-          this.$router.go(-1)
+          if (self.query.lasturl) {
+            self.$router.push(self.query.lasturl)
+          } else {
+            this.$router.go(-1)
+          }
         })
       }
     }
+  },
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
   }
 }
 </script>

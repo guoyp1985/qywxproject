@@ -30,6 +30,7 @@ import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import ShareSuccess from '@/components/ShareSuccess'
+import urlParse from 'url-parse'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -62,6 +63,12 @@ export default {
   watch: {
     data: function () {
       return this.data
+    },
+    crowduser: function () {
+      return this.crowduser
+    },
+    crowduserid: function () {
+      return this.crowduserid
     }
   },
   methods: {
@@ -105,11 +112,13 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         self.data = data.data ? data.data : data
-        document.title = self.data.title
+        if (self.data.title) {
+          document.title = self.data.title
+        }
         if (self.data.type === 'bargainbuy') {
           self.bargainbuyType = true
           let sharelink = `${ENV.Host}/#/activity?id=${self.data.id}&share_uid=${self.loginUser.uid}`
-          if (self.data.crowduser && self.data.crowduser.length !== 0) {
+          if (self.data.crowduser && self.data.crowduser.id) {
             self.crowduser = self.data.crowduser
             sharelink = `${sharelink}&crowduserid=${self.crowduser.id}`
           }
@@ -172,19 +181,51 @@ export default {
       })
     },
     cutdownCallback () {
+      const self = this
       self.getInfo()
+    },
+    createdFun (to, from, next) {
+      this.$vux.loading.show()
+      this.$store.commit('updateToggleTabbar', {toggleBar: false})
+      this.query = to.query
+      if (this.query.crowduserid) {
+        this.crowduserid = this.query.crowduserid
+      }
+      this.loginUser = User.get()
+      this.getInfo()
+      next && next()
+    },
+    access () {
+      const user = User.get()
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      if (code) {
+        alert(code)
+        // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
+        // .then(
+        //   res => {
+        //     // TODO
+        //     User.set({
+        //       ...user,
+        //       ...res.data
+        //     })
+        //     location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+        //   }
+        // )
+      } else if (user && !user.subscribe) {
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+      } else {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      }
     }
   },
+  beforeRouteUpdate (to, from, next) {
+    this.createdFun(to, from, next)
+  },
   created () {
-    const self = this
-    self.$vux.loading.show()
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    if (self.query.crowduserid) {
-      self.crowduserid = self.query.crowduserid
-    }
-    self.loginUser = User.get()
-    self.getInfo()
+    this.access()
+    this.createdFun(this.$route)
   }
 }
 </script>

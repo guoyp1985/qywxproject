@@ -2,7 +2,7 @@
   <div class="containerarea bg-page font14 notop posterdetail">
     <div class="pagemiddle" style="padding:20px;">
       <div class="boxouter flex_center">
-        <img class="pic" :src="data" />
+        <x-img class="pic" :src="data" default-src="../src/assets/images/nopic.jpg"></x-img>
       </div>
     </div>
     <div class="pagebottom flex_center">(长按图片保存到相册)</div>
@@ -13,8 +13,12 @@
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import ENV from 'env'
 export default {
+  components: {
+    XImg
+  },
   data () {
     return {
       query: Object,

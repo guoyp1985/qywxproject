@@ -6,22 +6,20 @@
 <template>
   <div class="reply">
     <div class="header-area">
-      <div class="name-cell">
-        {{item.userName}} {{$t('Reply')}}
+      <div class="name-cell" @click="testclick">
+        <span class="color-orange mr5">{{item.username}}</span><span>{{$t('Reply')}}</span>
       </div>
-      <div class="digg-cell color-gray">
-        <a @click="diggClick(item.diggUrl)">
-          <span class="digicon"></span>
-          <span class="digg-count">{{item.diggCount}}</span>
-        </a>
+      <!--
+      <div class="digg-cell color-gray" @click="diggClick('comment',item.id,item)">
+        <span class="digicon"></span>
+        <span class="digg-count">{{item.diggCount}}</span>
       </div>
+    -->
     </div>
-    <div class="reply-content">
-      {{item.content}}
-    </div>
+    <div class="reply-content" v-html="item.message"></div>
     <div class="date-area">
       <div class="date-cell">
-        {{item.date | dateFormat}}
+        {{item.dateline | dateFormat}}
       </div>
       <div class="btns-cell">
         <a v-if="item.authority>2" @click="onReview">{{$t('Review')}}</a>
@@ -34,6 +32,7 @@
 </i18n>
 <script>
 import Time from '#/time'
+import ENV from 'env'
 export default {
   name: 'Reply',
   props: {
@@ -51,7 +50,12 @@ export default {
   },
   filters: {
     dateFormat (date) {
-      return new Time(date).format()
+      return new Time(date * 1000).format()
+    }
+  },
+  watch: {
+    item: function () {
+      return this.item
     }
   },
   methods: {
@@ -61,8 +65,45 @@ export default {
     onDelete () {
       this.$emit('on-delete')
     },
-    diggClick () {
-
+    testclick () {
+      console.log('test click')
+    },
+    diggClick (digmodule, digid, data) {
+      console.log('in click')
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (self.digStatus && self.$util.trim(self.digStatus) !== '') {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: digid,
+        module: digmodule
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (data.digStatus === 'diged') {
+            if (digmodule === 'news') {
+              self.digStatus = ''
+            }
+            delete data.digStatus
+            data.dig = self.article.dig - 1
+          } else {
+            if (digmodule === 'news') {
+              self.digStatus = 'diged'
+            }
+            data.digStatus = 'diged'
+            data.dig = self.article.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   }
 }

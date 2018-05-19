@@ -8,12 +8,12 @@
         </div>
       </div>
     </div>
-    <div class="s-container" style="top:44px;">
+    <div class="s-container scroll-container" style="top:44px;">
       <div class="scroll_list pl10 pr10">
         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
-              <img :src="item.avatar" class="avatarimg1" />
+              <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
             </div>
             <div class="t-cell v_middle align_left">
               <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span><span>{{ item.linkman }}</span></div>
@@ -36,11 +36,13 @@ Message:
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
+    XImg
   },
   filters: {
     dateformat: function (value) {

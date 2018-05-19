@@ -4,7 +4,7 @@
       <div class="pl10 pr10">
         <div class="t-table">
           <div class="t-cell v_middle" style="width:80px;">
-            <img class="avatarimg4" :src="viewuser.avatar" />
+            <x-img class="avatarimg4 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
           </div>
           <div class="t-cell v_middle">
             <div class="font17">{{ viewuser.linkman }}</div>
@@ -58,9 +58,13 @@ Behavior analysis in the last month:
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 export default {
+  components: {
+    XImg
+  },
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')

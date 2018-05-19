@@ -1,12 +1,12 @@
 <template>
-  <div class="containerarea font14 bargainbuydetail" style="overflow-y:auto;">
+  <div class="containerarea font14 bargainbuydetail scroll-container" style="overflow-y:auto;">
     <div class="topimg">
       <img src="../assets/images/bargainbuy_2.png">
     </div>
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <img :src="crowduser.avatar">
+          <x-img class="imgcover" :src="crowduser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
         </div>
         <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
@@ -16,7 +16,7 @@
         <div class="innerbg">
           <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
             <div class="t-cell v_middle w80">
-              <img :src="product.photo" style="width:70px;height:70px;" class="imgcover" />
+              <x-img class="imgcover" :src="product.photo" style="width:70px;height:70px;" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
             </div>
             <div class="t-cell">
               <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
@@ -47,6 +47,17 @@
             <div class="t-cell align_right">￥{{ data.minprice }}</div>
           </div>
         </div>
+        <template v-if="data.leftstorage > 0 && crowduser.isfull == 0 && !crowduser.isovertime">
+          <div v-if="crowduser && crowduser.timeleft" class="pt10 pb10 align_center timeleftarea font13" style="color:#A87F35; ">
+            <span class="v_middle db-in">还剩</span>
+            <span class="v_middle db-in">{{ lefthour }}</span>
+            <span class="v_middle db-in">:</span>
+            <span class="v_middle db-in">{{ leftminute }}</span>
+            <span class="v_middle db-in">:</span>
+            <span class="v_middle db-in">{{ leftsecond }}</span>
+            <span class="v_middle db-in">结束，快让好友帮忙砍价吧~</span>
+          </div>
+        </template>
         <div v-if="data.leftstorage <= 0" class="align_center">
           <div class="btn db">商品已售罄，本次活动结束</div>
         </div>
@@ -60,12 +71,13 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div class="btn db" @click="cutevent">帮TA砍价</div>
-              </div>
-              <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
-                <div class="btn db" @click="joinin">我要参与</div>
+                <div v-if="!user || user.subscribes == 0" class="btn db" @click="toRedirect">帮TA砍价</div>
+                <div v-else class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
             </template>
+            <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
+              <div class="btn db" @click="joinin">我要参与</div>
+            </div>
           </template>
           <div v-if="data.havecreate" class="t-cell">
             <router-link :to="{path: '/activity', query: {id: data.id, crowduserid: data.havecreate}}" class="btn db">我的活动</router-link>
@@ -88,7 +100,7 @@
           <div v-else v-for="(item,index) in cutData" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
-                <img class="v_middle" style="width:44px;height:44px;border-radius:50%;" :src="item.avatar" />
+                <x-img class="v_middle imgcover avatarimg1" :src="product.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_middle" style="padding-right:25px;">
                 <div class="clamp1 font13">{{ item.linkman }}</div>
@@ -110,8 +122,7 @@
 </i18n>
 
 <script>
-
-import { Countdown } from 'vux'
+import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -129,24 +140,21 @@ export default {
     },
     cutData: Array,
     onJoin: Function,
-    onCut: Function
+    onCut: Function,
+    cuting: false
   },
   components: {
-    Countdown
+    XImg
   },
   data () {
     return {
-      loginUser: Object,
       product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
-      canbuy: true
-    }
-  },
-  created () {
-    const self = this
-    if (self.data) {
-      self.product = self.data.product
+      canbuy: true,
+      lefthour: '',
+      leftminute: '',
+      leftsecond: ''
     }
   },
   filters: {
@@ -163,22 +171,30 @@ export default {
     }
   },
   methods: {
+    toRedirect () {
+      const originHref = encodeURIComponent(location.href)
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+    },
     cutevent () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.onCut && self.onCut()
+      if (!self.cuting) {
+        self.$vux.loading.show()
+        self.cuting = true
+        self.$http.post(`${ENV.BokaApi}/api/activity/partInBargain`, { id: self.crowduser.id }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.onCut && self.onCut()
+              }
             }
-          }
+          })
+          self.cuting = false
         })
-      })
+      }
     },
     joinin () {
       const self = this
@@ -196,6 +212,60 @@ export default {
           }
         })
       })
+    },
+    toMyActivity () {
+      const self = this
+      self.$router.push({path: '/activity', query: {id: self.data.id, crowduserid: self.data.havecreate}})
+    },
+    cutdown () {
+      const self = this
+      let cutdownInterval = setInterval(function () {
+        let h = parseInt(self.lefthour)
+        let m = parseInt(self.leftminute)
+        let s = parseInt(self.leftsecond)
+        if (s > 0) {
+          s--
+          if (s < 10) {
+            self.leftsecond = '0' + s
+          } else {
+            self.leftsecond = s
+          }
+        } else if (m > 0) {
+          m--
+          if (m < 10) {
+            self.leftminute = '0' + m
+          } else {
+            self.leftminute = m
+          }
+          self.leftsecond = '59'
+        } else if (h > 0) {
+          h--
+          if (h < 10) {
+            self.lefthour = '0' + h
+          } else {
+            self.lefthour = h
+          }
+          self.leftminute = '59'
+          self.leftsecond = '59'
+        }
+        if (h === 0 && m === 0 && s === 0) {
+          clearInterval(cutdownInterval)
+          self.isfinish = true
+          self.cutdownEnd && self.cutdownEnd()
+        }
+      }, 1000)
+    }
+  },
+  created () {
+    const self = this
+    if (self.data) {
+      self.product = self.data.product
+      if (self.crowduser && self.crowduser.timeleft) {
+        self.lefthour = self.crowduser.timeleft.hour
+        self.leftminute = self.crowduser.timeleft.minute
+        self.leftsecond = self.crowduser.timeleft.second
+        self.cutdown()
+      }
     }
   }
 }

@@ -20,12 +20,12 @@
     <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
-          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" :key="index" container="#vux_view_box_body"></x-img>
+          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" default-src="../src/assets/images/nopic.jpg" :key="index" container=".scroll-container"></x-img>
         </div>
       </div>
       <div class="product-info" v-else>
         <div class="product-img">
-          <x-img :src="item.orderlist[0].photo"></x-img>
+          <x-img :src="item.orderlist[0].photo" default-src="../src/assets/images/nopic.jpg" container=".scroll-container"></x-img>
         </div>
         <div class="product-detail">
           <div class="product-name font12">
@@ -40,7 +40,7 @@
     <div class="pay-info">
       <span class="font12">共{{total}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
-    <div class="operate-area" v-if="item.buttons.length">
+    <div class="operate-area" v-if="item.buttons && item.buttons.length">
       <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
     </div>
   </div>
@@ -75,6 +75,19 @@ export default {
     buttons: {
       type: Array,
       default: () => []
+    }
+  },
+  data () {
+    return {
+      statusButtons: [
+        {id: 1, name: '取消订单'},
+        {id: 2, name: '去支付'},
+        {id: 3, name: '申请退款'},
+        {id: 4, name: '查看物流'},
+        {id: 5, name: '申请售后'},
+        {id: 6, name: '确认收货'},
+        {id: 7, name: '评价'}
+      ]
     }
   },
   computed: {

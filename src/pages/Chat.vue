@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room">
+  <div id="chat-room" class="font14">
     <div class="chat-area bg-white">
       <div class="chatlist">
         <div class="messages-date">03-24 13:01</div>
@@ -22,10 +22,10 @@
                 <template v-else-if="item.msgtype == 'news'">
                   <div class="scroll_item">
           					<div class="con">
-          						<router-link :to="{path: '/news'}">
+          						<router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
           							<div class="pic">
-          								<div class="img_background v_bottom" style="background-image: url(http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg);"></div>
-          								<span class="title">诚挚邀请你成为我的返点客户，为你带来更多收益！</span>
+          								<div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
+          								<span class="title">{{news.title}}</span>
           							</div>
           						</router-link>
           					</div>
@@ -75,17 +75,15 @@
       </div>
       <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea">
       </emotion-box>
-      <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox">
+      <form class="uploadImageForm hide" enctype="multipart/form-data">
+        <input style="opacity:0;" type="file" name="files" />
+      </form>
+      <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
         <grid-item @click.native="sendPhoto">
           <span slot="icon" class="feature-icon al al-zhaopian color-gray"></span>
           <span slot="label" class="color-gray">{{$t('Photo')}}</span>
-          <div v-if="isPC" class="invisable-form">
-            <form enctype="multipart/form-data">
-              <input type="file" name="files"/>
-            </form>
-          </div>
         </grid-item>
-        <grid-item @click.native="sendImgTxt">
+        <grid-item @click.native="showImgTxtPopup">
           <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
           <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
         </grid-item>
@@ -95,17 +93,106 @@
         </grid-item>
       </grid>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showImgTxt" height="100%">
+        <div class="popup1 popup-imgTxt">
+          <div class="popup-top flex_center">图文</div>
+          <div class="flex_center" style="position:absolute;left:0;top:45px;right:0;height:50px;">
+            <search
+              class="x-search"
+              v-model="searchword"
+              :auto-fixed="autofixed"
+              @on-submit="onSearchSubmit"
+              @on-change="onSearchChange"
+              @on-cancel="onSearchCancel"
+              ref="search">
+            </search>
+          </div>
+          <div style="position:absolute;left:0;top:95px;right:0;height:54px;">
+            <tab v-model="tabmodel" class="x-toptab">
+              <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
+            </tab>
+          </div>
+          <div class="popup-middle font14" style="top:149px;">
+            <swiper v-model="tabmodel" class="x-swiper no-indicator">
+              <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
+                <div v-if="(index == 0)">
+                  <div v-if="disNewsData" class="scroll_list">
+                    <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
+                      <template v-if="searchresult1">
+                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                      </template>
+                      <template v-else>
+                        <div class="flex_center" style="height:80px;">暂无文章</div>
+                      </template>
+                    </div>
+                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w50">
+                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container0" ></x-img>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">{{item.title}}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                  </div>
+                </div>
+                <div v-if="(index == 1)">
+                  <div v-if="disProductsData" class="scroll_list">
+                    <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
+                      <template v-if="searchresult2">
+                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                      </template>
+                      <template v-else>
+                        <div class="flex_center" style="height:80px;">暂无商品</div>
+                      </template>
+                    </div>
+                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w50">
+                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">{{item.title}}</div>
+                          <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                        </div>
+                      </div>
+                    </check-icon>
+                  </div>
+                </div>
+                <div v-if="(index == 2)" class="pl10 pr10">
+                </div>
+              </swiper-item>
+            </swiper>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closeImgTxtPopup">{{ $t('Close') }}</div>
+            <div class="flex_cell flex_center h_100 bg-green color-white" @click="sendImgTxt">{{ $t('Confirm txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 <script>
-import { ViewBox, Group, XTextarea, Grid, GridItem, XButton } from 'vux'
+import { ViewBox, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
+import ENV from 'env'
+import { User } from '#/storage'
+const websocket = new WebSocket('ws://124.207.246.109:7272')
+
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    ViewBox, Group, XTextarea, Grid, GridItem, XButton, EmotionBox
+    ViewBox, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon
   },
   data () {
     return {
+      roomid: '',
+      loginUser: Object,
       intervalId: null,
       showEmotBox: false,
       showFeatureBox: false,
@@ -113,181 +200,40 @@ export default {
       textarea: null,
       isPC: this.$util.isPC(),
       query: Object,
-      data: [
-        {
-          'id': 0,
-          'uid': '51',
-          'username': '系统提示',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg',
-          'touid': '51',
-          'content': '成交概率:80.26%<br>返点客户:贪吃小松鼠<br>最近浏览:Bose qc30<br>浏览最长:(2396秒)<br>地区:北京北京<br><font color="orange">建议交流内容:促销活动</font>',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1525423983,
-          'siteid': '',
-          'mediaid': '',
-          'msgtype': 'text',
-          'picurl': '',
-          'msgid': 0,
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 0,
-          'systemtip': true,
-          'unreadNumber': 0
-        },
-        {
-          'id': -1,
-          'uid': '51',
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg',
-          'username': '',
-          'touid': '51',
-          'content': '成交概率:80.26%<br>返点客户:贪吃小松鼠<br>最近浏览:Bose qc30<br>浏览最长:(2396秒)<br>地区:北京北京<br><font color="orange">建议交流内容:促销活动</font>',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1525423983,
-          'siteid': '',
-          'mediaid': '',
-          'msgtype': 'image',
-          'picurl': 'http://oss.boka.cn/gongxiaoshe_qiyeplus_com/month_201802/15179669942179.jpg',
-          'msgid': 0,
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 0,
-          'systemtip': true,
-          'unreadNumber': 0
-        }, {
-          'id': 607,
-          'uid': 187,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          'username': 'YOUNG',
-          'touid': 51,
-          'content': 'retailer_saleapply_187',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1524144452,
-          'siteid': null,
-          'mediaid': '',
-          'msgtype': 'news',
-          'picurl': '',
-          'msgid': '0',
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 0,
-          'type': '',
-          'unreadNumber': 0
-        }, {
-          'id': 606,
-          'uid': 51,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg',
-          'username': '贪吃小松鼠',
-          'touid': 187,
-          'content': '1',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1524108093,
-          'siteid': null,
-          'mediaid': '',
-          'msgtype': 'text',
-          'picurl': '',
-          'msgid': '0',
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 1,
-          'type': '',
-          'unreadNumber': 0
-        }, {
-          'id': 550,
-          'uid': 187,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          'username': 'YOUNG',
-          'touid': 51,
-          'content': 'retailer_saleapply_187',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1523673400,
-          'siteid': null,
-          'mediaid': '',
-          'msgtype': 'news',
-          'picurl': '',
-          'msgid': '0',
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 1,
-          'type': '',
-          'unreadNumber': 0
-        }, {
-          'id': 539,
-          'uid': 187,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          'username': 'YOUNG',
-          'touid': 51,
-          'content': 'hello',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1523517943,
-          'siteid': null,
-          'mediaid': '',
-          'msgtype': 'text',
-          'picurl': '',
-          'msgid': '0',
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 0,
-          'type': '',
-          'unreadNumber': 0
-        }, {
-          'id': 538,
-          'uid': 187,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-          'username': 'YOUNG',
-          'touid': 51,
-          'content': 'hello',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1523517913,
-          'siteid': null,
-          'mediaid': '',
-          'msgtype': 'text',
-          'picurl': '',
-          'msgid': '0',
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 0,
-          'type': '',
-          'unreadNumber': 0
-        }, {
-          'id': 535,
-          'uid': 51,
-          avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/51.jpg',
-          'username': '贪吃小松鼠',
-          'touid': 187,
-          'content': '什么时候＼◎o◎／！',
-          'module': 'service',
-          'moduleid': 0,
-          'moderate': 0,
-          'dateline': 1523516162,
-          'siteid': null,
-          'mediaid': '',
-          'msgtype': 'text',
-          'picurl': '',
-          'msgid': '0',
-          'meetingid': 0,
-          'isread': 1,
-          'isactivemsg': 1,
-          'type': '',
-          'unreadNumber': 0
-        }
-      ],
+      data: [],
       focusInterval: null,
       msgcontent: '',
-      showSend: false
+      showSend: false,
+      pagestart: 0,
+      limit: 5,
+      msgType: 'text',
+      client_list: '',
+      uid_list: [],
+      to_client_id: '',
+      to_client_name: '',
+      msgTextarea: null,
+      showImgTxt: false,
+      tabmodel: 0,
+      tabtxts: [ '文章', '产品', '外链' ],
+      autofixed: false,
+      searchword: '',
+      showSearchEmpty: false,
+      searchresult1: false,
+      searchresult2: false,
+      newsData: [],
+      disNewsData: false,
+      productsData: [],
+      disProductsData: false,
+      popupScrollContainer: null,
+      pagestart1: 0,
+      pagestart2: 0,
+      limit1: 10,
+      selectNewsData: null,
+      selectProductsData: null,
+      isBindNewsScroll: false,
+      isBindProductScroll: false,
+      newsScrollArea: null,
+      productScrollArea: null
     }
   },
   watch: {
@@ -296,6 +242,9 @@ export default {
     }
   },
   methods: {
+    getPhoto (src) {
+      return this.$util.getPhoto(src)
+    },
     onTextClick () {
       this.showEmotBox = false
     },
@@ -308,12 +257,14 @@ export default {
       clearInterval(this.intervalId)
     },
     onChange (val) {
+      /*
       const self = this
       if (self.$util.isNull(val)) {
         self.showSend = false
       } else {
         self.showSend = true
       }
+      */
     },
     toggleVoice () {
       if (this.showEmotBox) {
@@ -364,26 +315,53 @@ export default {
       }
     },
     sendPhoto () {
-      if (!this.isPC) {
-        // const self = this
-        // this.$wechat.ready(function () {
-        this.$wechat.chooseImage({
-          count: 9,
-          sizeType: ['original', 'compressed'],
-          sourceType: ['album', 'camera'],
-          success: function (res) {
-            const localIds = res.localIds
-            alert(localIds)
+      const self = this
+      if (!window.WeixinJSBridge) {
+        let fileForm = document.querySelector('.uploadImageForm')
+        let fileInput = document.querySelector('.uploadImageForm input')
+        fileInput.click()
+        fileInput.addEventListener('change', function (e) {
+          let files = e.target.files
+          if (files.length > 0) {
+            let filedata = new FormData(fileForm)
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              if (data.flag === 1 && data.data) {
+                self.sendData({
+                  touid: self.query.uid,
+                  content: '',
+                  module: 'message',
+                  sendtype: 'image',
+                  picurl: data.data,
+                  thumb: ''
+                })
+              }
+            })
           }
         })
-        // })
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              if (data.flag === 1 && data.data) {
+                self.sendData({
+                  touid: self.query.uid,
+                  content: '',
+                  module: 'message',
+                  sendtype: 'image',
+                  picurl: data.data,
+                  thumb: ''
+                })
+              }
+            }
+          })
+        })
       }
     },
-    sendImgTxt () {
-
-    },
     viewUserInfo () {
-
     },
     getitemclass (item) {
       const self = this
@@ -391,21 +369,337 @@ export default {
       if (item.msgtype === 'news') {
         ret = 'message-push'
       }
-      if (parseInt(item.uid) === self.query.uid) {
+      if (item.uid === parseInt(self.query.uid)) {
         ret = `${ret} left`
       } else {
         ret = `${ret} right`
       }
       return ret
     },
+    sendData (postdata) {
+      const self = this
+      if (self.query.frommodule) {
+        let frommoduleid = self.query.frommoduleid ? self.query.frommoduleid : self.query.moduleid
+        postdata.frommodule = self.query.frommodule
+        postdata.frommoduleid = frommoduleid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/message/send`, postdata).then(function (res) {
+        let data = res.data
+        if (data.flag === 1) {
+          let retdata = data.data
+          let senddata = {
+            module: postdata.module,
+            type: 'say',
+            from_uid: self.loginUser.uid,
+            to_client_id: self.query.uid,
+            msgid: retdata.id,
+            room_id: self.roomid
+          }
+          for (let key in retdata) {
+            senddata[key] = retdata[key]
+          }
+          let sendtxt = JSON.stringify(senddata)
+          websocket.send(sendtxt)
+          self.msgTextarea.value = ''
+          self.msgcontent = ''
+          self.showSend = false
+          self.msgTextarea.focus()
+        }
+      })
+    },
     sendEvent () {
+      const self = this
+      let postdata = {
+        touid: self.query.uid,
+        content: self.msgcontent,
+        module: 'message',
+        sendtype: 'text',
+        picurl: '',
+        thumb: '',
+        inroom: 1
+      }
+      if (!self.$util.isNull(postdata.content)) {
+        postdata.content = postdata.content.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
+      }
+      if (self.msgType === 'text' && self.$util.isNull(self.msgcontent)) {
+        return false
+      }
+      self.sendData(postdata)
+    },
+    getMsgList (lastid) {
+      const self = this
+      let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
+      if (lastid) {
+        params.lastid = lastid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.data = self.data.concat(retdata)
+      })
+    },
+    wsConnect () {
+      const self = this
+      let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
+      let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
+      self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
+      websocket.onopen = function () {
+        let loginData = {
+          type: 'login',
+          uid: self.loginUser.uid,
+          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+          room_id: self.roomid
+        }
+        websocket.send(JSON.stringify(loginData))
+      }
+      websocket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        if (data.type === 'login') {
+          console.log('in login')
+        } else if (data.type === 'logout') {
+          console.log('in logout')
+        } else if (data.type === 'say') {
+          console.log('say')
+          let edata = JSON.parse(e.data)
+          let saycontent = edata.content
+          if (!self.$util.isNull(saycontent)) {
+            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+          }
+          let saydata = {
+            uid: edata.from_uid,
+            content: saycontent,
+            dateline: edata.time,
+            msgtype: edata.msgtype ? edata.msgtype : 'text',
+            picurl: edata.picurl ? edata.picurl : '',
+            thumb: edata.thumb ? edata.thumb : '',
+            username: edata.from_client_name,
+            id: edata.msgid,
+            roomid: edata.room_id,
+            avatar: edata.avatar,
+            newsdata: edata.newsdata
+          }
+          self.data.push(saydata)
+        }
+      }
+      websocket.onclose = function () {
+        console.log('ws closed')
+        self.wsConnect()
+      }
+      websocket.onerror = function () {
+        console.log('ws error')
+      }
+    },
+    setSendStatus () {
+      const self = this
+      let val = self.msgTextarea.value.toString()
+      if (self.$util.trim(val) === '') {
+        self.showSend = false
+      } else {
+        self.showSend = true
+      }
+    },
+    showImgTxtPopup () {
+      const self = this
+      this.showImgTxt = true
+      this.showFeatureBox = false
+      if (!self.popupScrollContainer) {
+        self.popupScrollContainer = document.querySelector('.popup-imgTxt .popup-middle')
+      }
+      self.popupScrollContainer.removeEventListener('scroll', self.scroll1)
+      self.popupScrollContainer.addEventListener('scroll', self.scroll1)
+      self.$vux.loading.show()
+      self.getNewsData()
+    },
+    closeImgTxtPopup () {
+      this.showImgTxt = false
+    },
+    sendImgTxt () {
+      const self = this
+      let postdata = {
+        touid: self.query.uid,
+        sendtype: 'news',
+        picurl: '',
+        thumb: ''
+      }
+      if (self.tabmodel === 0) {
+        postdata.content = `news_${self.selectNewsData.id}`
+      } else if (self.tabmodel === 1) {
+        postdata.content = `product_${self.selectProductsData.id}`
+      }
+      self.sendData(postdata)
+      self.showImgTxt = false
+    },
+    onSearchChange (val) {
+      this.searchword = val
+    },
+    onSearchCancel () {
+      const self = this
+      self.searchword = ''
+      if (self.tabmodel === 0) {
+        self.$vux.loading.show()
+        self.newsData = []
+        self.pagestart1 = 0
+        self.getNewsData()
+      } else if (self.tabmodel === 1) {
+        self.$vux.loading.show()
+        self.productsData = []
+        self.pagestart2 = 0
+        self.getProductData()
+      }
+    },
+    onSearchSubmit () {
+      const self = this
+      if (self.tabmodel === 0) {
+        self.$vux.loading.show()
+        self.newsData = []
+        self.pagestart1 = 0
+        self.getNewsData()
+      } else if (self.tabmodel === 1) {
+        self.$vux.loading.show()
+        self.productsData = []
+        self.pagestart2 = 0
+        self.getProductData()
+      }
+    },
+    tabitemclick (index) {
+      const self = this
+      if (index === 0) {
+        if (self.newsData.length === 0) {
+          self.$vux.loading.show()
+          self.getNewsData()
+        }
+      } else if (index === 1) {
+        if (self.pagestart2 === 0 && !self.isBindProductScroll) {
+          self.$vux.loading.show()
+          self.getProductData()
+        }
+      }
+    },
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.newsScrollArea,
+        callback: function () {
+          if (self.newsData.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getNewsData()
+          }
+        }
+      })
+    },
+    scroll2: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.productScrollArea,
+        callback: function () {
+          if (self.productsData.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getProductData()
+          }
+        }
+      })
+    },
+    getNewsData () {
+      const self = this
+      let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit1 }
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
+        params.keyword = keyword
+      } else {
+        self.searchresult1 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+        params: params
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.newsData = self.newsData.concat(retdata)
+        self.disNewsData = true
+        if (!self.isBindNewsScroll) {
+          self.isBindNewsScroll = true
+          self.newsScrollArea = document.querySelector('.popup-imgTxt .scroll-container0')
+          self.productScrollArea = document.querySelector('.popup-imgTxt .scroll-container1')
+          self.newsScrollArea.removeEventListener('scroll', self.scroll1)
+          self.newsScrollArea.addEventListener('scroll', self.scroll1)
+        }
+      })
+    },
+    getProductData () {
+      const self = this
+      let keyword = self.searchword2
+      let params = { pagestart: self.pagestart2, limit: self.limit1 }
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        self.searchresult2 = true
+        params.keyword = keyword
+      } else {
+        self.searchresult2 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
+        params: params
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.productsData = self.productsData.concat(retdata)
+        self.disProductsData = true
+        if (!self.isBindProductScroll) {
+          self.isBindProductScroll = true
+          self.productScrollArea.removeEventListener('scroll', self.scroll2)
+          self.productScrollArea.addEventListener('scroll', self.scroll2)
+        }
+      })
+    },
+    clickNews (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectNewsData = data
+      } else {
+        self.selectNewsData = null
+      }
+      for (let d of self.newsData) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
+    },
+    clickProduct (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectProductsData = data
+      } else {
+        self.selectProductsData = null
+      }
+      for (let d of self.productsData) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
     }
   },
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.loginUser = User.get()
     self.query = self.$route.query
-    self.query.uid = 51
+    self.wsConnect()
+    self.getMsgList()
+  },
+  mounted () {
+    const self = this
+    this.msgTextarea = document.querySelector('#chat-textarea textarea')
+    this.msgTextarea.addEventListener('focus', function () {
+      self.setSendStatus()
+    })
+    this.msgTextarea.addEventListener('keyup', function () {
+      self.setSendStatus()
+    })
   }
 }
 </script>

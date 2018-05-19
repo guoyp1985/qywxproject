@@ -10,6 +10,9 @@ Util.install = function (Vue, options) {
     trim: (str) => str ? str.replace(Reg.rSpace, '') : '',
     // 判空
     isNull: function (str) {
+      if (!str) {
+        return true
+      }
       return !Reg.rNoSpace.test(this.trim(str))
     },
     // 判终端
@@ -58,6 +61,13 @@ Util.install = function (Vue, options) {
       }
       return re;
     },
+    getItem: function(list, id) {
+      for (let item of list) {
+        if (item.id === id) {
+          return item
+        }
+      }
+    },
     deleteItem: function (list, id) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
@@ -69,10 +79,12 @@ Util.install = function (Vue, options) {
     changeItem: function (list, id, callback) {
       for (let i = 0; i < list.length; i++) {
         if (list[i].id === id) {
-          callback(list[i])
+          let item = callback(list[i])
+          list.splice(i, 1, item)
           break
         }
       }
+      return list
     },
     checkMobile : function(mobile) {
       if (isNaN(mobile)) return false;
@@ -280,26 +292,27 @@ Util.install = function (Vue, options) {
       let sharedesc = os.desc
       let sharephoto = os.photo
       if (data) {
-        sharetitle = !self.isNull(data.seotitle) ? data.seotitle : data.title
+        sharetitle = (data.seotitle && self.trim(data.seotitle) !== '') ? data.seotitle : data.title
         sharedesc = data.title
-        if (!self.isNull(data.seodescription)) {
+        if (data.seodescription && self.trim(data.seodescription) !== '') {
           sharedesc = data.seodescription
-        } else if (!self.isNull(data.summary)) {
+        } else if (data.summary && self.trim(data.summary) !== '') {
           sharedesc = data.summary
-        } else if (!self.isNull(data.seotitle)) {
+        } else if (data.seotitle && self.trim(data.seotitle) !== '') {
           sharedesc = data.seotitle
         }
         sharephoto = data.photo
         let photoarr = []
-        if (!self.isNull(data.photo)) {
+        if (data.photo && self.trim(data.photo) !== '') {
           photoarr = data.photo.split(',')
-        } else if (!self.isNull(data.contentphoto)) {
+        } else if (data.contentphoto && self.trim(data.contentphoto) !== '') {
           photoarr = data.contentphoto.split(',')
         }
         if (photoarr.length > 0) {
           sharephoto = photoarr[0]
         }
       }
+      sharephoto = self.getPhoto(sharephoto)
       let wxData = {
         module: os.module,
         moduleid: os.moduleid,
@@ -343,9 +356,9 @@ Util.install = function (Vue, options) {
     },
     taskData: function (os) {
       let data = os.data
-      let handleFunction = options.handleFunction
+      let handleFunction = os.handleFunction
       if(data && data.length > 0) {
-        let ascdesc = options.ascdesc ? options.ascdesc : "asc"
+        let ascdesc = os.ascdesc ? os.ascdesc : "asc"
         let callback = os.callback
         let tasks = []
         let _serial = function () {
@@ -380,22 +393,26 @@ Util.install = function (Vue, options) {
             localIds = localIds.slice(0, maxnum)
           }
           Vue.$vux.loading.show()
+          let arr = localIds
+          if (maxnum === 1) {
+            arr = [ localIds ]
+          }
           self.taskData({
-            data: localIds,
+            data: arr,
             callback: function () {
               Vue.$vux.loading.hide()
             },
             handleFunction: function (d) {
               return function (done) {
                 Vue.wechat.uploadImage({
-                  localId: d,
+                  localId: d.toString(),
                   isShowProgressTips: 0,
                   success: function (res1) {
-                    self.$http.post(`${ENV.BokaApi}/api/upload/files`, {
+                    Vue.http.post(`${ENV.BokaApi}/api/weixinUpload`, {
                       imgid: res1.serverId
                     }).then(function (res) {
                       let data = res.data
-                      os.handleCallback && os.handelCallback(data)
+                      os.handleCallback && os.handleCallback(data)
                       done()
                     })
                   },
@@ -403,6 +420,7 @@ Util.install = function (Vue, options) {
                     Vue.$vux.toast.show({
                       text: '上传失败'
                     })
+                    Vue.$vux.loading.hide()
                     done()
                   }
                 })
@@ -505,6 +523,12 @@ Util.install = function (Vue, options) {
         })
       }
       return ret
+    },
+    setPhoto: function (src) {
+      return src.replace(/,/g, '||')
+    },
+    getPhoto: function (src) {
+      return src.replace(/\|\|/g, ',')
     }
   }
 }

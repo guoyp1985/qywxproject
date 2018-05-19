@@ -15,7 +15,7 @@
                 <div class="item pic-photo border01">
                   <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
                   <div class="pic-layer">
-                    <img :src="item.photo"/>
+                    <x-img :src="item.photo" default-src="../src/assets/images/nopic.jpg"></x-img>
                   </div>
                 </div>
               </div>
@@ -62,7 +62,9 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Main title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.title" type="text" class="input" name="title" :placeholder="$t('Input main title')" />
+                <group class="textarea-outer">
+                  <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Input main title')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                </group>
               </div>
             </div>
           </div>
@@ -70,7 +72,9 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Subtitle') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.subtitle" type="text" class="input" name="title" :placeholder="$t('Input subtitle')" />
+                <group class="textarea-outer">
+                  <x-textarea v-model="submitdata.subtitle" name="subtitle" class="x-textarea noborder" :placeholder="$t('Input subtitle')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                </group>
               </div>
             </div>
           </div>
@@ -100,9 +104,13 @@ Upload images:
 </i18n>
 
 <script>
+import { Group, XTextarea, XImg } from 'vux'
 import ENV from 'env'
 
 export default {
+  components: {
+    Group, XTextarea, XImg
+  },
   data () {
     return {
       query: Object,

@@ -6,18 +6,19 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
+      <!--
       <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body"></x-img>
+    -->
+      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
     </div>
     <div class="detail-cell">
       <div class="header-area">
         <div class="name-cell">
           {{item.username}}
         </div>
-        <div class="digg-cell color-gray">
-          <a @click="diggClick(item.dig)">
-            <span class="digicon"></span>
-            <span class="digg-count">{{item.dig}}</span>
-          </a>
+        <div class="digg-cell color-gray" @click="diggClick(item)">
+          <span :class="`digicon ${item.isdig ? 'diged' : ''}`"></span>
+          <span class="digg-count">{{item.dig}}</span>
         </div>
       </div>
       <div class="comment-content" v-html="item.message"></div>
@@ -25,10 +26,9 @@
         <div class="date-cell">
           {{item.dateline | dateFormat}}
         </div>
-        <div class="btns-cell">
-          <a v-if="params.uploader == item.uid" @click="onReply">{{$t('Reply')}}</a>
-          <!-- <a v-if="uid === item.authority" @click="onReview">{{$t('Review')}}</a> -->
-          <a v-if="params.uid == item.uid" @click="onDelete">{{$t('Delete')}}</a>
+        <div class="btns-cell" v-if="params.uploader == params.uid">
+          <div class="qbtn bg-orange color-white w50" style="padding:3px 0;" @click="onReply">{{$t('Reply')}}</div>
+          <div class="qbtn bg-red color-white w50" style="padding:3px 0;" @click="onDelete">{{$t('Delete')}}</div>
         </div>
       </div>
       <div class="reply-area">
@@ -43,6 +43,7 @@
 
 <script>
 import { XImg } from 'vux'
+import ENV from 'env'
 import Time from '#/time'
 
 export default {
@@ -81,8 +82,35 @@ export default {
     onDelete () {
       this.$emit('on-delete')
     },
-    diggClick () {
-
+    diggClick (item) {
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (item.isdig) {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: item.id,
+        module: 'comments'
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (item.isdig) {
+            item.isdig = 0
+            item.dig = item.dig - 1
+          } else {
+            item.isdig = 1
+            item.dig = item.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
     }
   }
 }

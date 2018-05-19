@@ -7,6 +7,8 @@ a{color:inherit;}
 .clear:after{content:"";display:block;clear:both;}
 .fl{float:left;}
 .fr{float:right;}
+.posi_r{position: relative;}
+.posi_a{position: absolute;}
 .bold{font-weight:bold;}
 .imgcover{object-fit: cover;}
 
@@ -41,13 +43,15 @@ a{color:inherit;}
 .bg-gray6{background-color:#efeff4 !important;}
 .bg-gray7{background-color:#58595B !important;}
 .bg-gray8{background-color:#ccc !important;}
+.bg-gray9{background-color:#f7f7f7 !important;}
 .bg-green{background-color:#4cd964 !important;}
 .bg-orange{background-color:orange !important;}
 .bg-orange1{background-color:#ff9500 !important;}
 .bg-orange5{background-color:#ff4400 !important;}
-.bg-red{background-color:#ff3b30 !important;}
+.bg-red{background-color:#ea3a3a !important;}
 .bg-red1{background-color:#f32a3d !important;}
 .bg-red2{background-color:#ff4a01 !important;}
+.bg-red3{background-color:#ff3b30 !important;}
 .bg-white{background-color:#fff !important;}
 .bg-page{background-color:@page-bg-color !important;}
 
@@ -98,6 +102,7 @@ a{color:inherit;}
 .color-exit{color:#f05e4b !important;}
 .color-order-detail{color: #6a6b71;}
 .color-sales{color: #89d043;}
+.color-999{color:#999999}
 .border-oranage5{border:#ff4400 1px solid;}
 
 .border-color-gray{border-color:#999 !important;}
@@ -156,7 +161,7 @@ a{color:inherit;}
 .boxflex{-moz-box-flex: 1;-webkit-box-flex: 1;box-flex:1;}
 .flex_row{display:flex;flex-flow:row;}
 .flex_table{display:flex;}
-.flex_cell{flex:1;}
+.flex_cell{flex:1;width:0;}
 .flex_left{display:flex;justify-content: flex-start; align-items: center;}
 .flex_right{display:flex;justify-content: flex-end; align-items: center;}
 
@@ -367,6 +372,9 @@ a{color:inherit;}
   background-position: 0 -0;
   margin-top: -3px;
 }
+.diged.digicon {
+    background-position: 0 -18px;
+}
 
 .containerarea{width:100%;height:100%;position:relative;}
 
@@ -427,7 +435,7 @@ a{color:inherit;}
 
 .x-popup .vux-popup-dialog{overflow-y:auto;}
 .popup-top{position:absolute;top:0;left:0;right:0;height:45px;background-color: @popup-top-bg-color;border-bottom:@list-border-color 1px solid;font-size:17px;}
-.popup-middle{position:absolute;left:0;top:45px;right:0;bottom:45px;overflow-y:auto;background-color: @popup-middle-bg-color;}
+.popup-middle{position:absolute;left:0;top:45px;right:0;bottom:45px;overflow-y:auto;overflow-x:hidden;background-color: @popup-middle-bg-color;}
 .popup-bottom{
 	position:absolute;left:0;right:0;bottom:0;height:45px;
 	background: #f5f5f5;border-top:#d8d8d8 1px solid;

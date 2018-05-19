@@ -15,40 +15,36 @@
       </div>
       <div class="b_bottom_after padding10">
         <div class="t-table">
-          <div class="t-cell w80">支付凭证</div>
-          <div class="t-cell align_right photoarea">
-              <template v-if="!data.photo || data.photo == ''">无</template>
-              <div v-else>
-              </div>
-          </div>
-        </div>
-      </div>
-      <div class="b_bottom_after padding10">
-        <div class="t-table">
           <div class="t-cell w80">返点时间</div>
           <div class="t-cell align_right color-gray disdate">{{ data.dateline | dateformat }}</div>
         </div>
       </div>
     </div>
     <div class="padding10 font16">相关订单</div>
-    <div class="scroll_list">
-      <div v-if="!data.orders || data.orders == 0" class="scroll_item emptyitem bg-white">
+    <div class="bg-white padding10 b_bottom_after flex_left">
+        <i class="al al-goumaiguodehuiyuan icon-red font20"></i><span class="ml3 v_middle font15">{{ data.linkman }}</span>
+    </div
+    <div class="scroll_list" v-if="showOrders">
+      <div v-if="!orders || orders.length == 0" class="scroll_item emptyitem bg-white">
         <div class="t-table">
           <div class="t-cell">暂无相关订单</div>
         </div>
       </div>
-      <router-link :to="{ path: '/orderDetail', query: { id: item.id } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in data.orders" :key="item.id">
-        <div class="bg-white padding10 b_bottom_after flex_left">
-            <i class="al al-goumaiguodehuiyuan icon-red font20"></i><span class="ml3 v_middle font15">{{ data.username }}</span>
+      <router-link :to="{ path: '/orderDetail', query: { id: item.orderid } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
+        <div class="padding10">
+          <div class="t-table">
+            <div class="t-cell w60">
+              <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" ></x-img>
+            </div>
+            <div class="t-cell v_middle">
+              <div class="clamp2 font12 color-gray5">{{ item.name }}</div>
+              <div class="font12"><span class="color-orange">{{ $t('RMB') }}{{ item.special }}</span><span class="color-gray"> × {{ item.quantity }}</span></div>
+            </div>
+            <div v-if="item.flagstr" class="t-cell w100 align_right v_middle color-red font12">{{item.flagstr}}</div>
+          </div>
         </div>
-        <orderproductplate v-for="(product,pindex) in item.orderlist" :key="product.id">
-          <img slot="photo" :src="product.photo" style="width:50px;height:50px;" class="imgcover" />
-          <span slot="name">{{ product.name }}</span>
-          <span slot="special">{{ product.special }}</span>
-          <span slot="quantity" class="font12">{{ product.quantity }}</span>
-        </orderproductplate>
         <div class="bg-white b_bottom_after padding10 flex_left">
-          <div>合计：<span class="color-orange">{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></span></div>
+          <div>合计：<span class="color-orange">{{ $t('RMB') }} <span class="font16">{{ data.orderstotal }}</span></span></div>
         </div>
       </router-link>
     </div>
@@ -59,12 +55,14 @@
 </i18n>
 
 <script>
+import { XImg } from 'vux'
 import Orderproductplate from '@/components/Orderproductplate'
+import ENV from 'env'
 import Time from '#/time'
 
 export default {
   components: {
-    Orderproductplate
+    Orderproductplate, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -73,47 +71,12 @@ export default {
   },
   data () {
     return {
-      data: {
-        username: 'SMART',
-        linkman: 'SMART',
-        money: '0.00',
-        photo: '',
-        dateline: 1524450730,
-        orders: [
-          {
-            id: 315,
-            uid: '187',
-            dateline: 1522724948,
-            flagstr: '待付款',
-            flag: 1,
-            username: 'YOUNG',
-            linkman: '于国旺',
-            telephone: '13051687651',
-            address: '北京市东城区金家村',
-            avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/1/187.jpg',
-            orderlist: [
-              {
-                id: 327, photo: 'http://ossgxs.boka.cn/month_201804/15226700508345.jpg', name: '苹果手机', special: '8,000.00', quantity: 1
-              }
-            ]
-          }
-        ]
-      },
+      query: Object,
+      data: {},
+      orders: [],
+      showOrders: false,
       totalPrice: '0.00'
     }
-  },
-  created: function () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    let total = 0
-    for (let i = 0; i < self.data.orders.length; i++) {
-      let o = self.data.orders[i]
-      for (let j = 0; j < o.orderlist.length; j++) {
-        let d = o.orderlist[j]
-        total += parseFloat(d.special.replace(/,/g, '')) * parseInt(d.quantity)
-      }
-    }
-    self.totalPrice = total.toFixed(2)
   },
   watch: {
     data: function () {
@@ -122,6 +85,22 @@ export default {
     totalPrice: function () {
       return this.totalPrice
     }
+  },
+  created: function () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
+      params: { id: self.query.id }
+    }).then(function (res) {
+      let data = res.data
+      self.$vux.loading.hide()
+      if (data.flag === 1) {
+        self.data = data.data
+        self.orders = self.data.orders
+        self.showOrders = true
+      }
+    })
   }
 }
 </script>

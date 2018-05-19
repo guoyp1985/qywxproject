@@ -8,11 +8,11 @@
     <sticky scroll-box="order-detail">
       <div class="order-service">
         <div class="seller-cell">
-          <span class="font14">卖家: {{retailertitle}}</span>
+          <span class="font14">卖家: {{retailerInfo.title}}</span>
         </div>
         <div class="contact-cell">
           <div class="ol-contact">
-            <router-link to="">
+            <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader}}">
               <span class="al al-pinglun3 color-order-detail font14"></span>
               <span class="font13">{{$t('Contact Seller')}}</span>
             </router-link>
@@ -30,11 +30,12 @@
       <cell v-if="expressNumber" class="express-info font14" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/shippingDetails', query: {id: id}}"></cell>
       <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
+      <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
     </group>
     <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
     <group>
-      <cell class="order-list font12" v-for="(order, index) in orders" :key="index">
-        <img slot="icon" :src="order.photo"/>
+      <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
+        <x-img slot="icon" class="imgcover" :src="order.photo" default-src="../src/assets/images/nopic.jpg" ></x-img>
         <div slot="title">
           {{order.name}}
         </div>
@@ -53,7 +54,7 @@
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
-          <img :src="userQrCode" style="max-width:100%">
+          <img :src="retailerInfo.qrcode" style="max-width:100%">
         </div>
         <div>
           <span>{{$t('Add To Contacts With Scan Qrcode')}}</span>
@@ -66,7 +67,7 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import ENV from 'env'
 export default {
@@ -74,17 +75,18 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg
   },
   data () {
     return {
       id: 0,
-      retailertitle: 'unkown',
+      retailerInfo: Object,
       receiver: 'unkown',
       receiverPhone: '13500000000',
       expressCompany: '未知快递',
       expressNumber: '100000000000',
       shippingAddress: '北京市市辖区',
+      shippingOrderon: 'unkown',
       special: 0,
       orders: [],
       priceInfos: [],
@@ -109,21 +111,24 @@ export default {
       this.id = this.$route.query.id
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
       .then(res => {
-        if (res.data.flag) {
-          self.orders = res.data.data.orderlist
-          self.special = res.data.data.special
-          self.retailertitle = res.data.data.retailer.title
-          self.shippingAddress = res.data.data.address
-          self.receiver = res.data.data.username
-          self.receiverPhone = res.data.data.telephone
-          self.expressCompany = res.data.data.delivercompanyname
-          self.expressNumber = res.data.data.delivercode
+        let data = res.data
+        if (data.flag) {
+          let retdata = data.data
+          self.orders = retdata.orderlist
+          self.special = retdata.special
+          self.retailerInfo = retdata.retailer
+          self.shippingAddress = retdata.address
+          self.shippingOrderon = retdata.orderno
+          self.receiver = retdata.linkman
+          self.receiverPhone = retdata.telephone
+          self.expressCompany = retdata.delivercompanyname
+          self.expressNumber = retdata.delivercode
         }
       })
     }
   },
   created () {
-    console.log('this.id')
+    this.$store.commit('updateToggleTabbar', {toggleBar: false})
     this.getData()
   }
 }
@@ -196,7 +201,10 @@ export default {
   border-top: none;
 }
 #order-detail .shipping-card .weui-cell {
-  padding: 8px 10px;
+  padding: 5px 10px 0px 0px
+}
+#order-detail .shipping-card .weui-cells{
+  padding:5px 0 10px 0
 }
 #order-detail .express-info .weui-cell__ft{
   font-size: 12px;

@@ -10,14 +10,14 @@
     </form>
     <div class="editor-icon">
       <div class="edit-btn-box" v-show="!showBtnArea">
-        <a class="edit-btn" @click="clickEditHandle">
+        <div class="edit-btn" @click="clickEditHandle">
           <span class="color-white font16">{{$t('Edit')}}</span>
-        </a>
+        </div>
       </div>
       <div class="menu-btn-box" v-show="!showMenuArea">
-        <a class="menu-btn" @click="clickMenuHandle">
+        <div class="menu-btn" @click="clickMenuHandle">
           <span class="color-white font16">{{$t('Menu')}}</span>
-        </a>
+        </div>
       </div>
     </div>
     <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
@@ -26,17 +26,6 @@
       </flexbox-item>
       <flexbox-item>
         <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
-      </flexbox-item>
-    </flexbox>
-    <flexbox slot="bottom" class="option-area" v-show="showMenuArea">
-      <flexbox-item>
-        <x-button @click.native="onSetting">{{$t('Setting')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button type="warn" @click.native="onDelete">{{$t('Delete')}}</x-button>
-      </flexbox-item>
-      <flexbox-item>
-        <x-button @click.native="onClose">{{$t('Close')}}</x-button>
       </flexbox-item>
     </flexbox>
     <div v-transfer-dom class="x-popup popup-selectproduct">
@@ -82,6 +71,81 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom>
+      <popup class="menuwrap" v-model="showMenuArea">
+        <div class="popup0">
+          <div class="list">
+            <div class="item">
+              <div class="inner" @click="pushEvent">推送给返点客</div>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/stat', query: {id: query.id,module:'news'}}">文章统计</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" to="/addNews">创建文章</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/addNews', query: {id: query.id}}">更多设置</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path:'/poster',query:{id:query.id, module:'news'}}">生成海报</router-link>
+            </div>
+            <div class="item">
+              <div class="inner" @click="deleteNews">删除文章</div>
+            </div>
+            <div class="item close mt10" @click="closeMenuPopup">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom class="x-popup popupCustomer">
+      <popup v-model="showpush" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">选择返点客</div>
+          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
+            <div class="w_100">
+              <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
+                <div class="flex_left">全选</div>
+              </check-icon>
+            </div>
+          </div>
+          <div class="popup-middle font14" style="top:85px;bottom:86px;">
+            <div class="padding10">
+              <div v-if="disCustomerData" class="scroll_list">
+                <template v-if="customerdata.length == 0">
+                  <div class="scroll_item emptyitem">
+          					<div class="t-table">
+          						<div class="t-cell" style="padding:10px;">暂无返点客</div>
+          					</div>
+          				</div>
+                </template>
+                <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick1(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell v_middle w50">
+                      <img :src="item.avatar" class="avatarimg imgcover" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{ item.linkman }}</div>
+                    </div>
+                  </div>
+                </check-icon>
+              </div>
+  					</div>
+          </div>
+          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+            <div class="w_100">
+              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -89,6 +153,7 @@
 import { TransferDom, Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon } from 'vux'
 import Eleditor from '#/Eleditor'
 import ENV from 'env'
+import jQuery from 'jquery'
 let editor = null
 export default {
   name: 'Editor',
@@ -99,7 +164,8 @@ export default {
     Flexbox, FlexboxItem, XButton, Popup, Search, CheckIcon
   },
   props: {
-    elem: String
+    elem: String,
+    query: Object
   },
   data () {
     return {
@@ -119,7 +185,26 @@ export default {
       pagestart1: 0,
       isBindScroll1: false,
       scrollArea1: null,
-      insertProductCallback: Function
+      insertProductCallback: Function,
+      isDown: false,
+      isMove: false,
+      x: 0,
+      y: 0,
+      sx: 0,
+      sy: 0,
+      mx: 0,
+      my: 0,
+      bottompoint: 60,
+      menuheight: 60,
+      showpush: false,
+      disCustomerData: false,
+      customerdata: [],
+      pushdata: [],
+      checkAll: false,
+      customerPagestart: 0,
+      isBindCustomerScroll: false,
+      scrollCustomerArea: null,
+      touchElement: null
     }
   },
   computed: {
@@ -137,8 +222,109 @@ export default {
       this.$vux.toast.text(this.$t('Entry Edit Mode'))
       this.$emit('on-edit')
     },
+    closeMenuPopup () {
+      this.showMenuArea = false
+    },
+    pushEvent () {
+      const self = this
+      this.showMenuArea = false
+      this.showpush = true
+      if (self.customerdata.length === 0) {
+        self.getCustomerdata()
+      } else {
+        self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+        self.isBindCustomerScroll = true
+        self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+        self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+      }
+    },
+    closepush () {
+      const self = this
+      this.showpush = false
+      self.isBindCustomerScroll = false
+    },
+    submitpush () {
+      const self = this
+      if (self.pushdata.length === 0) {
+        self.$vux.toast.show({
+          text: '请选择返点客'
+        })
+        return false
+      }
+      self.$vux.loading.show()
+      let subdata = { id: self.query.id, sendmodule: 'news', uid: self.pushdata }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showpush = false
+            }
+          }
+        })
+      })
+      self.isBindCustomerScroll = false
+    },
+    radioclick1 (data, index) {
+      const self = this
+      if (data.checked) {
+        self.pushdata.push(data.uid)
+      } else {
+        self.checkAll = false
+        for (let i = 0; i < self.pushdata.length; i++) {
+          if (self.pushdata[i] === data.uid) {
+            self.pushdata.splice(i, 1)
+            break
+          }
+        }
+      }
+    },
+    checkAllEvent () {
+      const self = this
+      for (let i = 0; i < self.customerdata.length; i++) {
+        if (self.checkAll) {
+          self.customerdata[i].checked = true
+        } else {
+          delete self.customerdata[i].checked
+        }
+      }
+    },
+    scrollCustomer: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollCustomerArea,
+        callback: function () {
+          if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
+            self.customerPagestart++
+            self.$vux.loading.show()
+            self.getCustomerdata()
+          }
+        }
+      })
+    },
+    getCustomerdata () {
+      const self = this
+      self.$vux.loading.show()
+      let params = { params: { pagestart: self.customerPagestart, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.customerdata = data.data ? data.data : data
+        self.disCustomerData = true
+        if (!self.isBindCustomerScroll) {
+          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
+          self.isBindCustomerScroll = true
+          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
+          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
+        }
+      })
+    },
     onSave () {
       this.showBtnArea = false
+      editor.destory()
       this.$emit('on-save')
     },
     onCancel () {
@@ -151,7 +337,7 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         insertImageCallback: function (callback) {
-          if (typeof window.WeixinJSBridge === 'undefined' || typeof window.WeixinJSBridge === undefined) {
+          if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')
             let fileInput = document.querySelector('.editorImageForm input')
             fileInput.click()
@@ -312,22 +498,142 @@ export default {
     },
     closepopup () {
       this.showpopup = false
+    },
+    deleteNews () {
+      const self = this
+      self.showMenuArea = false
+      self.$vux.confirm.show({
+        title: '确定要删除吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/delete/news`, { id: self.query.id }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                self.$router.push('/sos')
+              }
+            })
+          })
+        }
+      })
+    },
+    movePoint () {
+      const self = this
+      let e = event
+      let move = { x: 0, y: 0 }
+      let _e = e.touches ? e : window.event
+      if (!self.$util.isPC()) {
+        try {
+          let touch = _e.touches[0]
+          move.x = Number(touch.pageX)
+          move.y = Number(touch.pageY)
+        } catch (e) {
+          move.x = _e.screenX
+          move.y = _e.screenY
+        }
+      } else {
+        move.x = e.screenX
+        move.y = e.screenY
+      }
+      return move
+    },
+    startEvent () {
+      const self = this
+      let e = event
+      let cur = self.touchElement
+      self.isDown = true
+      self.x = cur.offsetLeft
+      self.y = cur.offsetTop
+      let move = self.movePoint(e)
+      self.sx = move.x
+      self.sy = move.y
+      return false // 取消元素事件向下冒泡
+    },
+    moveEvent () {
+      const self = this
+      let e = event
+      let cur = self.touchElement
+      if (self.isDown) {
+        let move = self.movePoint(e)
+        self.mx = move.x - self.sx // 获取鼠标移动了多少
+        self.my = move.y - self.sy // 获取鼠标移动了多少
+        let movemunber = 5 // 当触摸的时候移动像素小于这个值的时候代表着不移动
+        if (self.mx > movemunber || (0 - self.mx) > movemunber || self.my > movemunber || (0 - self.my) > movemunber) {
+          self.isMove = true
+        }
+        let _top = self.y + self.my
+        let maxtop = window.innerHeight - self.menuheight - self.bottompoint * 2
+        _top = _top < 0 ? 0 : (_top > maxtop ? maxtop : _top) // 避免小球移除移出去
+        if (_top < self.bottompoint * 2) {
+          _top = self.bottompoint * 2
+        }
+        // cur.offsetTop = _top
+        jQuery(cur).offset({ top: _top })
+        self.mx = move.x
+        self.my = move.y
+      }
+      return false // 取消元素事件向下冒泡
+    },
+    endEvent () {
+      const self = this
+      let cur = self.touchElement
+      // 添加定时器，是因为有的时候move事件还没运行完就运行了这个事件，为了给这个时间添加一个缓冲时间这里定义了10毫秒
+      setTimeout(function () {
+        if (self.isMove) { // 如果移动了执行移动方法
+          let move = { x: cur.offsetLeft, y: cur.offsetTop }
+          let width = window.innerWidth() / 2
+          let height = window.innerHeight() / 2
+          if (move.x > width) {
+            move.x = 2 * width - move.x // 左右边距
+          }
+          if (move.y > height) {
+            move.y = 2 * height - move.y // 上下边距
+          }
+        } else {
+          self.clickMenuHandle()
+        }
+        self.isDown = false
+        self.isMove = false
+      }, 10)
+      return false // 取消元素事件向下冒泡
     }
+  },
+  mounted () {
+    const self = this
+    let start = !self.$util.isPC() ? 'touchstart' : 'mousedown'
+    let move = !self.$util.isPC() ? 'touchmove' : 'mousemove'
+    let end = !self.$util.isPC() ? 'touchend' : 'mouseup'
+    self.touchElement = document.querySelector('.editor-icon')
+    self.touchElement.removeEventListener(start, self.startEvent)
+    self.touchElement.addEventListener(start, self.startEvent)
+    self.touchElement.removeEventListener(move, self.moveEvent)
+    self.touchElement.addEventListener(move, self.moveEvent)
+    self.touchElement.removeEventListener(end, self.moveEvent)
+    self.touchElement.addEventListener(end, self.moveEvent)
+    /*
+    menuicon.unbind("click").click(function(){
+      self.menuClickEvent()
+    })
+    */
   }
 }
 </script>
 
 <style lang="less" scoped>
-.editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;}
+.editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;width:60px;height:60px;}
 .edit-btn-box {
   position: absolute;
   bottom: 80px;
-  right: 20px;
+  right: 0px;
 }
 .menu-btn-box {
   position: absolute;
   bottom: 0px;
-  right: 20px;
+  right: 0px;
 }
 
 .edit-btn,
@@ -365,4 +671,13 @@ export default {
   height: 1px;
   border-top: 1px solid #e7e7e7;
 }
+.controlmenu{text-align:center;padding:15px;box-sizing: border-box;}
+.controlmenu .item{
+  text-align:center;
+  border:@list-border-color 1px solid;
+  border-radius:5px;
+  padding:10px;
+  display:block;
+}
+.controlmenu .item:not(:last-child){margin-bottom:10px;}
 </style>

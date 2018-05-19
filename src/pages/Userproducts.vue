@@ -1,6 +1,6 @@
 <template>
-  <div class="containerarea bg-white font14 uproducts notop">
-    <div class="pagemiddle" style="bottom:53px;">
+  <div v-if="loginUser" class="containerarea bg-white font14 uproducts notop">
+    <div class="pagemiddle scroll-container" style="bottom:53px;">
       <swiper
         v-if="addata && addata.length > 0"
         :list="addata"
@@ -16,7 +16,7 @@
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
             <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#efeff4 !important;">
-				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
+              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
@@ -24,7 +24,7 @@
               <span slot="price">{{ item.price }}</span>
             </groupbuyitemplate>
             <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#efeff4 !important;">
-				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" />
+              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{ item.minprice }}</span>
@@ -40,7 +40,7 @@
         <div class="b_top_after"></div>
         <div class="productlist squarepic mb12">
           <productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
-            <img slot="photo" :src="item.photo" />
+            <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
@@ -77,7 +77,7 @@ View more promotion:
 </i18n>
 
 <script>
-import { Swiper } from 'vux'
+import { Swiper, XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
@@ -89,7 +89,7 @@ import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess
+    Swiper, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -158,41 +158,45 @@ export default {
   },
   created () {
     const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$util.handleWxShare({
-      module: 'shop',
-      moduleid: 0,
-      lastshareuid: self.query.share_uid,
-      title: '共销宝商城',
-      desc: '一款能买能卖的销售平台，你要的都在这里！',
-      photo: self.loginUser.avatar,
-      link: `${ENV.Host}/#/userproducts?wid=${self.loginUser.uid}&share_uid=${self.loginUser.uid}`,
-      successCallback: function () {
-        self.showShareSuccess = true
-      }
-    })
-    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-      params: { uid: self.loginUser.uid }
-    }).then(function (res) {
-      let data = res.data
-      self.retailerInfo = data.data ? data.data : data
-      return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
-    }).then(function (res) {
-      let data = res.data
-      let retdata = data.data ? data.data : data
-      for (let i = 0; i < retdata.length; i++) {
-        retdata[i].img = retdata[i].photo
-      }
-      self.addata = retdata
-      let params = { params: { do: 'all', pagestart: 0, limit: 5 } }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-    }).then(function (res) {
-      let data = res.data
-      self.activitydata = data.data ? data.data : data
-      self.getdata1()
-    })
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+    this.query = this.$route.query
+    this.loginUser = User.get()
+    if (this.loginUser) {
+      self.$util.handleWxShare({
+        module: 'shop',
+        moduleid: 0,
+        lastshareuid: this.query.share_uid,
+        title: '共销宝商城',
+        desc: '一款能买能卖的销售平台，你要的都在这里！',
+        photo: this.loginUser.avatar,
+        link: `${ENV.Host}/#/userproducts?wid=${this.loginUser.uid}&share_uid=${this.loginUser.uid}`,
+        successCallback: function () {
+          self.showShareSuccess = true
+        }
+      })
+      this.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: { uid: this.loginUser.uid }
+      }).then(function (res) {
+        let data = res.data
+        self.retailerInfo = data.data ? data.data : data
+        return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
+      }).then(function (res) {
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          retdata[i].img = retdata[i].photo
+        }
+        self.addata = retdata
+        let params = { params: { do: 'all', pagestart: 0, limit: 5 } }
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
+      }).then(function (res) {
+        let data = res.data
+        self.activitydata = data.data ? data.data : data
+        self.getdata1()
+      })
+    } else {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    }
   }
 }
 </script>

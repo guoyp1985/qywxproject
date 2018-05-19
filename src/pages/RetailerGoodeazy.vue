@@ -15,7 +15,7 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="pl10 pr10">
             <div class="font15 pt15">搜索关键词采集文章</div>
             <div class="font12 color-gray mt5">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
@@ -29,7 +29,16 @@
                 @on-cancel="onCancel"
                 ref="search">
               </search>
-              <div class="scroll_list pl10 pr10 mb12" style="position:absolute;top:45px;">
+              <checker
+              class="x-checker"
+              type="radio"
+              v-model="keyword"
+              default-item-class="ck-item"
+              selected-item-class="ck-item-selected"
+              @on-change="searchEvent">
+                <checker-item v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">{{ kw }}</checker-item>
+              </checker>
+              <div class="scroll_list pl10 pr10 mb12">
                 <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
                   <div class="t-table">
                     <div class="t-cell">暂无搜索结果</div>
@@ -72,10 +81,10 @@
                   <div class="t-cell">您还没有采集过文章</div>
                 </div>
               </div>
-              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: 'article', query: {id: item.id}}">
+              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:40px;">
-                    <img class="imgcover v_middle" :src="item.photo" style="width:30px;height:30px;" />
+                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:30px;height:30px;" :offset="0" container=".scroll-container1"></x-img>
                   </div>
                   <div class="t-cell">
                     <div class="clamp1 font14">{{item.title}}</div>
@@ -99,34 +108,16 @@
 </template>
 
 <i18n>
-Rebate customer:
-  zh-CN: 返点客户
-Share invite customer:
-  zh-CN: 分享邀请返点客户
-Rebate manage:
-  zh-CN: 返点管理
-Message text:
-  zh-CN: 早上八点到晚上十一点可以发送消息,但只有48小时内互动过的返点客户才能收到消息,消息将通过博卡授权中心 公众号直接推送给返点客户,每日只能推送一次。
-Send text:
-  zh-CN: 发送
-Url paster here:
-  zh-CN: 链接粘贴在此处
-Collect:
-  zh-CN: 采集
-Collect record:
-  zh-CN: 采集记录
-My orders:
-  zh-CN: 我的订单
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -146,8 +137,9 @@ export default {
       limit: 20,
       pagestart: 0,
       isBindScroll: false,
-      scrollArea: null
-
+      scrollArea: null,
+      keywordsData: [],
+      keyword: ''
     }
   },
   methods: {
@@ -185,7 +177,9 @@ export default {
       this.searchword = val
     },
     onCancel () {
-      this.searchword = ''
+      const self = this
+      self.searchword = ''
+      self.searchdata = []
     },
     onSubmit () {
       const self = this
@@ -197,6 +191,12 @@ export default {
         })
         return false
       }
+      if (self.$util.trim(kw) !== '') {
+        self.searchFun(kw)
+      }
+    },
+    searchFun (kw) {
+      const self = this
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
         { do: 'get_sogou_list', keyword: kw }
@@ -206,6 +206,14 @@ export default {
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
       })
+    },
+    searchEvent (kw) {
+      const self = this
+      // self.searchword = kw
+      self.searchdata = []
+      if (self.$util.trim(kw) !== '') {
+        self.searchFun(kw)
+      }
     },
     tabitemclick (index) {
       const self = this
@@ -232,7 +240,6 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  // self.searchdata.splice(index, 1)
                   self.$router.push({path: '/news', query: {id: data.data.id}})
                 }
               }
@@ -261,7 +268,6 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              // self.newsdata.push(data.data)
               self.$router.push({path: '/news', query: {id: data.data.id}})
             }
           }
@@ -272,6 +278,12 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+      { do: 'history', pagestart: 0, limit: 15 }
+    ).then(function (res) {
+      let data = res.data
+      self.keywordsData = data.data ? data.data : data
+    })
   }
 }
 </script>
@@ -279,4 +291,9 @@ export default {
 <style lang="less" scoped>
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
+.keylist .item{
+  display:inline-block; padding:5px 10px;border:@list-border-color 1px solid;
+  border-radius:5px;
+}
+.keylist .item.active{border-color:green;}
 </style>

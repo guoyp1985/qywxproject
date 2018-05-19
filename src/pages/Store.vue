@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom store">
-    <div class="s-container" style="top:0px;">
+    <div class="s-container scroll-container" style="top:0px;">
       <swiper
         class="pic-swiper notitle"
         v-if="addata && addata.length > 0"
@@ -16,14 +16,14 @@
         <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
       		<div class="t-table">
       			<div class="t-cell v_middle w50">
-      				<img class="avatarimg1" :src="retailerInfo.avatar"/>
+              <x-img class="avatarimg1 imgcover" :src="retailerInfo.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       			</div>
       			<div class="t-cell v_middle shopkeeper_txt">
       				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
       			</div>
       				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
-                <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Decoration shop')}}</router-link>
-                <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Sales center')}}</router-link>
+                <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
+                <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
       				</div>
               <div v-else class="t-cell v_middle align_right w100">
                 <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
@@ -39,7 +39,7 @@
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
             <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
-				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
+              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
@@ -47,7 +47,7 @@
               <span slot="price">{{ item.price }}</span>
             </groupbuyitemplate>
             <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
-				      <img slot="photo" style="width:80px;height:80px;" :src="item.photo" class="imgcover" />
+              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{ item.minprice }}</span>
@@ -63,7 +63,7 @@
       <div class="productlist squarepic">
         <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
         <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
-          <img slot="photo" class="imgcover" :src="item.photo" />
+          <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
           <span slot="title">{{ item.title }}</span>
           <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
           <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
@@ -85,7 +85,7 @@
         <div class="b_top_after"></div>
         <div class="productlist">
           <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
-            <img slot="photo" :src="item.photo" class="v_middle" style="width: 70px; height: 50px;" />
+            <x-img slot="photo" class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width: 70px; height: 50px;" :offset="0" container=".scroll-container"></x-img>
             <span slot="title">{{ item.title }}</span>
             <span slot="date">{{ item.dateline | dateformat }}</span>
           </newsitemplate>
@@ -142,7 +142,7 @@ Another batch:
 </i18n>
 
 <script>
-import { Swiper, TransferDom, Popup } from 'vux'
+import { Swiper, TransferDom, Popup, XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import Productitemplate from '@/components/Productitemplate'
@@ -157,7 +157,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess
+    Swiper, Popup, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg
   },
   filters: {
     dateformat: function (value) {

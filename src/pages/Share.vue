@@ -10,26 +10,28 @@
     </c-title> -->
     <group>
       <group-title slot="title">{{$t('Sharing Details')}}</group-title>
-      <template v-if="list.length">
-        <cell v-for="(item, index) in list"
-        :key="item.id"
-        class="share-item font14"
-        align-items
-        :title="item.title"
-        :link="{path: '/sharingDetail', query: {id: item.id, module: item.module}}">
-          <x-img slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" container="#vux_view_box_body"></x-img>
-          <div slot="inline-desc">
-            {{item.dateline | dateFormat}} {{item.typestr}}
-          </div>
-          <div slot="child">
-            <span class="al al-jinbi color-gold"></span>
-            <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
-          </div>
-        </cell>
+      <template v-if="disList">
+        <template v-if="list.length">
+          <cell v-for="(item, index) in list"
+          :key="item.id"
+          class="share-item font14"
+          align-items
+          :link="{path: '/sharingDetail', query: {id: item.moduleid}}">
+            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container="#vux_view_box_body"></x-img>
+            <div slot="inline-desc">
+              <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+              <div class="clamp1 font12 mt5 color-gray">{{item.dateline | dateFormat}} {{item.typestr}}</div>
+            </div>
+            <div slot="child">
+              <span class="al al-jinbi color-gold"></span>
+              <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+            </div>
+          </cell>
+        </template>
+        <div v-else class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
+        </div>
       </template>
-      <div v-else class="no-related-x color-gray">
-        <span>{{$t('No Related Data')}}</span>
-      </div>
     </group>
   </div>
 </template>
@@ -49,8 +51,13 @@ export default {
   },
   data () {
     return {
-      type: '1',
-      list: []
+      query: Object,
+      disList: false,
+      list: [],
+      pagestart: 0,
+      limit: 10,
+      isBindScroll: false,
+      scrollContainer: document.querySelector('#vux_view_box_body')
     }
   },
   filters: {
@@ -62,19 +69,52 @@ export default {
     }
   },
   methods: {
-    getData () {
+    scroll: function () {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/user/shareList`)
-      .then(res => {
-        if (res.data.flag) {
-          self.list = res.data.data
+      self.$util.scrollEvent({
+        element: self.scrollContainer,
+        callback: function () {
+          if (self.list.length === (self.pagestart + 1) * self.limit) {
+            self.pagestart++
+            self.$vux.loading.show()
+            self.getData()
+          }
         }
       })
+    },
+    getData () {
+      const self = this
+      let params = { pagestart: self.pagestart, limit: self.limit }
+      this.$http.get(`${ENV.BokaApi}/api/user/shareList`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.list = self.list.concat(retdata)
+        self.disList = true
+        if (!self.isBindScroll) {
+          self.isBindScroll = true
+          self.scrollContainer.removeEventListener('scroll', self.scroll)
+          self.scrollContainer.addEventListener('scroll', self.scroll)
+        }
+      })
+    },
+    getDateState: function (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass: function (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
     }
   },
   created () {
-    this.getData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.$vux.loading.show()
+    self.getData()
   }
 }
 </script>

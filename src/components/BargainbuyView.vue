@@ -1,12 +1,12 @@
 <template>
-  <div class="containerarea font14 bargainbuyview" style="overflow-y:auto;">
+  <div class="containerarea font14 bargainbuyview scroll-container" style="overflow-y:auto;">
     <div class="topimg">
       <img src="../assets/images/bargainbuy_2.png">
     </div>
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <img :src="crowduser.avatar">
+          <x-img class="imgcover" :src="crowduser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
         </div>
         <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
@@ -16,7 +16,7 @@
         <div class="innerbg">
           <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
             <div class="t-cell v_middle w80">
-              <img :src="product.photo" style="width:70px;height:70px;" class="imgcover" />
+              <x-img class="imgcover" :src="product.photo" style="width:70px;height:70px;" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
             </div>
             <div class="t-cell">
               <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
@@ -49,7 +49,7 @@
         </div>
         <div v-if="data.leftstorage <= 0" class="btn">商品已售罄，本次活动结束</div>
         <template v-else>
-          <div v-if="data.isovertime" class="btn">指定时间内未完成砍价，砍价失败</div>
+          <div v-if="crowduser.isovertime" class="btn">指定时间内未完成砍价，砍价失败</div>
           <template v-else>
             <div v-if="crowduser.isdeliver == 0 && crowduser.isfull == 1" class="btn" @click="buyevent">立即购买 {{  $t('RMB') }}{{ crowduser.leftmoney }}</div>
             <div v-if="crowduser.isdeliver == 1" class="btn">已发起购买,砍价结束</div>
@@ -84,7 +84,7 @@
           <div v-else v-for="(item,index) in cutdata" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
-                <img class="v_middle" style="width:44px;height:44px;border-radius:50%;" :src="item.avatar" />
+                <x-img class="v_middle imgcover avatarimg1" :src="product.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_middle" style="padding-right:25px;">
                 <div class="clamp1 font13">{{ item.linkman }}</div>
@@ -114,7 +114,7 @@
 </i18n>
 
 <script>
-import { TransferDom, Popup } from 'vux'
+import { TransferDom, Popup, XImg } from 'vux'
 import ENV from 'env'
 
 export default {
@@ -123,7 +123,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup
+    Popup, XImg
   },
   props: {
     data: Object,
@@ -141,7 +141,6 @@ export default {
   data () {
     return {
       query: {},
-      loginUser: Object,
       product: Object,
       showpopup: false,
       lefthour: '',

@@ -72,7 +72,8 @@ export default {
     Swiper, SwiperItem, emotion
   },
   props: {
-    bindTextarea: String
+    bindTextarea: String,
+    className: ''
     // value: Boolean
   },
   data () {
@@ -157,7 +158,12 @@ export default {
     }
   },
   mounted () {
-    this.textarea = document.getElementById(this.bindTextarea).querySelector('textarea')
+    const self = this
+    let css = `#${self.bindTextarea} textarea`
+    if (!self.$util.isNull(self.className)) {
+      css = `.${self.className} #${self.bindTextarea} textarea`
+    }
+    this.textarea = document.querySelector(css)
     this.textareaEventBind()
   }
 }
