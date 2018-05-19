@@ -135,11 +135,9 @@
         <div class="img-box">
           <img :src="storeQrcode" style="max-width:100%;max-height:100%;">
         </div>
-        <div>
-          <span>{{$t('Save Picture To Sharing')}}</span>
-        </div>
+        <div class="padding10 color-white">{{$t('Save Picture To Sharing')}}</div>
         <div @click="storeCardShow=false">
-          <span class="vux-close"></span>
+          <span class="vux-close color-white"></span>
         </div>
       </x-dialog>
     </div>
