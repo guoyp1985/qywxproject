@@ -159,7 +159,11 @@ export default {
   },
   mounted () {
     const self = this
-    this.textarea = document.querySelector(`.${self.className} #${self.bindTextarea} textarea`)
+    let css = `#${self.bindTextarea} textarea`
+    if (!self.$util.isNull(self.className)) {
+      css = `.${self.className} #${self.bindTextarea} textarea`
+    }
+    this.textarea = document.querySelector(css)
     this.textareaEventBind()
   }
 }
