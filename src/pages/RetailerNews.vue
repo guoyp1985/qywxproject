@@ -1,23 +1,19 @@
 <template>
-  <div class="containerarea s-havebottom font14 rnews bg-white">
+  <div class="containerarea s-havebottom font14 rnews" style="background: #f5f9fa;">
+    <!--
     <div class="s-topbanner">
-      <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('News')}}</div>
-        </div>
-      </div>
-      <div class="row">
+      <div class="row color-lightgray">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
+  -->
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div v-if="distabdata1" class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list ">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
                 <div class="t-table">
                   <div class="t-cell v_middle">
@@ -27,21 +23,21 @@
                   </div>
                 </div>
               </div>
-              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="scroll_item db pt10 pb10">
+              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list_shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
                 <div class="t-table">
-                  <div class="t-cell v_middle w50">
-                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container0"></x-img>
+                  <div class="t-cell v_middle w70">
+                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container0"></x-img>
                   </div>
                   <div class="t-cell v_middle">
-                    <div class="clamp1 font16"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-                    <div class="clamp1 font12 color-gray v_middle">
-                        <span class="v_middle">{{ item.dateline | dateformat }}</span>
-                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
-                        <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+                    <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
+                    <div class="clamp1 font14 color-gray v_middle">
+                        <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
+                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                        <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
                     </div>
                   </div>
-                  <div class="t-cell v_middle w50">
-                    <div class="qbtn1 bg-green color-white" @click="controlpopup(item)">{{ $t('Control text') }}</div>
+                  <div class="align_right t-cell v_bottom w80">
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">●●●</div>
                   </div>
                 </div>
               </router-link>
@@ -59,20 +55,20 @@
                   </div>
                 </div>
               </div>
-              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10">
+              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10 bg-white">
                 <div class="t-table">
-                  <div class="t-cell v_middle w50">
-                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1"></x-img>
+                  <div class="t-cell v_middle w70">
+                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container1"></x-img>
                   </div>
                   <div class="t-cell v_middle">
-                    <div class="clamp1 font16"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                    <div class="clamp1 font14"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
                     <div class="clamp1 font12 color-gray v_middle">
                         <span class="v_middle">{{ item.dateline | dateformat }}</span>
                         <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
                         <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
                     </div>
                   </div>
-                  <div class="t-cell v_middle w50">
+                  <div class="t-cell v_middle w70">
                     <div class="qbtn1 bg-green color-white" @click="controlpopup(item)">{{ $t('Control text') }}</div>
                   </div>
                 </div>
@@ -82,9 +78,9 @@
         </swiper-item>
       </swiper>
     </div>
-    <div class="s-bottom flex_center bg-blue3 color-white">
-      <router-link class="flex_cell bg-blue3 flex_center h_100" to="/retailerGoodeazy" style="border-right:#fff 1px solid;">{{ $t('Goodeazy') }}</router-link>
-      <router-link class="bg-blue3 flex_center h_100" to="/addNews" style="width:30%;">{{ $t('Create news') }}</router-link>
+    <div class="s-bottom flex_center bg-white pl12 pr12">
+      <router-link class="collect flex_center h_100" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
+      <router-link class="collect bg-red flex_center h_100" to="/addNews" >{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
@@ -128,7 +124,7 @@
                 </template>
                 <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                   <div class="t-table">
-                    <div class="t-cell v_middle w50">
+                    <div class="t-cell v_middle w70">
                       <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".customer-popup-container"></x-img>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
@@ -414,5 +410,32 @@ export default {
 .rnews .bk-listplate1 .iconcell{width:45px;}
 .vux-popup-dialog .weui-cell__bd{text-align:center;}
 .vux-popup-dialog .weui-cell__ft{display:none;}
+.rnews .s-container{
+  top: 0
+}
+.rnews .collect{
+  background:#ee9f25;
+  color: #fff;
+  width: 171px;
+  height: 36px;
+  margin: 0 auto;
+  border-radius: 5px;
+}
+.rnews .s-bottom{
+  height: 50px;
+}
+.rnews .btnicon{
+  display:inline-block;
+  color: #ea3a3a;
+  font-size: 12px;
+  border: 1px solid #ea3a3a;
+  text-align: center;
+  border-radius: 30px;
+  padding: 1px 8px;
+  letter-spacing: 0px;
+}
+.rnews .list_shadow{
+  box-shadow: 0px 0px 3px 1px #edf3f4;
+}
 
 </style>
