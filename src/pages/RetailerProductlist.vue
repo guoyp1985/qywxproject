@@ -18,8 +18,8 @@
           </div>
         </template>
         <template v-else>
-          <div class="pro_box bg-white">
-            <div class="bg-white prompt pt10 pb10 pl12 pr12">悄悄告诉你，立即分享新发布的商品可以：</div>
+          <div class="pro_box bg-white list_shadow">
+            <div class="bg-white color-lightgray pt10 pb10 pl12 pr12">悄悄告诉你，立即分享新发布的商品可以：</div>
             <div class="rule  pt10 pb10 pl12 pr12 border color-lightgray b_bottom_after">
               <div>1. 接收好友查看商品的通知；</div>
               <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
@@ -29,24 +29,24 @@
           </div>
 
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list_shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="list_shadow t-table bg-white pt10 pb10">
+          		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
                   <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px; vertical-align: middle;" :offset="0" container=".scroll-container"></x-img>
           			</div>
           			<div class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="t-table pr12 border-box mt5">
+                  <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                      <div class="clamp1">
+                      <div class="clamp1 mt5">
                           <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
                       </div>
                     </div>
                     <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">●●●</div>
+                      <div class="btnicon bg-red color-white" @click="controlpopup1(item,index)">●●●</div>
                     </div>
                   </div>
           			</div>
@@ -56,7 +56,9 @@
         </template>
       </template>
     </div>
-    <router-link class="s-bottom flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
+    <div class="bg-white pl12 pr12 s-bottom flex_center">
+      <router-link class="addproduct flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
+    </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
@@ -412,10 +414,6 @@ export default {
   padding: 1px 8px;
   letter-spacing: 0px;
 }
-.rproductlist .prompt{
-  color: #999999;
-  font-size: 12px;
-}
 .rproductlist .rule{
   background: #f2f7f8;
 }
@@ -425,7 +423,14 @@ export default {
   background:#fff;
 }
 .rproductlist .list_shadow{
-box-shadow: 0px 0px 3px 1px #edf3f4;
+box-shadow: 0px 0px 3px 1px #e6ebed;
+}
+.rproductlist .s-bottom{
+  height: 50px;}
+.rproductlist .addproduct{
+  border-radius: 5px;
+  height: 36px;
+  width: 100%;
 }
 
 </style>
