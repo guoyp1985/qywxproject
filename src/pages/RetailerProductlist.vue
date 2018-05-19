@@ -1,9 +1,9 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;">
+    <div class="s-container scroll-container" style="top:0px;background: #f2f7f8">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
-          <div class="scroll_list bg-page">
+          <div class="scroll_list">
             <div class="emptyitem">
               <div class="t-table" style="padding-top:20%;">
                 <div class="t-cell padding10">
@@ -18,31 +18,35 @@
           </div>
         </template>
         <template v-else>
-          <div class="bg-orange color-white padding10">悄悄告诉你，立即分享新发布的商品可以：</div>
-          <div class="padding10 border bg-page color-gray b_bottom_after">
-            <div>1. 接收好友查看商品的通知；</div>
-            <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-            <div>3. 获得到更多潜在客户及销售机会。</div>
+          <div class="pro_box bg-white">
+            <div class="bg-white prompt pt10 pb10 pl12 pr12">悄悄告诉你，立即分享新发布的商品可以：</div>
+            <div class="rule  pt10 pb10 pl12 pr12 border color-lightgray b_bottom_after">
+              <div>1. 接收好友查看商品的通知；</div>
+              <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
+              <div>3. 获得到更多潜在客户及销售机会。</div>
+            </div>
+            <div class="l-line"></div>
           </div>
-          <div class="scroll_list bg-page">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mb5 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+
+          <div class="scroll_list ">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db" v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="t-table bg-white pt10 pb10">
-          			<div class="t-cell pl10 v_middle" style="width:90px;">
-                  <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
+          		<div class="list_shadow t-table bg-white pt10 pb10">
+          			<div class="t-cell pl12 v_middle" style="width:110px;">
+                  <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px; vertical-align: middle;" :offset="0" container=".scroll-container"></x-img>
           			</div>
           			<div class="t-cell v_middle">
-                  <div class="clamp2 font15 pr10">{{item.title}}</div>
-                  <div class="t-table pr10 border-box mt5">
-                    <div class="t-cell color-gray font12">
-                      <div class="clamp1">售价: {{ $t('RMB') }}{{ item.price }}</div>
+                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                  <div class="t-table pr12 border-box mt5">
+                    <div class="t-cell color-999 font14">
+                      <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
                       <div class="clamp1">
                           <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
                       </div>
                     </div>
                     <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon" @click="controlpopup1(item,index)">{{ $t('Control text') }}</div>
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">●●●</div>
                     </div>
                   </div>
           			</div>
@@ -52,7 +56,7 @@
         </template>
       </template>
     </div>
-    <router-link class="s-bottom flex_center bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
+    <router-link class="s-bottom flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
@@ -94,7 +98,7 @@
             </div>
           </div>
           <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;">
-            <div class="padding10">
+            <div class=" pt10 pb10 pl12 pr12">
               <div v-show="discustomerdata" class="scroll_list">
                 <template v-if="customerdata.length == 0">
                   <div class="scroll_item emptyitem">
@@ -400,12 +404,28 @@ export default {
 .rproductlist .scroll_item .down.icon:after{content:"已下架";}
 .rproductlist .btnicon{
   display:inline-block;
-  color: #ff4400;
+  color: #ea3a3a;
   font-size: 12px;
-  border: 1px solid #ff4400;
+  border: 1px solid #ea3a3a;
   text-align: center;
   border-radius: 30px;
   padding: 1px 8px;
   letter-spacing: 0px;
 }
+.rproductlist .prompt{
+  color: #999999;
+  font-size: 12px;
+}
+.rproductlist .rule{
+  background: #f2f7f8;
+}
+.rproductlist .l-line{
+  width:100%; 
+  height:8px; 
+  background:#fff;
+}
+.rproductlist .list_shadow{
+box-shadow: 0px 0px 3px 1px #edf3f4;
+}
+
 </style>
