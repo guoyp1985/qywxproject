@@ -580,12 +580,9 @@ export default {
     showBigimg (index) {
       const self = this
       if (self.$util.isPC()) {
-        alert(1)
         self.$refs.previewer.show(index)
       } else {
-        alert(2)
         let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
-        alert(JSON.stringify(viewarr))
         window.WeixinJSBridge.invoke('imagePreview', {
           current: viewarr[index],
           urls: viewarr
