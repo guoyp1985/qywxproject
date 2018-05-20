@@ -919,15 +919,12 @@ Clip.prototype = {
 		this.draggable.scrollHeight = this.oClipHeight;
 		// this.draggable.repaint();
 	},
-	/*
 	destory : function() {
-		this.overlay[0].removeEventListener(_START,this,false);
-		this.overlay[0].removeEventListener(_MOVE,this,false);
-		this.overlay[0].removeEventListener(_END,this,false);
+		this.draggable.destory();
+		this.clipElement.find(".clip-frame").remove();
+		this.toolbarElement.remove();
 		this.snap && this.snap.remove();
-		this.overlay.remove();
 	},
-	*/
 	canvasSnap : function() {
 		var matrix1 = getComputedStyle(this.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
 		var matrix2 = getComputedStyle(this.snap[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');

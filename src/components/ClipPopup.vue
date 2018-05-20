@@ -75,7 +75,7 @@ export default {
       })
     },
     onCancel () {
-      this.clip.destroy()
+      this.clip.destory()
       this.$emit('on-cancel')
     },
     imgLoad () {

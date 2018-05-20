@@ -92,8 +92,9 @@ export default {
     },
     clipPhoto (item) {
       this.popupShow = true
-      let index = item.indexOf('?')
-      this.cutImg = item.substring(0, index)
+      // let index = item.indexOf('?')
+      this.cutImg = item//.substring(0, index)
+      console.log(this.cutImg)
     },
     deletePhoto (item, index) {
       this.photoarr.splice(index, 1)
