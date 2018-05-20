@@ -58,7 +58,7 @@ export default {
       cutImg: '',
       popupShow: false,
       allowsubmit: true,
-      photoarr: [],
+      photoarr: ['../src/assets/images/lion.jpg'],
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
