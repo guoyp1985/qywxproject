@@ -688,6 +688,9 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.loginUser = User.get()
     self.query = self.$route.query
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'chat', id: self.query.uid
+    })
     self.wsConnect()
     self.getMsgList()
   },

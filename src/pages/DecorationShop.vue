@@ -302,6 +302,9 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'decorationshop'
+    })
     if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
       this.havenum = this.clickdata.rollingphoto.split(',')
     } else {

@@ -140,8 +140,11 @@ export default {
   },
   created: function () {
     let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'orderdetail', id: self.query.id
+    })
     if (self.query.id) {
       self.$vux.loading.show()
       self.deliverdata.id = self.query.id
