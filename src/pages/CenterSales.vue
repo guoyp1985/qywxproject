@@ -230,6 +230,9 @@ export default {
     self.$vux.loading.show()
     self.loginUser = User.get()
     let iscontinue = true
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'index'
+    })
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
       self.showcontainer = false
       iscontinue = false

@@ -67,6 +67,7 @@
             </template>
           </template>
         </template>
+        <div class="padding10 border-box align_center" style="color:#d51932;" @click="viewRule">* 查看活动规则</div>
       </div>
     </div>
     <div>
@@ -84,7 +85,7 @@
           <div v-else v-for="(item,index) in cutdata" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
-                <x-img class="v_middle imgcover avatarimg1" :src="product.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
+                <x-img class="v_middle imgcover avatarimg1" :src="item.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_middle" style="padding-right:25px;">
                 <div class="clamp1 font13">{{ item.linkman }}</div>
@@ -107,6 +108,29 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showViewPopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">砍价活动规则</div>
+          <div class="popup-middle font14">
+            <div class=" font12 pt10 pl15 pr15 pb10 color-gray7">
+              <div>活动规则：</div>
+              <div>1. 每人一次砍价机会；</div>
+              <div>2. 活动商品只可购买一次；</div>
+              <div>3. 商品最终购买金额以实际所砍金额为准；</div>
+              <div>4. 砍价活动结束后，商品即恢复原价；</div>
+              <div>5. 该活动不可与其他活动优惠同时使用；</div>
+              <div>6. 参与活动的有效砍价时间为{{ data.finishtime }}小时；</div>
+              <div>7. 活动截止时间: {{ data.endtime | dateformat }}</div>
+              <div>（商品若提前售完，活动将提前截止）</div>
+            </div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-orange color-white" @click="closepopup">{{ $t('Know txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -115,6 +139,7 @@
 
 <script>
 import { TransferDom, Popup, XImg } from 'vux'
+import Time from '#/time'
 import ENV from 'env'
 
 export default {
@@ -138,6 +163,11 @@ export default {
     onJoin: Function,
     cutdownEnd: Function
   },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
+  },
   data () {
     return {
       query: {},
@@ -146,7 +176,8 @@ export default {
       lefthour: '',
       leftminute: '',
       leftsecond: '',
-      cutdata: []
+      cutdata: [],
+      showViewPopup: false
     }
   },
   created () {
@@ -235,6 +266,12 @@ export default {
           })
         }
       })
+    },
+    viewRule () {
+      this.showViewPopup = true
+    },
+    closepopup () {
+      this.showViewPopup = false
     }
   }
 }

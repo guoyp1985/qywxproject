@@ -187,6 +187,9 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'productlist'
+    })
     self.$vux.loading.show()
     self.getdata1()
   },
@@ -418,8 +421,8 @@ export default {
   background: #f2f7f8;
 }
 .rproductlist .l-line{
-  width:100%; 
-  height:8px; 
+  width:100%;
+  height:8px;
   background:#fff;
 }
 

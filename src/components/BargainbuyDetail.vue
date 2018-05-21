@@ -100,7 +100,7 @@
           <div v-else v-for="(item,index) in cutData" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
-                <x-img class="v_middle imgcover avatarimg1" :src="product.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
+                <x-img class="v_middle imgcover avatarimg1" :src="item.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
               </div>
               <div class="t-cell v_middle" style="padding-right:25px;">
                 <div class="clamp1 font13">{{ item.linkman }}</div>

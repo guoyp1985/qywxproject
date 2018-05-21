@@ -183,6 +183,7 @@ export default {
       self.showphotopop = !this.showphotopop
       self.clickdata = item
       self.clickindex = index
+      self.photoarr = []
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'show', id: self.clickdata.id }).then(function (res) {
         let data = res.data
@@ -285,7 +286,11 @@ export default {
     clipPhoto (item) {
       this.popupShow = true
       let index = item.indexOf('?')
-      this.cutImg = item.substring(0, index)
+      if (index > -1) {
+        this.cutImg = item.substring(0, index)
+      } else {
+        this.cutImg = item
+      }
     },
     popupSubmit (cutimg) {
       this.photoarr = [ cutimg ]
@@ -297,6 +302,9 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'decorationshop'
+    })
     if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
       this.havenum = this.clickdata.rollingphoto.split(',')
     } else {

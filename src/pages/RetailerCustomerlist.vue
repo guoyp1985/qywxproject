@@ -251,6 +251,9 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'customerlist'
+    })
     self.$vux.loading.show()
     self.getdata1()
   },

@@ -68,7 +68,11 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
-    self.$http.get(`${ENV.BokaApi}/api/message/list`).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'messagelist'
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/message/list`)
+    }).then(function (res) {
       let data = res.data
       self.$vux.loading.hide()
       self.data = data.data ? data.data : data

@@ -84,7 +84,6 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepopup">{{ $t('Close') }}</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitaddress">提交</div>
             <router-link :to="{ path: '/newAddress', query: {lasturl: `/addOrder?id=${query.id}`} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
           </div>
         </div>
@@ -268,13 +267,7 @@ export default {
           break
         }
       }
-    },
-    submitaddress () {
-      if (!this.selectaddress.id) {
-        this.showalert = true
-      } else {
-        this.showpopup = false
-      }
+      self.showpopup = false
     },
     submitOrder () {
       const self = this

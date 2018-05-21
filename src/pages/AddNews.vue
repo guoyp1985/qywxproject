@@ -58,7 +58,7 @@ export default {
       cutImg: '',
       popupShow: false,
       allowsubmit: true,
-      photoarr: ['../src/assets/images/lion.jpg'],
+      photoarr: [],
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
@@ -92,9 +92,12 @@ export default {
     },
     clipPhoto (item) {
       this.popupShow = true
-      // let index = item.indexOf('?')
-      this.cutImg = item//.substring(0, index)
-      console.log(this.cutImg)
+      let index = item.indexOf('?')
+      if (index > -1) {
+        this.cutImg = item.substring(0, index)
+      } else {
+        this.cutImg = item
+      }
     },
     deletePhoto (item, index) {
       this.photoarr.splice(index, 1)

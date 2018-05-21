@@ -392,7 +392,7 @@ export default {
             type: 'say',
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
-            msgid: retdata.id,
+            messageid: retdata.id,
             room_id: self.roomid
           }
           for (let key in retdata) {
@@ -688,6 +688,9 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.loginUser = User.get()
     self.query = self.$route.query
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'chat', id: self.query.uid
+    })
     self.wsConnect()
     self.getMsgList()
   },

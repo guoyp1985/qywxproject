@@ -330,9 +330,13 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.$vux.loading.show()
-    self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
-      { params: { selleruid: self.query.uid } }
-    ).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'saleview'
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
+        { params: { selleruid: self.query.uid } }
+      )
+    }).then(function (res) {
       let data = res.data
       self.sellerUser = (data.data ? data.data : data)
       if (self.sellerUser) {

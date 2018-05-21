@@ -90,8 +90,12 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
-    self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
-      params: { id: self.query.id }
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'accountdetail', id: self.query.id
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
+        params: { id: self.query.id }
+      })
     }).then(function (res) {
       let data = res.data
       self.$vux.loading.hide()
