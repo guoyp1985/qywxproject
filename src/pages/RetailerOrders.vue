@@ -36,9 +36,9 @@
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
-                  <div class="t-table pt5 color-gray font12 deliverarea">
+                  <div class="t-table pt5 color-lightgray font13 deliverarea">
                     <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
+                      <div class=""><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
                       <div class="mt3">{{ item.address }}</div>
                       <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
                     </div>
@@ -180,6 +180,7 @@
         <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
     </div>
+    
     <div v-transfer-dom class="x-popup popup-deliver">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 font14">
@@ -217,6 +218,7 @@
       </popup>
     </div>
   </div>
+
 </template>
 
 <i18n>
