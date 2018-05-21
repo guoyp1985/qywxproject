@@ -183,6 +183,7 @@ export default {
       self.showphotopop = !this.showphotopop
       self.clickdata = item
       self.clickindex = index
+      self.photoarr = []
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'show', id: self.clickdata.id }).then(function (res) {
         let data = res.data
