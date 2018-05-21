@@ -44,7 +44,6 @@ module.exports = {
             filename = one.split('#')[0]
             path = one.split('#')[1]
           }
-          console.log(path)
           str.push(`{
   path: '${path}',
   name: 't${filename}',

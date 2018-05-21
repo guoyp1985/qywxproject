@@ -75,7 +75,7 @@ export default {
       })
     },
     onCancel () {
-      this.clip.destroy()
+      this.clip.destory()
       this.$emit('on-cancel')
     },
     imgLoad () {
@@ -85,7 +85,7 @@ export default {
         clipWidth: 160,
         clipHeight: 160,
         setInCenter: true,
-        zoomMin: 1,
+        // zoomMin: 1,
         zoomMax: 2
       })
     }

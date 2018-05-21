@@ -102,7 +102,7 @@ Draggable.prototype = {
 		jQuery(this.scroll).addClass("swapanim");
 
 		this.repaint();
-
+		console.log(this.options.zoomMin)
 		// console.log(this.cLeft +','+ this.cTop +','+ this.cRight +',' + this.cBottom)
 
 		// this.options.setInCenter && this.inCenter();
@@ -158,6 +158,8 @@ Draggable.prototype = {
 		this.cTop = ( this.viewHeight - this.cHeight ) / 2;
 		this.cRight = this.cLeft + this.cWidth;
 		this.cBottom = this.cTop + this.cHeight;
+
+		// this.options.zoomMin = 1 / (Math.max(this.contentWidth, this.contentHeight) / this.cWidth);
 
 		if (this.options.onRefresh) this.options.onRefresh.call(this);
 
@@ -267,8 +269,8 @@ Draggable.prototype = {
 				scale = 1 / this.touchesDistStart * this.touchesDist * this.scale;
 
 				// if(scale >= this.options.zoomMax) return;
-
-				if (scale < this.options.zoomMin) scale = 0.5 * this.options.zoomMin * Math.pow(2.0, scale / this.options.zoomMin);
+				if (!this.options.zoomMin) { scale = 0.5 * 0.1 * Math.pow(2.0, scale / 0.1) }
+				else if (scale < this.options.zoomMin) scale = 0.5 * this.options.zoomMin * Math.pow(2.0, scale / this.options.zoomMin);
 				else if (scale > this.options.zoomMax) scale = 2.0 * this.options.zoomMax * Math.pow(0.5, this.options.zoomMax / scale);
 
 				this.lastScale = scale / this.scale;
@@ -326,9 +328,9 @@ Draggable.prototype = {
 
 			// console.log(this.cLeft+','+this.cTop+','+this.cRight+','+this.cBottom)
 			// 禁止拖出截图区域
-			if (scrollX > this.cLeft || scrollY > this.cTop || (scrollX + this.oClipWidth) < this.cRight || (scrollY + this.oClipHeight) < this.cBottom) {
-				return
-			}
+			// if (scrollX > this.cLeft || scrollY > this.cTop || (scrollX + this.oClipWidth) < this.cRight || (scrollY + this.oClipHeight) < this.cBottom) {
+			// 	return
+			// }
 
 			this.moved = true;
 
@@ -919,15 +921,12 @@ Clip.prototype = {
 		this.draggable.scrollHeight = this.oClipHeight;
 		// this.draggable.repaint();
 	},
-	/*
 	destory : function() {
-		this.overlay[0].removeEventListener(_START,this,false);
-		this.overlay[0].removeEventListener(_MOVE,this,false);
-		this.overlay[0].removeEventListener(_END,this,false);
+		this.draggable.destory();
+		this.clipElement.find(".clip-frame").remove();
+		this.toolbarElement.remove();
 		this.snap && this.snap.remove();
-		this.overlay.remove();
 	},
-	*/
 	canvasSnap : function() {
 		var matrix1 = getComputedStyle(this.clipElement[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
 		var matrix2 = getComputedStyle(this.snap[0], null)[prefix + "Transform"].replace(/[^0-9-.,]/g, '').split(',');
