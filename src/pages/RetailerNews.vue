@@ -1,15 +1,9 @@
 <template>
   <div class="containerarea s-havebottom font14 rnews" style="background: #f5f9fa;">
-    <!--
-    <div class="s-topbanner">
-      <div class="row color-lightgray">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
-        </tab>
-      </div>
+    <div class="s-topbanner s-topbanner1">
+      <div class="row flex_left pl10 border-box">{{$t('News')}}</div>
     </div>
-  -->
-    <div class="s-container">
+    <div class="s-container s-container1">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
@@ -26,7 +20,7 @@
               <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list_shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w70">
-                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container0"></x-img>
+                    <x-img class="imgcover" :src="$util.getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container0"></x-img>
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
@@ -178,6 +172,12 @@ export default {
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    },
+    photoFormat: function (photo) {
+      const self = this
+      let parr = photo.split(',')
+      let retphoto = parr[0]
+      return self.$util.getPhoto(retphoto)
     }
   },
   data () {
@@ -414,9 +414,6 @@ export default {
 .rnews .bk-listplate1 .iconcell{width:45px;}
 .vux-popup-dialog .weui-cell__bd{text-align:center;}
 .vux-popup-dialog .weui-cell__ft{display:none;}
-.rnews .s-container{
-  top: 0
-}
 .rnews .collect{
   background:#ee9f25;
   color: #fff;

@@ -106,11 +106,12 @@ Upload images:
 
 <script>
 import { Group, XTextarea, XImg } from 'vux'
+import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, XTextarea, XImg
+    Group, XTextarea, XImg, ClipPopup
   },
   data () {
     return {
@@ -176,7 +177,11 @@ export default {
     clipPhoto (item) {
       this.popupShow = true
       let index = item.indexOf('?')
-      this.cutImg = item.substring(0, index)
+      if (index > -1) {
+        this.cutImg = item.substring(0, index)
+      } else {
+        this.cutImg = item
+      }
     },
     popupSubmit (cutimg) {
       this.photoarr = [ cutimg ]
