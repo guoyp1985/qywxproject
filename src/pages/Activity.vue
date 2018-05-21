@@ -204,7 +204,6 @@ export default {
         this.crowduserid = this.query.crowduserid
       }
       this.loginUser = User.get()
-      this.access()
       this.getInfo()
       next && next()
     },
@@ -237,6 +236,7 @@ export default {
     this.createdFun(to, from, next)
   },
   created () {
+    this.access()
     this.createdFun(this.$route)
   }
 }
