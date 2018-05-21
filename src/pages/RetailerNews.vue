@@ -78,7 +78,7 @@
         </swiper-item>
       </swiper>
     </div>
-    <div class="s-bottom flex_center bg-white pl12 pr12">
+    <div class="s-bottom list_shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
         <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
       </div>
@@ -423,7 +423,7 @@ export default {
   width: 171px;
   height: 36px;
   margin: 0 auto;
-  border-radius: 5px;
+  border-radius: 50px;
 }
 .rnews .s-bottom{
   height: 50px;
