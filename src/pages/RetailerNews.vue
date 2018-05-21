@@ -1,76 +1,38 @@
 <template>
-  <div class="containerarea s-havebottom font14 rnews" style="background: #f5f9fa;">
+  <div class="containerarea s-havebottom font14 rnews bg-page">
     <div class="s-topbanner s-topbanner1">
-      <div class="row flex_left pl10 border-box">{{$t('News')}}</div>
+      <div class="row flex_left pl10 border-box font18">{{$t('News')}}</div>
     </div>
-    <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="(index == 0)">
-            <div v-if="distabdata1" class="scroll_list ">
-              <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
-                <div class="t-table">
-                  <div class="t-cell v_middle">
-                    <div><i class="al al-wushuju font60 pt20"></i></div>
-                    <div class="mt5">空空如也~</div>
-                    <div class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
-                  </div>
-                </div>
-              </div>
-              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list_shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
-                <div class="t-table">
-                  <div class="t-cell v_middle w70">
-                    <x-img class="imgcover" :src="$util.getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container0"></x-img>
-                  </div>
-                  <div class="t-cell v_middle">
-                    <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
-                    <div class="clamp1 font14 color-gray v_middle mt5">
-                        <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
-                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                        <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
-                    </div>
-                  </div>
-                  <div class="align_right t-cell v_bottom w80 pb8">
-                      <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">●●●</div>
-                  </div>
-                </div>
-              </router-link>
+    <div class="s-container s-container1 scroll-container">
+      <div v-if="distabdata1" class="scroll_list ">
+        <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
+          <div class="t-table">
+            <div class="t-cell v_middle">
+              <div><i class="al al-wushuju font60 pt20"></i></div>
+              <div class="mt5">空空如也~</div>
+              <div class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
             </div>
-          </template>
-          <template v-if="(index == 1)">
-            <div v-if="distabdata2" class="scroll_list pl10 pr10">
-              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
-                <div class="t-table">
-                  <div class="t-cell v_middle">
-                    <div><i class="al al-wushuju font60 pt20"></i></div>
-                    <div class="mt5">空空如也~</div>
-                    <div class="align_left mt5">问：原创或采集的文章有什么作用？</div>
-                    <div class="align_left">答：将文章分享给好友，好友查看文章后就会成为你的客户，且文章中内置了店铺链接，也可向文章内插入商品，有效提高品牌曝光率！</div>
-                  </div>
-                </div>
-              </div>
-              <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata2" :key="item.id" class="scroll_item db pt10 pb10 bg-white">
-                <div class="t-table">
-                  <div class="t-cell v_middle w70">
-                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container1"></x-img>
-                  </div>
-                  <div class="t-cell v_middle">
-                    <div class="clamp1 font14"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-                    <div class="clamp1 font12 color-gray v_middle">
-                        <span class="v_middle">{{ item.dateline | dateformat }}</span>
-                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
-                        <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
-                    </div>
-                  </div>
-                  <div class="t-cell v_middle w70">
-                    <div class="qbtn1 bg-green color-white" @click="controlpopup(item)">{{ $t('Control text') }}</div>
-                  </div>
-                </div>
-              </router-link>
+          </div>
+        </div>
+        <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list_shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+          <div class="t-table">
+            <div class="t-cell v_middle w70">
+              <x-img class="imgcover" :src="$util.getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container"></x-img>
             </div>
-          </template>
-        </swiper-item>
-      </swiper>
+            <div class="t-cell v_middle">
+              <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
+              <div class="clamp1 font14 color-gray v_middle mt5">
+                  <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
+                  <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                  <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+              </div>
+            </div>
+            <div class="align_right t-cell v_bottom w80 pb8">
+                <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">●●●</div>
+            </div>
+          </div>
+        </router-link>
+      </div>
     </div>
     <div class="s-bottom list_shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
@@ -209,14 +171,15 @@ export default {
       checkAll: false,
       customerPagestart: 0,
       isBindCustomerScroll: false,
-      scrollCustomerArea: null
+      scrollCustomerArea: null,
+      scrollContainer: null
     }
   },
   methods: {
     scroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.scrollContainer,
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -248,13 +211,12 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
+        if (!self.scrollContainer) {
+          self.scrollContainer = document.querySelector('.scroll-container')
+        }
         if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.rnews .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
+          self.scrollContainer.removeEventListener('scroll', self.scroll1)
+          self.scrollContainer.addEventListener('scroll', self.scroll1)
         }
       })
     },
