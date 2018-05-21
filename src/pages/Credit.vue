@@ -5,34 +5,40 @@
 */
 <template>
   <div id="personal-credit">
-    <!-- <c-title :link-info="{path:'/profile'}"
-            :link-credit="{path:'/credit'}">
-    </c-title> -->
-    <template v-if="disList">
-      <group :title="$t('Credit Details')" v-if="list.length">
-        <cell v-for="(item, index) in list" :key="index" class="credit-item" align-items :title="item.title" :inline-desc="item.ldate">
-          <x-img slot="icon" :src="item.photo" class="imgcover" default-src="../src/assets/images/nopic.jpg" container="#vux_view_box_body"/>
-          <div slot="child">
-            <span class="al al-jinbi color-gold"></span>
-            <span class="color-red">{{ item.credit | valueFormat }}</span>
+    <group>
+      <group-title slot="title">{{$t('Credit Details')}}</group-title>
+      <div v-if="disList" class="scroll_list">
+        <cell v-if="list && list.length > 0" v-for="(item, index) in list" :key="index" class="credit-item scroll_item" align-items >
+          <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container="#vux_view_box_body"></x-img>
+          <div slot="inline-desc">
+            <div class="t-table">
+              <div class="t-cell v_middle">
+                <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                <div class="clamp1 font12 mt5 color-gray">{{item.ldate}} {{item.typestr}}</div>
+              </div>
+              <div class="t-cell v_middle w60 align_right">
+                <span class="al al-jinbi color-gold"></span>
+                <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+              </div>
+            </div>
           </div>
         </cell>
-      </group>
-      <div v-else class="no-related-x color-gray">
-        <span>{{$t('No Related Data')}}</span>
+        <div v-else class="no-related-x color-gray">
+          <span>{{$t('No Related Data')}}</span>
+        </div>
       </div>
-    </template>
+    </group>
   </div>
 </template>
 <script>
-import { Group, Cell, XImg } from 'vux'
+import { Group, GroupTitle, Cell, XImg } from 'vux'
 import CTitle from '@/components/CTitle'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, Cell, XImg, CTitle
+    Group, GroupTitle, Cell, XImg, CTitle
   },
   data () {
     return {
@@ -85,6 +91,14 @@ export default {
           self.scrollContainer.addEventListener('scroll', self.scroll)
         }
       })
+    },
+    getDateState: function (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass: function (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
     }
   },
   created () {

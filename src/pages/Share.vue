@@ -10,28 +10,30 @@
     </c-title> -->
     <group>
       <group-title slot="title">{{$t('Sharing Details')}}</group-title>
-      <template v-if="disList">
-        <template v-if="list.length">
-          <cell v-for="(item, index) in list"
-          :key="item.id"
-          class="share-item font14"
-          align-items
-          :link="{path: '/sharingDetail', query: {id: item.moduleid}}">
-            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container="#vux_view_box_body"></x-img>
-            <div slot="inline-desc">
-              <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-              <div class="clamp1 font12 mt5 color-gray">{{item.dateline | dateFormat}} {{item.typestr}}</div>
+      <div v-if="disList" class="scroll_list">
+        <cell v-if="list.length" v-for="(item, index) in list"
+        :key="item.id"
+        class="share-item font14 scroll_item"
+        align-items
+        :link="{path: '/sharingDetail', query: {id: item.moduleid}}">
+          <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container="#vux_view_box_body"></x-img>
+          <div slot="inline-desc">
+            <div class="t-table">
+              <div class="t-cell v_middle">
+                <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                <div class="clamp1 font12 mt5 color-gray">{{item.dateline | dateFormat}} {{item.typestr}}</div>
+              </div>
+              <div class="t-cell v_middle w60 align_right">
+                <span class="al al-jinbi color-gold"></span>
+                <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+              </div>
             </div>
-            <div slot="child">
-              <span class="al al-jinbi color-gold"></span>
-              <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
-            </div>
-          </cell>
-        </template>
+          </div>
+        </cell>
         <div v-else class="no-related-x color-gray">
           <span>{{$t('No Related Data')}}</span>
         </div>
-      </template>
+      </div>
     </group>
   </div>
 </template>
