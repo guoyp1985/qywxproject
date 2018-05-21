@@ -2,23 +2,12 @@
   <div class="containerarea s-havebottom bg-page font14 retailerordes">
     <div class="s-topbanner">
       <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Order list')}}</div>
-          <!--
-          <div class="pr10 align_right" style="width:100px;">
-            <router-link class="qbtn color-white" style="border:#fff 1px solid;" to="/retailerAddorder">{{$t('Add order')}}</router-link>
-          </div>
-        -->
-        </div>
-      </div>
-      <div class="row">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
+        <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="s-container">
+    <div class="s-container mt10">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
@@ -32,7 +21,7 @@
                 <span slot="createdate">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container0"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -545,4 +534,11 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.retailerordes .s-topbanner{
+  background: #fff;
+  height: 44px;
+}
+.retailerordes .s-container{
+  top:44px;
+}
 </style>
