@@ -151,7 +151,11 @@ export default {
           let sharedesc = self.data.title
           if (inpage === 'view' || inpage === 'detail') {
             self.getCudata()
-            sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+            if (self.data.havecreate) {
+              sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+            } else {
+              sharetitle = `${self.crowduser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+            }
             sharedesc = '好友帮帮忙，优惠享更多！'
           }
           self.$util.handleWxShare({

@@ -392,7 +392,7 @@ export default {
             type: 'say',
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
-            msgid: retdata.id,
+            messageid: retdata.id,
             room_id: self.roomid
           }
           for (let key in retdata) {
