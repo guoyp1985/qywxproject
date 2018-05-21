@@ -79,8 +79,12 @@
       </swiper>
     </div>
     <div class="s-bottom flex_center bg-white pl12 pr12">
-      <router-link class="collect flex_center h_100" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
-      <router-link class="collect bg-red flex_center h_100" to="/addNews" >{{ $t('Create news') }}</router-link>
+      <div class="align_center flex_center flex_cell">
+        <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
+      </div>
+      <div class="align_center flex_center flex_cell">
+        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addNews" >{{ $t('Create news') }}</router-link>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">

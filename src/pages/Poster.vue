@@ -35,7 +35,7 @@
                     <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                       <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
                         <div class="close" @click="deletephoto(item,index)">×</div>
-                        <div class="clip"><i class="al al-set"></i></div>
+                        <div class="clip" @click="clipPhoto(item)"><i class="al al-set"></i></div>
                       </div>
                     </div>
                   </template>
@@ -83,6 +83,7 @@
     </div>
     <div v-if="iscreating" class="pagebottom color-white bg-green font16 flex_center btncreate disabled"></div>
     <div v-else class="pagebottom color-white bg-green font16 flex_center btncreate" @click="saveevent"></div>
+    <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
   </div>
 </template>
 
@@ -121,7 +122,9 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', subtitle: '' },
       requireddata: { title: '', 'photo': '' },
-      iscreating: false
+      iscreating: false,
+      cutImg: '',
+      popupShow: false
     }
   },
   watch: {
@@ -169,6 +172,18 @@ export default {
           break
         }
       }
+    },
+    clipPhoto (item) {
+      this.popupShow = true
+      let index = item.indexOf('?')
+      this.cutImg = item.substring(0, index)
+    },
+    popupSubmit (cutimg) {
+      this.photoarr = [ cutimg ]
+      this.submitdata.photo = this.$util.setPhoto(cutimg)
+    },
+    popupCancel () {
+      this.popupShow = false
     },
     selectcover (item, index) {
       const self = this
