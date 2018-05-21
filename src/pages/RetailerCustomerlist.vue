@@ -29,11 +29,13 @@
               </div>
             </div>
             <!---->
-            <div class="font13 pl12 pr12 b_bottom h35 list-shadow">
+            <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
-                <div class="t-cell align_right" style="padding-right: 60px;">{{ $t('Percent') }}</div>
+                <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
+                <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
               </div>
+              
             </div>
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
@@ -124,7 +126,7 @@
             <div class="font12 padding10 b_bottom color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount2 }}人)</div>
-                <div class="t-cell align_right pr10">{{ $t('Contact customer') }}</div>
+                <div class="t-cell align_right ">{{ $t('Contact customer') }}</div>
               </div>
             </div>
             <div v-if="distabdata2" class="scroll_list">
