@@ -74,21 +74,13 @@ export default {
         let m = Math.floor(stay / 60)
         let s = stay % 60
         ret = `${m}分钟${s}秒`
-      } else if (stay >= 3660 && stay < 86400) {
+      } else if (stay >= 3660) {
         let h = Math.floor(stay / 3660)
         console.log('h=' + h)
         let val1 = stay % 3660
         let m = Math.floor(val1 / 60)
         let s = val1 % 60
         ret = `${h}小时${m}分钟${s}秒`
-      } else if (stay > 86400) {
-        let d = Math.floor(stay / 86400)
-        let val2 = stay % 86400
-        let h = Math.floor(val2 / 3660)
-        let val1 = val2 % 3660
-        let m = Math.floor(val1 / 60)
-        let s = val1 % 60
-        ret = `${d}天${h}小时${m}分钟${s}秒`
       }
       return ret
     }
