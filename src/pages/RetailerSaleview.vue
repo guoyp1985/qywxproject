@@ -18,7 +18,7 @@
       </div>
       <div class="row row2">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">
             <div class="flex_center txt">
               <div>
                 <div>{{item}}</div>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="s-container s-container2">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list pl10 pr10">
@@ -295,7 +295,7 @@ export default {
         }
       })
     },
-    tabclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 0) {
         if (self.tabdata1.length === 0) {

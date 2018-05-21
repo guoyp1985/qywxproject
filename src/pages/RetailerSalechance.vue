@@ -20,61 +20,65 @@
         </card>
       </div>
       <tab v-model="tabmodel" class="x-toptab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="pagemiddle">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="index === 0">
-            <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
-              <div class="t-table">
-                <div class="t-cell">
-                  <div><i class="al al-yulan3 font70 pt20"></i></div>
-                  <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+            <template v-if="disdatalist1">
+              <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
+                <div class="t-table">
+                  <div class="t-cell">
+                    <div><i class="al al-yulan3 font70 pt20"></i></div>
+                    <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <timeline v-else class="x-timeline">
-              <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
-                <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
-                <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                <div class="t-table">
-                  <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
-                    <div class="color-blue font14">{{ item.linkman }}</div>
-                    <div class="color-gray font12">{{ item.content }}</div>
-                  </router-link>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
-                    <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
-                  </router-link>
-                </div>
-              </timeline-item>
-            </timeline>
+              <timeline v-else class="x-timeline">
+                <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
+                  <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
+                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                  <div class="t-table">
+                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                      <div class="color-blue font14">{{ item.linkman }}</div>
+                      <div class="color-gray font12">{{ item.content }}</div>
+                    </router-link>
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
+                      <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
+                    </router-link>
+                  </div>
+                </timeline-item>
+              </timeline>
+            </template>
           </template>
           <template v-else-if="index === 1">
-            <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
-              <div class="t-table">
-                <div class="t-cell">
-                  <div><i class="al al-yulan3 font70 pt20"></i></div>
-                  <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+            <template v-if="disdatalist2">
+              <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
+                <div class="t-table">
+                  <div class="t-cell">
+                    <div><i class="al al-yulan3 font70 pt20"></i></div>
+                    <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                  </div>
                 </div>
               </div>
-            </div>
-            <timeline v-else class="x-timeline">
-              <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
-                <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
-                <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                <div class="t-table">
-                  <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
-                    <div class="color-blue font14">{{ item.linkman }}</div>
-                    <div class="color-gray font12">{{ item.content }}</div>
-                  </router-link>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
-                    <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
-                  </router-link>
-                </div>
-              </timeline-item>
-            </timeline>
+              <timeline v-else class="x-timeline">
+                <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
+                  <div class="color-black font12 ddate">{{ item.dateline | dateformat }}</div>
+                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                  <div class="t-table">
+                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                      <div class="color-blue font14">{{ item.linkman }}</div>
+                      <div class="color-gray font12">{{ item.content }}</div>
+                    </router-link>
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
+                      <div class="qbtn1 bg-green color-white">{{ $t('Contact') }}</div>
+                    </router-link>
+                  </div>
+                </timeline-item>
+              </timeline>
+            </template>
           </template>
         </swiper-item>
       </swiper>
@@ -143,7 +147,9 @@ export default {
       isBindScroll1: false,
       isBindScroll2: false,
       scrollArea1: null,
-      scrollArea2: null
+      scrollArea2: null,
+      disdatalist1: false,
+      disdatalist2: false
     }
   },
   watch: {
@@ -167,21 +173,7 @@ export default {
       if (data && data.flag === 1) {
         self.viewdata = data.data
       }
-      let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params)
-    }).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      let retdata = data.data ? data.data : data
-      self.tabdata1 = self.tabdata1.concat(retdata)
-      if (!self.isBindScroll1) {
-        let items = document.querySelectorAll('.rsalechance .swiperitem')
-        self.scrollArea1 = items[0]
-        self.scrollArea2 = items[1]
-        self.isBindScroll1 = true
-        self.scrollArea1.removeEventListener('scroll', self.scroll1)
-        self.scrollArea1.addEventListener('scroll', self.scroll1)
-      }
+      self.getdata1()
     })
   },
   methods: {
@@ -219,6 +211,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.disdatalist1 = true
         if (!self.isBindScroll1) {
           let items = document.querySelectorAll('.rsalechance .swiperitem')
           self.scrollArea1 = items[0]
@@ -237,6 +230,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
+        self.disdatalist2 = true
         if (!self.isBindScroll2) {
           self.isBindScroll2 = true
           self.scrollArea2.removeEventListener('scroll', self.scroll2)
@@ -244,7 +238,7 @@ export default {
         }
       })
     },
-    tabclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 0) {
         if (self.tabdata1.length === 0) {

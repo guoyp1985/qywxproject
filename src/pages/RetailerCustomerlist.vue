@@ -3,12 +3,12 @@
     <div class="s-topbanner bg-white">
       <div class="row">
         <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
@@ -433,7 +433,7 @@ export default {
       self.pagestart3 = 0
       self.getdata3()
     },
-    tabclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 0) {
         if (self.tabdata1.length === 0) {

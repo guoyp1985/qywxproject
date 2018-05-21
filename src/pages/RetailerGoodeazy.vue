@@ -9,12 +9,12 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="pl10 pr10">
             <div class="font15 pt15">搜索关键词采集文章</div>
@@ -75,7 +75,7 @@
             </div>
             <div class="bg-page" style="height:12px;"></div>
             <div class="padding15 font15 b_bottom_after">{{ $t('Collect record') }}</div>
-            <div class="scroll_list pl10 pr10 pb10">
+            <div v-if="disNewslist" class="scroll_list pl10 pr10 pb10">
               <div v-if="!newsdata || newsdata.length == 0" class="scroll_item emptyitem">
                 <div class="t-table">
                   <div class="t-cell">您还没有采集过文章</div>
@@ -139,7 +139,8 @@ export default {
       isBindScroll: false,
       scrollArea: null,
       keywordsData: [],
-      keyword: ''
+      keyword: '',
+      disNewslist: false
     }
   },
   methods: {
@@ -164,6 +165,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.newsdata = self.newsdata.concat(retdata)
+        self.disNewslist = true
         if (!self.isBindScroll) {
           let items = document.querySelectorAll('.rgoodeazy .swiperitem')
           self.scrollArea = items[1]
@@ -215,7 +217,7 @@ export default {
         self.searchFun(kw)
       }
     },
-    tabitemclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 1) {
         if (self.pagestart === 0 && !self.isBindScroll) {

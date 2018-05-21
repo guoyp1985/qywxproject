@@ -13,9 +13,9 @@
       <div class="tabarea">
         <template v-if="tabsdata && tabsdata.length > 0">
           <tab v-model="tabmodel" class="mt12 bg-page">
-            <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index" @on-item-click="tabclick(item,index)">{{ item.title }}</tab-item>
+            <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
           </tab>
-          <swiper v-model="tabmodel" class="x-swiper no-indicator">
+          <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
             <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabsdata" :key="index">
               <div class="scroll_list padding10">
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
@@ -292,9 +292,9 @@ export default {
         }
       })
     },
-    tabclick (item, index) {
+    swiperChange (index) {
       const self = this
-      self.clickTabitem = item
+      self.clickTabitem = self.tabsdata[index]
       self.clickTabIndex = index
       self.arrData = self.datalist[index]
       if (self.scrollData[index].pagestart === 0 && !self.scrollData[index].isBindScroll) {

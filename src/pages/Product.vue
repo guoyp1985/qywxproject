@@ -177,7 +177,7 @@
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
             <div class="buylist pt10 pb15 pl10 pr10">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
+              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in buyuserdata" :key="index">
                 <div class="align_center">
                   <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       					</div>
