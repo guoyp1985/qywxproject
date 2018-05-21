@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <div class="form-item">
+      <div class="form-item" v-if="retailerInfo.buyonline == 1">
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -174,13 +174,18 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' }
+      requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' },
+      retailerInfo: { buyonline: 0 }
     }
   },
   created: function () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+      let data = res.data
+      self.retailerInfo = data.data ? data.data : data
+    })
     if (self.query.id) {
       let params = { params: { id: self.query.id, module: 'product' } }
       self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
