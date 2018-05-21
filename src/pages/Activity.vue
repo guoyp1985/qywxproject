@@ -141,6 +141,12 @@ export default {
               inpage = 'main'
             }
           }
+          /*
+          if (inpage === 'detail' && self.loginUser.subscribes === 0) {
+            const originHref = encodeURIComponent(location.href)
+            location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+          }
+          */
           let sharetitle = self.data.title
           let sharedesc = self.data.title
           if (inpage === 'view' || inpage === 'detail') {
@@ -192,20 +198,14 @@ export default {
         this.crowduserid = this.query.crowduserid
       }
       this.loginUser = User.get()
+      this.access()
       this.getInfo()
       next && next()
     },
     access () {
-      const loginUser = User.get()
+      const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      if (loginUser && loginUser.subscribes === 0) {
-        const originHref = encodeURIComponent(location.href)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-      } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      }
-      /*
       if (code) {
         alert(code)
         // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
@@ -225,14 +225,12 @@ export default {
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
       }
-      */
     }
   },
   beforeRouteUpdate (to, from, next) {
     this.createdFun(to, from, next)
   },
   created () {
-    this.access()
     this.createdFun(this.$route)
   }
 }
