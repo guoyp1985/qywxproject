@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;background: #f2f7f8">
+    <div class="s-container scroll-containe bg-page" style="top:0px;">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
