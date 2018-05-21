@@ -149,12 +149,14 @@ export default {
           */
           let sharetitle = self.data.title
           let sharedesc = self.data.title
+          let sharephoto = self.loginUser.avatar
           if (inpage === 'view' || inpage === 'detail') {
             self.getCudata()
             if (self.data.havecreate) {
               sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
             } else {
               sharetitle = `${self.crowduser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+              sharephoto = self.crowduser.avatar
             }
             sharedesc = '好友帮帮忙，优惠享更多！'
           }
@@ -164,7 +166,7 @@ export default {
             lastshareuid: self.query.share_uid,
             title: sharetitle,
             desc: sharedesc,
-            photo: self.loginUser.avatar,
+            photo: sharephoto,
             link: sharelink,
             successCallback: function () {
               self.showShareSuccess = true
