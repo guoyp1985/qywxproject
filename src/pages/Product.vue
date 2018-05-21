@@ -35,7 +35,7 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg"></x-img>
+              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg" @click.native.stop="showBigimg1(index)"></x-img>
             </swiper-item>
           </swiper>
         </template>
@@ -329,6 +329,9 @@
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
+      </div>
       <template v-if="loginUser">
         <share-success
           v-show="showShareSuccess"
@@ -411,6 +414,7 @@ export default {
       photoarr: [],
       contentphotoarr: [],
       previewerPhotoarr: [],
+      previewerFlasharr: [],
       buyuserdata: [],
       evluatedata: [],
       replyPopupShow: false,
@@ -589,6 +593,17 @@ export default {
         })
       }
     },
+    showBigimg1 (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerFlash.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.photoarr[index],
+          urls: self.photoarr
+        })
+      }
+    },
     closeShareSuccess () {
       this.showShareSuccess = false
     },
@@ -752,6 +767,7 @@ export default {
           }
           if (self.photoarr.length > 0) {
             self.showFlash = true
+            self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
           }
           const content = self.productdata.content
           const contetnphoto = self.productdata.contentphoto
