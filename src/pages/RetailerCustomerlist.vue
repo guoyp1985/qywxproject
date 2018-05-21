@@ -2,7 +2,7 @@
   <div class="containerarea bg-page font14 rcustomerlist">
     <div class="s-topbanner bg-white">
       <div class="row">
-        <tab v-model="tabmodel" class="x-tab" active-color="#ea3a3a" default-color="#666666">
+        <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
         </tab>
       </div>
@@ -26,7 +26,6 @@
                 <div class="t-cell align_center active cut-off">时间<span class="font12 ml5">▼</span></div>
                 <div class="t-cell align_center  cut-off">地域<span class="font12 ml5">▼</span></div>
                 <div class="t-cell align_center cut-off">性别<span class="font12 ml5">▼</span></div>
-                <div class="t-cell align_center cut-off">默认</div>
               </div>
             </div>
             <!---->
@@ -474,21 +473,21 @@ export default {
 <style lang="less" >
 .rcustomerlist .s-topbanner{
   background: #fff;
-  height: 40px;
+  height: 44px;
 }
 .rcustomerlist .s-container{
-  top:40px;
+  top:44px;
 }
 .rcustomerlist .vux-tab {
-    height: 40px;
+    height: 44px;
 }
 .rcustomerlist .vux-tab .vux-tab-item{
-  line-height: 40px;
+  line-height: 44px;
 }
 .rcustomerlist .x-tab .vux-tab-selected:before{
   content: "";
   position: absolute;
-  border-bottom: 1px solid #ea3a3a;
+  border-bottom: 3px solid #ea3a3a;
   bottom: 0;
   left: 0;
   width:100%;
@@ -551,16 +550,22 @@ export default {
 .rcustomerlist .percentarea .txt{
   line-height: 24px;
 }
-.cut-off:after{
+.rcustomerlist .cut-off:after{
   content: "";
   position: absolute;
-  top: 10px;
-  height: 20px;
+  top: 12px;
+  height: 16px;
   width: 1px;
-  background-color: #dddddd;
+  background-color: #f5f5f5;
   margin-left: 14px;
   }
-.cut-off:nth-last-child(1):after {
+.rcustomerlist .cut-off:nth-last-child(1):after {
   display: none;
+}
+.rcustomerlist .weui-search-bar__box{
+  background: #f0f0f0;
+}
+.rcustomerlist .weui-search-bar__box .weui-icon-search{
+  line-height: 35px;
 }
 </style>
