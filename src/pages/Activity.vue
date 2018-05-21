@@ -212,13 +212,6 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      if (user && !user.subscribe) {
-        const originHref = encodeURIComponent(location.href)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-      } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
-      }
-      /*
       if (code) {
         alert(code)
         // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
@@ -232,13 +225,12 @@ export default {
         //     location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
         //   }
         // )
-      } else if (user && !user.subscribe) {
+      } else if (user && !user.subscribes) {
         const originHref = encodeURIComponent(location.href)
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
       }
-      */
     }
   },
   beforeRouteUpdate (to, from, next) {
