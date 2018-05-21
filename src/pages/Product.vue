@@ -702,7 +702,6 @@ export default {
     },
     onReply (item) {
       this.replyData = item
-      console.log(this.replyData)
       this.replyPopupShow = true
     },
     replyPopupCancel () {
@@ -713,6 +712,12 @@ export default {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.replyData.id, module: 'comments', message: value})
       .then(res => {
+        let data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error)
+        })
         if (res.data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = []

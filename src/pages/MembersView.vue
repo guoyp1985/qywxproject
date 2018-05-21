@@ -275,6 +275,21 @@ export default {
           self.$vux.confirm.setInputValue(inputval)
         },
         onConfirm (val) {
+          let iscontinue = true
+          if (char === 'mobile' && self.$util.trim(val) !== '') {
+            iscontinue = self.$util.validateQueue([{ telephone: val, r: 'Phone' }],
+              model => {
+                switch (model.key) {
+                  case 'telephone':
+                    self.$vux.toast.text('请输入正确的手机号', 'middle')
+                    break
+                }
+              }
+            )
+          }
+          if (!iscontinue) {
+            return false
+          }
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
             { action: 'update', customeruid: self.query.uid, char: char, value: val }
