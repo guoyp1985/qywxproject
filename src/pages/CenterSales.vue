@@ -395,6 +395,8 @@ export default {
 .centersales .weui-grid{
   width:100px;
   height:100px;
+  max-width:100%;
+  max-height:100%;
   padding:0px;
   display: block;
   margin: 0 auto;

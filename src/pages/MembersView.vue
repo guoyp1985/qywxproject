@@ -39,10 +39,10 @@
         </div>
         <div class="b_top_after padding10 flex_center bg-white">
           <div class="t-table align_center font15 itemtab">
-            <div class="t-cell item v_middle b_right_after">
+            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
               <div>{{viewuser.viewNumber}}</div>
               <div>{{ $t('Views') }}</div>
-            </div>
+            </router-link>
             <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
               <div>{{viewuser.shareNumber}}</div>
               <div>{{ $t('Share') }}</div>
