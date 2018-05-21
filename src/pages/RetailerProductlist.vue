@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-containe bg-page" style="top:0px;">
+    <div class="s-container scroll-containe" style="top:0px;">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -29,7 +29,7 @@
           </div>
 
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list_shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -425,9 +425,8 @@ export default {
   height:8px;
   background:#fff;
 }
-.rproductlist .list_shadow{
-box-shadow: 0px 0px 3px 1px #e6ebed;
-}
+
+
 .rproductlist .s-bottom{
   height: 50px;}
 .rproductlist .addproduct{
