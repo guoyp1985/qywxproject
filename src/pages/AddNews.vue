@@ -1,7 +1,9 @@
 <template>
-  <div id="article-info-edit">
+  <div id="article-info-edit" class="font14">
     <group label-width="5em">
-      <x-input :title="$t('News title')" :placeholder="`${$t('Necessary')}${$t('Title')}`" v-model="submitdata.title" class="font14"></x-input>
+      <group class="textarea-outer">
+        <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+      </group>
       <cell :title="$t('Cover photo')" class="font14">
         {{$t('Necessary')}}上传图像后可点击<i class="al al-set font14"></i>进行剪裁
       </cell>
@@ -248,4 +250,5 @@ export default {
   box-sizing: border-box;
   padding: 10px;
 }
+.x-textarea .weui-label{font-size:14px;}
 </style>

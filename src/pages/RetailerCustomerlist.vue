@@ -217,7 +217,7 @@ export default {
   data () {
     return {
       autofixed: false,
-      tabtxts: [ '潜在客户','意向客户','成交客户' ],
+      tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
       tabcount1: 0,
       tabcount2: 0,
       tabcount3: 0,
