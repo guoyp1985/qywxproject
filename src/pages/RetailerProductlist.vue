@@ -56,7 +56,7 @@
         </template>
       </template>
     </div>
-    <div class="bg-white pl12 pr12 s-bottom flex_center">
+    <div class="bg-white pl12 pr12 s-bottom flex_center list-shadow">
       <router-link class="addproduct flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
@@ -428,7 +428,7 @@ box-shadow: 0px 0px 3px 1px #e6ebed;
 .rproductlist .s-bottom{
   height: 50px;}
 .rproductlist .addproduct{
-  border-radius: 5px;
+  border-radius: 50px;
   height: 36px;
   width: 100%;
 }
