@@ -23,17 +23,17 @@
             <!---->
             <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
               <div class="t-table w_100">
-                <div class="t-cell align_center pr10 active">时间<span class="font12">▼</span></div>
-                <div class="t-cell align_center pr10">地域<span class="font12">▼</span></div>
-                <div class="t-cell align_center pr10">性别<span class="font12">▼</span></div>
-                <div class="t-cell align_center pr10">默认<span class="font12">▼</span></div>
+                <div class="t-cell align_center active cut-off">时间<span class="font12 ml5">▼</span></div>
+                <div class="t-cell align_center  cut-off">地域<span class="font12 ml5">▼</span></div>
+                <div class="t-cell align_center cut-off">性别<span class="font12 ml5">▼</span></div>
+                <div class="t-cell align_center cut-off">默认</div>
               </div>
             </div>
             <!---->
             <div class="font13 pl12 pr12 b_bottom h35 list-shadow">
               <div class="t-table w_100">
                 <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
-                <div class="t-cell align_right ">{{ $t('Percent') }}</div>
+                <div class="t-cell align_right" style="padding-right: 60px;">{{ $t('Percent') }}</div>
               </div>
             </div>
             <div v-if="distabdata1" class="scroll_list">
@@ -70,7 +70,7 @@
           </div>
           <div v-if="(index == 1)">
             <search
-              class="x-search"
+              class="x-search bg-white"
               v-model='searchword3'
               :auto-fixed="autofixed"
               @on-submit="onSubmit3"
@@ -78,14 +78,14 @@
               @on-cancel="onCancel3"
               ref="search">
             </search>
-            <div class="font12 padding10 b_bottom">
+            <div class="font12 padding10 b_bottom color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount3 }}人)</div>
                 <div class="t-cell align_center w80">{{ $t('Degree of intention') }}</div>
                 <div class="t-cell align_center w60">{{ $t('Contact customer') }}</div>
               </div>
             </div>
-            <div v-if="distabdata3" class="scroll_list pl10 pr10">
+            <div v-if="distabdata3" class="scroll_list ">
               <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult3">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -114,7 +114,7 @@
           </div>
           <div v-if="(index == 2)">
             <search
-              class="x-search"
+              class="x-search bg-white"
               v-model='searchword2'
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
@@ -122,13 +122,13 @@
               @on-cancel="onCancel2"
               ref="search">
             </search>
-            <div class="font12 padding10 b_bottom">
+            <div class="font12 padding10 b_bottom color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount2 }}人)</div>
                 <div class="t-cell align_right pr10">{{ $t('Contact customer') }}</div>
               </div>
             </div>
-            <div v-if="distabdata2" class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult2">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -218,7 +218,7 @@ export default {
   data () {
     return {
       autofixed: false,
-      tabtxts: [ '潜在客户', '成交客户' ],
+      tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
       tabcount1: 0,
       tabcount2: 0,
       tabcount3: 0,
@@ -519,9 +519,9 @@ export default {
    vertical-align: initial;
 }
 .rcustomerlist .condition{
+  position: relative;
   height: 40px;
   line-height: 40px;
-  border-top: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
 }
 .rcustomerlist .condition .active{
@@ -550,5 +550,17 @@ export default {
 }
 .rcustomerlist .percentarea .txt{
   line-height: 24px;
+}
+.cut-off:after{
+  content: "";
+  position: absolute;
+  top: 10px;
+  height: 20px;
+  width: 1px;
+  background-color: #dddddd;
+  margin-left: 14px;
+  }
+.cut-off:nth-last-child(1):after {
+  display: none;
 }
 </style>
