@@ -425,8 +425,6 @@ export default {
   height:8px;
   background:#fff;
 }
-
-
 .rproductlist .s-bottom{
   height: 50px;}
 .rproductlist .addproduct{

@@ -1,8 +1,10 @@
 <template>
   <div class="containerarea s-havebottom font14 rnews bg-page">
+    <!--
     <div class="s-topbanner s-topbanner1">
       <div class="row flex_left pl10 border-box font18">{{$t('News')}}</div>
     </div>
+     -->
     <div class="s-container s-container1 scroll-container">
       <div v-if="distabdata1" class="scroll_list ">
         <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
@@ -387,6 +389,9 @@ export default {
   margin: 0 auto;
   border-radius: 50px;
 }
+.rnews .s-container.s-container1{
+  top: 0
+}
 .rnews .s-bottom{
   height: 50px;
 }
@@ -399,9 +404,6 @@ export default {
   border-radius: 30px;
   padding: 1px 8px;
   letter-spacing: 0px;
-}
-.list_shadow{
-  box-shadow: 0px 0px 3px 1px #e6ebed;
 }
 
 </style>
