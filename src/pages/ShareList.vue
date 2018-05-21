@@ -155,9 +155,13 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
-    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-      { params: { customeruid: self.query.uid } }
-    ).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'sharelist'
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+        { params: { customeruid: self.query.uid } }
+      )
+    }).then(function (res) {
       let data = res.data
       if (data) {
         self.viewuser = data.data ? data.data : data

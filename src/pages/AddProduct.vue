@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <div class="form-item">
+      <div class="form-item" v-if="showRebate">
         <div class="t-table">
           <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -174,13 +174,37 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' }
+      requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' },
+      showRebate: false
     }
   },
   created: function () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    let logparams = { module: 'product', action: 'add' }
+    if (self.query.id) {
+      logparams.id = self.query.id
+    }
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, logparams).then(function (res) {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+    }).then(function (res) {
+      let data = res.data
+      self.retailerInfo = data.data ? data.data : data
+      if (self.retailerInfo.buyonline === 1) {
+        self.showRebate = true
+        setTimeout(function () {
+          let rebateInput = document.querySelector('.rebateInput')
+          self.priceChange(rebateInput, function (val) {
+            self.submitdata.rebate = val
+          })
+        }, 500)
+      }
+      let priceInput = document.querySelector('.priceInput')
+      self.priceChange(priceInput, function (val) {
+        self.submitdata.price = val
+      })
+    })
     if (self.query.id) {
       let params = { params: { id: self.query.id, module: 'product' } }
       self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
@@ -200,17 +224,6 @@ export default {
       })
     }
   },
-  mounted: function () {
-    const self = this
-    let priceInput = document.querySelector('.priceInput')
-    this.priceChange(priceInput, function (val) {
-      self.submitdata.price = val
-    })
-    let rebateInput = document.querySelector('.rebateInput')
-    this.priceChange(rebateInput, function (val) {
-      self.submitdata.rebate = val
-    })
-  },
   watch: {
     submitdata: function () {
       return this.submitdata
@@ -222,6 +235,10 @@ export default {
     havenum1: function (val) {
       this.havenum1 = this.photoarr1.length
       return this.havenum1
+    },
+    showRebate: function () {
+      const self = this
+      return self.showRebate
     }
   },
   computed: {
@@ -335,10 +352,9 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
-          type: toasttype,
+          type: data.flag !== 1 ? 'warn' : 'success',
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {

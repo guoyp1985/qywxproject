@@ -106,11 +106,12 @@ Upload images:
 
 <script>
 import { Group, XTextarea, XImg } from 'vux'
+import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, XTextarea, XImg
+    Group, XTextarea, XImg, ClipPopup
   },
   data () {
     return {
@@ -176,7 +177,11 @@ export default {
     clipPhoto (item) {
       this.popupShow = true
       let index = item.indexOf('?')
-      this.cutImg = item.substring(0, index)
+      if (index > -1) {
+        this.cutImg = item.substring(0, index)
+      } else {
+        this.cutImg = item
+      }
     },
     popupSubmit (cutimg) {
       this.photoarr = [ cutimg ]
@@ -249,8 +254,12 @@ export default {
     self.submitdata.type = self.query.module
     self.submitdata.id = self.query.id
     self.$vux.loading.show()
-    let params = { params: { id: self.query.id, module: self.query.module } }
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'poster', id: self.query.id
+    }).then(function () {
+      let params = { params: { id: self.query.id, module: self.query.module } }
+      return self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params)
+    }).then(function (res) {
       let data = res.data
       self.$vux.loading.hide()
       self.data = data.data ? data.data : data

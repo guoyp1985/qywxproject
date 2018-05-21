@@ -91,6 +91,9 @@
           </newsitemplate>
         </div>
       </template>
+      <div class="padding10">
+        <div class="btn-open" @click="openShop" style="display: block;background-color: #e10c00">我也要开店</div>
+      </div>
     </div>
     <div class="s-bottom flex_center">
       <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</router-link>
@@ -343,6 +346,14 @@ export default {
         })
       }
       self.isfavorite = !self.isfavorite
+    },
+    openShop () {
+      const self = this
+      if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
+        self.$router.push('/retailerApply')
+      } else if (self.loginUser.usergroup) {
+        self.$router.push('/centerSales')
+      }
     }
   },
   created () {
@@ -351,15 +362,19 @@ export default {
     self.loginUser = User.get()
     self.query = self.$route.query
     self.$vux.loading.show()
-    let infoparams = { uid: self.query.wid }
-    if (self.query.share_uid) {
-      infoparams.share_uid = self.query.share_uid
-    }
-    if (self.query.lastshareuid) {
-      infoparams.lastshareuid = self.query.lastshareuid
-    }
-    self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-      params: infoparams
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'store'
+    }).then(function () {
+      let infoparams = { uid: self.query.wid }
+      if (self.query.share_uid) {
+        infoparams.share_uid = self.query.share_uid
+      }
+      if (self.query.lastshareuid) {
+        infoparams.lastshareuid = self.query.lastshareuid
+      }
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: infoparams
+      })
     }).then(function (res) {
       self.$vux.loading.hide()
       self.hideloading = true
@@ -426,4 +441,13 @@ export default {
 .store .collect .txt:after{content:"收藏";}
 .store .collect.have .txt:after{content:"已收藏"}
 .store .staricon{margin-top:-2px;display:inline-block;}
+.store .btn-open{
+  background-color: #e10c00;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 4px;
+  padding:8px;
+  letter-spacing: 2px;
+}
 </style>

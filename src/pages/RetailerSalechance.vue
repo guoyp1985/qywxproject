@@ -158,7 +158,11 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
-    self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'salechance'
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`)
+    }).then(function (res) {
       let data = res.data
       if (data && data.flag === 1) {
         self.viewdata = data.data

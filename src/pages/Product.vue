@@ -35,7 +35,7 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg"></x-img>
+              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg" @click.native.stop="showBigimg1(index)"></x-img>
             </swiper-item>
           </swiper>
         </template>
@@ -59,7 +59,7 @@
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="!activityInfo.id && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
+            <div v-if="productdata.buyonline == 1 && !activityInfo.id && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
               <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
   					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
@@ -329,6 +329,9 @@
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
+      </div>
       <template v-if="loginUser">
         <share-success
           v-show="showShareSuccess"
@@ -411,6 +414,7 @@ export default {
       photoarr: [],
       contentphotoarr: [],
       previewerPhotoarr: [],
+      previewerFlasharr: [],
       buyuserdata: [],
       evluatedata: [],
       replyPopupShow: false,
@@ -589,6 +593,17 @@ export default {
         })
       }
     },
+    showBigimg1 (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerFlash.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.photoarr[index],
+          urls: self.photoarr
+        })
+      }
+    },
     closeShareSuccess () {
       this.showShareSuccess = false
     },
@@ -687,7 +702,6 @@ export default {
     },
     onReply (item) {
       this.replyData = item
-      console.log(this.replyData)
       this.replyPopupShow = true
     },
     replyPopupCancel () {
@@ -698,6 +712,12 @@ export default {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.replyData.id, module: 'comments', message: value})
       .then(res => {
+        let data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error)
+        })
         if (res.data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = []
@@ -752,6 +772,7 @@ export default {
           }
           if (self.photoarr.length > 0) {
             self.showFlash = true
+            self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
           }
           const content = self.productdata.content
           const contetnphoto = self.productdata.contentphoto

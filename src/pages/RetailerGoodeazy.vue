@@ -278,9 +278,11 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-      { do: 'history', pagestart: 0, limit: 15 }
-    ).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'goodeazy'
+    }).then(function () {
+      return self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, { do: 'history', pagestart: 0, limit: 15 })
+    }).then(function (res) {
       let data = res.data
       self.keywordsData = data.data ? data.data : data
     })

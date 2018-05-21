@@ -8,6 +8,7 @@
     <form class="editorImageForm hide" enctype="multipart/form-data">
       <input style="opacity:0;" type="file" name="files" />
     </form>
+    <div :class="`outer-eidtor-tip ${editTipCss}`">点击【编辑】按钮可修改内容哦！</div>
     <div class="editor-icon">
       <div class="edit-btn-box" v-show="!showBtnArea">
         <div class="edit-btn" @click="clickEditHandle">
@@ -204,7 +205,8 @@ export default {
       customerPagestart: 0,
       isBindCustomerScroll: false,
       scrollCustomerArea: null,
-      touchElement: null
+      touchElement: null,
+      editTipCss: ''
     }
   },
   computed: {
@@ -614,11 +616,10 @@ export default {
     self.touchElement.addEventListener(move, self.moveEvent)
     self.touchElement.removeEventListener(end, self.moveEvent)
     self.touchElement.addEventListener(end, self.moveEvent)
-    /*
-    menuicon.unbind("click").click(function(){
-      self.menuClickEvent()
-    })
-    */
+    self.editTipCss = 'active'
+    setTimeout(function () {
+      self.editTipCss = ''
+    }, 5000)
   }
 }
 </script>
@@ -680,4 +681,25 @@ export default {
   display:block;
 }
 .controlmenu .item:not(:last-child){margin-bottom:10px;}
+.outer-eidtor-tip{
+  position: absolute;
+  right: 0;
+  bottom: 167px;
+  height: 30px;
+  line-height: 30px;
+  background-color: rgb(255, 0, 0);
+  border-radius: 20px;
+  color: #fff;
+  width: 240px;
+  z-index: 10;
+  font-size: 14px;
+  text-align: center;
+  transform: translateX(100%);
+  -webkit-transition:all 1s 0.3s ease;
+  transition:all 1s 0.3s ease;
+}
+.outer-eidtor-tip.active{
+  right:73px;
+  transform: translateX(0);
+}
 </style>

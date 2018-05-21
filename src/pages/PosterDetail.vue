@@ -30,7 +30,11 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/getPoster`).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'posterdetail'
+    }).then(function () {
+      return self.$http.post(`${ENV.BokaApi}/api/retailer/getPoster`)
+    }).then(function (res) {
       let data = res.data
       self.$vux.loading.hide()
       self.data = data.data ? data.data : data

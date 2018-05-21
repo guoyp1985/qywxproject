@@ -178,13 +178,13 @@ export default {
       })
     },
     articleItemClick (item) {
-      this.$router.push({ path: '/news', query: { id: item.id } })
+      this.$router.push(item.url)
     },
     commodityItemClick (item) {
-      this.$router.push({path: `/product`, query: {id: item.id, wid: item.wid}})
+      this.$router.push(item.url)
     },
     storeItemClick (item) {
-      this.$router.push({path: `/store`, query: {wid: item.wid}})
+      this.$router.push(item.url)
     },
     cancelArticel (item) {
       const self = this

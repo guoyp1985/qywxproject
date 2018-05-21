@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;background: #f2f7f8">
+    <div class="s-container scroll-containe" style="top:0px;">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -29,7 +29,7 @@
           </div>
 
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list_shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -56,7 +56,7 @@
         </template>
       </template>
     </div>
-    <div class="bg-white pl12 pr12 s-bottom flex_center">
+    <div class="bg-white pl12 pr12 s-bottom flex_center list-shadow">
       <router-link class="addproduct flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
@@ -187,6 +187,9 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'productlist'
+    })
     self.$vux.loading.show()
     self.getdata1()
   },
@@ -418,17 +421,14 @@ export default {
   background: #f2f7f8;
 }
 .rproductlist .l-line{
-  width:100%; 
-  height:8px; 
+  width:100%;
+  height:8px;
   background:#fff;
-}
-.rproductlist .list_shadow{
-box-shadow: 0px 0px 3px 1px #e6ebed;
 }
 .rproductlist .s-bottom{
   height: 50px;}
 .rproductlist .addproduct{
-  border-radius: 5px;
+  border-radius: 50px;
   height: 36px;
   width: 100%;
 }

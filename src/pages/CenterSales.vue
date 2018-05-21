@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
-        <router-link class="db-in posi_r" style="color:#fff;" to="/retailerMessagelist">
+        <router-link class="db-in posi_r" style="color:#fff;" to="/messages">
           <span class="al al-xiaoxi1 font22"></span>
           <span class="numicon" v-if="retailerInfo.newmessage > 0">{{ retailerInfo.newmessage }}</span>
         </router-link>
@@ -256,6 +256,9 @@ export default {
     self.$vux.loading.show()
     self.loginUser = User.get()
     let iscontinue = true
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'index'
+    })
     if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
       self.showcontainer = false
       iscontinue = false
