@@ -33,7 +33,7 @@
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
                       </div>
                     </div>
-                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime }}秒</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                   </template>
                   <template v-else-if="tabitem.type == 'buylist'">
                     <div class="t-table">
@@ -93,7 +93,7 @@
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
                       </div>
                     </div>
-                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime }}秒</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                   </template>
                   <template v-else-if="tabitem.type == 'second'">
                     <div class="t-table">
@@ -108,7 +108,7 @@
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
                       </div>
                     </div>
-                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime }}秒</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                   </template>
                   <template v-else-if="tabitem.type == 'crowdlist'">
                     <div class="t-table">
@@ -186,6 +186,24 @@ export default {
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    },
+    staytimeFormat: function (value) {
+      let ret = ''
+      let stay = parseInt(value)
+      if (stay < 60) {
+        ret = `${stay}秒`
+      } else if (stay >= 60 && stay < 3660) {
+        let m = Math.floor(stay / 60)
+        let s = stay % 60
+        ret = `${m}分钟${s}秒`
+      } else if (stay >= 3660) {
+        let h = Math.floor(stay / 3660)
+        let val1 = stay % 3660
+        let m = Math.floor(val1 / 60)
+        let s = val1 % 60
+        ret = `${h}小时${m}分钟${s}秒`
+      }
+      return ret
     }
   },
   data () {

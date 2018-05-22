@@ -134,13 +134,16 @@ export default {
       searchword: '',
       showSearchEmpty: false,
       collecturl: '',
-      limit: 20,
+      limit: 5,
       pagestart: 0,
       isBindScroll: false,
       scrollArea: null,
       keywordsData: [],
       keyword: '',
-      disNewslist: false
+      disNewslist: false,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   methods: {
@@ -197,16 +200,35 @@ export default {
         self.searchFun(kw)
       }
     },
+    scroll: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.searchdata.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.searchFun(self.searchword)
+          }
+        }
+      })
+    },
     searchFun (kw) {
       const self = this
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-        { do: 'get_sogou_list', keyword: kw }
-      ).then(function (res) {
+      let params = { pagestart: self.pagestart1, limit: self.limit, do: 'get_sogou_list', keyword: kw }
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rgoodeazy .swiperitem')
+          self.scrollArea1 = items[0]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
       })
     },
     searchEvent (kw) {

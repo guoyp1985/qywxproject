@@ -76,7 +76,6 @@ export default {
         ret = `${m}分钟${s}秒`
       } else if (stay >= 3660) {
         let h = Math.floor(stay / 3660)
-        console.log('h=' + h)
         let val1 = stay % 3660
         let m = Math.floor(val1 / 60)
         let s = val1 % 60
