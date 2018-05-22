@@ -79,7 +79,6 @@ export default {
     '$route' (to, from) {
       if (from.name) {
         let socket = BkSocket.get()
-        console.log(socket)
         if (socket && socket.url) {
           socket.send(JSON.stringify({
             type: 'logout',

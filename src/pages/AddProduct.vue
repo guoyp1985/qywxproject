@@ -174,7 +174,7 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
       showRebate: false
     }
   },
