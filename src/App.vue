@@ -160,6 +160,7 @@ export default {
 
 body {
   background-color: #f5f9fa;
+  color:#333;
 }
 html, body {
   height: 100%;

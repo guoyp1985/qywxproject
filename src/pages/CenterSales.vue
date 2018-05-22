@@ -379,8 +379,8 @@ export default {
 }
 .centersales .list_show{box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.07);}
 .centersales .list_show01{box-shadow: 0 2px 4px 0 rgba(0,0,0,0.07);}
-.centersales .weui-grid__icon{width:35px;height:35px;padding-top: 22px;text-shadow: 0px 0px 10px rgba(0,0,0,0.15);}
-.centersales .weui-grid__icon i{height:35px;font-size: 32px;display:inline-block;color:#fff;width: 35px;text-align: center;}
+.centersales .weui-grid__icon{width:35px;height:35px;padding-top: 22%;text-shadow: 0px 0px 10px rgba(0,0,0,0.15);}
+.centersales .weui-grid__icon i{height:35px;font-size: 34px;display:inline-block;color:#fff;width: 35px;text-align: center;}
 .centersales .weui-grid__icon i::before{display: block;height: 35px;line-height: 35px;}
 .centersales .bk-grid .weui-grid__label{color:#fff;}
 .centersales .weui-grid:before,.centersales .weui-grid:after,.centersales .weui-grids:before,.centersales .weui-grids:after{display: none;}
@@ -388,21 +388,27 @@ export default {
   width:33.3333%;
   position: relative;
   float: left;
-  padding: 0px 10px;
+  padding: 0px 5px;
   margin-bottom:20px;
   box-sizing: border-box;
 }
 .centersales .weui-grid{
-  width:100px;
-  height:100px;
-  max-width:100%;
-  max-height:100%;
-  padding:0px;
+  width: 90%;
+  height: 0;
+  padding-bottom: 90%;
   display: block;
   margin: 0 auto;
   float: none;
+  padding-left:0;
+  padding-right: 0;
+  padding-top: 0;
 }
-.centersales .weui-grid__icon + .weui-grid__label{margin-top:10px;font-size: 15px;}
+.centersales .weui-grid__icon + .weui-grid__label{margin-top:10%;font-size: 15px;}
+@media (max-width:361px) {
+  .centersales .weui-grid__icon{padding-top:20%;}
+  .centersales .weui-grid__icon + .weui-grid__label{margin-top:5%;font-size: 14px;}
+  .centersales .weui-grid__icon i{font-size: 30px;}
+}
 
 .bk-salestop .right-cell {
   flex: 1;
