@@ -12,7 +12,7 @@
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
-              class="x-search bg-white"
+              class="v-search bg-white"
               v-model='searchword1'
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
@@ -386,7 +386,6 @@ export default {
     onCancel1 () {
       const self = this
       self.searchword1 = ''
-      console.log('in cancel1')
       self.$vux.loading.show()
       self.distabdata1 = false
       self.tabdata1 = []
@@ -473,31 +472,6 @@ export default {
 </script>
 
 <style lang="less" >
-.rcustomerlist .weui-search-bar{
-  padding: 10px 12px;
-  height: 55px;
-}
-.rcustomerlist .weui-search-bar__label{
-  background: #f0f0f0;
-  border-radius: 5px;
-  height: 35px;
-  }
-.rcustomerlist .weui-search-bar__form:after{
-  border: none;
-   border-radius: 5px;
-}
-.rcustomerlist .weui-icon-search,.weui-search-bar__label{
-  color: #999999 !important;
-}
-.rcustomerlist .weui-search-bar__form {
-    height: 35px;
-    line-height: 35px;
-    background-color: #ff3b30;
-    border-radius: 5px;
-}
-.rcustomerlist .weui-search-bar__label span {
-   vertical-align: initial;
-}
 .rcustomerlist .condition{
   position: relative;
   height: 40px;
@@ -522,11 +496,5 @@ export default {
   }
 .rcustomerlist .cut-off:nth-last-child(1):after {
   display: none;
-}
-.rcustomerlist .weui-search-bar__box{
-  background: #f0f0f0;
-}
-.rcustomerlist .weui-search-bar__box .weui-icon-search{
-  line-height: 35px;
 }
 </style>
