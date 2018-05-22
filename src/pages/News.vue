@@ -242,7 +242,10 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         if (res.data.flag) {
-          self.comments.replies.push(res.data.data)
+          if (!self.replyData.comment) {
+            self.replyData.comment = []
+          }
+          self.replyData.comment.push(res.data.data)
         }
       })
     },
