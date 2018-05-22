@@ -181,7 +181,7 @@ export default {
       let data = res.data
       if (data) {
         self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}分享`
+        document.title = `${self.viewuser.linkman}浏览`
       }
     })
     self.getdata1()
