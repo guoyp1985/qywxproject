@@ -249,7 +249,7 @@ export default {
         console.log('ws error')
       }
     },
-    createdFun (to, from, next) {
+    createdFun (query) {
       this.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleBar: false})
       this.query = to.query
@@ -259,40 +259,38 @@ export default {
       this.loginUser = User.get()
       this.wsConnect()
       this.getInfo()
-      next()
+    },
+    access () {
+      const user = User.get()
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      if (code) {
+        alert(code)
+        // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
+        // .then(
+        //   res => {
+        //     // TODO
+        //     User.set({
+        //       ...user,
+        //       ...res.data
+        //     })
+        //     location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+        //   }
+        // )
+        alert('hao')
+        next()
+      } else if (user && !user.subscribes) {
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+      } else {
+        Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }
     }
   },
   beforeRouteUpdate (to, from, next) {
-    this.createdFun(to, from, next)
-  },
-  beforeRouteEnter (to, from, next) {
-    const user = User.get()
-    const lUrl = urlParse(location.href, true)
-    const code = lUrl.query.code
-    if (code) {
-      alert(code)
-      // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
-      // .then(
-      //   res => {
-      //     // TODO
-      //     User.set({
-      //       ...user,
-      //       ...res.data
-      //     })
-      //     location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-      //   }
-      // )
-      alert('hao')
-      next()
-    } else if (user && !user.subscribes) {
-      const originHref = encodeURIComponent(location.href)
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-    } else {
-      Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-    }
-  },
-  created () {
-    this.createdFun(this.$route)
+    this.access()
+    this.createdFun(to.query)
+    next()
   }
 }
 </script>
