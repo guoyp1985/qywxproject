@@ -32,10 +32,9 @@
       <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
       <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
     </group>
-    <!-- <order-info :item="order" @on-eval="evaluate"></order-info> -->
     <group>
       <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
-        <x-img slot="icon" class="imgcover" :src="order.photo" default-src="../src/assets/images/nopic.jpg" ></x-img>
+        <x-img slot="icon" class="imgcover" :src="order.photo" default-src="../src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
         <div slot="title">
           {{order.name}}
         </div>
@@ -51,6 +50,16 @@
       <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
       <cell class="font14" :value="`${$t('Actual Payment')}: ¥${special}`"></cell>
     </group>
+    <group>
+      <div class="padding10 font12 color-gray">创建时间: {{ data.dateline | dateformat }}</div>
+      <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
+    </group>
+    <div class="padding10 align_right">
+      <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
+      <x-button v-if="data.flag == 2" mini @click.native="refund" class="font12">申请退款</x-button>
+      <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
+      <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
+    </div>
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
@@ -67,19 +76,26 @@
   </div>
 </template>
 <script>
-import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg } from 'vux'
+import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import Time from '#/time'
 import ENV from 'env'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg
+    Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     return {
       id: 0,
+      data: Object,
       retailerInfo: Object,
       receiver: 'unkown',
       receiverPhone: '13500000000',
@@ -101,7 +117,7 @@ export default {
   },
   methods: {
     evaluate () {
-      this.$router.push({name: 'evaluation', params: {order: this.order}})
+      this.$router.push({path: '/evaluation', query: {id: this.data.id}})
     },
     wxContact () {
       this.wxCardShow = true
@@ -114,6 +130,7 @@ export default {
         let data = res.data
         if (data.flag) {
           let retdata = data.data
+          self.data = retdata
           self.orders = retdata.orderlist
           self.special = retdata.special
           self.retailerInfo = retdata.retailer
@@ -123,6 +140,73 @@ export default {
           self.receiverPhone = retdata.telephone
           self.expressCompany = retdata.delivercompanyname
           self.expressNumber = retdata.delivercode
+        }
+      })
+    },
+    confirm (order) {
+      const self = this
+      this.$vux.confirm.show({
+        title: '您是否确认收货？',
+        content: '请确认货物已收到',
+        onConfirm () {
+          self.$http.post(`${ENV.BokaApi}/api/order/receive`, {id: self.data.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.data.flag = 4
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    cancel (order) {
+      const self = this
+      this.$vux.confirm.show({
+        title: '您确认取消订单？',
+        onConfirm () {
+          self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id: self.data.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.data.flag = 0
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    refund () {
+      const self = this
+      this.$vux.confirm.show({
+        title: '您是否要申请退款？',
+        onConfirm () {
+          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.data.flag = 0
+                }
+              }
+            })
+          })
         }
       })
     }

@@ -1,55 +1,111 @@
-/*
-* @description: 带来客户页
-* @auther: simon
-* @created_date: 2018-4-20
-*/
 <template>
-  <div id="bring-customer">
-    <sticky scroll-box="bring-customer">
-      <div class="bring-customer-title font16 color-white">
-        {{$t('Bring Customer')}}
+  <div class="containerarea bg-page font14 bringcustomer">
+    <div class="s-topbanner s-topbanner1 bg-white">
+      <div class="row">
+        <tab v-model="tabmodel" class="v-tab">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        </tab>
       </div>
-    </sticky>
-    <view-box>
-      <group v-if="list.length">
-        <cell class="user-cell" v-for="(item, index) in list" :key="index" :title="item.linkman">
-          <x-img slot="icon" :src="item.avatar" class="radius50 imgcover"></x-img>
-          <div slot="inline-desc">
-            <span class="color-gray font13">{{item.dateline | dateFormat}}</span>
+    </div>
+    <div class="s-container s-container1">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)">
+            <div v-if="distabdata1" class="scroll_list">
+              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+                <template>
+                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                  <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                </template>
+              </div>
+              <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div class="t-table">
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                  </router-link>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
+                  </router-link>
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                    <div class="qbtn bg-red color-white">联系</div>
+                  </router-link>
+                </div>
+              </div>
+            </div>
           </div>
-        </cell>
-      </group>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Data')}}</span>
-        </div>
-      </template>
-    </view-box>
+          <div v-if="(index == 1)">
+            <div v-if="distabdata2" class="scroll_list ">
+              <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
+                <template>
+                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                  <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程序</div>
+                </template>
+              </div>
+              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div class="t-table">
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                  </router-link>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                  </router-link>
+                  <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
+                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                    <div class="qbtn bg-red color-white">联系</div>
+                  </router-link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </swiper-item>
+      </swiper>
+    </div>
   </div>
 </template>
+
+<i18n>
+Contact customer:
+  zh-CN: 联系客户
+Customer text:
+  zh-CN: 客户
+Percent:
+  zh-CN: 成交概率
+</i18n>
+
 <script>
-import { ViewBox, Group, Cell, XImg, Sticky } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import ENV from 'env'
-import Time from '#/time'
 
 export default {
   components: {
-    ViewBox, Group, Cell, XImg, Sticky
+    Tab, TabItem, Swiper, SwiperItem, XImg
   },
   data () {
     return {
       query: Object,
-      list: [],
+      tabtxts: [ '全部', '购买客户' ],
+      tabmodel: 0,
+      distabdata1: false,
+      distabdata2: false,
+      tabdata1: [],
+      tabdata2: [],
       limit: 20,
       pagestart1: 0,
+      pagestart2: 0,
       isBindScroll1: false,
-      scrollArea1: null
+      isBindScroll2: false,
+      scrollArea1: null,
+      scrollArea2: null
     }
   },
-  filters: {
-    dateFormat (date) {
-      return new Time(date * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    }
+  created () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$vux.loading.show()
+    self.getdata1()
   },
   methods: {
     scroll1: function () {
@@ -57,70 +113,93 @@ export default {
       self.$util.scrollEvent({
         element: self.scrollArea1,
         callback: function () {
-          if (self.list.length === (self.pagestart1 + 1) * self.limit) {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata()
+            self.getdata1()
           }
         }
       })
     },
-    getdata () {
+    scroll2: function () {
       const self = this
-      let params = {}
+      self.$util.scrollEvent({
+        element: self.scrollArea2,
+        callback: function () {
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+        }
+      })
+    },
+    getdata1 () {
+      const self = this
+      let params = { pagestart: self.pagestart1, limit: self.limit }
       if (self.query.wid) {
         params.wid = self.query.wid
       }
-      this.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params)
-      .then(res => {
+      self.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.list = self.list.concat(retdata)
-        self.disdata = true
+        self.tabdata1 = self.tabdata1.concat(retdata)
+        self.distabdata1 = true
         if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('#vux_view_box_body')
+          let items = document.querySelectorAll('.bringcustomer .swiperitem')
+          self.scrollArea1 = items[0]
+          self.scrollArea2 = items[1]
           self.isBindScroll1 = true
           self.scrollArea1.removeEventListener('scroll', self.scroll1)
           self.scrollArea1.addEventListener('scroll', self.scroll1)
         }
       })
+    },
+    getdata2 () {
+      const self = this
+      let params = { pagestart: self.pagestart2, limit: self.limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabdata2 = self.tabdata2.concat(retdata)
+        self.distabdata2 = true
+        if (!self.isBindScroll2) {
+          self.isBindScroll2 = true
+          self.scrollArea2.removeEventListener('scroll', self.scroll2)
+          self.scrollArea2.addEventListener('scroll', self.scroll2)
+        }
+      })
+    },
+    swiperChange (index) {
+      const self = this
+      if (index === 0) {
+        if (self.tabdata1.length === 0) {
+          self.$vux.loading.show()
+          self.getdata1()
+        }
+      } else if (index === 1) {
+        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          self.$vux.loading.show()
+          self.getdata2()
+        }
+      }
+    },
+    getDateState: function (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass: function (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
     }
-  },
-  created () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'bringcustomer'
-    })
-    self.$vux.loading.show()
-    this.getdata()
   }
 }
 </script>
-<style lang="less">
-#bring-customer .bring-customer-title {
-  padding: 10px;
-  background-image: url('../assets/images/bannerbg2.png');
-}
-#bring-customer .user-cell img {
-  width: 40px;
-  height: 40px;
-}
 
-/* vux css hack */
-#bring-customer .weui-cell__hd {
-  display: flex;
-}
-#bring-customer .weui-cells {
-  margin-top: 0;
-}
-#bring-customer .weui-cells:before {
-  height: 0;
-  border-top: none;
-}
-#bring-customer .vux-cell-primary {
-  padding-left: 10px;
-}
+<style lang="less" >
 </style>
