@@ -229,10 +229,10 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
       .then(res => {
         self.$vux.loading.hide()
-        if (res.status === 200) {
-          if (res.data.flag) {
-            self.comments.push(res.data.data)
-          }
+        let data = res.data
+        if (data.flag) {
+          let newarr = [ data.data ]
+          self.comments = newarr.concat(self.comments)
         }
       })
     },
@@ -241,11 +241,13 @@ export default {
       this.replyPopupShow = false
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
-        if (res.data.flag) {
+        let data = res.data
+        if (data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = []
           }
-          self.replyData.comment.push(res.data.data)
+          let newarr = [ data.data ]
+          self.replayData = newarr.concat(self.replyData.comment)
         }
       })
     },
