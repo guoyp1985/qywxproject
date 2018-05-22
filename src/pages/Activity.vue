@@ -22,9 +22,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import Vue from 'vue'
 import Bargainbuy from '@/components/Bargainbuy'
@@ -285,6 +282,7 @@ export default {
       //     location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       //   }
       // )
+      alert('hao')
       next()
     } else if (user && !user.subscribes) {
       const originHref = encodeURIComponent(location.href)
