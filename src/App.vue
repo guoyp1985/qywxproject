@@ -11,11 +11,11 @@
       </transition>
 
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="toggleTabbar" slot="bottom">
-        <tabbar-item :link="{name: 'tIndex'}" :selected="route.path=='/'">
+        <tabbar-item :link="{name: 'tUserproducts'}" :selected="route.path=='/userProducts'">
           <span class="al al-home1 font20" slot="icon" style="position:relative;top: -2px;"></span>
           <span slot="label">{{ $t('Home') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{name: 'tSalesList'}" :selected="route.path=='/salesList'">
+        <tabbar-item :link="{name: 'tSaleProducts'}" :selected="route.path=='/saleProducts'">
           <span class="al al-tag font20" slot="icon"></span>
           <span slot="label">{{ $t('Sales') }}</span>
         </tabbar-item>
@@ -27,7 +27,7 @@
           <span class="al al-favor font20" slot="icon"></span>
           <span slot="label">{{ $t('Favorite') }}</span>
         </tabbar-item>
-        <tabbar-item :link="{name: 'tCenter'}" :selected="route.path=='/center'">
+        <tabbar-item :link="{name: 'tCenter'}" :selected="route.path=='/'">
           <span class="al al-peoplefill font20" slot="icon"></span>
           <span slot="label">{{ $t('Center') }}</span>
         </tabbar-item>
@@ -77,8 +77,10 @@ export default {
       }
     },
     '$route' (to, from) {
+      /*
       if (from.name) {
         let socket = BkSocket.get()
+        console.log(socket)
         if (socket) {
           socket.send(JSON.stringify({
             type: 'logout',
@@ -86,6 +88,7 @@ export default {
           }))
         }
       }
+      */
       document.title = this.getTitle(to.path)
     }
   },

@@ -68,7 +68,7 @@ export default [
   {
     path: '/',
     name: 'tIndex',
-    component: Userproducts
+    component: Center
   },
   {
     path: '/login',
