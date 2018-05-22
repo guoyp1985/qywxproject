@@ -33,6 +33,7 @@
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
+                <div class="clamp1 color-gray font12">浏览次数: {{ item.number }}</div>
                 <div class="clamp1 color-gray font12">停留时间: {{ item.staytime | staytimeFormat }}</div>
               </div>
             </div>
