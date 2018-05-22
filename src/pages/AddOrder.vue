@@ -84,7 +84,6 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepopup">{{ $t('Close') }}</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitaddress">提交</div>
             <router-link :to="{ path: '/newAddress', query: {lasturl: `/addOrder?id=${query.id}`} }" class="flex_cell h_100 flex_center bg-red color-white">新建地址</router-link>
           </div>
         </div>
@@ -167,7 +166,8 @@ export default {
       submitdata: {
         addressid: '',
         postdata: []
-      }
+      },
+      submiting: false
     }
   },
   created () {
@@ -268,37 +268,36 @@ export default {
           break
         }
       }
-    },
-    submitaddress () {
-      if (!this.selectaddress.id) {
-        this.showalert = true
-      } else {
-        this.showpopup = false
-      }
+      self.showpopup = false
     },
     submitOrder () {
       const self = this
-      if (!self.submitdata.addressid) {
-        self.$vux.toast.show({
-          text: '请选择地址'
-        })
-        return false
-      }
-      self.isShowLoading = true
-      self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
-        let data = res.data
-        self.isShowLoading = false
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              // self.$router.push({path: '/pay', query: {id: data.id}})
-              location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
+      if (!self.submiting) {
+        if (!self.submitdata.addressid) {
+          self.$vux.toast.show({
+            text: '请选择地址'
+          })
+          return false
+        }
+        self.isShowLoading = true
+        self.submiting = true
+        self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
+          let data = res.data
+          self.isShowLoading = false
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                // self.$router.push({path: '/pay', query: {id: data.id}})
+                location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
+              } else {
+                self.submiting = false
+              }
             }
-          }
+          })
         })
-      })
+      }
     }
   }
 }

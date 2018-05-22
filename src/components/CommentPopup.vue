@@ -135,10 +135,17 @@ export default {
       if (!this.textarea) {
         this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
       }
-      this.$emit('on-submit', this.textarea.value)
+      let val = this.textarea.value
+      this.textarea.value = ''
+      this.$emit('on-submit', val)
     },
     onCancel () {
-      this.$emit('on-cancel')
+      const self = this
+      if (!this.textarea) {
+        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
+      }
+      this.textarea.value = ''
+      this.$emit('on-cancel', this.textarea)
     },
     onTextFocus () {
       this.$emit('on-text-focus')

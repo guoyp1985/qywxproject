@@ -35,7 +35,7 @@
                     <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                       <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
                         <div class="close" @click="deletephoto(item,index)">×</div>
-                        <div class="clip"><i class="al al-set"></i></div>
+                        <div class="clip" @click="clipPhoto(item)"><i class="al al-set"></i></div>
                       </div>
                     </div>
                   </template>
@@ -83,6 +83,7 @@
     </div>
     <div v-if="iscreating" class="pagebottom color-white bg-green font16 flex_center btncreate disabled"></div>
     <div v-else class="pagebottom color-white bg-green font16 flex_center btncreate" @click="saveevent"></div>
+    <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
   </div>
 </template>
 
@@ -105,11 +106,12 @@ Upload images:
 
 <script>
 import { Group, XTextarea, XImg } from 'vux'
+import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, XTextarea, XImg
+    Group, XTextarea, XImg, ClipPopup
   },
   data () {
     return {
@@ -121,7 +123,9 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', subtitle: '' },
       requireddata: { title: '', 'photo': '' },
-      iscreating: false
+      iscreating: false,
+      cutImg: '',
+      popupShow: false
     }
   },
   watch: {
@@ -169,6 +173,22 @@ export default {
           break
         }
       }
+    },
+    clipPhoto (item) {
+      this.popupShow = true
+      let index = item.indexOf('?')
+      if (index > -1) {
+        this.cutImg = item.substring(0, index)
+      } else {
+        this.cutImg = item
+      }
+    },
+    popupSubmit (cutimg) {
+      this.photoarr = [ cutimg ]
+      this.submitdata.photo = this.$util.setPhoto(cutimg)
+    },
+    popupCancel () {
+      this.popupShow = false
     },
     selectcover (item, index) {
       const self = this
@@ -234,8 +254,12 @@ export default {
     self.submitdata.type = self.query.module
     self.submitdata.id = self.query.id
     self.$vux.loading.show()
-    let params = { params: { id: self.query.id, module: self.query.module } }
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'poster', id: self.query.id
+    }).then(function () {
+      let params = { params: { id: self.query.id, module: self.query.module } }
+      return self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params)
+    }).then(function (res) {
       let data = res.data
       self.$vux.loading.hide()
       self.data = data.data ? data.data : data

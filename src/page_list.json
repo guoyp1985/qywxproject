@@ -42,7 +42,6 @@
   "Recommend",
   "RetailerSetting",
   "RetailerGoodeazy",
-  "RetailerMessagelist",
   "RetailerApply",
   "RebateApply",
   "RebateStore",
@@ -59,5 +58,6 @@
   "SubscribeInfo",
   "Timeline",
   "Userproducts",
-  "UserRebateInfo"
+  "UserRebateInfo",
+  "ViewList"
 ]

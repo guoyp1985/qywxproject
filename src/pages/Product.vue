@@ -35,7 +35,7 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg"></x-img>
+              <x-img class="imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg" @click.native.stop="showBigimg1(index)"></x-img>
             </swiper-item>
           </swiper>
         </template>
@@ -59,7 +59,7 @@
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="!activityInfo.id && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
+            <div v-if="productdata.buyonline == 1 && !activityInfo.id && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
               <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
   					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
@@ -177,7 +177,7 @@
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
             <div class="buylist pt10 pb15 pl10 pr10">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in buyuserdata" :key="item.uid">
+              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in buyuserdata" :key="index">
                 <div class="align_center">
                   <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       					</div>
@@ -329,6 +329,9 @@
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
+      </div>
       <template v-if="loginUser">
         <share-success
           v-show="showShareSuccess"
@@ -368,7 +371,7 @@ import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, BkSocket, Roomid } from '#/storage'
 
 export default {
   directives: {
@@ -411,13 +414,16 @@ export default {
       photoarr: [],
       contentphotoarr: [],
       previewerPhotoarr: [],
+      previewerFlasharr: [],
       buyuserdata: [],
       evluatedata: [],
       replyPopupShow: false,
       ingdata: [],
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
-      replyData: null
+      replyData: null,
+      roomid: '',
+      socket: BkSocket.get()
     }
   },
   watch: {
@@ -589,6 +595,17 @@ export default {
         })
       }
     },
+    showBigimg1 (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerFlash.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.photoarr[index],
+          urls: self.photoarr
+        })
+      }
+    },
     closeShareSuccess () {
       this.showShareSuccess = false
     },
@@ -687,7 +704,6 @@ export default {
     },
     onReply (item) {
       this.replyData = item
-      console.log(this.replyData)
       this.replyPopupShow = true
     },
     replyPopupCancel () {
@@ -698,6 +714,12 @@ export default {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.replyData.id, module: 'comments', message: value})
       .then(res => {
+        let data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error)
+        })
         if (res.data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = []
@@ -705,6 +727,59 @@ export default {
           self.replyData.comment.push(res.data.data)
         }
       })
+    },
+    wsConnect () {
+      const self = this
+      self.roomid = `${ENV.SocketBokaApi}-product-${self.query.id}`
+      Roomid.set(self.roomid)
+      if (!self.socket || !self.socket.url) {
+        self.socket = new WebSocket(ENV.SocketApi)
+        BkSocket.set(self.socket)
+      }
+      self.socket.onopen = function () {
+        let loginData = {
+          type: 'login',
+          uid: self.loginUser.uid,
+          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+          room_id: self.roomid
+        }
+        self.socket.send(JSON.stringify(loginData))
+      }
+      self.socket.onmessage = function (e) {
+        const data = JSON.parse(e.data)
+        if (data.type === 'login') {
+          console.log('in login')
+        } else if (data.type === 'logout') {
+          console.log('in logout')
+        } else if (data.type === 'say') {
+          console.log('say')
+          let edata = JSON.parse(e.data)
+          let saycontent = edata.content
+          if (!self.$util.isNull(saycontent)) {
+            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+          }
+          let saydata = {
+            uid: edata.from_uid,
+            content: saycontent,
+            dateline: edata.time,
+            msgtype: edata.msgtype ? edata.msgtype : 'text',
+            picurl: edata.picurl ? edata.picurl : '',
+            thumb: edata.thumb ? edata.thumb : '',
+            username: edata.from_client_name,
+            id: edata.msgid,
+            roomid: edata.room_id,
+            avatar: edata.avatar,
+            newsdata: edata.newsdata
+          }
+        }
+      }
+      self.socket.onclose = function () {
+        console.log('ws closed')
+        self.wsConnect()
+      }
+      self.socket.onerror = function () {
+        console.log('ws error')
+      }
     }
   },
   created () {
@@ -714,6 +789,7 @@ export default {
     self.query = self.$route.query
     self.productid = self.query.id
     self.loginUser = User.get()
+    self.wsConnect()
     let infoparams = { id: self.productid, module: self.module }
     if (self.query.wid) {
       infoparams.wid = self.query.wid
@@ -752,6 +828,7 @@ export default {
           }
           if (self.photoarr.length > 0) {
             self.showFlash = true
+            self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
           }
           const content = self.productdata.content
           const contetnphoto = self.productdata.contentphoto

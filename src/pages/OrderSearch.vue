@@ -5,7 +5,7 @@
 */
 <template>
   <div id="order-search" class="containerarea font14 nobottom">
-    <div class="pagetop">
+    <div class="s-topbanner s-topbanner1">
       <tab v-model="selectedIndex">
         <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
@@ -13,7 +13,7 @@
         <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
     </div>
-    <div class="pagemiddle scroll-container">
+    <div class="s-container s-container1 scroll-container">
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
@@ -172,8 +172,10 @@ export default {
         title: '您是否确认收货？',
         content: '请确认货物已收到',
         onConfirm () {
+          self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/order/receive`, {id: order.id})
           .then(res => {
+            self.$vux.loading.hide()
             if (res.data.flag) {
               self.$vux.toast.text(res.data.error)
               self.changeOrderView(order, 4, [4, 6])
@@ -187,8 +189,10 @@ export default {
       this.$vux.confirm.show({
         title: '您确认取消订单？',
         onConfirm () {
+          self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/order/cancel`, {id: order.id})
           .then(res => {
+            self.$vux.loading.hide()
             self.$vux.toast.text(res.data.error)
             self.changeOrderView(order, 0, [])
           })
@@ -200,8 +204,10 @@ export default {
       this.$vux.confirm.show({
         title: '您是否要申请退款？',
         onConfirm () {
+          self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: order.id})
           .then(res => {
+            self.$vux.loading.hide()
             self.$vux.toast.text(res.data.error)
             self.changeOrderView(order, 0, [])
           })

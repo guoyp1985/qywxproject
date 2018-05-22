@@ -12,15 +12,15 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
+            <div class="scroll-container01" style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
@@ -32,7 +32,7 @@
                     <check-icon class="x-check-icon b_bottom_after" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w50">
-                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container01"></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1">{{item.buyername}}</div>
@@ -258,6 +258,9 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'revenue'
+    })
     self.$vux.loading.show()
     self.getdata1()
   },
@@ -412,13 +415,14 @@ export default {
                 if (data.flag === 1) {
                   for (let i = 0; i < self.checkedData.length; i++) {
                     let ckid = self.checkedData[i]
-                    for (let j = 0; j < self.tablist1.length; j++) {
-                      if (self.tablist1[j].id === ckid) {
-                        self.tablist1.splice(j, 1)
+                    for (let j = 0; j < self.tabdata1.length; j++) {
+                      if (self.tabdata1[j].id === ckid) {
+                        self.tabdata1.splice(j, 1)
                         break
                       }
                     }
                   }
+                  self.totalPrice = '0.00'
                 }
               }
             })
@@ -432,7 +436,7 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    tabclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 0) {
         if (self.tabdata1.length === 0) {

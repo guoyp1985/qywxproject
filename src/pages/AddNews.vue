@@ -1,7 +1,9 @@
 <template>
-  <div id="article-info-edit">
+  <div id="article-info-edit" class="font14">
     <group label-width="5em">
-      <x-input :title="$t('News title')" :placeholder="`${$t('Necessary')}${$t('Title')}`" v-model="submitdata.title" class="font14"></x-input>
+      <group class="textarea-outer">
+        <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+      </group>
       <cell :title="$t('Cover photo')" class="font14">
         {{$t('Necessary')}}上传图像后可点击<i class="al al-set font14"></i>进行剪裁
       </cell>
@@ -92,9 +94,12 @@ export default {
     },
     clipPhoto (item) {
       this.popupShow = true
-      // let index = item.indexOf('?')
-      this.cutImg = item//.substring(0, index)
-      console.log(this.cutImg)
+      let index = item.indexOf('?')
+      if (index > -1) {
+        this.cutImg = item.substring(0, index)
+      } else {
+        this.cutImg = item
+      }
     },
     deletePhoto (item, index) {
       this.photoarr.splice(index, 1)
@@ -245,4 +250,5 @@ export default {
   box-sizing: border-box;
   padding: 10px;
 }
+.x-textarea .weui-label{font-size:14px;}
 </style>

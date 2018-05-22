@@ -1,24 +1,18 @@
 <template>
-  <div class="containerarea bg-white font14 rcustomerlist">
-    <div class="s-topbanner">
+  <div class="containerarea bg-page font14 rcustomerlist">
+    <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100">
-          <div class="flex_cell font18 pl20">{{$t('Contact customer')}}</div>
-        </div>
-      </div>
-      <div class="row">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
+        <tab v-model="tabmodel" class="v-tab">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="s-container">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+    <div class="s-container s-container1">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <search
-              class="x-search"
+              class="x-search bg-white"
               v-model='searchword1'
               :auto-fixed="autofixed"
               @on-submit="onSubmit1"
@@ -26,13 +20,24 @@
               @on-cancel="onCancel1"
               ref="search">
             </search>
-            <div class="font12 padding10 b_bottom">
+            <!---->
+            <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
               <div class="t-table w_100">
-                <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
-                <div class="t-cell align_right pr10">{{ $t('Percent') }}</div>
+                <div class="t-cell align_center active cut-off">时间<span class="font12 ml5">▼</span></div>
+                <div class="t-cell align_center  cut-off">地域<span class="font12 ml5">▼</span></div>
+                <div class="t-cell align_center cut-off">性别<span class="font12 ml5">▼</span></div>
               </div>
             </div>
-            <div v-if="distabdata1" class="scroll_list pl10 pr10">
+            <!---->
+            <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
+              <div class="t-table w_100">
+                <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
+                <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
+                <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
+              </div>
+
+            </div>
+            <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult1">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -42,14 +47,14 @@
                   <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
                 </template>
               </div>
-              <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10">
+              <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
-                    <div class="clamp1 font14"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font12 color-gray">返点客：{{item.uploadname}}</div>
+                    <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
                   </router-link>
                   <div class="t-cell v_middle w60 h_100 align_right">
                       <div class="percentarea db-in v_middle" @click="percentclick">
@@ -58,7 +63,7 @@
                       </div>
                   </div>
                   <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-green color-white">联系</div>
+                    <div class="qbtn bg-red color-white">联系</div>
                   </router-link>
                 </div>
               </div>
@@ -66,7 +71,7 @@
           </div>
           <div v-if="(index == 1)">
             <search
-              class="x-search"
+              class="x-search bg-white"
               v-model='searchword3'
               :auto-fixed="autofixed"
               @on-submit="onSubmit3"
@@ -74,14 +79,14 @@
               @on-cancel="onCancel3"
               ref="search">
             </search>
-            <div class="font12 padding10 b_bottom">
+            <div class="font12 padding10 b_bottom color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount3 }}人)</div>
                 <div class="t-cell align_center w80">{{ $t('Degree of intention') }}</div>
                 <div class="t-cell align_center w60">{{ $t('Contact customer') }}</div>
               </div>
             </div>
-            <div v-if="distabdata3" class="scroll_list pl10 pr10">
+            <div v-if="distabdata3" class="scroll_list ">
               <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult3">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -91,18 +96,18 @@
                   <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程序</div>
                 </template>
               </div>
-              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10">
+              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
-                    <div class="clamp1 font14"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font12 color-gray">返点客: {{item.uploadname}}</div>
+                    <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                   </router-link>
                   <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
                   <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-green color-white">联系</div>
+                    <div class="qbtn bg-red color-white">联系</div>
                   </router-link>
                 </div>
               </div>
@@ -110,7 +115,7 @@
           </div>
           <div v-if="(index == 2)">
             <search
-              class="x-search"
+              class="x-search bg-white"
               v-model='searchword2'
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
@@ -118,13 +123,13 @@
               @on-cancel="onCancel2"
               ref="search">
             </search>
-            <div class="font12 padding10 b_bottom">
+            <div class="font12 padding10 b_bottom color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}(共{{ tabcount2 }}人)</div>
-                <div class="t-cell align_right pr10">{{ $t('Contact customer') }}</div>
+                <div class="t-cell align_right ">{{ $t('Contact customer') }}</div>
               </div>
             </div>
-            <div v-if="distabdata2" class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult2">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -134,17 +139,17 @@
                   <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
                 </template>
               </div>
-              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10">
+              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
-                    <div class="clamp1 font14"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font12 color-gray">返点客：{{item.uploadname}}</div>
+                    <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
                   </router-link>
                   <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-green color-white">联系</div>
+                    <div class="qbtn bg-red color-white">联系</div>
                   </router-link>
                 </div>
               </div>
@@ -247,6 +252,9 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'customerlist'
+    })
     self.$vux.loading.show()
     self.getdata1()
   },
@@ -282,8 +290,8 @@ export default {
       self.$util.scrollEvent({
         element: self.scrollArea3,
         callback: function () {
-          if (self.tabdata3.length === (self.pagestart32 + 1) * self.limit) {
-            self.pagestart2++
+          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.pagestart3++
             self.$vux.loading.show()
             self.getdata3()
           }
@@ -427,7 +435,7 @@ export default {
       self.pagestart3 = 0
       self.getdata3()
     },
-    tabclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 0) {
         if (self.tabdata1.length === 0) {
@@ -464,5 +472,61 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
+.rcustomerlist .weui-search-bar{
+  padding: 10px 12px;
+  height: 55px;
+}
+.rcustomerlist .weui-search-bar__label{
+  background: #f0f0f0;
+  border-radius: 5px;
+  height: 35px;
+  }
+.rcustomerlist .weui-search-bar__form:after{
+  border: none;
+   border-radius: 5px;
+}
+.rcustomerlist .weui-icon-search,.weui-search-bar__label{
+  color: #999999 !important;
+}
+.rcustomerlist .weui-search-bar__form {
+    height: 35px;
+    line-height: 35px;
+    background-color: #ff3b30;
+    border-radius: 5px;
+}
+.rcustomerlist .weui-search-bar__label span {
+   vertical-align: initial;
+}
+.rcustomerlist .condition{
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #eeeeee;
+}
+.rcustomerlist .condition .active{
+  color: #ea3a3a;
+}
+.rcustomerlist .h35{
+  height: 35px;
+  line-height: 35px;
+}
+.rcustomerlist .cut-off:after{
+  content: "";
+  position: absolute;
+  top: 12px;
+  height: 16px;
+  width: 1px;
+  background-color: #f5f5f5;
+  margin-left: 14px;
+  }
+.rcustomerlist .cut-off:nth-last-child(1):after {
+  display: none;
+}
+.rcustomerlist .weui-search-bar__box{
+  background: #f0f0f0;
+}
+.rcustomerlist .weui-search-bar__box .weui-icon-search{
+  line-height: 35px;
+}
 </style>

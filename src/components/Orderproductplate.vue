@@ -1,16 +1,18 @@
 <template>
-  <div class="bk-orderproductitem order-item">
-    <a class="db pt10 pb10" style="color:inherit;">
+  <div class="bk-orderproductitem order-item bg-white">
+    <a class="db pt10 pb10 pl12 pr12" style="color:inherit;">
       <div class="t-table">
-        <div class="t-cell pic pl10">
+        <div class="t-cell pic ">
           <slot name="photo"></slot>
         </div>
         <div class="t-cell v_top">
-          <div class="clamp2 font12 color-gray5"><slot name="name"></slot></div>
+          <div class="clamp1 font16 color-lightgray"><slot name="name"></slot></div>
+          <div class="mt20 color-red4 font14">{{ $t('RMB') }} <slot name="special"></slot></div>
+
         </div>
         <div class="t-cell v_top align_right color-gray5 w90 pr10">
-          <div>{{ $t('RMB') }} <slot name="special"></slot></div>
-          <div class="color-gray">× <slot name="quantity"></slot></div>
+          
+          <div class="font14 color-999" style="margin-top: 41px;">× <slot name="quantity"></slot></div>
         </div>
       </div>
     </a>
@@ -24,6 +26,6 @@ export default {
 </script>
 
 <style lang="less">
-.bk-orderproductitem .pic{width:60px;text-align:left;}
+.bk-orderproductitem .pic{width:90px;text-align:left;}
 .bk-orderproductitem .pic img{vertical-align:middle;}
 </style>

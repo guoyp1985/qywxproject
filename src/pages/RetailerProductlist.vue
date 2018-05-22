@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;background: #f2f7f8">
+    <div class="s-container scroll-containe" style="top:0px;">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -29,7 +29,7 @@
           </div>
 
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list_shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -46,7 +46,9 @@
                       </div>
                     </div>
                     <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white" @click="controlpopup1(item,index)">●●●</div>
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                        <i class="al al-asmkticon0165 v_middle"></i>
+                      </div>
                     </div>
                   </div>
           			</div>
@@ -56,14 +58,14 @@
         </template>
       </template>
     </div>
-    <div class="bg-white pl12 pr12 s-bottom flex_center">
+    <div class="bg-white pl12 pr12 s-bottom flex_center list-shadow">
       <router-link class="addproduct flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div class="item">
+            <div class="item" v-if="clickdata.activityid == 0">
               <router-link class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
@@ -187,6 +189,9 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'productlist'
+    })
     self.$vux.loading.show()
     self.getdata1()
   },
@@ -405,30 +410,28 @@ export default {
 }
 .rproductlist .scroll_item .down.icon:after{content:"已下架";}
 .rproductlist .btnicon{
-  display:inline-block;
+  display: inline-block;
   color: #ea3a3a;
-  font-size: 12px;
   border: 1px solid #ea3a3a;
   text-align: center;
   border-radius: 30px;
-  padding: 1px 8px;
   letter-spacing: 0px;
+  height: 21px;
+  width: 41px;
+  line-height: 21px;
 }
 .rproductlist .rule{
   background: #f2f7f8;
 }
 .rproductlist .l-line{
-  width:100%; 
-  height:8px; 
+  width:100%;
+  height:8px;
   background:#fff;
-}
-.rproductlist .list_shadow{
-box-shadow: 0px 0px 3px 1px #e6ebed;
 }
 .rproductlist .s-bottom{
   height: 50px;}
 .rproductlist .addproduct{
-  border-radius: 5px;
+  border-radius: 50px;
   height: 36px;
   width: 100%;
 }

@@ -39,10 +39,10 @@
         </div>
         <div class="b_top_after padding10 flex_center bg-white">
           <div class="t-table align_center font15 itemtab">
-            <div class="t-cell item v_middle b_right_after">
+            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
               <div>{{viewuser.viewNumber}}</div>
               <div>{{ $t('Views') }}</div>
-            </div>
+            </router-link>
             <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
               <div>{{viewuser.shareNumber}}</div>
               <div>{{ $t('Share') }}</div>
@@ -275,6 +275,21 @@ export default {
           self.$vux.confirm.setInputValue(inputval)
         },
         onConfirm (val) {
+          let iscontinue = true
+          if (char === 'mobile' && self.$util.trim(val) !== '') {
+            iscontinue = self.$util.validateQueue([{ telephone: val, r: 'Phone' }],
+              model => {
+                switch (model.key) {
+                  case 'telephone':
+                    self.$vux.toast.text('请输入正确的手机号', 'middle')
+                    break
+                }
+              }
+            )
+          }
+          if (!iscontinue) {
+            return false
+          }
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
             { action: 'update', customeruid: self.query.uid, char: char, value: val }
@@ -359,9 +374,13 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.$vux.loading.show()
-    self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-      { params: { customeruid: self.query.uid } }
-    ).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'membersview', id: self.query.uid
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+        { params: { customeruid: self.query.uid } }
+      )
+    }).then(function (res) {
       self.$vux.loading.hide()
       let data = res.data
       if (data.flag !== 1) {

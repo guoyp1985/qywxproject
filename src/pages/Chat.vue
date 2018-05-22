@@ -180,7 +180,7 @@ import { ViewBox, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom,
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
-const websocket = new WebSocket('ws://124.207.246.109:7272')
+let websocket = new WebSocket(ENV.SocketApi)
 
 export default {
   directives: {
@@ -392,7 +392,7 @@ export default {
             type: 'say',
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
-            msgid: retdata.id,
+            messageid: retdata.id,
             room_id: self.roomid
           }
           for (let key in retdata) {
@@ -441,6 +441,7 @@ export default {
     },
     wsConnect () {
       const self = this
+      websocket = new WebSocket(ENV.SocketApi)
       let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
       let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
       self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
@@ -688,6 +689,9 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.loginUser = User.get()
     self.query = self.$route.query
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'chat', id: self.query.uid
+    })
     self.wsConnect()
     self.getMsgList()
   },

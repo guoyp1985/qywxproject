@@ -154,6 +154,7 @@ Confirm txt:
 <script>
 import { Group, XNumber, Datetime, XButton, XTextarea, XInput, TransferDom, Popup, Search, Radio, XAddress, ChinaAddressV4Data, Value2nameFilter as value2name } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
+import ENV from 'env'
 export default {
   directives: {
     TransferDom
@@ -162,7 +163,11 @@ export default {
     Group, XNumber, Datetime, XButton, XTextarea, XInput, Popup, Search, Radio, XAddress, Forminputplate
   },
   created () {
+    const self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'addorder'
+    })
   },
   data () {
     return {

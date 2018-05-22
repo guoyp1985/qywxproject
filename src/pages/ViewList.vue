@@ -4,7 +4,7 @@
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100">
-          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}{{$t('Share')}}</div>
+          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}{{$t('Views')}}</div>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
         <div v-if="disdata" class="scroll_list pl10 pr10">
           <div v-if="!data || data.length === 0" class="scroll_item  emptyitem flex_center">
             <template v-if="searchresult1">暂无搜索结果</template>
-            <template v-else>暂无分享数据</template>
+            <template v-else>暂无浏览数据</template>
           </div>
           <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
             <div class="t-table">
@@ -33,10 +33,8 @@
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
-                <div class="clamp1 color-gray font12">
-                  <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.visitor}}次</span>
-                  <span class="v_middle"><i class="al al-fenxiang font14 middle-cell pl5 pr5"></i>{{ item.dateline | dateformat }}</span>
-                </div>
+                <div class="clamp1 color-gray font12">浏览次数: {{ item.number }}</div>
+                <div class="clamp1 color-gray font12">停留时间: {{ item.staytime | staytimeFormat }}</div>
               </div>
             </div>
           </router-link>
@@ -67,6 +65,24 @@ export default {
   filters: {
     dateformat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    },
+    staytimeFormat: function (value) {
+      let ret = ''
+      let stay = parseInt(value)
+      if (stay < 60) {
+        ret = `${stay}秒`
+      } else if (stay >= 60 && stay < 3660) {
+        let m = Math.floor(stay / 60)
+        let s = stay % 60
+        ret = `${m}分钟${s}秒`
+      } else if (stay >= 3660) {
+        let h = Math.floor(stay / 3660)
+        let val1 = stay % 3660
+        let m = Math.floor(val1 / 60)
+        let s = val1 % 60
+        ret = `${h}小时${m}分钟${s}秒`
+      }
+      return ret
     }
   },
   data () {
@@ -128,7 +144,7 @@ export default {
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/user/shareList`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/user/viewList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
@@ -165,7 +181,7 @@ export default {
       let data = res.data
       if (data) {
         self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}分享`
+        document.title = `${self.viewuser.linkman}浏览`
       }
     })
     self.getdata1()

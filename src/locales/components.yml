@@ -698,7 +698,6 @@ zh-CN:
   tAddProduct: 添加商品
   tRetailerGoodeazy: 易采集
   tAddNews: 创建文章
-  tRetailerMessagelist: 消息
   tAddOrder: 确认订单
   tSalesList: 返点客
   tDecorationShop: 滚动展示
@@ -752,7 +751,7 @@ zh-CN:
   Order Number: 订单编号
   Pre Sale: 售前
   Complaint: 投诉
-  Storage unit: 库存单位
+  Storage unit: 单位
   Rebate description and rebate customer protocol: 返点说明及返点客协议
   Agree to share right away: 同意马上分享赚佣金
   tUserRebateInfo: 我的收入
@@ -765,3 +764,4 @@ zh-CN:
   Share view user: 分享查看的用户
   Degree of intention: 意向程度
   tChat: 联系
+  tViewList: 浏览

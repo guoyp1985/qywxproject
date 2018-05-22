@@ -9,12 +9,12 @@
       </div>
       <div class="row">
         <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="pl10 pr10">
             <div class="font15 pt15">搜索关键词采集文章</div>
@@ -75,7 +75,7 @@
             </div>
             <div class="bg-page" style="height:12px;"></div>
             <div class="padding15 font15 b_bottom_after">{{ $t('Collect record') }}</div>
-            <div class="scroll_list pl10 pr10 pb10">
+            <div v-if="disNewslist" class="scroll_list pl10 pr10 pb10">
               <div v-if="!newsdata || newsdata.length == 0" class="scroll_item emptyitem">
                 <div class="t-table">
                   <div class="t-cell">您还没有采集过文章</div>
@@ -134,12 +134,16 @@ export default {
       searchword: '',
       showSearchEmpty: false,
       collecturl: '',
-      limit: 20,
+      limit: 5,
       pagestart: 0,
       isBindScroll: false,
       scrollArea: null,
       keywordsData: [],
-      keyword: ''
+      keyword: '',
+      disNewslist: false,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null
     }
   },
   methods: {
@@ -164,6 +168,7 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.newsdata = self.newsdata.concat(retdata)
+        self.disNewslist = true
         if (!self.isBindScroll) {
           let items = document.querySelectorAll('.rgoodeazy .swiperitem')
           self.scrollArea = items[1]
@@ -195,16 +200,35 @@ export default {
         self.searchFun(kw)
       }
     },
+    scroll: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.searchdata.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.searchFun(self.searchword)
+          }
+        }
+      })
+    },
     searchFun (kw) {
       const self = this
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-        { do: 'get_sogou_list', keyword: kw }
-      ).then(function (res) {
+      let params = { pagestart: self.pagestart1, limit: self.limit, do: 'get_sogou_list', keyword: kw }
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.searchdata = (data.data ? data.data : data)
         self.showSearchEmpty = true
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rgoodeazy .swiperitem')
+          self.scrollArea1 = items[0]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
       })
     },
     searchEvent (kw) {
@@ -215,7 +239,7 @@ export default {
         self.searchFun(kw)
       }
     },
-    tabitemclick (index) {
+    swiperChange (index) {
       const self = this
       if (index === 1) {
         if (self.pagestart === 0 && !self.isBindScroll) {
@@ -278,9 +302,11 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-      { do: 'history', pagestart: 0, limit: 15 }
-    ).then(function (res) {
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'goodeazy'
+    }).then(function () {
+      return self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, { do: 'history', pagestart: 0, limit: 15 })
+    }).then(function (res) {
       let data = res.data
       self.keywordsData = data.data ? data.data : data
     })
