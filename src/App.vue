@@ -141,7 +141,7 @@ export default {
       }
       const title = this.$t(name)
       return title || '$$'
-    }
+    },
     getData () {
       const user = User.get()
       if (user && !user.subscribes) {
