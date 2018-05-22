@@ -18,16 +18,13 @@
               </div>
               <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                  <div class="t-cell v_middle w70">
                     <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
-                  </router-link>
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                  </div>
+                  <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                     <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
-                  </router-link>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-red color-white">联系</div>
-                  </router-link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -40,17 +37,13 @@
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                  <div class="t-cell v_middle w70">
                     <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
-                  </router-link>
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                  </div>
+                  <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                     <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
-                  </router-link>
-                  <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-red color-white">联系</div>
-                  </router-link>
+                  </div>
                 </div>
               </div>
             </div>
