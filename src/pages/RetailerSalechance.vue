@@ -18,11 +18,11 @@
           </div>
         </card>
       </div>
-      <tab v-model="tabmodel" class="x-toptab bg-white mt10 list-shadow">
+      <tab v-model="tabmodel" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
-    <div class="pagemiddle bg-white pl12 pr12 pt10 pb10">
+    <div class="pagemiddle bg-white pl12 pr12">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="index === 0">
@@ -284,16 +284,9 @@ export default {
 .x-card .weui-panel__hd:after{display:none;}
 
 .bordertxt{border-top:@list-border-color 1px solid;border-bottom:@list-border-color 1px solid;}
-.rsalechance .pagetop{height:136px;}
-.rsalechance .pagemiddle{top:136px;}
-.rsalechance .vux-tab .vux-tab-item.vux-tab-selected{color: #ea3a3a;border-bottom: 3px solid #ea3a3a;}
-.rsalechance .x-toptab, .x-toptab.vux-tab-warp{height: 44px;}
-.rsalechance .x-toptab .vux-tab .vux-tab-item{line-height: 44px;}
-.rsalechance .x-toptab .vux-tab-item.vux-tab-selected{background: none;}
-.rsalechance .vux-tab{background: #ffffff;}
-.rsalechance .vux-tab-ink-bar{background: #ea3a3a;}
+.rsalechance .pagetop{height:128px;}
+.rsalechance .pagemiddle{top:128px;}
 .rsalechance .vux-1px-r:after {border: none}
 .rsalechance .x-timeline .vux-timeline-item-color{left: 40px; background-color: #f4dcdc;}
 .rsalechance .x-timeline .vux-timeline-item-tail{left: 44px;background-color: #f4dcdc;}
-.rsalechance .x-toptab .vux-tab-item:after{background-color:#fff;}
 </style>

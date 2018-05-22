@@ -18,34 +18,27 @@
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
-                <span slot="createdate">{{ item.dateline | dateformat }}</span>
+                <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
+                  <span slot="createdate">{{ product.dateline | dateformat }}</span>
                 </Orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div class="t-cell v_middle">
-                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
-                      <span class="v_middle">{{ item.username }}</span>
-                    </div>
-                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                    <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>           
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
                   <div class="t-table pt5 color-lightgray font13 deliverarea">
-                    <div class="t-cell middle-cell">
-                      <div class=""><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
-                      <div class="mt3">{{ item.address }}</div>
-                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
-                    </div>
-                    <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2">
+                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10" v-if="item.flag == 2">
                       <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
-                    <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
+                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10" v-if="item.flag == 3">
                       <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
                     </div>
                   </div>
@@ -61,29 +54,24 @@
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
-                <span slot="createdate">{{ item.dateline | dateformat }}</span>
+                <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container1"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
+                  <span slot="createdate">{{ product.dateline | dateformat }}</span>
                 </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div class="t-cell v_middle">
-                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
-                      <span class="v_middle">{{ item.username }}</span>
-                    </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
-                      <div class="mt3">{{ item.address }}</div>
-                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
+                      <div><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
                     </div>
                   </div>
                 </div>
@@ -98,29 +86,24 @@
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
-                <span slot="createdate">{{ item.dateline | dateformat }}</span>
+                <span slot="orderno">{{ item.dateline | dateformat }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
                   <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container2"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
+                  <span slot="createdate">{{ product.dateline | dateformat }}</span>
                 </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div class="t-cell v_middle">
-                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
-                      <span class="v_middle">{{ item.username }}</span>
-                    </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
-                      <div class="mt3">{{ item.address }}</div>
-                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
+                      <div><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80">
                       <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
@@ -145,23 +128,18 @@
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
+                  <span slot="createdate">{{ product.dateline | dateformat }}</span>
                 </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div class="t-cell v_middle">
-                      <x-img class="avatarimg imgcover v_middle mr5" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
-                      <span class="v_middle">{{ item.username }}</span>
-                    </div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
                   <div class="t-table pt5 color-gray font12 deliverarea">
                     <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span><span class="ml10 v_middle">{{ item.telephone }}</span></div>
-                      <div class="mt3">{{ item.address }}</div>
-                      <div class="font12">{{ $t('Order Number')}}：{{ item.orderno }}</div>
-                    </div>
+                      <div><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                      </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80">
                       <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
                     </div>
@@ -180,7 +158,6 @@
         <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
     </div>
-    
     <div v-transfer-dom class="x-popup popup-deliver">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 font14">
@@ -218,23 +195,19 @@
       </popup>
     </div>
   </div>
-
 </template>
-
 <i18n>
 Add order1:
   zh-CN: 返点客
 My orders:
   zh-CN: 我的订单
 </i18n>
-
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
-
 export default {
   directives: {
     TransferDom

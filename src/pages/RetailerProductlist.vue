@@ -18,18 +18,17 @@
           </div>
         </template>
         <template v-else>
-          <div class="pro_box bg-white list_shadow">
-            <div class="bg-white color-lightgray pt10 pb10 pl12 pr12">悄悄告诉你，立即分享新发布的商品可以：</div>
-            <div class="rule  pt10 pb10 pl12 pr12 border color-lightgray b_bottom_after">
+          <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
+            <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
+            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+              <div>悄悄告诉你，立即分享新发布的商品可以：</div>
               <div>1. 接收好友查看商品的通知；</div>
               <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
               <div>3. 获得到更多潜在客户及销售机会。</div>
             </div>
-            <div class="l-line"></div>
           </div>
-
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mt10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -420,9 +419,6 @@ export default {
   width: 41px;
   line-height: 21px;
 }
-.rproductlist .rule{
-  background: #f2f7f8;
-}
 .rproductlist .l-line{
   width:100%;
   height:8px;
@@ -434,6 +430,14 @@ export default {
   border-radius: 50px;
   height: 36px;
   width: 100%;
+}
+.rproductlist .pro_list_top{
+  background: url("../assets/images/product_list_top.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-size: 100%;
+  height: 20px;
 }
 
 </style>

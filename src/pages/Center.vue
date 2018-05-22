@@ -135,7 +135,6 @@ export default {
   created () {
     const self = this
     const user = User.get()
-    console.log(user)
     if (user) {
       self.avatarHref = user.avatar
       self.linkMan = user.linkman

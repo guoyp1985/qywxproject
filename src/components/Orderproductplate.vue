@@ -6,13 +6,13 @@
           <slot name="photo"></slot>
         </div>
         <div class="t-cell v_top">
-          <div class="clamp1 font16 color-lightgray"><slot name="name"></slot></div>
-          <div class="mt20 color-red4 font14">{{ $t('RMB') }} <slot name="special"></slot></div>
-
+          <div class="clamp1 font14 color-lightgray"><slot name="name"></slot></div>
+          <div class="mt5 color-red4 font14">{{ $t('RMB') }} <slot name="special"></slot></div>
+          <div class="mt5 font12 color-999"> <slot name="createdate"></slot>
+          </div>
         </div>
-        <div class="t-cell v_top align_right color-gray5 w90 pr10">
-          
-          <div class="font14 color-999" style="margin-top: 41px;">× <slot name="quantity"></slot></div>
+        <div class="t-cell v_top align_right color-gray5 w50 pr10">
+          <div class="font14 color-999" style="margin-top: 26px;">× <slot name="quantity"></slot></div>
         </div>
       </div>
     </a>
