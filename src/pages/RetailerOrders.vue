@@ -475,11 +475,13 @@ export default {
                 }
               }
               */
+              /*
               self.deliveritem.flag = 3
               self.deliveritem.delivercompany = self.deliverdata.delivercompany
               self.deliveritem.delivercode = self.deliverdata.delivercode
               self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
-              self.tabdata4.push(self.deliveritem)
+              */
+              self.tabdata4.push(data.data)
 
               self.showpopup = false
               self.deliveritem = null

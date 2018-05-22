@@ -180,7 +180,7 @@ import { ViewBox, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom,
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
-const websocket = new WebSocket('ws://124.207.246.109:7272')
+const websocket = new WebSocket(ENV.SocketApi)
 
 export default {
   directives: {

@@ -121,6 +121,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
+const websocket = new WebSocket(SocketApi)
 
 export default {
   directives: {
@@ -156,7 +157,8 @@ export default {
       isBindScroll: null,
       pagestart: 0,
       limit: 10,
-      replyData: null
+      replyData: null,
+      roomid: ''
     }
   },
   filters: {
@@ -473,6 +475,7 @@ export default {
     },
     createdFun (to, from, next) {
       const self = this
+      this.wsConnect()
       this.showsharetip = false
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = to.query
@@ -486,17 +489,42 @@ export default {
     },
     wsConnect () {
       const self = this
-      const id = this.$route.query.id
-      const websocket = new WebSocket('ws://124.207.246.109:7272')
+      self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
       websocket.onopen = function () {
-        var strLoginData = JSON.stringify({type: 'login', room_id: `laravel.boka.cn-news-${id}`})
-        // console.log("websocket:" + strLoginData)
-        websocket.send(strLoginData)
+        let loginData = {
+          type: 'login',
+          uid: self.loginUser.uid,
+          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+          room_id: self.roomid
+        }
+        websocket.send(JSON.stringify(loginData))
       }
       websocket.onmessage = function (e) {
         const data = JSON.parse(e.data)
         if (data.type === 'login') {
-          console.log(e)
+          console.log('in login')
+        } else if (data.type === 'logout') {
+          console.log('in logout')
+        } else if (data.type === 'say') {
+          console.log('say')
+          let edata = JSON.parse(e.data)
+          let saycontent = edata.content
+          if (!self.$util.isNull(saycontent)) {
+            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+          }
+          let saydata = {
+            uid: edata.from_uid,
+            content: saycontent,
+            dateline: edata.time,
+            msgtype: edata.msgtype ? edata.msgtype : 'text',
+            picurl: edata.picurl ? edata.picurl : '',
+            thumb: edata.thumb ? edata.thumb : '',
+            username: edata.from_client_name,
+            id: edata.msgid,
+            roomid: edata.room_id,
+            avatar: edata.avatar,
+            newsdata: edata.newsdata
+          }
         }
       }
       websocket.onclose = function () {
@@ -510,7 +538,6 @@ export default {
   },
   created () {
     this.createdFun(this.$route)
-    this.wsConnect()
   },
   beforeRouteUpdate (to, from, next) {
     const self = this
