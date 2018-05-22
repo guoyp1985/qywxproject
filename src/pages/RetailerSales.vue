@@ -37,7 +37,7 @@
                   </router-link>
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
-                    <div class="clamp1 mt5 font14 color-gray">带来消费：￥{{item.sales}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
                   </router-link>
                   <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w60 align_right v_middle">
                     <div class="qbtn bg-red color-white">联系</div>
@@ -73,13 +73,13 @@
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font14 color-gray">返点客:{{item.uploadname}}</div>
+                    <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                    <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div>
                   </router-link>
                   <div class="t-cell v_middle align_right w60">
                     <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
                   </div>
                 </div>
-                <div class="clamp1 mt5 font14 color-gray">成为客户时间:{{ item.dateline | dateformat }}</div>
               </div>
             </div>
           </div>
@@ -96,7 +96,8 @@
                 </div>
                 <div class="t-cell v_middle">
                   <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                  <div class="clamp1 mt5 font14 color-gray">{{ item.dateline | dateformat }} 返点金额：￥{{item.money}}</div>
+                  <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
+                  <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
                 </div>
               </div>
             </router-link>
