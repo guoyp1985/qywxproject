@@ -121,7 +121,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
-const websocket = new WebSocket(SocketApi)
+const websocket = new WebSocket(ENV.SocketApi)
 
 export default {
   directives: {
@@ -133,6 +133,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: Object,
       WeixinName: ENV.WeixinName,
       module: 'news',
       showSos: false,
@@ -475,6 +476,7 @@ export default {
     },
     createdFun (to, from, next) {
       const self = this
+      self.loginUser = User.get()
       this.wsConnect()
       this.showsharetip = false
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
