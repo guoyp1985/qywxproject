@@ -414,9 +414,9 @@ a{color:inherit;}
 .s-topbanner2 .x-tab .vux-tab .vux-tab-item{line-height: inherit;}
 .s-topbanner2 .x-tab .txt{height:53px;}
 
-.percentarea{width:50px;height:22px;position:relative;background-color:#a2eff4;color:#fff;}
-.percentarea .inner{height:100%;text-align:center;background-color:#43d2ea;}
-.percentarea .txt{position:absolute;left:0;top:0;right:0;bottom:0;background:transparent;z-index:1;text-align:center;line-height:22px;}
+.percentarea{width: 53px;height: 24px;border-radius: 50px;background: #f6d6a5;}
+.percentarea .inner{width: 53px;height: 24px;border-top-left-radius: 50px;border-bottom-left-radius: 50px;background: #ee9f25;}
+.percentarea .txt{position:absolute;left:0;top:0;right:0;bottom:0;background:transparent;z-index:1;text-align:center;line-height: 24px;}
 
 .percentlayer{z-index:10;position:absolute;left:0;right:0;bottom:0;top:0;}
 .percentlayer .bg{position:absolute;left:0;right:0;bottom:0;top:0;background:rgba(0,0,0,0.6);}
@@ -798,6 +798,13 @@ a{color:inherit;}
 .marqueeitem .weui-cells{margin-top:0 !important;}
 .marqueeitem .vux-no-group-title{margin-top:0 !important;}
 
-.page-padding-bottom{
-  padding-bottom: 53px;
+.page-padding-bottom{padding-bottom: 53px;}
+
+.v-tab .vux-tab {height: 44px;}
+.v-tab .vux-tab .vux-tab-item{line-height: 44px;}
+.v-tab .vux-tab .vux-tab-item{border-bottom:none;color:#666;}
+.v-tab .vux-tab .vux-tab-item.vux-tab-selected {
+    color: #ea3a3a;
+    border-bottom: none;
 }
+.v-tab .vux-tab-ink-bar{background-color:#ea3a3a;}

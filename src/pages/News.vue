@@ -309,7 +309,7 @@ export default {
             module: self.module,
             moduleid: self.article.id,
             lastshareuid: self.query.share_uid,
-            link: `${ENV.Host}/#/news?id=${self.article.id}?wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+            link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
             successCallback: function () {
               self.showShareSuccess = true
             }
@@ -496,7 +496,7 @@ export default {
       const self = this
       self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
       Roomid.set(self.roomid)
-      if (!self.socket) {
+      if (!self.socket || !self.socket.url) {
         self.socket = new WebSocket(ENV.SocketApi)
         BkSocket.set(self.socket)
       }

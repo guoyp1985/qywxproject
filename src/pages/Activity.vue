@@ -202,7 +202,7 @@ export default {
       const self = this
       self.roomid = `${ENV.SocketBokaApi}-activity-${self.query.id}`
       Roomid.set(self.roomid)
-      if (!self.socket) {
+      if (!self.socket || !self.socket.url) {
         self.socket = new WebSocket(ENV.SocketApi)
         BkSocket.set(self.socket)
       }
