@@ -269,9 +269,12 @@ Draggable.prototype = {
 				scale = 1 / this.touchesDistStart * this.touchesDist * this.scale;
 
 				// if(scale >= this.options.zoomMax) return;
-				if (!this.options.zoomMin) { scale = 0.5 * 0.1 * Math.pow(2.0, scale / 0.1) }
-				else if (scale < this.options.zoomMin) scale = 0.5 * this.options.zoomMin * Math.pow(2.0, scale / this.options.zoomMin);
+				if (scale < this.options.zoomMin) scale = 0.5 * this.options.zoomMin * Math.pow(2.0, scale / this.options.zoomMin);
 				else if (scale > this.options.zoomMax) scale = 2.0 * this.options.zoomMax * Math.pow(0.5, this.options.zoomMax / scale);
+
+				// if (this.options.autoZoomMin && (scrollX > this.cLeft || scrollY > this.cTop || (scrollX + this.oClipWidth) < this.cRight || (scrollY + this.oClipHeight) < this.cBottom)) {
+				// 	alert("ok")
+				// }
 
 				this.lastScale = scale / this.scale;
 
@@ -666,6 +669,7 @@ Clip.prototype = {
 			zoom: true,
 			zoomMin: this.zoomMin,
 			zoomMax: this.zoomMax,
+			autoZoomMin: this.options.zoomMin ? false : true,
 			clipWidth: this.cWidth,
 			clipHeight: this.cHeight,
 			touchEnd: function() {
