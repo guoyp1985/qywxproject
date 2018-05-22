@@ -1,10 +1,10 @@
 <template>
   <div id="app" style="height:100%;" v-cloak>
     <div v-transfer-dom>
-      <loading v-model="isLoading" delay="1"></loading>
+      <loading v-model="isLoading" delay="2"></loading>
     </div>
     <view-box ref="viewBox" body-padding-bottom="0">
-      <transition
+      <transition 
       :name="viewTransition"
       :css="!!direction">
         <router-view class="router-view"></router-view>
