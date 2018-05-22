@@ -248,6 +248,7 @@ export default {
       }
     },
     changeOrderView (order, status, buttons) {
+      console.log('okokokokokokokok')
       const self = this
       let list = []
       switch (this.selectedIndex) {
