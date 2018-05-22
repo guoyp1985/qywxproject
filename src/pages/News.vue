@@ -476,11 +476,11 @@ export default {
     },
     createdFun (to, from, next) {
       const self = this
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = to.query
       self.loginUser = User.get()
       this.wsConnect()
       this.showsharetip = false
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = to.query
       this.getData()
       if (this.query.newadd) {
         setTimeout(function () {
