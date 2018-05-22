@@ -540,12 +540,11 @@ export default {
     },
     toStore () {
       const self = this
-      let loginData = {
+      websocket.send(JSON.stringify({
         type: 'logout',
         room_id: self.roomid
-      }
-      websocket.send(JSON.stringify(loginData))
-      self.$router.push({path: '/store', query: {wid: self.retailerInfo.udi}})
+      }))
+      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     }
   },
   created () {

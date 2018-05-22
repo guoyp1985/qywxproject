@@ -481,6 +481,7 @@ export default {
               self.deliveritem.delivercode = self.deliverdata.delivercode
               self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
               */
+              self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
               self.tabdata4.push(data.data)
 
               self.showpopup = false

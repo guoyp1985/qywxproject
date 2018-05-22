@@ -140,6 +140,10 @@ export default {
       this.$emit('on-submit', val)
     },
     onCancel () {
+      const self = this
+      if (!this.textarea) {
+        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
+      }
       this.textarea.value = ''
       this.$emit('on-cancel', this.textarea)
     },
