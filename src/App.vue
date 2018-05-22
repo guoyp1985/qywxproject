@@ -54,8 +54,8 @@ Center:
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import { User, BkSocket, Roomid } from '#/storage'
+import ENV from 'env'
 // import routes from '#/routes'
-// import ENV from '#/env'
 
 // Util.share()
 
@@ -147,7 +147,7 @@ export default {
       if (user && !user.subscribes) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
-            User.set(res.data)
+          User.set(res.data)
         })
       }
     }

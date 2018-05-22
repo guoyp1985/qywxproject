@@ -2,11 +2,16 @@
   <div class="containerarea s-havebottom font14 addproduct">
     <div class="s-container" style="top:0;">
       <div class="list_show01">
-        <div class="form-item no-after required pt15 bg-gray10">
-          <div class="cover_map">
-            <div class="button_photo"><i class="al al-zhaoxiangji color-white"></i></div>
+        <div class="form-item no-after pt15 bg-gray10">
+          <div class="cover_map" v-if="photoarr.length < maxnum">
+            <div class="button_photo">
+              <i class="al al-zhaoxiangji color-white"></i>
+              <form class="fileform1" enctype="multipart/form-data">
+                <input class="fileinput" type="file" name="files" @change="filechange" />
+              </form>
+            </div>
           </div>
-          <div class="cover_maplist" style="display:none;">
+          <div class="cover_maplist mt12" v-if="photoarr.length > 0">
             <input v-model="submitdata.photo" type="hidden" name="photo">
             <div class="q_photolist align_left" uploadform=".uploadfileForm">
               <template v-if="photoarr.length > 0">
@@ -16,26 +21,10 @@
                   </div>
                 </div>
               </template>
-              <div v-if="photoarr.length < maxnum" class="photoitem add">
-                <div class="inner">
-                  <form class="fileform1" enctype="multipart/form-data">
-                    <input class="fileinput" type="file" name="files" @change="filechange" />
-                  </form>
-                  <div class="innerlist">
-                    <div class="flex_center h_100">
-                      <div class="txt">
-                        <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
-                        <div><span class="havenum">{{ gethavenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           <div class="pt10 pb5 align_center">
-            <p class="font14 color-gray5">封面图像 <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></p>
-            <!-- <p class="font12 color-gray2 mt3">（图像最佳宽高比为1:1,上传图像后可点击图像左上角"<i class="al al-set font12"></i>"进行剪裁）</p> -->
+            <p class="font14 color-gray5">封面图像(最多9张) <span class="al al-xing color-red font12" style="vertical-align: 2px;"></span></p>
           </div>
         </div>
         <div class="form-item required bg-white">
@@ -411,8 +400,8 @@ export default {
 	transform-origin: 0% 0%;
 }
 .b_top_after:after,.b_bottom_after:after{left:12px;}
-.q_photolist .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;}
 .button_photo{
+  position:relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -421,7 +410,9 @@ export default {
   background-color:#ea3a3a;
   margin: 0 auto;
   border-radius:50%;
+  overflow:hidden;
 }
+.button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 .s-havebottom .s-container{bottom:50px;}
 .s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
 .btn-red{border-radius:36px;height:36px;background-color:#ea3a3a;font-size:16px;}
