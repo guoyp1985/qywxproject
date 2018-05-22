@@ -31,7 +31,7 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
             <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
-              <router-link :to="{path: '/store', query: {wid: retailerInfo.uid}}" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</router-link>
+              <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
           <div id="editor-content" class="article-content" v-html="article.content"></div>
@@ -121,7 +121,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
-const websocket = new WebSocket(ENV.SocketApi)
+let websocket = new WebSocket(ENV.SocketApi)
 
 export default {
   directives: {
@@ -492,6 +492,7 @@ export default {
     wsConnect () {
       const self = this
       self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
+      websocket = new WebSocket(ENV.SocketApi)
       websocket.onopen = function () {
         let loginData = {
           type: 'login',
@@ -536,6 +537,15 @@ export default {
       websocket.onerror = function () {
         console.log('ws error')
       }
+    },
+    toStore () {
+      const self = this
+      let loginData = {
+        type: 'logout',
+        room_id: self.roomid
+      }
+      websocket.send(JSON.stringify(loginData))
+      self.$router.push({path: '/store', query: {wid: self.retailerInfo.udi}})
     }
   },
   created () {

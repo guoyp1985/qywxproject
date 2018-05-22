@@ -180,7 +180,7 @@ import { ViewBox, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom,
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
-const websocket = new WebSocket(ENV.SocketApi)
+let websocket = new WebSocket(ENV.SocketApi)
 
 export default {
   directives: {
@@ -441,6 +441,7 @@ export default {
     },
     wsConnect () {
       const self = this
+      websocket = new WebSocket(ENV.SocketApi)
       let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
       let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
       self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
