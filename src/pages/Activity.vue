@@ -286,10 +286,6 @@ export default {
       }
     }
   },
-  beforeRouteUpdate (to, from, next) {
-    this.createdFun(to.query)
-    next()
-  },
   created() {
     this.access()
     this.createdFun(this.$route.query)
