@@ -38,11 +38,11 @@
               <timeline v-else class="x-timeline">
                 <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
                   <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
-                  <div class="color-999 font14 dtime">{{ item.dateline | dateformat1 }}</div>
+                  <div class="color-999 font12 dtime">{{ item.dateline | dateformat1 }}</div>
                   <div class="t-table ml10">
                     <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
                       <div class="color-orange7 font14">{{ item.linkman }}</div>
-                      <div class="color-999 font14">{{ item.content }}</div>
+                      <div class="color-gray font12 pr10">{{ item.content }}</div>
                     </router-link>
                     <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
                       <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
@@ -65,11 +65,11 @@
               <timeline v-else class="x-timeline vux-tab">
                 <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
                   <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
-                  <div class="color-999 font14 dtime">{{ item.dateline | dateformat1 }}</div>
+                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
                   <div class="t-table ml10">
                     <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
                       <div class="color-orange7 font14">{{ item.linkman }}</div>
-                      <div class="color-gray font12">{{ item.content }}</div>
+                      <div class="color-gray font12 pr10">{{ item.content }}</div>
                     </router-link>
                     <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
                       <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
@@ -284,11 +284,11 @@ export default {
 .x-card .weui-panel__hd:after{display:none;}
 
 .bordertxt{border-top:@list-border-color 1px solid;border-bottom:@list-border-color 1px solid;}
-.rsalechance .pagetop{height:131px;}
-.rsalechance .pagemiddle{top:131px;}
+.rsalechance .pagetop{height:136px;}
+.rsalechance .pagemiddle{top:136px;}
 .rsalechance .vux-tab .vux-tab-item.vux-tab-selected{color: #ea3a3a;border-bottom: 3px solid #ea3a3a;}
-.rsalechance .x-toptab, .x-toptab.vux-tab-warp{height: 41px;}
-.rsalechance .x-toptab .vux-tab .vux-tab-item{line-height: 41px;}
+.rsalechance .x-toptab, .x-toptab.vux-tab-warp{height: 44px;}
+.rsalechance .x-toptab .vux-tab .vux-tab-item{line-height: 44px;}
 .rsalechance .x-toptab .vux-tab-item.vux-tab-selected{background: none;}
 .rsalechance .vux-tab{background: #ffffff;}
 .rsalechance .vux-tab-ink-bar{background: #ea3a3a;}
