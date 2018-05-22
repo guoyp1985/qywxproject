@@ -16,7 +16,7 @@
             </div>
           </div>
         </div>
-        <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list_shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+        <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
           <div class="t-table">
             <div class="t-cell v_middle w70">
               <x-img class="imgcover" :src="$util.getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container"></x-img>
@@ -30,13 +30,15 @@
               </div>
             </div>
             <div class="align_right t-cell v_bottom w80 pb8">
-                <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">●●●</div>
+                <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
+                  <i class="al al-asmkticon0165 v_middle"></i>
+                </div>
             </div>
           </div>
         </router-link>
       </div>
     </div>
-    <div class="s-bottom list_shadow flex_center bg-white pl12 pr12">
+    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
         <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
       </div>
@@ -396,14 +398,15 @@ export default {
   height: 50px;
 }
 .rnews .btnicon{
-  display:inline-block;
+  display: inline-block;
   color: #ea3a3a;
-  font-size: 12px;
   border: 1px solid #ea3a3a;
   text-align: center;
   border-radius: 30px;
-  padding: 1px 8px;
   letter-spacing: 0px;
+  height: 21px;
+  width: 41px;
+  line-height: 21px;
 }
 
 </style>

@@ -46,7 +46,9 @@
                       </div>
                     </div>
                     <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white" @click="controlpopup1(item,index)">●●●</div>
+                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                        <i class="al al-asmkticon0165 v_middle"></i>
+                      </div>
                     </div>
                   </div>
           			</div>
@@ -408,14 +410,15 @@ export default {
 }
 .rproductlist .scroll_item .down.icon:after{content:"已下架";}
 .rproductlist .btnicon{
-  display:inline-block;
+  display: inline-block;
   color: #ea3a3a;
-  font-size: 12px;
   border: 1px solid #ea3a3a;
   text-align: center;
   border-radius: 30px;
-  padding: 1px 8px;
   letter-spacing: 0px;
+  height: 21px;
+  width: 41px;
+  line-height: 21px;
 }
 .rproductlist .rule{
   background: #f2f7f8;

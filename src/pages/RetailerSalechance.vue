@@ -289,7 +289,7 @@ export default {
   border-bottom:@list-border-color 1px solid;
 }
 
-.rsalechance .pagetop{height:202px;}
-.rsalechance .pagemiddle{top:202px;}
+.rsalechance .pagetop{height:131px;}
+.rsalechance .pagemiddle{top:131px;}
 
 </style>
