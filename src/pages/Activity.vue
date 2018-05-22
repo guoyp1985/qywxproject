@@ -274,6 +274,7 @@ export default {
         //       ...user,
         //       ...res.data
         //     })
+      alert(lUrl.hash)
             location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
         //   }
         // )
