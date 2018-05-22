@@ -34,7 +34,7 @@
     </group>
     <group>
       <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
-        <x-img slot="icon" class="imgcover" :src="order.photo" default-src="../src/assets/images/nopic.jpg" ></x-img>
+        <x-img slot="icon" class="imgcover" :src="order.photo" default-src="../src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
         <div slot="title">
           {{order.name}}
         </div>
@@ -49,6 +49,10 @@
     <group>
       <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
       <cell class="font14" :value="`${$t('Actual Payment')}: ¥${special}`"></cell>
+    </group>
+    <group>
+      <div class="padding10 font12 color-gray">创建时间: {{ data.dateline | dateformat }}</div>
+      <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
     </group>
     <div class="padding10 align_right">
       <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
@@ -74,6 +78,7 @@
 <script>
 import { Group, Cell, Sticky, XDialog, CellFormPreview, TransferDom, XImg, XButton } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import Time from '#/time'
 import ENV from 'env'
 export default {
   directives: {
@@ -81,6 +86,11 @@ export default {
   },
   components: {
     Group, Cell, Sticky, XDialog, CellFormPreview, OrderInfo, XImg, XButton
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     return {

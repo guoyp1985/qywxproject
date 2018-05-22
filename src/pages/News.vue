@@ -120,8 +120,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User } from '#/storage'
-let websocket = new WebSocket(ENV.SocketApi)
+import { User, BkSocket, Roomid } from '#/storage'
 
 export default {
   directives: {
@@ -159,7 +158,8 @@ export default {
       pagestart: 0,
       limit: 10,
       replyData: null,
-      roomid: ''
+      roomid: '',
+      socket: BkSocket.get()
     }
   },
   filters: {
@@ -495,17 +495,21 @@ export default {
     wsConnect () {
       const self = this
       self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
-      websocket = new WebSocket(ENV.SocketApi)
-      websocket.onopen = function () {
+      Roomid.set(self.roomid)
+      if (!self.socket) {
+        self.socket = new WebSocket(ENV.SocketApi)
+        BkSocket.set(self.socket)
+      }
+      self.socket.onopen = function () {
         let loginData = {
           type: 'login',
           uid: self.loginUser.uid,
           client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
           room_id: self.roomid
         }
-        websocket.send(JSON.stringify(loginData))
+        self.socket.send(JSON.stringify(loginData))
       }
-      websocket.onmessage = function (e) {
+      self.socket.onmessage = function (e) {
         const data = JSON.parse(e.data)
         if (data.type === 'login') {
           console.log('in login')
@@ -533,20 +537,16 @@ export default {
           }
         }
       }
-      websocket.onclose = function () {
+      self.socket.onclose = function () {
         console.log('ws closed')
         self.wsConnect()
       }
-      websocket.onerror = function () {
+      self.socket.onerror = function () {
         console.log('ws error')
       }
     },
     toStore () {
       const self = this
-      websocket.send(JSON.stringify({
-        type: 'logout',
-        room_id: self.roomid
-      }))
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     }
   },
