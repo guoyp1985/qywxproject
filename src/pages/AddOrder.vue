@@ -272,7 +272,7 @@ export default {
     },
     submitOrder () {
       const self = this
-      if(!self.submiting) {
+      if (!self.submiting) {
         if (!self.submitdata.addressid) {
           self.$vux.toast.show({
             text: '请选择地址'

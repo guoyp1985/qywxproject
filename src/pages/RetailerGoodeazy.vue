@@ -140,7 +140,12 @@ export default {
       scrollArea: null,
       keywordsData: [],
       keyword: '',
-      disNewslist: false
+      disNewslist: false,
+      pagestart1: 0,
+      isBindScroll1: false,
+      scrollArea1: null,
+      limit1: 10,
+      clickSearchword: ''
     }
   },
   methods: {
@@ -194,25 +199,50 @@ export default {
         return false
       }
       if (self.$util.trim(kw) !== '') {
+        self.searchdata = []
+        self.pagestart1 = 0
         self.searchFun(kw)
       }
     },
+    scroll1: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.scrollArea1,
+        callback: function () {
+          if (self.searchdata.length === self.pagestart1 + self.limit1) {
+            self.pagestart1 = self.pagestart1 + self.limit1
+            self.$vux.loading.show()
+            let kw = self.$util.trim(self.clickSearchword) !== '' ? self.clickSearchword : self.searchword
+            self.searchFun(kw)
+          }
+        }
+      })
+    },
     searchFun (kw) {
       const self = this
+      self.clickSearchword = kw
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-        { do: 'get_sogou_list', keyword: kw }
-      ).then(function (res) {
+      let params = { pagestart: self.pagestart1, do: 'get_sogou_list', keyword: kw }
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.searchdata = (data.data ? data.data : data)
+        let retdata = (data.data ? data.data : data)
+        self.searchdata = self.searchdata.concat(retdata)
         self.showSearchEmpty = true
+        if (!self.isBindScroll1) {
+          let items = document.querySelectorAll('.rgoodeazy .swiperitem')
+          self.scrollArea1 = items[0]
+          self.isBindScroll1 = true
+          self.scrollArea1.removeEventListener('scroll', self.scroll1)
+          self.scrollArea1.addEventListener('scroll', self.scroll1)
+        }
       })
     },
     searchEvent (kw) {
       const self = this
       // self.searchword = kw
       self.searchdata = []
+      self.pagestart1 = 0
       if (self.$util.trim(kw) !== '') {
         self.searchFun(kw)
       }

@@ -72,7 +72,6 @@ var _genEditorUid = function(){
 	return _namespace + '' + +new Date;
 };
 
-console.log('simon eleditor');
 var _correctHtmlStructure = function(){
 
 	var _$wrap = arguments[0],

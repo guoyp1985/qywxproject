@@ -13,23 +13,18 @@
           <div v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-                <template>
-                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                  <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
-                </template>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <div class="mt5">暂无数据</div>
               </div>
               <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                  <div class="t-cell v_middle w70">
                     <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
-                  </router-link>
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                  </div>
+                  <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
-                  </router-link>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-red color-white">联系</div>
-                  </router-link>
+                    <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -37,24 +32,18 @@
           <div v-if="(index == 1)">
             <div v-if="distabdata2" class="scroll_list ">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
-                <template>
-                  <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                  <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程序</div>
-                </template>
+                <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                <div class="mt5">暂无购买客户</div>
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                  <div class="t-cell v_middle w70">
                     <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
-                  </router-link>
-                  <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                  </div>
+                  <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                  </router-link>
-                  <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
-                    <div class="qbtn bg-red color-white">联系</div>
-                  </router-link>
+                    <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -76,11 +65,17 @@ Percent:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
+import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
     Tab, TabItem, Swiper, SwiperItem, XImg
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     return {
@@ -162,7 +157,7 @@ export default {
       if (self.query.wid) {
         params.wid = self.query.wid
       }
-      self.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/seller/buyCustomer`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data

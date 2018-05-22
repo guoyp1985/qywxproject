@@ -1,72 +1,112 @@
 <template>
-  <div class="containerarea s-havebottom font14 bg-white">
+  <div class="containerarea s-havebottom font14 addproduct">
     <div class="s-container" style="top:0;">
-      <div class="form-item required">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">
-            <group class="textarea-outer" style="padding:0;">
-              <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Product name')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
-            </group>
+      <div class="list_show01">
+        <div class="form-item no-after required pt15 bg-gray10">
+          <div class="cover_map">
+            <div class="button_photo"><i class="al al-zhaoxiangji color-white"></i></div>
+          </div>
+          <div class="cover_maplist" style="display:none;">
+            <input v-model="submitdata.photo" type="hidden" name="photo">
+            <div class="q_photolist align_left" uploadform=".uploadfileForm">
+              <template v-if="photoarr.length > 0">
+                <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                  <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
+                    <div class="close" @click="deletephoto(item,index)">×</div>
+                  </div>
+                </div>
+              </template>
+              <div v-if="photoarr.length < maxnum" class="photoitem add">
+                <div class="inner">
+                  <form class="fileform1" enctype="multipart/form-data">
+                    <input class="fileinput" type="file" name="files" @change="filechange" />
+                  </form>
+                  <div class="innerlist">
+                    <div class="flex_center h_100">
+                      <div class="txt">
+                        <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                        <div><span class="havenum">{{ gethavenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt10 pb5 align_center">
+            <p class="font14 color-gray5">封面图像 <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></p>
+            <!-- <p class="font12 color-gray2 mt3">（图像最佳宽高比为1:1,上传图像后可点击图像左上角"<i class="al al-set font12"></i>"进行剪裁）</p> -->
           </div>
         </div>
-      </div>
-      <div class="form-item required">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.price" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
-          </div>
-          <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
-        </div>
-      </div>
-      <div class="form-item required">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
+        <div class="form-item required bg-white">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <group class="textarea-outer" style="padding:0;">
+                <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Product name')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+              </group>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="form-item required">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.unit" type="text" class="input" name="unit" :placeholder="$t('Storage unit')" />
+        <div class="form-item required bg-white">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <input v-model="submitdata.price" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+            </div>
+            <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
           </div>
         </div>
-      </div>
-      <div class="form-item" v-if="showRebate">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.rebate" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+        <div class="form-item required bg-white">
+          <div class="flex_row">
+            <div class="t-table" style="width:60%">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
+              </div>
+            </div>
+            <div class="t-table" style="width:40%;">
+              <div class="t-cell title-cell w50 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.unit" type="text" class="input" name="unit" :placeholder="$t('Storage unit')" />
+              </div>
+            </div>
           </div>
-          <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
         </div>
-      </div>
-      <div class="form-item required">
-        <div class="pt10 pb5">封面图像 <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span> （图像最佳宽高比为1:1,上传图像后可点击图像左上角"<i class="al al-set font12"></i>"进行剪裁）</div>
-        <div>
-          <input v-model="submitdata.photo" type="hidden" name="photo">
-          <div class="q_photolist align_left" uploadform=".uploadfileForm">
-            <template v-if="photoarr.length > 0">
-              <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
-                  <div class="close" @click="deletephoto(item,index)">×</div>
+        <div class="form-item bg-white" v-if="showRebate">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <input v-model="submitdata.rebate" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+            </div>
+            <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+          </div>
+        </div>
+        <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
+        <group class="textarea-outer textarea-text pb15 bg-white pr12 pl12">
+          <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
+        </group>
+        <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>
+        <div class="b_bottom_after bg-white pl12 pr12 pb5">
+          <input v-model="submitdata.contentphoto" type="hidden" name="contentphoto" />
+          <div class="q_photolist align_left bg-white">
+            <template v-if="photoarr1.length > 0">
+              <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
+                <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                  <div class="close" @click="deletephoto1(item,index)">×</div>
                 </div>
               </div>
             </template>
-            <div v-if="photoarr.length < maxnum" class="photoitem add">
+            <div v-if="photoarr1.length < maxnum1" class="photoitem add">
               <div class="inner">
-                <form class="fileform1" enctype="multipart/form-data">
-                  <input class="fileinput" type="file" name="files" @change="filechange" />
+                <form class="fileform2" enctype="multipart/form-data">
+                  <input class="fileinput" type="file" name="files" @change="filechange1" />
                 </form>
-                <div class="t-table">
-                  <div class="t-cell">
+                <div class="innerlist">
+                  <div class="flex_center h_100">
                     <div class="txt">
-                      <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                      <div><span class="havenum">{{ gethavenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                      <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
+                      <div><span class="havenum">{{ gethavenum1 }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
                     </div>
                   </div>
                 </div>
@@ -74,55 +114,23 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="pl10 pr10 pb5 pt10">文字介绍</div>
-      <group class="textarea-outer">
-        <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
-      </group>
-      <div class="pl10 pr10 pb5 pt10">详情图像（图像宽高不受限制）</div>
-      <div class="b_bottom_after">
-        <input v-model="submitdata.contentphoto" type="hidden" name="contentphoto" />
-        <div class="q_photolist align_left">
-          <template v-if="photoarr1.length > 0">
-            <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
-              <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                <div class="close" @click="deletephoto1(item,index)">×</div>
-              </div>
-            </div>
-          </template>
-          <div v-if="photoarr1.length < maxnum1" class="photoitem add">
-            <div class="inner">
-              <form class="fileform2" enctype="multipart/form-data">
-                <input class="fileinput" type="file" name="files" @change="filechange1" />
-              </form>
-              <div class="t-table">
-                <div class="t-cell">
-                  <div class="txt">
-                    <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                    <div><span class="havenum">{{ gethavenum1 }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
-                  </div>
-                </div>
+        <div v-show="showmore">
+          <div class="form-item bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share title') }}</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.seotitle" type="text" class="input" name="seotitle" :placeholder="$t('Product share title placeholder')" />
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div v-show="showmore">
-        <div class="form-item">
-          <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share title') }}</div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.seotitle" type="text" class="input" name="seotitle" :placeholder="$t('Product share title placeholder')" />
-            </div>
-          </div>
-        </div>
-        <div class="form-item">
-          <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share description') }}</div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <group class="textarea-outer" style="padding:10px 0;">
-                <x-textarea v-model="submitdata.seodescription" name="seodescription" class="x-textarea" :placeholder="$t('Product share description placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
-              </group>
+          <div class="form-item bg-white no-after">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share description') }}</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <group class="textarea-outer" style="padding:0;">
+                  <x-textarea v-model="submitdata.seodescription" name="seodescription" class="x-textarea noborder" :placeholder="$t('Product share description placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
+                </group>
+              </div>
             </div>
           </div>
         </div>
@@ -130,11 +138,11 @@
       <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
       <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('More') }}<i class="al al-jiantouyoushuang- font14"></i></div>
     </div>
-    <div class="s-bottom flex_center bg-orange color-white">
+    <div class="s-bottom flex_center color-white list_show">
       <!--
       <div class="flex_cell flex_center h_100 bg-orange color-white" style="border-right:#fff 1px solid;" @click="saveevent">{{ $t('Save') }}</div>
     -->
-      <div class="flex_cell flex_center h_100 bg-orange color-white" @click="saveupevent">{{ $t('Shelf sale') }}</div>
+      <div class="flex_cell flex_center color-white btn-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
     </div>
   </div>
 </template>
@@ -174,7 +182,7 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
       showRebate: false
     }
   },
@@ -392,15 +400,29 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.form-item{position:relative;padding:10px;}
+.form-item{position:relative;padding:10px 12px;}
 .form-item:after{
   content:"";display:block;
 	background-color:@list-border-color;height:1px;overflow:hidden;
-	position: absolute;left: 0;right: 0;bottom:1px;
+	position: absolute;left: 12px;right: 0;bottom:1px;
 	-webkit-transform: scaleY(0.5) translateY(0.5px);
 	transform: scaleY(0.5) translateY(0.5px);
 	-webkit-transform-origin: 0% 0%;
 	transform-origin: 0% 0%;
 }
+.b_top_after:after,.b_bottom_after:after{left:12px;}
 .q_photolist .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;}
+.button_photo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:60px;
+  height:60px;
+  background-color:#ea3a3a;
+  margin: 0 auto;
+  border-radius:50%;
+}
+.s-havebottom .s-container{bottom:50px;}
+.s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
+.btn-red{border-radius:36px;height:36px;background-color:#ea3a3a;font-size:16px;}
 </style>

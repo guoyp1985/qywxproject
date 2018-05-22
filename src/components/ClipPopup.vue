@@ -104,7 +104,7 @@ export default {
   line-height: 0;
 }
 #photo-box img {
-  width: 100%;
+  width: 100%
 }
 .submit-area {
   position: absolute;
