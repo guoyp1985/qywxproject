@@ -252,7 +252,7 @@ export default {
     createdFun (query) {
       this.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleBar: false})
-      this.query = to.query
+      this.query = query
       if (this.query.crowduserid) {
         this.crowduserid = this.query.crowduserid
       }
@@ -286,10 +286,10 @@ export default {
       }
     }
   },
-  beforeRouteUpdate (to, from, next) {
-    this.createdFun(to.query)
-    next()
-  },
+  // beforeRouteUpdate (to, from, next) {
+  //   this.createdFun(to.query)
+  //   next()
+  // },
   created() {
     this.access()
     this.createdFun(this.$route.query)
