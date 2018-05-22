@@ -158,7 +158,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.data.flag = 4
+                  self.getData()
                 }
               }
             })
@@ -180,7 +180,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.data.flag = 0
+                  self.getData()
                 }
               }
             })
@@ -202,7 +202,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.data.flag = 0
+                  self.getData()
                 }
               }
             })
