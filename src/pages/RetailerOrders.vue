@@ -29,7 +29,7 @@
                 </Orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>           
+                    <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
                     <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
@@ -97,15 +97,13 @@
                 </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                    <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
-                  <div class="t-table pt5 color-gray font12 deliverarea">
-                    <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
-                    </div>
-                    <div class="t-cell middle-cell appendcontrol align_right w80">
+                  <div class="t-table pt5 color-lightgray font13 deliverarea">
+                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10">
                       <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
                   </div>
@@ -132,15 +130,13 @@
                 </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                    <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
-                  <div class="t-table pt5 color-gray font12 deliverarea">
-                    <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
-                      </div>
-                    <div class="t-cell middle-cell appendcontrol align_right w80">
+                  <div class="t-table pt5 color-lightgray font13 deliverarea">
+                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10">
                       <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
                     </div>
                   </div>
