@@ -194,6 +194,7 @@ export default {
           .then(res => {
             self.$vux.loading.hide()
             self.$vux.toast.text(res.data.error)
+            console.log('okokokokokokokok')
             self.changeOrderView(order, 0, [])
           })
         }
@@ -248,7 +249,6 @@ export default {
       }
     },
     changeOrderView (order, status, buttons) {
-      console.log('okokokokokokokok')
       const self = this
       let list = []
       switch (this.selectedIndex) {
