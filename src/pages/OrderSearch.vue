@@ -81,10 +81,10 @@ export default {
   data () {
     return {
       selectedIndex: 0,
-      list: [],
-      list1: [],
-      list2: [],
-      list3: [],
+      // list: [],
+      // list1: [],
+      // list2: [],
+      // list3: [],
       scrollContainer: null,
       distabdata1: false,
       distabdata2: false,
@@ -194,7 +194,6 @@ export default {
           .then(res => {
             self.$vux.loading.hide()
             self.$vux.toast.text(res.data.error)
-            console.log('okokokokokokokok')
             self.changeOrderView(order, 0, [])
           })
         }
@@ -253,23 +252,21 @@ export default {
       let list = []
       switch (this.selectedIndex) {
         case 0:
-          list = this.list
+          list = this.tabdata1
           break
         case 1:
-          list = this.list1
+          list = this.tabdata2
           break
         case 2:
-          list = this.list2
+          list = this.tabdata3
           break
         case 3:
-          list = this.list3
+          list = this.tabdata4
           break
       }
-      console.log(list)
       this.$util.changeItem(list, order.id, function (m) {
         return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons}
       })
-      console.log(list)
     },
     toggleTab () {
       const self = this
