@@ -274,7 +274,7 @@ export default {
         //       ...user,
         //       ...res.data
         //     })
-        //     location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+            location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
         //   }
         // )
         alert('hao')
