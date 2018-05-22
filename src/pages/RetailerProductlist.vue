@@ -65,7 +65,7 @@
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
-            <div class="item">
+            <div class="item" v-if="clickdata.activityid == 0">
               <router-link class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
