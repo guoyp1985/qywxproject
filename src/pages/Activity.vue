@@ -286,7 +286,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     this.access()
     this.createdFun(this.$route.query)
   }
