@@ -1,14 +1,8 @@
 <template>
   <div class="containerarea bg-white fong14 rsales">
-    <div class="s-topbanner">
+    <div class="s-topbanner">      
       <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Rebate customer')}}</div>
-        </div>
-      </div>
-      <div class="row">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
+        <tab v-model="tabmodel" class="x-tab" active-color="#ea3a3a" default-color="#666666">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
@@ -362,4 +356,101 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.s-topbanner{
+  background: #fff;
+  height: 44px;
+}
+.rsales .s-container{
+  top:44px;
+}
+.rsales .vux-tab {
+    height: 44px;
+}
+.rsales .vux-tab .vux-tab-item{
+  line-height: 44px;
+}
+.rsales .x-tab .vux-tab-selected:before{
+  content: "";
+  position: absolute;
+  border-bottom: 3px solid #ea3a3a;
+  bottom: 0;
+  left: 0;
+  width:100%;
+}
+.rsales .weui-search-bar{
+  padding: 10px 12px;
+  height: 55px;
+}
+.rsales .weui-search-bar__label{
+  background: #f0f0f0;
+  border-radius: 5px;
+  height: 35px;
+  }
+.rsales .weui-search-bar__form:after{
+  border: none;
+   border-radius: 5px;
+}
+.rsales .weui-icon-search,.weui-search-bar__label{
+  color: #999999 !important;
+}
+.rsales .weui-search-bar__form {
+    height: 35px;
+    line-height: 35px;
+    background-color: #ff3b30;
+    border-radius: 5px;
+}
+.rsales .weui-search-bar__label span {
+   vertical-align: initial;
+}
+.rsales .condition{
+  position: relative;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #eeeeee;
+}
+.rsales .condition .active{
+  color: #ea3a3a;
+}
+.rsales .h35{
+  height: 35px;
+  line-height: 35px;
+}
+.rsales .avatarimg1{
+  width: 60px;
+  height: 60px;
+}
+.rsales .percentarea .inner{
+  width: 53px;
+  height: 24px;
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  background: #ee9f25;
+}
+.rsales .percentarea{
+  width: 53px;
+  height: 24px;
+  border-radius: 50px;
+  background: #f6d6a5;
+}
+.rsales .percentarea .txt{
+  line-height: 24px;
+}
+.rsales .cut-off:after{
+  content: "";
+  position: absolute;
+  top: 12px;
+  height: 16px;
+  width: 1px;
+  background-color: #f5f5f5;
+  margin-left: 14px;
+  }
+.rsales .cut-off:nth-last-child(1):after {
+  display: none;
+}
+.rsales .weui-search-bar__box{
+  background: #f0f0f0;
+}
+.rsales .weui-search-bar__box .weui-icon-search{
+  line-height: 35px;
+}
 </style>
