@@ -264,24 +264,26 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      if (code) {
-        alert(code)
-        // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
-        // .then(
-        //   res => {
-        //     // TODO
-        //     User.set({
-        //       ...user,
-        //       ...res.data
-        //     })
-        alert(lUrl.hash)
-        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-        //   }
-        // )
-        alert(location.href)
-      } else if (user && !user.subscribes) {
-        const originHref = encodeURIComponent(location.href)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+      if (user && !user.subscribes) {
+        if (code) {
+          alert(code)
+          // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
+          // .then(
+          //   res => {
+          //     // TODO
+          //     User.set({
+          //       ...user,
+          //       ...res.data
+          //     })
+          alert(lUrl.hash)
+          location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+          //   }
+          // )
+          alert(location.href)
+        } else {
+          const originHref = encodeURIComponent(location.href)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+        }
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
