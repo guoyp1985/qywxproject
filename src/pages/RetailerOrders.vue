@@ -1,14 +1,14 @@
 <template>
   <div class="containerarea s-havebottom bg-page font14 retailerordes">
-    <div class="s-topbanner s-topbanner1">
+    <div class="s-topbanner">
       <div class="row">
-        <tab v-model="tabmodel" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+    <div class="s-container mt10">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list">
@@ -180,7 +180,7 @@
         <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
     </div>
-
+    
     <div v-transfer-dom class="x-popup popup-deliver">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 font14">
@@ -401,7 +401,7 @@ export default {
         }
       })
     },
-    swiperChange (index) {
+    tabclick (index) {
       const self = this
       if (index === 0) {
         if (self.tabdata1.length === 0) {
@@ -536,4 +536,11 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.retailerordes .s-topbanner{
+  background: #fff;
+  height: 44px;
+}
+.retailerordes .s-container{
+  top:44px;
+}
 </style>

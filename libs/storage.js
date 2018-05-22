@@ -56,4 +56,26 @@ const Access = {
     localStorage.removeItem('access')
   }
 }
-export { Token, OpenId, WxQrCode, User, Access }
+const Roomid = {
+  set (roomid) {
+    localStorage.setItem('roomid', roomid)
+  },
+  get () {
+    return localStorage.getItem('roomid')
+  }
+}
+const BkSocket = {
+  set (bksocket) {
+    localStorage.setItem('bksocket', JSON.stringify(bksocket))
+  },
+  get () {
+    if (localStorage.getItem('bksocket') === 'undefined') {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('bksocket'))
+  },
+  remove () {
+    localStorage.removeItem('bksocket')
+  }
+}
+export { Token, OpenId, WxQrCode, User, Access, BkSocket, Roomid }

@@ -73,7 +73,7 @@ const routes = []
 routes.push({
   path: '/',
   name: 'tIndex',
-  component: () => import('./pages/Userproducts').then(m => m.default)
+  component: () => import('./pages/Center').then(m => m.default)
 })
 
 const router = new VueRouter({

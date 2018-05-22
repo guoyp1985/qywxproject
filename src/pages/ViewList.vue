@@ -33,6 +33,7 @@
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
+                <div class="clamp1 color-gray font12">浏览次数: {{ item.number }}</div>
                 <div class="clamp1 color-gray font12">停留时间: {{ item.staytime | staytimeFormat }}</div>
               </div>
             </div>
@@ -76,7 +77,6 @@ export default {
         ret = `${m}分钟${s}秒`
       } else if (stay >= 3660) {
         let h = Math.floor(stay / 3660)
-        console.log('h=' + h)
         let val1 = stay % 3660
         let m = Math.floor(val1 / 60)
         let s = val1 % 60
@@ -181,7 +181,7 @@ export default {
       let data = res.data
       if (data) {
         self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}分享`
+        document.title = `${self.viewuser.linkman}浏览`
       }
     })
     self.getdata1()

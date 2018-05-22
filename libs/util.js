@@ -7,7 +7,7 @@ const Util = {}
 Util.install = function (Vue, options) {
   Vue.prototype.$util = {
     // 去空格
-    trim: (str) => str ? str.replace(Reg.rSpace, '') : '',
+    trim: (str) => str ? str.toString().replace(Reg.rSpace, '') : '',
     // 判空
     isNull: function (str) {
       if (!str) {

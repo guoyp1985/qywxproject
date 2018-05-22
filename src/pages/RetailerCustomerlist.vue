@@ -1,13 +1,13 @@
 <template>
   <div class="containerarea bg-page font14 rcustomerlist">
-    <div class="s-topbanner bg-white">
+    <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
+        <tab v-model="tabmodel" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="s-container">
+    <div class="s-container s-container1">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
@@ -35,7 +35,7 @@
                 <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
                 <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
               </div>
-              
+
             </div>
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
@@ -50,7 +50,7 @@
               <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -99,7 +99,7 @@
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -142,7 +142,7 @@
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -290,8 +290,8 @@ export default {
       self.$util.scrollEvent({
         element: self.scrollArea3,
         callback: function () {
-          if (self.tabdata3.length === (self.pagestart32 + 1) * self.limit) {
-            self.pagestart2++
+          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.pagestart3++
             self.$vux.loading.show()
             self.getdata3()
           }
@@ -473,27 +473,6 @@ export default {
 </script>
 
 <style lang="less" >
-.rcustomerlist .s-topbanner{
-  background: #fff;
-  height: 44px;
-}
-.rcustomerlist .s-container{
-  top:44px;
-}
-.rcustomerlist .vux-tab {
-    height: 44px;
-}
-.rcustomerlist .vux-tab .vux-tab-item{
-  line-height: 44px;
-}
-.rcustomerlist .x-tab .vux-tab-selected:before{
-  content: "";
-  position: absolute;
-  border-bottom: 3px solid #ea3a3a;
-  bottom: 0;
-  left: 0;
-  width:100%;
-}
 .rcustomerlist .weui-search-bar{
   padding: 10px 12px;
   height: 55px;
@@ -531,26 +510,6 @@ export default {
 .rcustomerlist .h35{
   height: 35px;
   line-height: 35px;
-}
-.rcustomerlist .avatarimg1{
-  width: 60px;
-  height: 60px;
-}
-.rcustomerlist .percentarea .inner{
-  width: 53px;
-  height: 24px;
-  border-top-left-radius: 50px;
-  border-bottom-left-radius: 50px;
-  background: #ee9f25;
-}
-.rcustomerlist .percentarea{
-  width: 53px;
-  height: 24px;
-  border-radius: 50px;
-  background: #f6d6a5;
-}
-.rcustomerlist .percentarea .txt{
-  line-height: 24px;
 }
 .rcustomerlist .cut-off:after{
   content: "";

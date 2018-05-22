@@ -37,7 +37,7 @@
             <router-link :to="{path: '/stat', query: {id: item.moduleid, module: item.module}}" class="t-table font14 pl20 pr20 border-box" style="height:40px;">
               <div class="t-cell v_middle h_100">
                 <div class="clamp1">
-                  <span class="v_middle color-blue11 mr3">{{item.username}}</span>
+                  <span class="v_middle color-blue11 mr3">{{item.linkman}}</span>
                   <span class="v_middle color-gray">查看了《{{item.title}}》</span>
                 </div>
               </div>
