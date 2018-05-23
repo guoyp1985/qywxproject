@@ -293,7 +293,6 @@ Vue.http.interceptors.response.use(response => {
   const code = lUrl.query.code
   if (code) {
     // Access.set(true)
-    alert(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
