@@ -71,8 +71,8 @@
           </div>
           <div v-if="(index == 1)">
             <search
-              class="x-search bg-white"
-              v-model='searchword3'
+              class="v-search bg-white"
+              v-model='vsearchword3'
               :auto-fixed="autofixed"
               @on-submit="onSubmit3"
               @on-change="onChange3"
@@ -115,7 +115,7 @@
           </div>
           <div v-if="(index == 2)">
             <search
-              class="x-search bg-white"
+              class="v-search bg-white"
               v-model='searchword2'
               :auto-fixed="autofixed"
               @on-submit="onSubmit2"
