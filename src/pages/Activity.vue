@@ -263,9 +263,10 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
+      alert(user.subscribe)
       if (user && user.subscribe === 0) {
         if (code) {
-          this.$http.get(`${ENV.Boka}/api/authUser/${code}`)
+          this.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
           .then(res => {
             if (res.data.flag) {
               User.set({
@@ -281,7 +282,6 @@ export default {
         }
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
-        alert('ok')
       }
     }
   },
