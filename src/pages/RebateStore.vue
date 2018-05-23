@@ -4,12 +4,12 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="rebate-store" class="containerarea font14" ref="scrollContainer" @scroll="handleScroll">
+  <div id="rebate-store" class="containerarea font14 scroll-container" ref="scrollContainer" @scroll="handleScroll">
     <div class="bg-white">
       <div class="sharing-title">{{$t('Current Store')}}</div>
       <div class="pt5 pb5 pl15 pr15 flex_table">
         <div class="store-photo">
-          <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset='0' container="#vux_view_box_body"></x-img>
+          <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset="-100"></x-img>
         </div>
         <div class="store-details flex_cell pl10">
           <span class="db font14">{{rebateInfo.title}}</span>
@@ -56,7 +56,7 @@
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
@@ -81,7 +81,7 @@
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -89,7 +89,7 @@
               </template>
               <template v-else>
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -109,7 +109,7 @@
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
                       <span class="v_middle">{{ item.dateline | dateFormat }}</span>
@@ -165,14 +165,10 @@ export default {
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
-      limit: 3,
+      limit: 20,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      scrollContainer: document.querySelector('#vux_view_box_body'),
       storeQrcode: null
     }
   },
@@ -221,7 +217,6 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.rebateInfo = data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
