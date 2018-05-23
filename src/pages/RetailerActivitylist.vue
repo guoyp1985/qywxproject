@@ -8,9 +8,9 @@
     </tab>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="tabdata1.length > 0 && index === 0">
-            <div class="scroll_list">
+            <div class="scroll_list swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll">
               <div v-if="tabdata1.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
                 <div class="t-table">
                   <div class="t-cell">
@@ -27,7 +27,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -48,7 +48,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -66,7 +66,7 @@
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
                     <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
                       <div class="clamp1 font12">{{item.title}}</div>
@@ -331,10 +331,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer[0],
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -352,15 +352,6 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.ractivitylist .swiperitem')
-          if (items.length > 1) {
-            self.scrollArea1 = items[0]
-            self.isBindScroll1 = true
-            self.scrollArea1.removeEventListener('scroll', self.scroll1)
-            self.scrollArea1.addEventListener('scroll', self.scroll1)
-          }
-        }
       })
     },
     stopevent (item, index) {

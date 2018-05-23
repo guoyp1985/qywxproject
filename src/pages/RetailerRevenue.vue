@@ -18,9 +18,9 @@
     </div>
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="scroll-container01" style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
+            <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll1">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
@@ -53,7 +53,7 @@
                   <check-icon v-else class="x-check-icon" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1">{{item.buyername}}</div>
@@ -79,7 +79,7 @@
               </div>
             </div>
           </template>
-          <template v-if="(index == 1)">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
             <div v-if="disData2" class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
@@ -87,55 +87,6 @@
                 <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
-                <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                  <div class="b_bottom_after padding5">
-                    <div class="t-table">
-                      <div class="t-cell pic v_middle w50 pr10 border-box">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1">{{item.buyername}}</div>
-                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                      </div>
-                      <div class="t-cell align_center v_middle w100">
-                        <div class="font12">实际收入</div>
-                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="padding10 border-box">
-                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                    <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
-                    <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
-                  </div>
-                </template>
-                <div v-else class="padding5">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w50 pr10 border-box">
-                      <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.buyername}}</div>
-                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
-                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                    </div>
-                    <div class="t-cell align_center v_middle w100">
-                      <div class="font12">实际收入</div>
-                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-if="(index == 2)">
-            <div v-if="disData3" class="scroll_list">
-              <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
-                <div><i class="al al-wushuju font60" ></i></div>
-                <div class="mt5">暂无已提现记录！</div>
-                <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
-              </div>
-              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
                   <div class="b_bottom_after padding5">
                     <div class="t-table">
@@ -176,7 +127,56 @@
                 </div>
               </div>
             </div>
-          </template>
+          </div>
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+            <div v-if="disData3" class="scroll_list">
+              <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
+                <div><i class="al al-wushuju font60" ></i></div>
+                <div class="mt5">暂无已提现记录！</div>
+                <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
+              </div>
+              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white">
+                <template v-if="item.content.indexOf('平台奖励基金') < 0">
+                  <div class="b_bottom_after padding5">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w50 pr10 border-box">
+                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1">{{item.buyername}}</div>
+                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                      </div>
+                      <div class="t-cell align_center v_middle w100">
+                        <div class="font12">实际收入</div>
+                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="padding10 border-box">
+                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                    <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
+                  </div>
+                </template>
+                <div v-else class="padding5">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50 pr10 border-box">
+                      <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.buyername}}</div>
+                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
+                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                    </div>
+                    <div class="t-cell align_center v_middle w100">
+                      <div class="font12">实际收入</div>
+                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </swiper-item>
       </swiper>
     </div>
@@ -246,13 +246,7 @@ export default {
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null
+      pagestart3: 0
     }
   },
   created () {
@@ -267,10 +261,10 @@ export default {
   computed: {
   },
   methods: {
-    scroll1: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -280,10 +274,10 @@ export default {
         }
       })
     },
-    scroll2: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea2,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
@@ -293,10 +287,10 @@ export default {
         }
       })
     },
-    scroll3: function () {
+    handleScroll3: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea3,
+        element: self.$refs.scrollContainer3[0],
         callback: function () {
           if (self.tabdata3.length === self.pagestart3 + self.limit) {
             self.pagestart3 += self.limit
@@ -322,15 +316,6 @@ export default {
         }
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disData1 = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.retailerrevenue .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.scrollArea3 = items[2]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getdata2 () {
@@ -342,11 +327,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disData2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     getdata3 () {
@@ -358,11 +338,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
-        if (!self.isBindScroll3) {
-          self.isBindScroll3 = true
-          self.scrollArea3.removeEventListener('scroll', self.scroll3)
-          self.scrollArea3.addEventListener('scroll', self.scroll3)
-        }
       })
     },
     checkboxclick (d, index) {

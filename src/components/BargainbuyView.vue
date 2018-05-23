@@ -6,7 +6,7 @@
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <x-img class="imgcover" :src="crowduser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+          <x-img class="imgcover" :src="crowduser.avatar" default-src="../src/assets/images/user.jpg" :offset="-100"></x-img>
         </div>
         <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
@@ -16,7 +16,7 @@
         <div class="innerbg">
           <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
             <div class="t-cell v_middle w80">
-              <x-img class="imgcover" :src="product.photo" style="width:70px;height:70px;" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+              <x-img class="imgcover" :src="product.photo" style="width:70px;height:70px;" default-src="../src/assets/images/nopic.jpg" :offset="-100"></x-img>
             </div>
             <div class="t-cell">
               <div class="clamp2 font13 color-gray7">{{ product.title }}</div>

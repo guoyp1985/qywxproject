@@ -29,11 +29,11 @@
         <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
       </flexbox-item>
     </flexbox>
-    <div v-transfer-dom class="x-popup popup-selectproduct">
+    <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div class="popup-middle">
+          <div ref="scrollProduct" @scroll="scrollHandle2" class="popup-middle">
             <search
               class="x-search"
               v-model="searchword"
@@ -101,7 +101,7 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom class="x-popup popupCustomer">
+    <div v-transfer-dom class="x-popup">
       <popup v-model="showpush" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">选择返点客</div>
@@ -112,7 +112,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14" style="top:85px;bottom:86px;">
+          <div ref="scrollCustomer" @scroll="scrollHandle1" class="popup-middle font14" style="top:85px;bottom:86px;">
             <div class="padding10">
               <div v-if="disCustomerData" class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -182,10 +182,8 @@ export default {
       radiodata: [],
       searchword: '',
       searchresult: false,
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null,
       insertProductCallback: Function,
       isDown: false,
       isMove: false,
@@ -203,8 +201,6 @@ export default {
       pushdata: [],
       checkAll: false,
       customerPagestart: 0,
-      isBindCustomerScroll: false,
-      scrollCustomerArea: null,
       touchElement: null,
       editTipCss: ''
     }
@@ -233,17 +229,11 @@ export default {
       this.showpush = true
       if (self.customerdata.length === 0) {
         self.getCustomerdata()
-      } else {
-        self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-        self.isBindCustomerScroll = true
-        self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-        self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
       }
     },
     closepush () {
       const self = this
-      this.showpush = false
-      self.isBindCustomerScroll = false
+      self.showpush = false
     },
     submitpush () {
       const self = this
@@ -268,7 +258,6 @@ export default {
           }
         })
       })
-      self.isBindCustomerScroll = false
     },
     radioclick1 (data, index) {
       const self = this
@@ -294,11 +283,11 @@ export default {
         }
       }
     },
-    scrollCustomer: function () {
+    scrollHandle1 () {
       const self = this
-      self.$util.scrollEvent({
-        element: self.scrollCustomerArea,
-        callback: function () {
+      this.$util.scrollEvent({
+        element: this.$refs.scrollCustomer,
+        callback: () => {
           if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
             self.customerPagestart++
             self.$vux.loading.show()
@@ -314,14 +303,9 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
-        self.customerdata = data.data ? data.data : data
+        let retdata = data.data ? data.data : data
+        self.customerdata = self.customerdata.concat(retdata)
         self.disCustomerData = true
-        if (!self.isBindCustomerScroll) {
-          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-          self.isBindCustomerScroll = true
-          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
-        }
       })
     },
     onSave () {
@@ -453,11 +437,11 @@ export default {
       self.pagestart1 = 0
       self.getProductData()
     },
-    scroll1: function () {
+    scrollHandle2 () {
       const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea1,
-        callback: function () {
+      this.$util.scrollEvent({
+        element: this.$refs.scrollProduct,
+        callback: () => {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
@@ -483,12 +467,6 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.popup-selectproduct .popup-middle')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     selectevent () {

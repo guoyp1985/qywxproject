@@ -3,14 +3,14 @@
     <div class="s-topbanner">
       <div class="row">
         <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabclick">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator">
-        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)">
+      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -21,7 +21,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container0"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -46,7 +46,7 @@
               </Orderitemplate>
             </div>
           </div>
-          <div v-if="(index == 1)">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
             <div v-if="distabdata2" class="scroll_list">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -57,7 +57,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container2"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -74,7 +74,7 @@
               </orderitemplate>
             </div>
           </div>
-          <div v-if="(index == 2)">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container31" ref="scrollContainer3" @scroll="handleScroll3">
             <div v-if="distabdata3" class="scroll_list">
               <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -85,7 +85,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container2"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container3"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -107,7 +107,7 @@
               </orderitemplate>
             </div>
           </div>
-          <div v-if="(index == 3)">
+          <div v-if="(index == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll4">
             <div v-if="distabdata4" class="scroll_list">
               <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -118,7 +118,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container3"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container4"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -229,14 +229,6 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      isBindScroll4: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null,
-      scrollArea4: null,
       showpopup: false,
       deliveritem: null,
       deliverindex: 0,
@@ -245,10 +237,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -258,10 +250,10 @@ export default {
         }
       })
     },
-    scroll2: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea2,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
@@ -271,10 +263,10 @@ export default {
         }
       })
     },
-    scroll3: function () {
+    handleScroll3: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea3,
+        element: self.$refs.scrollContainer3[0],
         callback: function () {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++
@@ -284,10 +276,10 @@ export default {
         }
       })
     },
-    scroll4: function () {
+    handleScroll4: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea4,
+        element: self.$refs.scrollContainer4[0],
         callback: function () {
           if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
             self.pagestart4++
@@ -306,16 +298,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.retailerordes .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.scrollArea3 = items[2]
-          self.scrollArea4 = items[3]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getdata2 () {
@@ -327,11 +309,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     getdata3 () {
@@ -343,11 +320,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
-        if (!self.isBindScroll3) {
-          self.isBindScroll3 = true
-          self.scrollArea3.removeEventListener('scroll', self.scroll3)
-          self.scrollArea3.addEventListener('scroll', self.scroll3)
-        }
       })
     },
     getdata4 () {
@@ -359,35 +331,22 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata4 = self.tabdata4.concat(retdata)
         self.distabdata4 = true
-        if (!self.isBindScroll4) {
-          self.isBindScroll4 = true
-          self.scrollArea4.removeEventListener('scroll', self.scroll4)
-          self.scrollArea4.addEventListener('scroll', self.scroll4)
-        }
       })
     },
-    tabclick (index) {
+    swiperChange (index) {
       const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        if (self.pagestart3 === 0 && !self.isBindScroll3) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
-      } else if (index === 3) {
-        if (self.pagestart4 === 0 && !self.isBindScroll4) {
-          self.$vux.loading.show()
-          self.getdata4()
-        }
+      if (index === 0 && self.tabdata1.length === 0) {
+        self.$vux.loading.show()
+        self.getdata1()
+      } else if (index === 1 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
+      } else if (index === 2 && self.tabdata3.length === 0) {
+        self.$vux.loading.show()
+        self.getdata3()
+      } else if (index === 3 && self.tabdata4.length === 0) {
+        self.$vux.loading.show()
+        self.getdata4()
       }
     },
     uploaddeliver (item, index) {

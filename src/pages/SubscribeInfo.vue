@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page sinfo">
+  <div class="containerarea font14 bg-page sinfo scroll-container" ref="scrollContainer" @scroll="handleScroll">
 		<div class="align_center pt10 pb10">
       <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
 		</div>
@@ -10,7 +10,7 @@
         <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db">
           <div class="t-table">
 						<div class="t-cell w50">
-              <x-img class="avtarimg" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
+              <x-img class="avtarimg" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
 						</div>
 						<div class="t-cell">
 							<div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
@@ -41,9 +41,7 @@ export default {
       disData: false,
       WeixinQrcode: ENV.WeixinQrcode,
       limit: 20,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      pagestart1: 0
     }
   },
   filters: {
@@ -68,10 +66,10 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -89,12 +87,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
         self.disData = true
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.containerarea.sinfo')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     }
   },

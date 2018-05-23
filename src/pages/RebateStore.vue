@@ -4,28 +4,26 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="rebate-store">
+  <div id="rebate-store" class="containerarea font14 scroll-container" ref="scrollContainer" @scroll="handleScroll">
     <div class="bg-white">
       <div class="sharing-title">{{$t('Current Store')}}</div>
-      <sticky scroll-box="rebate-store">
-        <div class="pt5 pb5 pl15 pr15 flex_table">
-          <div class="store-photo">
-            <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset='0' container="#vux_view_box_body"></x-img>
-          </div>
-          <div class="store-details flex_cell pl10">
-            <span class="db font14">{{rebateInfo.title}}</span>
-            <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
-          </div>
+      <div class="pt5 pb5 pl15 pr15 flex_table">
+        <div class="store-photo">
+          <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset="-100"></x-img>
         </div>
-        <div class="rebate-store-title flex_table">
-          <div class="flex_cell align_right pr20">
-            <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
-          </div>
-          <div class="flex_cell align_left pl20">
-            <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
-          </div>
+        <div class="store-details flex_cell pl10">
+          <span class="db font14">{{rebateInfo.title}}</span>
+          <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
         </div>
-      </sticky>
+      </div>
+      <div class="rebate-store-title flex_table">
+        <div class="flex_cell align_right pr20">
+          <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
+        </div>
+        <div class="flex_cell align_left pl20">
+          <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
+        </div>
+      </div>
     </div>
     <div class="mt10 bg-white">
       <div class="sharing-title">{{$t('I Am In The Store')}}</div>
@@ -48,9 +46,9 @@
     </div>
     <div class="mt10 bg-white">
       <div class="sharing-title color-red b_bottom_after">{{$t('Immediately Make Money By Sharing')}}</div>
-      <tab v-model="selectedIndex">
-        <tab-item class="b_right_after" selected @on-item-click="onItemClick">{{$t('Product')}}</tab-item>
-        <tab-item class="b_right_after" @on-item-click="onItemClick">{{$t('Activity')}}</tab-item>
+      <tab v-model="selectedIndex" class="v-tab">
+        <tab-item selected @on-item-click="onItemClick">{{$t('Product')}}</tab-item>
+        <tab-item @on-item-click="onItemClick">{{$t('Activity')}}</tab-item>
         <tab-item @on-item-click="onItemClick">{{$t('Article')}}</tab-item>
       </tab>
       <view-box v-show="selectedIndex===0">
@@ -58,7 +56,7 @@
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
@@ -83,7 +81,7 @@
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -91,7 +89,7 @@
               </template>
               <template v-else>
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -111,7 +109,7 @@
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container="#vux_view_box_body"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
                       <span class="v_middle">{{ item.dateline | dateFormat }}</span>
@@ -171,10 +169,6 @@ export default {
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      scrollContainer: document.querySelector('#vux_view_box_body'),
       storeQrcode: null
     }
   },
@@ -184,41 +178,33 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollContainer,
+        element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
-          }
-        }
-      })
-    },
-    scroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
-          }
-        }
-      })
-    },
-    scroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getdata3()
+          switch (self.selectedIndex) {
+            case 0:
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.$vux.loading.show()
+                self.getdata1()
+              }
+              break
+            case 1:
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.$vux.loading.show()
+                self.getdata2()
+              }
+              break
+            case 2:
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.$vux.loading.show()
+                self.getdata3()
+              }
+              break
           }
         }
       })
@@ -231,7 +217,6 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.rebateInfo = data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
@@ -262,27 +247,16 @@ export default {
     },
     onItemClick (index) {
       const self = this
-      if (index === 0) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll1)
-        self.scrollContainer.addEventListener('scroll', self.scroll1)
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll2)
-        self.scrollContainer.addEventListener('scroll', self.scroll2)
-        if (self.pagestart2 === 0 && self.tabdata2.length === 0) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll3)
-        self.scrollContainer.addEventListener('scroll', self.scroll3)
-        if (self.pagestart3 === 0 && self.tabdata3.length === 0) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
+      switch (index) {
+        case 0:
+          !this.tabdata1.length && this.getdata1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getdata2()
+          break
+        case 2:
+          !this.tabdata3.length && this.getdata3()
+          break
       }
     },
     onShareCard () {
@@ -420,9 +394,6 @@ export default {
 #rebate-store .store-photo{width:50px;}
 #rebate-store .store-photo img{width:50px;height:50px;object-fit:cover;display:block;}
 #rebate-store .store-details{align-self:center;}
-#rebate-store .vux-tab{background-color:@tab-background-color;}
-#rebate-store .vux-tab .vux-tab-item.vux-tab-selected{color:@tab-active-text-color;background:@tab-active-background-color;}
-#rebate-store .vux-tab-ink-bar{height:1px !important;background-color:@tab-background-red;}
 #rebate-store .weui-cell__ft{display:none;}
 #rebate-store .vux-cell-primary p{
   overflow: hidden;

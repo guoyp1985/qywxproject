@@ -1,6 +1,6 @@
 <template>
   <div v-if="loginUser" class="containerarea bg-white font14 uproducts notop">
-    <div class="pagemiddle scroll-container" style="bottom:53px;">
+    <div class="pagemiddle scroll-container" style="bottom:53px;" ref="scrollContainer" @scroll="handleScroll">
       <swiper
         v-if="addata && addata.length > 0"
         :list="addata"
@@ -108,9 +108,7 @@ export default {
       activitydata: [],
       productdata: [],
       limit: 20,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      pagestart1: 0
     }
   },
   computed: {
@@ -124,10 +122,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -145,12 +143,6 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.uproducts .pagemiddle')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     closeShareSuccess () {
@@ -205,48 +197,6 @@ export default {
     } else {
       Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     }
-    // next(vm => {
-    //   vm.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    //   vm.query = to.query
-    //   vm.loginUser = User.get()
-    //   if (vm.loginUser) {
-    //     vm.$util.handleWxShare({
-    //       module: 'shop',
-    //       moduleid: 0,
-    //       lastshareuid: vm.query.share_uid,
-    //       title: '共销宝商城',
-    //       desc: '一款能买能卖的销售平台，你要的都在这里！',
-    //       photo: vm.loginUser.avatar,
-    //       link: `${ENV.Host}/#/userproducts?wid=${vm.loginUser.uid}&share_uid=${vm.loginUser.uid}`,
-    //       successCallback: function () {
-    //         vm.showShareSuccess = true
-    //       }
-    //     })
-    //     vm.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-    //       params: { uid: vm.loginUser.uid }
-    //     }).then(function (res) {
-    //       let data = res.data
-    //       vm.retailerInfo = data.data ? data.data : data
-    //       return vm.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
-    //     }).then(function (res) {
-    //       let data = res.data
-    //       let retdata = data.data ? data.data : data
-    //       for (let i = 0; i < retdata.length; i++) {
-    //         retdata[i].img = retdata[i].photo
-    //       }
-    //       vm.addata = retdata
-    //       let params = { params: { do: 'all', pagestart: 0, limit: 5 } }
-    //       return vm.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-    //     }).then(function (res) {
-    //       let data = res.data
-    //       vm.activitydata = data.data ? data.data : data
-    //       vm.getdata1()
-    //       next()
-    //     })
-    //   } else {
-    //     vm.$http.get(`${ENV.BokaApi}/api/user/show`)
-    //   }
-    // })
   }
 }
 </script>

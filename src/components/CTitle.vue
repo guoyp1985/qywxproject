@@ -38,21 +38,21 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
-import { Grid, GridItem, Badge, XImg } from 'vux'
+import { Grid, GridItem, Badge } from 'vux'
 export default {
   name: 'CTitle',
   components: {
-    Grid, GridItem, Badge, XImg
+    Grid, GridItem, Badge
   },
   props: {
     // linkInfo: [String, Object],
     // linkCredit: [String, Object],
     profile: Object,
-    avatarHref: String,
+    avatarHref: {
+      type: String,
+      default: '../src/assets/images/user.jpg'
+    },
     userName: {
       type: String,
       default: 'unkown'
