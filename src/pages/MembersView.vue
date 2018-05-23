@@ -27,11 +27,11 @@
         <div class="list-shadow">
         <div class="b_top_after flex_center bg-white h50">
           <div class="t-table align_center font15 itemtab">
-            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-red4 font12">
+            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-red4 font14">
               <div>{{ $t('Views') }}</div>
               <div>{{viewuser.viewNumber}}</div>
             </router-link>
-            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after  color-red4 font12">
+            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after  color-red4 font14">
               <div>{{ $t('Share') }}</div>
               <div>{{viewuser.shareNumber}}</div>
             </router-link>
@@ -44,25 +44,23 @@
            </router-link> -->
           </div>
         </div>
-        </div>
-
         <div class="b_top_after flex_center bg-white h45">
           <div class="t-table align_center font15 itemtab">
-            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after font12">
+            <router-link :to="{path: '/', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after font14">
               <div class="color-lightgray"><i class="al al-account font16 mr5"></i>{{ $t('Rebate manage') }}</div>
             </router-link>
-            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font12">
+            <router-link :to="{path: '/', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font14">
               <div class="color-lightgray"><i class="al al-zhidinge79b font16 mr5"></i>{{ $t('Cancel the roof') }}</div>
             </router-link>
-             <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font12">
+             <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font14">
               <div class="color-lightgray"><i class="al al-calendar font16 mr5"></i>{{ $t('Customer Behavior') }}</div>
             </router-link>
           </div>
         </div>
-
+        </div>
 
         <div class="b_bottom_after"></div>
-        <div class="mt12 bg-white itemlist list-shadow font12">
+        <div class="mt12 bg-white itemlist list-shadow font14">
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">真实姓名</div>
@@ -78,6 +76,15 @@
               <div class="t-cell align_right color-gray">{{ viewuser.mobile }}</div>
               <div class="t-cell align_right w50">
                 <span class="qbtn8 bg-orange7 color-white" @click="updatechar('mobile')">更新</span>
+              </div>
+            </div>
+          </div>
+          <div class="item padding10 b_bottom_after">
+            <div class="t-table">
+              <div class="t-cell align_left w100">意向程度</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
+              <div class="t-cell align_right w50">
+                <span class="qbtn8 bg-orange7 color-white" @click="showLevel">更新</span>
               </div>
             </div>
           </div>
@@ -106,15 +113,6 @@
             <div class="t-table">
               <div class="t-cell align_left w100">成为客户时间</div>
               <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">意向程度</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn8 bg-orange7 color-white" @click="showLevel">更新</span>
-              </div>
             </div>
           </div>
         </div>
