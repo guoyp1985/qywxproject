@@ -265,9 +265,8 @@ export default {
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
       // alert(JSON.stringify(user))
-      alert(user.subscribes)
       // alert(code)
-      if (user && !user.subscribes) {
+      if (user && user.subscribe > 0) {
         if (code) {
           alert(code)
           // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
