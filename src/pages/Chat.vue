@@ -464,6 +464,10 @@ export default {
           client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
           room_id: self.roomid
         }
+        if (self.query.frommodule) {
+          loginData.frommodule = self.query.frommodule
+          loginData.fromid = self.query.fromid
+        }
         websocket.send(JSON.stringify(loginData))
       }
       websocket.onmessage = function (e) {
@@ -495,7 +499,7 @@ export default {
           }
           self.data.push(saydata)
           if (saydata.isNew) {
-            if(self.scrollContainer.offsetHeight + self.scrollContainer.scrollTop + 180 > self.scrollContainer.scrollHeight){
+            if (self.scrollContainer.offsetHeight + self.scrollContainer.scrollTop + 180 > self.scrollContainer.scrollHeight) {
               self.scrollContainer.scrollTop = self.scrollContainer.scrollHeight + 50
             }
           }
