@@ -281,6 +281,7 @@ export default {
         }
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        alert('ok')
       }
     }
   },
