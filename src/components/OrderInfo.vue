@@ -41,7 +41,9 @@
       <span class="font12">共{{total}}件商品 {{$t('Actual Payment')}}: </span><span class="font14">¥{{item.special}}</span>
     </div>
     <div class="operate-area" v-if="item.buttons && item.buttons.length">
-      <x-button mini v-for="(button, index) in item.buttons" :key="index" @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+      <div class="db-in" v-for="(button, index) in item.buttons" :key="index">
+        <x-button mini @click.native="buttonClick(button.id)" class="font12">{{button.name}}</x-button>
+      </div>
     </div>
   </div>
 </template>

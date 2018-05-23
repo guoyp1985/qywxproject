@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea  bg-page  fong14 rsales">
-    <div class="s-topbanner">      
+    <div class="s-topbanner">
       <div class="row">
         <tab v-model="tabmodel" class="" active-color="#ea3a3a" default-color="#666666">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
@@ -116,6 +116,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -128,6 +129,7 @@ export default {
   },
   data () {
     return {
+      loginUser: Object,
       autofixed: false,
       tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
       tabmodel: 0,
@@ -156,6 +158,7 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.loginUser = User.get()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'sales'
     })
@@ -330,6 +333,9 @@ export default {
     inviteevent (item, index) {
       const self = this
       let content = `<div class="font14 v_middle">该客户是 <span class="color-orange v_middle">${item.uploadname}</span> 带来的，邀请成返点客后， <span class="color-orange v_middle">${item.uploadname}</span> 的收入可能受到影响，邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？</div>`
+      if (item.uploader === self.loginUser.uid) {
+        content = `邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？`
+      }
       self.$vux.confirm.show({
         content: content,
         onConfirm () {
