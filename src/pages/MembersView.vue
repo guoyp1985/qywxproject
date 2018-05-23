@@ -114,6 +114,15 @@
               <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
             </div>
           </div>
+          <div class="item padding10 b_bottom_after">
+            <div class="t-table">
+              <div class="t-cell align_left w100">意向程度</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
+              <div class="t-cell align_right w50">
+                <span class="qbtn1 bg-green color-white" @click="showLevel">更新</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="s-bottom bottomnaviarea b_top_after">
