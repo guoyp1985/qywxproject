@@ -28,6 +28,7 @@ Util.install = function (Vue, options) {
     access: function (response, authorization) {
       const isPC = this.isPC()
       if (response.status === 401) {
+        alert(response.status)
         authorization(isPC)
       }
     },
