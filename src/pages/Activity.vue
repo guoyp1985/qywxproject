@@ -263,6 +263,7 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
+      alert(user.subscribe)
       if (user && user.subscribe === 0) {
         if (code) {
           this.$http.get(`${ENV.Boka}/api/authUser/${code}`)
