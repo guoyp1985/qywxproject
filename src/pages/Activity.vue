@@ -264,9 +264,9 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      alert(JSON.stringify(user))
-      alert(user.subscribes)
-      alert(code)
+      // alert(JSON.stringify(user))
+      // alert(user.subscribes)
+      // alert(code)
       if (user && !user.subscribes) {
         if (code) {
           alert(code)
