@@ -278,8 +278,8 @@ export default {
           })
         } else {
           const originHref = encodeURIComponent(location.href)
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
           alert('ok')
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
         }
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
