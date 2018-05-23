@@ -264,6 +264,9 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
+      alert(JSON.stringify(user))
+      alert(user.subscribes)
+      alert(code)
       if (user && !user.subscribes) {
         if (code) {
           alert(code)
@@ -281,6 +284,7 @@ export default {
           // )
           alert(location.href)
         } else {
+          alert('in shouquan')
           const originHref = encodeURIComponent(location.href)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
         }
