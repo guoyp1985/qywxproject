@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom decorationshop">
-    <div class="s-container scroll-container" style="top:0px;">
+    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
       <div class="scroll_list bg-page">
         <template v-if="!productdata || productdata.length == 0">
           <div class="emptyitem">
@@ -16,7 +16,7 @@
           </div>
         </template>
         <template v-else v-for="(item,index) in productdata">
-          <router-link :to="{path:'/product',query:{id:item.id,wid:loginuser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
+          <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
             <div class="t-table bg-white pt10 pb10">
         			<div class="t-cell pl10 v_middle" style="width:90px;">
                   <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
@@ -103,6 +103,7 @@ Please upload rolling show photo:
 <script>
 import { TransferDom, Popup, Confirm, Alert, XImg } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
+import { User } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -114,7 +115,7 @@ export default {
   },
   data () {
     return {
-      loginuser: { uid: 187 },
+      loginUser: Object,
       productdata: [],
       clickdata: {},
       clickindex: 0,
@@ -124,8 +125,6 @@ export default {
       havenum: 0,
       limit: 20,
       pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null,
       rollingData: null,
       cutImg: '',
       popupShow: false
@@ -145,10 +144,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -166,15 +165,6 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.decorationshop .s-container')
-          if (items.length > 1) {
-            self.scrollArea1 = items[0]
-            self.isBindScroll1 = true
-            self.scrollArea1.removeEventListener('scroll', self.scroll1)
-            self.scrollArea1.addEventListener('scroll', self.scroll1)
-          }
-        }
       })
     },
     showRolling (item, index) {
@@ -302,6 +292,7 @@ export default {
   created: function () {
     let self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.loginUser = User.get()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'decorationshop'
     })

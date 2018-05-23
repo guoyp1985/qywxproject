@@ -5,7 +5,7 @@
 */
 <template>
   <div class="containerarea font14 bg-white knowledgeclass notop">
-    <div class="pagemiddle scroll-container">
+    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
       <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
       <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
         <div class="pic">
@@ -64,9 +64,7 @@ export default {
       query: {},
       data: [],
       limit: 20,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      pagestart1: 0
     }
   },
   computed: {
@@ -74,10 +72,10 @@ export default {
   filters: {
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -98,12 +96,6 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.knowledgeclass .pagemiddle')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     onShow () {
@@ -117,6 +109,7 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
+    self.$vux.loading.show()
     self.getdata1()
   }
 }

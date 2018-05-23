@@ -11,7 +11,7 @@
         ref="search">
       </search>
     </div>
-    <div class="pagemiddle scroll-container" style="top:55px;">
+    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
       <div v-if="distabdata1" class="scroll_list ">
         <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
           <template v-if="searchresult1">
@@ -87,7 +87,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollContainer1" @scroll="handleScroll1">
             <div class="padding10">
               <div class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -187,17 +187,15 @@ export default {
       checkAll: false,
       customerPagestart: 0,
       isBindCustomerScroll: false,
-      scrollCustomerArea: null,
-      scrollContainer: null,
       searchword1: '',
       searchresult1: false
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollContainer,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -225,13 +223,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
-        if (!self.scrollContainer) {
-          self.scrollContainer = document.querySelector('.scroll-container')
-        }
-        if (!self.isBindScroll1) {
-          self.scrollContainer.removeEventListener('scroll', self.scroll1)
-          self.scrollContainer.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     onChange1 (val) {
@@ -259,10 +250,10 @@ export default {
       this.showpopup = !this.showpopup
       this.clickdata = item
     },
-    scrollCustomer: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollCustomerArea,
+        element: self.$refs.scrollContainer1,
         callback: function () {
           if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
             self.customerPagestart++
@@ -282,12 +273,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.customerdata = self.customerdata.concat(retdata)
-        if (!self.isBindCustomerScroll) {
-          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-          self.isBindCustomerScroll = true
-          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
-        }
       })
     },
     clickpopup (key, item) {
@@ -297,11 +282,6 @@ export default {
         this.showpush = true
         if (self.customerdata.length === 0) {
           self.getCustomerdata()
-        } else {
-          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-          self.isBindCustomerScroll = true
-          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
         }
       }
     },

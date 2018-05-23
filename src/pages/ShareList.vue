@@ -8,10 +8,10 @@
         </div>
       </div>
     </div>
-    <div class="s-container s-container1 scroll-container">
-      <div style="position:absolute;left:0;top:0;right:0;">
+    <div class="s-container s-container1">
+      <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
         <search
-          class="x-search"
+          class="v-search"
           v-model="searchword1"
           :auto-fixed="autofixed"
           @on-submit="onSubmit1"
@@ -20,7 +20,7 @@
           ref="search">
         </search>
       </div>
-      <div style="position:absolute;left:0;top:44px;right:0;bottom:0;overflow-y:auto;">
+      <div v-if="disdata" class="scroll_list swiper-inner pl10 pr10 border-box scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
         <div v-if="disdata" class="scroll_list pl10 pr10">
           <div v-if="!data || data.length === 0" class="scroll_item  emptyitem flex_center">
             <template v-if="searchresult1">暂无搜索结果</template>
@@ -79,9 +79,7 @@ export default {
       searchword1: '',
       searchresult1: false,
       limit: 20,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      pagestart1: 0
     }
   },
   methods: {
@@ -105,10 +103,10 @@ export default {
       self.pagestart1 = 0
       self.getdata1()
     },
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -134,12 +132,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
         self.disdata = true
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.rsharelist .s-container')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getDateState: function (dt) {

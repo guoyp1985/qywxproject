@@ -6,7 +6,7 @@
         <div class="pl10 pr10 h_100">
           <div class="t-table h_100 toprow">
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle w80">
-              <x-img class="avatarimg4 v_middle imgcover" :src="sellerUser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" cotainer="#vux_view_box_body"></x-img>
+              <x-img class="avatarimg4 v_middle imgcover" :src="sellerUser.avatar" ></x-img>
             </router-link>
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle font18">{{ sellerUser.username }}</router-link>
             <div class="t-cell v_middle w70 align_center">
@@ -33,8 +33,8 @@
     </div>
     <div class="s-container s-container2">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <div v-if="distabdata1" class="scroll_list pl10 pr10">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -44,7 +44,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
@@ -58,7 +58,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 1)">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
             <div v-if="distabdata2" class="scroll_list pl10 pr10">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -68,7 +68,7 @@
               <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
                 <div class="t-table">
                   <div class="t-cell v_middle w80">
-                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container1"></x-img>
+                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container2"></x-img>
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.title}}</div>
@@ -80,7 +80,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 2)">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
             <div class="font12 padding10 b_bottom">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}</div>
@@ -96,7 +96,7 @@
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14">{{item.linkman}}</div>
@@ -194,20 +194,20 @@ export default {
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null
+      pagestart3: 0
     }
   },
   methods: {
-    scroll1: function () {
+    imgSuccess: function () {
+      console.log(this)
+    },
+    imgError: function () {
+      console.log(this)
+    },
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -217,10 +217,10 @@ export default {
         }
       })
     },
-    scroll2: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea2,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
@@ -230,10 +230,10 @@ export default {
         }
       })
     },
-    scroll3: function () {
+    handleScroll3: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea3,
+        element: self.$refs.scrollContainer3[0],
         callback: function () {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++
@@ -252,15 +252,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.rsaleview .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.scrollArea3 = items[2]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getdata2 () {
@@ -272,11 +263,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     getdata3 () {
@@ -288,30 +274,19 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
-        if (!self.isBindScroll3) {
-          self.isBindScroll3 = true
-          self.scrollArea3.removeEventListener('scroll', self.scroll3)
-          self.scrollArea3.addEventListener('scroll', self.scroll3)
-        }
       })
     },
     swiperChange (index) {
       const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        if (self.pagestart3 === 0 && !self.isBindScroll3) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
+      if (index === 0 && self.tabdata1.length === 0) {
+        self.$vux.loading.show()
+        self.getdata1()
+      } else if (index === 1 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
+      } else if (index === 2 && self.tabdata3.length === 0) {
+        self.$vux.loading.show()
+        self.getdata3()
       }
     },
     percentclick () {

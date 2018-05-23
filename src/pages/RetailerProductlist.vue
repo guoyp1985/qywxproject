@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-containe" style="top:0px;">
+    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -100,7 +100,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollCustomer" @scroll="handleScroll1">
             <div class=" pt10 pb10 pl12 pr12">
               <div v-show="discustomerdata" class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -158,7 +158,6 @@ export default {
   },
   data () {
     return {
-      loginuser: { uid: 187 },
       productdata: [],
       controldata1: [
         { key: 'edit', title: '编辑' },
@@ -172,15 +171,11 @@ export default {
       clickindex: 0,
       limit: 20,
       pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null,
       showpush: false,
       customerdata: [],
       pushdata: [],
       checkAll: false,
       customerPagestart: 0,
-      isBindCustomerScroll: false,
-      scrollCustomerArea: null,
       disproductdata: false,
       discustomerdata: false
     }
@@ -205,10 +200,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -227,12 +222,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         self.disproductdata = true
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.rproductlist .s-container')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     controlpopup1 (item, index) {
@@ -299,20 +288,15 @@ export default {
         self.showpush = true
         if (self.customerdata.length === 0) {
           self.getCustomerdata()
-        } else {
-          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-          self.isBindCustomerScroll = true
-          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
         }
       } else {
         self.showpopup1 = false
       }
     },
-    scrollCustomer: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollCustomerArea,
+        element: self.$refs.scrollCustomer,
         callback: function () {
           if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
             self.customerPagestart++
@@ -332,12 +316,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.customerdata = self.customerdata.concat(retdata)
         self.discustomerdata = true
-        if (!self.isBindCustomerScroll) {
-          self.scrollCustomerArea = document.querySelector('.popupCustomer .popup-middle')
-          self.isBindCustomerScroll = true
-          self.scrollCustomerArea.removeEventListener('scroll', self.scrollCustomer)
-          self.scrollCustomerArea.addEventListener('scroll', self.scrollCustomer)
-        }
       })
     },
     closepush () {

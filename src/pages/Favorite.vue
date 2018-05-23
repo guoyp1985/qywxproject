@@ -172,7 +172,7 @@ export default {
     getStores () {
       const self = this
       const user = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'retailer'})
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'store'})
       .then(res => {
         self.stores = res.data
       })

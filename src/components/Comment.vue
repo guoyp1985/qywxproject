@@ -112,9 +112,6 @@ export default {
         }
       })
     }
-  },
-  created () {
-    console.log(this.params)
   }
 }
 </script>

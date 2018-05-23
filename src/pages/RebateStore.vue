@@ -4,28 +4,26 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="rebate-store">
+  <div id="rebate-store" class="containerarea font14" ref="scrollContainer" @scroll="handleScroll">
     <div class="bg-white">
       <div class="sharing-title">{{$t('Current Store')}}</div>
-      <sticky scroll-box="rebate-store">
-        <div class="pt5 pb5 pl15 pr15 flex_table">
-          <div class="store-photo">
-            <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset='0' container="#vux_view_box_body"></x-img>
-          </div>
-          <div class="store-details flex_cell pl10">
-            <span class="db font14">{{rebateInfo.title}}</span>
-            <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
-          </div>
+      <div class="pt5 pb5 pl15 pr15 flex_table">
+        <div class="store-photo">
+          <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset='0' container="#vux_view_box_body"></x-img>
         </div>
-        <div class="rebate-store-title flex_table">
-          <div class="flex_cell align_right pr20">
-            <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
-          </div>
-          <div class="flex_cell align_left pl20">
-            <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
-          </div>
+        <div class="store-details flex_cell pl10">
+          <span class="db font14">{{rebateInfo.title}}</span>
+          <span class="db color-gray font12 clamp1">店主说：勤分享，勤推荐，好友购买立返佣金！</span>
         </div>
-      </sticky>
+      </div>
+      <div class="rebate-store-title flex_table">
+        <div class="flex_cell align_right pr20">
+          <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
+        </div>
+        <div class="flex_cell align_left pl20">
+          <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
+        </div>
+      </div>
     </div>
     <div class="mt10 bg-white">
       <div class="sharing-title">{{$t('I Am In The Store')}}</div>
@@ -167,7 +165,7 @@ export default {
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
-      limit: 20,
+      limit: 3,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
@@ -184,41 +182,33 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollContainer,
+        element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
-          }
-        }
-      })
-    },
-    scroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
-          }
-        }
-      })
-    },
-    scroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getdata3()
+          switch (self.selectedIndex) {
+            case 0:
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.$vux.loading.show()
+                self.getdata1()
+              }
+              break
+            case 1:
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.$vux.loading.show()
+                self.getdata2()
+              }
+              break
+            case 2:
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.$vux.loading.show()
+                self.getdata3()
+              }
+              break
           }
         }
       })
@@ -262,27 +252,16 @@ export default {
     },
     onItemClick (index) {
       const self = this
-      if (index === 0) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll1)
-        self.scrollContainer.addEventListener('scroll', self.scroll1)
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll2)
-        self.scrollContainer.addEventListener('scroll', self.scroll2)
-        if (self.pagestart2 === 0 && self.tabdata2.length === 0) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll3)
-        self.scrollContainer.addEventListener('scroll', self.scroll3)
-        if (self.pagestart3 === 0 && self.tabdata3.length === 0) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
+      switch (index) {
+        case 0:
+          !this.tabdata1.length && this.getdata1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getdata2()
+          break
+        case 2:
+          !this.tabdata3.length && this.getdata3()
+          break
       }
     },
     onShareCard () {

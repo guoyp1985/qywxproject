@@ -303,6 +303,7 @@ export default {
           } else if (data.error) {
             self.$vux.toast.show({
               text: data.error,
+              type: 'warn',
               time: self.$util.delay(data.error)
             })
           }

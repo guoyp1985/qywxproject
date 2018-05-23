@@ -16,7 +16,7 @@
     <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="pl10 pr10">
+          <div v-if="(index == 0)" class="pl10 pr10 swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <div class="font15 pt15">搜索关键词采集文章</div>
             <div class="font12 color-gray mt5">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
             <div class="mb15" style="position:relative;">
@@ -58,7 +58,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 1)">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
             <div class="pl10 pr10">
               <div class="font15 pt15">文章链接采集文章</div>
               <div class="font12 color-gray mt5">请从微信公众号中复制文章链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
@@ -84,7 +84,7 @@
               <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:40px;">
-                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:30px;height:30px;" :offset="0" container=".scroll-container1"></x-img>
+                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:30px;height:30px;" :offset="0" container=".scroll-container2"></x-img>
                   </div>
                   <div class="t-cell">
                     <div class="clamp1 font14">{{item.title}}</div>
@@ -136,23 +136,19 @@ export default {
       collecturl: '',
       limit: 20,
       pagestart: 0,
-      isBindScroll: false,
-      scrollArea: null,
       keywordsData: [],
       keyword: '',
       disNewslist: false,
       pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null,
       limit1: 10,
       clickSearchword: ''
     }
   },
   methods: {
-    scroll: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
           if (self.newsdata.length === (self.pagestart + 1) * self.limit) {
             self.pagestart++
@@ -171,13 +167,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.newsdata = self.newsdata.concat(retdata)
         self.disNewslist = true
-        if (!self.isBindScroll) {
-          let items = document.querySelectorAll('.rgoodeazy .swiperitem')
-          self.scrollArea = items[1]
-          self.isBindScroll = true
-          self.scrollArea.removeEventListener('scroll', self.scroll)
-          self.scrollArea.addEventListener('scroll', self.scroll)
-        }
       })
     },
     onChange (val) {
@@ -204,10 +193,10 @@ export default {
         self.searchFun(kw)
       }
     },
-    scroll1: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
           if (self.searchdata.length === self.pagestart1 + self.limit1) {
             self.pagestart1 = self.pagestart1 + self.limit1
@@ -229,18 +218,10 @@ export default {
         let retdata = (data.data ? data.data : data)
         self.searchdata = self.searchdata.concat(retdata)
         self.showSearchEmpty = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.rgoodeazy .swiperitem')
-          self.scrollArea1 = items[0]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     searchEvent (kw) {
       const self = this
-      // self.searchword = kw
       self.searchdata = []
       self.pagestart1 = 0
       if (self.$util.trim(kw) !== '') {

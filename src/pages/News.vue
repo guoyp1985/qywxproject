@@ -9,7 +9,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle scroll-container">
+      <div id="article-content" class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
@@ -153,10 +153,8 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       disComments: false,
-      commentsArea: null,
-      isBindScroll: null,
       pagestart: 0,
-      limit: 10,
+      limit: 20,
       replyData: null,
       roomid: '',
       socket: BkSocket.get()
@@ -233,6 +231,12 @@ export default {
         if (data.flag) {
           let newarr = [ data.data ]
           self.comments = newarr.concat(self.comments)
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
         }
       })
     },
@@ -251,10 +255,10 @@ export default {
         }
       })
     },
-    scrollComments: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.commentsArea,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.comments.length === self.pagestart * self.limit) {
             self.$vux.loading.show()
@@ -273,12 +277,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.comments = self.comments.concat(retdata)
         self.disComments = true
-        if (!self.isBindScroll) {
-          self.commentsArea = document.querySelector('.news .pagemiddle')
-          self.isBindScroll = true
-          self.commentsArea.removeEventListener('scroll', self.scrollComments)
-          self.commentsArea.addEventListener('scroll', self.scrollComments)
-        }
       })
     },
     getData () {
@@ -327,12 +325,6 @@ export default {
           let data = res.data
           if (data.flag === 1) {
             self.isdig = 1
-          }
-          if (!self.isBindScroll) {
-            self.commentsArea = document.querySelector('.news .pagemiddle')
-            self.isBindScroll = true
-            self.commentsArea.removeEventListener('scroll', self.scrollComments)
-            self.commentsArea.addEventListener('scroll', self.scrollComments)
           }
           return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }

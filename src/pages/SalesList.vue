@@ -9,17 +9,19 @@
           </div>
         </div>
       </div>
-      <div class="s-container s-container1 scroll-container">
-        <search
-          class="x-search"
-          v-model="searchword1"
-          :auto-fixed="autofixed"
-          @on-submit="onSubmit1"
-          @on-change="onChange1"
-          @on-cancel="onCancel1"
-          ref="search">
-        </search>
-        <div v-if="distabdata1" class="scroll_list pl10 pr10">
+      <div class="s-container s-container1">
+        <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+          <search
+            class="v-search"
+            v-model="searchword1"
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit1"
+            @on-change="onChange1"
+            @on-cancel="onCancel1"
+            ref="search">
+          </search>
+        </div>
+        <div v-if="distabdata1" class="scroll_list swiper-inner pl10 pr10 border-box scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
           <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无订单</template>
@@ -80,16 +82,14 @@ export default {
       searchword2: '',
       searchresult2: false,
       limit: 20,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      pagestart1: 0
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -115,14 +115,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
-        if (!self.scrollArea1) {
-          self.scrollArea1 = document.querySelector('.rsaleslist .scroll-container')
-        }
-        if (!self.isBindScroll1) {
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     onChange1 (val) {
