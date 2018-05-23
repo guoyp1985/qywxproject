@@ -266,7 +266,7 @@ export default {
       const code = lUrl.query.code
       // alert(JSON.stringify(user))
       // alert(code)
-      if (user && !user.subscribe) {
+      if (user && user.subscribe === 0) {
         if (code) {
           alert(code)
           // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
