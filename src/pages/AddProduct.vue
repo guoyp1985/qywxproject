@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea s-havebottom font14 addproduct">
     <div class="s-container" style="top:0;">
-      <div class="list_show01">
+      <div class="list-shadow01">
         <div class="form-item no-after pt15 bg-gray10">
           <div class="cover_map" v-if="photoarr.length == 0">
             <div class="button_photo">
@@ -70,7 +70,7 @@
             <div class="t-table" style="width:40%;">
               <div class="t-cell title-cell w50 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.unit" type="text" class="input align_right" name="unit" :placeholder="$t('Storage unit')" />
+                <input v-model="submitdata.unit" type="text" class="input align_left" name="unit" :placeholder="$t('Storage unit')" />
               </div>
             </div>
           </div>
@@ -85,8 +85,8 @@
           </div>
         </div>
         <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
-        <group class="textarea-outer bg-white">
-          <x-textarea v-model="submitdata.content" name="content" class="x-textarea border" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
+        <group class="textarea-outer textarea-text bg-white">
+          <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
         <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>
         <div class="b_bottom_after bg-white pl12 pr12 pb5">
@@ -140,11 +140,11 @@
       <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
       <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('More') }}<i class="al al-jiantouyoushuang- font14"></i></div>
     </div>
-    <div class="s-bottom flex_center color-white list_show">
+    <div class="s-bottom flex_center color-white list-shadow02">
       <!--
       <div class="flex_cell flex_center h_100 bg-orange color-white" style="border-right:#fff 1px solid;" @click="saveevent">{{ $t('Save') }}</div>
     -->
-      <div class="flex_cell flex_center color-white btn-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
+      <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
     </div>
   </div>
 </template>
@@ -429,5 +429,4 @@ export default {
 .button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 .s-havebottom .s-container{bottom:50px;}
 .s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
-.btn-red{border-radius:36px;height:36px;background-color:#ea3a3a;font-size:16px;}
 </style>

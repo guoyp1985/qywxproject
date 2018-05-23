@@ -109,7 +109,7 @@ export default {
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
-              self.$router.push({name: 'tIndex'})
+              self.$router.push({name: 'tUserproducts'})
             }
           }
         }
@@ -136,6 +136,7 @@ export default {
     const self = this
     const user = User.get()
     if (user) {
+      alert(user.avatar)
       self.avatarHref = user.avatar
       self.linkMan = user.linkman
       self.userCredits = user.credit

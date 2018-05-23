@@ -34,12 +34,12 @@
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
-                  <div class="t-table pt5 color-lightgray font13 deliverarea">
-                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10" v-if="item.flag == 2">
-                      <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                  <div class="t-table pt5 color-lightgray font13 deliverarea" >
+                    <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2">
+                      <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
-                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10" v-if="item.flag == 3">
-                      <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
+                    <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
+                      <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
                     </div>
                   </div>
                 </div>
@@ -57,7 +57,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container2"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container2"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -65,13 +65,9 @@
                 </orderproductplate>
                 <div slot="receivearea">
                   <div class="t-table">
-                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right font12">
+                    <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
+                    <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
-                    </div>
-                  </div>
-                  <div class="t-table pt5 color-gray font12 deliverarea">
-                    <div class="t-cell middle-cell">
-                      <div><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
                     </div>
                   </div>
                 </div>
@@ -86,10 +82,10 @@
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
-                <span slot="orderno">{{ item.dateline | dateformat }}</span>
+                <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container3"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container3"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -103,8 +99,8 @@
                     </div>
                   </div>
                   <div class="t-table pt5 color-lightgray font13 deliverarea">
-                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10">
-                      <div class="qbtn4 font12" style="padding:1px 8px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                    <div class="t-cell middle-cell appendcontrol align_right w80">
+                      <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
                   </div>
                 </div>
@@ -119,10 +115,10 @@
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
-                <span slot="createdate">{{ item.dateline | dateformat }}</span>
+                <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container4"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container4"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -136,8 +132,8 @@
                     </div>
                   </div>
                   <div class="t-table pt5 color-lightgray font13 deliverarea">
-                    <div class="t-cell middle-cell appendcontrol align_right w80 pr10">
-                      <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn3 font12">{{ $t('View deliver') }}</router-link>
+                    <div class="t-cell middle-cell appendcontrol align_right w80">
+                      <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
                     </div>
                   </div>
                 </div>
