@@ -85,8 +85,8 @@
           </div>
         </div>
         <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
-        <group class="textarea-outer textarea-text pb15 bg-white pr12 pl12">
-          <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
+        <group class="textarea-outer bg-white">
+          <x-textarea v-model="submitdata.content" name="content" class="x-textarea border" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
         <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>
         <div class="b_bottom_after bg-white pl12 pr12 pb5">
