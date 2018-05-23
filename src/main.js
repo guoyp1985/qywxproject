@@ -289,6 +289,7 @@ Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
   return response
 }, error => {
+  alert(error)
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   if (code) {
