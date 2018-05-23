@@ -57,7 +57,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container1"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -85,7 +85,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container2"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container2"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -118,7 +118,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container3"></x-img>
+                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container3"></x-img>
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
