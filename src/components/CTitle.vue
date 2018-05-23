@@ -52,10 +52,7 @@ export default {
     // linkInfo: [String, Object],
     // linkCredit: [String, Object],
     profile: Object,
-    avatarHref: {
-      type: String,
-      default: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg'
-    },
+    avatarHref: String,
     userName: {
       type: String,
       default: 'unkown'
