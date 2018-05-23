@@ -75,6 +75,7 @@ export default {
       return this.userName
     },
     avatar () {
+      console.log(this.avatarHref)
       return this.avatarHref
     },
     credits () {

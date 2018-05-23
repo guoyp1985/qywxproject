@@ -36,7 +36,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img :src="article.photo" container="#vux_view_box_body"></x-img>
+              <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -63,7 +63,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img :src="commodity.photo" container="#vux_view_box_body"></x-img>
+              <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">
@@ -90,7 +90,7 @@
           </div>
           <div slot="content" class="item-content vux-1px-t">
             <div class="img-cell">
-              <x-img  default-src="../assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
+              <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
             </div>
             <div class="info-cell">
               <div class="font14">

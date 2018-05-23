@@ -309,6 +309,7 @@ export default {
                       }
                     }
                   }
+                  self.total = '0.00'
                 }
               }
             })
