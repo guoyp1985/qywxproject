@@ -43,12 +43,14 @@
           </div>
           <div class="b_top_after flex_center bg-white h45">
             <div class="t-table align_center color-gray2">
-              <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
-                <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
-              </div>
-              <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
-                <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
-              </router-link>
+              <template v-if="viewuser.subscribe == 1">
+                <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
+                  <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
+                </div>
+                <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
+                  <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
+                </router-link>
+              </template>
               <div @click="priorityevent" :class="`t-cell v_middle b_right_after priority ${getprioritycss}`">
                 <i class="al al-zhidinge79b font16 mr5"></i><span class="txt" style="vertical-align: 1px;"></span>
               </div>
