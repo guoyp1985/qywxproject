@@ -42,11 +42,11 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Badge } from 'vux'
+import { Grid, GridItem, Badge, XImg } from 'vux'
 export default {
   name: 'CTitle',
   components: {
-    Grid, GridItem, Badge
+    Grid, GridItem, Badge, XImg
   },
   props: {
     // linkInfo: [String, Object],
