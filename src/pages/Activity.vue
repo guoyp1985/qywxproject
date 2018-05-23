@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
@@ -281,7 +280,7 @@ export default {
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
         }
       } else {
-        Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
       }
     }
   },
