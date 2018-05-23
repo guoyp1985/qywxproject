@@ -32,7 +32,7 @@
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
-                  <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px; vertical-align: middle;" :offset="0" container=".scroll-container"></x-img>
+                  <x-img class="imgcover v_middle" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px;" :offset="0" container=".scroll-container"></x-img>
           			</div>
           			<div class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
@@ -200,6 +200,9 @@ export default {
     }
   },
   methods: {
+    getPhoto: function (src) {
+      return this.$util.getPhoto(src)
+    },
     handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
