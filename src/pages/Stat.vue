@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showcontainer" class="containerarea font14 notop nobottom statpage productstat bg-white">
+  <div v-if="showcontainer" class="containerarea font14 notop nobottom bg-white">
     <div class="pagemiddle">
       <div class="bannerbg border-box padding10 flex_left font18 color-white">{{ data.title }}</div>
       <div v-if="statData && statData.length > 0" class="radiusarea mt12">
@@ -10,158 +10,200 @@
           </div>
         </div>
       </div>
-      <div class="tabarea">
+      <div class="tabarea" ref="tabArea">
         <template v-if="tabsdata && tabsdata.length > 0">
-          <tab v-model="tabmodel" class="mt12 bg-page">
+          <tab v-model="tabmodel" class="v-tab">
             <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
           </tab>
-          <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-            <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabsdata" :key="index">
-              <div class="scroll_list padding10">
-                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
-                  <template v-if="tabitem.type == 'shareview'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+          <div ref="tabSwiper" class="w_100">
+            <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+              <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
+                <div v-if="tabitem.type == 'shareview'" class="scroll_list padding10 border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.linkman }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
                       </div>
-                    </div>
-                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'buylist'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.username }}</div>
-                        <div class="clamp1 font12 color-gray">订单金额：{{ item.special }}</div>
-                        <div class="clamp1 font12 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'sharelist'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.username }}</div>
-                        <div class="clamp1 font12 color-gray">传播级别: {{ item.level }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'asklist'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font13">{{ item.content }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'viewlist'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.username }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'second'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                    <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'crowdlist'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.isfull }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                    <div class="mt5 clamp1 color-gray font13">团员: {{ item.otherusers }}</div>
-                    <div class="clamp1 color-gray font13">开团时间: {{ item.dateline }}</div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'crowdlist_isdeliver_1'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                  </template>
-                  <template v-else-if="tabitem.type == 'crowdlist_isdeliver_0'">
-                    <div class="t-table">
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
-                      </router-link>
-                      <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
-                        <div class="clamp1">{{ item.linkman }}</div>
-                        <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
-                      </router-link>
-                      <div class="t-cell v_middle align_right w60">
-                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
-                      </div>
-                    </div>
-                    <div class="mt5 clamp1 color-gray font13">
-                      <span class="db-in">已砍到: <span class="color-orange">{{ $t('RMB') }}{{ item.currentprice }}</span></span>
-                      <span class="db-in ml5">助力: {{ item.sumothers }}人</span>
+                      <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                     </div>
                   </template>
                 </div>
-              </div>
-            </swiper-item>
-          </swiper>
+                <div v-if="tabitem.type == 'buylist'" class="scroll_list padding10 border-box swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.username }}</div>
+                          <div class="clamp1 font12 color-gray">订单金额：{{ item.special }}</div>
+                          <div class="clamp1 font12 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'sharelist'" class="scroll_list padding10 border-box swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.username }}</div>
+                          <div class="clamp1 font12 color-gray">传播级别: {{ item.level }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'asklist'" class="scroll_list padding10 border-box swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container4"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.linkman }}</div>
+                          <div class="clamp1 font13">{{ item.content }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'viewlist'" class="scroll_list padding10 border-box swiper-inner scroll-container5" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container5"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.username }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                      <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'second'" class="scroll_list padding10 border-box swiper-inner scroll-container6" ref="scrollContainer6" @scroll="handleScroll('scrollContainer6')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container6"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.linkman }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                      <div class="mt5 clamp1 color-gray font13"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'crowdlist'" class="scroll_list padding10 border-box swiper-inner scroll-container7" ref="scrollContainer7" @scroll="handleScroll('scrollContainer7')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container7"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.linkman }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.isfull }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                      <div class="mt5 clamp1 color-gray font13">团员: {{ item.otherusers }}</div>
+                      <div class="clamp1 color-gray font13">开团时间: {{ item.dateline }}</div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list padding10 border-box swiper-inner scroll-container8" ref="scrollContainer8" @scroll="handleScroll('scrollContainer8')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container8"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.linkman }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list padding10 border-box swiper-inner scroll-container9" ref="scrollContainer9" @scroll="handleScroll('scrollContainer9')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item pt10 pb10">
+                      <div class="t-table">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w50">
+                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="scroll-container9"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell">
+                          <div class="clamp1">{{ item.linkman }}</div>
+                          <div class="clamp1 font12 color-gray">{{ item.dateline }}</div>
+                        </router-link>
+                        <div class="t-cell v_middle align_right w60">
+                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn1 bg-green color-white">联系</router-link>
+                        </div>
+                      </div>
+                      <div class="mt5 clamp1 color-gray font13">
+                        <span class="db-in">已砍到: <span class="color-orange">{{ $t('RMB') }}{{ item.currentprice }}</span></span>
+                        <span class="db-in ml5">助力: {{ item.sumothers }}人</span>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </swiper-item>
+            </swiper>
+          </div>
         </template>
       </div>
     </div>
@@ -217,24 +259,7 @@ export default {
       statData: [],
       tabsdata: [],
       tabtop: 'auto',
-      tabdata1: [],
-      tabdata2: [],
-      tabdata3: [],
-      tabdata4: [],
       limit: 20,
-      pagestart1: 0,
-      pagestart2: 0,
-      pagestart3: 0,
-      pagestart4: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      isBindScroll4: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null,
-      scrollArea4: null,
-      disDatalist: [],
       scrollData: [],
       datalist: [],
       isFirst: true,
@@ -243,9 +268,6 @@ export default {
     }
   },
   watch: {
-    disDatalist: function () {
-      return this.disDatalist
-    },
     datalist: function () {
       return this.datalist
     }
@@ -253,15 +275,19 @@ export default {
   computed: {
   },
   methods: {
+    isShowArea: function (index) {
+      return this.isShowArea
+    },
     getListdata: function (index) {
       const self = this
       return self.datalist[index]
     },
-    scroll: function () {
+    handleScroll: function (refname) {
       const self = this
       let index = self.clickTabIndex
+      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.scrollData[index].scrollArea,
+        element: scrollarea,
         callback: function () {
           if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * self.limit) {
             self.scrollData[index].pagestart++
@@ -279,7 +305,6 @@ export default {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
           self.datalist.push([])
-          self.disDatalist.push(false)
         }
       }
       let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: self.limit } }
@@ -289,24 +314,14 @@ export default {
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
         self.arrData = self.datalist[index]
-        self.disDatalist[index] = true
         if (self.isFirst) {
-          self.disDatalist[0] = true
           self.isFirst = false
-          self.tabtop = document.querySelector('.productstat .tabarea').offsetTop + 44
-          let swiper = document.querySelector('.productstat .x-swiper')
+          let tabArea = self.$refs.tabArea[0] ? self.$refs.tabArea[0] : self.$refs.tabArea
+          self.tabtop = tabArea.offsetTop + 44
+          let swiper = self.$refs.tabSwiper[0] ? self.$refs.tabSwiper[0] : self.$refs.tabSwiper
           swiper.style['position'] = 'absolute'
           swiper.style['top'] = `${self.tabtop}px`
           swiper.style['bottom'] = '0px'
-          let items = document.querySelectorAll('.statpage .swiperitem')
-          for (let i = 0; i < items.length; i++) {
-            self.scrollData[i].scrollArea = items[i]
-          }
-        }
-        if (!self.scrollData[index].isBindScroll) {
-          self.scrollData[index].isBindScroll = true
-          self.scrollData[index].scrollArea.removeEventListener('scroll', self.scroll)
-          self.scrollData[index].scrollArea.addEventListener('scroll', self.scroll)
         }
       })
     },
@@ -315,7 +330,7 @@ export default {
       self.clickTabitem = self.tabsdata[index]
       self.clickTabIndex = index
       self.arrData = self.datalist[index]
-      if (self.scrollData[index].pagestart === 0 && !self.scrollData[index].isBindScroll) {
+      if (self.datalist[index].length === 0) {
         self.$vux.loading.show()
         self.getdata()
       }
@@ -338,6 +353,9 @@ export default {
       let data = res.data
       self.statData = data.data ? data.data : data
       self.tabsdata = data.detail
+      for (let i = 0; i < self.tabsdata.length; i++) {
+        let type = self.tabsdata[i].type
+      }
       self.data = data.moduleinfo
       document.title = `统计-${self.data.title}`
       self.clickindex = 0
@@ -359,8 +377,4 @@ export default {
 .radiusarea .item:nth-child(3) .radius{background-color:#aed370;}
 .radiusarea .item:nth-child(4) .radius{background-color:#ffb22d;}
 .radiusarea .item:nth-child(5) .radius{background-color:#ea8482;}
-
-.statpage .x-swiper{height:auto;}
-.statpage .vux-tab{background-color:@tab-background-color}
-.statpage .vux-tab .vux-tab-item.vux-tab-selected{background-color:@tab-active-background-color}
 </style>

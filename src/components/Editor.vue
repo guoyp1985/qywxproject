@@ -233,7 +233,7 @@ export default {
     },
     closepush () {
       const self = this
-      this.showpush = false
+      self.showpush = false
     },
     submitpush () {
       const self = this

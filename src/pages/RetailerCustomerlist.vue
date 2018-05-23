@@ -9,7 +9,7 @@
     </div>
     <div class="s-container s-container1">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <search
               class="v-search bg-white"

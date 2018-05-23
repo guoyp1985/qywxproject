@@ -254,13 +254,13 @@ export default {
       const self = this
       switch (index) {
         case 0:
-          !this.tabdata1.length && this.getdata1()
+          !self.tabdata1.length && self.getdata1()
           break
         case 1:
-          !this.tabdata2.length && this.getdata2()
+          !self.tabdata2.length && self.getdata2()
           break
         case 2:
-          !this.tabdata3.length && this.getdata3()
+          !self.tabdata3.length && self.getdata3()
           break
       }
     },
