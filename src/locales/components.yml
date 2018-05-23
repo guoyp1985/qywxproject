@@ -289,6 +289,8 @@ en:
   Pre Sale: Pre Sale
   Complaint: Complaint
   Delivery of goods: Delivery of goods
+  Cancel the roof: Cancel the roof
+  Customer Behavior: Customer Behavior
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -765,3 +767,5 @@ zh-CN:
   Degree of intention: 意向程度
   tChat: 联系
   tViewList: 浏览
+  Cancel the roof: 取消置顶
+  Customer Behavior: 客户行为

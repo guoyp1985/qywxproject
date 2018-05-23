@@ -4,64 +4,69 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-topbanner flex_center color-white">
-        <div class="pl10 pr10">
+      <div class="v-top">
+        <div class="pl5 pr5">
           <div class="t-table">
-            <div class="t-cell v_middle w80">
-              <x-img class="avatarimg4 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
+            <div class="t-cell v_middle w65">
+              <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
               <div v-transfer-dom>
                 <previewer :list="imgarr" ref="previewer"></previewer>
               </div>
             </div>
-            <div class="t-cell v_middle">
-              <div class="font17">{{ viewuser.linkman }}</div>
-              <div class="font14" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
+            <div class="t-cell v_middle color-white">
+              <div class="font17 clamp1">{{ viewuser.linkman }}</div>
+              <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
+            </div>
+            <div class="t-cell v_middle color-white w80 align_right">
+              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
             </div>
           </div>
         </div>
       </div>
-      <div class="s-container">
-        <div v-if="showContainer" class="padding10 align_center btnlist">
-          <div class="t-table">
-            <div class="t-cell v_middle">
-              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="btn bg-orange color-white">联系</router-link>
-            </div>
-            <div class="t-cell v_middle" v-if="!viewuser.isseller || viewuser.isseller == '0'">
-              <div class="btn bg-orange color-white" @click="inviteevent">返点客</div>
-            </div>
-            <div class="t-cell v_middle" v-else>
-              <router-link :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="btn bg-orange color-white">返点管理</router-link>
-            </div>
-            <div class="t-cell v_middle">
-              <div :class="`btn bg-red color-white priority ${getprioritycss}`" @click="priorityevent"></div>
-            </div>
-          </div>
-        </div>
-        <div class="b_top_after padding10 flex_center bg-white">
+      <div class="v-container">
+        <div class="list-shadow">
+        <div class="b_top_after flex_center bg-white h50">
           <div class="t-table align_center font15 itemtab">
-            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
-              <div>{{viewuser.viewNumber}}</div>
+            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-red4 font14">
               <div>{{ $t('Views') }}</div>
+              <div>{{viewuser.viewNumber}}</div>
             </router-link>
-            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
-              <div>{{viewuser.shareNumber}}</div>
+            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after  color-red4 font14">
               <div>{{ $t('Share') }}</div>
+              <div>{{viewuser.shareNumber}}</div>
             </router-link>
-            <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">
-              <div>{{viewuser.orderNumber}}</div>
+            <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after  color-red4 font12">
               <div>{{ $t('Orders') }}</div>
+              <div>{{viewuser.orderNumber}}</div>
             </router-link>
-            <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">{{ $t('Behavior') }}</router-link>
+            <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle  color-red4 font12">
+             <div>{{ $t('Behavior') }}</div>
+           </router-link> -->
           </div>
         </div>
+        <div class="b_top_after flex_center bg-white h45">
+          <div class="t-table align_center font15 itemtab">
+            <router-link :to="{path: '/', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after font14">
+              <div class="color-lightgray"><i class="al al-account font16 mr5"></i>{{ $t('Rebate manage') }}</div>
+            </router-link>
+            <router-link :to="{path: '/', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font14">
+              <div class="color-lightgray"><i class="al al-zhidinge79b font16 mr5"></i>{{ $t('Cancel the roof') }}</div>
+            </router-link>
+             <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font14">
+              <div class="color-lightgray"><i class="al al-calendar font16 mr5"></i>{{ $t('Customer Behavior') }}</div>
+            </router-link>
+          </div>
+        </div>
+        </div>
+
         <div class="b_bottom_after"></div>
-        <div class="mt12 bg-white itemlist">
+        <div class="mt12 bg-white itemlist list-shadow font14">
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">真实姓名</div>
               <div class="t-cell align_right color-gray">{{ viewuser.position }}</div>
               <div class="t-cell align_right w50">
-                <span class="qbtn1 bg-green color-white" @click="updatechar('position')">更新</span>
+                <span class="qbtn8 bg-orange7 color-white" @click="updatechar('position')">更新</span>
               </div>
             </div>
           </div>
@@ -70,7 +75,16 @@
               <div class="t-cell align_left w100">手机号</div>
               <div class="t-cell align_right color-gray">{{ viewuser.mobile }}</div>
               <div class="t-cell align_right w50">
-                <span class="qbtn1 bg-green color-white" @click="updatechar('mobile')">更新</span>
+                <span class="qbtn8 bg-orange7 color-white" @click="updatechar('mobile')">更新</span>
+              </div>
+            </div>
+          </div>
+          <div class="item padding10 b_bottom_after">
+            <div class="t-table">
+              <div class="t-cell align_left w100">意向程度</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
+              <div class="t-cell align_right w50">
+                <span class="qbtn8 bg-orange7 color-white" @click="showLevel">更新</span>
               </div>
             </div>
           </div>
@@ -79,7 +93,7 @@
               <div class="t-cell align_left w100">地区</div>
               <div class="t-cell align_right color-gray">{{ viewuser.country }} {{ viewuser.province }} {{ viewuser.city }}</div>
               <div class="t-cell align_right w50">
-                <span class="qbtn1 bg-green color-white" @click="updateArea">更新</span>
+                <span class="qbtn8 bg-orange7 color-white" @click="updateArea">更新</span>
               </div>
             </div>
           </div>
@@ -99,15 +113,6 @@
             <div class="t-table">
               <div class="t-cell align_left w100">成为客户时间</div>
               <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">意向程度</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn1 bg-green color-white" @click="showLevel">更新</span>
-              </div>
             </div>
           </div>
         </div>
@@ -410,4 +415,7 @@ export default {
 .membersview .priority:after{content:"置顶"}
 .membersview .priority.done:after{content:"取消置顶"}
 .membersview .itemtab .item{color:#01a6ea;}
+.b_right_after:last-child:after {
+      display: none;
+}
 </style>

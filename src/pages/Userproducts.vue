@@ -159,7 +159,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     const user = User.get()
-    if(user) {
+    if (user) {
       let retailerInfo = null
       let addata = null
       let activitydata = null
@@ -202,8 +202,7 @@ export default {
           vm.getdata1()
         })
       })
-    }
-    else {
+    } else {
       Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     }
     // next(vm => {

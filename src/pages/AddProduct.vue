@@ -3,7 +3,7 @@
     <div class="s-container" style="top:0;">
       <div class="list-shadow01">
         <div class="form-item no-after pt15 bg-gray10">
-          <div class="cover_map" v-if="photoarr.length < maxnum">
+          <div class="cover_map" v-if="photoarr.length == 0">
             <div class="button_photo">
               <i class="al al-zhaoxiangji color-white"></i>
               <form class="fileform1" enctype="multipart/form-data">
@@ -13,7 +13,7 @@
           </div>
           <div class="cover_maplist mt12" v-if="photoarr.length > 0">
             <input v-model="submitdata.photo" type="hidden" name="photo">
-            <div class="q_photolist align_left" uploadform=".uploadfileForm">
+            <div class="q_photolist align_left">
               <template v-if="photoarr.length > 0">
                 <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                   <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
@@ -21,6 +21,19 @@
                   </div>
                 </div>
               </template>
+              <div v-if="photoarr.length >= 1 && photoarr.length < maxnum" class="photoitem add">
+                <div class="inner">
+                  <form class="fileform1" enctype="multipart/form-data">
+                    <input class="fileinput" type="file" name="files" @change="filechange" />
+                  </form>
+                  <div class="icon flex_center">
+                    <div class="txt">
+                      <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                      <div><span class="havenum">{{ photoarr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="pt10 pb5 align_center">
@@ -57,7 +70,7 @@
             <div class="t-table" style="width:40%;">
               <div class="t-cell title-cell w50 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.unit" type="text" class="input" name="unit" :placeholder="$t('Storage unit')" />
+                <input v-model="submitdata.unit" type="text" class="input align_left" name="unit" :placeholder="$t('Storage unit')" />
               </div>
             </div>
           </div>
@@ -72,7 +85,7 @@
           </div>
         </div>
         <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
-        <group class="textarea-outer textarea-text pb15 bg-white pr12 pl12">
+        <group class="textarea-outer textarea-text bg-white">
           <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
         </group>
         <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>

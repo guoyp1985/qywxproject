@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
     <div class="pagetop">
-      <div class="bg-red-gradient pl12 pr12 border-box">
+      <div class="v-top">
           <div slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
               <div class="color-white font12">访问量</div>
