@@ -12,7 +12,7 @@
           <div class="user-info">
             <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
               <div>
-                <x-img :src="avatar" default-src="../src/assets/images/user.jpg" :offset="-100"></x-img>
+                <img :src="avatar"/>
               </div>
               <div class="user-name">
                 <span class="color-white font16 u-name">{{ name }}</span>
@@ -38,21 +38,21 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
-import { Grid, GridItem, Badge, XImg } from 'vux'
+import { Grid, GridItem, Badge } from 'vux'
 export default {
   name: 'CTitle',
   components: {
-    Grid, GridItem, Badge, XImg
+    Grid, GridItem, Badge
   },
   props: {
     // linkInfo: [String, Object],
     // linkCredit: [String, Object],
     profile: Object,
-    avatarHref: String,
+    avatarHref: {
+      type: String,
+      default: '../src/assets/images/user.jpg'
+    },
     userName: {
       type: String,
       default: 'unkown'
@@ -75,7 +75,6 @@ export default {
       return this.userName
     },
     avatar () {
-      console.log(this.avatarHref)
       return this.avatarHref
     },
     credits () {
