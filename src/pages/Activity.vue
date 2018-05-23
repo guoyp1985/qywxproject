@@ -266,7 +266,7 @@ export default {
       alert(user.subscribe)
       if (user && user.subscribe === 0) {
         if (code) {
-          this.$http.get(`${ENV.Boka}/api/authUser/${code}`)
+          this.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
           .then(res => {
             if (res.data.flag) {
               User.set({
