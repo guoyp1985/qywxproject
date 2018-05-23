@@ -1,20 +1,31 @@
 <template>
   <div class="containerarea s-havebottom font14 rnews bg-page">
-    <!--
-    <div class="s-topbanner s-topbanner1">
-      <div class="row flex_left pl10 border-box font18">{{$t('News')}}</div>
+    <div class="pagetop b_bottom_after flex_center" style="height:55px;">
+      <search
+        class="v-search"
+        v-model='searchword1'
+        :auto-fixed="autofixed"
+        @on-submit="onSubmit1"
+        @on-change="onChange1"
+        @on-cancel="onCancel1"
+        ref="search">
+      </search>
     </div>
-     -->
-    <div class="s-container s-container1 scroll-container">
+    <div class="pagemiddle scroll-container" style="top:55px;">
       <div v-if="distabdata1" class="scroll_list ">
-        <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item pt10 pb10 color-gray align_center">
-          <div class="t-table">
-            <div class="t-cell v_middle">
-              <div><i class="al al-wushuju font60 pt20"></i></div>
-              <div class="mt5">空空如也~</div>
-              <div class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
+        <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+          <template v-if="searchresult1">
+            <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+          </template>
+          <template v-else>
+            <div class="t-table">
+              <div class="t-cell v_middle">
+                <div><i class="al al-wushuju font60 pt20"></i></div>
+                <div class="mt5">空空如也~</div>
+                <div class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
+              </div>
             </div>
-          </div>
+          </template>
         </div>
         <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
           <div class="t-table">
@@ -124,7 +135,7 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -133,7 +144,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup, CheckIcon, XImg
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup, CheckIcon, XImg, Search
   },
   filters: {
     dateformat: function (value) {
@@ -148,6 +159,7 @@ export default {
   },
   data () {
     return {
+      autofixed: false,
       tabtxts: [ '我的文章', '采集记录' ],
       tabmodel: 0,
       distabdata1: false,
@@ -176,7 +188,9 @@ export default {
       customerPagestart: 0,
       isBindCustomerScroll: false,
       scrollCustomerArea: null,
-      scrollContainer: null
+      scrollContainer: null,
+      searchword1: '',
+      searchresult1: false
     }
   },
   methods: {
@@ -193,23 +207,19 @@ export default {
         }
       })
     },
-    scroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea2,
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
-          }
-        }
-      })
-    },
     getdata1 () {
       const self = this
-      let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(function (res) {
+      let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit }
+      let keyword = self.searchword1
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        self.searchresult1 = true
+        params.keyword = keyword
+      } else {
+        self.searchresult1 = false
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
@@ -224,21 +234,25 @@ export default {
         }
       })
     },
-    getdata2 () {
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
       const self = this
-      let params = { from: 'retailer', do: 'list', pagestart: self.pagestart2, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata2 = self.tabdata2.concat(retdata)
-        self.distabdata2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
-      })
+      self.searchword1 = ''
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
+    },
+    onSubmit1 () {
+      const self = this
+      self.$vux.loading.show()
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.pagestart1 = 0
+      self.getdata1()
     },
     controlpopup (item) {
       event.preventDefault()
@@ -391,9 +405,6 @@ export default {
   margin: 0 auto;
   border-radius: 50px;
 }
-.rnews .s-container.s-container1{
-  top: 0
-}
 .rnews .s-bottom{
   height: 50px;
 }
@@ -408,5 +419,4 @@ export default {
   width: 41px;
   line-height: 21px;
 }
-
 </style>

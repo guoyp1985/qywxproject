@@ -19,7 +19,7 @@
           <span class="numicon" v-if="retailerInfo.newmessage > 0">{{ retailerInfo.newmessage }}</span>
         </router-link>
       </div>
-      <div class="header-nav flex_table list_show">
+      <div class="header-nav flex_table list-shadow02">
         <router-link class="flex_cell flex_center color-gray2" :to="{path: '/store', query: {wid:retailerInfo.uid}}">
           <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
           <span class="ml10 font15" to="/retailerRevenue">{{$t('My shop')}}</span>
@@ -47,7 +47,7 @@
         </marquee-item>
       </marquee>
     </div>
-    <div class="list_show01">
+    <div class="list-shadow01">
       <grid :cols="3" class="bk-grid bg-white">
         <div class="gridlist">
           <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
@@ -126,7 +126,7 @@
         </template>
       </grid>
     </div>
-    <group class="list_show">
+    <group class="list-shadow02">
       <template v-if="retailerInfo.products > 0">
           <cell :link="{path:'/retailerOrders'}" style="position:relative">
             <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
@@ -134,7 +134,7 @@
               <span class="font15">{{$t('Order list')}}</span>
             </div>
             <div slot="child">
-              <div class="numicon" v-if="retailerInfo.newcustomers > 0">{{ retailerInfo.newcustomers }}</div>
+              <div class="numicon" v-if="retailerInfo.neworders > 0">{{ retailerInfo.neworders }}</div>
             </div>
           </cell>
       </template>
@@ -377,8 +377,6 @@ export default {
   top: 5px;
   right: 1px;
 }
-.centersales .list_show{box-shadow: 0px 0px 4px 1px rgba(0,0,0,0.07);}
-.centersales .list_show01{box-shadow: 0 2px 4px 0 rgba(0,0,0,0.07);}
 .centersales .weui-grid__icon{width:35px;height:35px;padding-top: 22%;text-shadow: 0px 0px 10px rgba(0,0,0,0.15);}
 .centersales .weui-grid__icon i{height:35px;font-size: 34px;display:inline-block;color:#fff;width: 35px;text-align: center;}
 .centersales .weui-grid__icon i::before{display: block;height: 35px;line-height: 35px;}

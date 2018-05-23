@@ -448,22 +448,26 @@ Util.install = function (Vue, options) {
         }
       }
     },
-    scrollEvent: function (os) {
-      let _ele = os.element
-      let scrollTop = _ele.scrollTop
-      let scrollHeight = _ele.scrollHeight
-			let height = _ele.offsetHeight;
-      let distance = os.distance ? os.distance : 50
-      if (typeof distance === 'string' && distance.indexOf('%') >= 0) {
-				distance = parseInt(distance, 10) / 100 * height;
-			}
-			if (distance > height){
-        distance = height
+    scrollEvent: (() => {
+      let oScrollHeight = 0
+      return (os) => {
+        let _ele = os.element
+        let scrollTop = _ele.scrollTop
+        let scrollHeight = _ele.scrollHeight
+        let height = _ele.offsetHeight;
+        let distance = os.distance ? os.distance : 50
+        if (typeof distance === 'string' && distance.indexOf('%') >= 0) {
+          distance = parseInt(distance, 10) / 100 * height
+        }
+        if (distance > height) {
+          distance = height
+        }
+        if ((scrollTop + height >= scrollHeight - distance) && (oScrollHeight != scrollHeight)) {
+          os.callback && os.callback()
+          oScrollHeight = scrollHeight
+        }
       }
-			if (scrollTop + height >= scrollHeight - distance) {
-				os.callback && os.callback()
-			}
-		},
+		})(),
     getDateState: function (dt) {
       let newtime = new Time(dt * 1000)
       let year = newtime.year()

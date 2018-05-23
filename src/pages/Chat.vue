@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <div class="chat-area bg-white">
+    <div class="chat-area bg-white scroll-container">
       <div class="chatlist">
         <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
@@ -73,7 +73,7 @@
           </a>
         </div>
       </div>
-      <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea">
+      <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" :click-callback="clickEmotionCallback">
       </emotion-box>
       <form class="uploadImageForm hide" enctype="multipart/form-data">
         <input style="opacity:0;" type="file" name="files" />
@@ -233,7 +233,8 @@ export default {
       isBindNewsScroll: false,
       isBindProductScroll: false,
       newsScrollArea: null,
-      productScrollArea: null
+      productScrollArea: null,
+      scrollContainer: document.querySelector('.scroll-container')
     }
   },
   watch: {
@@ -403,12 +404,19 @@ export default {
           self.msgTextarea.value = ''
           self.msgcontent = ''
           self.showSend = false
+          self.showEmotBox = false
           self.msgTextarea.focus()
         }
       })
     },
+    clickEmotionCallback () {
+      const self = this
+      self.msgcontent = self.msgTextarea.value
+      self.setSendStatus()
+    },
     sendEvent () {
       const self = this
+      self.msgcontent = self.msgTextarea.value
       let postdata = {
         touid: self.query.uid,
         content: self.msgcontent,
@@ -416,12 +424,13 @@ export default {
         sendtype: 'text',
         picurl: '',
         thumb: '',
-        inroom: 1
+        inroom: 1,
+        isNew: true
       }
       if (!self.$util.isNull(postdata.content)) {
         postdata.content = postdata.content.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
       }
-      if (self.msgType === 'text' && self.$util.isNull(self.msgcontent)) {
+      if (self.msgType === 'text' && self.$util.trim(postdata.content) === '') {
         return false
       }
       self.sendData(postdata)
@@ -437,6 +446,9 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
+        if (!self.scrollContainer) {
+          self.scrollContainer = document.querySelector('.scroll-container')
+        }
       })
     },
     wsConnect () {
@@ -478,9 +490,15 @@ export default {
             id: edata.msgid,
             roomid: edata.room_id,
             avatar: edata.avatar,
-            newsdata: edata.newsdata
+            newsdata: edata.newsdata,
+            isNew: edata.isNew
           }
           self.data.push(saydata)
+          if (saydata.isNew) {
+            if(self.scrollContainer.offsetHeight + self.scrollContainer.scrollTop + 180 > self.scrollContainer.scrollHeight){
+              self.scrollContainer.scrollTop = self.scrollContainer.scrollHeight + 50
+            }
+          }
         }
       }
       websocket.onclose = function () {

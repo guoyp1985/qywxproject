@@ -1,9 +1,27 @@
 <template>
-  <div v-show="showcontainer" class="containerarea font14 bg-white retailerapply">
-    <div class="pagetop flex_center bg-blue color-white font18">免费申请表</div>
-    <div class="pagemiddle">
-      <form class="applyform">
-        <div class="form-item required">
+  <div v-show="showcontainer" class="containerarea font14 bg-white retailerapply notop">
+    <div class="pagemiddle bg-white" style="bottom: 50px;">
+      <div class="flex_center bg-white posi_r" style="height:auto;">
+          <div class="transition-top posi_r">
+            <img src="../assets/images/banner_top.png" width="100%"/>
+            <div class="waveWrapper waveAnimation">
+              <div class="waveWrapperInner bgTop">
+                <div class="wave waveTop" style="background-image: url('src/assets/images/wave-top.png')"></div>
+              </div>
+              <div class="waveWrapperInner bgMiddle">
+                <div class="wave waveMiddle" style="background-image: url('src/assets/images/wave-mid.png')"></div>
+              </div>
+              <div class="waveWrapperInner bgBottom">
+                <div class="wave waveBottom" style="background-image: url('src/assets/images/wave-top.png')"></div>
+              </div>
+            </div>
+          </div>
+          <div class="posi_a logo">
+            <img src="../assets/images/logo_red.png"/>
+          </div>
+      </div>
+      <form class="applyform pr12 pl12">
+        <div class="form-item required border1px border-box mt15 mb10">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -11,21 +29,21 @@
             </div>
           </div>
         </div>
-        <div class="form-item required">
+        <div class="form-item required border1px border-box mb10" style="padding: 1px 1px 0 10px">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
               <group>
-                <x-input v-model="submitdata.mobile" required class="font14" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
+                <x-input v-model="submitdata.mobile" required class="font14 x-input" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
               </group>
             </div>
-            <div class="t-cell align_center w100">
-              <div v-if="showGetcode" class="qbtn bg-blue3 color-white w90 font12" style="line-height:25px;box-sizing:border-box;" @click="getcode">获取验证码</div>
-              <div v-else class="qbtn bg-gray8 color-white w90" style="line-height:25px;box-sizing:border-box;">{{ timenum }} 秒</div>
+            <div class="t-cell align_center" style="width:86px;">
+              <div v-if="showGetcode" class="qbtn bg-red color-white font13" style="width:85px;box-sizing:border-box;" @click="getcode">获取验证码</div>
+              <div v-else class="qbtn bg-gray8 color-white" style="width:85px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
           </div>
         </div>
-        <div class="form-item required">
+        <div class="form-item required border1px border-box mb10">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -33,9 +51,9 @@
             </div>
           </div>
         </div>
-        <div class="form-item required" v-if="classdata.length > 0">
+        <div class="form-item required border1px border-box padding10" v-if="classdata.length > 0">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
-          <div class="pt10">经营产品<span class="fong12 color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+          <div class="pb10">经营产品<span class="fong12 color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
           class="x-checker"
           type="checkbox"
@@ -47,22 +65,24 @@
           </checker>
         </div>
         <div class="form-item padding10 font16">
-          <div class="t-table">
-            <div class="t-cell align_right v_middle">
-              <check-icon class="blue" style="vertical-align: 3px;" :value.sync="isagree" @click.native.stop="clickagree">同意</check-icon>
+          <div class="font0 align_center">
+            <span class="font14 v_top">
+              <check-icon class="blue color-gray2" :value.sync="isagree" @click.native.stop="clickagree">同意</check-icon>
               <!--
               <label class="qcheckbox1 font16 color-gray" style="width:33px;">
                 <input type="checkbox" @click="clickagree">同意
                 <i class="al"></i>
               </label>
             -->
-            </div>
-            <div class="t-cell align_left v_middle color-blue" @click="showpopup">卖家入驻协议</div>
+            </span>
+            <span class="font14 v_bottom" style="text-decoration: underline" @click="showpopup">卖家入驻协议</span>
           </div>
         </div>
       </form>
     </div>
-    <div :class="`pagebottom flex_center font18 ${bottomcss}`" @click="submitevent">马上免费入驻</div>
+    <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent" style="height:50px;">
+      <div class="flex_cell flex_center btn-bottom-red font16">马上免费入驻</div>
+    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="isshowpopup" height="100%">
         <div class="popup1">
@@ -396,15 +416,82 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-.retailerapply .pagebottom{
-  background-color:#f2f2f2;
+<style lang="less">
+.retailerapply .banner_top{
+  background: url("../assets/images/banner_top.png") no-repeat top center;
+  background-size:100% 100%;
+  width:100%;
+  height:128px;
 }
-.retailerapply .pagebottom{
-  background-color:#f2f2f2;
+.retailerapply .logo{
+  width:80px;
+  height:80px;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  margin:auto auto;
+  background-color:#fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index:50;
 }
-.retailerapply .pagebottom.active{
-  background-color: #1c90fe;
-  color: #fff;
+.retailerapply .logo img{width:50%;display: block;}
+.retailerapply .pagemiddle{padding:0;}
+.retailerapply .x-input .weui-input{padding: 5px;font-size: 14px;}
+.retailerapply .form-item{padding:7px 10px;}
+.retailerapply .form-item:after{background-color:transparent;}
+.retailerapply .qbtn{
+  line-height: 39px;
+  box-sizing: border-box;
+  padding: 0px;
+  height: 39px;
+  border-radius: 5px;
 }
+.retailerapply .x-checker .ck-item{
+  font-size:13px;
+  display: inline-block;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+.retailerapply .btn-bottom-red{border-radius:5px;}
+.retailerapply .pagebottom{background-color:#fff;}
+.retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
+.retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
+.retailerapply .blue .weui-icon-success{color:#ea3a3a;}
+.vux-check-icon.blue > .weui-icon-success:before, .vux-check-icon.blue > .weui-icon-success-circle:before{color:#ea3a3a;}
+@keyframes move_wave {
+  0% {
+      transform: translateX(0) translateZ(0) scaleY(1)
+  }
+  50% {
+      transform: translateX(-25%) translateZ(0) scaleY(0.55)
+  }
+  100% {
+      transform: translateX(-50%) translateZ(0) scaleY(1)
+  }
+}
+.waveWrapper{overflow: hidden;position: absolute;left: 0;right: 0;bottom: 0;top: 0;margin: auto;}
+.waveWrapperInner{position: absolute;width: 100%;overflow: hidden;height: 100%;bottom: -1px;}
+.bgTop{z-index: 15;opacity: 0.5;}
+.bgMiddle{z-index: 10;opacity: 0.75;}
+.bgBottom{z-index: 5;}
+.wave{position: absolute;left: 0;bottom:0px;width: 200%;height: 70px;background-repeat: repeat no-repeat;background-position: 0 bottom;transform-origin: center bottom;}
+.waveTop{background-size: 50% 45%;}
+.waveAnimation .waveTop{animation: move-wave 3s;-webkit-animation: move-wave 3s;-webkit-animation-delay: 1s;animation-delay: 1s;}
+.waveMiddle{background-size: 50% 50%;}
+.waveAnimation .waveMiddle{animation: move_wave 8s linear infinite;}
+.waveBottom{background-size: 50% 45%;}
+.waveAnimation .waveBottom{animation: move_wave 12s linear infinite;}
 </style>

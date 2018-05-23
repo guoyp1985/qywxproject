@@ -73,7 +73,8 @@ export default {
   },
   props: {
     bindTextarea: String,
-    className: ''
+    className: '',
+    clickCallback: Function
     // value: Boolean
   },
   data () {
@@ -128,6 +129,7 @@ export default {
           text: emot
         }
         this.textarea.value = emot
+        this.clickCallback && this.clickCallback()
       }
     },
     onInput () {

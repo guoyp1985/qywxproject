@@ -13,7 +13,7 @@
         <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
     </div>
-    <div class="s-container s-container1 scroll-container">
+    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
       <div v-show="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
@@ -81,11 +81,11 @@ export default {
   data () {
     return {
       selectedIndex: 0,
-      list: [],
-      list1: [],
-      list2: [],
-      list3: [],
-      scrollContainer: null,
+      // list: [],
+      // list1: [],
+      // list2: [],
+      // list3: [],
+      // scrollContainer: null,
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
@@ -94,19 +94,19 @@ export default {
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
-      limit: 20,
-      pagestart1: 0,
-      pagestart2: 0,
-      pagestart3: 0,
-      pagestart4: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      isBindScroll4: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null,
-      scrollArea4: null
+      // limit: 20,
+      pagestart1: 1,
+      pagestart2: 1,
+      pagestart3: 1,
+      pagestart4: 1
+      // isBindScroll1: false,
+      // isBindScroll2: false,
+      // isBindScroll3: false,
+      // isBindScroll4: false,
+      // scrollArea1: null,
+      // scrollArea2: null,
+      // scrollArea3: null,
+      // scrollArea4: null
     }
   },
   computed: {
@@ -252,16 +252,16 @@ export default {
       let list = []
       switch (this.selectedIndex) {
         case 0:
-          list = this.list
+          list = this.tabdata1
           break
         case 1:
-          list = this.list1
+          list = this.tabdata2
           break
         case 2:
-          list = this.list2
+          list = this.tabdata3
           break
         case 3:
-          list = this.list3
+          list = this.tabdata4
           break
       }
       this.$util.changeItem(list, order.id, function (m) {
@@ -269,7 +269,6 @@ export default {
       })
     },
     toggleTab () {
-      const self = this
       switch (this.selectedIndex) {
         case 0:
         /*
@@ -280,12 +279,13 @@ export default {
             }
           })
           */
-          self.scrollContainer.removeEventListener('scroll', self.scroll1)
-          self.scrollContainer.addEventListener('scroll', self.scroll1)
-          if (self.tabdata1.length === 0) {
-            self.$vux.loading.show()
-            self.getdata1()
-          }
+          // self.scrollContainer.removeEventListener('scroll', self.scroll1)
+          // self.scrollContainer.addEventListener('scroll', self.scroll1)
+          // if (self.tabdata1.length === 0) {
+          //   self.$vux.loading.show()
+          //   self.getdata1()
+          // }
+          !this.tabdata1.length && this.getData()
           break
         case 1:
         /*
@@ -296,12 +296,13 @@ export default {
             }
           })
           */
-          self.scrollContainer.removeEventListener('scroll', self.scroll2)
-          self.scrollContainer.addEventListener('scroll', self.scroll2)
-          if (self.pagestart2 === 0 && !self.isBindScroll2) {
-            self.$vux.loading.show()
-            self.getdata2()
-          }
+          // self.scrollContainer.removeEventListener('scroll', self.scroll2)
+          // self.scrollContainer.addEventListener('scroll', self.scroll2)
+          // if (self.pagestart2 === 0 && !self.isBindScroll2) {
+          //   self.$vux.loading.show()
+          //   self.getdata2()
+          // }
+          !this.tabdata2.length && this.getData(2)
           break
         case 2:
         /*
@@ -312,12 +313,13 @@ export default {
             }
           })
           */
-          self.scrollContainer.removeEventListener('scroll', self.scroll3)
-          self.scrollContainer.addEventListener('scroll', self.scroll3)
-          if (self.pagestart3 === 0 && !self.isBindScroll3) {
-            self.$vux.loading.show()
-            self.getdata3()
-          }
+          // self.scrollContainer.removeEventListener('scroll', self.scroll3)
+          // self.scrollContainer.addEventListener('scroll', self.scroll3)
+          // if (self.pagestart3 === 0 && !self.isBindScroll3) {
+          //   self.$vux.loading.show()
+          //   self.getdata3()
+          // }
+          !this.tabdata3.length && this.getData(3)
           break
         case 3:
         /*
@@ -328,159 +330,241 @@ export default {
             }
           })
           */
-          self.scrollContainer.removeEventListener('scroll', self.scroll4)
-          self.scrollContainer.addEventListener('scroll', self.scroll4)
-          if (self.pagestart4 === 0 && !self.isBindScroll4) {
-            self.$vux.loading.show()
-            self.getdata4()
-          }
+          // self.scrollContainer.removeEventListener('scroll', self.scroll4)
+          // self.scrollContainer.addEventListener('scroll', self.scroll4)
+          // if (self.pagestart4 === 0 && !self.isBindScroll4) {
+          //   self.$vux.loading.show()
+          //   self.getdata4()
+          // }
+          !this.tabdata4.length && this.getData(4)
           break
       }
     },
-    getData () {
+    // getData () {
+    //   const self = this
+    //   this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
+    //   .then(res => {
+    //     if (res.data.flag) {
+    //       self.list = res.data.data
+    //     }
+    //   })
+    // },
+    // getScrollContainer () {
+    //   this.scrollContainer = document.querySelector('.scroll-container')
+    // },
+    scrollHandle () {
       const self = this
-      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`)
-      .then(res => {
-        if (res.data.flag) {
-          self.list = res.data.data
-        }
-      })
-    },
-    getScrollContainer () {
-      this.scrollContainer = document.querySelector('.scroll-container')
-    },
-    scroll1: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
+      this.$util.scrollEvent({
+        element: this.$refs.scrollContainer,
+        callback: () => {
+          switch (self.selectedIndex) {
+            case 0:
+              self.getPageData(0, self.pagestart1)
+              break
+            case 1:
+              self.getPageData(2, self.pagestart2)
+              break
+            case 2:
+              self.getPageData(3, self.pagestart3)
+              break
+            case 3:
+              self.getPageData(4, self.pagestart4)
+              break
           }
         }
       })
     },
-    scroll2: function () {
+    getData(flag) {
+      flag = flag || 0
+      this.$vux.loading.show()
       const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
-          }
-        }
-      })
-    },
-    scroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getdata3()
-          }
-        }
-      })
-    },
-    scroll4: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollContainer,
-        callback: function () {
-          if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
-            self.pagestart4++
-            self.$vux.loading.show()
-            self.getdata4()
-          }
-        }
-      })
-    },
-    getdata1 () {
-      const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+      let params = { params: { flag: flag, pagestart: 0, limit: 20 } }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.tabdata1 = self.tabdata1.concat(retdata)
-        self.distabdata1 = true
-        if (!self.isBindScroll1) {
-          self.getScrollContainer()
-          self.isBindScroll1 = true
-          self.scrollContainer.removeEventListener('scroll', self.scroll1)
-          self.scrollContainer.addEventListener('scroll', self.scroll1)
+        switch (flag) {
+          case 0:
+            self.tabdata1 = retdata
+            self.distabdata1 = true
+            break
+          case 2:
+            self.tabdata2 = retdata
+            self.distabdata2 = true
+            break
+          case 3:
+            self.tabdata3 = retdata
+            self.distabdata3 = true
+            break
+          case 4:
+            self.tabdata4 = retdata
+            self.distabdata4 = true
+            break
         }
       })
     },
-    getdata2 () {
+    getPageData (flag, page) {
+      flag = flag || 0
+      page = page || 0
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { flag: 2, pagestart: self.pagestart2, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+      let params = { params: { flag: flag, pagestart: page, limit: 20 } }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.tabdata2 = self.tabdata2.concat(retdata)
-        self.distabdata2 = true
-        if (!self.isBindScroll2) {
-          self.getScrollContainer()
-          self.isBindScroll2 = true
-          self.scrollContainer.removeEventListener('scroll', self.scroll2)
-          self.scrollContainer.addEventListener('scroll', self.scroll2)
+        switch (flag) {
+          case 0:
+            retdata.length && self.pagestart1++
+            self.tabdata1 = self.tabdata1.concat(retdata)
+            break
+          case 2:
+            retdata.length && self.pagestart2++
+            self.tabdata2 = self.tabdata2.concat(retdata)
+            break
+          case 3:
+            retdata.length && self.pagestart3++
+            self.tabdata3 = self.tabdata3.concat(retdata)
+            break
+          case 4:
+            retdata.length && self.pagestart4++
+            self.tabdata4 = self.tabdata4.concat(retdata)
+            break
         }
       })
     },
-    getdata3 () {
-      const self = this
-      let params = { params: { flag: 3, pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata3 = self.tabdata3.concat(retdata)
-        self.distabdata3 = true
-        if (!self.isBindScroll3) {
-          self.getScrollContainer()
-          self.isBindScroll3 = true
-          self.scrollContainer.removeEventListener('scroll', self.scroll3)
-          self.scrollContainer.addEventListener('scroll', self.scroll3)
-        }
-      })
-    },
-    getdata4 () {
-      const self = this
-      let params = { params: { flag: 4, pagestart: self.pagestart4, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.tabdata4 = self.tabdata4.concat(retdata)
-        self.distabdata4 = true
-        if (!self.isBindScroll4) {
-          self.getScrollContainer()
-          self.isBindScroll4 = true
-          self.scrollContainer.removeEventListener('scroll', self.scroll4)
-          self.scrollContainer.addEventListener('scroll', self.scroll4)
-        }
-      })
-    }
+    // scroll1 () {
+    //   const self = this
+    //   self.$util.scrollEvent({
+    //     element: self.scrollContainer,
+    //     callback: function () {
+    //       if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+    //         self.pagestart1++
+    //         self.$vux.loading.show()
+    //         self.getdata1()
+    //       }
+    //     }
+    //   })
+    // },
+    // scroll2 () {
+    //   const self = this
+    //   self.$util.scrollEvent({
+    //     element: self.scrollContainer,
+    //     callback: function () {
+    //       if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+    //         self.pagestart2++
+    //         self.$vux.loading.show()
+    //         self.getdata2()
+    //       }
+    //     }
+    //   })
+    // },
+    // scroll3 () {
+    //   const self = this
+    //   self.$util.scrollEvent({
+    //     element: self.scrollContainer,
+    //     callback: function () {
+    //       if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+    //         self.pagestart3++
+    //         self.$vux.loading.show()
+    //         self.getdata3()
+    //       }
+    //     }
+    //   })
+    // },
+    // scroll4 () {
+    //   const self = this
+    //   self.$util.scrollEvent({
+    //     element: self.scrollContainer,
+    //     callback: function () {
+    //       if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
+    //         self.pagestart4++
+    //         self.$vux.loading.show()
+    //         self.getdata4()
+    //       }
+    //     }
+    //   })
+    // },
+    // getdata1 () {
+    //   const self = this
+    //   let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+    //   self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+    //     let data = res.data
+    //     self.$vux.loading.hide()
+    //     let retdata = data.data ? data.data : data
+    //     self.tabdata1 = self.tabdata1.concat(retdata)
+    //     self.distabdata1 = true
+        // if (!self.isBindScroll1) {
+        //   self.getScrollContainer()
+        //   self.isBindScroll1 = true
+          // self.scrollContainer.removeEventListener('scroll', self.scroll1)
+          // self.scrollContainer.addEventListener('scroll', self.scroll1)
+        // }
+    //   })
+    // },
+    // getdata2 () {
+    //   const self = this
+    //   let params = { params: { flag: 2, pagestart: self.pagestart2, limit: self.limit } }
+    //   self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+    //     let data = res.data
+    //     self.$vux.loading.hide()
+    //     let retdata = data.data ? data.data : data
+    //     self.tabdata2 = self.tabdata2.concat(retdata)
+    //     self.distabdata2 = true
+        // if (!self.isBindScroll2) {
+        //   self.getScrollContainer()
+        //   self.isBindScroll2 = true
+          // self.scrollContainer.removeEventListener('scroll', self.scroll2)
+          // self.scrollContainer.addEventListener('scroll', self.scroll2)
+        // }
+    //   })
+    // },
+    // getdata3 () {
+    //   const self = this
+    //   let params = { params: { flag: 3, pagestart: self.pagestart3, limit: self.limit } }
+    //   self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+    //     let data = res.data
+    //     self.$vux.loading.hide()
+    //     let retdata = data.data ? data.data : data
+    //     self.tabdata3 = self.tabdata3.concat(retdata)
+    //     self.distabdata3 = true
+    //     // if (!self.isBindScroll3) {
+    //     //   self.getScrollContainer()
+    //     //   self.isBindScroll3 = true
+    //       // self.scrollContainer.removeEventListener('scroll', self.scroll3)
+    //       // self.scrollContainer.addEventListener('scroll', self.scroll3)
+    //     // }
+    //   })
+    // },
+    // getdata4 () {
+    //   const self = this
+    //   let params = { params: { flag: 4, pagestart: self.pagestart4, limit: self.limit } }
+    //   self.$http.get(`${ENV.BokaApi}/api/order/orderList/user`, params).then(function (res) {
+    //     let data = res.data
+    //     self.$vux.loading.hide()
+    //     let retdata = data.data ? data.data : data
+    //     self.tabdata4 = self.tabdata4.concat(retdata)
+    //     self.distabdata4 = true
+        // if (!self.isBindScroll4) {
+        //   self.getScrollContainer()
+        //   self.isBindScroll4 = true
+          // self.scrollContainer.removeEventListener('scroll', self.scroll4)
+          // self.scrollContainer.addEventListener('scroll', self.scroll4)
+        // }
+    //   })
+    // }
   },
   created () {
-    const self = this
+    // const self = this
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.$vux.loading.show()
-    this.getdata1()
-    self.getScrollContainer()
-    if (!self.isBindScroll1 && self.scrollContainer) {
-      self.isBindScroll1 = true
-      self.scrollContainer.removeEventListener('scroll', self.scroll1)
-      self.scrollContainer.addEventListener('scroll', self.scroll1)
-    }
+    this.$vux.loading.show()
+    this.getData()
+    // self.getScrollContainer()
+    // if (!self.isBindScroll1 && self.scrollContainer) {
+    //   self.isBindScroll1 = true
+      // self.scrollContainer.removeEventListener('scroll', self.scroll1)
+      // self.scrollContainer.addEventListener('scroll', self.scroll1)
+    // }
   }
 }
 </script>

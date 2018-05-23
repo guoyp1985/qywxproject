@@ -1,10 +1,10 @@
 <template>
   <div id="app" style="height:100%;" v-cloak>
     <div v-transfer-dom>
-      <loading v-model="isLoading" delay="1"></loading>
+      <loading v-model="isLoading" delay="2"></loading>
     </div>
     <view-box ref="viewBox" body-padding-bottom="0">
-      <transition
+      <transition 
       :name="viewTransition"
       :css="!!direction">
         <router-view class="router-view"></router-view>
@@ -53,9 +53,9 @@ Center:
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { BkSocket, Roomid } from '#/storage'
+import { User, BkSocket, Roomid } from '#/storage'
+import ENV from 'env'
 // import routes from '#/routes'
-// import ENV from '#/env'
 
 // Util.share()
 
@@ -131,28 +131,26 @@ export default {
   created () {
     document.title = this.$t('tIndex')
     this.$util.wxConfig()
-    // this.getData()
+    this.getData()
   },
   methods: {
     getTitle (path) {
       let name = path.substr(1).replace(/([a-z])(.*)/, (match, p1, p2) => `t${p1.toUpperCase()}${p2}`)
-      console.log(name)
       if (name === '') {
         name = 'tIndex'
       }
       const title = this.$t(name)
       return title || '$$'
+    },
+    getData () {
+      const user = User.get()
+      if (user && !user.subscribes) {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        .then(res => {
+          User.set(res.data)
+        })
+      }
     }
-    // getData () {
-    //   this.$http.get(`${ENV.BokaApi}/api/user/show`)
-    //   .then(
-    //     res => {
-    //       console.log()
-    //       User.set(res.data)
-    //       console.log(User.get())
-    //     }
-    //   )
-    // }
   }
 }
 </script>

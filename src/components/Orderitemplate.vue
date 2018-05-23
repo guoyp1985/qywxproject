@@ -1,7 +1,9 @@
 <template>
   <router-link :to="{path: '/retailerOrderDetail', query: {id: data.id}}" class="bk-orderitem order-item scroll_item mb10 font14 db">
     <div class="bg-white padding12 b_bottom_after font13 flex_center list-shadow">
-        <div class="flex_cell color-lightgray">创建时间：<slot name="createdate"></slot></div>
+        <div class="flex_cell color-lightgray"><!-- 创建时间：<slot name="createdate"></slot> -->
+          {{ $t('Order Number')}}：<slot name="orderno"></slot>
+        </div>
         <div class="align_right color-red4" style="width:100px;"><slot name="flagstr"></slot></div>
     </div>
     <slot name="productlist"></slot>

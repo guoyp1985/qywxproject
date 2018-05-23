@@ -103,7 +103,7 @@ methods.forEach(key => {
 
 router.beforeEach(function (to, from, next) {
   store.commit('updateLoadingStatus', {isLoading: true})
-
+  
   const toIndex = history.getItem(to.path)
   const fromIndex = history.getItem(from.path)
 
