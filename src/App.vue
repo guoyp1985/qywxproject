@@ -4,7 +4,7 @@
       <loading v-model="isLoading" delay="2"></loading>
     </div>
     <view-box ref="viewBox" body-padding-bottom="0">
-      <transition 
+      <transition
       :name="viewTransition"
       :css="!!direction">
         <router-view class="router-view"></router-view>
@@ -144,7 +144,7 @@ export default {
     },
     getData () {
       const user = User.get()
-      if (user && !user.subscribes) {
+      if (user && user.subscribe === 0) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
           User.set(res.data)
