@@ -114,20 +114,11 @@
               <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
             </div>
           </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">意向程度</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn1 bg-green color-white" @click="showLevel">更新</span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="s-bottom bottomnaviarea b_top_after">
         <div class="t-table bottomnavi">
-          <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
+          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
           <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
         </div>
@@ -159,6 +150,7 @@ import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group, XImg } from '
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -175,6 +167,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: Object,
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -386,6 +379,7 @@ export default {
     const self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.loginUser = User.get()
     self.$vux.loading.show()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'membersview', id: self.query.uid

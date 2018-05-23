@@ -145,7 +145,7 @@
     </div>
     <div class="s-bottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
-        <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
         <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
         <div class="t-cell item active">{{ $t('My orders') }}</div>
       </div>
@@ -200,6 +200,8 @@ import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
+
 export default {
   directives: {
     TransferDom
@@ -214,6 +216,8 @@ export default {
   },
   data () {
     return {
+      query: {},
+      loginUser: Object,
       tabtxts: [ '全部', '待付款', '待发货', '已发货' ],
       tabmodel: 0,
       distabdata1: false,
@@ -386,19 +390,6 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              /*
-              let updatedata = self.tabdata1[self.deliverindex]
-              updatedata.delivercompany = self.deliverdata.delivercompany
-              updatedata.delivercode = self.deliverdata.delivercode
-              updatedata.flag = 3
-              for (let i = 0; i < self.tabdata3.length; i++) {
-                let td = self.tabdata3[i]
-                if (td.id === updatedata.id) {
-                  td.delivercompany = self.deliverdata.delivercompany
-                  td.delivercode = self.deliverdata.delivercode
-                }
-              }
-              */
               self.deliveritem.flag = 3
               self.deliveritem.delivercompany = self.deliverdata.delivercompany
               self.deliveritem.delivercode = self.deliverdata.delivercode
@@ -449,6 +440,8 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.loginUser = User.get()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'orders'
     })

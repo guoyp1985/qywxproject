@@ -99,7 +99,7 @@
     </div>
     <div class="s-bottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
-        <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
+        <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
         <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
         <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
       </div>
@@ -114,6 +114,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -126,6 +127,8 @@ export default {
   },
   data () {
     return {
+      query: {},
+      loginUser: Object,
       autofixed: false,
       tabtxts: [ '关键词', '链接' ],
       tabmodel: 0,
@@ -291,6 +294,8 @@ export default {
   created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.loginUser = User.get()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'goodeazy'
     }).then(function () {
