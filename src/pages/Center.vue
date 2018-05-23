@@ -109,7 +109,7 @@ export default {
             if (self.$util.isPC()) {
               self.$router.push({name: 'tLogin'})
             } else {
-              self.$router.push({name: 'tIndex'})
+              self.$router.push({name: 'tUserproducts'})
             }
           }
         }
