@@ -263,13 +263,10 @@ export default {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      alert(JSON.stringify(user))
       if (user && user.subscribe === 0) {
         if (code) {
-          alert(code)
           this.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
           .then(res => {
-            alert(JSON.stringify(res.data))
             if (res.data.flag) {
               User.set({
                 ...user,
@@ -279,7 +276,6 @@ export default {
             }
           })
         } else {
-          alert('ok')
           const originHref = encodeURIComponent(location.href)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
         }
