@@ -288,19 +288,19 @@
         <popup v-model="showevluate" height="100%">
           <div class="popup1">
             <div class="popup-top flex_center">评价</div>
-            <div class="popup-middle font14 evluate-popup-container">
-              <div class="scroll_list">
-                <template v-if="evluatedata.length == 0">
+            <div class="popup-middle font14 evluate-popup-container" ref="evluatePopContainer" @scroll="handleScrollEvaluate('evluatePopContainer')">
+              <div v-if="disPopEvluate" class="scroll_list">
+                <template v-if="evluatedata1.length == 0">
                   <div class="scroll_item emptyitem">
           					<div class="t-table">
           						<div class="t-cell" style="padding:10px;">暂无评价</div>
           					</div>
           				</div>
                 </template>
-                <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
+                <div v-else v-for="(item,index) in evluatedata1" :key="item.id" class="scroll_item padding10">
         					<div class="t-table">
         						<div class="t-cell pic" style="width:40px;">
-                      <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".evluate-popup-container"></x-img>
+                      <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" ></x-img>
         						</div>
         						<div class="t-cell">{{ item.username }}</div>
         						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -417,13 +417,17 @@ export default {
       previewerFlasharr: [],
       buyuserdata: [],
       evluatedata: [],
+      evluatedata1: [],
+      disPopEvluate: false,
       replyPopupShow: false,
       ingdata: [],
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
       replyData: null,
       roomid: '',
-      socket: BkSocket.get()
+      socket: BkSocket.get(),
+      pagestart: 0,
+      limit: 20
     }
   },
   watch: {
@@ -517,10 +521,41 @@ export default {
       this.showpopup = false
     },
     popupevluate () {
+      const self = this
       this.showevluate = true
+      if (self.evluatedata1.length === 0) {
+        this.getEvaluateList()
+      }
     },
     closepopup1 () {
       this.showevluate = false
+    },
+    getEvaluateList () {
+      const self = this
+      let params = { module: self.module, nid: self.productid, pagestart: self.pagestart, limit: self.limit }
+      self.$http.get(`${ENV.BokaApi}/api/comment/list`,{
+        params: params
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.evluatedata1 = self.evluatedata1.concat(retdata)
+        self.disPopEvluate = true
+      })
+    },
+    handleScrollEvaluate (refname) {
+      const self = this
+      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.evluatedata1.length === (self.pagestart + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getEvaluateList()
+          }
+        }
+      })
     },
     favoriteevent () {
       const self = this
@@ -863,7 +898,7 @@ export default {
           self.isfavorite = false
         }
         return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-          { params: { module: self.module, nid: self.productid } }
+          { params: { module: self.module, nid: self.productid, pagestart: 0, limit: 3 } }
         )
       }
     }).then(function (res) {
