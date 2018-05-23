@@ -47,7 +47,7 @@ export default {
       query: {},
       loginUser: {},
       data: {},
-      product: Object,
+      product: {},
       crowduserid: null,
       crowduser: null,
       cutData: [],
