@@ -12,7 +12,7 @@
           <div class="user-info">
             <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
               <div>
-                <img :src="avatar"/>
+                <x-img :src="avatar" default-src="../src/assets/images/user.jpg"/>
               </div>
               <div class="user-name">
                 <span class="color-white font16 u-name">{{ name }}</span>
