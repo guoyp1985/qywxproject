@@ -257,7 +257,7 @@ export default {
         this.crowduserid = this.query.crowduserid
       }
       this.loginUser = User.get()
-      this.wsConnect()
+      // this.wsConnect()
       this.getInfo()
     },
     access () {
