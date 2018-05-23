@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
@@ -257,35 +256,32 @@ export default {
         this.crowduserid = this.query.crowduserid
       }
       this.loginUser = User.get()
-      // this.wsConnect()
+      this.wsConnect()
       this.getInfo()
     },
     access () {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      // alert(JSON.stringify(user))
-      // alert(code)
       if (user && user.subscribe === 0) {
         if (code) {
-          alert(code)
-          // this.$http.get(`${ENV.Boka}/api/xxx/${code}`) // <- url
-          // .then(
-          //   res => {
-          //     // TODO
-          //     User.set({
-          //       ...user,
-          //       ...res.data
-          //     })
-          // location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-          //   }
-          // )
+          this.$http.get(`${ENV.Boka}/api/authUser/${code}`)
+          .then(res => {
+            if (res.data.flag) {
+              User.set({
+                ...user,
+                ...res.data.data
+              })
+              location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+            }
+          })
         } else {
           const originHref = encodeURIComponent(location.href)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
         }
       } else {
-        Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        alert('ok')
       }
     }
   },
