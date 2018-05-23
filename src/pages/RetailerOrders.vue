@@ -7,7 +7,7 @@
         </tab>
       </div>
     </div>
-    <div class="s-container mt10">
+    <div class="s-container">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)">
