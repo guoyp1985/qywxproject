@@ -46,9 +46,9 @@
     </div>
     <div class="mt10 bg-white">
       <div class="sharing-title color-red b_bottom_after">{{$t('Immediately Make Money By Sharing')}}</div>
-      <tab v-model="selectedIndex">
-        <tab-item class="b_right_after" selected @on-item-click="onItemClick">{{$t('Product')}}</tab-item>
-        <tab-item class="b_right_after" @on-item-click="onItemClick">{{$t('Activity')}}</tab-item>
+      <tab v-model="selectedIndex" class="v-tab">
+        <tab-item selected @on-item-click="onItemClick">{{$t('Product')}}</tab-item>
+        <tab-item @on-item-click="onItemClick">{{$t('Activity')}}</tab-item>
         <tab-item @on-item-click="onItemClick">{{$t('Article')}}</tab-item>
       </tab>
       <view-box v-show="selectedIndex===0">
@@ -254,13 +254,13 @@ export default {
       const self = this
       switch (index) {
         case 0:
-          !self.tabdata1.length && self.getdata1()
+          !this.tabdata1.length && this.getdata1()
           break
         case 1:
-          !self.tabdata2.length && self.getdata2()
+          !this.tabdata2.length && this.getdata2()
           break
         case 2:
-          !self.tabdata3.length && self.getdata3()
+          !this.tabdata3.length && this.getdata3()
           break
       }
     },
@@ -399,9 +399,6 @@ export default {
 #rebate-store .store-photo{width:50px;}
 #rebate-store .store-photo img{width:50px;height:50px;object-fit:cover;display:block;}
 #rebate-store .store-details{align-self:center;}
-#rebate-store .vux-tab{background-color:@tab-background-color;}
-#rebate-store .vux-tab .vux-tab-item.vux-tab-selected{color:@tab-active-text-color;background:@tab-active-background-color;}
-#rebate-store .vux-tab-ink-bar{height:1px !important;background-color:@tab-background-red;}
 #rebate-store .weui-cell__ft{display:none;}
 #rebate-store .vux-cell-primary p{
   overflow: hidden;

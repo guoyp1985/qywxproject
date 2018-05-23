@@ -353,9 +353,6 @@ export default {
       let data = res.data
       self.statData = data.data ? data.data : data
       self.tabsdata = data.detail
-      for (let i = 0; i < self.tabsdata.length; i++) {
-        let type = self.tabsdata[i].type
-      }
       self.data = data.moduleinfo
       document.title = `统计-${self.data.title}`
       self.clickindex = 0
