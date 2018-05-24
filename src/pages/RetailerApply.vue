@@ -34,7 +34,7 @@
             <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
               <group>
-                <x-input v-model="submitdata.mobile" required class="font14 x-input" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
+                <x-input type="tel" v-model="submitdata.mobile" required class="font14 x-input" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
               </group>
             </div>
             <div class="t-cell align_center" style="width:86px;">
