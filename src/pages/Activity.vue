@@ -143,7 +143,6 @@ export default {
           let sharetitle = self.data.title
           let sharedesc = self.data.title
           let sharephoto = self.loginUser.avatar
-          console.log(inpage)
           if (inpage === 'view' || inpage === 'detail') {
             self.getCudata()
             if (self.data.havecreate) {
