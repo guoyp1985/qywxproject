@@ -86,11 +86,12 @@ export default {
       const self = this
       const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
       if (self.$util.isPC()) {
+        alert('in 1')
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: 9,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
