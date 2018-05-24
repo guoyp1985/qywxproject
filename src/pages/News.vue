@@ -246,12 +246,19 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         let data = res.data
+        console.log('in reply')
         if (data.flag) {
           if (!self.replyData.comment) {
-            self.replyData.comment = []
+            self.replyData.comment = [ data.data ]
+          } else {
+            self.replyData.comment.push(data.data)
           }
-          let newarr = [ data.data ]
-          self.replayData = newarr.concat(self.replyData.comment)
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
         }
       })
     },
@@ -292,6 +299,7 @@ export default {
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
+        alert(JSON.stringify(res))
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag !== 1) {
