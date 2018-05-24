@@ -155,7 +155,7 @@ export default {
               sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
             } else {
               sharetitle = `${self.crowduser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
-              sharephoto = self.crowduser.avatar
+              sharephoto = self.$util.getPhoto(self.data.photo)
             }
             sharedesc = '好友帮帮忙，优惠享更多！'
           }
