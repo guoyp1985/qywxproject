@@ -361,20 +361,8 @@ export default {
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
         }).then(function (res) {
           let data = res.data
-          console.log('res')
-          console.log(res)
-          console.log('\n\n\n')
-          console.log(res)
-          alert(JSON.stringify(data))
           let curuser = data.data ? data.data : data
-          console.log('curuser')
-          console.log(curuser)
-          console.log('\n\n\n')
           User.set(curuser)
-          alert(JSON.stringify(User.get()))
-          console.log('user.get()')
-          console.log(User.get())
-          console.log('\n\n\n')
           self.$vux.toast.show({
             text: applydata.error,
             time: self.$util.delay(applydata.error),
