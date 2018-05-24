@@ -371,7 +371,8 @@ import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
-import { User, BkSocket, Roomid } from '#/storage'
+import { User } from '#/storage'
+import Socket from '#/socket'
 
 export default {
   directives: {
@@ -763,172 +764,191 @@ export default {
         }
       })
     },
-    wsConnect () {
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      const room = query.id
+      Socket.create()
+      Socket.listening(uid, linkman, room)
+    },
+    createdFun () {
+      this.$store.commit('updateToggleTabbar', {toggleBar: false})
+    },
+    activatedFun (query) {
+      this.$vux.loading.show()
+      this.loginUser = User.get()
+      this.query = query
+      this.getData()
+      this.createSocket()
+    },
+    getData () {
       const self = this
-      self.roomid = `${ENV.SocketBokaApi}-product-${self.query.id}`
-      Roomid.set(self.roomid)
-      if (!self.socket || !self.socket.url) {
-        self.socket = new WebSocket(ENV.SocketApi)
-        BkSocket.set(self.socket)
+      this.productid = this.query.id
+      // self.wsConnect()
+      let infoparams = { id: this.productid, module: this.module }
+      if (this.query.wid) {
+        infoparams.wid = this.query.wid
       }
-      self.socket.onopen = function () {
-        let loginData = {
-          type: 'login',
-          uid: self.loginUser.uid,
-          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-          room_id: self.roomid
-        }
-        self.socket.send(JSON.stringify(loginData))
+      if (this.query.share_uid) {
+        infoparams.share_uid = this.query.share_uid
       }
-      self.socket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        if (data.type === 'login') {
-          console.log('in login')
-        } else if (data.type === 'logout') {
-          console.log('in logout')
-        } else if (data.type === 'say') {
-          console.log('say')
-          let edata = JSON.parse(e.data)
-          let saycontent = edata.content
-          if (!self.$util.isNull(saycontent)) {
-            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+      if (this.query.lastshareuid) {
+        infoparams.lastshareuid = this.query.lastshareuid
+      }
+      if (this.query.from === 'poster') {
+        infoparams.from = 'poster'
+      }
+      this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+        params: infoparams
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+          } else {
+            self.showcontainer = true
+            self.productdata = data.data
+            self.retailerinfo = self.productdata.retailerinfo
+            if (self.productdata.activityinfo) {
+              self.activityInfo = self.productdata.activityinfo
+            }
+            document.title = self.productdata.title
+            self.handleTop()
+            self.handleNewAdd()
+            const photo = self.productdata.photo
+            if (photo && self.$util.trim(photo) !== '') {
+              self.photoarr = photo.split(',')
+            }
+            if (self.photoarr.length > 0) {
+              self.showFlash = true
+              self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
+            }
+            const content = self.productdata.content
+            const contetnphoto = self.productdata.contentphoto
+            if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+            } else if (contetnphoto && self.$util.trim(contetnphoto) !== '') {
+              self.contentphotoarr = contetnphoto.split(',')
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
+            }
+            self.handelShare()
+            return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+              params: { wid: self.retailerinfo.uid, productid: self.productid }
+            })
           }
-          let saydata = {
-            uid: edata.from_uid,
-            content: saycontent,
-            dateline: edata.time,
-            msgtype: edata.msgtype ? edata.msgtype : 'text',
-            picurl: edata.picurl ? edata.picurl : '',
-            thumb: edata.thumb ? edata.thumb : '',
-            username: edata.from_client_name,
-            id: edata.msgid,
-            roomid: edata.room_id,
-            avatar: edata.avatar,
-            newsdata: edata.newsdata
-          }
         }
-      }
-      self.socket.onclose = function () {
-        console.log('ws closed')
-        self.wsConnect()
-      }
-      self.socket.onerror = function () {
-        console.log('ws error')
-      }
-    }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.query = self.$route.query
-    self.productid = self.query.id
-    self.loginUser = User.get()
-    self.wsConnect()
-    let infoparams = { id: self.productid, module: self.module }
-    if (self.query.wid) {
-      infoparams.wid = self.query.wid
-    }
-    if (self.query.share_uid) {
-      infoparams.share_uid = self.query.share_uid
-    }
-    if (self.query.lastshareuid) {
-      infoparams.lastshareuid = self.query.lastshareuid
-    }
-    if (self.query.from === 'poster') {
-      infoparams.from = 'poster'
-    }
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-      params: infoparams
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
-          self.showSos = true
-        } else {
-          self.showcontainer = true
-          self.productdata = data.data
-          self.retailerinfo = self.productdata.retailerinfo
-          if (self.productdata.activityinfo) {
-            self.activityInfo = self.productdata.activityinfo
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.buyuserdata = data.data
           }
-          document.title = self.productdata.title
-          self.handleTop()
-          self.handleNewAdd()
-          const photo = self.productdata.photo
-          if (photo && self.$util.trim(photo) !== '') {
-            self.photoarr = photo.split(',')
-          }
-          if (self.photoarr.length > 0) {
-            self.showFlash = true
-            self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
-          }
-          const content = self.productdata.content
-          const contetnphoto = self.productdata.contentphoto
-          if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
-            self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
-          } else if (contetnphoto && self.$util.trim(contetnphoto) !== '') {
-            self.contentphotoarr = contetnphoto.split(',')
-            self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
-          }
-          self.handelShare()
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-            params: { wid: self.retailerinfo.uid, productid: self.productid }
-          })
-        }
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        if (data.flag === 1) {
-          self.buyuserdata = data.data
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
-          { params: { module: self.module, id: self.productid } }
-        )
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        if (data.flag === 1) {
-          self.isfavorite = true
-        } else {
-          self.isfavorite = false
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-          { params: { module: self.module, nid: self.productid, pagestart: 0, limit: 3 } }
-        )
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        if (data.flag === 1) {
-          self.evluatedata = data.data
-        }
-        if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
-          return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
-            { params: { id: self.activityInfo.id } }
+          return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+            { params: { module: self.module, id: self.productid } }
           )
         }
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          let d = retdata[i]
-          let lefttime = d.lefttime
-          d.lefthour = lefttime.hour
-          d.leftminute = lefttime.minute
-          d.leftsecond = lefttime.second
-          d.interval = null
-          self.cutdown(d, d.interval)
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.isfavorite = true
+          } else {
+            self.isfavorite = false
+          }
+          return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
+            { params: { module: self.module, nid: self.productid, pagestart: 0, limit: 3 } }
+          )
         }
-        self.activitydata = retdata
-      }
-    })
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.evluatedata = data.data
+          }
+          if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
+            return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
+              { params: { id: self.activityInfo.id } }
+            )
+          }
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            let d = retdata[i]
+            let lefttime = d.lefttime
+            d.lefthour = lefttime.hour
+            d.leftminute = lefttime.minute
+            d.leftsecond = lefttime.second
+            d.interval = null
+            self.cutdown(d, d.interval)
+          }
+          self.activitydata = retdata
+        }
+      })
+    }
+    // wsConnect () {
+    //   const self = this
+    //   self.roomid = `${ENV.SocketBokaApi}-product-${self.query.id}`
+    //   Roomid.set(self.roomid)
+    //   if (!self.socket || !self.socket.url) {
+    //     self.socket = new WebSocket(ENV.SocketApi)
+    //     BkSocket.set(self.socket)
+    //   }
+    //   self.socket.onopen = function () {
+    //     let loginData = {
+    //       type: 'login',
+    //       uid: self.loginUser.uid,
+    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+    //       room_id: self.roomid
+    //     }
+    //     self.socket.send(JSON.stringify(loginData))
+    //   }
+    //   self.socket.onmessage = function (e) {
+    //     const data = JSON.parse(e.data)
+    //     if (data.type === 'login') {
+    //       console.log('in login')
+    //     } else if (data.type === 'logout') {
+    //       console.log('in logout')
+    //     } else if (data.type === 'say') {
+    //       console.log('say')
+    //       let edata = JSON.parse(e.data)
+    //       let saycontent = edata.content
+    //       if (!self.$util.isNull(saycontent)) {
+    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+    //       }
+    //       let saydata = {
+    //         uid: edata.from_uid,
+    //         content: saycontent,
+    //         dateline: edata.time,
+    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
+    //         picurl: edata.picurl ? edata.picurl : '',
+    //         thumb: edata.thumb ? edata.thumb : '',
+    //         username: edata.from_client_name,
+    //         id: edata.msgid,
+    //         roomid: edata.room_id,
+    //         avatar: edata.avatar,
+    //         newsdata: edata.newsdata
+    //       }
+    //     }
+    //   }
+    //   self.socket.onclose = function () {
+    //     console.log('ws closed')
+    //     self.wsConnect()
+    //   }
+    //   self.socket.onerror = function () {
+    //     console.log('ws error')
+    //   }
+    // }
+  },
+  created () {
+    this.createdFun()
+  },
+  activated () {
+    this.activatedFun(this.$route.query)
   }
 }
 </script>
