@@ -359,8 +359,6 @@ export default {
           let data = res.data
           User.remove()
           User.set()
-          self.loginUser = User.get()
-          console.log(self.loginUser)
           self.$vux.toast.show({
             text: data.error,
             time: self.$util.delay(data.error),
@@ -381,8 +379,6 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
-    console.log(self.loginUser)
-    alert(self.loginUser)
     let iscontinue = true
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'apply'
