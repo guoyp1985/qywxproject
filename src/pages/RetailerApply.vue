@@ -357,14 +357,14 @@ export default {
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           let data = res.data
-          self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1 || data.flag === 2) {
-                User.set()
                 self.$router.push('/centerSales')
+              } else {
+                self.$vux.loading.hide()
               }
             }
           })
@@ -377,7 +377,8 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
-    alert(JSON.stringify(self.loginUser))
+    console.log(self.loginUser)
+    alert(self.loginUser)
     let iscontinue = true
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'apply'
