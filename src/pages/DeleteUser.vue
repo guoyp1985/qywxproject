@@ -39,10 +39,11 @@ export default {
           }).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
+            let error = data.flag === 1 ? '成功' : data.error
             self.$vux.toast.show({
-              text: data.error,
+              text: error,
               type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
+              time: self.$util.delay(error),
               onHide: function () {
                 if (data.flag === 1) {
                   self.uids = ''
