@@ -6,7 +6,7 @@
         <div class="pl10 pr10 h_100">
           <div class="t-table h_100 toprow">
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle w80">
-              <x-img class="avatarimg4 v_middle imgcover" :src="sellerUser.avatar" ></x-img>
+              <img class="avatarimg4 v_middle imgcover" :src="sellerUser.avatar" />
             </router-link>
             <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle font18">{{ sellerUser.username }}</router-link>
             <div class="t-cell v_middle w70 align_center">

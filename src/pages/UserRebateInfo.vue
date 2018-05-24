@@ -26,15 +26,14 @@
                     <div class="avatar-cell">
                       <x-img :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container1"></x-img>
                     </div>
-                    <div class="content-cell">
-                      <div class="inline-title font14">店铺: {{item.title}}</div>
-                      <div class="inline-desc font12 color-gray">
-                        {{item.dateline | dateFormat}}
-                      </div>
+                    <div slot="inline-desc">
+                      <div class="clamp1">{{item.username}}</div>
+                      <div class="clamp1">店铺: {{item.title}}</div>
+                      <div class="clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
                     </div>
-                    <div class="value-cell font14 color-red align_center">
-                      <div>{{item.content}}</div>
-                      <div>{{$t('RMB')}}{{item.money}}</div>
+                    <div class="value-cell font14 color-red align_center" style="width:120px;">
+                      <div class="clamp1">{{item.content}}</div>
+                      <div class="clamp1">{{$t('RMB')}}{{item.money}}</div>
                     </div>
                   </cell-box>
                 </group>
@@ -62,14 +61,16 @@
             <template v-if="distabdata2">
               <template v-if="tabdata2.length">
                 <group>
-                  <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index" :title="`店铺: ${item.title}`">
+                  <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index">
                     <x-img slot="icon" :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container2"></x-img>
-                    <div slot="inline-desc" class="font12 color-gray">
-                      {{item.dateline | dateFormat}}
+                    <div slot="inline-desc">
+                      <div class="clamp1">{{item.username}}</div>
+                      <div class="clamp1">店铺: {{item.title}}</div>
+                      <div class="clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
                     </div>
-                    <div slot="child" class="color-red align_center">
-                      <div>{{item.content}}</div>
-                      <div>{{$t('RMB')}}{{item.money}}</div>
+                    <div class="value-cell font14 color-red align_center" style="width:120px;">
+                      <div class="clamp1">{{item.content}}</div>
+                      <div class="clamp1">{{$t('RMB')}}{{item.money}}</div>
                     </div>
                   </cell>
                 </group>
@@ -85,14 +86,16 @@
             <template v-if="distabdata3">
               <template v-if="tabdata3.length">
                 <group>
-                  <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index" :title="`店铺: ${item.title}`">
+                  <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index">
                     <x-img slot="icon" :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container3"></x-img>
-                    <div slot="inline-desc" class="font12 color-gray">
-                      {{item.dateline | dateFormat}}
+                    <div slot="inline-desc">
+                      <div class="clamp1">{{item.username}}</div>
+                      <div class="clamp1">店铺: {{item.title}}</div>
+                      <div class="clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
                     </div>
-                    <div slot="child" class="color-red align_center">
-                      <div>{{item.content}}</div>
-                      <div>{{$t('RMB')}}{{item.money}}</div>
+                    <div class="value-cell font14 color-red align_center" style="width:120px;">
+                      <div class="clamp1">{{item.content}}</div>
+                      <div class="clamp1">{{$t('RMB')}}{{item.money}}</div>
                     </div>
                   </cell>
                 </group>
@@ -188,7 +191,7 @@ export default {
     },
     getdata1 () {
       const self = this
-      let params = { cashed: 0, pagestart: self.pagestart1, limit: self.limit }
+      let params = { cashed: 0, from: 'user', pagestart: self.pagestart1, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -207,7 +210,7 @@ export default {
     },
     getdata2 () {
       const self = this
-      let params = { cashed: 2, pagestart: self.pagestart1, limit: self.limit }
+      let params = { cashed: 2, from: 'user', pagestart: self.pagestart1, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -218,7 +221,7 @@ export default {
     },
     getdata3 () {
       const self = this
-      let params = { cashed: 1, pagestart: self.pagestart1, limit: self.limit }
+      let params = { cashed: 1, from: 'user', pagestart: self.pagestart1, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

@@ -13,7 +13,7 @@
       </div>
       <div style="position:absolute;top:10px;right:20px;height:35px;">
         <router-link class="color-white" style="padding-top:8px;" to="/retailerSetting"><span class="al al-set font20"></span></router-link>
-        <router-link  style="position:reltaive;color:#fff;margin-left:5px;" to="/retailerMessagelist">
+        <router-link  style="position:reltaive;color:#fff;margin-left:5px;" to="/messages">
           <span class="al al-pinglun font20"></span>
           <span class="numicon" v-if="retailerInfo.newmessage > 0">{{ retailerInfo.newmessage }}</span>
         </router-link>

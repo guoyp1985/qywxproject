@@ -17,7 +17,7 @@
           {{$t('Gain Credit')}}: {{userCredit}}
         </div>
       </router-link>
-      <router-link class="op-cell" to="/retailerMessagelist">
+      <router-link class="op-cell" to="/messages">
         <span class="al al-pinglun color-black font24"></span>
       </router-link>
     </div>

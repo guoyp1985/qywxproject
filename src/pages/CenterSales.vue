@@ -107,8 +107,8 @@
             </grid-item>
           </div>
         </template>
-        <template v-else >
-          <div class="gridlist">
+        <template v-else>
+          <div class="gridlist disabled" @click="clickDisabled">
             <grid-item :label="$t('Rebate customer')" style="position:relative;">
               <div slot="icon">
                 <i class="al al-xiaoshou db-in"></i>
@@ -116,14 +116,14 @@
               <span class="icon_hot"></span>
             </grid-item>
           </div>
-          <div class="gridlist">
+          <div class="gridlist disabled" @click="clickDisabled">
             <grid-item :label="$t('Sale chance')">
               <div slot="icon">
                 <i class="al al-yewujihui db-in"></i>
               </div>
             </grid-item>
           </div>
-          <div class="gridlist">
+          <div class="gridlist disabled" @click="clickDisabled">
             <grid-item :label="$t('Contact customer')">
               <div slot="icon">
                 <i class="al al-lianxiren db-in"></i>
@@ -135,19 +135,19 @@
     </div>
     <group class="list-shadow02 order_list_show posi_r">
       <template v-if="retailerInfo.products > 0">
-          <cell :link="{path:'/retailerOrders'}" style="position:relative">
-            <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
-            <div slot="inline-desc">
-              <span class="font15">{{$t('Order list')}}</span>
-            </div>
-            <div slot="child">
-              <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
-              <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
-            </div>
-          </cell>
+        <cell :link="{path:'/retailerOrders'}" style="position:relative">
+          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+          <div slot="inline-desc">
+            <span class="font15">{{$t('Order list')}}</span>
+          </div>
+          <div slot="child">
+            <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
+            <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
+          </div>
+        </cell>
       </template>
       <template v-else >
-        <cell :link="{path:'/retailerOrders'}" style="position:relative">
+        <cell class="listitem disabled" @click.native.stop="clickDisabled">
           <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
           <div slot="inline-desc">
             <span class="font15">{{$t('Order list')}}</span>
@@ -226,9 +226,10 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       showcontainer: false,
       loginUser: Object,
-      retailerInfo: { avatar: '/src/assets/images/user.jpg' },
+      retailerInfo: Object,
       marquedata: [],
       imgarr: [{
         msrc: '/src/assets/images/user.jpg',
@@ -256,53 +257,72 @@ export default {
           urls: self.wximgarr
         })
       }
+    },
+    clickDisabled () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '请先添加商品再使用该功能哦！',
+        confirmText: '添加商品',
+        onConfirm () {
+          self.$router.push('/addProduct')
+        }
+      })
+    },
+    initInfo () {
+      const self = this
+      self.$vux.loading.show()
+      self.loginUser = User.get()
+      let iscontinue = true
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'index'
+      })
+      if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
+        self.showcontainer = false
+        iscontinue = false
+      } else if (self.loginUser.usergroup) {
+        let usergroup = self.loginUser.usergroup
+        for (let i = 0; i < usergroup.length; i++) {
+          let g = usergroup[i]
+          if (g === 3) {
+            iscontinue = true
+            break
+          }
+        }
+      }
+      if (!iscontinue) {
+        self.$vux.loading.hide()
+        self.$router.push('/retailerApply')
+      } else {
+        self.showcontainer = true
+        self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+          let data = res.data
+          self.retailerInfo = data.data ? data.data : data
+          self.imgarr[0].msrc = self.retailerInfo.avatar
+          self.imgarr[0].src = self.retailerInfo.avatar
+          self.wximgarr[0] = self.retailerInfo.avatar
+          self.$vux.loading.hide()
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+        }).then(function (res) {
+          let data = res.data
+          self.marquedata = data.data ? data.data : data
+        })
+      }
     }
   },
   created () {
     console.log('created')
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.loginUser = User.get()
-    console.log(self.loginUser)
-    let iscontinue = true
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'index'
-    })
-    if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-      self.showcontainer = false
-      iscontinue = false
-    } else if (self.loginUser.usergroup) {
-      let usergroup = self.loginUser.usergroup
-      for (let i = 0; i < usergroup.length; i++) {
-        let g = usergroup[i]
-        if (g === 3) {
-          iscontinue = true
-          break
-        }
-      }
-    }
-    if (!iscontinue) {
-      self.$vux.loading.hide()
-      self.$router.push('/retailerApply')
-    } else {
-      self.showcontainer = true
-      self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-        let data = res.data
-        self.retailerInfo = data.data ? data.data : data
-        self.imgarr[0].msrc = self.retailerInfo.avatar
-        self.imgarr[0].src = self.retailerInfo.avatar
-        self.wximgarr[0] = self.retailerInfo.avatar
-        self.$vux.loading.hide()
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-      }).then(function (res) {
-        let data = res.data
-        self.marquedata = data.data ? data.data : data
-      })
-    }
+    self.initInfo()
   },
   activated () {
     console.log('activated')
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>
@@ -368,6 +388,12 @@ export default {
 .centersales .weui-grids .gridlist:nth-child(4) .weui-grid{background: linear-gradient(#3eb4f1, #099ded);}
 .centersales .weui-grids .gridlist:nth-child(5) .weui-grid{background: linear-gradient(#f25c7d, #ed2d5a);}
 .centersales .weui-grids .gridlist:nth-child(6) .weui-grid{background: linear-gradient(#7974f6, #615aec);}
+.centersales .weui-grids .gridlist.disabled .weui-grid{background: linear-gradient(#ccc, #666);}
+.listitem.disabled {position:relative;}
+.listitem.disabled:after{
+  content:'';
+  position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.1)
+}
 
 .icon_hot{
   position: absolute;

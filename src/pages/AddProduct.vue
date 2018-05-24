@@ -61,16 +61,20 @@
         </div>
         <div class="form-item required bg-white">
           <div class="flex_row">
-            <div class="t-table" style="width:60%">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
+            <div class="flex_cell">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
+                </div>
               </div>
             </div>
-            <div class="t-table" style="width:40%;">
-              <div class="t-cell title-cell w50 font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.unit" type="text" class="input align_left" name="unit" :placeholder="$t('Storage unit')" />
+            <div class="flex_cell" style="width:80px;">
+              <div class="t-table">
+                <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell w30 v_middle" style="position:relative;">
+                  <input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
+                </div>
               </div>
             </div>
           </div>
