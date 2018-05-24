@@ -81,7 +81,7 @@
             <div class="font12 padding10 b_bottom bg-page color-lightgray">
               <div class="t-table w_100">
                 <div class="t-cell align_left pl10">{{ $t('Customer text') }}</div>
-                <div class="t-cell align_right pr10 w80">{{ $t('Percent') }}</div>
+                <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
                 <div class="t-cell align_right w60">{{ $t('Contact Consumers') }}</div>
               </div>
             </div>

@@ -188,35 +188,6 @@ export default {
         }
       })
     },
-<<<<<<< HEAD
-      photoCallback (data) {
-        const self = this
-        if (data.flag === 1) {
-          self.photoarr.push(data.data)
-        } else if (data.error) {
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error)
-          })
-        }
-      },
-      uploadPhoto () {
-        const self = this
-        const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
-        if (self.$util.isPC()) {
-          fileInput.click()
-        } else {
-          self.$wechat.ready(function () {
-            self.$util.wxUploadImage({
-              maxnum: 1,
-              handleCallback: function (data) {
-                self.photoCallback(data)
-              }
-            })
-          })
-        }
-      },
-=======
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -244,7 +215,6 @@ export default {
         })
       }
     },
->>>>>>> 32602c8591ee88f126b19cc3037642a43f5f3cfb
     fileChange (e) {
       const self = this
       let files = e.target.files
