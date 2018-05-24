@@ -355,15 +355,20 @@ export default {
         }
         self.$vux.loading.show()
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
+        let applydata = Object
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
+          applydata = res.data
+          return self.$http.get(`${ENV.BokaApi}/api/user/show`)
+        }).then(function (res) {
           let data = res.data
-          User.remove()
-          User.set()
+          let curuser = data.data ? data.data : data
+          User.set(curuser)
+          alert(JSON.stringify(User.get()))
           self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error),
+            text: applydata.error,
+            time: self.$util.delay(applydata.error),
             onHide: function () {
-              if (data.flag === 1 || data.flag === 2) {
+              if (applydata.flag === 1 || applydata.flag === 2) {
                 self.$router.push('/centerSales')
               } else {
                 self.$vux.loading.hide()

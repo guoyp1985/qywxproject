@@ -107,8 +107,8 @@
             </grid-item>
           </div>
         </template>
-        <template v-else >
-          <div class="gridlist">
+        <template v-else>
+          <div class="gridlist disabled">
             <grid-item :label="$t('Rebate customer')" style="position:relative;">
               <div slot="icon">
                 <i class="al al-xiaoshou db-in"></i>
@@ -116,14 +116,14 @@
               <span class="icon_hot"></span>
             </grid-item>
           </div>
-          <div class="gridlist">
+          <div class="gridlist disabled">
             <grid-item :label="$t('Sale chance')">
               <div slot="icon">
                 <i class="al al-yewujihui db-in"></i>
               </div>
             </grid-item>
           </div>
-          <div class="gridlist">
+          <div class="gridlist disabled">
             <grid-item :label="$t('Contact customer')">
               <div slot="icon">
                 <i class="al al-lianxiren db-in"></i>
