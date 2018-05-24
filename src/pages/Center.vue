@@ -136,7 +136,6 @@ export default {
     const self = this
     const user = User.get()
     if (user) {
-      alert(user.avatar)
       self.avatarHref = user.avatar
       self.linkMan = user.linkman
       self.userCredits = user.credit
