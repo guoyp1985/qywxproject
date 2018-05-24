@@ -4,20 +4,20 @@
       <div class="row row1">
         <div class="bg"></div>
         <div class="pl10 pr10 h_100">
-          <div class="t-table h_100 toprow">
-            <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle w80">
-              <x-img class="avatarimg4 v_middle imgcover" :src="sellerUser.avatar" ></x-img>
+          <div class="t-table h_100 toprow color-white">
+            <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle w65">
+              <x-img class="avatarimg5 v_middle imgcover" :src="sellerUser.avatar" ></x-img>
             </router-link>
-            <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle font18">{{ sellerUser.username }}</router-link>
+            <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="t-cell v_middle font17">{{ sellerUser.username }}</router-link>
             <div class="t-cell v_middle w70 align_center">
-              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn2">联系</router-link>
+              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
               <a class="db-in mt5" v-if="sellerUser.mobile && sellerUser.mobile != ''" :href="`tel:${sellerUser.mobile}`"><i class="al al-fuwuzhongxin font16"></i></a>
             </div>
           </div>
         </div>
       </div>
       <div class="row row2">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
+        <tab v-model="tabmodel" class="v-tab" active-color="#ea3a3a" default-color="#666">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">
             <div class="flex_center txt">
               <div>
@@ -31,7 +31,7 @@
         </tab>
       </div>
     </div>
-    <div class="s-container s-container2">
+    <div class="v-container s-container2" style="">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
@@ -43,13 +43,13 @@
               </div>
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
-                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
+                    <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1" ></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
-                    <div class="clamp1 font14">{{item.linkman}}</div>
-                    <div class="clamp1 font12 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
-                    <div class="clamp1 font12 color-gray">时间:{{ item.dateline | dateformat }}</div>
+                    <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                    <div class="clamp1 font14 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
+                    <div class="clamp1 font14 color-gray">时间:{{ item.dateline | dateformat }}</div>
                   </router-link>
                   <div class="t-cell v_middle align_right w60">
                     <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-green color-white">联系</router-link>
@@ -71,10 +71,10 @@
                     <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container2"></x-img>
                   </div>
                   <div class="t-cell v_middle">
-                    <div class="clamp1 font14">{{item.title}}</div>
-                    <div class="clamp1 font12 color-gray">分享次数:{{item.shares}}</div>
-                    <div class="clamp1 font12 color-gray">带来访问:{{item.visitor}}</div>
-                    <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                    <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
+                    <div class="clamp1 font14 color-gray">分享次数:{{item.shares}}</div>
+                    <div class="clamp1 font14 color-gray">带来访问:{{item.visitor}}</div>
+                    <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
                   </div>
                 </div>
               </div>
@@ -95,12 +95,12 @@
               </div>
               <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                 <div class="t-table">
-                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w50">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
+                    <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
-                    <div class="clamp1 font14">{{item.linkman}}</div>
-                    <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
+                    <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                    <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
                   </router-link>
                   <div class="t-cell v_middle w60 h_100">
                     <div class="w_100 h_100 flex_right">
