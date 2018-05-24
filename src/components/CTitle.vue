@@ -31,8 +31,9 @@
     </div>
     <div class="message-btn">
       <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
-        <span class="al al-pinglun color-white font24"></span>
-        <badge class="msg-badge" v-if="messages > 0" :text="messages"></badge>
+        <span class="al al-pinglun color-white font28"></span>
+        <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
+        <span class="msg-badge" v-if="messages >= 100">···</span>
       </router-link>
     </div>
   </div>
@@ -68,6 +69,10 @@ export default {
     messages: {
       type: Number,
       default: 0
+    }
+  },
+  data () {
+    return {
     }
   },
   computed: {
@@ -171,8 +176,8 @@ export default {
 }
 .ctitle .message-btn .msg-badge {
   position: absolute;
-  top: 2px;
-  right: -6px;
+  top: -2px;
+  right: -11px;
   z-index: 3
 }
 
@@ -186,5 +191,17 @@ export default {
 .ctitle .weui-grids:before {
   border-top: none;
   height: 0;
+}
+.ctitle .msg-badge{
+  background-color: #ea3a3a;
+  text-align:center;
+  color:#fff;
+  font-size:8pt;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  border-radius: 50%;
+  display: block;
+  padding: 0px;
 }
 </style>

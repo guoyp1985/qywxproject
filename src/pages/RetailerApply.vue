@@ -2,7 +2,7 @@
   <div v-show="showcontainer" class="containerarea font14 bg-white retailerapply notop">
     <div class="pagemiddle bg-white" style="bottom: 50px;">
       <div class="flex_center bg-white posi_r" style="height:auto;">
-          <div class="transition-top posi_r">
+          <div class="transition-top posi_r" style="width:100%;">
             <img src="../assets/images/banner_top.png" width="100%"/>
             <div class="waveWrapper waveAnimation">
               <div class="waveWrapperInner bgTop">

@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-white font14 rsaleview">
-    <div class="s-topbanner s-topbanner2">
+    <div class="s-topbanner">
       <div class="row row1">
         <div class="bg"></div>
         <div class="pl10 pr10 h_100">
