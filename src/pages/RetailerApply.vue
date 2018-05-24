@@ -357,6 +357,10 @@ export default {
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           let data = res.data
+          User.remove()
+          User.set()
+          self.loginUser = User.get()
+          console.log(self.loginUser)
           self.$vux.toast.show({
             text: data.error,
             time: self.$util.delay(data.error),

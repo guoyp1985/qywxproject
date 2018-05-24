@@ -312,7 +312,7 @@ export default {
       .then(res => {
         alert(JSON.stringify(res))
         let data = res.data
-        if (data) {
+        if (!isNaN(data.flag)) {
           alert('in data')
           self.$vux.loading.hide()
           if (data.flag !== 1) {
