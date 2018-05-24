@@ -42,7 +42,7 @@
                       </div>
                     </div>
                   </template>
-                  <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto">
+                  <div v-if="photoarr.length < maxnum" class="photoitem add" style="width:34%;" @click="uploadPhoto">
                     <div class="inner">
                       <div class="innerlist">
                         <div class="flex_center h_100">

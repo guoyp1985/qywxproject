@@ -9,7 +9,7 @@
         <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
     </div>
     <div class="s-container">
-      <div class="b_top_after padding10 flex_center bg-white">
+      <div class="b_top_after padding10 flex_center bg-white list-shadow01">
         <div class="t-table align_center font15 itemtab">
           <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Share') }}</router-link>
           <router-link :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>
