@@ -64,18 +64,5 @@ const Roomid = {
     return localStorage.getItem('roomid')
   }
 }
-const BkSocket = {
-  set (bksocket) {
-    localStorage.setItem('bksocket', JSON.stringify(bksocket))
-  },
-  get () {
-    if (localStorage.getItem('bksocket') === 'undefined') {
-      return null
-    }
-    return JSON.parse(localStorage.getItem('bksocket'))
-  },
-  remove () {
-    localStorage.removeItem('bksocket')
-  }
-}
-export { Token, OpenId, WxQrCode, User, Access, BkSocket, Roomid }
+
+export { Token, OpenId, WxQrCode, User, Access, Roomid }

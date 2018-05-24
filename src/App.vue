@@ -79,15 +79,15 @@ export default {
       }
     },
     '$route' (to, from) {
-      if (from.name) {
-        let socket = BkSocket.get()
-        if (socket && socket.url) {
-          socket.send(JSON.stringify({
-            type: 'logout',
-            room_id: Roomid.get()
-          }))
-        }
-      }
+      // if (from.name) {
+      //   let socket = BkSocket.get()
+      //   if (socket && socket.url) {
+      //     socket.send(JSON.stringify({
+      //       type: 'logout',
+      //       room_id: Roomid.get()
+      //     }))
+      //   }
+      // }
       document.title = this.getTitle(to.path)
     }
   },

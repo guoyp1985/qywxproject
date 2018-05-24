@@ -372,7 +372,7 @@ export default {
       }
     }
   },
-  created: function () {
+  created () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()

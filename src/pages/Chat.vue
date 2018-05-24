@@ -40,7 +40,7 @@
         </template>
       </div>
     </div>
-    <div slot="bottom" class="bottom-area">
+    <div class="bottom-area">
       <div class="input-box">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">

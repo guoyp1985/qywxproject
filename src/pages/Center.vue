@@ -133,15 +133,14 @@ export default {
     }
   },
   created () {
-    const self = this
     const user = User.get()
     if (user) {
-      self.avatarHref = user.avatar
-      self.linkMan = user.linkman
-      self.userCredits = user.credit
-      self.userLevels = user.levels
-      self.messages = user.messages
-      self.profile = {
+      this.avatarHref = user.avatar
+      this.linkMan = user.linkman
+      this.userCredits = user.credit
+      this.userLevels = user.levels
+      this.messages = user.messages
+      this.profile = {
         linkman: user.linkman,
         avatar: user.avatar,
         sex: user.sex,
@@ -149,9 +148,9 @@ export default {
         company: user.company
       }
     } else {
-      self.$http.get(`${ENV.BokaApi}/api/user/show`)
+      this.$http.get(`${ENV.BokaApi}/api/user/show`)
     }
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     /*
     if (self.$util.isPC()) {
       self.btns1.push({
@@ -172,6 +171,25 @@ export default {
       })
     }
     */
+  },
+  activated () {
+    const user = User.get()
+    if (user) {
+      this.avatarHref = user.avatar
+      this.linkMan = user.linkman
+      this.userCredits = user.credit
+      this.userLevels = user.levels
+      this.messages = user.messages
+      this.profile = {
+        linkman: user.linkman,
+        avatar: user.avatar,
+        sex: user.sex,
+        mobile: user.mobile,
+        company: user.company
+      }
+    } else {
+      this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    }
   }
 }
 </script>

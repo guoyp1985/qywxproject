@@ -120,7 +120,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User, BkSocket, Roomid } from '#/storage'
+import { User, Roomid } from '#/storage'
 
 export default {
   directives: {
@@ -155,9 +155,9 @@ export default {
       disComments: false,
       pagestart: 0,
       limit: 20,
-      replyData: null,
-      roomid: '',
-      socket: BkSocket.get()
+      replyData: null
+      // roomid: '',
+      // socket: BkSocket.get()
     }
   },
   filters: {
@@ -490,87 +490,108 @@ export default {
         }
       }
     },
-    createdFun (to, from, next) {
-      const self = this
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      const room = query.id
+      Socket.create()
+      Socket.listening(uid, linkman, room)
+    },
+    createdFun (query) {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = to.query
-      self.loginUser = User.get()
-      alert(JSON.stringify(self.loginUser))
-      this.wsConnect()
+      // this.query = query
+      this.loginUser = User.get()
+      this.activatedFun(query)
+      // alert(JSON.stringify(this.loginUser))
+      // this.wsConnect()
+      // this.showsharetip = false
+      // this.getData()
+      // const self = this
+      // if (this.query.newadd) {
+      //   setTimeout(function () {
+      //     self.showsharetip = false
+      //   }, 10000)
+      // }
+    },
+    activatedFun (query) {
+      this.query = query
       this.showsharetip = false
+      this.createSocket()
       this.getData()
       if (this.query.newadd) {
         setTimeout(function () {
           self.showsharetip = false
         }, 10000)
       }
-      next && next()
     },
-    wsConnect () {
-      const self = this
-      self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
-      Roomid.set(self.roomid)
-      if (!self.socket || !self.socket.url) {
-        self.socket = new WebSocket(ENV.SocketApi)
-        BkSocket.set(self.socket)
-      }
-      self.socket.onopen = function () {
-        let loginData = {
-          type: 'login',
-          uid: self.loginUser.uid,
-          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-          room_id: self.roomid
-        }
-        self.socket.send(JSON.stringify(loginData))
-      }
-      self.socket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        if (data.type === 'login') {
-          console.log('in login')
-        } else if (data.type === 'logout') {
-          console.log('in logout')
-        } else if (data.type === 'say') {
-          console.log('say')
-          let edata = JSON.parse(e.data)
-          let saycontent = edata.content
-          if (!self.$util.isNull(saycontent)) {
-            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-          }
-          let saydata = {
-            uid: edata.from_uid,
-            content: saycontent,
-            dateline: edata.time,
-            msgtype: edata.msgtype ? edata.msgtype : 'text',
-            picurl: edata.picurl ? edata.picurl : '',
-            thumb: edata.thumb ? edata.thumb : '',
-            username: edata.from_client_name,
-            id: edata.msgid,
-            roomid: edata.room_id,
-            avatar: edata.avatar,
-            newsdata: edata.newsdata
-          }
-        }
-      }
-      self.socket.onclose = function () {
-        console.log('ws closed')
-        self.wsConnect()
-      }
-      self.socket.onerror = function () {
-        console.log('ws error')
-      }
-    },
+    // wsConnect () {
+    //   const self = this
+    //   self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
+    //   Roomid.set(self.roomid)
+    //   if (!self.socket || !self.socket.url) {
+    //     self.socket = new WebSocket(ENV.SocketApi)
+    //     BkSocket.set(self.socket)
+    //   }
+    //   self.socket.onopen = function () {
+    //     let loginData = {
+    //       type: 'login',
+    //       uid: self.loginUser.uid,
+    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+    //       room_id: self.roomid
+    //     }
+    //     self.socket.send(JSON.stringify(loginData))
+    //   }
+    //   self.socket.onmessage = function (e) {
+    //     const data = JSON.parse(e.data)
+    //     if (data.type === 'login') {
+    //       console.log('in login')
+    //     } else if (data.type === 'logout') {
+    //       console.log('in logout')
+    //     } else if (data.type === 'say') {
+    //       console.log('say')
+    //       let edata = JSON.parse(e.data)
+    //       let saycontent = edata.content
+    //       if (!self.$util.isNull(saycontent)) {
+    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+    //       }
+    //       let saydata = {
+    //         uid: edata.from_uid,
+    //         content: saycontent,
+    //         dateline: edata.time,
+    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
+    //         picurl: edata.picurl ? edata.picurl : '',
+    //         thumb: edata.thumb ? edata.thumb : '',
+    //         username: edata.from_client_name,
+    //         id: edata.msgid,
+    //         roomid: edata.room_id,
+    //         avatar: edata.avatar,
+    //         newsdata: edata.newsdata
+    //       }
+    //     }
+    //   }
+    //   self.socket.onclose = function () {
+    //     console.log('ws closed')
+    //     self.wsConnect()
+    //   }
+    //   self.socket.onerror = function () {
+    //     console.log('ws error')
+    //   }
+    // },
     toStore () {
       const self = this
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     }
   },
   created () {
-    this.createdFun(this.$route)
+    this.createdFun(this.$route.query)
   },
-  beforeRouteUpdate (to, from, next) {
-    const self = this
-    self.createdFun(to, from, next)
+  activated () {
+    this.activatedFun(this.$route.query)
   }
+  // beforeRouteUpdate (to, from, next) {
+  //   const self = this
+  //   self.createdFun(to, from, next)
+  // }
 }
 </script>
 <style lang="less">
