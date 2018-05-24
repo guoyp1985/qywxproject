@@ -533,7 +533,7 @@ export default {
     getEvaluateList () {
       const self = this
       let params = { module: self.module, nid: self.productid, pagestart: self.pagestart, limit: self.limit }
-      self.$http.get(`${ENV.BokaApi}/api/comment/list`,{
+      self.$http.get(`${ENV.BokaApi}/api/comment/list`, {
         params: params
       }).then(function (res) {
         self.$vux.loading.hide()

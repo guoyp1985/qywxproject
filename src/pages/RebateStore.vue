@@ -246,7 +246,6 @@ export default {
       })
     },
     onItemClick (index) {
-      const self = this
       switch (index) {
         case 0:
           !this.tabdata1.length && this.getdata1()

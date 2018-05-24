@@ -6,7 +6,7 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
-      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="-100" container=".scroll-container"></x-img>
+      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg"></x-img>
     </div>
     <div class="detail-cell">
       <div class="header-area">
