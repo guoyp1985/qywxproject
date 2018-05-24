@@ -1,12 +1,12 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
-    <tab v-if="tabdata1.length > 0" v-model="tabmodel" class="x-toptab">
+    <tab v-if="tabdata1.length > 0" v-model="tabmodel" class="x-toptab v-tab">
       <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
     </tab>
     <tab v-else v-model="tabmodel" class="x-toptab">
       <tab-item :selected="true">{{ tabtxts[1] }}</tab-item>
     </tab>
-    <div class="s-container">
+    <div class="s-container" style="top:44px">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="tabdata1.length > 0 && index === 0">
@@ -22,24 +22,24 @@
                   </div>
                 </div>
               </div>
-              <div v-else v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl10 pr10 db`">
+              <div v-else v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
                 <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
-                    <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px;" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
-                      <div class="clamp1 font12">{{item.title}}</div>
-                      <div class="clamp1 color-999 middle-cell mt5">总金额:{{ $t('RMB') }}{{ item.budget }}</div>
-                      <div class="clamp1 color-999 middle-cell">已领取:{{ item.getcount }}人/{{ $t('RMB') }}{{ item.getmoney }}</div>
-                      <div class="clamp1 color-999 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
+                      <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
+                      <div class="clamp1 color-999 font14 middle-cell mt5">总金额: <span class="color-red">{{ $t('RMB') }}{{ item.budget }}</span></div>
+                      <div class="clamp1 color-999 font14 middle-cell">已领取:{{ item.getcount }}人/{{ $t('RMB') }}{{ item.getmoney }}</div>
+                      <div class="clamp1 color-999 font14 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
                     </div>
                     <div class="t-cell align_right v_middle font0" style="width:60px;">
-                      <router-link v-if="item.moderate == 0" class="qbtn1 bg-orange1 color-white" :to="`/pay/${item.orderid}`">支支付</router-link>
-                      <router-link class="qbtn1 bg-orange1 color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.moderate != 0">补钱</div>
-                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                      <router-link v-if="item.moderate == 0" class="qbtn bg-red color-white" :to="`/pay/${item.orderid}`">支支付</router-link>
+                      <router-link class="qbtn bg-red color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.moderate != 0">补钱</div>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -47,17 +47,17 @@
                 <router-link :to="{path:'/product',query:{wid:item.wid,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
-                    <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px;" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
-                      <div class="clamp1 font12">{{item.title}}</div>
-                      <div class="clamp1 font12 color-gray mt5">{{ $t('Groupprice') }} {{ $t('RMB') }} {{ item.groupprice }}</div>
-                      <div class="clamp1 font12 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
+                      <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Groupprice') }} <span class="color-red"> {{ $t('RMB') }} {{ item.groupprice }} </span></div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Group numbers') }} {{ item.numbers }}{{ $t('Person') }}</div>
                     </div>
                     <div class="t-cell align_right v_middle font0" style="width:60px;">
-                      <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -65,17 +65,17 @@
                 <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'bargainbuy'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
-                    <div class="t-cell align_left pr10 v_middle" style="width:80px;">
-                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
+                    <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                      <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px;" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell align_left v_middle">
-                      <div class="clamp1 font12">{{item.title}}</div>
-                      <div class="clamp1 font12 color-gray mt5">{{ $t('Min buy price') }} {{ $t('RMB') }} {{ item.minprice }}</div>
-                      <div class="clamp1 font12 color-gray mt5">{{ $t('Delivery of goods') }} {{ item.limitbuy }}</div>
+                      <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Min buy price') }} <span class="color-red"> {{ $t('RMB') }} {{ item.minprice }} </span></div>
+                      <div class="clamp1 font14 color-gray mt5">{{ $t('Delivery of goods') }} {{ item.limitbuy }}</div>
                     </div>
                     <div class="t-cell align_right v_middle font0" style="width:60px;">
-                      <router-link class="qbtn1 bg-orange1 color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
-                      <div class="qbtn1 bg-orange1 color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
+                      <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                      <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
                     </div>
                   </div>
                   <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
@@ -84,14 +84,14 @@
             </div>
           </template>
           <template v-if="tabdata1.length == 0 || index == 1">
-            <div class="db-flex padding10 mb5 bg-white" @click="clickadd('groupbuy')">
-              <div class="flex_left" style="width:90px;">
-                <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="/src/assets/images/groupbuy.jpg">
+            <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('groupbuy')">
+              <div class="flex_left" style="width:110px;">
+                <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="/src/assets/images/groupbuy.jpg">
               </div>
               <div class="flex_cell flex_left">
                 <div>
-                  <div class="color-black">{{ $t('Groupbuy') }}</div>
-                  <div class="font12 mt5 color-gray">{{ $t('Groupbuy description') }}</div>
+                  <div class="clamp2 font16 color-lightgray">{{ $t('Groupbuy') }}</div>
+                  <div class="font14 mt5 color-gray">{{ $t('Groupbuy description') }}</div>
                   <div class="mt5">
                     <div class="qbtn4 font12" style="line-height:1;">{{ $t('Eazy get order') }}</div>
                   </div>
@@ -101,14 +101,14 @@
                 <i class="al al-mjiantou-copy font14"></i>
               </div>
             </div>
-            <div class="db-flex padding10 mb5 bg-white" @click="clickadd('bargainbuy')">
-              <div class="flex_left" style="width:90px;">
-                <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="/src/assets/images/bargainbuy.jpg">
+            <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('bargainbuy')">
+              <div class="flex_left" style="width:110px;">
+                <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="/src/assets/images/bargainbuy.jpg">
               </div>
               <div class="flex_cell flex_left">
                 <div>
-                  <div class="color-black">{{ $t('Bargainbuy') }}</div>
-                  <div class="font12 mt5 color-gray">{{ $t('Bargainbuy description') }}</div>
+                  <div class="clamp2 font16 color-lightgray">{{ $t('Bargainbuy') }}</div>
+                  <div class="font14 mt5 color-999">{{ $t('Bargainbuy description') }}</div>
                   <div class="mt5">
                     <div class="qbtn4 font12 mr5" style="line-height:1;">{{ $t('Eazy get customer') }}</div>
                     <div class="qbtn4 font12" style="line-height:1;">{{ $t('Eazy get order') }}</div>
@@ -445,5 +445,8 @@ export default {
 .ractivitylist .scroll_item .row{
   display: -webkit-box;
   position:relative;
+}
+.ractivitylist .x-toptab, .x-toptab.vux-tab-warp{
+  height: 44px;
 }
 </style>

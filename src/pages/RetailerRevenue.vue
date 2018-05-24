@@ -1,20 +1,19 @@
 <template>
   <div class="containerarea font14 retailerrevenue">
-    <div class="pagetop" style="height:126px;">
-      <div class="v-top">
+    <div class="pagetop" style="height:88px;">
+      <div class="v-top" style="height:44px;">
         <div class="flex_center">
-          <div class="flex_cell font12 color-white">{{$t('Myrevenue')}}</div>
+          <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
           <div class="align_right" style="width:150px;">
             <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
           </div>
         </div>
-        <div class="color-white font24">￥500.00</div>
       </div>
       <tab v-model="tabmodel" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
-    <div class="s-container" style="top:126px;">
+    <div class="s-container" style="top:88px;">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
