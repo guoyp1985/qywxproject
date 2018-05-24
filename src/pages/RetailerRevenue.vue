@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 retailerrevenue bg-page nobottom">
+  <div class="containerarea font14 retailerrevenue">
     <div class="pagetop" style="height:126px;">
       <div class="v-top">
         <div class="flex_center">
@@ -18,7 +18,7 @@
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="scroll-container01" style="position:absolute;left:0;top:0;right:0;bottom:45px;overflow-y:auto;">
+            <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
@@ -30,7 +30,7 @@
                     <check-icon class="x-check-icon b_bottom_after pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
-                          <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container01"></x-img>
+                          <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 font14 color-999">{{item.buyername}}</div>
@@ -88,7 +88,7 @@
               </div>
             </div>
           </template>
-          <template v-if="(index == 1)">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <div v-if="disData2" class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
@@ -108,10 +108,6 @@
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
                       </div>
-                      <!-- <div class="t-cell align_center v_middle w100">
-                        <div class="font12">实际收入</div>
-                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
-                      </div> -->
                     </div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 border-box bg-page">
@@ -151,8 +147,8 @@
                 </template>
               </div>
             </div>
-          </template>
-          <template v-if="(index == 2)">
+          </div>
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
             <div v-if="disData3" class="scroll_list">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
@@ -185,35 +181,33 @@
                   </div>
                 </template>
                 <template v-else>
-                <div class="b_bottom_after pl12 pr12 pt10 pb10">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w45 pr10 border-box">
-                      <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 color-999">{{item.buyername}}</div>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                    </div>
-                  </div>
-                </div>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page">
-                      <div class="clamp1 font14 color-999">
-                        <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                        <span class="v_middle">{{ item.products }}</span>
+                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w45 pr10 border-box">
+                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 color-999">{{item.buyername}}</div>
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
                       </div>
                     </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="clamp1 font14 color-999">
+                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                      <span class="v_middle">{{ item.products }}</span>
                     </div>
-
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                  </div>
                 </template>
-
               </div>
             </div>
-          </template>
+          </div>
         </swiper-item>
       </swiper>
     </div>
@@ -283,13 +277,7 @@ export default {
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null
+      pagestart3: 0
     }
   },
   created () {
@@ -304,38 +292,22 @@ export default {
   computed: {
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function (refname, index) {
       const self = this
+      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+          if (index === 0 && self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.$vux.loading.show()
             self.pagestart1++
-            self.$vux.loading.show()
             self.getdata1()
-          }
-        }
-      })
-    },
-    scroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea2,
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
+          } else if (index === 1 && self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.$vux.loading.show()
+            self.pagestart2++
             self.getdata2()
-          }
-        }
-      })
-    },
-    scroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea3,
-        callback: function () {
-          if (self.tabdata3.length === self.pagestart3 + self.limit) {
+          } else if (index === 2 && self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.$vux.loading.show()
             self.pagestart3 += self.limit
             self.getdata3()
           }
@@ -359,15 +331,6 @@ export default {
         }
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disData1 = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.retailerrevenue .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.scrollArea3 = items[2]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getdata2 () {
@@ -379,11 +342,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disData2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     getdata3 () {
@@ -395,11 +353,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
-        if (!self.isBindScroll3) {
-          self.isBindScroll3 = true
-          self.scrollArea3.removeEventListener('scroll', self.scroll3)
-          self.scrollArea3.addEventListener('scroll', self.scroll3)
-        }
       })
     },
     checkboxclick (d, index) {
@@ -496,11 +449,7 @@ export default {
 }
 </script>
 
-<style lang="less" >
+<style lang="less" scoped>
 .retailerrevenue .scroll_list .scroll_item:after{display:none;}
 .retailerrevenue .scroll_list .scroll_item:not(:last-child){margin-bottom:10px;}
-.retailerrevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a}
-.retailerrevenue .weui-icon-success{color: #ea3a3a}
-.retailerrevenue .x-check-icon.vux-check-icon > span{padding-right: 0}
-.toolbar_bg{background-image: none;}
 </style>
