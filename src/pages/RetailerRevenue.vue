@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 retailerrevenue">
-    <div class="pagetop">
+    <div class="pagetop" style="height:88px;">
       <div class="v-top" style="height:44px;">
         <div class="flex_center">
           <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
@@ -13,7 +13,7 @@
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
-    <div class="s-container" style="top:44px;">
+    <div class="s-container" style="top:88px;">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
