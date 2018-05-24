@@ -86,7 +86,6 @@ export default {
       const self = this
       const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
       if (self.$util.isPC()) {
-        alert('in 1')
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
@@ -100,7 +99,6 @@ export default {
       }
     },
     fileChange (e) {
-      console.log(e)
       const self = this
       let files = e.target.files
       if (files.length > 0) {
