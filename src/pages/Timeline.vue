@@ -1,6 +1,10 @@
 <template>
   <div class="containerarea bg-page membersview font14 s-havebottom">
+<<<<<<< HEAD
     <div class="s-topbanner flex_left color-white pl15 pr15">
+=======
+    <div class="s-topbanner flex_left color-white pl15 pr15 border-box">
+>>>>>>> 32602c8591ee88f126b19cc3037642a43f5f3cfb
         <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
         <div class="flex_cell pr20 pl10">
           <div class="font17 clamp1">{{ viewuser.linkman }}</div>
@@ -9,7 +13,7 @@
         <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
     </div>
     <div class="s-container">
-      <div class="b_top_after padding10 flex_center bg-white">
+      <div class="b_top_after padding10 flex_center bg-white list-shadow01">
         <div class="t-table align_center font15 itemtab">
           <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Share') }}</router-link>
           <router-link :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>

@@ -140,12 +140,6 @@ export default {
               inpage = 'main'
             }
           }
-          /*
-          if (inpage === 'detail' && self.loginUser.subscribes === 0) {
-            const originHref = encodeURIComponent(location.href)
-            location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-          }
-          */
           let sharetitle = self.data.title
           let sharedesc = self.data.title
           let sharephoto = self.loginUser.avatar
@@ -155,9 +149,13 @@ export default {
               sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
             } else {
               sharetitle = `${self.crowduser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
-              sharephoto = self.crowduser.avatar
+              sharephoto = self.$util.getPhoto(self.data.photo)
             }
             sharedesc = '好友帮帮忙，优惠享更多！'
+          } else {
+            if (!self.data.havecreate) {
+              sharephoto = self.$util.getPhoto(self.data.photo)
+            }
           }
           self.$util.handleWxShare({
             module: 'activity',
