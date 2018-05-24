@@ -74,7 +74,7 @@
             <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
           </template>
           <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader, commentuid: comment.uid}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
-            <reply v-if="comment.comments > 0" slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
+            <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
           </comment>
         </div>
       </div>
@@ -229,7 +229,9 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         if (data.flag) {
-          let newarr = [ data.data ]
+          let newcomment = data.data
+          newcomment.comment = []
+          let newarr = [ newcomment ]
           self.comments = newarr.concat(self.comments)
         } else {
           self.$vux.toast.show({
@@ -247,12 +249,15 @@ export default {
       .then(res => {
         let data = res.data
         console.log('in reply')
+        console.log(self.replyData)
+        console.log(self.replyData.comment)
         if (data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = [ data.data ]
           } else {
             self.replyData.comment.push(data.data)
           }
+          console.log(self.replyData.comment)
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -282,6 +287,11 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          if (!retdata[i].comment) {
+            retdata[i].comment = []
+          }
+        }
         self.comments = self.comments.concat(retdata)
         self.disComments = true
       })
@@ -484,6 +494,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = to.query
       self.loginUser = User.get()
+      alert(JSON.stringify(self.loginUser))
       this.wsConnect()
       this.showsharetip = false
       this.getData()
