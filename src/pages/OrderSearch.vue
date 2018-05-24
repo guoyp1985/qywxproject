@@ -359,7 +359,7 @@ export default {
             break
         }
       })
-    },
+    }
   },
   created () {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

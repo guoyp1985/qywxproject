@@ -6,10 +6,7 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
-      <!--
-      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg" container="#vux_view_box_body"></x-img>
-    -->
-      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg" container=".scroll-container"></x-img>
+      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg"></x-img>
     </div>
     <div class="detail-cell">
       <div class="header-area">
@@ -112,9 +109,6 @@ export default {
         }
       })
     }
-  },
-  created () {
-    console.log(this.params)
   }
 }
 </script>

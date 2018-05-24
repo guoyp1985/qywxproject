@@ -127,7 +127,6 @@ export default {
   },
   methods: {
     valueChange (val) {
-      console.log('in change  ' + val)
       this.value = val
     },
     onSubmit () {

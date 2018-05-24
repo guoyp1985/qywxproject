@@ -7,7 +7,9 @@
       <transition
       :name="viewTransition"
       :css="!!direction">
-        <router-view class="router-view"></router-view>
+        <keep-alive>
+          <router-view class="router-view"></router-view>
+        </keep-alive>
       </transition>
 
       <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="toggleTabbar" slot="bottom">

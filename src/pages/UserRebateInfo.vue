@@ -4,119 +4,124 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="user-rebate" class="urebateinfo">
-    <view-box>
-      <sticky scroll-box="user-rebate" class="sticky-area">
-        <tab v-model="selectedIndex">
-          <tab-item selected @on-item-click="onItemClick">{{$t('Waiting To Return Money')}}</tab-item>
-          <tab-item @on-item-click="onItemClick">{{$t('Waiting To Rebate')}}</tab-item>
-          <tab-item @on-item-click="onItemClick">{{$t('Already Return Money')}}</tab-item>
-        </tab>
-      </sticky>
-      <div v-show="selectedIndex===0">
-        <template v-if="distabdata1">
-          <template v-if="tabdata1.length">
-            <group>
-              <cell-box class="income-cell" v-for="(item, index) in tabdata1" :key="index" @click.native="itemClick(item)">
-                <div class="checker-cell">
-                  <check-icon :value.sync="item.checked" @click.native.stop="itemCheck(item)"></check-icon>
+  <div id="user-rebate" class="containerarea font14">
+    <div class="s-topbanner s-topbanner1">
+      <tab v-model="selectedIndex" class="v-tab">
+        <tab-item selected>{{$t('Waiting To Return Money')}}</tab-item>
+        <tab-item>{{$t('Waiting To Rebate')}}</tab-item>
+        <tab-item>{{$t('Already Return Money')}}</tab-item>
+      </tab>
+    </div>
+    <div class="s-container s-container1">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" style="bottom:50px;" ref="scrollContainer1" @scroll="handleScroll1">
+            <template v-if="distabdata1">
+              <template v-if="tabdata1.length">
+                <group>
+                  <cell-box class="income-cell" v-for="(item, index) in tabdata1" :key="index" @click.native="itemClick(item)">
+                    <div class="checker-cell">
+                      <check-icon :value.sync="item.checked" @click.native.stop="itemCheck(item)"></check-icon>
+                    </div>
+                    <div class="avatar-cell">
+                      <x-img :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container1"></x-img>
+                    </div>
+                    <div class="content-cell">
+                      <div class="inline-title font14">店铺: {{item.title}}</div>
+                      <div class="inline-desc font12 color-gray">
+                        {{item.dateline | dateFormat}}
+                      </div>
+                    </div>
+                    <div class="value-cell font14 color-red align_center">
+                      <div>{{item.content}}</div>
+                      <div>{{$t('RMB')}}{{item.money}}</div>
+                    </div>
+                  </cell-box>
+                </group>
+              </template>
+              <template v-else>
+                <div class="no-related-x color-gray">
+                  <span>{{$t('No Related Orders')}}</span>
                 </div>
-                <div class="avatar-cell">
-                  <x-img :src="item.photo" class="imgcover"></x-img>
-                </div>
-                <div class="content-cell">
-                  <div class="inline-title font14">店铺: {{item.title}}</div>
-                  <div class="inline-desc font12 color-gray">
-                    {{item.dateline | dateFormat}}
-                  </div>
-                </div>
-                <div class="value-cell font14 color-red align_center">
-                  <div>{{item.content}}</div>
-                  <div>{{$t('RMB')}}{{item.money}}</div>
-                </div>
-              </cell-box>
-            </group>
-          </template>
-          <template v-else>
-            <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+              </template>
+            </template>
+          </div>
+          <div v-if="(index == 0)" class="footer-bar">
+            <div class="checker-cell">
+              <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}</check-icon>
             </div>
-          </template>
-        </template>
-      </div>
-      <div v-show="selectedIndex===1">
-        <template v-if="distabdata2">
-          <template v-if="tabdata2.length">
-            <group>
-              <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index" :title="`店铺: ${item.title}`">
-                <x-img slot="icon" :src="item.photo" class="imgcover"></x-img>
-                <div slot="inline-desc" class="font12 color-gray">
-                  {{item.dateline | dateFormat}}
-                </div>
-                <div slot="child" class="color-red align_center">
-                  <div>{{item.content}}</div>
-                  <div>{{$t('RMB')}}{{item.money}}</div>
-                </div>
-              </cell>
-            </group>
-          </template>
-          <template v-else>
-            <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+            <div class="count-cell">
+              <span>{{$t('Total')}}:</span>
+              <span class="color-red">¥{{total}}</span>
             </div>
-          </template>
-        </template>
-      </div>
-      <div v-show="selectedIndex===2">
-        <template v-if="distabdata3">
-          <template v-if="tabdata3.length">
-            <group>
-              <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index" :title="`店铺: ${item.title}`">
-                <x-img slot="icon" :src="item.photo" class="imgcover"></x-img>
-                <div slot="inline-desc" class="font12 color-gray">
-                  {{item.dateline | dateFormat}}
-                </div>
-                <div slot="child" class="color-red align_center">
-                  <div>{{item.content}}</div>
-                  <div>{{$t('RMB')}}{{item.money}}</div>
-                </div>
-              </cell>
-            </group>
-          </template>
-          <template v-else>
-            <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+            <div class="button-cell">
+              <x-button class="withdraw-btn" @click.native="getCash">{{$t('Withdraw')}}</x-button>
             </div>
-          </template>
-        </template>
-      </div>
-      <div class="footer-bar" slot="bottom" v-show="selectedIndex===0">
-        <div class="checker-cell">
-          <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}</check-icon>
-        </div>
-        <div class="count-cell">
-          <span>{{$t('Total')}}:</span>
-          <span class="color-red">¥{{total}}</span>
-        </div>
-        <div class="button-cell">
-          <x-button class="withdraw-btn" @click.native="getCash">{{$t('Withdraw')}}</x-button>
-        </div>
-      </div>
-    </view-box>
+          </div>
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+            <template v-if="distabdata2">
+              <template v-if="tabdata2.length">
+                <group>
+                  <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index" :title="`店铺: ${item.title}`">
+                    <x-img slot="icon" :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container2"></x-img>
+                    <div slot="inline-desc" class="font12 color-gray">
+                      {{item.dateline | dateFormat}}
+                    </div>
+                    <div slot="child" class="color-red align_center">
+                      <div>{{item.content}}</div>
+                      <div>{{$t('RMB')}}{{item.money}}</div>
+                    </div>
+                  </cell>
+                </group>
+              </template>
+              <template v-else>
+                <div class="no-related-x color-gray">
+                  <span>{{$t('No Related Orders')}}</span>
+                </div>
+              </template>
+            </template>
+          </div>
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+            <template v-if="distabdata3">
+              <template v-if="tabdata3.length">
+                <group>
+                  <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index" :title="`店铺: ${item.title}`">
+                    <x-img slot="icon" :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container3"></x-img>
+                    <div slot="inline-desc" class="font12 color-gray">
+                      {{item.dateline | dateFormat}}
+                    </div>
+                    <div slot="child" class="color-red align_center">
+                      <div>{{item.content}}</div>
+                      <div>{{$t('RMB')}}{{item.money}}</div>
+                    </div>
+                  </cell>
+                </group>
+              </template>
+              <template v-else>
+                <div class="no-related-x color-gray">
+                  <span>{{$t('No Related Orders')}}</span>
+                </div>
+              </template>
+            </template>
+          </div>
+        </swiper-item>
+      </swiper>
+    </div>
   </div>
 </template>
 <script>
-import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
+import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 export default {
   components: {
-    ViewBox, Group, Cell, CellBox, Tab, TabItem, Sticky, XImg, CheckIcon, XButton
+    ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton
   },
   data () {
     return {
       query: Object,
+      tabtxts: [ '待提现', '待返点', '已提现' ],
       user: {},
       rebateInfo: {},
       totalIncome: 0,
@@ -133,14 +138,7 @@ export default {
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      isBindScroll3: false,
-      scrollArea1: null,
-      scrollArea2: null,
-      scrollArea3: null,
-      scrollContainer: document.querySelector('#vux_view_box_body')
+      pagestart3: 0
     }
   },
   filters: {
@@ -149,10 +147,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -162,10 +160,10 @@ export default {
         }
       })
     },
-    scroll2: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea2,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
@@ -175,10 +173,10 @@ export default {
         }
       })
     },
-    scroll3: function () {
+    handleScroll3: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea3,
+        element: self.$refs.scrollContainer3[0],
         callback: function () {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++
@@ -229,29 +227,17 @@ export default {
         self.distabdata3 = true
       })
     },
-    onItemClick (index) {
+    swiperChange (index) {
       const self = this
-      if (index === 0) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll1)
-        self.scrollContainer.addEventListener('scroll', self.scroll1)
-        if (self.pagestart1 > 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll2)
-        self.scrollContainer.addEventListener('scroll', self.scroll2)
-        if (self.pagestart2 === 0 && self.tabdata2.length === 0) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        self.scrollContainer.removeEventListener('scroll', self.scroll3)
-        self.scrollContainer.addEventListener('scroll', self.scroll3)
-        if (self.pagestart3 === 0 && self.tabdata3.length === 0) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
+      if (index === 0 && self.tabdata1.length === 0) {
+        self.$vux.loading.show()
+        self.getdata1()
+      } else if (index === 1 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
+      } else if (index === 2 && self.tabdata3.length === 0) {
+        self.$vux.loading.show()
+        self.getdata3()
       }
     },
     itemClick (item) {
@@ -323,6 +309,7 @@ export default {
                       }
                     }
                   }
+                  self.total = '0.00'
                 }
               }
             })
@@ -337,16 +324,11 @@ export default {
     this.user = User.get()
     self.query = self.$route.query
     self.$vux.loading.show()
-    self.scrollContainer.removeEventListener('scroll', self.scroll1)
-    self.scrollContainer.addEventListener('scroll', self.scroll1)
     self.getdata1()
   }
 }
 </script>
 <style lang="less">
-#user-rebate {
-  height: 100%
-}
 #user-rebate .sticky-area {
   background-color: #f7f7f7;
 }
@@ -447,18 +429,5 @@ export default {
 #user-rebate .vux-check-icon > .weui-icon-success:before,
 #user-rebate .vux-check-icon > .weui-icon-success-circle:before {
   color:red;
-}
-
-.urebateinfo .vux-tab .vux-tab-item.vux-tab-selected {
-    color: red;
-    border-bottom: 3px solid red;
-}
-.urebateinfo .vux-tab-ink-bar {
-    position: absolute;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: red;
-    text-align: center;
 }
 </style>

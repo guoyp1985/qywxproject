@@ -4,30 +4,32 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-credit">
-    <group>
-      <group-title slot="title">{{$t('Credit Details')}}</group-title>
-      <div v-if="disList" class="scroll_list">
-        <cell v-if="list && list.length > 0" v-for="(item, index) in list" :key="index" class="credit-item scroll_item" align-items >
-          <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container="#vux_view_box_body"></x-img>
-          <div slot="inline-desc">
-            <div class="t-table">
-              <div class="t-cell v_middle">
-                <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-                <div class="clamp1 font12 mt5 color-gray">{{item.ldate}} {{item.typestr}}</div>
-              </div>
-              <div class="t-cell v_middle w60 align_right">
-                <span class="al al-jinbi color-gold"></span>
-                <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+  <div id="personal-credit" class="containerarea font14 bg-page">
+    <div class="pagetop flex_left font18 pl10 border-box">{{$t('Credit Details')}}</div>
+    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll" style="bottom:53px;">
+      <group>
+        <div v-if="disList" class="scroll_list">
+          <cell v-if="list && list.length > 0" v-for="(item, index) in list" :key="index" class="credit-item" align-items >
+            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container=".scroll-container"></x-img>
+            <div slot="inline-desc">
+              <div class="t-table">
+                <div class="t-cell v_middle">
+                  <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                  <div class="clamp1 font12 mt5 color-gray">{{item.ldate}} {{item.typestr}}</div>
+                </div>
+                <div class="t-cell v_middle w60 align_right">
+                  <span class="al al-jinbi color-gold"></span>
+                  <span class="color-red credit-txt">{{ item.credit | valueFormat }}</span>
+                </div>
               </div>
             </div>
+          </cell>
+          <div v-else class="no-related-x color-gray">
+            <span>{{$t('No Related Data')}}</span>
           </div>
-        </cell>
-        <div v-else class="no-related-x color-gray">
-          <span>{{$t('No Related Data')}}</span>
         </div>
-      </div>
-    </group>
+      </group>
+    </div>
   </div>
 </template>
 <script>
@@ -46,9 +48,7 @@ export default {
       disList: false,
       list: [],
       pagestart: 0,
-      limit: 10,
-      isBindScroll: false,
-      scrollContainer: document.querySelector('#vux_view_box_body')
+      limit: 20
     }
   },
   filters: {
@@ -60,10 +60,10 @@ export default {
     }
   },
   methods: {
-    scroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollContainer,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.list.length === (self.pagestart + 1) * self.limit) {
             self.pagestart++
@@ -85,11 +85,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.list = self.list.concat(retdata)
         self.disList = true
-        if (!self.isBindScroll) {
-          self.isBindScroll = true
-          self.scrollContainer.removeEventListener('scroll', self.scroll)
-          self.scrollContainer.addEventListener('scroll', self.scroll)
-        }
       })
     },
     getDateState: function (dt) {

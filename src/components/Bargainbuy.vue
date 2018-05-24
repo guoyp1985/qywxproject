@@ -7,7 +7,7 @@
       <div class="boxarea productarea">
         <router-link class="t-table" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}" style="color:inherit;">
             <div class="t-cell pic v_middle">
-              <x-img class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+              <x-img class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" :offset="-100"></x-img>
             </div>
             <div class="t-cell pl10 v_middle">
               <div class="clamp2 title font13 color-gray7">{{ product.title }}</div>

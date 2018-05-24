@@ -1,6 +1,6 @@
 <template>
 <div class="containerarea bg-white font14 saleproducts notop">
-  <div class="pagemiddle scroll-container" style="bottom:53px;">
+  <div class="pagemiddle scroll-container" style="bottom:53px;" ref="scrollContainer" @scroll="handleScroll">
     <div class="padding5 align_center font18 bg-white color-black" style="line-height: 38px;">
       <span>— {{ $t('Selected') }}</span><span class="color-red">{{ $t('Promotion') }}</span> —
     </div>
@@ -47,19 +47,17 @@ export default {
   data () {
     return {
       tabdata1: [],
-      limit: 5,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      limit: 20,
+      pagestart1: 0
     }
   },
   computed: {
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -77,12 +75,6 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.saleproducts .pagemiddle')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     }
   },

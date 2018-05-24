@@ -9,7 +9,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle scroll-container">
+      <div id="article-content" class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
         <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
@@ -74,7 +74,7 @@
             <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
           </template>
           <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader, commentuid: comment.uid}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
-            <reply v-if="comment.comments > 0" slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
+            <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
           </comment>
         </div>
       </div>
@@ -153,10 +153,8 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       disComments: false,
-      commentsArea: null,
-      isBindScroll: null,
       pagestart: 0,
-      limit: 10,
+      limit: 20,
       replyData: null,
       roomid: '',
       socket: BkSocket.get()
@@ -231,8 +229,16 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         if (data.flag) {
-          let newarr = [ data.data ]
+          let newcomment = data.data
+          newcomment.comment = []
+          let newarr = [ newcomment ]
           self.comments = newarr.concat(self.comments)
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
         }
       })
     },
@@ -242,19 +248,29 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         let data = res.data
+        console.log('in reply')
+        console.log(self.replyData)
+        console.log(self.replyData.comment)
         if (data.flag) {
           if (!self.replyData.comment) {
-            self.replyData.comment = []
+            self.replyData.comment = [ data.data ]
+          } else {
+            self.replyData.comment.push(data.data)
           }
-          let newarr = [ data.data ]
-          self.replayData = newarr.concat(self.replyData.comment)
+          console.log(self.replyData.comment)
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
         }
       })
     },
-    scrollComments: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.commentsArea,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.comments.length === self.pagestart * self.limit) {
             self.$vux.loading.show()
@@ -271,14 +287,13 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          if (!retdata[i].comment) {
+            retdata[i].comment = []
+          }
+        }
         self.comments = self.comments.concat(retdata)
         self.disComments = true
-        if (!self.isBindScroll) {
-          self.commentsArea = document.querySelector('.news .pagemiddle')
-          self.isBindScroll = true
-          self.commentsArea.removeEventListener('scroll', self.scrollComments)
-          self.commentsArea.addEventListener('scroll', self.scrollComments)
-        }
       })
     },
     getData () {
@@ -291,9 +306,11 @@ export default {
       if (self.query.share_uid) {
         infoparams['share_uid'] = self.query.share_uid
       }
+      alert(JSON.stringify(infoparams))
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
+        alert(JSON.stringify(res))
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag !== 1) {
@@ -327,12 +344,6 @@ export default {
           let data = res.data
           if (data.flag === 1) {
             self.isdig = 1
-          }
-          if (!self.isBindScroll) {
-            self.commentsArea = document.querySelector('.news .pagemiddle')
-            self.isBindScroll = true
-            self.commentsArea.removeEventListener('scroll', self.scrollComments)
-            self.commentsArea.addEventListener('scroll', self.scrollComments)
           }
           return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
@@ -484,6 +495,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = to.query
       self.loginUser = User.get()
+      alert(JSON.stringify(self.loginUser))
       this.wsConnect()
       this.showsharetip = false
       this.getData()

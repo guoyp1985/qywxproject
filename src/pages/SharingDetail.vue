@@ -4,20 +4,22 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="sharing-detail">
-    <group>
-      <group-title slot="title">{{$t('Share view user')}}</group-title>
-      <template v-if="disList">
-        <div v-if="!list || list.length == 0" class="emptyitem flex_center">暂无用户查看</div>
-        <cell v-else class="font13" v-for="(item, index) in list" :key="index">
-          <x-img slot="icon" class="avatarimg2 imgcover" :src="item.avatar"></x-img>
-          <div slot="inline-desc" class="pl10 pr10">
-            <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-            <div class="mt5 clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
-          </div>
-        </cell>
-      </template>
-    </group>
+  <div id="sharing-detail" class="containerarea font14 bg-page">
+    <div class="pagetop flex_left font18 pl10 border-box">{{$t('Share view user')}}</div>
+    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll" style="bottom:53px;">
+      <group>
+        <template v-if="disList">
+          <div v-if="!list || list.length == 0" class="emptyitem flex_center">暂无用户查看</div>
+          <cell v-else class="font13" v-for="(item, index) in list" :key="index">
+            <x-img slot="icon" class="avatarimg2 imgcover" :src="item.avatar" container=".scroll-container"></x-img>
+            <div slot="inline-desc" class="pl10 pr10">
+              <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
+              <div class="mt5 clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
+            </div>
+          </cell>
+        </template>
+      </group>
+    </div>
   </div>
 </template>
 <script>
@@ -36,9 +38,7 @@ export default {
       disList: false,
       list: [],
       pagestart: 0,
-      limit: 10,
-      isBindScroll: false,
-      scrollContainer: document.querySelector('#vux_view_box_body')
+      limit: 20
     }
   },
   filters: {
@@ -50,10 +50,10 @@ export default {
     }
   },
   methods: {
-    scroll: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollContainer,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.list.length === (self.pagestart + 1) * self.limit) {
             self.pagestart++
@@ -75,11 +75,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.list = self.list.concat(retdata)
         self.disList = true
-        if (!self.isBindScroll) {
-          self.isBindScroll = true
-          self.scrollContainer.removeEventListener('scroll', self.scroll)
-          self.scrollContainer.addEventListener('scroll', self.scroll)
-        }
       })
     },
     getDateState: function (dt) {

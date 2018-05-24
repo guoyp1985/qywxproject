@@ -25,7 +25,7 @@
     <div class="pagemiddle bg-white pl12 pr12">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="index === 0">
+          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <template v-if="disdatalist1">
               <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
                 <div class="t-table ml10">
@@ -51,8 +51,8 @@
                 </timeline-item>
               </timeline>
             </template>
-          </template>
-          <template v-else-if="index === 1">
+          </div>
+          <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
             <template v-if="disdatalist2">
               <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
                 <div class="t-table ml10">
@@ -78,7 +78,7 @@
                 </timeline-item>
               </timeline>
             </template>
-          </template>
+          </div>
         </swiper-item>
       </swiper>
     </div>
@@ -143,10 +143,6 @@ export default {
       limit: 20,
       pagestart1: 0,
       pagestart2: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      scrollArea1: null,
-      scrollArea2: null,
       disdatalist1: false,
       disdatalist2: false
     }
@@ -176,10 +172,10 @@ export default {
     })
   },
   methods: {
-    scroll1: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -189,10 +185,10 @@ export default {
         }
       })
     },
-    scroll2: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea2,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
@@ -211,14 +207,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disdatalist1 = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.rsalechance .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getdata2 () {
@@ -230,11 +218,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disdatalist2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     swiperChange (index) {

@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom store">
-    <div class="s-container scroll-container" style="top:0px;">
+    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
       <swiper
         class="pic-swiper notitle"
         v-if="addata && addata.length > 0"
@@ -60,7 +60,7 @@
   			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
   		</div>
       <div class="b_top_after"></div>
-      <div class="productlist squarepic">
+      <div v-if="disproductdata" class="productlist squarepic">
         <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
         <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
           <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
@@ -179,11 +179,10 @@ export default {
       showdot: true,
       addata: [],
       activitydata: [],
+      disproductdata: false,
       productdata: [],
       limit: 20,
       pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null,
       newspagestart: 0,
       newslimit: 3,
       isgetnews: true,
@@ -222,10 +221,10 @@ export default {
     }
   },
   methods: {
-    scroll1: function () {
+    handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.scrollArea1,
+        element: self.$refs.scrollContainer,
         callback: function () {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
@@ -250,12 +249,7 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.store .s-container')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
+        self.disproductdata = true
       })
     },
     getnewsdata () {

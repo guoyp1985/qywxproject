@@ -25,40 +25,41 @@
       </div>
       <div class="v-container">
         <div class="list-shadow">
-        <div class="b_top_after flex_center bg-white h50">
-          <div class="t-table align_center font15 itemtab">
-            <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-red4 font14">
-              <div>{{ $t('Views') }}</div>
-              <div>{{viewuser.viewNumber}}</div>
-            </router-link>
-            <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after  color-red4 font14">
-              <div>{{ $t('Share') }}</div>
-              <div>{{viewuser.shareNumber}}</div>
-            </router-link>
-            <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after  color-red4 font12">
-              <div>{{ $t('Orders') }}</div>
-              <div>{{viewuser.orderNumber}}</div>
-            </router-link>
-            <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle  color-red4 font12">
-             <div>{{ $t('Behavior') }}</div>
-           </router-link> -->
+          <div class="b_top_after flex_center bg-white h50">
+            <div class="t-table align_center color-red4">
+              <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
+                <div>{{ $t('Views') }}</div>
+                <div>{{viewuser.viewNumber}}</div>
+              </router-link>
+              <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
+                <div>{{ $t('Share') }}</div>
+                <div>{{viewuser.shareNumber}}</div>
+              </router-link>
+              <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">
+                <div>{{ $t('Orders') }}</div>
+                <div>{{viewuser.orderNumber}}</div>
+              </router-link>
+            </div>
+          </div>
+          <div class="b_top_after flex_center bg-white h45">
+            <div class="t-table align_center color-gray2">
+              <template v-if="viewuser.subscribe == 1">
+                <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
+                  <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
+                </div>
+                <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
+                  <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
+                </router-link>
+              </template>
+              <div @click="priorityevent" :class="`t-cell v_middle b_right_after priority ${getprioritycss}`">
+                <i class="al al-zhidinge79b font16 mr5"></i><span class="txt" style="vertical-align: 1px;"></span>
+              </div>
+              <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell v_middle">
+                <i class="al al-calendar font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Customer Behavior') }}</span>
+              </router-link>
+            </div>
           </div>
         </div>
-        <div class="b_top_after flex_center bg-white h45">
-          <div class="t-table align_center font15 itemtab">
-            <router-link :to="{path: '/', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after font14">
-              <div class="color-lightgray"><i class="al al-account font16 mr5"></i>{{ $t('Rebate manage') }}</div>
-            </router-link>
-            <router-link :to="{path: '/', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font14">
-              <div class="color-lightgray"><i class="al al-zhidinge79b font16 mr5"></i>{{ $t('Cancel the roof') }}</div>
-            </router-link>
-             <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after color-lightgray font14">
-              <div class="color-lightgray"><i class="al al-calendar font16 mr5"></i>{{ $t('Customer Behavior') }}</div>
-            </router-link>
-          </div>
-        </div>
-        </div>
-
         <div class="b_bottom_after"></div>
         <div class="mt12 bg-white itemlist list-shadow font14">
           <div class="item padding10 b_bottom_after">
@@ -119,7 +120,7 @@
       </div>
       <div class="s-bottom bottomnaviarea b_top_after">
         <div class="t-table bottomnavi">
-          <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
+          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
           <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
         </div>
@@ -151,6 +152,7 @@ import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group, XImg } from '
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -167,6 +169,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: Object,
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -378,6 +381,7 @@ export default {
     const self = this
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+    self.loginUser = User.get()
     self.$vux.loading.show()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'membersview', id: self.query.uid
@@ -412,10 +416,6 @@ export default {
   display:inline-block;vertical-align: middle;
   width:90%;box-sizing: border-box;height:35px;line-height:35px;border-radius:20px;
 }
-.membersview .priority:after{content:"置顶"}
-.membersview .priority.done:after{content:"取消置顶"}
-.membersview .itemtab .item{color:#01a6ea;}
-.b_right_after:last-child:after {
-      display: none;
-}
+.membersview .priority .txt:after{content:"置顶"}
+.membersview .priority.done .txt:after{content:"取消置顶"}
 </style>

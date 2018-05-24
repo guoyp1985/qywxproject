@@ -359,15 +359,6 @@ export default {
         }
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disData1 = true
-        if (!self.isBindScroll1) {
-          let items = document.querySelectorAll('.retailerrevenue .swiperitem')
-          self.scrollArea1 = items[0]
-          self.scrollArea2 = items[1]
-          self.scrollArea3 = items[2]
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getdata2 () {
@@ -379,11 +370,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disData2 = true
-        if (!self.isBindScroll2) {
-          self.isBindScroll2 = true
-          self.scrollArea2.removeEventListener('scroll', self.scroll2)
-          self.scrollArea2.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     getdata3 () {
@@ -395,11 +381,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
-        if (!self.isBindScroll3) {
-          self.isBindScroll3 = true
-          self.scrollArea3.removeEventListener('scroll', self.scroll3)
-          self.scrollArea3.addEventListener('scroll', self.scroll3)
-        }
       })
     },
     checkboxclick (d, index) {
@@ -502,5 +483,5 @@ export default {
 .retailerrevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a}
 .retailerrevenue .weui-icon-success{color: #ea3a3a}
 .retailerrevenue .x-check-icon.vux-check-icon > span{padding-right: 0}
-.toolbar_bg{background-image: none;}
+.s-container{top: 82px}
 </style>

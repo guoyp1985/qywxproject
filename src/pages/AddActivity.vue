@@ -49,11 +49,11 @@
       </form>
     </div>
     <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
-    <div v-transfer-dom class="x-popup popup-selectproduct">
+    <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div class="popup-middle selectpopup-container">
+          <div ref="scrollProduct" @scroll="scrollHandle2" class="popup-middle">
             <search
               class="x-search"
               v-model="searchword"
@@ -154,9 +154,7 @@ export default {
       searchword: '',
       searchresult: false,
       limit: 20,
-      pagestart1: 0,
-      isBindScroll1: false,
-      scrollArea1: null
+      pagestart1: 0
     }
   },
   watch: {
@@ -232,11 +230,12 @@ export default {
       self.pagestart1 = 0
       self.getProductData()
     },
-    scroll1: function () {
+    scrollHandle2 () {
       const self = this
-      self.$util.scrollEvent({
-        element: self.scrollArea1,
-        callback: function () {
+      console.log(this.$refs.scrollProduct)
+      this.$util.scrollEvent({
+        element: this.$refs.scrollProduct,
+        callback: () => {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
@@ -262,12 +261,6 @@ export default {
         }
         let retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
-        if (!self.isBindScroll1) {
-          self.scrollArea1 = document.querySelector('.popup-selectproduct .popup-middle')
-          self.isBindScroll1 = true
-          self.scrollArea1.removeEventListener('scroll', self.scroll1)
-          self.scrollArea1.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     selectevent () {

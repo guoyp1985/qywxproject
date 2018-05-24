@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <div class="chat-area bg-white scroll-container">
+    <div class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist">
         <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
@@ -99,7 +99,7 @@
           <div class="popup-top flex_center">图文</div>
           <div class="flex_center" style="position:absolute;left:0;top:45px;right:0;height:50px;">
             <search
-              class="x-search"
+              class="v-search"
               v-model="searchword"
               :auto-fixed="autofixed"
               @on-submit="onSearchSubmit"
@@ -108,15 +108,15 @@
               ref="search">
             </search>
           </div>
-          <div style="position:absolute;left:0;top:95px;right:0;height:54px;">
-            <tab v-model="tabmodel" class="x-toptab">
-              <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="tabitemclick">{{item}}</tab-item>
+          <div class="b_top_after" style="position:absolute;left:0;top:95px;right:0;height:54px;">
+            <tab v-model="tabmodel" class="v-tab">
+              <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
             </tab>
           </div>
           <div class="popup-middle font14" style="top:149px;">
-            <swiper v-model="tabmodel" class="x-swiper no-indicator">
-              <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-                <div v-if="(index == 0)">
+            <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+              <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+                <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
                   <div v-if="disNewsData" class="scroll_list">
                     <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
                       <template v-if="searchresult1">
@@ -129,7 +129,7 @@
                     <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container0" ></x-img>
+                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1">{{item.title}}</div>
@@ -138,7 +138,7 @@
                     </check-icon>
                   </div>
                 </div>
-                <div v-if="(index == 1)">
+                <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
                   <div v-if="disProductsData" class="scroll_list">
                     <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
                       <template v-if="searchresult2">
@@ -151,7 +151,7 @@
                     <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
+                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1">{{item.title}}</div>
@@ -224,17 +224,11 @@ export default {
       disNewsData: false,
       productsData: [],
       disProductsData: false,
-      popupScrollContainer: null,
       pagestart1: 0,
       pagestart2: 0,
       limit1: 10,
       selectNewsData: null,
-      selectProductsData: null,
-      isBindNewsScroll: false,
-      isBindProductScroll: false,
-      newsScrollArea: null,
-      productScrollArea: null,
-      scrollContainer: document.querySelector('.scroll-container')
+      selectProductsData: null
     }
   },
   watch: {
@@ -446,9 +440,6 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
-        if (!self.scrollContainer) {
-          self.scrollContainer = document.querySelector('.scroll-container')
-        }
       })
     },
     wsConnect () {
@@ -499,8 +490,9 @@ export default {
           }
           self.data.push(saydata)
           if (saydata.isNew) {
-            if (self.scrollContainer.offsetHeight + self.scrollContainer.scrollTop + 180 > self.scrollContainer.scrollHeight) {
-              self.scrollContainer.scrollTop = self.scrollContainer.scrollHeight + 50
+            let scrollarea = self.$refs.scrollContainer
+            if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
+              scrollarea.scrollTop = scrollarea.scrollHeight + 50
             }
           }
         }
@@ -526,11 +518,6 @@ export default {
       const self = this
       this.showImgTxt = true
       this.showFeatureBox = false
-      if (!self.popupScrollContainer) {
-        self.popupScrollContainer = document.querySelector('.popup-imgTxt .popup-middle')
-      }
-      self.popupScrollContainer.removeEventListener('scroll', self.scroll1)
-      self.popupScrollContainer.addEventListener('scroll', self.scroll1)
       self.$vux.loading.show()
       self.getNewsData()
     },
@@ -585,26 +572,22 @@ export default {
         self.getProductData()
       }
     },
-    tabitemclick (index) {
+    swiperChange (index) {
       const self = this
-      if (index === 0) {
-        if (self.newsData.length === 0) {
-          self.$vux.loading.show()
-          self.getNewsData()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindProductScroll) {
-          self.$vux.loading.show()
-          self.getProductData()
-        }
+      if (index === 0 && self.newsData.length === 0) {
+        self.$vux.loading.show()
+        self.getNewsData()
+      } else if (index === 1 && self.productsData.length === 0) {
+        self.$vux.loading.show()
+        self.getProductData()
       }
     },
-    scroll1: function () {
+    handleScroll1: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.newsScrollArea,
+        element: self.$refs.scrollContainer1[0],
         callback: function () {
-          if (self.newsData.length === (self.pagestart1 + 1) * self.limit) {
+          if (self.newsData.length === (self.pagestart1 + 1) * self.limit1) {
             self.pagestart1++
             self.$vux.loading.show()
             self.getNewsData()
@@ -612,12 +595,12 @@ export default {
         }
       })
     },
-    scroll2: function () {
+    handleScroll2: function () {
       const self = this
       self.$util.scrollEvent({
-        element: self.productScrollArea,
+        element: self.$refs.scrollContainer2[0],
         callback: function () {
-          if (self.productsData.length === (self.pagestart2 + 1) * self.limit) {
+          if (self.productsData.length === (self.pagestart2 + 1) * self.limit1) {
             self.pagestart2++
             self.$vux.loading.show()
             self.getProductData()
@@ -643,13 +626,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.newsData = self.newsData.concat(retdata)
         self.disNewsData = true
-        if (!self.isBindNewsScroll) {
-          self.isBindNewsScroll = true
-          self.newsScrollArea = document.querySelector('.popup-imgTxt .scroll-container0')
-          self.productScrollArea = document.querySelector('.popup-imgTxt .scroll-container1')
-          self.newsScrollArea.removeEventListener('scroll', self.scroll1)
-          self.newsScrollArea.addEventListener('scroll', self.scroll1)
-        }
       })
     },
     getProductData () {
@@ -670,11 +646,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.productsData = self.productsData.concat(retdata)
         self.disProductsData = true
-        if (!self.isBindProductScroll) {
-          self.isBindProductScroll = true
-          self.productScrollArea.removeEventListener('scroll', self.scroll2)
-          self.productScrollArea.addEventListener('scroll', self.scroll2)
-        }
       })
     },
     clickNews (data, index) {
