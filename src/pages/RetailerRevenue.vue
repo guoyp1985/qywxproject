@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 retailerrevenue">
+  <div class="containerarea font14 retailerrevenue bg-page">
     <div class="pagetop" style="height:88px;">
       <div class="v-top" style="height:44px;">
         <div class="flex_center">
@@ -448,7 +448,9 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .retailerrevenue .scroll_list .scroll_item:after{display:none;}
 .retailerrevenue .scroll_list .scroll_item:not(:last-child){margin-bottom:10px;}
+.retailerrevenue .weui-icon-success{color: #ea3a3a;}
+.retailerrevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a;}
 </style>
