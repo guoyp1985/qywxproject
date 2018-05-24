@@ -191,7 +191,7 @@ export default {
     },
     getdata1 () {
       const self = this
-      let params = { cashed: 0, pagestart: self.pagestart1, limit: self.limit }
+      let params = { cashed: 0, from: 'user', pagestart: self.pagestart1, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -210,7 +210,7 @@ export default {
     },
     getdata2 () {
       const self = this
-      let params = { cashed: 2, pagestart: self.pagestart1, limit: self.limit }
+      let params = { cashed: 2, from: 'user', pagestart: self.pagestart1, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -221,7 +221,7 @@ export default {
     },
     getdata3 () {
       const self = this
-      let params = { cashed: 1, pagestart: self.pagestart1, limit: self.limit }
+      let params = { cashed: 1, from: 'user', pagestart: self.pagestart1, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
