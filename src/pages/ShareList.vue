@@ -4,7 +4,7 @@
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100">
-          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}{{$t('Share')}}</div>
+          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}的{{$t('Share')}}</div>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
         </search>
       </div>
       <div v-if="disdata" class="scroll_list swiper-inner pl10 pr10 border-box scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
-        <div v-if="disdata" class="scroll_list pl10 pr10">
+        <div v-if="disdata" class="scroll_list">
           <div v-if="!data || data.length === 0" class="scroll_item  emptyitem flex_center">
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无分享数据</template>

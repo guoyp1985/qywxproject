@@ -4,14 +4,14 @@
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100">
-          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}{{$t('Views')}}</div>
+          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}的{{$t('Views')}}</div>
         </div>
       </div>
     </div>
     <div class="s-container s-container1">
       <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
         <search
-          class="x-search"
+          class="v-search"
           v-model="searchword1"
           :auto-fixed="autofixed"
           @on-submit="onSubmit1"

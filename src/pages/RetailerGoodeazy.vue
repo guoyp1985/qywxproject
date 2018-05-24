@@ -1,27 +1,21 @@
 <template>
   <div class="containerarea s-havebottom font14 rgoodeazy bg-white">
-    <div class="s-topbanner">
+    <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Goodeazy')}}</div>
-        </div>
-      </div>
-      <div class="row">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
+        <tab v-model="tabmodel" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="s-container">
+    <div class="s-container s-container1">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="pl10 pr10 swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
-            <div class="font15 pt15">搜索关键词采集文章</div>
-            <div class="font12 color-gray mt5">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+            <div class="font15 pt15 pl10 pr10">搜索关键词采集文章</div>
+            <div class="font12 color-gray mt5 pl10 pr10">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
             <div class="mb15" style="position:relative;">
               <search
-                class="x-search"
+                class="v-search bg-white"
                 v-model="searchword"
                 :auto-fixed="autofixed"
                 @on-submit="onSubmit"
@@ -30,7 +24,7 @@
                 ref="search">
               </search>
               <checker
-              class="x-checker"
+              class="v-checker pt10 pl10 pr10"
               type="radio"
               v-model="keyword"
               default-item-class="ck-item"
@@ -50,8 +44,8 @@
                       <div class="clamp1">{{ item.title }}</div>
                       <div class="clamp2 font12 color-gray mt5">{{ item.summary }}</div>
                     </a>
-                    <div class="t-cell align_right v_middle" style="width:60px;">
-                      <span class="qbtn bg-green color-white font12" @click="collect(item,index)">{{ $t('Collect') }}</span>
+                    <div class="t-cell align_right v_middle w60">
+                      <div class="qbtn bg-red color-white" @click="collect(item,index)">{{ $t('Collect') }}</div>
                     </div>
                   </div>
                 </div>
@@ -63,13 +57,13 @@
               <div class="font15 pt15">文章链接采集文章</div>
               <div class="font12 color-gray mt5">请从微信公众号中复制文章链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
               <form class="subform mb15">
-                <div class="t-table mt12">
-                  <div class="t-cell v_middle" style="height:100%;background-color: #fafafa;">
+                <div class="flex_left mt12 border1px">
+                  <div class="flex_cell" style="height:100%;">
                     <group class="textarea-outer">
                       <x-textarea v-model="collecturl" class="x-textarea noborder" name="url" :placeholder="$t('Url paster here')" :show-counter="false" :rows="1" autosize></x-textarea>
                     </group>
                   </div>
-                  <div class="t-cell v_middle align_center bg-green color-white font15" style="width:80px;" @click="collect1">{{ $t('Collect') }}</div>
+                  <div class="align_center bg-red color-white font15 w80" style="height:45px;line-height:45px;border-radius:5px;" @click="collect1">{{ $t('Collect') }}</div>
                 </div>
               </form>
             </div>
@@ -82,11 +76,11 @@
                 </div>
               </div>
               <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
-                <div class="t-table">
-                  <div class="t-cell v_middle" style="width:40px;">
-                    <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:30px;height:30px;" :offset="0" container=".scroll-container2"></x-img>
+                <div class="flex_left">
+                  <div class="">
+                    <x-img class="imgcover v_middle avatarimg1 radius0" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container2"></x-img>
                   </div>
-                  <div class="t-cell">
+                  <div class="flex_cell pl10">
                     <div class="clamp1 font14">{{item.title}}</div>
                     <div class="clamp1 font12 color-gray">{{ item.dateline | dateformat }}</div>
                   </div>
