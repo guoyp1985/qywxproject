@@ -9,7 +9,7 @@
       <div class="sharing-title">{{$t('Current Store')}}</div>
       <div class="pt5 pb5 pl15 pr15 flex_table">
         <div class="store-photo">
-          <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover" :offset="-100"></x-img>
+          <x-img :src="rebateInfo.photo" default-src="../src/assets/images/nopic.jpg" class="imgcover"></x-img>
         </div>
         <div class="store-details flex_cell pl10">
           <span class="db font14">{{rebateInfo.title}}</span>
