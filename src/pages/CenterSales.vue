@@ -259,10 +259,12 @@ export default {
     }
   },
   created () {
+    console.log('created')
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
+    console.log(self.loginUser)
     let iscontinue = true
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'index'
@@ -298,6 +300,9 @@ export default {
         self.marquedata = data.data ? data.data : data
       })
     }
+  },
+  activated () {
+    console.log('activated')
   }
 }
 </script>

@@ -309,33 +309,34 @@ export default {
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
-        alert(JSON.stringify(res))
         let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
-          self.showSos = true
-          return false
-        }
-        if (res.data.flag) {
-          self.article = res.data.data
-          document.title = self.article.title
-          self.reward = User.get()
-          self.retailerInfo = self.article.retailerinfo
-          self.$util.handleWxShare({
-            data: self.article,
-            module: self.module,
-            moduleid: self.article.id,
-            lastshareuid: self.query.share_uid,
-            link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
-            successCallback: function () {
-              self.showShareSuccess = true
-            }
-          })
-          self.showContainer = true
-          return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
-            params: {id: id, module: self.module}
-          })
+        if (!isNaN(data.flag)) {
+          self.$vux.loading.hide()
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+            return false
+          }
+          if (res.data.flag) {
+            self.article = res.data.data
+            document.title = self.article.title
+            self.reward = User.get()
+            self.retailerInfo = self.article.retailerinfo
+            self.$util.handleWxShare({
+              data: self.article,
+              module: self.module,
+              moduleid: self.article.id,
+              lastshareuid: self.query.share_uid,
+              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              successCallback: function () {
+                self.showShareSuccess = true
+              }
+            })
+            self.showContainer = true
+            return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
+              params: {id: id, module: self.module}
+            })
+          }
         }
       }).then(function (res) {
         self.handleImg()

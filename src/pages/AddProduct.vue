@@ -1,14 +1,17 @@
 <template>
   <div class="containerarea s-havebottom font14 addproduct">
     <div class="s-container" style="top:0;">
+      <form enctype="multipart/form-data">
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('photo')" />
+      </form>
+      <form enctype="multipart/form-data">
+        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('contentphoto')" />
+      </form>
       <div class="list-shadow01">
         <div class="form-item no-after pt15 bg-gray10">
-          <div class="cover_map" v-if="photoarr.length == 0">
+          <div class="cover_map" v-if="photoarr.length == 0" @click="uploadPhoto('fileInput','photo')">
             <div class="button_photo">
               <i class="al al-zhaoxiangji color-white"></i>
-              <form class="fileform1" enctype="multipart/form-data">
-                <input class="fileinput" type="file" name="files" @change="filechange" />
-              </form>
             </div>
           </div>
           <div class="cover_maplist mt12" v-if="photoarr.length > 0">
@@ -17,15 +20,12 @@
               <template v-if="photoarr.length > 0">
                 <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                   <div class="inner photo" :photo="item" :style="`background-image: url('${item}');`">
-                    <div class="close" @click="deletephoto(item,index)">×</div>
+                    <div class="close" @click="deletephoto(item,index,'photo')">×</div>
                   </div>
                 </div>
               </template>
-              <div v-if="photoarr.length >= 1 && photoarr.length < maxnum" class="photoitem add">
+              <div v-if="photoarr.length >= 1 && photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','photoarr')">
                 <div class="inner">
-                  <form class="fileform1" enctype="multipart/form-data">
-                    <input class="fileinput" type="file" name="files" @change="filechange" />
-                  </form>
                   <div class="icon flex_center">
                     <div class="txt">
                       <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
@@ -95,15 +95,12 @@
             <template v-if="photoarr1.length > 0">
               <div v-for="(item,index) in photoarr1" :key="index" class="photoitem">
                 <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                  <div class="close" @click="deletephoto1(item,index)">×</div>
+                  <div class="close" @click="deletephoto(item,index,'contentphoto')">×</div>
                 </div>
               </div>
             </template>
-            <div v-if="photoarr1.length < maxnum1" class="photoitem add">
+            <div v-if="photoarr1.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','contentphoto')">
               <div class="inner">
-                <form class="fileform2" enctype="multipart/form-data">
-                  <input class="fileinput" type="file" name="files" @change="filechange1" />
-                </form>
                 <div class="innerlist">
                   <div class="flex_center h_100">
                     <div class="txt">
@@ -260,60 +257,63 @@ export default {
     }
   },
   methods: {
-    filechange (e) {
+    photoCallback (data, type) {
       const self = this
-      let files = e.target.files
+      if (data.flag === 1) {
+        if (type === 'photo') {
+          self.photoarr.push(data.data)
+          self.submitdata.photo = self.photoarr.join(',')
+        } else {
+          self.photoarr1.push(data.data)
+          self.submitdata.contentphoto = self.photoarr1.join(',')
+        }
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto (refname, type) {
+      const self = this
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 9,
+            handleCallback: function (data) {
+              self.photoCallback(data, type)
+            }
+          })
+        })
+      }
+    },
+    fileChange (type) {
+      const self = this
+      const target = event.target
+      const files = target.files
       if (files.length > 0) {
-        let fileform = document.querySelector('.fileform1')
-        let filedata = new FormData(fileform)
+        const fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
-          if (data.flag === 1) {
-            self.photoarr.push(data.data)
-            self.submitdata.photo = self.photoarr.join(',')
-          } else if (data.error) {
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
+          self.photoCallback(data, type)
         })
       }
     },
-    deletephoto (item, index) {
+    deletephoto (item, index, type) {
       const self = this
-      self.photoarr.splice(index, 1)
-      self.submitdata.photo = self.photoarr.join(',')
-    },
-    filechange1 (e) {
-      const self = this
-      let files = e.target.files
-      if (files.length > 0) {
-        let fileform = document.querySelector('.fileform2')
-        let filedata = new FormData(fileform)
-        self.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          if (data.flag === 1) {
-            self.photoarr1.push(data.data)
-            self.submitdata.contentphoto = self.photoarr1.join(',')
-          } else if (data.error) {
-            self.$vux.toast.show({
-              text: data.error,
-              type: 'warn',
-              time: self.$util.delay(data.error)
-            })
-          }
-        })
+      if (type === 'photo') {
+        self.photoarr.splice(index, 1)
+        self.submitdata.photo = self.photoarr.join(',')
+      } else {
+        self.photoarr1.splice(index, 1)
+        self.submitdata.contentphoto = self.photoarr1.join(',')
       }
-    },
-    deletephoto1 (item, index) {
-      const self = this
-      self.photoarr1.splice(index, 1)
-      self.submitdata.contentphoto = self.photoarr1.join(',')
     },
     expandevent () {
       this.showmore = !this.showmore
