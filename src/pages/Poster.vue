@@ -24,6 +24,9 @@
         </template>
       </div>
       <div class="mt10 bg-white">
+        <form enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        </form>
         <form>
           <div class="form-item required">
             <div class="t-table">
@@ -39,13 +42,10 @@
                       </div>
                     </div>
                   </template>
-                  <div v-if="photoarr.length < maxnum" class="photoitem add">
+                  <div v-if="photoarr.length < maxnum" class="photoitem add" style="width:34%;" @click="uploadPhoto">
                     <div class="inner">
-                      <form class="fileform" enctype="multipart/form-data">
-                        <input class="fileinput" type="file" name="files" @change="filechange" />
-                      </form>
-                      <div class="t-table">
-                        <div class="t-cell">
+                      <div class="innerlist">
+                        <div class="flex_center h_100">
                           <div class="txt">
                             <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
                             <div><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
@@ -140,25 +140,45 @@ export default {
   computed: {
   },
   methods: {
-    filechange (e) {
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.photoarr.push(data.data)
+        self.submitdata.photo = self.photoarr.join(',')
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto () {
+      const self = this
+      const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (e) {
       const self = this
       let files = e.target.files
       if (files.length > 0) {
-        let fileform = document.querySelector('.fileform')
-        let filedata = new FormData(fileform)
+        const fileForm = e.target.parentNode
+        const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
-          if (data.flag === 1) {
-            self.photoarr.push(data.data)
-            self.submitdata.photo = self.photoarr.join(',')
-          } else if (data.error) {
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
+          self.photoCallback(data)
         })
       }
     },
@@ -245,6 +265,26 @@ export default {
           }
         })
       })
+    },
+    initData () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'poster', id: self.query.id
+      }).then(function () {
+        let params = { params: { id: self.query.id, module: self.query.module } }
+        return self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params)
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.data = data.data ? data.data : data
+        self.submitdata.title = self.data.title
+        if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
+          let arr = self.data.photo.split(',')
+          for (let i = 0; i < arr.length; i++) {
+            self.coverphotoarr.push({ photo: arr[i], checked: false })
+          }
+        }
+      })
     }
   },
   created () {
@@ -254,23 +294,7 @@ export default {
     self.submitdata.type = self.query.module
     self.submitdata.id = self.query.id
     self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'poster', id: self.query.id
-    }).then(function () {
-      let params = { params: { id: self.query.id, module: self.query.module } }
-      return self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params)
-    }).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      self.data = data.data ? data.data : data
-      self.submitdata.title = self.data.title
-      if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
-        let arr = self.data.photo.split(',')
-        for (let i = 0; i < arr.length; i++) {
-          self.coverphotoarr.push({ photo: arr[i], checked: false })
-        }
-      }
-    })
+    self.initData()
   }
 }
 </script>

@@ -5,7 +5,7 @@
         <div class="row">
           <div class="bg"></div>
           <div class="flex_center h_100 toprow">
-            <div class="flex_cell font18 pl20">{{ viewuser.linkman }}</div>
+            <div class="flex_cell font18 pl20">{{ viewuser.linkman }}的订单</div>
           </div>
         </div>
       </div>

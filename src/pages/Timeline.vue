@@ -1,23 +1,15 @@
 <template>
   <div class="containerarea bg-page membersview font14 s-havebottom">
-    <div class="s-topbanner flex_center color-white">
-      <div class="pl10 pr10">
-        <div class="t-table">
-          <div class="t-cell v_middle" style="width:80px;">
-            <x-img class="avatarimg4 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
-          </div>
-          <div class="t-cell v_middle">
-            <div class="font17">{{ viewuser.linkman }}</div>
-            <div class="font12">成交概率{{ viewuser.percent }}</div>
-          </div>
-          <div class="t-cell v_middle w50 align_right">
-            <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn bg-green color-white">{{ $t('Contact') }}</router-link>
-          </div>
+    <div class="s-topbanner flex_left color-white pl15 pr15">
+        <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
+        <div class="flex_cell pr20 pl10">
+          <div class="font17 clamp1">{{ viewuser.linkman }}</div>
+          <div class="font13">成交概率{{ viewuser.percent }}</div>
         </div>
-      </div>
+        <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
     </div>
     <div class="s-container">
-      <div class="b_top_after padding10 flex_center bg-white">
+      <div class="b_top_after padding10 flex_center bg-white list-shadow01">
         <div class="t-table align_center font15 itemtab">
           <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Share') }}</router-link>
           <router-link :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>
@@ -119,5 +111,5 @@ export default {
 }
 .membersview .priority:after{content:"置顶"}
 .membersview .priority.done:after{content:"取消置顶"}
-.membersview .itemtab .item{color:#01a6ea;}
+.membersview .itemtab .item{color:#ea3a3a;}
 </style>

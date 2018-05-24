@@ -1,179 +1,209 @@
 <template>
   <div class="containerarea font14 retailerrevenue">
-    <div class="s-topbanner">
-      <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Myrevenue')}}</div>
-          <div class="pr10 align_right" style="width:150px;">
-            <div class="qbtn font12" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
+    <div class="pagetop" style="height:88px;">
+      <div class="v-top" style="height:44px;">
+        <div class="flex_center">
+          <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
+          <div class="align_right" style="width:150px;">
+            <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <tab v-model="tabmodel" class="x-tab" active-color="#fff" default-color="#fff">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-        </tab>
-      </div>
+      <tab v-model="tabmodel" class="v-tab">
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+      </tab>
     </div>
-    <div class="s-container">
+    <div class="s-container" style="top:88px;">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll1">
+            <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
                   <div class="mt5">暂无待提现记录！</div>
                   <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
                 </div>
-                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white">
+                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                   <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                    <check-icon class="x-check-icon b_bottom_after" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                    <check-icon class="x-check-icon b_bottom_after pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
-                        <div class="t-cell pic v_middle w50">
-                          <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container01"></x-img>
+                        <div class="t-cell pic v_middle w45">
+                          <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1">{{item.buyername}}</div>
-                          <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                          <div class="clamp1 font14 color-999">{{item.buyername}}</div>
                         </div>
-                        <div class="t-cell align_center v_middle w100">
-                          <div class="font12">实际收入</div>
-                          <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
                         </div>
                       </div>
                     </check-icon>
-                    <div class="padding10 border-box">
-                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
-                      <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
+                    <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
+                      <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
+                    </div>
+                    <div class="pl12 pr12 pt10 pb10 flex_right">
+                      <div class="font14 color-999">实际收入</div>
+                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                     </div>
                   </template>
-                  <check-icon v-else class="x-check-icon" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
-                    <div class="t-table">
-                      <div class="t-cell pic v_middle w50">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                  <template v-else>
+                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w45">
+                          <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 color-999">{{item.buyername}}</div>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                        </div>
                       </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1">{{item.buyername}}</div>
-                        <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
-                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                      </div>
-                      <div class="t-cell align_center v_middle w100">
-                        <div class="font12">实际收入</div>
-                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                    </check-icon>
+                    <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                      <div class="clamp1 font14 color-999">
+                        <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                        <span class="v_middle">{{ item.products }}</span>
                       </div>
                     </div>
-                  </check-icon>
+                    <div class="pl12 pr12 pt10 pb10 flex_right">
+                      <div class="font14 color-999">实际收入</div>
+                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </template>
                 </div>
               </div>
             </div>
-            <div class="toolbar_bg" style="position:absolute;left:0;bottom:0;right:0;height:45px;">
+            <div class="toolbar_bg bg-white list-shadow" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="t-table h_100">
                 <div class="t-cell h_100 v_middle w100">
-                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent">全选</check-icon>
+                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent"><span class="color-lightgray">全选</span></check-icon>
                 </div>
-                <div class="t-cell h_100 v_middle align_left">合计：<font class="color-orange">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
-                <div class="t-cell h_100 v_middle font16 align_center bg-orange1 color-white w80" @click="getcash">提现</div>
+                <div class="t-cell h_100 v_middle align_left color-lightgray">合计：<font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
+                <div class="t-cell h_100 v_middle font16 align_center bg-red color-white w80" @click="getcash">提现</div>
               </div>
             </div>
           </template>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <div v-if="disData2" class="scroll_list listarea">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
                 <div class="mt5">暂无待结算记录！</div>
                 <div>客户在线购买成功后，待结算订单金额方可显示在此处！</div>
               </div>
-              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white">
+              <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                  <div class="b_bottom_after padding5">
+                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
                     <div class="t-table">
-                      <div class="t-cell pic v_middle w50 pr10 border-box">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                      <div class="t-cell pic v_middle w45 pr10 border-box">
+                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1">{{item.buyername}}</div>
-                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                        <div class="clamp1 color-999">{{item.buyername}}</div>
                       </div>
-                      <div class="t-cell align_center v_middle w100">
-                        <div class="font12">实际收入</div>
-                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
                       </div>
                     </div>
                   </div>
-                  <div class="padding10 border-box">
-                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                    <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
-                    <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                    <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
-                <div v-else class="padding5">
+                <template v-else>
+                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
                   <div class="t-table">
-                    <div class="t-cell pic v_middle w50 pr10 border-box">
-                      <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.buyername}}</div>
-                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
-                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                      <div class="clamp1 color-999">{{item.buyername}}</div>
                     </div>
-                    <div class="t-cell align_center v_middle w100">
-                      <div class="font12">实际收入</div>
-                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
                     </div>
                   </div>
-                </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="clamp1 font14 color-999">
+                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                      <span class="v_middle">{{ item.products }}</span>
+                    </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
             <div v-if="disData3" class="scroll_list">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60" ></i></div>
                 <div class="mt5">暂无已提现记录！</div>
                 <div>请到【待提现】页面进行提现，提现后的订单金额方可显示在此处！</div>
               </div>
-              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white">
+              <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                  <div class="b_bottom_after padding5">
+                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
                     <div class="t-table">
-                      <div class="t-cell pic v_middle w50 pr10 border-box">
-                        <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                      <div class="t-cell pic v_middle w45 pr10 border-box">
+                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1">{{item.buyername}}</div>
-                        <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
+                        <div class="clamp1 color-999">{{item.buyername}}</div>
                       </div>
-                      <div class="t-cell align_center v_middle w100">
-                        <div class="font12">实际收入</div>
-                        <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
                       </div>
                     </div>
                   </div>
-                  <div class="padding10 border-box">
-                    <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                    <div class="clamp1 font12 color-gray">订单金额: ￥{{ item.special }}</div>
-                    <div class="clamp1 font12 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml5">手续费: -￥{{ item.commission }}</span></div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span></div>
+                    <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
-                <div v-else class="padding5">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w50 pr10 border-box">
-                      <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{item.buyername}}</div>
-                      <div class="clamp1 font12 color-gray"><span class="color-orange mr5">{{ item.content }}</span><span class="disproducts">{{ item.products }}</span></div>
-                      <div class="clamp1 font12 color-gray disdate">{{ item.dateline | dateformat }}</div>
-                    </div>
-                    <div class="t-cell align_center v_middle w100">
-                      <div class="font12">实际收入</div>
-                      <div class="clamp1 color-orange">{{ $t('RMB') }}{{item.money}}</div>
+                <template v-else>
+                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
+                    <div class="t-table">
+                      <div class="t-cell pic v_middle w45 pr10 border-box">
+                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 color-999">{{item.buyername}}</div>
+                      </div>
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="clamp1 font14 color-999">
+                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                      <span class="v_middle">{{ item.products }}</span>
+                    </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                  </div>
+                </template>
               </div>
             </div>
           </div>
@@ -261,38 +291,22 @@ export default {
   computed: {
   },
   methods: {
-    handleScroll1: function () {
+    handleScroll: function (refname, index) {
       const self = this
+      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+          if (index === 0 && self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.$vux.loading.show()
             self.pagestart1++
-            self.$vux.loading.show()
             self.getdata1()
-          }
-        }
-      })
-    },
-    handleScroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
+          } else if (index === 1 && self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.$vux.loading.show()
+            self.pagestart2++
             self.getdata2()
-          }
-        }
-      })
-    },
-    handleScroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer3[0],
-        callback: function () {
-          if (self.tabdata3.length === self.pagestart3 + self.limit) {
+          } else if (index === 2 && self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+            self.$vux.loading.show()
             self.pagestart3 += self.limit
             self.getdata3()
           }

@@ -2,6 +2,9 @@
   <div class="containerarea s-havebottom bg-white font14">
     <div class="s-container" style="top:0;">
       <div class="padding10 font16 bg-gray4">{{ $t('Seller info setting') }}</div>
+      <form enctype="multipart/form-data">
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+      </form>
       <form>
         <forminputplate class="required">
           <span slot="title">{{ $t('Shop name') }}</span>
@@ -20,13 +23,10 @@
                   </div>
                 </div>
               </template>
-              <div v-if="photoarr.length < maxnum" class="photoitem add">
+              <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto">
                 <div class="inner">
-                  <form class="fileform" enctype="multipart/form-data">
-                    <input class="fileinput" type="file" name="files" @change="filechange" />
-                  </form>
-                  <div class="t-table">
-                    <div class="t-cell">
+                  <div class="innerlist">
+                    <div class="flex_center h_100">
                       <div class="txt">
                         <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
                         <div class="mt5">{{ $t('Upload wechat qrcode') }}</div>
@@ -211,25 +211,45 @@ export default {
     expandevent () {
       this.showmore = !this.showmore
     },
-    filechange (e) {
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.photoarr.push(data.data)
+        self.submitdata.qrcode = self.photoarr.join(',')
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    uploadPhoto () {
+      const self = this
+      const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
+    fileChange (e) {
       const self = this
       let files = e.target.files
       if (files.length > 0) {
-        let fileform = document.querySelector('.fileform')
-        let filedata = new FormData(fileform)
+        const fileForm = e.target.parentNode
+        const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
-          if (data.flag === 1) {
-            self.photoarr.push(data.data)
-            self.submitdata.qrcode = self.photoarr.join(',')
-          } else if (data.error) {
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
+          self.photoCallback(data)
         })
       }
     },
