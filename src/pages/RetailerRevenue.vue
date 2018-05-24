@@ -3,7 +3,7 @@
     <div class="pagetop">
       <div class="v-top" style="height:44px;">
         <div class="flex_center">
-          <div class="flex_cell font12 color-white">{{$t('Myrevenue')}}</div>
+          <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
           <div class="align_right" style="width:150px;">
             <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
           </div>
