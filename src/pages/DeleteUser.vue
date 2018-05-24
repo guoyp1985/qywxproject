@@ -34,8 +34,8 @@ export default {
         content: '确定要删除吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/delUser`, {
-            uids: self.uids
+          self.$http.get(`${ENV.BokaApi}/delUser`, {
+            params: { uids: self.uids }
           }).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
