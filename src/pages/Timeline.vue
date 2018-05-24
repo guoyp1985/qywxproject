@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page membersview font14 s-havebottom">
-    <div class="s-topbanner flex_left color-white pl15 pr15">
+    <div class="s-topbanner flex_left color-white pl15 pr15 border-box">
         <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
         <div class="flex_cell pr20 pl10">
           <div class="font17 clamp1">{{ viewuser.linkman }}</div>
