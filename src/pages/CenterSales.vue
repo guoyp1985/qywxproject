@@ -15,8 +15,9 @@
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
         <router-link class="db-in posi_r" style="color:#fff;" to="/messages">
-          <span class="al al-xiaoxi1 font22"></span>
-          <span class="numicon" v-if="retailerInfo.newmessage > 0">{{ retailerInfo.newmessage }}</span>
+          <span class="al al-xiaoxi1 font24"></span>
+          <span class="numicon" v-if="retailerInfo.newmessage > 0 && retailerInfo.newmessage < 100">{{ retailerInfo.newmessage }}</span>
+          <span class="numicon" v-if="retailerInfo.newmessage >= 100">···</span>
         </router-link>
       </div>
       <div class="header-nav flex_table list-shadow02">
@@ -53,7 +54,8 @@
           <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-guanlizhongxin1"></i>
-                <div class="numicon flex_center font15" v-if="retailerInfo.newproduct > 0">{{ retailerInfo.newproduct }}</div>
+                <div class="numicon" v-if="retailerInfo.newproduct > 0 && retailerInfo.newproduct < 100">{{ retailerInfo.newproduct }}</div>
+                <div class="numicon" v-if="retailerInfo.newproduct >= 100">···</div>
               </div>
           </grid-item>
         </div>
@@ -61,7 +63,8 @@
           <grid-item :label="$t('Activity')" :link="{path:'/retailerActivitylist'}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-huodong"></i>
-                <div class="numicon flex_center font15" v-if="retailerInfo.newactivity > 0">{{ retailerInfo.newactivity }}</div>
+                <div class="numicon" v-if="retailerInfo.newactivity > 0 && retailerInfo.newactivity < 100">{{ retailerInfo.newactivity }}</div>
+                <div class="numicon" v-if="retailerInfo.newactivity >= 100">···</div>
               </div>
           </grid-item>
         </div>
@@ -69,7 +72,8 @@
           <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
-              <div class="numicon flex_center font15" v-if="retailerInfo.newnews > 0">{{ retailerInfo.newnews }}</div>
+              <div class="numicon" v-if="retailerInfo.newnews > 0 && retailerInfo.newnews < 100">{{ retailerInfo.newnews }}</div>
+              <div class="numicon" v-if="retailerInfo.newnews >= 100">···</div>
             </div>
           </grid-item>
         </div>
@@ -79,7 +83,8 @@
               <div slot="icon">
                 <i class="al al-kehu1"></i>
               </div>
-              <div class="numicon" v-if="retailerInfo.newsellers > 0">{{ retailerInfo.newsellers }}</div>
+              <div class="numicon" v-if="retailerInfo.newsellers > 0 && retailerInfo.newsellers < 100">{{ retailerInfo.newsellers }}</div>
+              <div class="numicon" v-if="retailerInfo.newsellers >= 100">···</div>
               <span class="icon_hot"></span>
             </grid-item>
           </div>
@@ -88,7 +93,8 @@
               <div slot="icon">
                 <i class="al al-12shangpincuxiao"></i>
               </div>
-              <div class="numicon" v-if="retailerInfo.newopportunity > 0">{{ retailerInfo.newopportunity }}</div>
+              <div class="numicon" v-if="retailerInfo.newopportunity > 0 && retailerInfo.newopportunity < 100">{{ retailerInfo.newopportunity }}</div>
+              <div class="numicon" v-if="retailerInfo.newopportunity >= 100">···</div>
             </grid-item>
           </div>
           <div class="gridlist">
@@ -96,7 +102,8 @@
               <div slot="icon">
                 <i class="al al-lianxiren"></i>
               </div>
-              <div class="numicon" v-if="retailerInfo.newcustomers > 0">{{ retailerInfo.newcustomers }}</div>
+              <div class="numicon" v-if="retailerInfo.newcustomers > 0 && retailerInfo.newcustomers < 100">{{ retailerInfo.newcustomers }}</div>
+              <div class="numicon" v-if="retailerInfo.newcustomers >= 100">···</div>
             </grid-item>
           </div>
         </template>
@@ -126,7 +133,7 @@
         </template>
       </grid>
     </div>
-    <group class="list-shadow02">
+    <group class="list-shadow02 order_list_show posi_r">
       <template v-if="retailerInfo.products > 0">
           <cell :link="{path:'/retailerOrders'}" style="position:relative">
             <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
@@ -134,7 +141,8 @@
               <span class="font15">{{$t('Order list')}}</span>
             </div>
             <div slot="child">
-              <div class="numicon" v-if="retailerInfo.neworders > 0">{{ retailerInfo.neworders }}</div>
+              <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
+              <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
             </div>
           </cell>
       </template>
@@ -439,14 +447,16 @@ export default {
 
 .bk-salestop .numicon{
   position: absolute;
-  top: 0;
-  right: -15px;
-  background: #f06825;
-  padding: 0 1px;
-  border-radius: 16%;
+  top: -5px;
+  right: -8px;
+  background: #eb3a3b;
+  border-radius: 50%;
   color: #fff;
-  font-size: 10px;
+  font-size: 8pt;
   min-width: 18px;
+  min-height:18px;
+  line-height: 16px;
+  border:1px solid #fff;
   text-align: center;
 }
 .grid-title {
@@ -464,11 +474,27 @@ export default {
   padding:1px;
   border-radius: 50%;
   color: #fff;
-  font-size: 12px;
-  min-width: 20px;
-  min-height:20px;
-  text-align: center;
+  font-size: 8pt;
+  min-width: 18px;
+  min-height:18px;
+  line-height: 16px;
   border:1px solid #fff;
+  text-align: center;
 }
 .bk-grid.disable{color:#a6a6a6 !important;}
+.order_list_show .numicon{
+  position: absolute;
+  top: 11px;
+  right: 32px;
+  background: #ea3a3a;
+  padding:1px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 8pt;
+  min-width: 18px;
+  min-height:18px;
+  line-height: 16px;
+  border:1px solid #fff;
+  text-align: center;
+}
 </style>
