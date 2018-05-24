@@ -263,6 +263,7 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
+    alert(JSON.stringify(self.loginUser))
     let iscontinue = true
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'index'
