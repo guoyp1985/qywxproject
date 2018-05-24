@@ -14,7 +14,7 @@
       <template v-if="activitydata && activitydata.length > 0">
         <div class="padding5 align_center color-red bold font16 bg-white" style="line-height: 37px;"><i class="al al-tagfill font18 mr10"></i>{{ $t('Selection promotion') }}</div>
         <div class="activitylist">
-          <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
+          <div v-for="(item,index) in activitydata" :key="index" class="bg-page">
             <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#efeff4 !important;">
               <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
@@ -39,7 +39,7 @@
         <div class="padding5 align_center color-red bold font16 bg-white" style="line-height: 37px;"><i class="al al-goodsnewfill font18 mr10"></i>{{ $t('New products') }}</div>
         <div class="b_top_after"></div>
         <div class="productlist squarepic mb12">
-          <productitemplate :data="item" v-for="(item,index) in productdata" :key="item.id">
+          <productitemplate :data="item" v-for="(item,index) in productdata" :key="index">
             <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" container=".scroll-container"></x-img>
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
