@@ -15,7 +15,7 @@
               <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
             </router-link>
             <div class="t-cell v_middle align_center" style="width:65px;">
-              <router-link class="db-in" style="position:relative;" :to="{path:'/retailerMessagelist'}">
+              <router-link class="db-in" style="position:relative;" :to="{path:'/messages'}">
                 <i class="al al-pinglun color-black" style="font-size:24px;"></i>
                 <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
               </router-link>
