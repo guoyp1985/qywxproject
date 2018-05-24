@@ -306,6 +306,7 @@ export default {
       if (self.query.share_uid) {
         infoparams['share_uid'] = self.query.share_uid
       }
+      alert(JSON.stringify(infoparams))
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
