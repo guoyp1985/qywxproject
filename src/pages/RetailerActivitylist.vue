@@ -156,7 +156,7 @@
             <div class="t-table h_100">
               <div class="t-cell h_100 align_center v_middle w70">{{ $t('Groupbuy') }}</div>
               <div class="t-cell h_100 v_middle pr20 align_right">
-                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'groupbuy'}}">{{ $t('Go to create') }}</router-link>
+                <div class="qbtn bg-orange color-white" style="line-height:20px;" @click="toCreate('groupbuy')">{{ $t('Go to create') }}</div>
               </div>
             </div>
           </div>
@@ -172,7 +172,7 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup1">{{ $t('Close') }}</div>
-            <router-link class="flex_cell flex_center h_100 bg-orange color-white" :to="{path: '/addActivity', query: {type: 'groupbuy'}}">{{ $t('Go to create') }}</router-link>
+            <div class="flex_cell flex_center h_100 bg-orange color-white" @click="toCreate('groupbuy')">{{ $t('Go to create') }}</div>
           </div>
         </div>
       </popup>
@@ -184,7 +184,7 @@
             <div class="t-table h_100">
               <div class="t-cell h_100 align_center v_middle w70">{{ $t('Bargainbuy') }}</div>
               <div class="t-cell h_100 v_middle pr20 align_right">
-                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'bargainbuy'}}">{{ $t('Go to create') }}</router-link>
+                <div class="qbtn bg-orange color-white" style="line-height:20px;" @click="toCreate('bargainbuy')">{{ $t('Go to create') }}</div>
               </div>
             </div>
           </div>
@@ -200,7 +200,7 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup2">{{ $t('Close') }}</div>
-            <router-link class="flex_cell flex_center h_100 bg-orange color-white" :to="{path: '/addActivity', query: {type: 'bargainbuy'}}">{{ $t('Go to create') }}</router-link>
+            <div class="flex_cell flex_center h_100 bg-orange color-white" @click="toCreate('bargainbuy')">{{ $t('Go to create') }}</div>
           </div>
         </div>
       </popup>
@@ -212,7 +212,7 @@
             <div class="t-table h_100">
               <div class="t-cell h_100 align_center v_middle w70">{{ $t('Discount') }}</div>
               <div class="t-cell h_100 v_middle pr20 align_right">
-                <router-link class="qbtn bg-orange color-white" style="line-height:20px;" :to="{path: '/addActivity', query: {type: 'discount'}}">{{ $t('Go to create') }}</router-link>
+                <div class="qbtn bg-orange color-white" style="line-height:20px;" @click="toCreate('discount')">{{ $t('Go to create') }}</div>
               </div>
             </div>
           </div>
@@ -228,7 +228,7 @@
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closepopup3">{{ $t('Close') }}</div>
-            <router-link class="flex_cell flex_center h_100 bg-orange color-white" :to="{path: '/addActivity', query: {type: 'discount'}}">{{ $t('Go to create') }}</router-link>
+            <div class="flex_cell flex_center h_100 bg-orange color-white" @click="toCreate('discount')">{{ $t('Go to create') }}</div>
           </div>
         </div>
       </popup>
@@ -294,6 +294,7 @@ export default {
   },
   data () {
     return {
+      retailerInfo: Object,
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
       tabdata1: [],
@@ -309,15 +310,6 @@ export default {
       isBindScroll1: false,
       scrollArea1: null
     }
-  },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'activitylist'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
   },
   watch: {
     tabdata1: function () {
@@ -400,7 +392,32 @@ export default {
     },
     closepopup3 () {
       this.showdiscount = false
+    },
+    toCreate (type) {
+      const self = this
+      if (self.retailerInfo.buyonline !== 1) {
+        self.$vux.alert.show({
+          title: '',
+          content: '线下支付模式无法创建活动，请到设置中修改支付方式再来创建！'
+        })
+      } else {
+        self.$router.push({path: '/addActivity', query: {type: type}})
+      }
     }
+  },
+  created: function () {
+    let self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'activitylist'
+    }).then(function () {
+      return self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
+    }).then(function (res) {
+      let data = res.data
+      self.retailerInfo = data.data ? data.data : data
+      self.getdata1()
+    })
   }
 }
 </script>
