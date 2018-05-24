@@ -14,7 +14,7 @@
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
-    <div class="s-container" style="top:126px;">
+    <div class="s-container" style="top:126px">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
@@ -208,9 +208,9 @@
                       <div class="font14 color-999">实际收入</div>
                       <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                     </div>
-                
+
                 </template>
-                    
+
               </div>
             </div>
           </template>
