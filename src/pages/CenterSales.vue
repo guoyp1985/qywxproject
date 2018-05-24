@@ -259,6 +259,7 @@ export default {
     }
   },
   created () {
+    console.log('created')
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
@@ -299,6 +300,9 @@ export default {
         self.marquedata = data.data ? data.data : data
       })
     }
+  },
+  activated () {
+    console.log('activated')
   }
 }
 </script>

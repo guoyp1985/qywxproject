@@ -313,6 +313,7 @@ export default {
         alert(JSON.stringify(res))
         let data = res.data
         if (data) {
+          alert('in data')
           self.$vux.loading.hide()
           if (data.flag !== 1) {
             self.sosTitle = data.error
