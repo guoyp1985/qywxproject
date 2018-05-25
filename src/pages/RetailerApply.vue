@@ -29,7 +29,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box mb10" style="padding: 1px 1px 0 10px">
+        <div class="form-item required border1px border-box mb10" style="padding: 0px 0px 0 10px">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -37,7 +37,7 @@
                 <x-input type="tel" v-model="submitdata.mobile" required class="font14 x-input" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
               </group>
             </div>
-            <div class="t-cell align_center" style="width:86px;">
+            <div class="t-cell align_center" style="width:85px;">
               <div v-if="showGetcode" class="qbtn bg-red color-white font13" style="width:85px;box-sizing:border-box;" @click="getcode">获取验证码</div>
               <div v-else class="qbtn bg-gray8 color-white" style="width:85px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
@@ -450,10 +450,10 @@ export default {
 .retailerapply .form-item{padding:7px 10px;}
 .retailerapply .form-item:after{background-color:transparent;}
 .retailerapply .qbtn{
-  line-height: 39px;
+  line-height: 40px;
   box-sizing: border-box;
   padding: 0px;
-  height: 39px;
+  height: 40px;
   border-radius: 5px;
 }
 .retailerapply .x-checker .ck-item{
