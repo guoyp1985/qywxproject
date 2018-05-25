@@ -108,6 +108,7 @@ Please upload rolling show photo:
 <script>
 import { TransferDom, Popup, Confirm, Alert, XImg } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
+import Sos from '@/components/Sos'
 import { User } from '#/storage'
 import ENV from 'env'
 
@@ -116,7 +117,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, Alert, ClipPopup, XImg
+    Popup, Confirm, Alert, ClipPopup, XImg, Sos
   },
   data () {
     return {
