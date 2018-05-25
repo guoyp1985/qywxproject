@@ -1,29 +1,34 @@
 <template>
   <div class="containerarea deliverinfo nobottom font14">
-    <div class="pagetop b_bottom_after pl15 pr15 flex_left color-white">
-      <div>
-        <div>物流公司：{{ deliverinfo.delivercompanyname }}</div>
-        <div>物流单号：{{ deliverinfo.delivercode }}</div>
-      </div>
-    </div>
-    <div class="pagemiddle">
-      <template v-if="showData">
-        <div v-if="!data || data.length == 0" class="scroll_item emptyitem">
-          <div class="t-table">
-            <div class="t-cell">暂无物流信息</div>
-          </div>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagetop b_bottom_after pl15 pr15 flex_left color-white">
+        <div>
+          <div>物流公司：{{ deliverinfo.delivercompanyname }}</div>
+          <div>物流单号：{{ deliverinfo.delivercode }}</div>
         </div>
-        <timeline v-else class="x-timeline">
-          <timeline-item v-for="(item, index) in data" :key="index">
-            <div class="font16 ddate align_right">{{ item.dateline | dateformat }}</div>
-            <div class="font12 dtime align_right">{{ item.dateline | dateformat1 }}</div>
+      </div>
+      <div class="pagemiddle">
+        <template v-if="showData">
+          <div v-if="!data || data.length == 0" class="scroll_item emptyitem">
             <div class="t-table">
-              <div class="t-cell" style="padding-bottom:30px;">{{ item.status }}</div>
+              <div class="t-cell">暂无物流信息</div>
             </div>
-          </timeline-item>
-        </timeline>
-      </template>
-    </div>
+          </div>
+          <timeline v-else class="x-timeline">
+            <timeline-item v-for="(item, index) in data" :key="index">
+              <div class="font16 ddate align_right">{{ item.dateline | dateformat }}</div>
+              <div class="font12 dtime align_right">{{ item.dateline | dateformat1 }}</div>
+              <div class="t-table">
+                <div class="t-cell" style="padding-bottom:30px;">{{ item.status }}</div>
+              </div>
+            </timeline-item>
+          </timeline>
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -32,12 +37,13 @@
 
 <script>
 import { Timeline, TimelineItem } from 'vux'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Timeline, TimelineItem
+    Timeline, TimelineItem, Sos
   },
   filters: {
     dateformat: function (dt) {
@@ -71,37 +77,62 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
+      showSos: false,
+      sosTitle: '',
+      showContainer: false,
       query: {},
       deliverinfo: {},
       data: [],
       showData: false
     }
   },
+  methods: {
+    initInfo () {
+      const self = this
+      if (self.query.id) {
+        self.$vux.loading.show()
+        let params = { id: self.query.id }
+        self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, { params: params }).then(function (res) {
+          let data = res.data
+          self.deliverinfo = data.data ? data.data : data
+          return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
+        }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+            self.$vux.loading.hide()
+          } else {
+            self.showContainer = true
+            let retdata = data.data ? data.data : data
+            if (!retdata.status) {
+              for (let i = 0; i < retdata.length; i++) {
+                let d = retdata[i]
+                d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
+              }
+              self.data = retdata
+            }
+            self.showData = true
+          }
+        })
+      }
+    }
+  },
   created: function () {
-    let self = this
+    const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
-    if (self.query.id) {
-      self.$vux.loading.show()
-      let params = { id: self.query.id }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, { params: params }).then(function (res) {
-        let data = res.data
-        self.deliverinfo = data.data ? data.data : data
-        return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        if (!retdata.status) {
-          for (let i = 0; i < retdata.length; i++) {
-            let d = retdata[i]
-            d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
-          }
-          self.data = retdata
-        }
-        self.showData = true
-      })
+    self.initInfo()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && self.data.length === 0) {
+      self.initInfo()
     }
+    self.doCreated = false
   }
 }
 </script>

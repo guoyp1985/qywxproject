@@ -56,6 +56,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: Object,
       cutImg: '',
       popupShow: false,
@@ -179,36 +180,50 @@ export default {
     },
     popupCancel () {
       this.popupShow = false
+    },
+    initInfo () {
+      const self = this
+      if (self.query.id) {
+        document.title = '更多设置'
+        self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+          params: { id: self.query.id, module: 'news' }
+        }).then(function (res) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          if (retdata) {
+            for (let key in self.submitdata) {
+              self.submitdata[key] = retdata[key]
+            }
+            if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
+              let parr = self.submitdata.photo.split(',')
+              for (let i = 0; i < parr.length; i++) {
+                self.photoarr.push(self.$util.getPhoto(parr[i]))
+              }
+            }
+          }
+        })
+      }
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
     if (self.query.id) {
-      document.title = '更多设置'
-      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-        params: { id: self.query.id, module: 'news' }
-      }).then(function (res) {
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        if (retdata) {
-          for (let key in self.submitdata) {
-            self.submitdata[key] = retdata[key]
-          }
-          if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
-            let parr = self.submitdata.photo.split(',')
-            for (let i = 0; i < parr.length; i++) {
-              self.photoarr.push(self.$util.getPhoto(parr[i]))
-            }
-          }
-        }
-      })
+      self.initInfo()
     } else {
       if (self.photoarr.length > 0) {
         self.submitdata.photo = self.$util.setPhoto(self.photoarr[0])
       }
     }
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>

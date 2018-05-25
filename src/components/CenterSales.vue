@@ -43,7 +43,7 @@
                   <span class="v_middle color-gray">查看了《{{item.title}}》</span>
                 </div>
               </div>
-              <div class="t-cell v_middle h_100 w80 align_right color-gray">{{ item.dateline | dateformat }}</div>
+              <div class="t-cell v_middle h_100 font12 w100 align_right color-gray">{{ item.dateline | dateFormat }}</div>
             </router-link>
           </group>
         </marquee-item>
@@ -198,6 +198,7 @@ With the customer rebate money together!:
 
 <script>
 import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg } from 'vux'
+import Time from '#/time'
 
 export default {
   name: 'CenterSales',
@@ -220,6 +221,11 @@ export default {
   },
   components: {
     Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg
+  },
+  filters: {
+    dateFormat (date) {
+      return new Time(date * 1000).format()
+    }
   },
   data () {
     return {

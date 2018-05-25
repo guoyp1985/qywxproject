@@ -119,19 +119,20 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky } from 'vux'
+import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
-    Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky
+    Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg
   },
   data () {
     return {
+      doCreated: false,
       selectedIndex: 0,
       avatar: '',
-      name: '黄一萌',
+      name: '',
       coins: 50,
       articles: [],
       commodities: [],
@@ -216,8 +217,27 @@ export default {
     }
   },
   created () {
+    const self = this
+    self.doCreated = true
     this.getData()
     this.getArticles()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      switch (self.selectedIndex) {
+        case 0:
+          !self.articles.length && self.getArticles()
+          break
+        case 1:
+          !self.commodities.length && this.getCommodities()
+          break
+        case 2:
+          !self.stores.length && this.getStores()
+          break
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>

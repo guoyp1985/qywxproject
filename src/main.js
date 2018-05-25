@@ -284,7 +284,6 @@ Vue.http.interceptors.request.use(config => {
   return Promise.reject(error)
 })
 
-
 const handleUserInfo = (response) => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code

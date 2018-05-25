@@ -34,17 +34,17 @@
 </template>
 <script>
 import { Group, GroupTitle, Cell, XImg } from 'vux'
-import CTitle from '@/components/CTitle'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, GroupTitle, Cell, XImg, CTitle
+    Group, GroupTitle, Cell, XImg
   },
   data () {
     return {
-      query: Object,
+      doCreated: false,
+      query: {},
       disList: false,
       list: [],
       pagestart: 0,
@@ -98,8 +98,16 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$vux.loading.show()
     self.getData()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && self.list.length === 0) {
+      self.getData()
+    }
+    self.doCreated = false
   }
 }
 </script>
