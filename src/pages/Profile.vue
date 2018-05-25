@@ -47,6 +47,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       option: '',
       options: [
         {
@@ -59,7 +60,7 @@ export default {
         }
       ],
       profile: {
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
+        avatar: '/src/assets/images/user.jpg',
         linkman: '',
         sex: 1,
         company: '',
@@ -80,14 +81,6 @@ export default {
         }
       }
     }
-  },
-  created () {
-    if (this.$route.params.profile) {
-      this.getProfile = this.$route.params.profile
-    } else {
-      this.getProfile = User.get()
-    }
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
     syncWxProfile () {
@@ -137,7 +130,28 @@ export default {
     },
     onCancel () {
       this.$router.go(-1)
+    },
+    initData () {
+      const self = this
+      if (self.$route.params.profile) {
+        self.getProfile = self.$route.params.profile
+      } else {
+        self.getProfile = User.get()
+      }
     }
+  },
+  created () {
+    const self = this
+    self.doCreated = true
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    self.initData()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && !self.getProfile.uid) {
+      self.initData()
+    }
+    self.doCreated = false
   }
 }
 </script>

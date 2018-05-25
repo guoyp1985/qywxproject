@@ -155,8 +155,9 @@ export default {
   },
   data () {
     return {
-      query: Object,
-      rebateInfo: Object,
+      doCreated: false,
+      query: {},
+      rebateInfo: {},
       selectedIndex: 0,
       storeCardShow: false,
       distabdata1: false,
@@ -296,11 +297,41 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
     self.$vux.loading.show()
     this.getData()
     this.getdata1()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      if (!self.rebateInfo.uid) {
+        self.getData()
+      }
+      switch (self.selectedIndex) {
+        case 0:
+          if (self.tabdata1.length === 0) {
+            self.$vux.loading.show()
+            self.getdata1()
+          }
+          break
+        case 1:
+          if (self.tabdata2.length === 0) {
+            self.$vux.loading.show()
+            self.getdata2()
+          }
+          break
+        case 2:
+          if (self.tabdata3.length === 0) {
+            self.$vux.loading.show()
+            self.getdata3()
+          }
+          break
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>
