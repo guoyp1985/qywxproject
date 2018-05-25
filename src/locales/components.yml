@@ -498,8 +498,10 @@ zh-CN:
   Contact: 联系
   Advisory: 咨询
   All: 全部
+  Pending payment: 待付款
   To Be Delivered: 待发货
   Shipped: 待收货
+  To be evaluated: 待评价
   Completed: 已完成
   Online Contact: 在线咨询
   Weixin Contact: 微信联系
@@ -536,6 +538,7 @@ zh-CN:
   Collect: 采集
   Collect record: 采集记录
   My orders: 我的订单
+  All orders: 全部订单
   Title: 标题
   Outer show product title: 对外展示的商品标题
   Price: 价格
