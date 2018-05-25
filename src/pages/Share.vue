@@ -4,9 +4,9 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-credit" class="containerarea font14 bg-page">
+  <div id="personal-credit" class="containerarea font14 bg-page nobottom">
     <div class="pagetop flex_left font18 pl10 border-box">{{$t('Sharing Details')}}</div>
-    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll" style="bottom:53px;">
+    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll">
       <group>
         <div v-if="disList" class="scroll_list">
           <cell v-if="list.length" v-for="(item, index) in list"
@@ -109,6 +109,10 @@ export default {
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.$vux.loading.show()
     self.getData()
+  },
+  activated () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }
 </script>
