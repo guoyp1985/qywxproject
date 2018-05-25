@@ -4,26 +4,20 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="v-top">
-        <div class="pl5 pr5">
-          <div class="t-table">
-            <div class="t-cell v_middle w65">
-              <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
-              <div v-transfer-dom>
-                <previewer :list="imgarr" ref="previewer"></previewer>
-              </div>
-            </div>
-            <div class="t-cell v_middle color-white">
-              <div class="font17 clamp1">{{ viewuser.linkman }}</div>
-              <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
-            </div>
-            <div class="t-cell v_middle color-white w80 align_right">
-              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
-            </div>
+      <div class="s-topbanner flex_left pl15 pr15 border-box">
+        <div class="">
+          <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
+          <div v-transfer-dom>
+            <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
         </div>
+        <div class="flex_cell pl10 pr20 color-white">
+          <div class="font16 clamp1">{{ viewuser.linkman }}</div>
+          <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
+        </div>
+        <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       </div>
-      <div class="v-container">
+      <div class="s-container">
         <div class="list-shadow">
           <div class="b_top_after flex_center bg-white h50">
             <div class="t-table align_center color-red4">

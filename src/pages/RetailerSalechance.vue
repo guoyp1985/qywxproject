@@ -1,27 +1,26 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
-    <div class="pagetop">
-      <div class="v-top">
-          <div slot="content" class="card-demo-flex card-demo-content01">
-            <div class="vux-1px-r">
-              <div class="color-white font12">访问量</div>
-              <div class="color-white font21 mt10">{{ viewdata.views }}</div>
-            </div>
-            <div class="vux-1px-r">
-              <div class="color-white font12">分享数</div>
-              <div class="color-white font21 mt10">{{ viewdata.share }}</div>
-            </div>
-            <div class="vux-1px-r">
-              <div class="color-white font12">销售额</div>
-              <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
-            </div>
+
+      <div class="s-topbanner">
+        <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
+          <div class="vux-1px-r">
+            <div class="color-white font14">访问量</div>
+            <div class="color-white font21 mt10">{{ viewdata.views }}</div>
           </div>
-        </card>
+          <div class="vux-1px-r">
+            <div class="color-white font14">分享数</div>
+            <div class="color-white font21 mt10">{{ viewdata.share }}</div>
+          </div>
+          <div class="vux-1px-r">
+            <div class="color-white font14">销售额</div>
+            <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
+          </div>
+        </div>
+        <tab v-model="tabmodel" class="v-tab">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        </tab>
       </div>
-      <tab v-model="tabmodel" class="v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-      </tab>
-    </div>
+
     <div class="pagemiddle bg-white pl12 pr12">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
@@ -242,9 +241,6 @@ export default {
 .card-demo-flex {
   display: flex;
 }
-.card-demo-content01 {
-  padding: 10px 0;
-}
 .card-padding {
   padding: 15px;
 }
@@ -267,8 +263,8 @@ export default {
 .x-card .weui-panel__hd:after{display:none;}
 
 .bordertxt{border-top:@list-border-color 1px solid;border-bottom:@list-border-color 1px solid;}
-.rsalechance .pagetop{height:128px;}
-.rsalechance .pagemiddle{top:128px;}
+.rsalechance .s-topbanner{height:132px;}
+.rsalechance .pagemiddle{top:132px;}
 .rsalechance .vux-1px-r:after {border: none}
 .rsalechance .x-timeline .vux-timeline-item-color{left: 40px; background-color: #f4dcdc;}
 .rsalechance .x-timeline .vux-timeline-item-tail{left: 44px;background-color: #f4dcdc;}

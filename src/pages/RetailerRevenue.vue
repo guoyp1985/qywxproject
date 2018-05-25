@@ -1,12 +1,10 @@
 <template>
   <div class="containerarea font14 retailerrevenue bg-page">
-    <div class="pagetop" style="height:88px;">
-      <div class="v-top" style="height:44px;">
-        <div class="flex_center">
-          <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
-          <div class="align_right" style="width:150px;">
-            <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
-          </div>
+    <div class="s-topbanner bg-white">
+      <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
+        <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
+        <div class="align_right" style="width:150px;">
+          <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
       <tab v-model="tabmodel" class="v-tab">
