@@ -35,10 +35,10 @@ export default {
   },
   methods: {
     applySuccess () {
-      console.log('in success')
       const self = this
       self.showCenter = true
       self.showApply = false
+      self.$vux.loading.hide()
     },
     initInfo () {
       const self = this
@@ -53,6 +53,7 @@ export default {
           let data = res.data
           if (data.flag === 1) {
             self.showCenter = true
+            self.showApply = false
             self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
               if (res.status === 200) {
                 let data = res.data
@@ -67,6 +68,7 @@ export default {
               }
             })
           } else {
+            self.showCenter = false
             self.showApply = true
             self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
               { params: { limit: 100 } }
