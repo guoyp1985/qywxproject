@@ -259,19 +259,19 @@ export default {
         self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(function (res) {
           let data = res.data
           let retdata = data.data ? data.data : data
-          if (retdata.length === 0) {
+          if (retdata.length === 0 && self.toplinedata.length > 0) {
             self.newspagestart = 0
             self.getnewsdata()
           } else {
             if (retdata.length < self.newslimit) {
-              self.toplinedata = data.data ? data.data : data
+              self.toplinedata = retdata
               if (self.newspagestart === 0) {
                 self.isgetnews = false
               } else {
                 self.newspagestart = 0
               }
             } else if (retdata.length === self.newslimit) {
-              self.toplinedata = data.data ? data.data : data
+              self.toplinedata = retdata
               self.newspagestart++
             }
           }
@@ -358,7 +358,7 @@ export default {
     self.$vux.loading.show()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'store'
-    }).then(function () {
+    }).then(function (res) {
       let infoparams = { uid: self.query.wid }
       if (self.query.share_uid) {
         infoparams.share_uid = self.query.share_uid
