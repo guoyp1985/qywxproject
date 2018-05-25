@@ -10,7 +10,7 @@
     <div class="s-container s-container1">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll1" v-if="(index == 0)">
+          <div class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)" v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                 <div><i class="al al-qiangkehu font60 pt20"></i></div>
@@ -27,7 +27,7 @@
               </div>
             </div>
           </div>
-          <div class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll2" v-if="(index == 1)">
+          <div class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)" v-if="(index == 1)">
             <div v-if="distabdata2" class="scroll_list ">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
                 <div><i class="al al-qiangkehu font60 pt20"></i></div>
@@ -75,6 +75,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: Object,
       tabtxts: [ '全部', '购买客户' ],
       tabmodel: 0,
@@ -87,36 +88,25 @@ export default {
       pagestart2: 0
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   methods: {
-    handleScroll1: function (index) {
+    handleScroll: function (refname, index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
-          }
-        }
-      })
-    },
-    handleScroll2: function (index) {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getdata1()
+            }
+          } else if (index === 1) {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getdata2()
+            }
           }
         }
       })
@@ -157,7 +147,7 @@ export default {
           self.getdata1()
         }
       } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
+        if (self.pagestart2 === 0) {
           self.$vux.loading.show()
           self.getdata2()
         }
@@ -171,6 +161,21 @@ export default {
       ret = `${ret} mr5`
       return ret
     }
+  },
+  created () {
+    const self = this
+    self.doCreated = true
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+    self.$vux.loading.show()
+    self.getdata1()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && self.tabdata1.length === 0) {
+      self.getdata1()
+    }
+    self.doCreated = false
   }
 }
 </script>

@@ -142,9 +142,6 @@
       <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('More') }}<i class="al al-jiantouyoushuang- font14"></i></div>
     </div>
     <div class="s-bottom flex_center color-white list-shadow02">
-      <!--
-      <div class="flex_cell flex_center h_100 bg-orange color-white" style="border-right:#fff 1px solid;" @click="saveevent">{{ $t('Save') }}</div>
-    -->
       <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
     </div>
   </div>
