@@ -178,11 +178,12 @@ export default {
       showSos: false,
       sosTitle: '',
       showContainer: false,
+      doCreated: false,
       module: 'store',
-      query: Object,
-      loginUser: Object,
+      query: {},
+      loginUser: {},
       showShareSuccess: false,
-      wid: null,
+      wid: 0,
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       showqrcode: false,
       showdot: true,
@@ -357,78 +358,96 @@ export default {
       } else if (self.loginUser.usergroup) {
         self.$router.push('/centerSales')
       }
+    },
+    initInfo () {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'store'
+      }).then(function (res) {
+        if (res.status === 200) {
+          let infoparams = { uid: self.query.wid }
+          if (self.query.share_uid) {
+            infoparams.share_uid = self.query.share_uid
+          }
+          if (self.query.lastshareuid) {
+            infoparams.lastshareuid = self.query.lastshareuid
+          }
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+            params: infoparams
+          })
+        }
+      }).then(function (res) {
+        if (res) {
+          self.$vux.loading.hide()
+          self.hideloading = true
+          let data = res.data
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+          } else {
+            self.showContainer = true
+            self.retailerInfo = data.data ? data.data : data
+            document.title = self.retailerInfo.title
+            self.wid = self.retailerInfo.uid
+            self.$util.handleWxShare({
+              module: 'store',
+              moduleid: self.wid,
+              lastshareuid: self.query.share_uid,
+              title: self.retailerInfo.title,
+              desc: self.retailerInfo.title,
+              photo: self.retailerInfo.avatar,
+              link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
+              successCallback: function () {
+                self.showShareSuccess = true
+              }
+            })
+            if (self.wid !== self.loginUser.uid) {
+              self.getCollectStaus()
+            }
+            return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
+          }
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            let p = retdata[i]
+            p.img = p.photo
+            p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+          }
+          self.addata = retdata
+          let params = { do: 'store', pagestart: 0, limit: 20, wid: self.wid }
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
+            params: params
+          })
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          self.activitydata = data.data ? data.data : data
+          self.getdata1()
+          self.getnewsdata()
+        }
+      })
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.loginUser = User.get()
     self.query = self.$route.query
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'store'
-    }).then(function (res) {
-      let infoparams = { uid: self.query.wid }
-      if (self.query.share_uid) {
-        infoparams.share_uid = self.query.share_uid
-      }
-      if (self.query.lastshareuid) {
-        infoparams.lastshareuid = self.query.lastshareuid
-      }
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-        params: infoparams
-      })
-    }).then(function (res) {
-      self.$vux.loading.hide()
-      self.hideloading = true
-      let data = res.data
-      if (data.flag !== 1) {
-        self.sosTitle = data.error
-        self.showSos = true
-        return false
-      } else {
-        self.showContainer = true
-        self.retailerInfo = data.data ? data.data : data
-        document.title = self.retailerInfo.title
-        self.wid = self.retailerInfo.uid
-        self.$util.handleWxShare({
-          module: 'store',
-          moduleid: self.wid,
-          lastshareuid: self.query.share_uid,
-          title: self.retailerInfo.title,
-          desc: self.retailerInfo.title,
-          photo: self.retailerInfo.avatar,
-          link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
-          successCallback: function () {
-            self.showShareSuccess = true
-          }
-        })
-        if (self.retailerInfo.uid !== self.loginUser.uid) {
-          self.getCollectStaus()
-        }
-        return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
-      }
-    }).then(function (res) {
-      if (res) {
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          let p = retdata[i]
-          p.img = p.photo
-          p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
-        }
-        self.addata = retdata
-        let params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-      }
-    }).then(function (res) {
-      if (res) {
-        let data = res.data
-        self.activitydata = data.data ? data.data : data
-      }
-    })
-    self.getdata1()
-    self.getnewsdata()
+    self.initInfo()
+  },
+  activated () {
+    console.log('activated')
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>

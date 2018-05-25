@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="row row2">
-        <tab v-model="tabmodel" class="v-tab" active-color="#ea3a3a" default-color="#666" style="height:80px;">
+        <tab v-model="tabmodel" class="v-tab" active-color="#ea3a3a" default-color="#666" style="height:60px;">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">
             <div class="flex_center txt">
               <div>
@@ -28,11 +28,11 @@
         </tab>
       </div>
     </div>
-    <div class="v-container s-container2" style="top:162px;">
+    <div class="v-container s-container2" style="top:148px;">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
-            <div v-if="distabdata1" class="scroll_list pl10 pr10">
+            <div v-if="distabdata1" class="scroll_list pl10 pr10 mb10 list-shadow">
               <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有带来消费</div>
@@ -56,7 +56,7 @@
             </div>
           </div>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
-            <div v-if="distabdata2" class="scroll_list pl10 pr10">
+            <div v-if="distabdata2" class="scroll_list pl10 pr10 mb10 list-shadow">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有分享过</div>
@@ -85,7 +85,7 @@
                 <div class="t-cell align_right w60">{{ $t('Contact Consumers') }}</div>
               </div>
             </div>
-            <div v-if="distabdata3" class="scroll_list pl10 pr10 cols-2">
+            <div v-if="distabdata3" class="scroll_list pl10 pr10 mb10 list-shadow cols-2">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">该返点客还没有带来客户</div>
@@ -319,5 +319,10 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+.rsaleview .vux-tab-container{ height: 60px;}
+.rsaleview .vux-tab{height: 60px;}
+.rsaleview .v-tab .vux-tab .vux-tab-item{line-height: 30px;}
+.rsaleview .s-topbanner .row{height: 60px;}
+.rsaleview .vux-tab-wrap{padding-top: 0}
 </style>
