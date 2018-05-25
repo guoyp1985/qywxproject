@@ -15,7 +15,7 @@
               <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
             </router-link>
             <div class="t-cell v_middle align_center" style="width:65px;">
-              <router-link class="db-in" style="position:relative;" :to="{path:'/retailerMessagelist'}">
+              <router-link class="db-in" style="position:relative;" :to="{path:'/messages'}">
                 <i class="al al-pinglun color-black" style="font-size:24px;"></i>
                 <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
               </router-link>
@@ -788,24 +788,6 @@ export default {
           console.log('in logout')
         } else if (data.type === 'say') {
           console.log('say')
-          let edata = JSON.parse(e.data)
-          let saycontent = edata.content
-          if (!self.$util.isNull(saycontent)) {
-            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-          }
-          let saydata = {
-            uid: edata.from_uid,
-            content: saycontent,
-            dateline: edata.time,
-            msgtype: edata.msgtype ? edata.msgtype : 'text',
-            picurl: edata.picurl ? edata.picurl : '',
-            thumb: edata.thumb ? edata.thumb : '',
-            username: edata.from_client_name,
-            id: edata.msgid,
-            roomid: edata.room_id,
-            avatar: edata.avatar,
-            newsdata: edata.newsdata
-          }
         }
       }
       self.socket.onclose = function () {

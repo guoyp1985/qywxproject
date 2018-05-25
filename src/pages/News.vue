@@ -131,6 +131,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
       loginUser: Object,
       WeixinName: ENV.WeixinName,
@@ -248,16 +249,12 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         let data = res.data
-        console.log('in reply')
-        console.log(self.replyData)
-        console.log(self.replyData.comment)
         if (data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = [ data.data ]
           } else {
             self.replyData.comment.push(data.data)
           }
-          console.log(self.replyData.comment)
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -495,7 +492,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = to.query
       self.loginUser = User.get()
-      alert(JSON.stringify(self.loginUser))
       this.wsConnect()
       this.showsharetip = false
       this.getData()
@@ -531,24 +527,6 @@ export default {
           console.log('in logout')
         } else if (data.type === 'say') {
           console.log('say')
-          let edata = JSON.parse(e.data)
-          let saycontent = edata.content
-          if (!self.$util.isNull(saycontent)) {
-            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-          }
-          let saydata = {
-            uid: edata.from_uid,
-            content: saycontent,
-            dateline: edata.time,
-            msgtype: edata.msgtype ? edata.msgtype : 'text',
-            picurl: edata.picurl ? edata.picurl : '',
-            thumb: edata.thumb ? edata.thumb : '',
-            username: edata.from_client_name,
-            id: edata.msgid,
-            roomid: edata.room_id,
-            avatar: edata.avatar,
-            newsdata: edata.newsdata
-          }
         }
       }
       self.socket.onclose = function () {
@@ -565,11 +543,20 @@ export default {
     }
   },
   created () {
-    this.createdFun(this.$route)
+    const self = this
+    self.doCreated = true
+    self.createdFun(this.$route)
   },
   beforeRouteUpdate (to, from, next) {
     const self = this
     self.createdFun(to, from, next)
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.createdFun(this.$route)
+    }
+    self.doCreated = false
   }
 }
 </script>

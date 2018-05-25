@@ -11,6 +11,9 @@
     <div class="mt12">
       <div class="btn bg-green color-white" @click="deleteEvent">删除</div>
     </div>
+    <div class="mt12">
+      <div class="btn bg-green color-white" @click="clearStorage">清除本地缓存</div>
+    </div>
   </div>
 </template>
 
@@ -53,6 +56,22 @@ export default {
                 }
               }
             })
+          })
+        }
+      })
+    },
+    clearStorage () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要清除缓存吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          Token.remove()
+          User.remove()
+          Access.remove()
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: '成功'
           })
         }
       })
