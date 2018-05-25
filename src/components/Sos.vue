@@ -31,7 +31,6 @@ export default {
   padding:0;
   max-width:1920px;
   height:100%;
-  background-color:#f2f2f2;
   margin:0 auto;
 }
 .error404 .list-block{
@@ -52,7 +51,7 @@ export default {
   padding-top:15%;
   box-sizing:border-box;
   background:url(../assets/images/404_icon.png) no-repeat center 90%;
-  background-size:30%;
+  background-size:40%;
   box-shadow:0px 10px 20px rgba(0,0,0,0.05);
   border-radius:7%;
   text-shadow:1px 2px 0px rgba(255,255,255,1);

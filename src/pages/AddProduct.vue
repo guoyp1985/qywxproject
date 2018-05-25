@@ -69,11 +69,11 @@
                 </div>
               </div>
             </div>
-            <div class="flex_cell" style="width:80px;">
+            <div style="width:30%;">
               <div class="t-table">
                 <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                <div class="t-cell input-cell w30 v_middle" style="position:relative;">
-                  <input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <input v-model="submitdata.unit" type="text" class="input align_center" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
                 </div>
               </div>
             </div>
