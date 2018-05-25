@@ -272,6 +272,7 @@ export default {
           self.showContainer = false
           self.showSos = true
         } else {
+          self.showContainer = true
           self.orderdata = data
           let total = 0
           for (let i = 0; i < self.orderdata.length; i++) {
