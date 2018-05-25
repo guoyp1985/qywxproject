@@ -320,18 +320,18 @@ export default {
         self.distabdata4 = true
       })
     },
-    swiperChange (index) {
+    swiperChange () {
       const self = this
-      if (index === 0 && self.tabdata1.length === 0) {
+      if (self.selectedIndex === 0 && self.tabdata1.length === 0) {
         self.$vux.loading.show()
         self.getdata1()
-      } else if (index === 1 && self.tabdata2.length === 0) {
+      } else if (self.selectedIndex === 1 && self.tabdata2.length === 0) {
         self.$vux.loading.show()
         self.getdata2()
-      } else if (index === 2 && self.tabdata3.length === 0) {
+      } else if (self.selectedIndex === 2 && self.tabdata3.length === 0) {
         self.$vux.loading.show()
         self.getdata3()
-      } else if (index === 3 && self.tabdata4.length === 0) {
+      } else if (self.selectedIndex === 3 && self.tabdata4.length === 0) {
         self.$vux.loading.show()
         self.getdata4()
       }
@@ -438,19 +438,7 @@ export default {
   activated () {
     const self = this
     if (!self.doCreated) {
-      if (self.selectedIndex === 0 && !self.tabdata1.length) {
-        self.$vux.loading.show()
-        self.getdata1()
-      } else if (self.selectedIndex === 1 && !self.tabdata2.length) {
-        self.$vux.loading.show()
-        self.getdata2()
-      } else if (self.selectedIndex === 2 && !self.tabdata3.length) {
-        self.$vux.loading.show()
-        self.getdata3()
-      } else if (self.selectedIndex === 3 && !self.tabdata4.length) {
-        self.$vux.loading.show()
-        self.getdata4()
-      }
+      self.swiperChange()
     }
     self.doCreated = false
   }

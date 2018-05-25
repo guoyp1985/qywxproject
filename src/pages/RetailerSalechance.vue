@@ -16,15 +16,15 @@
             <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
           </div>
         </div>
-        <tab v-model="tabmodel" class="v-tab">
+        <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
 
     <div class="pagemiddle bg-white pl12 pr12">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="disdatalist1">
               <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
                 <div class="t-table ml10">
@@ -51,7 +51,7 @@
               </timeline>
             </template>
           </div>
-          <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+          <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="disdatalist2">
               <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
                 <div class="t-table ml10">
@@ -134,7 +134,8 @@ export default {
   },
   data () {
     return {
-      tabmodel: 0,
+      doCreated: false,
+      selectedIndex: 0,
       tabtxts: [ '分享', '浏览' ],
       viewdata: { orders: '0.00', share: 0, views: 0 },
       tabdata1: [],
@@ -154,45 +155,25 @@ export default {
       return this.tabdata2
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'salechance'
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`)
-    }).then(function (res) {
-      let data = res.data
-      if (data && data.flag === 1) {
-        self.viewdata = data.data
-      }
-      self.getdata1()
-    })
-  },
   methods: {
-    handleScroll1: function () {
+    handleScroll: function (refname, index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
-          }
-        }
-      })
-    },
-    handleScroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getdata1()
+            }
+          } else {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getdata2()
+            }
           }
         }
       })
@@ -219,20 +200,48 @@ export default {
         self.disdatalist2 = true
       })
     },
-    swiperChange (index) {
+    swiperChange () {
       const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
+      if (self.selectedIndex === 0) {
+        if (self.tabdata1.length === 0 && self.tabdata1.length === 0) {
           self.$vux.loading.show()
           self.getdata1()
         }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
+      } else if (self.selectedIndex === 1 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
       }
+    },
+    initInfo () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`).then(function (res) {
+        let data = res.data
+        if (data && data.flag === 1) {
+          self.viewdata = data.data
+        }
+        self.getdata1()
+      })
     }
+  },
+  created () {
+    const self = this
+    self.doCreated = true
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'salechance'
+    }).then(function (res) {
+      if (res.status === 200) {
+        self.initInfo()
+      }
+    })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.swiperChange()
+    }
+    self.doCreated = false
   }
 }
 </script>

@@ -278,6 +278,8 @@ export default {
               self.showSos = true
               self.showContainer = false
             } else {
+              self.showSos = false
+              self.showContainer = true
               if (self.data.flag !== 2) {
                 self.bottomcss = 'nobottom'
               }
