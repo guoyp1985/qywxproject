@@ -387,6 +387,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
       disTimeout: true,
       showSos: false,
@@ -797,120 +798,132 @@ export default {
       self.socket.onerror = function () {
         console.log('ws error')
       }
+    },
+    initInfo () {
+      const self = this
+      self.$vux.loading.show()
+      self.wsConnect()
+      let infoparams = { id: self.productid, module: self.module }
+      if (self.query.wid) {
+        infoparams.wid = self.query.wid
+      }
+      if (self.query.share_uid) {
+        infoparams.share_uid = self.query.share_uid
+      }
+      if (self.query.lastshareuid) {
+        infoparams.lastshareuid = self.query.lastshareuid
+      }
+      if (self.query.from === 'poster') {
+        infoparams.from = 'poster'
+      }
+      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+        params: infoparams
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+          } else {
+            self.showcontainer = true
+            self.productdata = data.data
+            self.retailerinfo = self.productdata.retailerinfo
+            if (self.productdata.activityinfo) {
+              self.activityInfo = self.productdata.activityinfo
+            }
+            document.title = self.productdata.title
+            self.handleTop()
+            self.handleNewAdd()
+            const photo = self.productdata.photo
+            if (photo && self.$util.trim(photo) !== '') {
+              self.photoarr = photo.split(',')
+            }
+            if (self.photoarr.length > 0) {
+              self.showFlash = true
+              self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
+            }
+            const content = self.productdata.content
+            const contetnphoto = self.productdata.contentphoto
+            if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+            } else if (contetnphoto && self.$util.trim(contetnphoto) !== '') {
+              self.contentphotoarr = contetnphoto.split(',')
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
+            }
+            self.handelShare()
+            return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+              params: { wid: self.retailerinfo.uid, productid: self.productid }
+            })
+          }
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.buyuserdata = data.data
+          }
+          return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
+            { params: { module: self.module, id: self.productid } }
+          )
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.isfavorite = true
+          } else {
+            self.isfavorite = false
+          }
+          return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
+            { params: { module: self.module, nid: self.productid, pagestart: 0, limit: 3 } }
+          )
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          if (data.flag === 1) {
+            self.evluatedata = data.data
+          }
+          if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
+            return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
+              { params: { id: self.activityInfo.id } }
+            )
+          }
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            let d = retdata[i]
+            let lefttime = d.lefttime
+            d.lefthour = lefttime.hour
+            d.leftminute = lefttime.minute
+            d.leftsecond = lefttime.second
+            d.interval = null
+            self.cutdown(d, d.interval)
+          }
+          self.activitydata = retdata
+        }
+      })
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
     self.query = self.$route.query
     self.productid = self.query.id
     self.loginUser = User.get()
-    self.wsConnect()
-    let infoparams = { id: self.productid, module: self.module }
-    if (self.query.wid) {
-      infoparams.wid = self.query.wid
+    self.initInfo()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
     }
-    if (self.query.share_uid) {
-      infoparams.share_uid = self.query.share_uid
-    }
-    if (self.query.lastshareuid) {
-      infoparams.lastshareuid = self.query.lastshareuid
-    }
-    if (self.query.from === 'poster') {
-      infoparams.from = 'poster'
-    }
-    self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-      params: infoparams
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
-          self.showSos = true
-        } else {
-          self.showcontainer = true
-          self.productdata = data.data
-          self.retailerinfo = self.productdata.retailerinfo
-          if (self.productdata.activityinfo) {
-            self.activityInfo = self.productdata.activityinfo
-          }
-          document.title = self.productdata.title
-          self.handleTop()
-          self.handleNewAdd()
-          const photo = self.productdata.photo
-          if (photo && self.$util.trim(photo) !== '') {
-            self.photoarr = photo.split(',')
-          }
-          if (self.photoarr.length > 0) {
-            self.showFlash = true
-            self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
-          }
-          const content = self.productdata.content
-          const contetnphoto = self.productdata.contentphoto
-          if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
-            self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
-          } else if (contetnphoto && self.$util.trim(contetnphoto) !== '') {
-            self.contentphotoarr = contetnphoto.split(',')
-            self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
-          }
-          self.handelShare()
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-            params: { wid: self.retailerinfo.uid, productid: self.productid }
-          })
-        }
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        if (data.flag === 1) {
-          self.buyuserdata = data.data
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
-          { params: { module: self.module, id: self.productid } }
-        )
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        if (data.flag === 1) {
-          self.isfavorite = true
-        } else {
-          self.isfavorite = false
-        }
-        return self.$http.get(`${ENV.BokaApi}/api/comment/list`,
-          { params: { module: self.module, nid: self.productid, pagestart: 0, limit: 3 } }
-        )
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        if (data.flag === 1) {
-          self.evluatedata = data.data
-        }
-        if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
-          return self.$http.get(`${ENV.BokaApi}/api/activity/crowdUser`,
-            { params: { id: self.activityInfo.id } }
-          )
-        }
-      }
-    }).then(function (res) {
-      if (res && res.status === 200) {
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          let d = retdata[i]
-          let lefttime = d.lefttime
-          d.lefthour = lefttime.hour
-          d.leftminute = lefttime.minute
-          d.leftsecond = lefttime.second
-          d.interval = null
-          self.cutdown(d, d.interval)
-        }
-        self.activitydata = retdata
-      }
-    })
+    self.doCreated = false
   }
 }
 </script>
