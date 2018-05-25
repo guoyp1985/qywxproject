@@ -73,7 +73,7 @@ export default {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
+        element: scrollarea,
         callback: function () {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++

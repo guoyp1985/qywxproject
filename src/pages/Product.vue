@@ -921,7 +921,7 @@ export default {
   activated () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    if (!self.doCreated) {
+    if (!self.doCreated && !self.productdata.id) {
       self.initInfo()
     }
     self.doCreated = false
