@@ -22,7 +22,7 @@
               <div class="clamp1 color-gray font12">{{ item.dateline | dateformat }}</div>
             </div>
             <div v-if="item.unreadNumber > 0" class="t-cell v_middle align_right w60">
-              <div class="qbtn6 bg-green color-white">{{ item.unreadNumber }}</div>
+              <div class="qbtn6 bg-red color-white">{{ item.unreadNumber }}</div>
             </div>
           </div>
         </router-link>

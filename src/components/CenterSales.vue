@@ -84,8 +84,6 @@
               <div slot="icon">
                 <i class="al al-kehu1"></i>
               </div>
-              <div class="numicon" v-if="retailerInfo.newsellers > 0 && retailerInfo.newsellers < 100">{{ retailerInfo.newsellers }}</div>
-              <div class="numicon" v-if="retailerInfo.newsellers >= 100">···</div>
               <span class="icon_hot"></span>
             </grid-item>
           </div>
