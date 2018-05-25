@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-white retailerapply notop">
+  <div v-show="showcontainer" class="containerarea font14 bg-white retailerapply notop">
     <div class="pagemiddle bg-white" style="bottom: 50px;">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
@@ -51,7 +51,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0">
+        <div class="form-item required border1px border-box padding10" v-if="classdata.length > 0">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
           <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
@@ -61,11 +61,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-<<<<<<< HEAD:src/pages/RetailerApply.vue
             <checker-item class="border1px color-gray" v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
-=======
-            <checker-item v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
->>>>>>> 310cc7d696014b2a278fc586edeb568da9bdc492:src/components/RetailerApply.vue
           </checker>
         </div>
         <div class="form-item padding10 font16">
@@ -236,18 +232,6 @@ import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
-  name: 'RetailerApply',
-  props: {
-    loginUser: {
-      type: Object,
-      default: {}
-    },
-    classData: {
-      type: Array,
-      default: []
-    },
-    afterApply: Function
-  },
   directives: {
     TransferDom
   },
@@ -256,12 +240,15 @@ export default {
   },
   data () {
     return {
+      showcontainer: false,
       showGetcode: true,
       timer: null,
       timenum: 60,
+      loginUser: {},
       bottomcss: '',
       isagree: false,
       isshowpopup: false,
+      classdata: [],
       allowsubmit: false,
       submitdata: {
         truename: '',
@@ -378,11 +365,10 @@ export default {
           User.set(curuser)
           self.$vux.toast.show({
             text: applydata.error,
-            type: applydata.flag === 1 ? 'success' : 'warn',
             time: self.$util.delay(applydata.error),
             onHide: function () {
               if (applydata.flag === 1 || applydata.flag === 2) {
-                self.afterApply && self.afterApply()
+                self.$router.push('/centerSales')
               } else {
                 self.$vux.loading.hide()
               }
@@ -390,6 +376,47 @@ export default {
           })
         })
       }
+    }
+  },
+  created: function () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.loginUser = User.get()
+    let iscontinue = true
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'apply'
+    })
+    if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
+      self.$vux.loading.hide()
+      self.showcontainer = true
+    } else if (self.loginUser.usergroup) {
+      let usergroup = self.loginUser.usergroup
+      for (let i = 0; i < usergroup.length; i++) {
+        let g = usergroup[i]
+        if (g === 3) {
+          iscontinue = false
+          break
+        }
+      }
+    }
+    if (!iscontinue) {
+      self.$vux.loading.hide()
+      self.$router.push('/centerSales')
+    } else {
+      self.$vux.loading.hide()
+      self.showcontainer = true
+      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+        { params: { limit: 100 } }
+      ).then(function (res) {
+        let data = res.data
+        data = data.data ? data.data : data
+        for (let i = 0; i < data.length; i++) {
+          let d = data[i]
+          d.checked = false
+        }
+        self.classdata = data
+      })
     }
   }
 }

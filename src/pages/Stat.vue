@@ -24,7 +24,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -41,7 +41,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" :container="`.scroll-container${index}`"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -59,7 +59,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -77,7 +77,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container4"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container4"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -95,7 +95,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container5"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container5"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -113,7 +113,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container6"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container6"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -131,11 +131,11 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container7"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container7"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
-                          <div class="clamp1 color-gray">团员: {{ item.otherusers }}</div>
+                          <div class="color-gray">团员: {{ item.otherusers }}</div>
                           <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
                         </router-link>
                         <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
@@ -149,7 +149,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container8"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container8"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -166,7 +166,7 @@
                     <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                       <div class="flex_left">
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                          <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="scroll-container9"></x-img>
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="scroll-container9"></x-img>
                         </router-link>
                         <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                           <div class="clamp1 color-gray2">{{ item.linkman }}</div>

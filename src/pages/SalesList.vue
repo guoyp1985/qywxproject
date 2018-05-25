@@ -2,11 +2,8 @@
   <div class="containerarea font14 rsaleslist bg-white">
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
-        <div class="row">
-          <div class="bg"></div>
-          <div class="flex_center h_100 toprow">
-            <div class="flex_cell font18 pl20">{{ viewuser.linkman }}的订单</div>
-          </div>
+        <div class="flex_center h_100 toprow">
+          <div class="flex_cell font16 pl20 color-white">{{ viewuser.linkman }}的订单</div>
         </div>
       </div>
       <div class="s-container s-container1">
@@ -27,11 +24,9 @@
             <template v-else>暂无订单</template>
           </div>
           <router-link v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10 db" :to="{path: '/retailerOrderDetail', query: {id: item.orderid}}">
-            <div class="t-table">
-              <div class="t-cell v_middle" style="width:50px;height:50px;">
-                <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container"></x-img>
-              </div>
-              <div class="t-cell v_middle">
+            <div class="flex_left">
+              <x-img class="imgcover avatarimg2 radius0" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+              <div class="flex_cell pl10">
                 <div class="clamp1">{{ item.title }}</div>
                 <div class="clamp1 color-gray font12">
                   <span class="v_middle">{{ item.dateline | dateformat }}</span>
