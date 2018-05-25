@@ -131,6 +131,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
       loginUser: Object,
       WeixinName: ENV.WeixinName,
@@ -248,16 +249,12 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
         let data = res.data
-        console.log('in reply')
-        console.log(self.replyData)
-        console.log(self.replyData.comment)
         if (data.flag) {
           if (!self.replyData.comment) {
             self.replyData.comment = [ data.data ]
           } else {
             self.replyData.comment.push(data.data)
           }
-          console.log(self.replyData.comment)
         } else {
           self.$vux.toast.show({
             text: data.error,

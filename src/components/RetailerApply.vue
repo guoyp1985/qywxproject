@@ -2,7 +2,7 @@
  * 已废弃
 */
 <template>
-  <div v-show="showcontainer" class="containerarea font14 bg-white retailerapply notop">
+  <div class="containerarea font14 bg-white retailerapply notop">
     <div class="pagemiddle bg-white" style="bottom: 50px;">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
@@ -32,7 +32,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box mb10" style="padding: 1px 1px 0 10px">
+        <div class="form-item required border1px border-box mb10" style="padding: 0px 0px 0 10px">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -40,7 +40,7 @@
                 <x-input type="tel" v-model="submitdata.mobile" required class="font14 x-input" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
               </group>
             </div>
-            <div class="t-cell align_center" style="width:86px;">
+            <div class="t-cell align_center" style="width:85px;">
               <div v-if="showGetcode" class="qbtn bg-red color-white font13" style="width:85px;box-sizing:border-box;" @click="getcode">获取验证码</div>
               <div v-else class="qbtn bg-gray8 color-white" style="width:85px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
@@ -54,9 +54,9 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box padding10" v-if="classdata.length > 0">
+        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
-          <div class="pb10">经营产品<span class="fong12 color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+          <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
           class="x-checker"
           type="checkbox"
@@ -64,7 +64,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-            <checker-item v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
+            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
@@ -235,6 +235,18 @@ import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  name: 'RetailerApply',
+  props: {
+    loginUser: {
+      type: Object,
+      default: {}
+    },
+    classData: {
+      type: Array,
+      default: []
+    },
+    afterApply: Function
+  },
   directives: {
     TransferDom
   },
@@ -243,15 +255,12 @@ export default {
   },
   data () {
     return {
-      showcontainer: false,
       showGetcode: true,
       timer: null,
       timenum: 60,
-      loginUser: {},
       bottomcss: '',
       isagree: false,
       isshowpopup: false,
-      classdata: [],
       allowsubmit: false,
       submitdata: {
         truename: '',
@@ -368,10 +377,11 @@ export default {
           User.set(curuser)
           self.$vux.toast.show({
             text: applydata.error,
+            type: applydata.flag === 1 ? 'success' : 'warn',
             time: self.$util.delay(applydata.error),
             onHide: function () {
               if (applydata.flag === 1 || applydata.flag === 2) {
-                self.$router.push('/centerSales')
+                self.afterApply && self.afterApply()
               } else {
                 self.$vux.loading.hide()
               }
@@ -379,47 +389,6 @@ export default {
           })
         })
       }
-    }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.$vux.loading.show()
-    self.loginUser = User.get()
-    let iscontinue = true
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'apply'
-    })
-    if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-      self.$vux.loading.hide()
-      self.showcontainer = true
-    } else if (self.loginUser.usergroup) {
-      let usergroup = self.loginUser.usergroup
-      for (let i = 0; i < usergroup.length; i++) {
-        let g = usergroup[i]
-        if (g === 3) {
-          iscontinue = false
-          break
-        }
-      }
-    }
-    if (!iscontinue) {
-      self.$vux.loading.hide()
-      self.$router.push('/centerSales')
-    } else {
-      self.$vux.loading.hide()
-      self.showcontainer = true
-      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-        { params: { limit: 100 } }
-      ).then(function (res) {
-        let data = res.data
-        data = data.data ? data.data : data
-        for (let i = 0; i < data.length; i++) {
-          let d = data[i]
-          d.checked = false
-        }
-        self.classdata = data
-      })
     }
   }
 }
@@ -453,10 +422,10 @@ export default {
 .retailerapply .form-item{padding:7px 10px;}
 .retailerapply .form-item:after{background-color:transparent;}
 .retailerapply .qbtn{
-  line-height: 39px;
+  line-height: 40px;
   box-sizing: border-box;
   padding: 0px;
-  height: 39px;
+  height: 40px;
   border-radius: 5px;
 }
 .retailerapply .x-checker .ck-item{
@@ -465,16 +434,17 @@ export default {
   padding: 0 15px;
   height: 30px;
   line-height: 30px;
+  border:0px;
   text-align: center;
   border-radius: 3px;
-  border: 1px solid #ccc;
   background-color: #fff;
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
   box-sizing: border-box;
 }
-.retailerapply .btn-bottom-red{border-radius:5px;}
+.x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
+.retailerapply .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
 .retailerapply .pagebottom{background-color:#fff;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}

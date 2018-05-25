@@ -1,12 +1,10 @@
 <template>
-  <div class="containerarea font14 retailerrevenue">
-    <div class="pagetop" style="height:88px;">
-      <div class="v-top" style="height:44px;">
-        <div class="flex_center">
-          <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
-          <div class="align_right" style="width:150px;">
-            <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
-          </div>
+  <div class="containerarea font14 retailerrevenue bg-page">
+    <div class="s-topbanner bg-white">
+      <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
+        <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
+        <div class="align_right" style="width:150px;">
+          <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
       <tab v-model="selectedIndex" class="v-tab">
@@ -261,6 +259,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       tabtxts: [ '待提现', '待结算', '已提现' ],
       selectedIndex: 0,
       tabdata1: [],
@@ -454,7 +453,9 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .retailerrevenue .scroll_list .scroll_item:after{display:none;}
 .retailerrevenue .scroll_list .scroll_item:not(:last-child){margin-bottom:10px;}
+.retailerrevenue .weui-icon-success{color: #ea3a3a;}
+.retailerrevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a;}
 </style>

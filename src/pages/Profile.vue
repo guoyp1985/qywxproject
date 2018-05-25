@@ -32,6 +32,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       option: '',
       options: [
         {
@@ -44,7 +45,7 @@ export default {
         }
       ],
       profile: {
-        avatar: 'http://gongxiaoshe.qiyeplus.com/data/upload/avatar/user.jpg',
+        avatar: '/src/assets/images/user.jpg',
         linkman: '',
         sex: 1,
         company: '',

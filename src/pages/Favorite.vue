@@ -4,111 +4,99 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-favorite">
-    <sticky scroll-box="personal-favorite">
+  <div id="personal-favorite" class="containerarea bg-page font14">
+    <div class="pagetop" style="height:154px;">
       <div class="top-banner">
-        <div class="f-title">
-          <div class="user-avatar">
-            <x-img :src="avatar" default-src="../src/assets/images/user.jpg"></x-img>
-          </div>
-          <div class="user-info">
-            <div class="font16 color-white">{{ name }}</div>
-            <div class="coin-row">
-              <span class="user-coin">
-                <i class="al al-jinbi3 font20"></i>
-                <span class="font13 color-white">{{ coins }}</span>
-              </span>
-            </div>
-          </div>
-        </div>
-        <tab class="x-tab" v-model="selectedIndex">
+        <tab class="b-tab" v-model="selectedIndex">
           <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
           <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
           <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
         </tab>
       </div>
-    </sticky>
-    <swipeout v-show="selectedIndex===0">
-      <template v-if="articles.length">
-        <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
-          <div slot="right-menu">
-            <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-          </div>
-          <div slot="content" class="item-content vux-1px-t">
-            <div class="img-cell">
-              <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+    </div>
+    <div class="pagemiddle" style="top:154px;">
+      <swipeout v-show="selectedIndex===0">
+        <template v-if="articles.length">
+          <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
+            <div slot="right-menu">
+              <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
             </div>
-            <div class="info-cell">
-              <div class="font14">
-                {{article.title}}
+            <div slot="content" class="item-content vux-1px-t">
+              <div class="img-cell">
+                <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
               </div>
-              <div class="font12 color-gray">
-                {{article.dateline | dateFormat}}
-              </div>
-            </div>
-          </div>
-        </swipeout-item>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Data')}}</span>
-        </div>
-      </template>
-    </swipeout>
-    <swipeout v-show="selectedIndex===1">
-      <template v-if="commodities.length">
-        <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
-          <div slot="right-menu">
-            <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-          </div>
-          <div slot="content" class="item-content vux-1px-t">
-            <div class="img-cell">
-              <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
-            </div>
-            <div class="info-cell">
-              <div class="font14">
-                {{commodity.title}}
-              </div>
-              <div class="font12 color-gray">
-                {{commodity.dateline | dateFormat}}
+              <div class="info-cell">
+                <div class="font14">
+                  {{article.title}}
+                </div>
+                <div class="font12 color-gray">
+                  {{article.dateline | dateFormat}}
+                </div>
               </div>
             </div>
+          </swipeout-item>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>{{$t('No Related Data')}}</span>
           </div>
-        </swipeout-item>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Data')}}</span>
-        </div>
-      </template>
-    </swipeout>
-    <swipeout v-show="selectedIndex===2">
-      <template v-if="stores.length">
-        <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
-          <div slot="right-menu">
-            <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-          </div>
-          <div slot="content" class="item-content vux-1px-t">
-            <div class="img-cell">
-              <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
+        </template>
+      </swipeout>
+      <swipeout v-show="selectedIndex===1">
+        <template v-if="commodities.length">
+          <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
+            <div slot="right-menu">
+              <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
             </div>
-            <div class="info-cell">
-              <div class="font14">
-                {{store.title}}
+            <div slot="content" class="item-content vux-1px-t">
+              <div class="img-cell">
+                <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
               </div>
-              <div class="font12 color-gray">
-                {{store.dateline | dateFormat}}
+              <div class="info-cell">
+                <div class="font14">
+                  {{commodity.title}}
+                </div>
+                <div class="font12 color-gray">
+                  {{commodity.dateline | dateFormat}}
+                </div>
               </div>
             </div>
+          </swipeout-item>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>{{$t('No Related Data')}}</span>
           </div>
-        </swipeout-item>
-      </template>
-      <template v-else>
-        <div class="no-related-x color-gray">
-          <span>{{$t('No Related Data')}}</span>
-        </div>
-      </template>
-    </swipeout>
+        </template>
+      </swipeout>
+      <swipeout v-show="selectedIndex===2">
+        <template v-if="stores.length">
+          <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
+            <div slot="right-menu">
+              <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+            </div>
+            <div slot="content" class="item-content vux-1px-t">
+              <div class="img-cell">
+                <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
+              </div>
+              <div class="info-cell">
+                <div class="font14">
+                  {{store.title}}
+                </div>
+                <div class="font12 color-gray">
+                  {{store.dateline | dateFormat}}
+                </div>
+              </div>
+            </div>
+          </swipeout-item>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>{{$t('No Related Data')}}</span>
+          </div>
+        </template>
+      </swipeout>
+    </div>
   </div>
 </template>
 
@@ -117,19 +105,19 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky } from 'vux'
+import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 export default {
   components: {
-    Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg, Sticky
+    Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg
   },
   data () {
     return {
       selectedIndex: 0,
       avatar: '',
-      name: '黄一萌',
+      name: '',
       coins: 50,
       articles: [],
       commodities: [],
@@ -140,13 +128,13 @@ export default {
     onItemClick () {
       switch (this.selectedIndex) {
         case 0:
-          this.getArticles()
+          !this.articles.length && this.getArticles()
           break
         case 1:
-          this.getCommodities()
+          !this.commodities.length && this.getCommodities()
           break
         case 2:
-          this.getStores()
+          !this.stores.length && this.getStores()
           break
       }
     },
@@ -224,72 +212,6 @@ export default {
 </script>
 
 <style lang="less">
-#personal-favorite .top-banner {
-  width: 100%;
-  // height: 154px;
-  // position: absolute;
-  // left: 0;
-  // top: 0;
-  // right: 0;
-  background-image: url(../assets/images/bannerbg2.png);
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-}
-
-#personal-favorite .f-title {
-  height: 110px;
-  padding: 0 10px;
-  display: flex;
-}
-
-#personal-favorite .user-avatar {
-  width: 110px;
-  margin: auto;
-  text-align: center;
-}
-
-#personal-favorite .user-info {
-  flex: 1;
-  margin: auto;
-}
-
-#personal-favorite .user-avatar img {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  vertical-align: middle;
-  border: 2px solid #fff;
-}
-
-#personal-favorite .x-tab {
-  background: none;
-}
-
-#personal-favorite .user-coin {
-  border: 1px solid #ffd706;
-  border-radius: 22px;
-  padding-right: 12px;
-  min-width: 40px;
-  display: inline-block;
-  height: 20px;
-  position: relative;
-}
-
-#personal-favorite .user-coin i {
-  line-height: 20px;
-  color: #ffd706;
-}
-
-#personal-favorite .user-coin span {
-  line-height: 22px;
-  vertical-align: top;
-}
-
-#personal-favorite .coin-row {
-  margin-top: 10px;
-}
-
 #personal-favorite .item-content {
   padding: 10px;
   display: flex;
@@ -331,12 +253,4 @@ export default {
   margin: auto 10px;
 }
 
-/* vux css hack */
-#personal-favorite .vux-tab {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-#personal-favorite .vux-tab .vux-tab-item {
-  color: #ffffff;
-}
 </style>

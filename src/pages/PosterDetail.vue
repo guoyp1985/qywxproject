@@ -1,11 +1,16 @@
 <template>
   <div class="containerarea bg-page font14 notop posterdetail">
-    <div class="pagemiddle" style="padding:20px;">
-      <div class="boxouter flex_center">
-        <x-img class="pic" :src="data" default-src="../src/assets/images/nopic.jpg"></x-img>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagemiddle" style="padding:20px;">
+        <div class="boxouter flex_center">
+          <x-img class="pic" :src="data" default-src="../src/assets/images/nopic.jpg"></x-img>
+        </div>
       </div>
-    </div>
-    <div class="pagebottom flex_center">(长按图片保存到相册)</div>
+      <div class="pagebottom flex_center">(长按图片保存到相册)</div>
+    </template>
   </div>
 </template>
 
@@ -14,15 +19,19 @@
 
 <script>
 import { XImg } from 'vux'
+import Sos from '@/components/Sos'
 import ENV from 'env'
 export default {
   components: {
-    XImg
+    XImg, Sos
   },
   data () {
     return {
       query: {},
-      data: {}
+      data: {},
+      showSos: false,
+      sosTitle: '',
+      showContainer: false
     }
   },
   methods : {
@@ -35,7 +44,15 @@ export default {
       }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
-        self.data = data.data ? data.data : data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          self.data = data.data ? data.data : data
+        }
       })
     },
     refresh (query) {

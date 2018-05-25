@@ -4,34 +4,49 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="ctitle">
+  <div class="ctitle  bg-page">
     <div class="info-area">
-      <div class="bg" style="width: 750px;height: 375px;margin-left: -375px;"></div>
-      <div class="content">
-        <div class="content-box">
-          <div class="user-info">
-            <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
-              <div>
-                <img :src="avatar"/>
+      <div class="bg">
+        <img src="../assets/images/v_centerbg.png" width="100%">
+      </div>
+      <div class="card_box">
+      <div class="card bg-white" >
+        <div class="content">
+          <div class="content-box">
+            <div class="user-info pt10">
+              <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
+                <div class="c_pic">
+                  <img :src="avatar"/>
+                </div>
+              </router-link>
+            </div>
+            <div class="flex_center" style="display:flex;">
+              <div class="user-info pr5" style="color:#323232;">
+                <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
+                  <div class="user-name" >
+                    <span class="font16 u-name">{{ name }}</span>
+                  <!-- <span v-for="i in userLevel + 1" class="al al-xing font13 u-star" :key="i"></span> -->
+                  </div>
+                </router-link>
               </div>
-              <div class="user-name">
-                <span class="color-white font16 u-name">{{ name }}</span>
-                <span v-for="i in userLevel + 1" class="al al-xing font13 u-star" :key="i"></span>
+              <div class="user-credits">
+                <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
+                  <img src="../assets/images/jb_icon.png" style="width: 16px;
+    height: 16px;" />
+                  <span class="u-credits color-yellow1">{{ credits }}</span>
+                </router-link>
               </div>
-            </router-link>
-          </div>
-          <div class="user-credits">
-            <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-              <img src="../assets/images/jb_icon.png"/>
-              <span class="u-credits color-yellow1">{{ credits }}</span>
-            </router-link>
+            </div>
           </div>
         </div>
+        <img src="../assets/images/v_yinying.png" style="width:100%;height:23px;position: absolute;
+    bottom: 0;" />
+      </div>
       </div>
     </div>
     <div class="message-btn">
       <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
-        <span class="al al-pinglun color-white font28"></span>
+        <span class="al al-pinglun color-white font22"></span>
         <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
         <span class="msg-badge" v-if="messages >= 100">···</span>
       </router-link>
@@ -102,28 +117,29 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 185px;
-  background: #fff;
+  height: 200px;
   border-radius: 0;
 }
-
-.ctitle .bg {
-  position: absolute;
-  content: "";
-  display: block;
-  bottom: 0;
-  left: 50%;
-  margin-left: -750px;
-  width: 1500px;
-  height: 750px;
-  border-radius: ~"750px/350px";
-  z-index: 1;
-	background-image: -o-linear-gradient(179deg, #30bded 0, #2085c5 20%);
-	background-image: -moz-linear-gradient(179deg, #30bded 0, #2085c5 20%);
-	background-image: -ms-linear-gradient(179deg, #30bded 0, #2085c5 20%);
-	background-image: linear-gradient(358deg, #30bded 0, #2085c5 20%);
-	border-color: #eee;
-	background-color: #5899d0;
+.ctitle .card_box{
+    width:  100%;
+    padding:0 12px;
+    box-sizing:  border-box;
+    position:  absolute;
+    top: 48px;
+}
+.ctitle .card{
+  width:100%;
+  height:142px;
+  border-radius:5px;
+  position: relative;
+  overflow: hidden;
+}
+.ctitle .card .c_pic img{
+  width: 71px;
+  height: 71px;
+  border-radius: 50%;
+  vertical-align: middle;
+  border: 2px solid #fff;
 }
 
 .ctitle .content {
@@ -133,25 +149,21 @@ export default {
 }
 
 .ctitle .content .content-box {
-  padding-top: 30px;
   max-width: 375px;
   margin: 0 auto;
   text-align: center;
 }
 
-.ctitle .content .content-box .user-info {
+.ctitle .content .content-box .user-info{
   position: relative;
   text-align: center !important;
+  text-align: center;
 }
-
-.ctitle .content .user-info img {
-  width: 76px;
-  height: 76px;
-  border-radius: 50%;
-  vertical-align: middle;
-  border: 2px solid #fff;
+.ctitle .user-info {
+  position: relative;
+  text-align: center !important;
+  text-align: center;
 }
-
 .ctitle .content .user-info .u-name {
   vertical-align: middle;
 }

@@ -34,17 +34,16 @@
 </template>
 <script>
 import { Group, GroupTitle, Cell, XImg } from 'vux'
-import CTitle from '@/components/CTitle'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, GroupTitle, Cell, XImg, CTitle
+    Group, GroupTitle, Cell, XImg
   },
   data () {
     return {
-      query: Object,
+      query: {},
       disList: false,
       list: [],
       pagestart: 0,

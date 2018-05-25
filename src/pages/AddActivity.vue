@@ -53,7 +53,7 @@
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div ref="scrollProduct" @scroll="scrollHandle2" class="popup-middle">
+          <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
             <search
               class="x-search"
               v-model="searchword"
@@ -117,7 +117,7 @@ Go to create:
 </i18n>
 
 <script>
-import { Group, XInput, TransferDom, Popup, Alert, Datetime, Search, CheckIcon, XImg } from 'vux'
+import { Group, XInput, TransferDom, Popup, Datetime, Search, CheckIcon, XImg } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import FormGroupbuy from '@/components/FormGroupbuy'
 import FormBargainbuy from '@/components/FormBargainbuy'
@@ -130,7 +130,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Alert, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg
+    Group, XInput, Popup, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg
   },
   data () {
     return {
@@ -230,11 +230,11 @@ export default {
       self.pagestart1 = 0
       self.getProductData()
     },
-    scrollHandle2 () {
+    handleScroll (refname) {
       const self = this
-      console.log(this.$refs.scrollProduct)
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       this.$util.scrollEvent({
-        element: this.$refs.scrollProduct,
+        element: scrollarea,
         callback: () => {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++

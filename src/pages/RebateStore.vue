@@ -155,8 +155,9 @@ export default {
   },
   data () {
     return {
-      query: Object,
-      rebateInfo: Object,
+      doCreated: false,
+      query: {},
+      rebateInfo: {},
       selectedIndex: 0,
       storeCardShow: false,
       distabdata1: false,

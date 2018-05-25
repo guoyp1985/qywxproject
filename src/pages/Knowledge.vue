@@ -4,49 +4,54 @@
 * @created_date: 2018-05-05
 */
 <template>
-  <div id="article-content">
-    <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
-    <div class="article-view">
-      <div class="article-title">
-        <h2>{{article.title}}</h2>
+  <div id="article-content" class="containerarea">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+      <div class="article-view">
+        <div class="article-title">
+          <h2>{{article.title}}</h2>
+        </div>
+        <div class="article-vice-title">
+          <h4>{{article.vicetitle}}</h4>
+        </div>
+        <div class="article-info font14">
+          <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
+          <span class="article-ex"></span>
+          <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+        </div>
+        <div id="editor-content" class="article-content" v-html="article.content"></div>
+        <div class="operate-area">
+          <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
+            <span class="fa fa-star-o"></span>
+            <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
+          </x-button>
+          <x-button mini plain type="primary" @click.native="onAdvisory">
+            <span class="fa fa-user"></span>
+            <span>{{$t('Advisory')}}</span>
+          </x-button>
+        </div>
+        <div class="reading-info">
+          <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+          <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
+        </div>
       </div>
-      <div class="article-vice-title">
-        <h4>{{article.vicetitle}}</h4>
+      <div class="comment-area">
+        <div class="comment-op font14">
+          <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
+        </div>
+        <template v-if="article.comments">
+          <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
+        </template>
+        <comment v-if="comments.length > 0" v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
+          <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
+        </comment>
       </div>
-      <div class="article-info font14">
-        <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-        <span class="article-ex"></span>
-        <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
-      </div>
-      <div id="editor-content" class="article-content" v-html="article.content"></div>
-      <div class="operate-area">
-        <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-          <span class="fa fa-star-o"></span>
-          <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
-        </x-button>
-        <x-button mini plain type="primary" @click.native="onAdvisory">
-          <span class="fa fa-user"></span>
-          <span>{{$t('Advisory')}}</span>
-        </x-button>
-      </div>
-      <div class="reading-info">
-        <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-        <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
-      </div>
-    </div>
-    <div class="comment-area">
-      <div class="comment-op font14">
-        <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
-      </div>
-      <template v-if="article.comments">
-        <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
-      </template>
-      <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
-        <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
-      </comment>
-    </div>
-    <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+    </template>
   </div>
 </template>
 <script>
@@ -55,7 +60,7 @@ import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
-import Editor from '@/components/Editor'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -63,12 +68,16 @@ import Socket from '#/socket'
 
 export default {
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Sos
   },
   data () {
     return {
-      query: Object,
-      loginUser: Object,
+      showSos: false,
+      sosTitle: '',
+      showContainer: false,
+      doCreated: false,
+      query: {},
+      loginUser: {},
       showsharetip: true,
       commentPopupShow: false,
       replyPopupShow: false,
@@ -141,14 +150,20 @@ export default {
       const id = self.query.id
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, { params: { id: self.query.id, module: 'knowledge' } }) // 获取文章
       .then(res => {
-        if (res.data.flag) {
+        let data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
           self.article = res.data.data
-          self.reward = User.get()
           self.$util.wxShare({
             data: {
               title: self.article.seotitle || self.article.title,
               desc: self.article.seodescription || self.article.seotitle || self.article.title,
-              link: `${ENV.Host}/#/knowledge?id=${self.productdata.id}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/knowledge?id=${self.article.id}&share_uid=${self.reward.uid}`,
               photo: self.article.photo.split(',')[0]
             }
           })
@@ -188,15 +203,6 @@ export default {
           }
         })
       }
-    },
-    onAdvisory () {
-
-    },
-    onShare () {
-
-    },
-    editSave () {
-
     },
     editSetting () {
       this.$router.push({name: 'tArticleInfoEdit', params: {id: this.article.id}})

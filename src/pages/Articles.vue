@@ -5,18 +5,25 @@
 */
 <template>
   <div id="view-articles">
-    <sticky scroll-box="view-articles">
-      <tab v-model="selectedIndex" bar-active-color="#04be02">
-        <tab-item active-class="active-green" v-for="(tab, index) in tabs" :key="index" :selected="index===0" @on-item-click="onItemClick(tab.id)">{{ tab.title }}</tab-item>
-      </tab>
-    </sticky>
-    <swiper :list="headlines | convertHeadlines" v-model="swiperIndex" @on-index-change="onIndexChange" auto></swiper>
-    <div v-for="(tab, index) in tabs" :key="index" v-show="selectedIndex===index">
-      <panel v-if="oArticles.length" :list="oArticles | convertArticles" type="5" @on-img-error="onImgError" @on-click-item="clickArticle"></panel>
-      <div v-else class="no-related-x color-gray">
+    <template v-if="tabs.length > 0">
+      <sticky scroll-box="view-articles">
+        <tab v-model="selectedIndex" bar-active-color="#04be02">
+          <tab-item active-class="active-green" v-for="(tab, index) in tabs" :key="index" :selected="index===0" @on-item-click="onItemClick(tab.id)">{{ tab.title }}</tab-item>
+        </tab>
+      </sticky>
+      <swiper :list="headlines | convertHeadlines" v-model="swiperIndex" @on-index-change="onIndexChange" auto></swiper>
+      <div v-if="tabs.length > 0" v-for="(tab, index) in tabs" :key="index" v-show="selectedIndex===index">
+        <panel v-if="oArticles.length" :list="oArticles | convertArticles" type="5" @on-img-error="onImgError" @on-click-item="clickArticle"></panel>
+        <div v-else class="no-related-x color-gray">
+          <span>{{$t('No Related Articles')}}</span>
+        </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="no-related-x color-gray">
         <span>{{$t('No Related Articles')}}</span>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 <script>
@@ -33,41 +40,12 @@ export default {
     return {
       // query: {},
       tabs: [],
-      headlines: [
-        {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/1.jpg',
-          title: '送你一朵fua'
-        },
-        {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/2.jpg',
-          title: '送你一辆车'
-        },
-        {
-          url: 'javascript:',
-          img: 'https://static.vux.li/demo/5.jpg',
-          title: '送你一次旅行'
-        }
-      ],
+      headlines: [],
       oArticles: [],
       selectedIndex: 0,
       swiperIndex: 0
     }
   },
-  // computed: {
-  //   aritcles: {
-  //     get () {
-  //       return this.oArticles.map((article) => {
-  //         article.meta.date = new Time(article.meta.date).dateFormat('yyyy-MM-dd hh:mm')
-  //         return article
-  //       })
-  //     },
-  //     set (data) {
-  //       this.oArticles = data
-  //     }
-  //   }
-  // },
   filters: {
     convertHeadlines (headlines) {
       return headlines.map((item) => {
@@ -121,11 +99,13 @@ export default {
         let data = res.data
         if (data.flag) {
           let retdata = data.data
-          for (let i = 0; i < retdata.length; i++) {
-            let d = retdata[i]
-            retdata[i].url = `/news?id=${d.id}&wid=${d.uploader}`
+          if (retdata.length > 0) {
+            for (let i = 0; i < retdata.length; i++) {
+              let d = retdata[i]
+              retdata[i].url = `/news?id=${d.id}&wid=${d.uploader}`
+            }
+            self.headlines = retdata
           }
-          self.headlines = retdata
         }
       })
     },

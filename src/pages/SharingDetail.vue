@@ -4,9 +4,9 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="sharing-detail" class="containerarea font14 bg-page">
+  <div id="sharing-detail" class="containerarea font14 bg-page nobottom">
     <div class="pagetop flex_left font18 pl10 border-box">{{$t('Share view user')}}</div>
-    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll" style="bottom:53px;">
+    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll">
       <group>
         <template v-if="disList">
           <div v-if="!list || list.length == 0" class="emptyitem flex_center">暂无用户查看</div>

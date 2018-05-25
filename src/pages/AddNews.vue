@@ -56,6 +56,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: Object,
       cutImg: '',
       popupShow: false,
@@ -183,7 +184,7 @@ export default {
     getData () {
       if (this.query.id) {
         const self = this
-        // document.title = '更多设置'
+        document.title = '更多设置'
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
           params: { id: this.query.id, module: 'news' }
         })

@@ -56,13 +56,12 @@
 
 <script>
 import { XImg } from 'vux'
-import Orderproductplate from '@/components/Orderproductplate'
 import ENV from 'env'
 import Time from '#/time'
 
 export default {
   components: {
-    Orderproductplate, XImg
+    XImg
   },
   filters: {
     dateformat: function (value) {
@@ -71,6 +70,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: Object,
       data: {},
       orders: [],
@@ -87,14 +87,14 @@ export default {
     }
   },
   methods: {
-    getData (query) {
+    getData () {
       const self = this
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'accountdetail', id: query.id
+        module: 'retailer', action: 'accountdetail', id: this.query.id
       }).then(function () {
         return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
-          params: { id: query.id }
+          params: { id: self.query.id }
         })
       }).then(function (res) {
         let data = res.data
@@ -106,14 +106,14 @@ export default {
         }
       })
     },
-    refresh (query) {
+    refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = query
-      this.getData(query)
+      this.query = this.$route.query
+      this.getData()
     }
   },
   activated () {
-    this.refresh(this.$route.query)
+    this.refresh()
   }
 }
 </script>

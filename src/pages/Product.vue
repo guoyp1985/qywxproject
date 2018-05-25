@@ -388,6 +388,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
       disTimeout: true,
       showSos: false,

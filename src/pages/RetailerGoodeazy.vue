@@ -122,7 +122,7 @@ export default {
   data () {
     return {
       query: {},
-      loginUser: Object,
+      loginUser: {},
       autofixed: false,
       tabtxts: [ '关键词', '链接' ],
       selectedIndex: 0,

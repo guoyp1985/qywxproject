@@ -10,7 +10,7 @@
     <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll1" v-if="(index == 0)">
+          <div class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)" v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                 <div><i class="al al-qiangkehu font60 pt20"></i></div>
@@ -27,7 +27,7 @@
               </div>
             </div>
           </div>
-          <div class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll2" v-if="(index == 1)">
+          <div class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)" v-if="(index == 1)">
             <div v-if="distabdata2" class="scroll_list ">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 color-gray align_center">
                 <div><i class="al al-qiangkehu font60 pt20"></i></div>
@@ -103,8 +103,9 @@ export default {
     },
     handleScroll2 (index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
+        element: scrollarea,
         callback: function () {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++

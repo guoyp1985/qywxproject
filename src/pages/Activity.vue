@@ -38,6 +38,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       bargainbuyType: false,
       showShareSuccess: false,
       showBargainbuy: false,
@@ -52,11 +53,6 @@ export default {
       cutData: []
       // roomid: '',
       // socket: BkSocket.get()
-    }
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   watch: {

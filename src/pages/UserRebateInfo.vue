@@ -15,7 +15,7 @@
     <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner scroll-container1" style="bottom:50px;" ref="scrollContainer1" @scroll="handleScroll1">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" style="bottom:50px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="distabdata1">
               <template v-if="tabdata1.length">
                 <group>
@@ -57,7 +57,7 @@
               <x-button class="withdraw-btn" @click.native="getCash">{{$t('Withdraw')}}</x-button>
             </div>
           </div>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="distabdata2">
               <template v-if="tabdata2.length">
                 <group>
@@ -82,7 +82,7 @@
               </template>
             </template>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
             <template v-if="distabdata3">
               <template v-if="tabdata3.length">
                 <group>
@@ -150,41 +150,30 @@ export default {
     }
   },
   methods: {
-    handleScroll1 () {
+    handleScroll: function (refname, index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getData1()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getData2()
-          }
-        }
-      })
-    },
-    handleScroll3 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer3[0],
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getData3()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
+          } else if (index === 2) {
+            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+              self.pagestart3++
+              self.$vux.loading.show()
+              self.getData3()
+            }
           }
         }
       })

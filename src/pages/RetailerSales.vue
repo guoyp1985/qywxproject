@@ -22,7 +22,7 @@
                 ref="search">
               </search>
             </div>
-            <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll1">
+            <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                 <template v-if="searchresult1">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -35,7 +35,7 @@
               <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:70px;">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                    <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
@@ -60,7 +60,7 @@
                 ref="search">
               </search>
             </div>
-            <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll2">
+            <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
               <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                 <template v-if="searchresult2">
                   <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -73,7 +73,7 @@
               <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
                 <div class="t-table">
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle " style="width: 70px;">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                   </router-link>
                   <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -87,7 +87,7 @@
               </div>
             </div>
           </template>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
             <div v-if="distabdata3" class="scroll_list cols-2">
               <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -96,7 +96,7 @@
               <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
                 <div class="t-table">
                   <div class="t-cell v_middle" style="width:70px;">
-                    <x-img class="avatarimg1 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                    <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
                   </div>
                   <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -133,7 +133,8 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
+      doCreated: false,
+      loginUser: {},
       autofixed: false,
       tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
       selectedIndex: 0,
@@ -154,41 +155,30 @@ export default {
     }
   },
   methods: {
-    handleScroll1 () {
+    handleScroll: function (refname, index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getData1()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getData2()
-          }
-        }
-      })
-    },
-    handleScroll3 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer3[0],
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getData3()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
+          } else if (index === 2) {
+            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+              self.pagestart3++
+              self.$vux.loading.show()
+              self.getData3()
+            }
           }
         }
       })
@@ -355,10 +345,6 @@ export default {
 .rsales .h35{
   height: 35px;
   line-height: 35px;
-}
-.rsales .avatarimg1{
-  width: 60px;
-  height: 60px;
 }
 .rsales .cut-off:after{
   content: "";

@@ -5,7 +5,7 @@
 */
 <template>
   <div class="containerarea font14 bg-white knowledgeclass notop">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
+    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
       <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
         <div class="pic">
@@ -67,15 +67,12 @@ export default {
       pagestart1: 0
     }
   },
-  computed: {
-  },
-  filters: {
-  },
   methods: {
-    handleScroll: function () {
+    handleScroll: function (refname) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
+        element: scrollarea,
         callback: function () {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++

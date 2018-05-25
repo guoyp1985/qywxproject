@@ -5,9 +5,6 @@
 */
 <template>
   <div id="personal-address" v-cloak>
-    <!-- <c-title :link-info="{path:'/profile'}"
-            :link-credit="{path:'/credit'}">
-    </c-title> -->
     <view-box class="view-box" body-padding-bottom="0">
       <group v-if="!items.length">
         <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
@@ -46,24 +43,16 @@
 
 <script>
 import { Group, Cell, CellBox, ViewBox, CheckIcon, XSwitch, XButton, Box, Swipeout, SwipeoutItem, SwipeoutButton } from 'vux'
-import CTitle from '@/components/CTitle'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, Cell, CellBox, ViewBox, CheckIcon, XSwitch, XButton, Box, Swipeout, SwipeoutItem, SwipeoutButton, CTitle
+    Group, Cell, CellBox, ViewBox, CheckIcon, XSwitch, XButton, Box, Swipeout, SwipeoutItem, SwipeoutButton
   },
   data () {
     return {
-      items: [
-        // {
-        //   linkman: 'huang',
-        //   telephone: '13613797907',
-        //   address: '金家村288号院5号楼A座2206',
-        //   area: ['北京市', '市辖区', '丰台区'],
-        //   isdefault: 0
-        // }
-      ]
+      doCreated: false,
+      items: []
     }
   },
   // computed: {
@@ -90,7 +79,6 @@ export default {
       return `${item.province}${item.city}${item.counties} ${item.address}`
     },
     checkedFormat: function (checked) {
-
     }
   },
   methods: {

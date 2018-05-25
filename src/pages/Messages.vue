@@ -4,13 +4,14 @@
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Message')}}</div>
+          <div class="flex_cell font16 pl20">{{$t('Message')}}</div>
         </div>
       </div>
     </div>
     <div class="s-container scroll-container" style="top:44px;">
-      <div class="scroll_list pl10 pr10">
-        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
+      <div v-if="disData" class="scroll_list pl10 pr10">
+        <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无消息</div>
+        <router-link v-else :to="{path: '/chat', query: {uid: item.uid}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
               <x-img class="avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
@@ -21,7 +22,7 @@
               <div class="clamp1 color-gray font12">{{ item.dateline | dateformat }}</div>
             </div>
             <div v-if="item.unreadNumber > 0" class="t-cell v_middle align_right w60">
-              <div class="qbtn6 bg-green color-white">{{ item.unreadNumber }}</div>
+              <div class="qbtn6 bg-red color-white">{{ item.unreadNumber }}</div>
             </div>
           </div>
         </router-link>
@@ -46,7 +47,9 @@ export default {
   },
   data () {
     return {
-      data: []
+      doCreated: false,
+      data: [],
+      disData: false
     }
   },
   methods: {

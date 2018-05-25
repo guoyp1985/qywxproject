@@ -11,7 +11,7 @@
         ref="search">
       </search>
     </div>
-    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
+    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer','news')">
       <div v-if="distabdata1" class="scroll_list ">
         <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
           <template v-if="searchresult1">
@@ -87,7 +87,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollContainer1" @scroll="handleScroll1">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1','customer')">
             <div class="padding10">
               <div class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -192,15 +192,24 @@ export default {
     }
   },
   methods: {
-    handleScroll: function () {
+    handleScroll (refname, type) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getData1()
+          if (type === 'news') {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getdata1()
+            }
+          } else if (type === 'customer') {
+            if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
+              self.customerPagestart++
+              self.$vux.loading.show()
+              self.getCustomerdata()
+            }
           }
         }
       })
@@ -249,19 +258,6 @@ export default {
       event.preventDefault()
       this.showpopup = !this.showpopup
       this.clickdata = item
-    },
-    handleScroll1 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1,
-        callback: function () {
-          if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
-            self.customerPagestart++
-            self.$vux.loading.show()
-            self.getCustomerdata()
-          }
-        }
-      })
     },
     getCustomerdata () {
       const self = this
@@ -373,7 +369,7 @@ export default {
       this.$vux.loading.show()
       this.getData()
     }
-  }, 
+  },
   activated () {
     this.refresh()
   }

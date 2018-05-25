@@ -1,22 +1,19 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
-    <div class="pagetop">
-      <div class="v-top">
-          <div slot="content" class="card-demo-flex card-demo-content01">
-            <div class="vux-1px-r">
-              <div class="color-white font12">访问量</div>
-              <div class="color-white font21 mt10">{{ viewdata.views }}</div>
-            </div>
-            <div class="vux-1px-r">
-              <div class="color-white font12">分享数</div>
-              <div class="color-white font21 mt10">{{ viewdata.share }}</div>
-            </div>
-            <div class="vux-1px-r">
-              <div class="color-white font12">销售额</div>
-              <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
-            </div>
-          </div>
-        </card>
+    <div class="s-topbanner">
+      <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
+        <div class="vux-1px-r">
+          <div class="color-white font14">访问量</div>
+          <div class="color-white font21 mt10">{{ viewdata.views }}</div>
+        </div>
+        <div class="vux-1px-r">
+          <div class="color-white font14">分享数</div>
+          <div class="color-white font21 mt10">{{ viewdata.share }}</div>
+        </div>
+        <div class="vux-1px-r">
+          <div class="color-white font14">销售额</div>
+          <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
+        </div>
       </div>
       <tab v-model="selectedIndex" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
@@ -25,7 +22,7 @@
     <div class="pagemiddle bg-white pl12 pr12">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="disdatalist1">
               <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
                 <div class="t-table ml10">
@@ -52,7 +49,7 @@
               </timeline>
             </template>
           </div>
-          <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+          <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="disdatalist2">
               <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
                 <div class="t-table ml10">
@@ -156,28 +153,24 @@ export default {
     }
   },
   methods: {
-    handleScroll1 () {
+    handleScroll: function (refname, index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getData1()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getData2()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
           }
         }
       })
@@ -245,9 +238,6 @@ export default {
 .card-demo-flex {
   display: flex;
 }
-.card-demo-content01 {
-  padding: 10px 0;
-}
 .card-padding {
   padding: 15px;
 }
@@ -270,8 +260,8 @@ export default {
 .x-card .weui-panel__hd:after{display:none;}
 
 .bordertxt{border-top:@list-border-color 1px solid;border-bottom:@list-border-color 1px solid;}
-.rsalechance .pagetop{height:128px;}
-.rsalechance .pagemiddle{top:128px;}
+.rsalechance .s-topbanner{height:132px;}
+.rsalechance .pagemiddle{top:132px;}
 .rsalechance .vux-1px-r:after {border: none}
 .rsalechance .x-timeline .vux-timeline-item-color{left: 40px; background-color: #f4dcdc;}
 .rsalechance .x-timeline .vux-timeline-item-tail{left: 44px;background-color: #f4dcdc;}

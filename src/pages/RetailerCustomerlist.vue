@@ -10,7 +10,7 @@
     <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
             <search
               class="v-search bg-white"
               v-model='searchword1'
@@ -69,7 +69,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
             <search
               class="v-search bg-white"
               v-model='searchword3'
@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <search
               class="v-search bg-white"
               v-model='searchword2'
@@ -218,6 +218,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       autofixed: false,
       tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
       tabcount1: 0,
@@ -272,8 +273,9 @@ export default {
     },
     handleScroll3 () {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer3[0],
+        element: scrollarea,
         callback: function () {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++

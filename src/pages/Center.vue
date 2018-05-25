@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-center" class="page-padding-bottom" v-cloak>
+  <div id="personal-center" class="page-padding-bottom  bg-page" v-cloak>
     <c-title :avatar-href="avatarHref"
             :user-name="linkMan"
             :user-credits="userCredits"
@@ -12,22 +12,57 @@
             :profile="profile"
             :messages="messages">
     </c-title>
-    <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
-        <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
-          <span :class="`fa ${btn.icon}`"></span>
+
+    <div class="pt10 pb10 pl12 pr12">
+      <!-- <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
+        <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
+          <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
+            <span :class="`fa ${btn.icon}`"></span>
+          </div>
+        </grid-item>
+      </grid> -->
+      <div class="v_order bg-white font13 list-shadow">
+        <div class="t-table v_tit pt5 pb5 pl15 pr15 border-box" style="l-line">
+          <div class="t-cell align_left">{{ $t('My orders') }}</div>
+          <div class="t-cell align_right">{{ $t('All orders') }}</div>
         </div>
-      </grid-item>
-    </grid>
-    <div class="grid-title">{{ $t('Service') }}</div>
-    <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-      <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
-        <div slot="icon" :class="btn.color">
-          <span :class="`al ${btn.icon}`"></span>
+        <div class="weui-grids vux-grid-no-lr-borders pl12 pr12">
+          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
+            <i class="al al-daifukuan color-blue5"></i>
+            <p class="weui-grid__label">{{ $t('Pending payment') }}</p>
+          </a>
+          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
+            <i class="al al-wodedaifahuo3dtouchshangpinxiangqing color-blue5"></i>
+            <p class="weui-grid__label">{{ $t('To Be Delivered') }}</p>
+          </a>
+          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
+            <i class="al al-buoumaotubiao39 color-blue5"></i>
+            <p class="weui-grid__label">{{ $t('Shipped') }}</p>
+          </a>
+          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
+            <i class="al al-buoumaotubiao48 color-blue5"></i>
+            <p class="weui-grid__label">{{ $t('To be evaluated') }}</p>
+          </a>
         </div>
-      </grid-item>
-    </grid>
-  </div>
+      </div>
+      <a class="pl12 pr12 pt10 pb10 mt10 border-box t-table bg-white list-shadow">
+        <div class="t-cell color-orange2 align_left">  推荐购买赚佣金 </div>
+        <div class="t-cell color-orange2 align_right">  > </div>
+      </a>
+      <div class=" mt10 list-shadow">
+        <div class="grid-title bg-white v_tit" style="">{{ $t('Service') }}</div>
+          <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
+            <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
+              <div slot="icon" :class="btn.color">
+                <span :class="`al ${btn.icon}`"></span>
+              </div>
+            </grid-item>
+          </grid>
+        </div>
+      </div>
+
+    </div>
+
 </template>
 
 <i18n>
@@ -46,6 +81,7 @@ export default {
   data () {
     const self = this
     return {
+      doCreated: false,
       btns: [
         {
           name: 'To Recommend',
@@ -196,4 +232,16 @@ export default {
   height: 0px;
   border-bottom: none;
 }
+#personal-center .v_tit{
+  border-bottom:1px solid #efeff4;
+  color:#323232;
+}
+#personal-center .v_order{
+  color: #323232;
+  border-bottom: 1px solid #efeff4;
+}
+#personal-center .al-buoumaotubiao48:before{
+  font-size: 24px;
+}
+#personal-center .weui-grid{padding: 5px;}
 </style>
