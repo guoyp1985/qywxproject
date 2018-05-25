@@ -31,7 +31,8 @@
         </router-link>
       </div>
     </div>
-    <div class="center-marquee">
+    <div v-if="!marquedata || marquedata.length == 0" class="bg-white" style="height:40px;"></div>
+    <div v-else class="center-marquee">
       <marquee :item-height="30" :interval="5000" :duration="1000">
         <marquee-item v-for="(item,index) in marquedata" :key="item.id">
           <group class="marqueeitem">
