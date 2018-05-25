@@ -2,13 +2,13 @@
   <div class="containerarea s-havebottom font14 rgoodeazy bg-white">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <tab v-model="tabmodel" class="v-tab">
+        <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <div class="font15 pt15 pl10 pr10">搜索关键词采集文章</div>
@@ -121,11 +121,12 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
-      loginUser: Object,
+      loginUser: {},
       autofixed: false,
       tabtxts: [ '关键词', '链接' ],
-      tabmodel: 0,
+      selectedIndex: 0,
       newsdata: [],
       searchdata: [],
       searchword: '',
@@ -283,21 +284,41 @@ export default {
           }
         })
       })
+    },
+    getHistory () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, {
+        do: 'history', pagestart: 0, limit: 15
+      }).then(function (res) {
+        let data = res.data
+        self.keywordsData = data.data ? data.data : data
+      })
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.loginUser = User.get()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'goodeazy'
-    }).then(function () {
-      return self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, { do: 'history', pagestart: 0, limit: 15 })
     }).then(function (res) {
-      let data = res.data
-      self.keywordsData = data.data ? data.data : data
+      if (res.status === 200) {
+        self.getHistory()
+      }
     })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      if (self.selectedIndex === 0) {
+        self.getHistory()
+      } else if (self.selectedIndex === 1 && self.newsdata.length === 0) {
+        self.getnewsdata()
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>
