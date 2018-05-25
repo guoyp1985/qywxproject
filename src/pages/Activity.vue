@@ -28,7 +28,6 @@ import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import ShareSuccess from '@/components/ShareSuccess'
 import urlParse from 'url-parse'
-import Time from '#/time'
 import ENV from 'env'
 import { User, BkSocket, Roomid } from '#/storage'
 
@@ -38,6 +37,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       bargainbuyType: false,
       showShareSuccess: false,
       showBargainbuy: false,
@@ -52,11 +52,6 @@ export default {
       cutData: [],
       roomid: '',
       socket: BkSocket.get()
-    }
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   watch: {
@@ -228,17 +223,6 @@ export default {
         console.log('ws error')
       }
     },
-    createdFun (query) {
-      this.$vux.loading.show()
-      this.$store.commit('updateToggleTabbar', {toggleBar: false})
-      this.query = query
-      if (this.query.crowduserid) {
-        this.crowduserid = this.query.crowduserid
-      }
-      this.loginUser = User.get()
-      this.wsConnect()
-      this.getInfo()
-    },
     access () {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
@@ -260,13 +244,38 @@ export default {
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
         }
       } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+          if (res.status === 200) {
+            User.set(res.data)
+          }
+        })
       }
+    },
+    createdFun (query) {
+      const self = this
+      self.access()
+      this.$vux.loading.show()
+      this.$store.commit('updateToggleTabbar', {toggleBar: false})
+      this.query = query
+      if (this.query.crowduserid) {
+        this.crowduserid = this.query.crowduserid
+      }
+      this.loginUser = User.get()
+      this.wsConnect()
+      this.getInfo()
     }
   },
   created () {
-    this.access()
+    const self = this
+    self.doCreated = true
     this.createdFun(this.$route.query)
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      this.createdFun(this.$route.query)
+    }
+    self.doCreated = false
   }
 }
 </script>

@@ -301,6 +301,7 @@ Util.install = function (Vue, options) {
         } else if (data.seotitle && self.trim(data.seotitle) !== '') {
           sharedesc = data.seotitle
         }
+        console.log(sharedesc)
         sharephoto = data.photo
         let photoarr = []
         if (data.photo && self.trim(data.photo) !== '') {

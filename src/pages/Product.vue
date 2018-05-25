@@ -920,6 +920,7 @@ export default {
   },
   activated () {
     const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
     if (!self.doCreated) {
       self.initInfo()
     }

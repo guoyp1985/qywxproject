@@ -163,6 +163,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
       data: {},
       photoarr: [],
@@ -187,52 +188,6 @@ export default {
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
       showRebate: false
-    }
-  },
-  created: function () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    let logparams = { module: 'product', action: 'add' }
-    if (self.query.id) {
-      logparams.id = self.query.id
-    }
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, logparams).then(function (res) {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
-    }).then(function (res) {
-      let data = res.data
-      self.retailerInfo = data.data ? data.data : data
-      if (self.retailerInfo.buyonline === 1) {
-        self.showRebate = true
-        setTimeout(function () {
-          let rebateInput = document.querySelector('.rebateInput')
-          self.priceChange(rebateInput, function (val) {
-            self.submitdata.rebate = val
-          })
-        }, 500)
-      }
-      let priceInput = document.querySelector('.priceInput')
-      self.priceChange(priceInput, function (val) {
-        self.submitdata.price = val
-      })
-    })
-    if (self.query.id) {
-      let params = { params: { id: self.query.id, module: 'product' } }
-      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
-        let data = res.data
-        self.data = data.data ? data.data : data
-        self.activityInfo = self.data.activitinfo
-        for (let key in self.submitdata) {
-          self.submitdata[key] = self.data[key]
-        }
-        if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
-          self.photoarr = self.submitdata.photo.split(',')
-        }
-        if (self.submitdata.contentphoto && self.$util.trim(self.submitdata.contentphoto) !== '') {
-          self.photoarr1 = self.submitdata.contentphoto.split(',')
-        }
-        document.title = self.data.title
-      })
     }
   },
   watch: {
@@ -401,7 +356,68 @@ export default {
         }
         callback && callback(val)
       })
+    },
+    initInfo () {
+      const self = this
+      let logparams = { module: 'product', action: 'add' }
+      if (self.query.id) {
+        logparams.id = self.query.id
+      }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, logparams).then(function (res) {
+        if (res.status === 200) {
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          self.retailerInfo = data.data ? data.data : data
+          if (self.retailerInfo.buyonline === 1) {
+            self.showRebate = true
+            setTimeout(function () {
+              let rebateInput = document.querySelector('.rebateInput')
+              self.priceChange(rebateInput, function (val) {
+                self.submitdata.rebate = val
+              })
+            }, 500)
+          }
+          let priceInput = document.querySelector('.priceInput')
+          self.priceChange(priceInput, function (val) {
+            self.submitdata.price = val
+          })
+        }
+      })
+      if (self.query.id) {
+        let params = { params: { id: self.query.id, module: 'product' } }
+        self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
+          let data = res.data
+          self.data = data.data ? data.data : data
+          self.activityInfo = self.data.activitinfo
+          for (let key in self.submitdata) {
+            self.submitdata[key] = self.data[key]
+          }
+          if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
+            self.photoarr = self.submitdata.photo.split(',')
+          }
+          if (self.submitdata.contentphoto && self.$util.trim(self.submitdata.contentphoto) !== '') {
+            self.photoarr1 = self.submitdata.contentphoto.split(',')
+          }
+          document.title = self.data.title
+        })
+      }
     }
+  },
+  created: function () {
+    const self = this
+    self.doCreated = true
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.query = self.$route.query
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>

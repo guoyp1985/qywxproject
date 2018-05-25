@@ -56,13 +56,12 @@
 
 <script>
 import { XImg } from 'vux'
-import Orderproductplate from '@/components/Orderproductplate'
 import ENV from 'env'
 import Time from '#/time'
 
 export default {
   components: {
-    Orderproductplate, XImg
+    XImg
   },
   filters: {
     dateformat: function (value) {
@@ -71,6 +70,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: Object,
       data: {},
       orders: [],
@@ -86,25 +86,43 @@ export default {
       return this.totalPrice
     }
   },
+  methods: {
+    initInfo () {
+      const self = this
+      self.$store.commit('updateToggleTabbar', {toggleBar: false})
+      self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
+        params: { id: self.query.id }
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.data = data.data
+          self.orders = self.data.orders
+          self.showOrders = true
+        }
+      })
+    }
+  },
   created: function () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'accountdetail', id: self.query.id
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
-        params: { id: self.query.id }
-      })
     }).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      if (data.flag === 1) {
-        self.data = data.data
-        self.orders = self.data.orders
-        self.showOrders = true
+      if (res.status === 200) {
+        self.initInfo()
       }
     })
+  },
+  activated () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>
