@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="row row2">
-        <tab v-model="tabmodel" class="v-tab" active-color="#ea3a3a" default-color="#666">
+        <tab v-model="tabmodel" class="v-tab" active-color="#ea3a3a" default-color="#666" style="height:80px;">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">
             <div class="flex_center txt">
               <div>
@@ -28,7 +28,7 @@
         </tab>
       </div>
     </div>
-    <div class="v-container s-container2" style="top:132px;">
+    <div class="v-container s-container2" style="top:162px;">
       <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
