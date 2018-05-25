@@ -284,17 +284,8 @@ Vue.http.interceptors.request.use(config => {
   return Promise.reject(error)
 })
 
-// 响应拦截器
-Vue.http.interceptors.response.use(response => {
-  // removePending(response.config)
-  if (response.status === 200) {
-    const user = User.get()
-    if (!user || !user.uid) {
-      router.push({name: 'tLogin'})
-    }
-  }
-  return response
-}, error => {
+
+const handleUserInfo = (response) => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   if (code) {
@@ -315,7 +306,7 @@ Vue.http.interceptors.response.use(response => {
       }
     )
   } else {
-    $vue.$util.access(error.response, isPC => {
+    $vue.$util.access(response, isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
@@ -325,6 +316,20 @@ Vue.http.interceptors.response.use(response => {
     })
   }
   return { data: { } }
+}
+
+// 响应拦截器
+Vue.http.interceptors.response.use(response => {
+  // removePending(response.config)
+  if (response.status === 200) {
+    const user = User.get()
+    if (!user || !user.uid) {
+      handleUserInfo(response)
+    }
+  }
+  return response
+}, error => {
+  handleUserInfo(error.response)
 })
 
 const getAddress = (wxToken) => {
