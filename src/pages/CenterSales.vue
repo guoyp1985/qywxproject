@@ -228,8 +228,8 @@ export default {
     return {
       doCreated: false,
       showcontainer: false,
-      loginUser: Object,
-      retailerInfo: Object,
+      loginUser: {},
+      retailerInfo: {},
       marquedata: [],
       imgarr: [{
         msrc: '/src/assets/images/user.jpg',
@@ -268,10 +268,8 @@ export default {
         }
       })
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$vux.loading.show()
-      self.loginUser = User.get()
       let iscontinue = true
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'index'
@@ -280,7 +278,7 @@ export default {
         self.showcontainer = false
         iscontinue = false
       } else if (self.loginUser.usergroup) {
-        let usergroup = self.loginUser.usergroup
+        const usergroup = self.loginUser.usergroup
         for (let i = 0; i < usergroup.length; i++) {
           let g = usergroup[i]
           if (g === 3) {
@@ -294,35 +292,34 @@ export default {
         self.$router.push('/retailerApply')
       } else {
         self.showcontainer = true
-        self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-          let data = res.data
+        self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(res => {
+          const data = res.data
           self.retailerInfo = data.data ? data.data : data
           self.imgarr[0].msrc = self.retailerInfo.avatar
           self.imgarr[0].src = self.retailerInfo.avatar
           self.wximgarr[0] = self.retailerInfo.avatar
           self.$vux.loading.hide()
           return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-        }).then(function (res) {
-          let data = res.data
+        }).then(res => {
+          const data = res.data
           self.marquedata = data.data ? data.data : data
         })
       }
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
   },
   created () {
-    console.log('created')
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.initInfo()
+    this.init()
   },
   activated () {
-    console.log('activated')
-    const self = this
-    if (!self.doCreated) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

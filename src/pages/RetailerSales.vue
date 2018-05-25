@@ -2,13 +2,13 @@
   <div class="containerarea  bg-page  fong14 rsales">
     <div class="s-topbanner s-topbanner1">
       <div class="row">
-        <tab v-model="tabmodel" class="v-tab">
+        <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
@@ -136,7 +136,7 @@ export default {
       loginUser: Object,
       autofixed: false,
       tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
-      tabmodel: 0,
+      selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
@@ -153,18 +153,8 @@ export default {
       pagestart3: 0
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.loginUser = User.get()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'sales'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   methods: {
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1[0],
@@ -172,12 +162,12 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    handleScroll2: function () {
+    handleScroll2 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
@@ -185,12 +175,12 @@ export default {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
             self.$vux.loading.show()
-            self.getdata2()
+            self.getData2()
           }
         }
       })
     },
-    handleScroll3: function () {
+    handleScroll3 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer3[0],
@@ -198,22 +188,23 @@ export default {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++
             self.$vux.loading.show()
-            self.getdata3()
+            self.getData3()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword1
+      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
@@ -221,31 +212,33 @@ export default {
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { pagestart: self.pagestart2, limit: self.limit }
-      let keyword = self.searchword2
+      const params = { pagestart: self.pagestart2, limit: self.limit }
+      const keyword = self.searchword2
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult2 = true
         params.keyword = keyword
       } else {
         self.searchresult2 = false
       }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(function (res) {
-        let data = res.data
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list?from=retailer`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { pagestart: self.pagestart3, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list?from=retailer`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
       })
@@ -259,7 +252,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel1 () {
       const self = this
@@ -268,7 +261,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel2 () {
       const self = this
@@ -277,7 +270,7 @@ export default {
       self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
-      self.getdata2()
+      self.getData2()
     },
     onChange2 (val) {
       this.searchword2 = val
@@ -288,19 +281,19 @@ export default {
       self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
-      self.getdata2()
+      self.getData2()
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 0 && self.tabdata1.length === 0) {
-        self.$vux.loading.show()
-        self.getdata1()
-      } else if (index === 1 && self.tabdata2.length === 0) {
-        self.$vux.loading.show()
-        self.getdata2()
-      } else if (index === 2 && self.tabdata3.length === 0) {
-        self.$vux.loading.show()
-        self.getdata3()
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getData2()
+          break
+        case 2:
+          !this.tabdata3.length && this.getData3()
+          break
       }
     },
     inviteevent (item, index) {
@@ -313,10 +306,9 @@ export default {
         content: content,
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
-            { inviteuid: item.uid }
-          ).then(function (res) {
-            let data = res.data
+          self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid })
+          .then(res => {
+            const data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
@@ -330,7 +322,22 @@ export default {
           })
         }
       })
+    },
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'sales'
+      })
+      .then(res => {
+        self.swiperChange()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

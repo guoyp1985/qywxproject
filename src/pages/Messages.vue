@@ -30,11 +30,6 @@
   </div>
 </template>
 
-<i18n>
-Message:
-  zh-CN: 消息
-</i18n>
-
 <script>
 import { XImg } from 'vux'
 import Time from '#/time'
@@ -45,7 +40,7 @@ export default {
     XImg
   },
   filters: {
-    dateformat: function (value) {
+    dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
@@ -55,24 +50,30 @@ export default {
     }
   },
   methods: {
-    getDateState: function (dt) {
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
+    },
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/message/list`).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        self.data = data.data ? data.data : data
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.$http.get(`${ENV.BokaApi}/api/message/list`).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      self.data = data.data ? data.data : data
-    })
+  activated () {
+    this.refresh()
   }
 }
 </script>

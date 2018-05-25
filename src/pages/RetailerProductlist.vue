@@ -180,15 +180,6 @@ export default {
       discustomerdata: false
     }
   },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'productlist'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   watch: {
     productdata: function () {
       return this.productdata
@@ -200,10 +191,10 @@ export default {
     }
   },
   methods: {
-    getPhoto: function (src) {
+    getPhoto (src) {
       return this.$util.getPhoto(src)
     },
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -211,20 +202,9 @@ export default {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
-      })
-    },
-    getdata1 () {
-      const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
-        self.disproductdata = true
       })
     },
     controlpopup1 (item, index) {
@@ -373,7 +353,36 @@ export default {
           delete self.customerdata[i].checked
         }
       }
+    },
+    getData1 () {
+      const self = this
+      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
+        self.disproductdata = true
+      })
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'productlist'
+      })
+      .then(res => {
+        self.getData1()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

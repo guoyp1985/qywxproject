@@ -72,8 +72,8 @@ export default {
   data () {
     return {
       autofixed: false,
-      query: Object,
-      viewuser: Object,
+      query: {},
+      viewuser: {},
       disdata: false,
       data: [],
       searchword1: '',
@@ -96,7 +96,7 @@ export default {
       self.disdata = false
       self.data = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onSubmit1 () {
       const self = this
@@ -104,9 +104,9 @@ export default {
       self.disdata = false
       self.data = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -114,15 +114,15 @@ export default {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
-      let params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword1
+      const params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
+      const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
@@ -130,40 +130,42 @@ export default {
         self.searchresult1 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/user/shareList`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        this.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
         self.disdata = true
       })
     },
-    getDateState: function (dt) {
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'sharelist' })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
+      .then(res => {
+        const data = res.data
+        if (data) {
+          self.viewuser = data.data ? data.data : data
+          document.title = `${self.viewuser.linkman}分享`
+        }
+        self.getData1()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'sharelist'
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      )
-    }).then(function (res) {
-      let data = res.data
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}分享`
-      }
-    })
-    self.getdata1()
+  activated () {
+    this.refresh()
   }
 }
 </script>

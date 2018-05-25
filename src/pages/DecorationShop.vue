@@ -144,7 +144,7 @@ export default {
     }
   },
   methods: {
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -152,19 +152,9 @@ export default {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData()
           }
         }
-      })
-    },
-    getdata1 () {
-      const self = this
-      let params = { params: { from: 'myshop', pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
       })
     },
     showRolling (item, index) {
@@ -307,22 +297,39 @@ export default {
     },
     popupCancel () {
       this.popupShow = false
+    },
+    getData () {
+      const self = this
+      const params = { params: { from: 'myshop', pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.$vux.loading.hide()
+        self.productdata = self.productdata.concat(retdata)
+      })
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'decorationshop'
+      })
+      if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
+        this.havenum = this.clickdata.rollingphoto.split(',')
+      } else {
+        this.havenum = 0
+      }
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.loginUser = User.get()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'decorationshop'
-    })
-    if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
-      this.havenum = this.clickdata.rollingphoto.split(',')
-    } else {
-      this.havenum = 0
-    }
-    self.$vux.loading.show()
-    self.getdata1()
+  created () {
+    this.init()
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

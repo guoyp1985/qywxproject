@@ -264,25 +264,25 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = query.id
+      const room = this.query.id
       Socket.create()
       Socket.listening(uid, linkman, room)
     },
-    createdFun () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    init () {
+      this.loginUser = User.get()
     },
-    activatedFun (query) {
-      this.query = query
-      self.loginUser = User.get()
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.getData()
       this.createSocket()
     }
   },
   created () {
-    this.createdFun()
+    this.init()
   },
   activated () {
-    this.activatedFun(this.$route.query)
+    this.refresh()
   }
 }
 </script>

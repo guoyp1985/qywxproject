@@ -55,13 +55,13 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg } from 'vux'
+import { Search, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg
+    Search, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -94,25 +94,25 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
-      let params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword1
+      const params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
+      const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
-        let data = res.data
+      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
@@ -126,7 +126,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel1 () {
       const self = this
@@ -135,28 +135,31 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting', id: this.query.uid })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
+      .then(res => {
+        const data = res.data
+        if (data) {
+          self.viewuser = data.data ? data.data : data
+          document.title = `${self.viewuser.linkman}`
+        }
+        self.showContainer = true
+        self.getData1()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'setting', id: self.query.uid
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      )
-    }).then(function (res) {
-      let data = res.data
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}`
-      }
-      self.showContainer = true
-      self.getdata1()
-    })
+  activated () {
+    this.refresh()
   }
 }
 </script>

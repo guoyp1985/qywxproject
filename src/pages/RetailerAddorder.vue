@@ -162,13 +162,6 @@ export default {
   components: {
     Group, XNumber, Datetime, XButton, XTextarea, XInput, Popup, Search, Radio, XAddress, Forminputplate
   },
-  created () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'addorder'
-    })
-  },
   data () {
     return {
       showpopup: false,
@@ -237,7 +230,7 @@ export default {
     }
   },
   computed: {
-    getradiodata: function () {
+    getradiodata () {
       let curdata = this.userdata
       for (var i = 0; i < curdata.length; i++) {
         let d = curdata[i]
@@ -325,7 +318,19 @@ export default {
     },
     addressShow (str) {
       console.log('on-show')
+    },
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'addorder'
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

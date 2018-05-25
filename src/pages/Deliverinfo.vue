@@ -27,9 +27,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import { Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
@@ -40,7 +37,7 @@ export default {
     Timeline, TimelineItem
   },
   filters: {
-    dateformat: function (dt) {
+    dateformat (dt) {
       let newtime = new Time(dt * 1000)
       let year = newtime.year()
       let month = newtime.month()
@@ -65,7 +62,7 @@ export default {
       }
       return state
     },
-    dateformat1: function (value) {
+    dateformat1 (value) {
       return new Time(value * 1000).dateFormat('hh:mm')
     }
   },
@@ -77,21 +74,18 @@ export default {
       showData: false
     }
   },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    if (self.query.id) {
-      self.$vux.loading.show()
-      let params = { id: self.query.id }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, { params: params }).then(function (res) {
-        let data = res.data
+  methods: {
+    getData () {
+      const self = this
+      const params = { id: this.query.id }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, { params: params }).then(function (res) {
+        const data = res.data
         self.deliverinfo = data.data ? data.data : data
         return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
       }).then(function (res) {
-        let data = res.data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
         if (!retdata.status) {
           for (let i = 0; i < retdata.length; i++) {
             let d = retdata[i]
@@ -101,7 +95,16 @@ export default {
         }
         self.showData = true
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

@@ -188,28 +188,28 @@ export default {
               if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
                 self.pagestart1++
                 self.$vux.loading.show()
-                self.getdata1()
+                self.getData1()
               }
               break
             case 1:
               if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
                 self.pagestart2++
                 self.$vux.loading.show()
-                self.getdata2()
+                self.getData2()
               }
               break
             case 2:
               if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
                 self.pagestart3++
                 self.$vux.loading.show()
-                self.getdata3()
+                self.getData3()
               }
               break
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
       let params = { wid: self.query.wid, pagestart: self.pagestart1, limit: self.limit }
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
@@ -221,7 +221,7 @@ export default {
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
       const self = this
       let params = { wid: self.query.wid, pagestart: self.pagestart2, limit: self.limit }
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, params)
@@ -233,7 +233,7 @@ export default {
         self.distabdata2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
       const self = this
       let params = { wid: self.query.wid, pagestart: self.pagestart3, limit: self.limit }
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, params)
@@ -245,16 +245,16 @@ export default {
         self.distabdata3 = true
       })
     },
-    onItemClick (index) {
-      switch (index) {
+    onItemClick () {
+      switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getdata1()
+          !this.tabdata1.length && this.getData1()
           break
         case 1:
-          !this.tabdata2.length && this.getdata2()
+          !this.tabdata2.length && this.getData2()
           break
         case 2:
-          !this.tabdata3.length && this.getdata3()
+          !this.tabdata3.length && this.getData3()
           break
       }
     },
@@ -283,7 +283,7 @@ export default {
     },
     getData () {
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`, {wid: self.query.wid})
+      this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`, {wid: this.query.wid})
       .then(res => {
         self.rebateInfo = res.data
         self.income = res.data.income
@@ -292,15 +292,17 @@ export default {
         self.customers = res.data.customers
         self.title = res.data.title
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
+      this.onItemClick()
     }
   },
-  created () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    this.getData()
-    this.getdata1()
+  activated () {
+    this.refresh()
   }
 }
 </script>

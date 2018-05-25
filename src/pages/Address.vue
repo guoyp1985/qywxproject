@@ -126,12 +126,14 @@ export default {
       .then(res => {
         self.$vux.toast.text(self.$t('Setting Default Success For Address'))
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
   },
-  created () {
-    this.getData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    // this.getWxAddress()
+  activated () {
+    this.refresh()
   }
 }
 </script>

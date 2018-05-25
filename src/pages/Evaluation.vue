@@ -80,17 +80,19 @@ export default {
     getData () {
       const self = this
       const id = this.$route.query.id
-      console.log(id)
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${id}`)
       .then(res => {
         if (res.data.flag) {
           self.list = res.data.data.orderlist
         }
       })
+    },
+    refresh () {
+      this.getData()
     }
   },
-  created () {
-    this.getData()
+  activated () {
+    this.refresh()
   }
 }
 </script>

@@ -9,12 +9,12 @@
           </div>
         </div>
       </div>
-      <tab v-model="tabmodel" class="v-tab">
+      <tab v-model="selectedIndex" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container" style="top:88px;">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
@@ -262,7 +262,7 @@ export default {
   data () {
     return {
       tabtxts: [ '待提现', '待结算', '已提现' ],
-      tabmodel: 0,
+      selectedIndex: 0,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
@@ -279,19 +279,10 @@ export default {
       pagestart3: 0
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'revenue'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   computed: {
   },
   methods: {
-    handleScroll: function (refname, index) {
+    handleScroll (refname, index) {
       const self = this
       let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
@@ -300,27 +291,28 @@ export default {
           if (index === 0 && self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.$vux.loading.show()
             self.pagestart1++
-            self.getdata1()
+            self.getData1()
           } else if (index === 1 && self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.$vux.loading.show()
             self.pagestart2++
-            self.getdata2()
+            self.getData2()
           } else if (index === 2 && self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.$vux.loading.show()
             self.pagestart3 += self.limit
-            self.getdata3()
+            self.getData3()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, {
-        params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit, cashed: 0 }
-      }).then(function (res) {
-        let data = res.data
+      const params = { params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit, cashed: 0 } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         if (self.checkedAll) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true
@@ -332,24 +324,28 @@ export default {
         self.disData1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit, cashed: 2 } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit, cashed: 2 } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disData2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit, cashed: 1 } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit, cashed: 1 } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
@@ -425,25 +421,35 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        if (self.pagestart3 === 0 && !self.isBindScroll3) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          this.tabdata2.length && this.getData2()
+          break
+        case 2:
+          this.tabdata3.length && this.getData3()
+          break
       }
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'revenue'
+      })
+      .then(res => {
+        self.swiperChange()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

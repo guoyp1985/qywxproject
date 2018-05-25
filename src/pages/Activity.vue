@@ -92,20 +92,20 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    getInfo () {
+    getData () {
       const self = this
-      self.$vux.loading.show()
-      let infoparams = { id: self.query.id }
-      if (self.crowduserid) {
-        infoparams.crowduserid = self.crowduserid
+      this.$vux.loading.show()
+      let infoparams = { id: this.query.id }
+      if (this.crowduserid) {
+        infoparams.crowduserid = this.crowduserid
       }
-      if (self.query.share_uid) {
-        infoparams.share_uid = self.query.share_uid
+      if (this.query.share_uid) {
+        infoparams.share_uid = this.query.share_uid
       }
-      if (self.query.lastshareuid) {
-        infoparams.lastshareuid = self.query.lastshareuid
+      if (this.query.lastshareuid) {
+        infoparams.lastshareuid = this.query.lastshareuid
       }
-      self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
+      this.$http.get(`${ENV.BokaApi}/api/activity/info`, {
         params: infoparams
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -173,25 +173,22 @@ export default {
       })
     },
     joinSuccess (crowduserid) {
-      const self = this
-      self.crowduserid = crowduserid
-      self.getInfo()
+      this.crowduserid = crowduserid
+      this.getData()
     },
     cutSuccess () {
-      const self = this
-      self.getInfo()
-      self.getCudata()
+      this.getData()
+      this.getCudata()
     },
     getCudata () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
-        let data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: this.crowduser.id }).then(function (res) {
+        const data = res.data
         self.cutData = data.data ? data.data : data
       })
     },
     cutdownCallback () {
-      const self = this
-      self.getInfo()
+      this.getData()
     },
     // wsConnect () {
     //   const self = this
@@ -249,25 +246,25 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = query.id
+      const room = this.query.id
       Socket.create()
       Socket.listening(uid, linkman, room)
     },
-    createdFun (query) {
+    init () {
       this.$util.wxAccess()
-      this.$store.commit('updateToggleTabbar', {toggleBar: false})
       this.loginUser = User.get()
       // this.wsConnect()
-      this.activatedFun(query)
+      // this.refresh(query)
     },
-    activatedFun (query) {
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
-      this.query = query
+      this.query = this.$route.query
       if (this.query.crowduserid) {
         this.crowduserid = this.query.crowduserid
       }
       this.createSocket()
-      this.getInfo()
+      this.getData()
     }
     // access () {
     //   const user = User.get()
@@ -295,10 +292,10 @@ export default {
     // }
   },
   created () {
-    this.createdFun(this.$route.query)
+    this.init()
   },
   activated () {
-    this.activatedFun(this.$route.query)
+    this.refresh()
   }
 }
 </script>

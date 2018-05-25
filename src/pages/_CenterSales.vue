@@ -226,7 +226,7 @@ export default {
   },
   created () {
     const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
     let iscontinue = true

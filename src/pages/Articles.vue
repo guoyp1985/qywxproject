@@ -31,7 +31,7 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      // query: {},
       tabs: [],
       headlines: [
         {
@@ -113,7 +113,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
       .then(res => {
         self.tabs = res.data.data
-        self.getAritcles(self.tabs[self.selectedIndex].id)
+        self.tabs.length && self.getAritcles(self.tabs[self.selectedIndex].id)
         const lUrl = urlParse(location.href, true)
         return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, {useforurl: lUrl.hash.replace(/#/, '')})
       })
@@ -135,12 +135,15 @@ export default {
       .then(res => {
         self.oArticles = res.data
       })
+    },
+    refresh () {
+      // this.query = this.$route.query
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
   },
-  created () {
-    this.query = this.$route.query
-    this.getData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+  activated () {
+    this.refresh()
   }
 }
 </script>

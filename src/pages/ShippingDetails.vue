@@ -81,11 +81,14 @@ export default {
           self.expressNumber = res.data.data.delivercode
         }
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    this.getData()
+  activated () {
+    this.refresh()
   }
 }
 </script>

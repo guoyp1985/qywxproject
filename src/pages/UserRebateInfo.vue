@@ -123,11 +123,11 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      query: {},
       tabtxts: [ '待提现', '待返点', '已提现' ],
-      user: {},
+      // user: {},
       rebateInfo: {},
-      totalIncome: 0,
+      // totalIncome: 0,
       total: '0.00',
       selectedIndex: 0,
       globalChecked: true,
@@ -150,7 +150,7 @@ export default {
     }
   },
   methods: {
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1[0],
@@ -158,12 +158,12 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    handleScroll2: function () {
+    handleScroll2 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
@@ -171,12 +171,12 @@ export default {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
             self.$vux.loading.show()
-            self.getdata2()
+            self.getData2()
           }
         }
       })
     },
-    handleScroll3: function () {
+    handleScroll3 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer3[0],
@@ -184,18 +184,19 @@ export default {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++
             self.$vux.loading.show()
-            self.getdata3()
+            self.getData3()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { cashed: 0, from: 'user', pagestart: self.pagestart1, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
-        let data = res.data
+      const params = { cashed: 0, from: 'user', pagestart: self.pagestart1, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         if (self.globalChecked) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true
@@ -208,39 +209,41 @@ export default {
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { cashed: 2, from: 'user', pagestart: self.pagestart1, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
-        let data = res.data
+      const params = { cashed: 2, from: 'user', pagestart: self.pagestart1, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { cashed: 1, from: 'user', pagestart: self.pagestart1, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(function (res) {
-        let data = res.data
+      const params = { cashed: 1, from: 'user', pagestart: self.pagestart1, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
       })
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 0 && self.tabdata1.length === 0) {
-        self.$vux.loading.show()
-        self.getdata1()
-      } else if (index === 1 && self.tabdata2.length === 0) {
-        self.$vux.loading.show()
-        self.getdata2()
-      } else if (index === 2 && self.tabdata3.length === 0) {
-        self.$vux.loading.show()
-        self.getdata3()
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getData2()
+          break
+        case 2:
+          !this.tabdata3.length && this.getData3()
+          break
       }
     },
     itemClick (item) {
@@ -274,14 +277,14 @@ export default {
         }
       }
     },
-    getData () {
-      const self = this
-      const uid = this.$route.query.uid
-      this.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, {uid: uid})
-      .then(res => {
-        self.totalIncome = res.data.special
-      })
-    },
+    // getData () {
+    //   const self = this
+    //   const uid = this.$route.query.uid
+    //   this.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, {uid: uid})
+    //   .then(res => {
+    //     self.totalIncome = res.data.special
+    //   })
+    // },
     getCash () {
       const self = this
       if (self.checkedData.length === 0) {
@@ -319,15 +322,25 @@ export default {
           })
         }
       })
+    },
+    getData () {
+      this.swiperChange()
+    },
+    init () {
+
+    },
+    refresh () {
+      // this.user = User.get()
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
     }
   },
   created () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    this.user = User.get()
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.getdata1()
+    this.init()
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

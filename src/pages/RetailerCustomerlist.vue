@@ -2,13 +2,13 @@
   <div class="containerarea bg-page font14 rcustomerlist">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <tab v-model="tabmodel" class="v-tab">
+        <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <search
@@ -223,7 +223,7 @@ export default {
       tabcount1: 0,
       tabcount2: 0,
       tabcount3: 0,
-      tabmodel: 0,
+      selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
@@ -243,17 +243,8 @@ export default {
       pagestart3: 0
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'customerlist'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   methods: {
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1[0],
@@ -261,12 +252,12 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    handleScroll2: function () {
+    handleScroll2 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
@@ -274,12 +265,12 @@ export default {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
             self.$vux.loading.show()
-            self.getdata2()
+            self.getData2()
           }
         }
       })
     },
-    handleScroll3: function () {
+    handleScroll3 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer3[0],
@@ -287,13 +278,14 @@ export default {
           if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
             self.pagestart3++
             self.$vux.loading.show()
-            self.getdata3()
+            self.getData3()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
+      this.$vux.loading.show()
       let params = { params: { tolevel: -1, pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
@@ -311,8 +303,9 @@ export default {
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
       const self = this
+      this.$vux.loading.show()
       let keyword = self.searchword2
       let params = { params: { tolevel: 5, pagestart: self.pagestart2, limit: self.limit } }
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
@@ -330,8 +323,9 @@ export default {
         self.distabdata2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
       const self = this
+      this.$vux.loading.show()
       let keyword = self.searchword3
       let params = { params: { tolevel: 100, pagestart: self.pagestart3, limit: self.limit } }
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
@@ -365,7 +359,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel2 () {
       const self = this
@@ -374,7 +368,7 @@ export default {
       self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
-      self.getdata2()
+      self.getData2()
     },
     onCancel3 () {
       const self = this
@@ -383,7 +377,7 @@ export default {
       self.distabdata3 = false
       self.tabdata3 = []
       self.pagestart3 = 0
-      self.getdata3()
+      self.getData3()
     },
     onSubmit1 () {
       const self = this
@@ -391,7 +385,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onSubmit2 () {
       const self = this
@@ -399,7 +393,7 @@ export default {
       self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
-      self.getdata2()
+      self.getData2()
     },
     onSubmit3 () {
       const self = this
@@ -407,19 +401,19 @@ export default {
       self.distabdata3 = false
       self.tabdata3 = []
       self.pagestart3 = 0
-      self.getdata3()
+      self.getData3()
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 0 && self.tabdata1.length === 0) {
-        self.$vux.loading.show()
-        self.getdata1()
-      } else if (index === 1 && self.tabdata3.length === 0) {
-        self.$vux.loading.show()
-        self.getdata3()
-      } else if (index === 2 && self.tabdata2.length === 0) {
-        self.$vux.loading.show()
-        self.getdata2()
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          !this.tabdata3.length && this.getData3()
+          break
+        case 2:
+          !this.tabdata2.length && this.getData2()
+          break
       }
     },
     percentclick () {
@@ -428,14 +422,28 @@ export default {
     closepopup () {
       this.isshowpopup = false
     },
-    getDateState: function (dt) {
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
+    },
+    getData () {
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'customerlist'
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
+      this.swiperChange()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

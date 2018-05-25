@@ -80,21 +80,21 @@ export default {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData()
           }
         }
       })
     },
-    getdata1 () {
+    getData () {
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { pagestart: this.pagestart1, limit: this.limit } }
       if (self.query.classid) {
         params.params.classid = self.query.classid
       }
       self.$http.get(`${ENV.BokaApi}/api/list/knowledge`, params).then(function (res) {
-        let data = res.data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
       })
     },
@@ -103,14 +103,16 @@ export default {
     },
     onHide () {
       console.log('on hide')
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.getdata1()
+  activated () {
+    this.refresh()
   }
 }
 </script>

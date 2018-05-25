@@ -86,25 +86,34 @@ export default {
       return this.totalPrice
     }
   },
-  created: function () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'accountdetail', id: self.query.id
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
-        params: { id: self.query.id }
+  methods: {
+    getData (query) {
+      const self = this
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'accountdetail', id: query.id
+      }).then(function () {
+        return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
+          params: { id: query.id }
+        })
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          self.data = data.data
+          self.orders = self.data.orders
+          self.showOrders = true
+        }
       })
-    }).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      if (data.flag === 1) {
-        self.data = data.data
-        self.orders = self.data.orders
-        self.showOrders = true
-      }
-    })
+    },
+    refresh (query) {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = query
+      this.getData(query)
+    }
+  },
+  activated () {
+    this.refresh(this.$route.query)
   }
 }
 </script>

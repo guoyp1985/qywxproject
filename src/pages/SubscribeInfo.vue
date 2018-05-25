@@ -36,7 +36,7 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
+      loginUser: {},
       data: [],
       disData: false,
       WeixinQrcode: ENV.WeixinQrcode,
@@ -55,18 +55,18 @@ export default {
     }
   },
   methods: {
-    getQrcode () {
-      return ENV.WeixinQrcode
-    },
-    getDateState: function (dt) {
+    // getQrcode () {
+    //   return ENV.WeixinQrcode
+    // },
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
     },
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -74,12 +74,12 @@ export default {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/user/uploadByMe`).then(function (res) {
         let data = res.data
@@ -88,16 +88,22 @@ export default {
         self.data = self.data.concat(retdata)
         self.disData = true
       })
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'subscribeinfo' })
+      .then(res => {
+        self.getData1()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'subscribeinfo'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
+  activated () {
+    this.refresh()
   }
 }
 </script>

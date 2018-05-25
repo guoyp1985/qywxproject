@@ -138,36 +138,6 @@ export default {
       deliverdata: { delivercompany: '-1', delivercode: '' }
     }
   },
-  created: function () {
-    let self = this
-    self.query = self.$route.query
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'orderdetail', id: self.query.id
-    })
-    if (self.query.id) {
-      self.$vux.loading.show()
-      self.deliverdata.id = self.query.id
-      let params = { params: { id: self.query.id } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, params).then(function (res) {
-        self.$vux.loading.hide()
-        self.data = res.data.data ? res.data.data : res.data
-        if (self.data.flag !== 2) {
-          self.bottomcss = 'nobottom'
-        }
-        let total = 0
-        for (let i = 0; i < self.data.orderlist.length; i++) {
-          let o = self.data.orderlist[i]
-          total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
-        }
-        self.totalPrice = total.toFixed(2)
-        if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
-          self.deliverdata.delivercompany = self.data.delivercompany
-          self.deliverdata.delivercode = self.data.delivercode
-        }
-      })
-    }
-  },
   watch: {
     data () {
       return this.data
@@ -278,7 +248,40 @@ export default {
           })
         }
       })
+    },
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'orderdetail', id: this.query.id
+      })
+      this.deliverdata.id = this.query.id
+      const params = { params: { id: this.query.id } }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, params).then(res => {
+        self.$vux.loading.hide()
+        self.data = res.data.data ? res.data.data : res.data
+        if (self.data.flag !== 2) {
+          self.bottomcss = 'nobottom'
+        }
+        let total = 0
+        for (let i = 0; i < self.data.orderlist.length; i++) {
+          let o = self.data.orderlist[i]
+          total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
+        }
+        self.totalPrice = total.toFixed(2)
+        if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
+          self.deliverdata.delivercompany = self.data.delivercompany
+          self.deliverdata.delivercode = self.data.delivercode
+        }
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

@@ -1,5 +1,5 @@
 /*
-* @description: 返点申请页
+* @description: 返点申请页 (已废弃)
 * @auther: simon
 * @created_date: 2018-4-20
 */

@@ -12,11 +12,11 @@
       </div>
       <div class="tabarea bg-white" ref="tabArea">
         <template v-if="tabsdata && tabsdata.length > 0">
-          <tab v-model="tabmodel" class="v-tab">
+          <tab v-model="selectedIndex" class="v-tab">
             <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
           </tab>
           <div ref="tabSwiper" class="w_100 bg-white">
-            <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+            <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
               <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
                 <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
                   <template>
@@ -231,11 +231,11 @@ export default {
   data () {
     return {
       showcontainer: false,
-      query: Object,
+      query: {},
       module: '',
-      data: Object,
+      data: {},
       arrData: [],
-      tabmodel: 0,
+      selectedIndex: 0,
       statData: [],
       tabsdata: [],
       tabtop: 'auto',
@@ -255,32 +255,32 @@ export default {
   computed: {
   },
   methods: {
-    isShowArea: function (index) {
-      return this.isShowArea
-    },
-    getListdata: function (index) {
+    // isShowArea (index) {
+    //   return this.isShowArea
+    // },
+    // getListdata (index) {
+    //   const self = this
+    //   return self.datalist[index]
+    // },
+    handleScroll (refname) {
       const self = this
-      return self.datalist[index]
-    },
-    handleScroll: function (refname) {
-      const self = this
-      let index = self.clickTabIndex
-      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      const index = this.selectedIndex
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
           if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * self.limit) {
             self.scrollData[index].pagestart++
             self.$vux.loading.show()
-            self.getdata()
+            self.getData1()
           }
         }
       })
     },
-    getdata () {
+    getData1 () {
       const self = this
-      let item = self.clickTabitem
-      let index = self.clickTabIndex
+      const item = self.clickTabitem
+      const index = this.selectedIndex
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
@@ -305,40 +305,42 @@ export default {
         }
       })
     },
-    swiperChange (index) {
-      const self = this
-      self.clickTabitem = self.tabsdata[index]
-      self.clickTabIndex = index
-      self.arrData = self.datalist[index]
-      if (self.datalist[index].length === 0) {
-        self.$vux.loading.show()
-        self.getdata()
+    swiperChange () {
+      const index = this.selectedIndex
+      this.clickTabitem = this.tabsdata[index]
+      this.arrData = this.datalist[index]
+      switch (index) {
+        case 0:
+          !this.datalist[index].length && this.getData1()
+          break
       }
+    },
+    getData () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: this.module, action: 'stat', id: this.query.id })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: { id: self.query.id } }))
+      .then(res => {
+        self.showcontainer = true
+        const data = res.data
+        self.statData = data.data ? data.data : data
+        self.tabsdata = data.detail
+        self.data = data.moduleinfo
+        document.title = `统计-${self.data.title}`
+        self.clickindex = 0
+        self.clickTabitem = self.tabsdata[0]
+        self.swiperChange()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.module = this.query.module
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created: function () {
-    let self = this
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.module = self.query.module
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: self.module, action: 'stat', id: self.query.id
-    }).then(function (res) {
-      return self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
-          { params: { id: self.query.id } }
-      )
-    }).then(function (res) {
-      self.showcontainer = true
-      let data = res.data
-      self.statData = data.data ? data.data : data
-      self.tabsdata = data.detail
-      self.data = data.moduleinfo
-      document.title = `统计-${self.data.title}`
-      self.clickindex = 0
-      self.clickTabitem = self.tabsdata[0]
-      self.getdata()
-    })
+  activated () {
+    this.refresh()
   }
 }
 </script>

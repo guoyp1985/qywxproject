@@ -33,8 +33,8 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
-      query: Object,
+      loginUser: {},
+      query: {},
       disList: false,
       list: [],
       pagestart: 0,
@@ -63,6 +63,14 @@ export default {
         }
       })
     },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
     getData () {
       const self = this
       let params = { uid: self.loginUser.uid, moduleid: self.query.id, pagestart: self.pagestart, limit: self.limit }
@@ -77,21 +85,20 @@ export default {
         self.disList = true
       })
     },
-    getDateState: function (dt) {
-      return this.$util.getDateState(dt)
+    init () {
+      this.loginUser = User.get()
     },
-    getDateClass: function (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
+    refresh () {
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
   },
   created () {
-    const self = this
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$vux.loading.show()
-    self.getData()
+    this.init()
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

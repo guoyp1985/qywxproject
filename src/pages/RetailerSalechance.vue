@@ -18,12 +18,12 @@
           </div>
         </card>
       </div>
-      <tab v-model="tabmodel" class="v-tab">
+      <tab v-model="selectedIndex" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="pagemiddle bg-white pl12 pr12">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
             <template v-if="disdatalist1">
@@ -135,7 +135,7 @@ export default {
   },
   data () {
     return {
-      tabmodel: 0,
+      selectedIndex: 0,
       tabtxts: [ '分享', '浏览' ],
       viewdata: { orders: '0.00', share: 0, views: 0 },
       tabdata1: [],
@@ -155,24 +155,8 @@ export default {
       return this.tabdata2
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'salechance'
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`)
-    }).then(function (res) {
-      let data = res.data
-      if (data && data.flag === 1) {
-        self.viewdata = data.data
-      }
-      self.getdata1()
-    })
-  },
   methods: {
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1[0],
@@ -180,12 +164,12 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    handleScroll2: function () {
+    handleScroll2 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
@@ -193,47 +177,66 @@ export default {
           if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
             self.pagestart2++
             self.$vux.loading.show()
-            self.getdata2()
+            self.getData2()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        let data = res.data
+        const data = res.data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disdatalist1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { action: 'views', pagestart: self.pagestart2, limit: self.limit } }
+      const params = { params: { action: 'views', pagestart: self.pagestart2, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        let data = res.data
+        const data = res.data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disdatalist2 = true
       })
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getData2()
+          break
       }
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'salechance'
+      })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`))
+      .then(res => {
+        const data = res.data
+        if (data && data.flag === 1) {
+          self.viewdata = data.data
+        }
+        self.swiperChange()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

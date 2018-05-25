@@ -70,11 +70,14 @@ export default {
           self.$vux.toast.text(res.data.error)
         }
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initPay()
     }
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    this.initPay()
+  activated () {
+    this.refresh()
   }
 }
 </script>

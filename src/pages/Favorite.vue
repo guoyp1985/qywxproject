@@ -137,8 +137,8 @@ export default {
     }
   },
   methods: {
-    onItemClick (index) {
-      switch (index) {
+    onItemClick () {
+      switch (this.selectedIndex) {
         case 0:
           this.getArticles()
           break
@@ -206,16 +206,19 @@ export default {
       this.avatar = user.avatar
       this.name = user.linkman
       this.coins = user.credit
+      this.onItemClick()
+    },
+    refresh () {
+      this.getData()
     }
   },
   filters: {
-    dateFormat: function (isoDate) {
+    dateFormat (isoDate) {
       return `收藏时间: ${new Time(isoDate * 1000).dateFormat('yyyy-MM-dd hh:mm')}`
     }
   },
-  created () {
-    this.getData()
-    this.getArticles()
+  activated () {
+    this.refresh()
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div :class="`containerarea bg-white font14 product ${showtopcss}`">
     <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
+      <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
       <template v-show="isshowtop">
@@ -764,23 +764,6 @@ export default {
         }
       })
     },
-    createSocket () {
-      const uid = this.loginUser.uid
-      const linkman = this.loginUser.linkman
-      const room = query.id
-      Socket.create()
-      Socket.listening(uid, linkman, room)
-    },
-    createdFun () {
-      this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    },
-    activatedFun (query) {
-      this.$vux.loading.show()
-      this.loginUser = User.get()
-      this.query = query
-      this.getData()
-      this.createSocket()
-    },
     getData () {
       const self = this
       this.productid = this.query.id
@@ -889,7 +872,7 @@ export default {
           self.activitydata = retdata
         }
       })
-    }
+    },
     // wsConnect () {
     //   const self = this
     //   self.roomid = `${ENV.SocketBokaApi}-product-${self.query.id}`
@@ -943,12 +926,29 @@ export default {
     //     console.log('ws error')
     //   }
     // }
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      const room = this.query.id
+      Socket.create()
+      Socket.listening(uid, linkman, room)
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.query = this.$route.query
+      this.getData()
+      this.createSocket()
+    }
   },
   created () {
-    this.createdFun()
+    this.init()
   },
   activated () {
-    this.activatedFun(this.$route.query)
+    this.refresh()
   }
 }
 </script>

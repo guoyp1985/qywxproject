@@ -135,7 +135,7 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
+import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -144,7 +144,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup, CheckIcon, XImg, Search
+    Popup, CheckIcon, XImg, Search
   },
   filters: {
     dateformat: function (value) {
@@ -200,14 +200,14 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
-      let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit }
+      const params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -218,9 +218,9 @@ export default {
       self.$http.get(`${ENV.BokaApi}/api/list/news`, {
         params: params
       }).then(function (res) {
-        let data = res.data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
@@ -235,7 +235,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onSubmit1 () {
       const self = this
@@ -243,14 +243,14 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     controlpopup (item) {
       event.preventDefault()
       this.showpopup = !this.showpopup
       this.clickdata = item
     },
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1,
@@ -285,20 +285,20 @@ export default {
         }
       }
     },
-    tabitemclick (index) {
-      const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      }
-    },
+    // tabitemclick (index) {
+    //   const self = this
+    //   if (index === 0) {
+    //     if (self.tabdata1.length === 0) {
+    //       self.$vux.loading.show()
+    //       self.getData1()
+    //     }
+    //   } else if (index === 1) {
+    //     if (self.pagestart2 === 0 && !self.isBindScroll2) {
+    //       self.$vux.loading.show()
+    //       self.getdata2()
+    //     }
+    //   }
+    // },
     closepush () {
       this.showpush = false
       self.isBindCustomerScroll = false
@@ -352,23 +352,30 @@ export default {
         }
       }
     },
-    getDateState: function (dt) {
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'news'
+      }).then(res => {
+        self.getData1()
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'news'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
+  }, 
+  activated () {
+    this.refresh()
   }
 }
 </script>

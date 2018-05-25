@@ -52,7 +52,7 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      // query: Object,
       disList: false,
       list: [],
       pagestart: 0,
@@ -81,34 +81,34 @@ export default {
         }
       })
     },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
     getData () {
       const self = this
-      let params = { pagestart: self.pagestart, limit: self.limit }
-      this.$http.get(`${ENV.BokaApi}/api/user/shareList`, {
-        params: params
-      })
+      const params = { pagestart: self.pagestart, limit: self.limit }
+      this.$http.get(`${ENV.BokaApi}/api/user/shareList`, { params: params })
       .then(res => {
         self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.list = self.list.concat(retdata)
         self.disList = true
       })
     },
-    getDateState: function (dt) {
-      return this.$util.getDateState(dt)
-    },
-    getDateClass: function (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.$vux.loading.show()
-    self.getData()
+  activated () {
+    this.refresh()
   }
 }
 </script>

@@ -64,8 +64,8 @@ export default {
   },
   data () {
     return {
-      query: Object,
-      viewuser: Object,
+      query: {},
+      viewuser: {},
       data: [],
       disdatalist: false
     }
@@ -73,33 +73,36 @@ export default {
   computed: {
   },
   methods: {
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'timeline' })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } } ))
+      .then(res => {
+        const data = res.data
+        if (data) {
+          self.viewuser = data.data ? data.data : data
+          document.title = `${self.viewuser.linkman}的行为`
+        }
+        const params = { params: { uid: self.query.uid } }
+        return self.$http.get(`${ENV.BokaApi}/api/user/timeLine`, params)
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.data = retdata
+        self.disdatalist = true
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.query = this.$route.query
+      this.getData()
+    }
   },
-  created: function () {
-    let self = this
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'timeline'
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      )
-    }).then(function (res) {
-      let data = res.data
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}的行为`
-      }
-      let params = { params: { uid: self.query.uid } }
-      return self.$http.get(`${ENV.BokaApi}/api/user/timeLine`, params)
-    }).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      let retdata = data.data ? data.data : data
-      self.data = retdata
-      self.disdatalist = true
-    })
+  activated () {
+    this.getData()
   }
 }
 </script>

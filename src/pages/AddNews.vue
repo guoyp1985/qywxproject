@@ -2,7 +2,7 @@
   <div id="article-info-edit" class="font14">
     <group label-width="5em">
       <group class="textarea-outer">
-        <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+        <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
       </group>
       <cell :title="$t('Cover photo')" class="font14">
         {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
@@ -179,36 +179,41 @@ export default {
     },
     popupCancel () {
       this.popupShow = false
-    }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.query = self.$route.query
-    if (self.query.id) {
-      document.title = '更多设置'
-      self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-        params: { id: self.query.id, module: 'news' }
-      }).then(function (res) {
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        if (retdata) {
-          for (let key in self.submitdata) {
-            self.submitdata[key] = retdata[key]
-          }
-          if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
-            let parr = self.submitdata.photo.split(',')
-            for (let i = 0; i < parr.length; i++) {
-              self.photoarr.push(self.$util.getPhoto(parr[i]))
+    },
+    getData () {
+      if (this.query.id) {
+        const self = this
+        // document.title = '更多设置'
+        this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+          params: { id: this.query.id, module: 'news' }
+        })
+        .then(function (res) {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata) {
+            for (let key in self.submitdata) {
+              self.submitdata[key] = retdata[key]
+            }
+            if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
+              const parr = self.submitdata.photo.split(',')
+              for (let i = 0; i < parr.length; i++) {
+                self.photoarr.push(self.$util.getPhoto(parr[i]))
+              }
             }
           }
-        }
-      })
-    } else {
-      if (self.photoarr.length > 0) {
-        self.submitdata.photo = self.$util.setPhoto(self.photoarr[0])
+        })
+      } else if (this.photoarr.length > 0) {
+        this.submitdata.photo = this.$util.setPhoto(this.photoarr[0])
       }
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

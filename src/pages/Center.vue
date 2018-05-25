@@ -130,66 +130,33 @@ export default {
       } else {
         btn.react()
       }
-    }
-  },
-  created () {
-    const user = User.get()
-    if (user) {
-      this.avatarHref = user.avatar
-      this.linkMan = user.linkman
-      this.userCredits = user.credit
-      this.userLevels = user.levels
-      this.messages = user.messages
-      this.profile = {
-        linkman: user.linkman,
-        avatar: user.avatar,
-        sex: user.sex,
-        mobile: user.mobile,
-        company: user.company
-      }
-    } else {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`)
-    }
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    /*
-    if (self.$util.isPC()) {
-      self.btns1.push({
-        name: 'Exit',
-        icon: 'al-tuichu3',
-        color: 'color-exit',
-        react: function () {
-          Token.remove()
-          User.remove()
-          // if (self.$util.isAndroid()) {
-          // }
-          if (self.$util.isPC()) {
-            self.$router.push({name: 'tLogin'})
-          } else {
-            self.$router.push({name: 'tIndex'})
-          }
+    },
+    getData () {
+      const user = User.get()
+      if (user) {
+        this.avatarHref = user.avatar
+        this.linkMan = user.linkman
+        this.userCredits = user.credit
+        this.userLevels = user.levels
+        this.messages = user.messages
+        this.profile = {
+          linkman: user.linkman,
+          avatar: user.avatar,
+          sex: user.sex,
+          mobile: user.mobile,
+          company: user.company
         }
-      })
+      } else {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      this.getData()
     }
-    */
   },
   activated () {
-    const user = User.get()
-    if (user) {
-      this.avatarHref = user.avatar
-      this.linkMan = user.linkman
-      this.userCredits = user.credit
-      this.userLevels = user.levels
-      this.messages = user.messages
-      this.profile = {
-        linkman: user.linkman,
-        avatar: user.avatar,
-        sex: user.sex,
-        mobile: user.mobile,
-        company: user.company
-      }
-    } else {
-      this.$http.get(`${ENV.BokaApi}/api/user/show`)
-    }
+    this.refresh()
   }
 }
 </script>

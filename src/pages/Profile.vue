@@ -21,21 +21,6 @@
   </div>
 </template>
 
-<i18n>
-Sync From Wx:
-  zh-CN: 同步微信资料
-Name:
-  zh-CN: 姓名
-Gendar:
-  zh-CN: 性别
-Company Name:
-  zh-CN: 公司名
-Cell Phone Number:
-  zh-CN: 手机
-Confirm:
-  zh-CN: 确认
-</i18n>
-
 <script>
 import { Group, Cell, Box, XInput, PopupRadio, XButton, XImg } from 'vux'
 import ENV from 'env'
@@ -80,14 +65,6 @@ export default {
         }
       }
     }
-  },
-  created () {
-    if (this.$route.params.profile) {
-      this.getProfile = this.$route.params.profile
-    } else {
-      this.getProfile = User.get()
-    }
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   methods: {
     syncWxProfile () {
@@ -137,7 +114,19 @@ export default {
     },
     onCancel () {
       this.$router.go(-1)
+    },
+    init () {
+      this.getProfile = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
+  },
+  created () {
+    this.init()
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

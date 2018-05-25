@@ -1,3 +1,6 @@
+/*
+ * 已废弃
+*/
 <template>
   <div v-show="showcontainer" class="containerarea font14 bg-white retailerapply notop">
     <div class="pagemiddle bg-white" style="bottom: 50px;">
@@ -380,7 +383,7 @@ export default {
   },
   created () {
     const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.$vux.loading.show()
     self.loginUser = User.get()
     let iscontinue = true

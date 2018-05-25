@@ -359,12 +359,15 @@ export default {
             break
         }
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.toggleTab()
     }
   },
-  created () {
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    this.$vux.loading.show()
-    this.getData()
+  activated () {
+    this.refresh()
   }
 }
 </script>

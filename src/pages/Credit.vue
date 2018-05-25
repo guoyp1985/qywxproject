@@ -73,9 +73,17 @@ export default {
         }
       })
     },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
     getData () {
       const self = this
-      let params = { pagestart: self.pagestart, limit: self.limit }
+      const params = { pagestart: this.pagestart, limit: this.limit }
       this.$http.get(`${ENV.BokaApi}/api/user/creditsList`, {
         params: params
       })
@@ -87,19 +95,13 @@ export default {
         self.disList = true
       })
     },
-    getDateState: function (dt) {
-      return this.$util.getDateState(dt)
-    },
-    getDateClass: function (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
+    refresh () {
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created () {
-    const self = this
-    self.$vux.loading.show()
-    self.getData()
+  activated () {
+    this.refresh()
   }
 }
 </script>

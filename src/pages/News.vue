@@ -298,18 +298,18 @@ export default {
     },
     getData () {
       const self = this
-      const id = self.query.id
-      let infoparams = { id: id, module: self.module }
-      if (self.query.from === 'poster') {
+      const id = this.query.id
+      const infoparams = { id: id, module: this.module }
+      if (this.query.from === 'poster') {
         infoparams.from = 'poster'
       }
-      if (self.query.share_uid) {
+      if (this.query['share_uid']) {
         infoparams['share_uid'] = self.query.share_uid
       }
-      self.$vux.loading.show()
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
-        let data = res.data
+        const data = res.data
         if (!isNaN(data.flag)) {
           self.$vux.loading.hide()
           if (data.flag !== 1) {
@@ -338,23 +338,20 @@ export default {
             })
           }
         }
-      }).then(function (res) {
-        self.handleImg()
-        if (res) {
-          let data = res.data
-          if (data.flag === 1) {
-            self.isdig = 1
-          }
-          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
-        }
       })
       .then(res => {
-        if (res) {
-          if (res.data.flag < 1) {
-            self.notFavorite = true
-          } else {
-            self.notFavorite = false
-          }
+        self.handleImg()
+        const data = res.data
+        if (data.flag === 1) {
+          self.isdig = 1
+        }
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
+      })
+      .then(res => {
+        if (res.data.flag < 1) {
+          self.notFavorite = true
+        } else {
+          self.notFavorite = false
         }
       })
     },
@@ -493,33 +490,22 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = query.id
+      const room = this.query.id
       Socket.create()
       Socket.listening(uid, linkman, room)
     },
-    createdFun (query) {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      // this.query = query
+    init () {
       this.loginUser = User.get()
-      this.activatedFun(query)
-      // alert(JSON.stringify(this.loginUser))
-      // this.wsConnect()
-      // this.showsharetip = false
-      // this.getData()
-      // const self = this
-      // if (this.query.newadd) {
-      //   setTimeout(function () {
-      //     self.showsharetip = false
-      //   }, 10000)
-      // }
     },
-    activatedFun (query) {
-      this.query = query
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.showsharetip = false
-      this.createSocket()
       this.getData()
+      this.createSocket()
       if (this.query.newadd) {
-        setTimeout(function () {
+        const self = this
+        setTimeout(() => {
           self.showsharetip = false
         }, 10000)
       }
@@ -583,14 +569,14 @@ export default {
     }
   },
   created () {
-    this.createdFun(this.$route.query)
+    this.init()
   },
   activated () {
-    this.activatedFun(this.$route.query)
+    this.refresh()
   }
   // beforeRouteUpdate (to, from, next) {
   //   const self = this
-  //   self.createdFun(to, from, next)
+  //   self.init(to, from, next)
   // }
 }
 </script>

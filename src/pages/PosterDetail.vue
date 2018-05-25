@@ -21,24 +21,32 @@ export default {
   },
   data () {
     return {
-      query: Object,
-      data: Object
+      query: {},
+      data: {}
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'posterdetail'
-    }).then(function () {
-      return self.$http.post(`${ENV.BokaApi}/api/retailer/getPoster`)
-    }).then(function (res) {
-      let data = res.data
-      self.$vux.loading.hide()
-      self.data = data.data ? data.data : data
-    })
+  methods : {
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'posterdetail'
+      }).then(function () {
+        return self.$http.post(`${ENV.BokaApi}/api/retailer/getPoster`)
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        self.data = data.data ? data.data : data
+      })
+    },
+    refresh (query) {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
+    }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

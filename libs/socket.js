@@ -8,16 +8,16 @@ const Socket = {
       console.error('WS: ws undefined')
       return
     }
-    ws.onopen = function () {
-      let loginData = {
+    ws.onopen = () => {
+      const loginData = {
         type: 'login',
         uid: uid,
         client_name: linkman.replace(/"/g, '\\"'),
         room_id: roomId
       }
-      ws.send(JSON.stringify(loginData))
+      Socket.send(loginData)
     }
-    ws.onmessage = function (e) {
+    ws.onmessage = e => {
       const data = JSON.parse(e.data)
       if (data.type === 'login') {
         console.info('WS: Login')
@@ -46,19 +46,22 @@ const Socket = {
         callback && callback(sendMessage)
       }
     }
-    ws.onclose = function () {
+    ws.onclose = () => {
       console.info('WS: Closed')
-      self.wsConnect()
+      Socket.listening(room, uid, linkman, callback)
     }
-    ws.onerror = function () {
+    ws.onerror = () => {
       console.info('WS: Connecting Error')
     }
   },
+  send: (data) => {
+    ws.send(JSON.stringify(data))
+  },
   destory: () => {
-    ws.send(JSON.stringify({
+    Socket.send({
       type: 'logout',
       room_id: room
-    }))
+    })
     ws = null
   }
 }
