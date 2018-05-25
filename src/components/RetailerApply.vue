@@ -61,11 +61,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-<<<<<<< HEAD:src/pages/RetailerApply.vue
-            <checker-item class="border1px color-gray" v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
-=======
-            <checker-item v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
->>>>>>> 310cc7d696014b2a278fc586edeb568da9bdc492:src/components/RetailerApply.vue
+            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
@@ -445,7 +441,7 @@ export default {
   box-sizing: border-box;
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
-.retailerapply .vux-check-icon > span{color:#666;vertical-align:bottom;}
+.retailerapply .vux-check-icon > span{color:#666;display: inline-block;line-height: 19px;}
 .retailerapply .pagebottom{background-color:#fff;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
