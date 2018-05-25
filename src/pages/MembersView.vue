@@ -162,8 +162,9 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
-      loginUser: Object,
+      loginUser: {},
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -364,43 +365,58 @@ export default {
             if (data.flag === 1) {
               self.viewuser.intention = self.userIntention
               self.viewuser.intentiondesc = self.intentionObject[self.userIntention]
-              // self.userIntentionDesc = self.intentionObject[self.userIntention]
             }
           }
         })
+      })
+    },
+    initInfo () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+        { params: { customeruid: self.query.uid } }
+      ).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+          return false
+        }
+        if (data) {
+          self.viewuser = data.data ? data.data : data
+          self.imgarr[0].msrc = self.viewuser.avatar
+          self.imgarr[0].src = self.viewuser.avatar
+          self.wximgarr[0] = self.viewuser.avatar
+          document.title = self.viewuser.linkman
+          self.userIntention = self.viewuser.intention
+        }
+        self.showContainer = true
+        self.showSos = false
       })
     }
   },
   created: function () {
     const self = this
+    self.doCreated = true
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.loginUser = User.get()
     self.$vux.loading.show()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'membersview', id: self.query.uid
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      )
     }).then(function (res) {
-      self.$vux.loading.hide()
-      let data = res.data
-      if (data.flag !== 1) {
-        self.sosTitle = data.error
-        self.showSos = true
-        return false
+      if (res.status === 200) {
+        self.initInfo()
       }
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        self.imgarr[0].msrc = self.viewuser.avatar
-        self.imgarr[0].src = self.viewuser.avatar
-        self.wximgarr[0] = self.viewuser.avatar
-        document.title = self.viewuser.linkman
-        self.userIntention = self.viewuser.intention
-      }
-      self.showContainer = true
     })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && !self.viewuser.uid) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>
