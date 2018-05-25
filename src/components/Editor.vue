@@ -33,7 +33,7 @@
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-          <div ref="scrollProduct" @scroll="scrollHandle2" class="popup-middle">
+          <div ref="scrollProduct" @scroll="handleScroll('scrollProduct','product')" class="popup-middle">
             <search
               class="x-search"
               v-model="searchword"
@@ -112,7 +112,7 @@
               </check-icon>
             </div>
           </div>
-          <div ref="scrollCustomer" @scroll="scrollHandle1" class="popup-middle font14" style="top:85px;bottom:86px;">
+          <div ref="scrollCustomer" @scroll="handleScroll('scrollCustomer','customer')" class="popup-middle font14" style="top:85px;bottom:86px;">
             <div class="padding10">
               <div v-if="disCustomerData" class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -283,17 +283,45 @@ export default {
         }
       }
     },
-    scrollHandle1 () {
+    handleScroll: function (refname, type) {
       const self = this
-      this.$util.scrollEvent({
-        element: this.$refs.scrollCustomer,
-        callback: () => {
-          if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
-            self.customerPagestart++
-            self.$vux.loading.show()
-            self.getCustomerdata()
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (type === 'product') {
+            if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getProductData()
+            }
+          } else if (type === 'customer') {
+            if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
+              self.customerPagestart++
+              self.$vux.loading.show()
+              self.getCustomerdata()
+            }
           }
         }
+      })
+    },
+    getProductData () {
+      const self = this
+      let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
+      let keyword = self.searchword
+      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+        params.params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
+          self.searchresult = true
+        } else {
+          self.searchresult = false
+        }
+        let retdata = data.data ? data.data : data
+        self.productdata = self.productdata.concat(retdata)
       })
     },
     getCustomerdata () {
@@ -367,7 +395,9 @@ export default {
         insertProductCallback: function (callback) {
           self.insertProductCallback = callback
           self.showpopup = true
-          self.getProductData()
+          if (self.productdata.length === 0) {
+            self.getProductData()
+          }
         }
       })
     },
@@ -436,38 +466,6 @@ export default {
       self.productdata = []
       self.pagestart1 = 0
       self.getProductData()
-    },
-    scrollHandle2 () {
-      const self = this
-      this.$util.scrollEvent({
-        element: this.$refs.scrollProduct,
-        callback: () => {
-          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getProductData()
-          }
-        }
-      })
-    },
-    getProductData () {
-      const self = this
-      let params = { params: { from: 'activity', pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword
-      if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-        params.params.keyword = keyword
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
-          self.searchresult = true
-        } else {
-          self.searchresult = false
-        }
-        let retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
-      })
     },
     selectevent () {
       const self = this

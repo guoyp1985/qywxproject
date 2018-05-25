@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
+    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -100,7 +100,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollCustomer" @scroll="handleScroll1">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollCustomer" @scroll="handleScroll('scrollCustomer', 'customer')">
             <div class=" pt10 pb10 pl12 pr12">
               <div v-show="discustomerdata" class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -158,6 +158,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       productdata: [],
       controldata1: [
         { key: 'edit', title: '编辑' },
@@ -180,15 +181,6 @@ export default {
       discustomerdata: false
     }
   },
-  created: function () {
-    let self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'productlist'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   watch: {
     productdata: function () {
       return this.productdata
@@ -203,15 +195,24 @@ export default {
     getPhoto: function (src) {
       return this.$util.getPhoto(src)
     },
-    handleScroll: function () {
+    handleScroll: function (refname, type) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
+        element: scrollarea,
         callback: function () {
-          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
+          if (type === 'product') {
+            if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getdata1()
+            }
+          } else if (type === 'customer') {
+            if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
+              self.customerPagestart++
+              self.$vux.loading.show()
+              self.getCustomerdata()
+            }
           }
         }
       })
@@ -296,19 +297,6 @@ export default {
         self.showpopup1 = false
       }
     },
-    handleScroll1: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollCustomer,
-        callback: function () {
-          if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
-            self.customerPagestart++
-            self.$vux.loading.show()
-            self.getCustomerdata()
-          }
-        }
-      })
-    },
     getCustomerdata () {
       const self = this
       self.$vux.loading.show()
@@ -373,7 +361,29 @@ export default {
           delete self.customerdata[i].checked
         }
       }
+    },
+    initInfo () {
+      const self = this
+      self.getdata1()
     }
+  },
+  created: function () {
+    let self = this
+    self.doCreated = true
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$vux.loading.show()
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'productlist'
+    }).then(function () {
+      self.getdata1()
+    })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>
