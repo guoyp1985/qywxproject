@@ -143,6 +143,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       selectedIndex: 0,
       list: [],
       list1: [],
@@ -191,17 +192,29 @@ export default {
     },
     bringCustomerClick () {
       this.$router.push({path: '/bringCustomer'})
+    },
+    getRebateInfo () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`)
+      .then(res => {
+        self.rebateInfo = res.data
+      })
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$vux.loading.show()
-    this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`)
-    .then(res => {
-      self.rebateInfo = res.data
-    })
+    self.getRebateInfo()
     this.getMyRetailer()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      !self.list.length && self.getMyRetailer()
+    }
+    self.doCreated = false
   }
 }
 </script>

@@ -81,6 +81,7 @@ export default {
   data () {
     const self = this
     return {
+      doCreated: false,
       btns: [
         {
           name: 'To Recommend',
@@ -165,12 +166,10 @@ export default {
       } else {
         btn.react()
       }
-    }
-  },
-  created () {
-    const self = this
-    const user = User.get()
-    if (user) {
+    },
+    setInfo () {
+      const self = this
+      const user = User.get()
       self.avatarHref = user.avatar
       self.linkMan = user.linkman
       self.userCredits = user.credit
@@ -183,30 +182,34 @@ export default {
         mobile: user.mobile,
         company: user.company
       }
-    } else {
-      self.$http.get(`${ENV.BokaApi}/api/user/show`)
-    }
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    /*
-    if (self.$util.isPC()) {
-      self.btns1.push({
-        name: 'Exit',
-        icon: 'al-tuichu3',
-        color: 'color-exit',
-        react: function () {
-          Token.remove()
-          User.remove()
-          // if (self.$util.isAndroid()) {
-          // }
-          if (self.$util.isPC()) {
-            self.$router.push({name: 'tLogin'})
-          } else {
-            self.$router.push({name: 'tIndex'})
+    },
+    initInfo () {
+      const self = this
+      const user = User.get()
+      if (user && user.uid) {
+        self.setInfo()
+      } else {
+        self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+          if (res.status === 200) {
+            User.set(res.data)
+            self.setInfo()
           }
-        }
-      })
+        })
+      }
     }
-    */
+  },
+  created () {
+    const self = this
+    self.doCreated = true
+    self.initInfo()
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>

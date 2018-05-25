@@ -109,6 +109,8 @@ export default {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
+  },
+  activated () {
   }
 }
 </script>

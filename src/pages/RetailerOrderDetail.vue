@@ -1,117 +1,123 @@
 <template>
   <div id="order-detail" :class="`containerarea notop rorderdetail bg-page color-gray5 font14 ${bottomcss}`">
-    <div class="pagemiddle scroll-container">
-      <div v-if="data.seller && data.seller.username">
-        <div class="b_bottom_after padding10 bg-white">
-          <div class="t-table">
-            <div class="t-cell w100">返点客：</div>
-            <div class="t-cell sellername align_right clamp1">
-              <div class="clamp1">{{ data.seller.username }}</div>
-            </div>
-          </div>
-        </div>
-        <div style="height:10px;"></div>
-      </div>
-      <div class="bg-white b_bottom_after padding10">
-        <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
-      </div>
-      <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
-        <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
-          <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
-          <div class="t-cell v_middle align_right w60">
-            <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
-          </div>
-        </div>
-        <div class="t-table">
-          <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
-          <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
-        </div>
-        <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
-        <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
-      </div>
-      <div class="mt10 bg-white padding10 b_bottom_after">
-        <div class="t-table">
-          <div class="t-cell">创建时间：{{ data.dateline | dateformat }}</div>
-          <div class="t-cell w60 align_right color-orange5">{{ data.flagstr }}</div>
-        </div>
-      </div>
-      <div class="bg-white">
-        <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
-          <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagemiddle scroll-container">
+        <div v-if="data.seller && data.seller.username">
+          <div class="b_bottom_after padding10 bg-white">
             <div class="t-table">
-              <div class="t-cell v_middle w60 algin_left">
-                <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container"></x-img>
-              </div>
-              <div class="t-cell v_top">
-                <div class="clamp2 font12 align_left">{{ item.name }}</div>
-              </div>
-              <div class="t-cell align_right w90">
-                <div>{{ $t('RMB') }}{{ item.special }}</div>
-                <div class="color-gray">× <span class="font12">{{ item.quantity }}</span></div>
+              <div class="t-cell w100">返点客：</div>
+              <div class="t-cell sellername align_right clamp1">
+                <div class="clamp1">{{ data.seller.username }}</div>
               </div>
             </div>
-          </router-link>
+          </div>
+          <div style="height:10px;"></div>
         </div>
-        <div class="align_right padding10 flex_right">
-          <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
+        <div class="bg-white b_bottom_after padding10">
+          <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
         </div>
-      </div>
-      <div class="align_right">
-        <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
+        <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
+          <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
+            <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
+            <div class="t-cell v_middle align_right w60">
+              <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
+            </div>
+          </div>
           <div class="t-table">
-            <div class="t-cell v_middle align_right cancelarea">
-              <div v-if="data.flag == 0" class="color-red">交易已关闭</div>
-              <div v-else class="db-in color-blue" @click="cancelorder">关闭交易</div>
-            </div>
-            <router-link v-if="data.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: data.id}}" >修改订单</router-link>
+            <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
+            <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
+          </div>
+          <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
+          <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
+        </div>
+        <div class="mt10 bg-white padding10 b_bottom_after">
+          <div class="t-table">
+            <div class="t-cell">创建时间：{{ data.dateline | dateformat }}</div>
+            <div class="t-cell w60 align_right color-orange5">{{ data.flagstr }}</div>
           </div>
         </div>
-        <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
+        <div class="bg-white">
+          <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
+            <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
+              <div class="t-table">
+                <div class="t-cell v_middle w60 algin_left">
+                  <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container"></x-img>
+                </div>
+                <div class="t-cell v_top">
+                  <div class="clamp2 font12 align_left">{{ item.name }}</div>
+                </div>
+                <div class="t-cell align_right w90">
+                  <div>{{ $t('RMB') }}{{ item.special }}</div>
+                  <div class="color-gray">× <span class="font12">{{ item.quantity }}</span></div>
+                </div>
+              </div>
+            </router-link>
+          </div>
+          <div class="align_right padding10 flex_right">
+            <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
+          </div>
+        </div>
+        <div class="align_right">
+          <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
+            <div class="t-table">
+              <div class="t-cell v_middle align_right cancelarea">
+                <div v-if="data.flag == 0" class="color-red">交易已关闭</div>
+                <div v-else class="db-in color-blue" @click="cancelorder">关闭交易</div>
+              </div>
+              <router-link v-if="data.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: data.id}}" >修改订单</router-link>
+            </div>
+          </div>
+          <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
+        </div>
       </div>
-    </div>
-    <div v-if="data.flag == 2" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
-    <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
-    <div v-transfer-dom class="x-popup popup-deliver">
-      <popup v-model="showpopup" height="100%">
-        <div class="popup1 font14">
-          <div class="popup-top flex_center">发货</div>
-          <div class="popup-middle">
-            <div class="scroll_list">
-              <div class="scroll_item padding10">
-                <div class="t-table">
-                  <div class="t-cell w80">物流<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <div class="t-cell">
-                    <select class="qselect" v-model="deliverdata.delivercompany">
-                      <option v-for="(item,index) in delivercompany" :key='item.id' :value="item.id">{{ item.name }}</option>
-                    </select>
+      <div v-if="data.flag == 2" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
+      <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
+      <div v-transfer-dom class="x-popup popup-deliver">
+        <popup v-model="showpopup" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">发货</div>
+            <div class="popup-middle">
+              <div class="scroll_list">
+                <div class="scroll_item padding10">
+                  <div class="t-table">
+                    <div class="t-cell w80">物流<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                    <div class="t-cell">
+                      <select class="qselect" v-model="deliverdata.delivercompany">
+                        <option v-for="(item,index) in delivercompany" :key='item.id' :value="item.id">{{ item.name }}</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div v-if="deliverdata.delivercompany != '-1'" class="scroll_item padding10 form-item">
-                <div class="t-table">
-                  <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
-                  <div class="t-cell">
-                    <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
-                  </div>
-                  <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
-                    <i class="al al-scanning color-blue"></i>
+                <div v-if="deliverdata.delivercompany != '-1'" class="scroll_item padding10 form-item">
+                  <div class="t-table">
+                    <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+                    <div class="t-cell">
+                      <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
+                    </div>
+                    <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
+                      <i class="al al-scanning color-blue"></i>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
+              <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+            </div>
           </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
-            <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
-          </div>
-        </div>
-      </popup>
-    </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 <script>
 import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -120,7 +126,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos
   },
   filters: {
     dateformat: function (value) {
@@ -129,6 +135,10 @@ export default {
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '该订单不存在',
+      showContainer: false,
+      doCreated: false,
       query: {},
       data: {},
       totalPrice: '0.00',
@@ -136,36 +146,6 @@ export default {
       showpopup: false,
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' }
-    }
-  },
-  created: function () {
-    let self = this
-    self.query = self.$route.query
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'orderdetail', id: self.query.id
-    })
-    if (self.query.id) {
-      self.$vux.loading.show()
-      self.deliverdata.id = self.query.id
-      let params = { params: { id: self.query.id } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, params).then(function (res) {
-        self.$vux.loading.hide()
-        self.data = res.data.data ? res.data.data : res.data
-        if (self.data.flag !== 2) {
-          self.bottomcss = 'nobottom'
-        }
-        let total = 0
-        for (let i = 0; i < self.data.orderlist.length; i++) {
-          let o = self.data.orderlist[i]
-          total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
-        }
-        self.totalPrice = total.toFixed(2)
-        if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
-          self.deliverdata.delivercompany = self.data.delivercompany
-          self.deliverdata.delivercode = self.data.delivercode
-        }
-      })
     }
   },
   watch: {
@@ -278,7 +258,66 @@ export default {
           })
         }
       })
+    },
+    initInfo () {
+      const self = this
+      if (self.query.id) {
+        self.$vux.loading.show()
+        self.deliverdata.id = self.query.id
+        let params = { params: { id: self.query.id } }
+        self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, params).then(function (res) {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+            self.showContainer = false
+          } else {
+            self.data = data.data
+            if (self.data.length === 0) {
+              self.showSos = true
+              self.showContainer = false
+            } else {
+              self.showSos = false
+              self.showContainer = true
+              if (self.data.flag !== 2) {
+                self.bottomcss = 'nobottom'
+              }
+              let total = 0
+              for (let i = 0; i < self.data.orderlist.length; i++) {
+                let o = self.data.orderlist[i]
+                total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
+              }
+              self.totalPrice = total.toFixed(2)
+              if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
+                self.deliverdata.delivercompany = self.data.delivercompany
+                self.deliverdata.delivercode = self.data.delivercode
+              }
+            }
+          }
+        })
+      }
     }
+  },
+  created: function () {
+    const self = this
+    self.doCreated = true
+    self.query = self.$route.query
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'orderdetail', id: self.query.id
+    }).then(function (res) {
+      if (res.status === 200) {
+        self.initInfo()
+      }
+    })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && self.data.length === 0) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>

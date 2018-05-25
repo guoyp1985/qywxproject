@@ -1,11 +1,8 @@
 <template>
   <div class="containerarea bg-white font14 rsharelist">
     <div class="s-topbanner s-topbanner1">
-      <div class="row">
-        <div class="bg"></div>
-        <div class="flex_center h_100">
-          <div class="flex_cell font18 pl20">{{ viewuser.linkman }}的{{$t('Views')}}</div>
-        </div>
+      <div class="flex_center h_100 toprow">
+        <div class="flex_cell font16 pl20 color-white">{{ viewuser.linkman }}的{{$t('Views')}}</div>
       </div>
     </div>
     <div class="s-container s-container1">
@@ -26,11 +23,9 @@
           <template v-else>暂无浏览数据</template>
         </div>
         <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
-          <div class="t-table">
-            <div class="t-cell v_middle" style="width:50px;height:50px;">
-              <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container"></x-img>
-            </div>
-            <div class="t-cell v_middle">
+          <div class="flex_left">
+            <x-img class="imgcover avatarimg2 radius0" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+            <div class="flex_cell pl10">
               <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
               <div class="clamp1 color-gray font12">浏览次数: {{ item.number }}</div>
               <div class="clamp1 color-gray font12">停留时间: {{ item.staytime | staytimeFormat }}</div>

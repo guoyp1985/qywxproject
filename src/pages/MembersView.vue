@@ -4,26 +4,20 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="v-top">
-        <div class="pl5 pr5">
-          <div class="t-table">
-            <div class="t-cell v_middle w65">
-              <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
-              <div v-transfer-dom>
-                <previewer :list="imgarr" ref="previewer"></previewer>
-              </div>
-            </div>
-            <div class="t-cell v_middle color-white">
-              <div class="font17 clamp1">{{ viewuser.linkman }}</div>
-              <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
-            </div>
-            <div class="t-cell v_middle color-white w80 align_right">
-              <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
-            </div>
+      <div class="s-topbanner flex_left pl15 pr15 border-box">
+        <div class="">
+          <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" @click="showBigimg(0)"></x-img>
+          <div v-transfer-dom>
+            <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
         </div>
+        <div class="flex_cell pl10 pr20 color-white">
+          <div class="font16 clamp1">{{ viewuser.linkman }}</div>
+          <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
+        </div>
+        <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       </div>
-      <div class="v-container">
+      <div class="s-container">
         <div class="list-shadow">
           <div class="b_top_after flex_center bg-white h50">
             <div class="t-table align_center color-red4">
@@ -168,8 +162,9 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
-      loginUser: Object,
+      loginUser: {},
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -370,43 +365,58 @@ export default {
             if (data.flag === 1) {
               self.viewuser.intention = self.userIntention
               self.viewuser.intentiondesc = self.intentionObject[self.userIntention]
-              // self.userIntentionDesc = self.intentionObject[self.userIntention]
             }
           }
         })
+      })
+    },
+    initInfo () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+        { params: { customeruid: self.query.uid } }
+      ).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+          return false
+        }
+        if (data) {
+          self.viewuser = data.data ? data.data : data
+          self.imgarr[0].msrc = self.viewuser.avatar
+          self.imgarr[0].src = self.viewuser.avatar
+          self.wximgarr[0] = self.viewuser.avatar
+          document.title = self.viewuser.linkman
+          self.userIntention = self.viewuser.intention
+        }
+        self.showContainer = true
+        self.showSos = false
       })
     }
   },
   created: function () {
     const self = this
+    self.doCreated = true
     this.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.loginUser = User.get()
     self.$vux.loading.show()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'membersview', id: self.query.uid
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      )
     }).then(function (res) {
-      self.$vux.loading.hide()
-      let data = res.data
-      if (data.flag !== 1) {
-        self.sosTitle = data.error
-        self.showSos = true
-        return false
+      if (res.status === 200) {
+        self.initInfo()
       }
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        self.imgarr[0].msrc = self.viewuser.avatar
-        self.imgarr[0].src = self.viewuser.avatar
-        self.wximgarr[0] = self.viewuser.avatar
-        document.title = self.viewuser.linkman
-        self.userIntention = self.viewuser.intention
-      }
-      self.showContainer = true
     })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && !self.viewuser.uid) {
+      self.initInfo()
+    }
+    self.doCreated = false
   }
 }
 </script>

@@ -862,7 +862,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .page-padding-bottom{padding-bottom: 53px;}
 .no-after:after{display: none !important;}
-.border1px{position:relative;width:100%;}
+.border1px{position:relative;}
 .border1px:after{content:" ";width:200%;height:200%;position:absolute;top:0;left:0;border:1px solid @list-border-color;transform:scale(0.5);-webkit-transform-origin:0 0;-ms-transform-origin:0 0;transform-origin:0 0;box-sizing:border-box;border-radius:@list-border-radius10;pointer-events:none;}
 .v-tab .vux-tab {height: 44px;}
 .v-tab .vux-tab .vux-tab-item{line-height: 44px;}
@@ -874,6 +874,18 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
     border-bottom: 3px solid #ea3a3a;
 }
 .v-tab .vux-tab-ink-bar{background-color:#ea3a3a;}
+
+.b-tab .vux-tab {height: 44px;}
+.b-tab .vux-tab .vux-tab-item{line-height: 44px;}
+.b-tab .vux-tab .vux-tab-item{border-bottom:none;color:#666;}
+.b-tab .vux-tab .vux-tab-item.vux-tab-selected{color: #208cef;border-bottom: none;}
+.b-tab .vux-tab .vux-tab-item.vux-tab-selected {
+    color: #208cef;
+    border-bottom: none;
+    border-bottom: 3px solid #208cef;
+}
+.b-tab .vux-tab-ink-bar{background-color:#208cef;}
+
 .v-search{background-color:#fff;}
 .v-search .weui-search-bar{padding: 10px 12px;height: 55px;background-color:transparent;}
 .v-search .weui-search-bar:before{display: none;}
@@ -901,8 +913,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
   margin-bottom: 5px;
   box-sizing: border-box;
 }
-
-.weui-btn:after {-webkit-transform: scale(0491) !important;transform: scale(0.491) !important;}
 
 .swiper-inner{position:absolute;left:0;top:0;right:0;bottom:0;overflow-y:auto;}
 

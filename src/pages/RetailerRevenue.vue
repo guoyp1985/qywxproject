@@ -1,20 +1,18 @@
 <template>
   <div class="containerarea font14 retailerrevenue bg-page">
-    <div class="pagetop" style="height:88px;">
-      <div class="v-top" style="height:44px;">
-        <div class="flex_center">
-          <div class="flex_cell color-white">{{$t('Myrevenue')}}</div>
-          <div class="align_right" style="width:150px;">
-            <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
-          </div>
+    <div class="s-topbanner bg-white">
+      <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
+        <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
+        <div class="align_right" style="width:150px;">
+          <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
-      <tab v-model="tabmodel" class="v-tab">
+      <tab v-model="selectedIndex" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container" style="top:88px;">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
             <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
@@ -261,8 +259,9 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       tabtxts: [ '待提现', '待结算', '已提现' ],
-      tabmodel: 0,
+      selectedIndex: 0,
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
@@ -278,15 +277,6 @@ export default {
       pagestart2: 0,
       pagestart3: 0
     }
-  },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'revenue'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
   },
   computed: {
   },
@@ -427,23 +417,46 @@ export default {
     },
     swiperChange (index) {
       const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0 && !self.isBindScroll2) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
-      } else if (index === 2) {
-        if (self.pagestart3 === 0 && !self.isBindScroll3) {
-          self.$vux.loading.show()
-          self.getdata3()
-        }
+      if (index === 0 && self.tabdata1.length === 0) {
+        self.$vux.loading.show()
+        self.getdata1()
+      } else if (index === 1 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
+      } else if (index === 2 && self.tabdata3.length === 0) {
+        self.$vux.loading.show()
+        self.getdata3()
       }
     }
+  },
+  created () {
+    const self = this
+    self.doCreated = true
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'revenue'
+    }).then(function (res) {
+      if (res.status === 200) {
+        self.$vux.loading.show()
+        self.getdata1()
+      }
+    })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      if (self.selectedIndex === 0 && self.tabdata1.length === 0) {
+        self.$vux.loading.show()
+        self.getdata1()
+      } else if (self.selectedIndex === 1 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
+      } else if (self.selectedIndex === 2 && self.tabdata3.length === 0) {
+        self.$vux.loading.show()
+        self.getdata3()
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>

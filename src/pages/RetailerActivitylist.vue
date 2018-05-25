@@ -294,7 +294,8 @@ export default {
   },
   data () {
     return {
-      retailerInfo: Object,
+      doCreated: false,
+      retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
       tabdata1: [],
@@ -403,21 +404,36 @@ export default {
       } else {
         self.$router.push({path: '/addActivity', query: {type: type}})
       }
+    },
+    getRetailerInfo () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(function (res) {
+        let data = res.data
+        self.retailerInfo = data.data ? data.data : data
+      })
     }
   },
   created: function () {
-    let self = this
+    const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'activitylist'
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
     }).then(function (res) {
-      let data = res.data
-      self.retailerInfo = data.data ? data.data : data
-      self.getdata1()
+      if (res.status === 200) {
+        self.getRetailerInfo()
+        self.getdata1()
+      }
     })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      !self.retailerInfo.uid && self.getRetailerInfo()
+      !self.tabdata1.length && self.getdata1()
+    }
+    self.doCreated = false
   }
 }
 </script>

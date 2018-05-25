@@ -6,7 +6,7 @@
 <template>
   <div id="order-search" class="containerarea font14 nobottom">
     <div class="s-topbanner s-topbanner1">
-      <tab v-model="selectedIndex">
+      <tab class="b-tab" v-model="selectedIndex">
         <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
@@ -80,6 +80,7 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
@@ -362,9 +363,31 @@ export default {
     }
   },
   created () {
+    const self = this
+    self.doCreated = true
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.$vux.loading.show()
     this.getData()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      switch (self.selectedIndex) {
+        case 0:
+          !self.tabdata1.length && self.getPageData(0, self.pagestart1)
+          break
+        case 1:
+          !self.tabdata2.length && self.getPageData(2, self.pagestart2)
+          break
+        case 2:
+          !self.tabdata3.length && self.getPageData(3, self.pagestart3)
+          break
+        case 3:
+          !self.tabdata4.length && self.getPageData(4, self.pagestart4)
+          break
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>

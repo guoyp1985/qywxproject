@@ -385,7 +385,9 @@ export default {
           if (data.flag !== 1) {
             self.sosTitle = data.error
             self.showSos = true
+            self.showContainer = false
           } else {
+            self.showSos = false
             self.showContainer = true
             self.retailerInfo = data.data ? data.data : data
             document.title = self.retailerInfo.title

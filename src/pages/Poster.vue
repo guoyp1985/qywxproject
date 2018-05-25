@@ -1,54 +1,59 @@
 <template>
   <div class="containerarea notop font14 bg-page poster">
-    <div class="pagemiddle">
-      <div class="picarea bg-white">
-        <div class="inner">
-          <img src="../assets/images/poster.png">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagemiddle">
+        <div class="picarea bg-white">
+          <div class="inner">
+            <img src="../assets/images/poster.png">
+          </div>
         </div>
-      </div>
-      <div v-if="coverphotoarr && coverphotoarr.length > 0" class="mt10 bg-white padding10 mt5 bg-white">
-        <div class="pr10 pl10">{{ $t('Choice cover photo') }}</div>
-        <template>
-          <div class="coverlist">
-            <div class="flex_row flex_left">
-              <div v-for="(item,index) in coverphotoarr" :key="index" class="flex_table w_33 padding5 border-box" @click="selectcover(item,index)">
-                <div class="item pic-photo border01">
-                  <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
-                  <div class="pic-layer">
-                    <x-img :src="item.photo" default-src="../src/assets/images/nopic.jpg"></x-img>
+        <div v-if="coverphotoarr && coverphotoarr.length > 0" class="mt10 bg-white padding10 mt5 bg-white">
+          <div class="pr10 pl10">{{ $t('Choice cover photo') }}</div>
+          <template>
+            <div class="coverlist">
+              <div class="flex_row flex_left">
+                <div v-for="(item,index) in coverphotoarr" :key="index" class="flex_table w_33 padding5 border-box" @click="selectcover(item,index)">
+                  <div class="item pic-photo border01">
+                    <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
+                    <div class="pic-layer">
+                      <x-img :src="item.photo" default-src="../src/assets/images/nopic.jpg"></x-img>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
-      </div>
-      <div class="mt10 bg-white">
-        <form enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
-        </form>
-        <form>
-          <div class="form-item required">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Upload images') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <div class="t-cell">
-                <input v-model="submitdata.photo" type="hidden" name="photo" />
-                <div class="q_photolist align_left">
-                  <template v-if="photoarr.length > 0">
-                    <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
-                      <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                        <div class="close" @click="deletephoto(item,index)">×</div>
-                        <div class="clip" @click="clipPhoto(item)"><i class="al al-set"></i></div>
+          </template>
+        </div>
+        <div class="mt10 bg-white">
+          <form enctype="multipart/form-data">
+            <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+          </form>
+          <form>
+            <div class="form-item required">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Upload images') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell">
+                  <input v-model="submitdata.photo" type="hidden" name="photo" />
+                  <div class="q_photolist align_left">
+                    <template v-if="photoarr.length > 0">
+                      <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
+                        <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                          <div class="close" @click="deletephoto(item,index)">×</div>
+                          <div class="clip" @click="clipPhoto(item)"><i class="al al-set"></i></div>
+                        </div>
                       </div>
-                    </div>
-                  </template>
-                  <div v-if="photoarr.length < maxnum" class="photoitem add" style="width:34%;" @click="uploadPhoto">
-                    <div class="inner">
-                      <div class="innerlist">
-                        <div class="flex_center h_100">
-                          <div class="txt">
-                            <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                            <div><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                    </template>
+                    <div v-if="photoarr.length < maxnum" class="photoitem add" style="width:34%;" @click="uploadPhoto">
+                      <div class="inner">
+                        <div class="innerlist">
+                          <div class="flex_center h_100">
+                            <div class="txt">
+                              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                              <div><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -57,33 +62,33 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="form-item required">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Main title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <group class="textarea-outer">
-                  <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Input main title')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
-                </group>
+            <div class="form-item required">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Main title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <group class="textarea-outer">
+                    <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Input main title')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                  </group>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Subtitle') }}</div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <group class="textarea-outer">
-                  <x-textarea v-model="submitdata.subtitle" name="subtitle" class="x-textarea noborder" :placeholder="$t('Input subtitle')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
-                </group>
+            <div class="form-item">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Subtitle') }}</div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <group class="textarea-outer">
+                    <x-textarea v-model="submitdata.subtitle" name="subtitle" class="x-textarea noborder" :placeholder="$t('Input subtitle')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                  </group>
+                </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
-    <div v-if="iscreating" class="pagebottom color-white bg-green font16 flex_center btncreate disabled"></div>
-    <div v-else class="pagebottom color-white bg-green font16 flex_center btncreate" @click="saveevent"></div>
-    <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+      <div v-if="iscreating" class="pagebottom color-white bg-green font16 flex_center btncreate disabled"></div>
+      <div v-else class="pagebottom color-white bg-green font16 flex_center btncreate" @click="saveevent"></div>
+      <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+    </template>
   </div>
 </template>
 
@@ -107,16 +112,21 @@ Upload images:
 <script>
 import { Group, XTextarea, XImg } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
+import Sos from '@/components/Sos'
 import ENV from 'env'
 
 export default {
   components: {
-    Group, XTextarea, XImg, ClipPopup
+    Group, XTextarea, XImg, ClipPopup, Sos
   },
   data () {
     return {
-      query: Object,
-      data: Object,
+      showSos: false,
+      sosTitle: '',
+      showContainer: false,
+      doCreated: false,
+      query: {},
+      data: {},
       coverphotoarr: [],
       photoarr: [],
       maxnum: 1,
@@ -277,11 +287,19 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         self.data = data.data ? data.data : data
-        self.submitdata.title = self.data.title
-        if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
-          let arr = self.data.photo.split(',')
-          for (let i = 0; i < arr.length; i++) {
-            self.coverphotoarr.push({ photo: arr[i], checked: false })
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          self.submitdata.title = self.data.title
+          if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
+            let arr = self.data.photo.split(',')
+            for (let i = 0; i < arr.length; i++) {
+              self.coverphotoarr.push({ photo: arr[i], checked: false })
+            }
           }
         }
       })
@@ -289,12 +307,20 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.query = self.$route.query
     self.submitdata.type = self.query.module
     self.submitdata.id = self.query.id
     self.$vux.loading.show()
     self.initData()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && !self.data.id) {
+      self.initData()
+    }
+    self.doCreated = false
   }
 }
 </script>

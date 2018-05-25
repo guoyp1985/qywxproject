@@ -2,15 +2,15 @@
   <div class="containerarea bg-page font14 rcustomerlist">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <tab v-model="tabmodel" class="v-tab">
+        <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
             <search
               class="v-search bg-white"
               v-model='searchword1'
@@ -69,7 +69,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll3">
+          <div v-if="(index == 1)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
             <search
               class="v-search bg-white"
               v-model='searchword3'
@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+          <div v-if="(index == 2)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <search
               class="v-search bg-white"
               v-model='searchword2'
@@ -218,12 +218,13 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       autofixed: false,
       tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
       tabcount1: 0,
       tabcount2: 0,
       tabcount3: 0,
-      tabmodel: 0,
+      selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
       distabdata3: false,
@@ -243,51 +244,31 @@ export default {
       pagestart3: 0
     }
   },
-  created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'customerlist'
-    })
-    self.$vux.loading.show()
-    self.getdata1()
-  },
   methods: {
-    handleScroll1: function () {
+    handleScroll: function (refname, index) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
+        element: scrollarea,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
-          }
-        }
-      })
-    },
-    handleScroll2: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getdata2()
-          }
-        }
-      })
-    },
-    handleScroll3: function () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer3[0],
-        callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getdata3()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getdata1()
+            }
+          } else if (index === 1) {
+            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+              self.pagestart3++
+              self.$vux.loading.show()
+              self.getdata3()
+            }
+          } else if (index === 2) {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getdata2()
+            }
           }
         }
       })
@@ -436,6 +417,35 @@ export default {
       ret = `${ret} mr5`
       return ret
     }
+  },
+  created () {
+    const self = this
+    self.doCreated = true
+    self.$store.commit('updateToggleTabbar', {toggleBar: false})
+    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      module: 'retailer', action: 'customerlist'
+    }).then(function (res) {
+      if (res.status === 200) {
+        self.$vux.loading.show()
+        self.getdata1()
+      }
+    })
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated) {
+      if (self.selectedIndex === 0 && self.tabdata1.length === 0) {
+        self.$vux.loading.show()
+        self.getdata1()
+      } else if (self.selectedIndex === 1 && self.tabdata3.length === 0) {
+        self.$vux.loading.show()
+        self.getdata3()
+      } else if (self.selectedIndex === 2 && self.tabdata2.length === 0) {
+        self.$vux.loading.show()
+        self.getdata2()
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>
