@@ -5,7 +5,7 @@
 */
 <template>
   <div class="containerarea font14 bg-white knowledgeclass notop">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
+    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
       <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
         <div class="pic">
@@ -61,19 +61,17 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       query: {},
       data: [],
       limit: 20,
       pagestart1: 0
     }
   },
-  computed: {
-  },
-  filters: {
-  },
   methods: {
-    handleScroll: function () {
+    handleScroll: function (refname) {
       const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
@@ -107,10 +105,18 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.query = self.$route.query
     self.$vux.loading.show()
     self.getdata1()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && self.data.length === 0) {
+      self.getdata1()
+    }
+    self.doCreated = false
   }
 }
 </script>
