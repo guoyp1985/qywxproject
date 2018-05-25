@@ -441,7 +441,7 @@ export default {
   box-sizing: border-box;
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
-.retailerapply .vux-check-icon > span{color:#666;vertical-align:bottom;}
+.retailerapply .vux-check-icon > span{color:#666;display: inline-block;line-height: 19px;}
 .retailerapply .pagebottom{background-color:#fff;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
