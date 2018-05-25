@@ -53,7 +53,7 @@
         </div>
         <div class="form-item required border1px border-box padding10" v-if="classdata.length > 0">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
-          <div class="pb10">经营产品<span class="fong12 color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+          <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
           class="x-checker"
           type="checkbox"
@@ -61,7 +61,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-            <checker-item v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
+            <checker-item class="border1px color-gray" v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
@@ -462,16 +462,17 @@ export default {
   padding: 0 15px;
   height: 30px;
   line-height: 30px;
+  border:0px;
   text-align: center;
   border-radius: 3px;
-  border: 1px solid #ccc;
   background-color: #fff;
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
   box-sizing: border-box;
 }
-.retailerapply .btn-bottom-red{border-radius:5px;}
+.x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
+.retailerapply .vux-check-icon > span{color:#666;vertical-align:bottom;}
 .retailerapply .pagebottom{background-color:#fff;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
