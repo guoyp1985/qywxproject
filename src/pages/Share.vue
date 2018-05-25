@@ -5,8 +5,8 @@
 */
 <template>
   <div id="personal-credit" class="containerarea font14 bg-page nobottom">
-    <div class="pagetop flex_left font18 pl10 border-box">{{$t('Sharing Details')}}</div>
-    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll">
+    <div class="s-topbanner s-topbanner1 flex_left font16 pl10 border-box b_bottom_after">{{$t('Sharing Details')}}</div>
+    <div class="s-container s-container1 bg-white scroll-container pl10 pr10" ref="scrollContainer" @scroll="handleScroll">
       <group>
         <div v-if="disList" class="scroll_list">
           <cell v-if="list.length" v-for="(item, index) in list"
@@ -133,4 +133,10 @@ export default {
 #personal-credit .weui-cell__ft {
   padding-right: 20px;
 }
+#personal-credit .weui-cells{margin-top: 0px;}
+#personal-credit .scroll_list .scroll_item{padding:10px;}
+#personal-credit .weui-cells:before{display:none;}
+#personal-credit .weui-cells:last-child::after{display: none;}
+#personal-credit .s-topbanner{background:transparent;}
+#personal-credit .scroll_list .scroll_item:after{display: none;}
 </style>

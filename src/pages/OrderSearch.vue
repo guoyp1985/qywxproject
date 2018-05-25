@@ -6,7 +6,7 @@
 <template>
   <div id="order-search" class="containerarea font14 nobottom">
     <div class="s-topbanner s-topbanner1">
-      <tab v-model="selectedIndex">
+      <tab class="b-tab" v-model="selectedIndex">
         <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
         <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>

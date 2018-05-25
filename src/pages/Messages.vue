@@ -4,7 +4,7 @@
       <div class="row">
         <div class="bg"></div>
         <div class="flex_center h_100 toprow">
-          <div class="flex_cell font18 pl20">{{$t('Message')}}</div>
+          <div class="flex_cell font16 pl20">{{$t('Message')}}</div>
         </div>
       </div>
     </div>
