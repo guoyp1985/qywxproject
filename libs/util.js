@@ -532,6 +532,9 @@ Util.install = function (Vue, options) {
       return src.replace(/,/g, '||')
     },
     getPhoto: function (src) {
+      if (!src) {
+        return ''
+      }
       return src.replace(/\|\|/g, ',')
     }
   }
