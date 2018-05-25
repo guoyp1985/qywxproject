@@ -4,7 +4,7 @@
     <div class="padding5 align_center font18 bg-white color-black" style="line-height: 38px;">
       <span>— {{ $t('Selected') }}</span><span class="color-red">{{ $t('Promotion') }}</span> —
     </div>
-    <div class="activitylist scroll_list">
+    <div v-if="disData" class="activitylist scroll_list">
       <div v-if="!tabdata1 || tabdata1.length == 0" class="emptyitem flex_center">暂无促销商品</div>
       <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="bg-page">
         <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
@@ -46,7 +46,9 @@ export default {
   },
   data () {
     return {
+      doCreated: false,
       tabdata1: [],
+      disData: false,
       limit: 20,
       pagestart1: 0
     }
@@ -75,14 +77,24 @@ export default {
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        self.disData = true
       })
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     self.$vux.loading.show()
     self.getdata1()
+  },
+  activated () {
+    const self = this
+    if (!self.doCreated && self.tabdata1.length === 0) {
+      self.$vux.loading.show()
+      self.getdata1()
+    }
+    self.doCreated = false
   }
 }
 </script>

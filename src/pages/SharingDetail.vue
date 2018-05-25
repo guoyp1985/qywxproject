@@ -33,8 +33,9 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
-      query: Object,
+      doCreated: false,
+      loginUser: {},
+      query: {},
       disList: false,
       list: [],
       pagestart: 0,
@@ -88,6 +89,7 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     self.query = self.$route.query
     self.loginUser = User.get()
     self.$vux.loading.show()
@@ -96,6 +98,11 @@ export default {
   activated () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    if (!self.doCreated && self.list.length === 0) {
+      self.$vux.loading.show()
+      self.getData()
+    }
+    self.doCreated = false
   }
 }
 </script>

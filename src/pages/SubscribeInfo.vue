@@ -36,7 +36,8 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
+      doCreated: false,
+      loginUser: {},
       data: [],
       disData: false,
       WeixinQrcode: ENV.WeixinQrcode,
@@ -92,12 +93,25 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'subscribeinfo'
+    }).then(function (res) {
+      if (res.status === 200) {
+        self.$vux.loading.show()
+        self.getdata1()
+      }
     })
-    self.$vux.loading.show()
-    self.getdata1()
+  },
+  activated () {
+    const self = this
+    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    if (!self.doCreated && self.data.length === 0) {
+      self.$vux.loading.show()
+      self.getdata1()
+    }
+    self.doCreated = false
   }
 }
 </script>

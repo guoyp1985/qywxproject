@@ -9,7 +9,10 @@
     <div class="s-container s-container1 bg-white scroll-container pl10 pr10" ref="scrollContainer" @scroll="handleScroll">
       <group>
         <div v-if="disList" class="scroll_list">
-          <cell v-if="list.length" v-for="(item, index) in list"
+          <div v-if="!list || list.length == 0" class="no-related-x color-gray">
+            <span>{{$t('No Related Data')}}</span>
+          </div>
+          <cell v-else v-for="(item, index) in list"
           :key="item.id"
           class="share-item font14 scroll_item"
           align-items
@@ -28,9 +31,6 @@
               </div>
             </div>
           </cell>
-          <div v-else class="no-related-x color-gray">
-            <span>{{$t('No Related Data')}}</span>
-          </div>
         </div>
       </group>
     </div>
@@ -52,7 +52,8 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      doCreated: false,
+      query: {},
       disList: false,
       list: [],
       pagestart: 0,
@@ -106,6 +107,7 @@ export default {
   },
   created () {
     const self = this
+    self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     self.$vux.loading.show()
     self.getData()
@@ -113,6 +115,11 @@ export default {
   activated () {
     const self = this
     self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    if (!self.doCreated && self.list.length === 0) {
+      self.$vux.loading.show()
+      self.getData()
+    }
+    self.doCreated = false
   }
 }
 </script>

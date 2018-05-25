@@ -444,9 +444,8 @@ export default {
     self.initInfo()
   },
   activated () {
-    console.log('activated')
     const self = this
-    if (!self.doCreated) {
+    if (!self.doCreated && self.showSos) {
       self.initInfo()
     }
     self.doCreated = false

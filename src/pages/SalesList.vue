@@ -1,5 +1,8 @@
 <template>
   <div class="containerarea font14 rsaleslist bg-white">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="flex_center h_100 toprow">
@@ -51,12 +54,13 @@ Control text:
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg } from 'vux'
+import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg
+    Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg, Sos
   },
   filters: {
     dateformat: function (value) {
@@ -65,7 +69,10 @@ export default {
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '',
       showContainer: false,
+      doCreated: false,
       autofixed: false,
       query: Object,
       viewuser: Object,
@@ -131,27 +138,60 @@ export default {
       self.tabdata1 = []
       self.pagestart1 = 0
       self.getdata1()
+    },
+    initInfo () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+        { params: { customeruid: self.query.uid } }
+      ).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          self.viewuser = data.data ? data.data : data
+          document.title = `${self.viewuser.linkman}`
+        }
+      })
     }
   },
   created () {
     const self = this
+    self.doCreated = true
     this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
     self.query = self.$route.query
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'setting', id: self.query.uid
-    }).then(function () {
-      return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      )
     }).then(function (res) {
-      let data = res.data
-      if (data) {
-        self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}`
+      if (res.status === 200) {
+        self.initInfo(function () {
+          self.getdata1()
+        })
       }
-      self.showContainer = true
-      self.getdata1()
     })
+  },
+  activated () {
+    const self = this
+    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
+    if (!self.doCreated) {
+      self.$vux.loading.show()
+      if (self.showSos) {
+        self.initInfo(function () {
+          if (self.tabdata1.length === 0) {
+            self.getdata1()
+          }
+        })
+      } else {
+        if (self.tabdata1.length === 0) {
+          self.getdata1()
+        }
+      }
+    }
+    self.doCreated = false
   }
 }
 </script>
