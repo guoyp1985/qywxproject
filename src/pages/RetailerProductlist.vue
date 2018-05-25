@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -147,6 +147,7 @@ Back go shop:
 
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { User } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -159,6 +160,7 @@ export default {
   data () {
     return {
       doCreated: false,
+      loginUser: {},
       productdata: [],
       controldata1: [
         { key: 'edit', title: '编辑' },
@@ -372,6 +374,7 @@ export default {
     self.doCreated = true
     self.$store.commit('updateToggleTabbar', {toggleBar: false})
     self.$vux.loading.show()
+    self.loginUser = User.get()
     self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
       module: 'retailer', action: 'productlist'
     }).then(function () {
@@ -380,7 +383,7 @@ export default {
   },
   activated () {
     const self = this
-    if (!self.doCreated) {
+    if (!self.doCreated && self.productdata.length === 0) {
       self.initInfo()
     }
     self.doCreated = false

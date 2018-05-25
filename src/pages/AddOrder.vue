@@ -92,9 +92,6 @@
           </div>
         </popup>
       </div>
-      <div v-transfer-dom>
-        <alert v-model="showalert">{{ $t('Please select address') }}</alert>
-      </div>
     </template>
   </div>
 </template>
