@@ -61,11 +61,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-<<<<<<< HEAD:src/pages/RetailerApply.vue
-            <checker-item class="border1px color-gray" v-for="(item, index) in classdata" :key="index" :value="index">{{ item.title }}</checker-item>
-=======
-            <checker-item v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
->>>>>>> 310cc7d696014b2a278fc586edeb568da9bdc492:src/components/RetailerApply.vue
+            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
