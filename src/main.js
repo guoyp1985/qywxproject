@@ -287,11 +287,11 @@ Vue.http.interceptors.request.use(config => {
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
-  const user = User.get()
-  console.log('getuser')
-  console.log(user)
-  if (!user || !user.uid) {
-    router.push({name: 'tLogin'})
+  if (response.status === 200) {
+    const user = User.get()
+    if (!user || !user.uid) {
+      router.push({name: 'tLogin'})
+    }
   }
   return response
 }, error => {
