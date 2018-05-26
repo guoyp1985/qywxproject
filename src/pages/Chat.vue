@@ -723,6 +723,9 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  deactivated () {
+    Socket.destory()
   }
 }
 </script>

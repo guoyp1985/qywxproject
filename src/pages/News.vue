@@ -570,6 +570,9 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  deactivated () {
+    Socket.destory()
   }
   // beforeRouteUpdate (to, from, next) {
   //   const self = this
