@@ -187,7 +187,11 @@ export default {
       this.replyPopupShow = true
     },
     onCommentShow () {
-      this.commentPopupShow = true
+      if (this.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        this.commentPopupShow = true
+      }
     },
     onCommentDelete (comment) {
       const self = this
