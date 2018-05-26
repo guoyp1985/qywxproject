@@ -198,12 +198,12 @@ export default {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
       }
     },
-    refresh () {
+    init () {
       this.getData()
     }
   },
-  activated () {
-    this.refresh()
+  created () {
+    this.init()
   }
 }
 </script>

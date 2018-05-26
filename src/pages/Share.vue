@@ -101,11 +101,16 @@ export default {
         self.disList = true
       })
     },
-    refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    init () {
       this.$vux.loading.show()
       this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

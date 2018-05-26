@@ -27,7 +27,6 @@ export default {
   },
   data () {
     return {
-      query: {},
       data: {},
       showSos: false,
       sosTitle: '',
@@ -55,12 +54,16 @@ export default {
         }
       })
     },
-    refresh (query) {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
+    init () {
       this.$vux.loading.show()
       this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

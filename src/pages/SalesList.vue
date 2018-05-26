@@ -152,12 +152,17 @@ export default {
         self.getData1()
       })
     },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
       this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

@@ -417,12 +417,12 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      this.$vux.loading.show()
+      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
     }
   },
   created () {

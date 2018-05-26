@@ -433,16 +433,24 @@ export default {
       return ret
     },
     getData () {
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'customerlist'
       })
+      .then(res => {
+        self.swiperChange()
+      })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
-      this.getData()
-      this.swiperChange()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

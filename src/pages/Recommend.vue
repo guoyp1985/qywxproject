@@ -196,17 +196,23 @@ export default {
       this.$router.push({path: '/bringCustomer'})
     },
     getData () {
+      const self = this
       this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`)
       .then(res => {
         self.rebateInfo = res.data
+        self.clickTabItem()
       })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
-      this.getData()
-      this.clickTabItem()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

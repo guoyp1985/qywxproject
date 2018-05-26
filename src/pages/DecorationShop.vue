@@ -147,11 +147,11 @@ export default {
       return this.photoarr.length
     }
   },
-  computed: {
-    getquery: function () {
-      return this.$route.query
-    }
-  },
+  // computed: {
+  //   getquery: function () {
+  //     return this.$route.query
+  //   }
+  // },
   methods: {
     handleScroll () {
       const self = this
@@ -318,20 +318,23 @@ export default {
       })
     },
     init () {
+      const self = this
       this.loginUser = User.get()
-    },
-    refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'decorationshop'
+      })
+      .then(res => {
+        self.getData()
       })
       if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
         this.havenum = this.clickdata.rollingphoto.split(',')
       } else {
         this.havenum = 0
       }
-      this.$vux.loading.show()
-      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {

@@ -307,11 +307,11 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.getData()
     }
   },
   created () {

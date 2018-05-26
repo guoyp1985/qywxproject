@@ -315,18 +315,12 @@ export default {
     getData () {
       this.swiperChange()
     },
-    init () {
-
-    },
     refresh () {
       // this.user = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

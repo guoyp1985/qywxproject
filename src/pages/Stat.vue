@@ -346,13 +346,18 @@ export default {
         }
       })
     },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.module = this.query.module
-      this.$vux.loading.show()
-      this.getData()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

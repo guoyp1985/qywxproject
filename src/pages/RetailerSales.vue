@@ -321,10 +321,15 @@ export default {
         self.swiperChange()
       })
     },
+    init () {
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.getData()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

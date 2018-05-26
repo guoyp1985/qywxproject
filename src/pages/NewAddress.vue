@@ -34,7 +34,7 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      query: {},
       addressData: ChinaAddressV4Data,
       initItem: {},
       switcher: true
@@ -104,7 +104,7 @@ export default {
         })
       }
     },
-    refresh (query) {
+    refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
     }

@@ -170,10 +170,12 @@ export default {
         }
       })
     },
+    init () {
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.getData()
     }
   },
   activated () {

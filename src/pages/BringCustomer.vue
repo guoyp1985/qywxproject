@@ -163,12 +163,17 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
+    init () {
+      this.$vux.loading.show()
+      this.swiperChange()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.$vux.loading.show()
-      this.swiperChange()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

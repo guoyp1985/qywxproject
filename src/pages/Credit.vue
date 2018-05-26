@@ -94,10 +94,16 @@ export default {
         self.disList = true
       })
     },
-    refresh () {
+    init () {
       this.$vux.loading.show()
       this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

@@ -80,10 +80,15 @@ export default {
         self.disData = true
       })
     },
+    init () {
+      this.getData()
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-      this.getData()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

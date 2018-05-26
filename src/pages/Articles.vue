@@ -116,11 +116,17 @@ export default {
         self.oArticles = res.data
       })
     },
+    init () {
+      
+    },
     refresh () {
       // this.query = this.$route.query
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.getData()
     }
+  },
+  created () {
+
   },
   activated () {
     this.refresh()

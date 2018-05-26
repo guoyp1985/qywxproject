@@ -292,15 +292,20 @@ export default {
         self.towithdraw = res.data.towithdraw
         self.customers = res.data.customers
         self.title = res.data.title
+        self.onItemClick()
       })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
-      this.onItemClick()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()
