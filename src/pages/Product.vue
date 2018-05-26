@@ -952,6 +952,7 @@ export default {
     this.refresh()
   },
   deactivated () {
+    console.log('dddddd')
     const room = this.query.id
     Socket.destory(room)
   }
