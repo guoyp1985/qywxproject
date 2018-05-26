@@ -951,7 +951,7 @@ export default {
   activated () {
     this.refresh()
   },
-  deactivated () {
+  beforeRouteLeave () {
     console.log('dddddd')
     const room = this.query.id
     Socket.destory(room)
