@@ -45,75 +45,53 @@ export default {
       self.showApply = false
       self.$vux.loading.hide()
     },
-    initInfo () {
-      const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'setting'
-      }).then(function (res) {
-        if (res.status !== 200) {
-          self.$vux.loading.hide()
-        } else {
-          let data = res.data
-          if (data.flag === 1) {
-            self.showSetting = true
-            self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-              if (res.status === 200) {
-                self.$vux.loading.hide()
-                let data = res.data
-                self.retailerInfo = data.data ? data.data : data
-                for (let key in self.submitdata) {
-                  self.submitdata[key] = self.retailerInfo[key]
-                }
-                let qrcode = self.submitdata.qrcode
-                if (qrcode && self.$util.trim(qrcode) !== '') {
-                  self.photoarr = qrcode.split(',')
-                }
-              }
-            })
-          } else {
-            self.showCenter = false
-            self.showApply = true
-            self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-              { params: { limit: 100 } }
-            ).then(function (res) {
-              self.$vux.loading.hide()
-              if (res.status === 200) {
-                let data = res.data
-                data = data.data ? data.data : data
-                for (let i = 0; i < data.length; i++) {
-                  data[i].checked = false
-                }
-                self.classData = data
-              }
-            })
-          }
-        }
-      })
-    },
     getData () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' })
-      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/home`))
       .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retailerInfo = data.data ? data.data : data
-        if (retailerInfo.buyonline) {
-          self.isOnline = true
-          self.isOffline = false
+        let data = res.data
+        if (data.flag === 1) {
+          self.showSetting = true
+          self.showApply = false
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
         } else {
-          self.isOnline = false
-          self.isOffline = true
+          self.showSetting = false
+          self.showApply = true
+          self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+            { params: { limit: 100 } }
+          ).then(function (res) {
+            self.$vux.loading.hide()
+            if (res.status === 200) {
+              let data = res.data
+              data = data.data ? data.data : data
+              for (let i = 0; i < data.length; i++) {
+                data[i].checked = false
+              }
+              self.classData = data
+            }
+          })
         }
-        for (let key in self.submitdata) {
-          self.submitdata[key] = retailerInfo[key]
+      })
+      .then(res => {
+        let data = res.data
+        if (self.showSetting) {
+          self.$vux.loading.hide()
+          self.retailerInfo = data.data ? data.data : data
+          for (let key in self.submitdata) {
+            self.submitdata[key] = self.retailerInfo[key]
+          }
+          let qrcode = self.submitdata.qrcode
+          if (qrcode && self.$util.trim(qrcode) !== '') {
+            self.photoarr = qrcode.split(',')
+          }
+        } else if (self.showApply) {
+          self.$vux.loading.hide()
+          data = data.data ? data.data : data
+          for (let i = 0; i < data.length; i++) {
+            data[i].checked = false
+          }
+          self.classData = data
         }
-        let qrcode = self.submitdata.qrcode
-        if (qrcode && self.$util.trim(qrcode) !== '') {
-          self.photoarr = qrcode.split(',')
-        }
-        self.havenum = self.photoarr.length
       })
     },
     refresh () {
