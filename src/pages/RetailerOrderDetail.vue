@@ -138,7 +138,6 @@ export default {
       showSos: false,
       sosTitle: '该订单不存在',
       showContainer: false,
-      doCreated: false,
       query: {},
       data: {},
       totalPrice: '0.00',
@@ -260,6 +259,7 @@ export default {
       })
     },
     getData () {
+      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'orderdetail', id: this.query.id
       })
