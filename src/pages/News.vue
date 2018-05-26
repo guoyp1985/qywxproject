@@ -497,10 +497,8 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
-    init () {
-      this.loginUser = User.get()
-    },
     refresh () {
+      this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.showsharetip = false
@@ -517,9 +515,6 @@ export default {
       const self = this
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
