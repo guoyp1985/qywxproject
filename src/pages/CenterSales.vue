@@ -38,41 +38,50 @@ export default {
     },
     getData () {
       const self = this
-      let iscontinue = true
+      self.$vux.loading.show()
+      self.loginUser = User.get()
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'index'
-      })
-      if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-        self.showcontainer = false
-        iscontinue = false
-      } else if (self.loginUser.usergroup) {
-        const usergroup = self.loginUser.usergroup
-        for (let i = 0; i < usergroup.length; i++) {
-          let g = usergroup[i]
-          if (g === 3) {
-            iscontinue = true
-            break
+      }).then(function (res) {
+        if (res.status !== 200) {
+          self.$vux.loading.hide()
+        } else {
+          let data = res.data
+          if (data.flag === 1) {
+            self.showCenter = true
+            self.showApply = false
+            self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+              if (res.status === 200) {
+                let data = res.data
+                self.retailerInfo = data.data ? data.data : data
+                self.$vux.loading.hide()
+                return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+              }
+            }).then(function (res) {
+              if (res) {
+                let data = res.data
+                self.marqueeData = data.data ? data.data : data
+              }
+            })
+          } else {
+            self.showCenter = false
+            self.showApply = true
+            self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+              { params: { limit: 100 } }
+            ).then(function (res) {
+              self.$vux.loading.hide()
+              if (res.status === 200) {
+                let data = res.data
+                data = data.data ? data.data : data
+                for (let i = 0; i < data.length; i++) {
+                  data[i].checked = false
+                }
+                self.classData = data
+              }
+            })
           }
         }
-      }
-      if (!iscontinue) {
-        self.$vux.loading.hide()
-        self.$router.push('/retailerApply')
-      } else {
-        self.showcontainer = true
-        self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(res => {
-          const data = res.data
-          self.retailerInfo = data.data ? data.data : data
-          self.imgarr[0].msrc = self.retailerInfo.avatar
-          self.imgarr[0].src = self.retailerInfo.avatar
-          self.wximgarr[0] = self.retailerInfo.avatar
-          self.$vux.loading.hide()
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-        }).then(res => {
-          const data = res.data
-          self.marquedata = data.data ? data.data : data
-        })
-      }
+      })
     },
     init () {
       this.loginUser = User.get()
