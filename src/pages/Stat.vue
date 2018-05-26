@@ -5,7 +5,12 @@
     </template>
     <template v-if="showContainer">
       <div class="pagemiddle">
-        <div class="bg-white pr12 pl12 pt10 pb10 font14 color-gray2 b_bottom_after clamp1">{{ data.title }}</div>
+        <template v-if="module == 'activity' && data.type === 'groupbuy'">
+          <router-link :to="{path: '/product', query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
+        </template>
+        <template v-else>
+          <router-link :to="{path: `/${module}`, query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
+        </template>
         <div v-if="statData && statData.length > 0" class="radiusarea mb10 pb15 bg-white list-shadow01">
           <div class="item" v-for="(item,index) in statData" :key="index">
             <div class="inner">
