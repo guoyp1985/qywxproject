@@ -29,7 +29,7 @@ import BargainbuyDetail from '@/components/BargainbuyDetail'
 import ShareSuccess from '@/components/ShareSuccess'
 import ENV from 'env'
 import { User } from '#/storage'
-import { Socket } from '#/socket'
+import Socket from '#/socket'
 
 export default {
   components: {

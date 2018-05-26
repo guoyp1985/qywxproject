@@ -121,7 +121,7 @@ import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
-import { Socket } from '#/socket'
+import Socket from '#/socket'
 
 export default {
   directives: {
@@ -511,6 +511,7 @@ export default {
     }
   },
   created () {
+    console.log(Socket)
     this.init()
   },
   activated () {
