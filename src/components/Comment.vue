@@ -6,7 +6,10 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
-      <x-img :src="item.avatar" default-src="../src/assets/images/user.jpg"></x-img>
+      <img :src="item.avatar" default-src="../src/assets/images/user.jpg" @on-error="imgError('avatar')" />
+      <!--
+      <img  :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+    -->
     </div>
     <div class="detail-cell">
       <div class="header-area">

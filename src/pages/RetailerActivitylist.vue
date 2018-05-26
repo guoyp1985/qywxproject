@@ -413,7 +413,6 @@ export default {
       }).then(function (res) {
         const data = res.data
         self.retailerInfo = data.data ? data.data : data
-        self.getData1()
       })
     },
     init () {
@@ -422,6 +421,10 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if (this.tabdata1.length < this.limit) {
+        this.tabdata1 = []
+        this.getData1()
+      }
     }
   },
   created () {
