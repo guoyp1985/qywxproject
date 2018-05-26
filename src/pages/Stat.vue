@@ -16,11 +16,11 @@
         </div>
         <div class="tabarea bg-white" ref="tabArea">
           <template v-if="tabsdata && tabsdata.length > 0">
-            <tab v-model="tabmodel" class="v-tab">
+            <tab v-model="selectedIndex" class="v-tab">
               <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
             </tab>
             <div ref="tabSwiper" class="w_100 bg-white">
-              <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+              <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
                 <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
                   <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
                     <template>
@@ -259,16 +259,7 @@ export default {
       return this.datalist
     }
   },
-  computed: {
-  },
   methods: {
-    // isShowArea (index) {
-    //   return this.isShowArea
-    // },
-    // getListdata (index) {
-    //   const self = this
-    //   return self.datalist[index]
-    // },
     handleScroll (refname) {
       const self = this
       const index = this.selectedIndex
@@ -288,12 +279,6 @@ export default {
       const self = this
       const item = self.clickTabitem
       const index = this.selectedIndex
-      if (self.scrollData.length === 0) {
-        for (let i = 0; i < self.tabsdata.length; i++) {
-          self.scrollData.push({ pagestart: 0 })
-          self.datalist.push([])
-        }
-      }
       let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, params).then(function (res) {
         let data = res.data
@@ -313,9 +298,16 @@ export default {
       })
     },
     swiperChange () {
+      const self = this
       const index = this.selectedIndex
       this.clickTabitem = this.tabsdata[index]
       this.arrData = this.datalist[index]
+      if (self.scrollData.length === 0) {
+        for (let i = 0; i < self.tabsdata.length; i++) {
+          self.scrollData.push({ pagestart: 0 })
+          self.datalist.push([])
+        }
+      }
       switch (index) {
         case 0:
           !this.datalist[index].length && this.getData1()
@@ -340,7 +332,6 @@ export default {
           self.statData = data.data ? data.data : data
           self.tabsdata = data.detail
           document.title = `统计-${self.data.title}`
-          self.clickindex = 0
           self.clickTabitem = self.tabsdata[0]
           self.swiperChange()
         }
