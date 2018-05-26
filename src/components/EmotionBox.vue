@@ -87,19 +87,8 @@ export default {
       textarea: null,
       rangeData: undefined,
       show: false
-      // value: ''
     }
   },
-  // watch: {
-  //   value (val) {
-  //     if (!val) {
-  //       this.onTextFocus()
-  //       this.textarea.focus()
-  //     } else {
-  //       this.textarea.blur()
-  //     }
-  //   }
-  // },
   methods: {
     onClick (emot) {
       this.onClickEmotion(emot)
@@ -121,7 +110,6 @@ export default {
         Cursor.add(this.textarea, this.rangeData, emot)
         this.rangeData = Cursor.get(this.textarea)
         this.textarea.blur()
-        // alert(JSON.stringify(this.rangeData))
       } else {
         this.rangeData = {
           start: emot.length,
@@ -150,7 +138,6 @@ export default {
       this.rangeData.end = str.length
       Cursor.set(this.textarea, this.rangeData)
       this.textarea.blur()
-      // this.value = this.textarea.value
     },
     textareaEventBind () {
       this.textarea.focus()

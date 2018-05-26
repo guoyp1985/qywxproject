@@ -15,40 +15,6 @@
         </group>
         <emotion-box bind-textarea="comment-textarea" :class-name="className">
         </emotion-box>
-        <!-- <div class="emotion-area">
-          <swiper :show-desc-mask="false" dots-position="center" height="160px">
-            <swiper-item class="swiper-page">
-              <emotion v-for="(item, index) in emotions1" :key="index" is-gif @click.native="onClickEmotion(item)">{{item}}</emotion>
-              <div class="emotion-delete" @click="deleteEmotion">
-                <img src="../assets/images/delete.png"/>
-              </div>
-            </swiper-item>
-            <swiper-item class="swiper-page">
-              <emotion v-for="(item, index) in emotions2" :key="index" is-gif @click.native="onClickEmotion(item)">{{item}}</emotion>
-              <div class="emotion-delete" @click="deleteEmotion">
-                <img src="../assets/images/delete.png"/>
-              </div>
-            </swiper-item>
-            <swiper-item class="swiper-page">
-              <emotion v-for="(item, index) in emotions3" :key="index" is-gif @click.native="onClickEmotion(item)">{{item}}</emotion>
-              <div class="emotion-delete" @click="deleteEmotion">
-                <img src="../assets/images/delete.png"/>
-              </div>
-            </swiper-item>
-            <swiper-item class="swiper-page">
-              <emotion v-for="(item, index) in emotions4" :key="index" is-gif @click.native="onClickEmotion(item)">{{item}}</emotion>
-              <div class="emotion-delete" @click="deleteEmotion">
-                <img src="../assets/images/delete.png"/>
-              </div>
-            </swiper-item>
-            <swiper-item class="swiper-page">
-              <emotion v-for="(item, index) in emotions5" :key="index" is-gif @click.native="onClickEmotion(item)">{{item}}</emotion>
-              <div class="emotion-delete" @click="deleteEmotion">
-                <img src="../assets/images/delete.png"/>
-              </div>
-            </swiper-item>
-          </swiper>
-        </div> -->
         <box gap="20px">
           <x-button type="primary" @click.native="onSubmit">{{$t('Comment')}}</x-button>
           <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
@@ -149,44 +115,6 @@ export default {
     onTextFocus () {
       this.$emit('on-text-focus')
     }
-    // onTextBlur () {
-    //   let textarea = this.$refs.textarea.$el.querySelector('textarea')
-    //   this.rangeData = Cursor.get(textarea)
-    //   this.$emit('on-text-blur')
-    // },
-    // onClickEmotion (emot) {
-    //   emot = `[${emot}]`
-    //   let textarea = this.$refs.textarea.$el.querySelector('textarea')
-    //   if (this.rangeData) {
-    //     Cursor.add(textarea, this.rangeData, emot)
-    //   } else {
-    //     textarea.value = emot
-    //   }
-    //   this.value = textarea.value
-    //   this.rangeData = Cursor.get(textarea)
-    //   textarea.blur()
-    // },
-    // onInput (event) {
-    //   let textarea = this.$refs.textarea.$el.querySelector('textarea')
-    //   this.rangeData = Cursor.get(textarea)
-    // },
-    // deleteEmotion () {
-    //   let textarea = this.$refs.textarea.$el.querySelector('textarea')
-    //   this.rangeData = Cursor.get(textarea)
-    //   let preText = textarea.value.substr(0, this.rangeData.end)
-    //   let sufText = textarea.value.substr(this.rangeData.end)
-    //   let str = ''
-    //   if (rEmotion.test(preText)) {
-    //     str = preText.replace(rEmotion, '$1')
-    //   } else {
-    //     str = preText.substr(0, preText.length - 1)
-    //   }
-    //   textarea.value = str + sufText
-    //   this.rangeData.start = str.length
-    //   this.rangeData.end = str.length
-    //   Cursor.set(textarea, this.rangeData)
-    //   this.value = textarea.value
-    // }
   }
 }
 </script>
