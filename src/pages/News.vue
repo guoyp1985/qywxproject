@@ -511,7 +511,6 @@ export default {
     }
   },
   created () {
-    console.log(Socket)
     this.init()
   },
   activated () {

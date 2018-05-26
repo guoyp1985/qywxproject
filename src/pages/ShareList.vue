@@ -177,6 +177,9 @@ export default {
       this.query = this.$route.query
     }
   },
+  created () {
+    this.init()
+  },
   activated () {
     this.refresh()
   }
