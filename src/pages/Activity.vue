@@ -294,7 +294,8 @@ export default {
     this.refresh()
   },
   deactivated () {
-    Socket.destory()
+    const room = this.query.id
+    Socket.destory(room)
   }
 }
 </script>
