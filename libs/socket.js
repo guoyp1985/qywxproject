@@ -8,6 +8,7 @@ const Socket = {
       console.error('WS: ws undefined')
       return
     }
+    console.log(linkman)
     ws.onopen = () => {
       const loginData = {
         type: 'login',
