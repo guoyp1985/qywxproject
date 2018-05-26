@@ -133,7 +133,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       loginUser: {},
       autofixed: false,
       tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
@@ -314,6 +313,7 @@ export default {
       })
     },
     getData () {
+      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'sales'
       })
@@ -322,6 +322,7 @@ export default {
       })
     },
     init () {
+      this.loginUser = User.get()
       this.getData()
     },
     refresh () {
