@@ -422,13 +422,13 @@ export default {
     swiperChange () {
       switch (this.selectedIndex) {
         case 0:
-          this.tabdata1.length && this.getData1()
+          !this.tabdata1.length && this.getData1()
           break
         case 1:
-          this.tabdata2.length && this.getData2()
+          !this.tabdata2.length && this.getData2()
           break
         case 2:
-          this.tabdata3.length && this.getData3()
+          !this.tabdata3.length && this.getData3()
           break
       }
     },
