@@ -393,6 +393,7 @@ export default {
       self.getData3()
     },
     swiperChange () {
+      console.log(this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData1()
