@@ -134,7 +134,7 @@ export default {
         self.searchresult1 = false
       }
       self.$http.get(`${ENV.BokaApi}/api/user/shareList`, params).then(function (res) {
-        this.$vux.loading.hide()
+        self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
