@@ -379,7 +379,11 @@ export default {
       }
     },
     onAdvisory () {
-      this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, frommodule: 'news', fromid: this.query.id}})
+      if (this.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, frommodule: 'news', fromid: this.query.id}})
+      }
     },
     onStore () {
       this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
