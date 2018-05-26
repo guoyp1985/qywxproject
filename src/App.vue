@@ -55,11 +55,8 @@ Center:
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { User, BkSocket, Roomid } from '#/storage'
+import { User } from '#/storage'
 import ENV from 'env'
-// import routes from '#/routes'
-
-// Util.share()
 
 export default {
   name: 'app',
@@ -79,15 +76,6 @@ export default {
       }
     },
     '$route' (to, from) {
-      // if (from.name) {
-      //   let socket = BkSocket.get()
-      //   if (socket && socket.url) {
-      //     socket.send(JSON.stringify({
-      //       type: 'logout',
-      //       room_id: Roomid.get()
-      //     }))
-      //   }
-      // }
       document.title = this.getTitle(to.path)
     }
   },

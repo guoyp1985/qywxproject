@@ -77,7 +77,6 @@ View more promotion:
 </i18n>
 
 <script>
-import Vue from 'vue'
 import { Swiper, XImg } from 'vux'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'

@@ -294,7 +294,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
@@ -417,7 +416,7 @@ export default {
         self.getData1()
       })
     },
-    init() {
+    init () {
       this.$vux.loading.show()
       this.getData()
     },

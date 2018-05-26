@@ -266,7 +266,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData1()
-          break;
+          break
         case 1:
           !this.tabdata2.length && this.getData2()
           break
@@ -288,7 +288,7 @@ export default {
     getData () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'saleview' })
-      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,{ params: { selleruid: self.query.uid } }))
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`, { params: { selleruid: self.query.uid } }))
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data

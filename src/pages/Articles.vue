@@ -81,7 +81,6 @@ export default {
       this.swiperIndex = index
     },
     onImgError () {
-
     },
     clickArticle (item) {
       this.$router.push({ path: '/news', query: { id: item.id } })
@@ -117,16 +116,13 @@ export default {
       })
     },
     init () {
-      
     },
     refresh () {
-      // this.query = this.$route.query
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.getData()
     }
   },
   created () {
-
   },
   activated () {
     this.refresh()

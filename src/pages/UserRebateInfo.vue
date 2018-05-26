@@ -116,7 +116,6 @@
 import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
-import { User } from '#/storage'
 export default {
   components: {
     ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton
@@ -125,9 +124,7 @@ export default {
     return {
       query: {},
       tabtxts: [ '待提现', '待返点', '已提现' ],
-      // user: {},
       rebateInfo: {},
-      // totalIncome: 0,
       total: '0.00',
       selectedIndex: 0,
       globalChecked: true,
@@ -266,14 +263,6 @@ export default {
         }
       }
     },
-    // getData () {
-    //   const self = this
-    //   const uid = this.$route.query.uid
-    //   this.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, {uid: uid})
-    //   .then(res => {
-    //     self.totalIncome = res.data.special
-    //   })
-    // },
     getCash () {
       const self = this
       if (self.checkedData.length === 0) {
@@ -316,7 +305,6 @@ export default {
       this.swiperChange()
     },
     refresh () {
-      // this.user = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()

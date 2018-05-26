@@ -147,7 +147,6 @@ Back go shop:
 
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
-import { User } from '#/storage'
 import ENV from 'env'
 
 export default {

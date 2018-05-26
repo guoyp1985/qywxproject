@@ -218,7 +218,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       autofixed: false,
       tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
       tabcount1: 0,
@@ -245,42 +244,30 @@ export default {
     }
   },
   methods: {
-    handleScroll1 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
-        callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getData1()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getData2()
-          }
-        }
-      })
-    },
-    handleScroll3 () {
+    handleScroll: function (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-            self.pagestart3++
-            self.$vux.loading.show()
-            self.getData3()
+          if (index === 0) {
+            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getdata1()
+            }
+          } else if (index === 1) {
+            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+              self.pagestart3++
+              self.$vux.loading.show()
+              self.getdata3()
+            }
+          } else if (index === 2) {
+            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getdata2()
+            }
           }
         }
       })

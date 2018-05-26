@@ -33,7 +33,7 @@ export default {
       showContainer: false
     }
   },
-  methods : {
+  methods: {
     getData () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
