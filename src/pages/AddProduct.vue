@@ -24,7 +24,7 @@
                   </div>
                 </div>
               </template>
-              <div v-if="photoarr.length >= 1 && photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','photoarr')">
+              <div v-if="photoarr.length >= 1 && photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','photo')">
                 <div class="inner">
                   <div class="icon flex_center">
                     <div class="txt">
