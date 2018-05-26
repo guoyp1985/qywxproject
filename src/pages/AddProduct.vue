@@ -54,7 +54,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.price" @keyup="priceChange(event)" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+              <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
             </div>
             <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
           </div>
@@ -83,7 +83,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.rebate" @keyup="priceChange(event)" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+              <input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
             </div>
             <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
           </div>
@@ -342,21 +342,15 @@ export default {
       postdata['moderate'] = 1
       self.savedata(postdata)
     },
-    priceChange (event) {
-      // input.addEventListener('keyup', function () {
-        let val = event.target.value
-        const dotindex = val.lastIndexOf('.')
-        const vallen = val.length
-        const cha = vallen - 1 - dotindex
-        if (dotindex > -1 && cha > 2) {
-          val = val.substr(0, vallen - cha + 2)
-        }
-        if (self.showRebate) {
-          this.submitdata.rebate = val
-        }
-        this.submitdata.price = val
-        // callback && callback(val)
-      // })
+    priceChange (key) {
+      let val = event.target.value
+      const dotindex = val.lastIndexOf('.')
+      const vallen = val.length
+      const cha = vallen - 1 - dotindex
+      if (dotindex > -1 && cha > 2) {
+        val = val.substr(0, vallen - cha + 2)
+      }
+      this.submitdata[key] = val
     },
     getData () {
       const self = this
@@ -387,17 +381,7 @@ export default {
         self.retailerInfo = data.data ? data.data : data
         if (self.retailerInfo.buyonline === 1) {
           self.showRebate = true
-          // setTimeout(function () {
-          //   const rebateInput = document.querySelector('.rebateInput')
-          //   self.priceChange(rebateInput, function (val) {
-          //     self.submitdata.rebate = val
-          //   })
-          // }, 500)
         }
-        // const priceInput = document.querySelector('.priceInput')
-        // self.priceChange(priceInput, function (val) {
-        //   self.submitdata.price = val
-        // })
       })
     },
     refresh () {
