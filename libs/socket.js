@@ -21,11 +21,11 @@ const Socket = {
     ws.onmessage = e => {
       const data = JSON.parse(e.data)
       if (data.type === 'login') {
-        console.info('WS: Login')
+        console.info(`WS: Login Room ${roomId}`)
       } else if (data.type === 'logout') {
-        console.info('WS: Logout')
+        console.info(`WS: Logout Room ${roomId}`)
       } else if (data.type === 'say') {
-        console.info('WS: Receive Message')
+        console.info(`WS: Receive Message From Room ${roomId}`)
         const message = JSON.parse(e.data)
         let content = message.content
         if (content) {
@@ -64,6 +64,10 @@ const Socket = {
       type: 'logout',
       room_id: room
     })
+    ws.onopen = null
+    ws.onmessage = null
+    ws.onclose = null
+    ws.onerror = null
     ws = null
   }
 }
