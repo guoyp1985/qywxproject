@@ -244,7 +244,7 @@ export default {
       const linkman = this.loginUser.linkman
       const room = this.query.id
       Socket.create()
-      Socket.listening(uid, linkman, room)
+      Socket.listening(room, uid, linkman)
     },
     init () {
       this.$util.wxAccess()
