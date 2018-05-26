@@ -1,7 +1,14 @@
 <template>
-  <div class="containerarea bg-page font14 nobottom">
-    <div class="pagetop flex_left pl10 border-box font16">{{$t('Message')}}</div>
-    <div class="pagemiddle scroll-container bg-white">
+  <div class="containerarea bg-white font14">
+    <div class="s-topbanner" style="height:44px;">
+      <div class="row">
+        <div class="bg"></div>
+        <div class="flex_center h_100 toprow">
+          <div class="flex_cell font16 pl20">{{$t('Message')}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-container scroll-container" style="top:44px;">
       <div v-if="disData" class="scroll_list pl10 pr10">
         <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无消息</div>
         <router-link v-else :to="{path: '/chat', query: {uid: item.uid}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">

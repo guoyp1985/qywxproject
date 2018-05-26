@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
-        <router-link class="db-in posi_r" style="color:#fff;" to="/messages">
+        <router-link class="db-in posi_r" style="color:#fff;" to="/messageList">
           <span class="al al-xiaoxi1 font24"></span>
           <span class="numicon" v-if="retailerInfo.newmessage > 0 && retailerInfo.newmessage < 100">{{ retailerInfo.newmessage }}</span>
           <span class="numicon" v-if="retailerInfo.newmessage >= 100">···</span>
