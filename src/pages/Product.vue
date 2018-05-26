@@ -427,7 +427,7 @@ export default {
       submitdata: { flag: 1, quantity: 1 },
       replyData: null,
       roomid: '',
-      socket: BkSocket.get(),
+      // socket: BkSocket.get(),
       pagestart: 0,
       limit: 20
     }

@@ -200,10 +200,16 @@ export default {
     },
     init () {
       this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     }
   },
   created () {
     this.init()
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

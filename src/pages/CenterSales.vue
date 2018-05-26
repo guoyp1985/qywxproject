@@ -9,9 +9,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
