@@ -85,8 +85,8 @@ export default {
       reward: {},
       article: {},
       comments: [],
-      roomid: '',
-      socket: BkSocket.get()
+      roomid: ''
+      // socket: BkSocket.get()
     }
   },
   filters: {
