@@ -8,6 +8,7 @@ const Socket = {
       console.error('WS: ws undefined')
       return
     }
+    console.log(linkman)
     ws.onopen = () => {
       const loginData = {
         type: 'login',
@@ -55,9 +56,10 @@ const Socket = {
     }
   },
   send: (data) => {
-    ws.send(JSON.stringify(data))
+    ws && ws.send(JSON.stringify(data))
   },
-  destory: () => {
+  destory: (room) => {
+    console.log(room)
     Socket.send({
       type: 'logout',
       room_id: room

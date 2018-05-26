@@ -289,6 +289,11 @@ export default {
   },
   activated () {
     this.refresh()
+  },
+  beforeRouteLeave (to, from, next) {
+    const room = this.query.id
+    Socket.destory(room)
+    next()
   }
 }
 </script>
