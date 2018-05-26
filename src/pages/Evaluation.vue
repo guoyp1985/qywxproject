@@ -83,7 +83,7 @@ export default {
     },
     getData () {
       const self = this
-      const id = this.query.id
+      const id = this.$route.query.id
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${id}`)
       .then(res => {
         let data = res.data
@@ -103,20 +103,13 @@ export default {
           }
         }
       })
+    },
+    refresh () {
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    self.query = self.$route.query
-    this.getData()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.list.length === 0) {
-      self.getData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

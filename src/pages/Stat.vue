@@ -238,12 +238,11 @@ export default {
       showSos: false,
       sosTitle: '该信息不存在',
       showContainer: false,
-      doCreated: false,
-      query: Object,
+      query: {},
       module: '',
-      data: Object,
+      data: {},
       arrData: [],
-      tabmodel: 0,
+      selectedIndex: 0,
       statData: [],
       tabsdata: [],
       tabtop: 'auto',
@@ -263,32 +262,32 @@ export default {
   computed: {
   },
   methods: {
-    isShowArea: function (index) {
-      return this.isShowArea
-    },
-    getListdata: function (index) {
+    // isShowArea (index) {
+    //   return this.isShowArea
+    // },
+    // getListdata (index) {
+    //   const self = this
+    //   return self.datalist[index]
+    // },
+    handleScroll (refname) {
       const self = this
-      return self.datalist[index]
-    },
-    handleScroll: function (refname) {
-      const self = this
-      let index = self.clickTabIndex
-      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      const index = this.selectedIndex
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
           if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * self.limit) {
             self.scrollData[index].pagestart++
             self.$vux.loading.show()
-            self.getdata()
+            self.getData1()
           }
         }
       })
     },
-    getdata () {
+    getData1 () {
       const self = this
-      let item = self.clickTabitem
-      let index = self.clickTabIndex
+      const item = self.clickTabitem
+      const index = this.selectedIndex
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
@@ -313,21 +312,21 @@ export default {
         }
       })
     },
-    swiperChange (index) {
-      const self = this
-      self.clickTabitem = self.tabsdata[index]
-      self.clickTabIndex = index
-      self.arrData = self.datalist[index]
-      if (self.datalist[index].length === 0) {
-        self.$vux.loading.show()
-        self.getdata()
+    swiperChange () {
+      const index = this.selectedIndex
+      this.clickTabitem = this.tabsdata[index]
+      this.arrData = this.datalist[index]
+      switch (index) {
+        case 0:
+          !this.datalist[index].length && this.getData1()
+          break
       }
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`,
-          { params: { id: self.query.id } }
-      ).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: this.module, action: 'stat', id: this.query.id })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: { id: self.query.id } }))
+      .then(res => {
         self.$vux.loading.hide()
         self.showcontainer = true
         let data = res.data
@@ -343,37 +342,25 @@ export default {
           document.title = `统计-${self.data.title}`
           self.clickindex = 0
           self.clickTabitem = self.tabsdata[0]
-          self.getdata()
+          self.swiperChange()
         }
       })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.module = this.query.module
     }
   },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.module = self.query.module
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: self.module, action: 'stat', id: self.query.id
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo()
-      }
-    })
+  created () {
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      if (self.showSos) {
-        self.initInfo()
-      } else if (self.arrData.length === 0) {
-        self.$vux.loading.show()
-        self.getdata()
-      }
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

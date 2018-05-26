@@ -40,7 +40,7 @@
         </template>
       </div>
     </div>
-    <div slot="bottom" class="bottom-area">
+    <div class="bottom-area">
       <div class="input-box">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -180,7 +180,7 @@ import { ViewBox, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom,
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
-let websocket = new WebSocket(ENV.SocketApi)
+import Socket from '#/socket'
 
 export default {
   directives: {
@@ -393,8 +393,9 @@ export default {
           for (let key in retdata) {
             senddata[key] = retdata[key]
           }
-          let sendtxt = JSON.stringify(senddata)
-          websocket.send(sendtxt)
+          // let sendtxt = JSON.stringify(senddata)
+          // websocket.send(sendtxt)
+          Socket.send(senddata)
           self.msgTextarea.value = ''
           self.msgcontent = ''
           self.showSend = false
@@ -429,82 +430,82 @@ export default {
       }
       self.sendData(postdata)
     },
-    getMsgList (lastid) {
-      const self = this
-      let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
-      if (lastid) {
-        params.lastid = lastid
-      }
-      self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.data = self.data.concat(retdata)
-      })
-    },
-    wsConnect () {
-      const self = this
-      websocket = new WebSocket(ENV.SocketApi)
-      let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
-      let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
-      self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
-      websocket.onopen = function () {
-        let loginData = {
-          type: 'login',
-          uid: self.loginUser.uid,
-          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-          room_id: self.roomid
-        }
-        if (self.query.frommodule) {
-          loginData.frommodule = self.query.frommodule
-          loginData.fromid = self.query.fromid
-        }
-        websocket.send(JSON.stringify(loginData))
-      }
-      websocket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        if (data.type === 'login') {
-          console.log('in login')
-        } else if (data.type === 'logout') {
-          console.log('in logout')
-        } else if (data.type === 'say') {
-          console.log('say')
-          let edata = JSON.parse(e.data)
-          let saycontent = edata.content
-          if (!self.$util.isNull(saycontent)) {
-            saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-          }
-          let saydata = {
-            uid: edata.from_uid,
-            content: saycontent,
-            dateline: edata.time,
-            msgtype: edata.msgtype ? edata.msgtype : 'text',
-            picurl: edata.picurl ? edata.picurl : '',
-            thumb: edata.thumb ? edata.thumb : '',
-            username: edata.from_client_name,
-            id: edata.msgid,
-            roomid: edata.room_id,
-            avatar: edata.avatar,
-            newsdata: edata.newsdata,
-            isNew: edata.isNew
-          }
-          self.data.push(saydata)
-          if (saydata.isNew) {
-            let scrollarea = self.$refs.scrollContainer
-            if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
-              scrollarea.scrollTop = scrollarea.scrollHeight + 50
-            }
-          }
-        }
-      }
-      websocket.onclose = function () {
-        console.log('ws closed')
-        self.wsConnect()
-      }
-      websocket.onerror = function () {
-        console.log('ws error')
-      }
-    },
+    // getMsgList (lastid) {
+    //   const self = this
+    //   let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
+    //   if (lastid) {
+    //     params.lastid = lastid
+    //   }
+    //   self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
+    //     let data = res.data
+    //     self.$vux.loading.hide()
+    //     let retdata = data.data ? data.data : data
+    //     self.data = self.data.concat(retdata)
+    //   })
+    // },
+    // wsConnect () {
+    //   const self = this
+    //   websocket = new WebSocket(ENV.SocketApi)
+    //   let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
+    //   let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
+    //   self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
+    //   websocket.onopen = function () {
+    //     let loginData = {
+    //       type: 'login',
+    //       uid: self.loginUser.uid,
+    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+    //       room_id: self.roomid
+    //     }
+    //     if (self.query.frommodule) {
+    //       loginData.frommodule = self.query.frommodule
+    //       loginData.fromid = self.query.fromid
+    //     }
+    //     websocket.send(JSON.stringify(loginData))
+    //   }
+    //   websocket.onmessage = function (e) {
+    //     const data = JSON.parse(e.data)
+    //     if (data.type === 'login') {
+    //       console.log('in login')
+    //     } else if (data.type === 'logout') {
+    //       console.log('in logout')
+    //     } else if (data.type === 'say') {
+    //       console.log('say')
+    //       let edata = JSON.parse(e.data)
+    //       let saycontent = edata.content
+    //       if (!self.$util.isNull(saycontent)) {
+    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+    //       }
+    //       let saydata = {
+    //         uid: edata.from_uid,
+    //         content: saycontent,
+    //         dateline: edata.time,
+    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
+    //         picurl: edata.picurl ? edata.picurl : '',
+    //         thumb: edata.thumb ? edata.thumb : '',
+    //         username: edata.from_client_name,
+    //         id: edata.msgid,
+    //         roomid: edata.room_id,
+    //         avatar: edata.avatar,
+    //         newsdata: edata.newsdata,
+    //         isNew: edata.isNew
+    //       }
+    //       self.data.push(saydata)
+    //       if (saydata.isNew) {
+    //         let scrollarea = self.$refs.scrollContainer
+    //         if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
+    //           scrollarea.scrollTop = scrollarea.scrollHeight + 50
+    //         }
+    //       }
+    //     }
+    //   }
+    //   websocket.onclose = function () {
+    //     console.log('ws closed')
+    //     self.wsConnect()
+    //   }
+    //   websocket.onerror = function () {
+    //     console.log('ws error')
+    //   }
+    // },
     setSendStatus () {
       const self = this
       let val = self.msgTextarea.value.toString()
@@ -582,7 +583,7 @@ export default {
         self.getProductData()
       }
     },
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1[0],
@@ -595,7 +596,7 @@ export default {
         }
       })
     },
-    handleScroll2: function () {
+    handleScroll2 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
@@ -675,18 +676,40 @@ export default {
           break
         }
       }
+    },
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      const room = this.query.id
+      Socket.create()
+      Socket.listening(uid, linkman, room)
+    },
+    getData (query) {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'chat', id: query.uid
+      })
+      const self = this
+      const params = { uid: query.uid, pagestart: this.pagestart, limit: this.limit }
+      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.data = self.data.concat(retdata)
+      })
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
+      this.createSocket()
+      // this.wsConnect()
     }
   },
   created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    self.loginUser = User.get()
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'chat', id: self.query.uid
-    })
-    self.wsConnect()
-    self.getMsgList()
+    this.init()
   },
   mounted () {
     const self = this
@@ -697,6 +720,9 @@ export default {
     this.msgTextarea.addEventListener('keyup', function () {
       self.setSendStatus()
     })
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

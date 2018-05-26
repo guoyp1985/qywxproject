@@ -133,38 +133,6 @@ export default {
     wxContact () {
       this.wxCardShow = true
     },
-    getData () {
-      const self = this
-      this.id = this.$route.query.id
-      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
-      .then(res => {
-        let data = res.data
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
-          self.showSos = true
-          self.showContainer = false
-        } else {
-          let retdata = data.data
-          if (retdata.length === 0) {
-            self.showSos = true
-            self.showContainer = false
-          } else {
-            self.showSos = false
-            self.showContainer = true
-            self.data = retdata
-            self.orders = retdata.orderlist
-            self.special = retdata.special
-            self.retailerInfo = retdata.retailer
-            self.shippingAddress = retdata.address
-            self.shippingOrderon = retdata.orderno
-            self.receiver = retdata.linkman
-            self.receiverPhone = retdata.telephone
-            self.expressCompany = retdata.delivercompanyname
-            self.expressNumber = retdata.delivercode
-          }
-        }
-      })
-    },
     confirm (order) {
       const self = this
       this.$vux.confirm.show({
@@ -231,20 +199,35 @@ export default {
           })
         }
       })
+    },
+    getData () {
+      const self = this
+      this.id = this.$route.query.id
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
+      .then(res => {
+        const data = res.data
+        if (data.flag) {
+          const retdata = data.data
+          self.data = retdata
+          self.orders = retdata.orderlist
+          self.special = retdata.special
+          self.retailerInfo = retdata.retailer
+          self.shippingAddress = retdata.address
+          self.shippingOrderon = retdata.orderno
+          self.receiver = retdata.linkman
+          self.receiverPhone = retdata.telephone
+          self.expressCompany = retdata.delivercompanyname
+          self.expressNumber = retdata.delivercode
+        }
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    this.getData()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && !self.data.id) {
-      self.getData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

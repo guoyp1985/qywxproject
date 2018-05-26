@@ -54,7 +54,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.price" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+              <input v-model="submitdata.price" @keyup="priceChange(event)" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
             </div>
             <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
           </div>
@@ -83,7 +83,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.rebate" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+              <input v-model="submitdata.rebate" @keyup="priceChange(event)" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
             </div>
             <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
           </div>
@@ -342,51 +342,30 @@ export default {
       postdata['moderate'] = 1
       self.savedata(postdata)
     },
-    priceChange (input, callback) {
-      input.addEventListener('keyup', function () {
-        let val = input.value
-        let dotindex = val.lastIndexOf('.')
-        let vallen = val.length
-        let cha = vallen - 1 - dotindex
+    priceChange (event) {
+      // input.addEventListener('keyup', function () {
+        let val = event.target.value
+        const dotindex = val.lastIndexOf('.')
+        const vallen = val.length
+        const cha = vallen - 1 - dotindex
         if (dotindex > -1 && cha > 2) {
           val = val.substr(0, vallen - cha + 2)
         }
-        callback && callback(val)
-      })
+        if (self.showRebate) {
+          this.submitdata.rebate = val
+        }
+        this.submitdata.price = val
+        // callback && callback(val)
+      // })
     },
-    initInfo () {
+    getData () {
       const self = this
-      let logparams = { module: 'product', action: 'add' }
-      if (self.query.id) {
-        logparams.id = self.query.id
-      }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, logparams).then(function (res) {
-        if (res.status === 200) {
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
-        }
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          self.retailerInfo = data.data ? data.data : data
-          if (self.retailerInfo.buyonline === 1) {
-            self.showRebate = true
-            setTimeout(function () {
-              let rebateInput = document.querySelector('.rebateInput')
-              self.priceChange(rebateInput, function (val) {
-                self.submitdata.rebate = val
-              })
-            }, 500)
-          }
-          let priceInput = document.querySelector('.priceInput')
-          self.priceChange(priceInput, function (val) {
-            self.submitdata.price = val
-          })
-        }
-      })
-      if (self.query.id) {
-        let params = { params: { id: self.query.id, module: 'product' } }
-        self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params).then(function (res) {
-          let data = res.data
+      const params1 = { module: 'product', action: 'add' }
+      if (this.query.id) {
+        params1.id = this.query.id
+        const params2 = { params: { id: this.query.id, module: 'product' } }
+        this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
+          const data = res.data
           self.data = data.data ? data.data : data
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
@@ -401,20 +380,34 @@ export default {
           document.title = self.data.title
         })
       }
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, params1).then(res => {
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+      }).then(res => {
+        const data = res.data
+        self.retailerInfo = data.data ? data.data : data
+        if (self.retailerInfo.buyonline === 1) {
+          self.showRebate = true
+          // setTimeout(function () {
+          //   const rebateInput = document.querySelector('.rebateInput')
+          //   self.priceChange(rebateInput, function (val) {
+          //     self.submitdata.rebate = val
+          //   })
+          // }, 500)
+        }
+        // const priceInput = document.querySelector('.priceInput')
+        // self.priceChange(priceInput, function (val) {
+        //   self.submitdata.price = val
+        // })
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
     }
-  },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

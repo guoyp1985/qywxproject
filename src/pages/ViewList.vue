@@ -112,7 +112,7 @@ export default {
       self.disdata = false
       self.data = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onSubmit1 () {
       const self = this
@@ -120,9 +120,9 @@ export default {
       self.disdata = false
       self.data = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -130,42 +130,43 @@ export default {
           if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
-      let params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword1
+      const params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
+      const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/user/viewList`, params).then(function (res) {
-        let data = res.data
+      self.$http.get(`${ENV.BokaApi}/api/user/viewList`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
         self.disdata = true
       })
     },
-    getDateState: function (dt) {
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
     },
-    initInfo (callback) {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      ).then(function (res) {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'sharelist' })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
+      .then(res => {
         self.$vux.loading.hide()
         let data = res.data
         if (data.flag !== 1) {
@@ -177,44 +178,23 @@ export default {
           self.showContainer = true
           self.viewuser = data.data ? data.data : data
           document.title = `${self.viewuser.linkman}的浏览`
-          callback && callback()
+          self.getData1()
         }
       })
+    },
+    init () {
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'sharelist'
-    }).then(function (res) {
-      if (res.status === 200) {
-        console.log('in login')
-        self.initInfo(function () {
-          self.getdata1()
-        })
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    if (!self.doCreated) {
-      if (self.showSos) {
-        self.initInfo(function () {
-          if (self.data.length === 0) {
-            self.getdata1()
-          }
-        })
-      } else {
-        if (self.data.length === 0) {
-          self.getdata1()
-        }
-      }
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

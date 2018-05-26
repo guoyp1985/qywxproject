@@ -38,8 +38,7 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
-      query: Object,
+      // query: {},
       tabs: [],
       headlines: [],
       oArticles: [],
@@ -92,9 +91,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/classList/news`)
       .then(res => {
         self.tabs = res.data.data
-        if (self.tabs.length > 0) {
-          self.getAritcles(self.tabs[self.selectedIndex].id)
-        }
+        self.tabs.length && self.getAritcles(self.tabs[self.selectedIndex].id)
         const lUrl = urlParse(location.href, true)
         return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, {useforurl: lUrl.hash.replace(/#/, '')})
       })
@@ -118,21 +115,21 @@ export default {
       .then(res => {
         self.oArticles = res.data
       })
+    },
+    init () {
+      
+    },
+    refresh () {
+      // this.query = this.$route.query
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.getData()
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    this.query = this.$route.query
-    this.getData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.oArticles.length === 0) {
-      this.getData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

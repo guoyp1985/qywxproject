@@ -122,7 +122,7 @@ export default {
     }
   },
   methods: {
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -130,73 +130,80 @@ export default {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      this.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
       })
     },
     closeShareSuccess () {
       this.showShareSuccess = false
-    }
-  },
-  beforeRouteEnter (to, from, next) {
-    const user = User.get()
-    if (user) {
-      let retailerInfo = null
-      let addata = null
-      let activitydata = null
-      Vue.http.get(`${ENV.BokaApi}/api/retailer/info`, {
-        params: { uid: user.uid }
-      }).then(function (res) {
-        const data = res.data
-        retailerInfo = data.data ? data.data : data
-        return Vue.http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
-      }).then(function (res) {
-        const data = res.data
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          retdata[i].img = retdata[i].photo
-        }
-        addata = retdata
-        const params = { params: { do: 'all', pagestart: 0, limit: 5 } }
-        return Vue.http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-      }).then(function (res) {
-        const data = res.data
-        activitydata = data.data ? data.data : data
-        next(vm => {
-          vm.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-          vm.retailerInfo = retailerInfo
-          vm.addata = addata
-          vm.activitydata = activitydata
-          vm.loginUser = user
-          vm.$util.handleWxShare({
+    },
+    getData () {
+      const user = User.get()
+      const query = this.$route.query
+      if (user) {
+        let retailerInfo = null
+        let addata = null
+        let activitydata = null
+        const self = this
+        this.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: { uid: user.uid } })
+        .then(res => {
+          const data = res.data
+          retailerInfo = data.data ? data.data : data
+          return self.$http.post(`${ENV.BokaApi}/api/common/getAd`, { useforurl: '/mobile/community.php' })
+        })
+        .then(res => {
+          const data = res.data
+          let retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            retdata[i].img = retdata[i].photo
+          }
+          addata = retdata
+          const params = { params: { do: 'all', pagestart: 0, limit: 5 } }
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
+        })
+        .then(res => {
+          const data = res.data
+          activitydata = data.data ? data.data : data
+          self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+          self.retailerInfo = retailerInfo
+          self.addata = addata
+          self.activitydata = activitydata
+          self.loginUser = user
+          self.$util.handleWxShare({
             module: 'shop',
             moduleid: 0,
-            lastshareuid: to.query.share_uid,
+            lastshareuid: query.share_uid,
             title: '共销宝商城',
             desc: '一款能买能卖的销售平台，你要的都在这里！',
             photo: user.avatar,
             link: `${ENV.Host}/#/userproducts?wid=${user.uid}&share_uid=${user.uid}`,
             successCallback: function () {
-              vm.showShareSuccess = true
+              self.showShareSuccess = true
             }
           })
-          vm.getdata1()
+          self.getData1()
         })
-      })
-    } else {
-      Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      } else {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    },
+    init () {
+      this.getData()
     }
+  },
+  created () {
+    this.init()
   }
 }
 </script>

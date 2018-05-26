@@ -26,20 +26,6 @@ import { Token, User } from '#/storage'
 import ENV from 'env'
 let intervalId = 0
 export default {
-  created () {
-    // const token = Token.get()
-    // if (token) {
-    //
-    // }
-    // this.qrCode = this.$route.params.qrCode
-    // if (!this.qrCode) {
-    //   this.requestLogin()
-    //   this.polling()
-    // }
-    this.$vux.loading.hide()
-    this.requestLogin()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-  },
   data () {
     return {
       qrCode: {
@@ -80,7 +66,14 @@ export default {
           self.polling()
         }
       )
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.requestLogin()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

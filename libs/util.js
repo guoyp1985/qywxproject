@@ -3,6 +3,8 @@ import Reg from './reg'
 import ENV from 'env'
 import SHA1 from 'js-sha1'
 import Time from './time'
+import urlParse from 'url-parse'
+import { User, Roomid } from './storage'
 const Util = {}
 Util.install = function (Vue, options) {
   Vue.prototype.$util = {
@@ -86,7 +88,7 @@ Util.install = function (Vue, options) {
       }
       return list
     },
-    checkMobile : function(mobile) {
+    checkMobile: function (mobile) {
       if (isNaN(mobile)) return false;
       if (!mobile || mobile=="" || mobile.length!=11) {
       	return false;
@@ -96,6 +98,89 @@ Util.install = function (Vue, options) {
       }
       return false;
     },
+    wxAccess: function () {
+      const user = User.get()
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      if (user && user.subscribe === 0) {
+        if (code) {
+          Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+          .then(res => {
+            if (res.data.flag) {
+              User.set({
+                ...user,
+                ...res.data.data
+              })
+              location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+            }
+          })
+        } else {
+          const originHref = encodeURIComponent(location.href)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+        }
+      } else {
+        Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    },
+    // webSocketFactory: (() => {
+    //   let ws = null
+    //   return () => ws = (ws ? ws : new WebSocket(ENV.SocketApi))
+    // })(),
+    // socketInit: function (uid, linkman, room) {
+    //   const roomId = `${ENV.SocketBokaApi}-news-${room}`
+    //   const ws = this.webSocketFactory()
+    //   Roomid.set(roomId)
+    //   ws.onopen = function () {
+    //     let loginData = {
+    //       type: 'login',
+    //       uid: uid,
+    //       client_name: linkman.replace(/"/g, '\\"'),
+    //       room_id: roomId
+    //     }
+    //     ws.send(JSON.stringify(loginData))
+    //   }
+    //   ws.onmessage = function (e) {
+    //     const data = JSON.parse(e.data)
+    //     if (data.type === 'login') {
+    //       console.log('in login')
+    //     } else if (data.type === 'logout') {
+    //       console.log('in logout')
+    //     } else if (data.type === 'say') {
+    //       console.log('say')
+    //       let edata = JSON.parse(e.data)
+    //       let saycontent = edata.content
+    //       if (!this.isNull(saycontent)) {
+    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+    //       }
+    //       let saydata = {
+    //         uid: edata.from_uid,
+    //         content: saycontent,
+    //         dateline: edata.time,
+    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
+    //         picurl: edata.picurl ? edata.picurl : '',
+    //         thumb: edata.thumb ? edata.thumb : '',
+    //         username: edata.from_client_name,
+    //         id: edata.msgid,
+    //         roomid: edata.room_id,
+    //         avatar: edata.avatar,
+    //         newsdata: edata.newsdata
+    //       }
+    //     }
+    //   }
+    //   ws.onclose = function () {
+    //     console.log('ws closed')
+    //     self.wsConnect()
+    //   }
+    //   ws.onerror = function () {
+    //     console.log('ws error')
+    //   }
+    // },
+    // socketDestory: function (room) {
+    //   socket.send(JSON.stringify({
+    //     type: 'logout',
+    //     room_id: room
+    //   }))
+    // },
     delay: (text) => {
       let ret = 1000
       let len = text.length

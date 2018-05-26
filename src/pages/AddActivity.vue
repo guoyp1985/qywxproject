@@ -177,7 +177,7 @@ export default {
   computed: {
   },
   methods: {
-    dateformat: function (value) {
+    dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     },
     radioclick (data, index) {
@@ -412,54 +412,53 @@ export default {
           })
         }
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.activityType = this.query.type
+      const nowdate = new Date().getTime()
+      const startime = this.dateformat(parseInt(nowdate / 1000))
+      const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
+      this.selectdatetxt1 = ''
+      this.selectdatetxt2 = ''
+      const submitdata = {
+        productid: '',
+        starttime: startime,
+        endtime: endtime
+      }
+      if (this.activityType === 'groupbuy') {
+        this.submitdata = {
+          ...submitdata,
+          param_groupprice: '',
+          param_numbers: '',
+          param_limitbuy: '',
+          param_finishtime: '',
+          param_everybuy: ''
+        }
+      } else if (this.activityType === 'bargainbuy') {
+        this.submitdata = {
+          ...submitdata,
+          param_minprice: '',
+          param_limitbuy: '',
+          param_finishtime: '',
+          param_everymin: '',
+          param_everymax: ''
+        }
+      } else if (this.activityType === 'discount') {
+        this.submitdata = {
+          ...submitdata,
+          param_price: '',
+          param_limitcount: '',
+          param_storage: ''
+        }
+      }
+      this.submitdata.type = this.query.type
+      this.requireddata = this.submitdata
     }
-  },
-  created: function () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.activityType = self.query.type
-    let nowdate = new Date().getTime()
-    let startime = self.dateformat(parseInt(nowdate / 1000))
-    let endtime = self.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
-    self.selectdatetxt1 = ''
-    self.selectdatetxt2 = ''
-    if (self.activityType === 'groupbuy') {
-      self.submitdata = {
-        productid: '',
-        starttime: startime,
-        endtime: endtime,
-        param_groupprice: '',
-        param_numbers: '',
-        param_limitbuy: '',
-        param_finishtime: '',
-        param_everybuy: ''
-      }
-    } else if (self.activityType === 'bargainbuy') {
-      self.submitdata = {
-        productid: '',
-        starttime: startime,
-        endtime: endtime,
-        param_minprice: '',
-        param_limitbuy: '',
-        param_finishtime: '',
-        param_everymin: '',
-        param_everymax: ''
-      }
-    } else if (self.activityType === 'discount') {
-      self.submitdata = {
-        productid: '',
-        starttime: startime,
-        endtime: endtime,
-        param_price: '',
-        param_limitcount: '',
-        param_storage: ''
-      }
-    }
-    self.submitdata['type'] = self.query.type
-    self.requireddata = self.submitdata
   },
   activated () {
+    this.refresh()
   }
 }
 </script>

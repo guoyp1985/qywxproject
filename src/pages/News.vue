@@ -120,7 +120,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User, BkSocket, Roomid } from '#/storage'
+import { User, Roomid } from '#/storage'
 
 export default {
   directives: {
@@ -156,9 +156,9 @@ export default {
       disComments: false,
       pagestart: 0,
       limit: 20,
-      replyData: null,
-      roomid: '',
-      socket: BkSocket.get()
+      replyData: null
+      // roomid: '',
+      // socket: BkSocket.get()
     }
   },
   filters: {
@@ -295,18 +295,18 @@ export default {
     },
     getData () {
       const self = this
-      const id = self.query.id
-      let infoparams = { id: id, module: self.module }
-      if (self.query.from === 'poster') {
+      const id = this.query.id
+      const infoparams = { id: id, module: this.module }
+      if (this.query.from === 'poster') {
         infoparams.from = 'poster'
       }
-      if (self.query.share_uid) {
+      if (this.query['share_uid']) {
         infoparams['share_uid'] = self.query.share_uid
       }
-      self.$vux.loading.show()
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
       .then(res => {
-        let data = res.data
+        const data = res.data
         if (!isNaN(data.flag)) {
           self.$vux.loading.hide()
           if (data.flag !== 1) {
@@ -335,23 +335,20 @@ export default {
             })
           }
         }
-      }).then(function (res) {
-        self.handleImg()
-        if (res) {
-          let data = res.data
-          if (data.flag === 1) {
-            self.isdig = 1
-          }
-          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
-        }
       })
       .then(res => {
-        if (res) {
-          if (res.data.flag < 1) {
-            self.notFavorite = true
-          } else {
-            self.notFavorite = false
-          }
+        self.handleImg()
+        const data = res.data
+        if (data.flag === 1) {
+          self.isdig = 1
+        }
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
+      })
+      .then(res => {
+        if (res.data.flag < 1) {
+          self.notFavorite = true
+        } else {
+          self.notFavorite = false
         }
       })
     },
@@ -487,77 +484,97 @@ export default {
         }
       }
     },
-    createdFun (to, from, next) {
-      const self = this
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      const room = this.query.id
+      Socket.create()
+      Socket.listening(uid, linkman, room)
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = to.query
-      self.loginUser = User.get()
-      this.wsConnect()
+      this.query = this.$route.query
       this.showsharetip = false
       this.getData()
+      this.createSocket()
       if (this.query.newadd) {
-        setTimeout(function () {
+        const self = this
+        setTimeout(() => {
           self.showsharetip = false
         }, 10000)
       }
-      next && next()
     },
-    wsConnect () {
-      const self = this
-      self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
-      Roomid.set(self.roomid)
-      if (!self.socket || !self.socket.url) {
-        self.socket = new WebSocket(ENV.SocketApi)
-        BkSocket.set(self.socket)
-      }
-      self.socket.onopen = function () {
-        let loginData = {
-          type: 'login',
-          uid: self.loginUser.uid,
-          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-          room_id: self.roomid
-        }
-        self.socket.send(JSON.stringify(loginData))
-      }
-      self.socket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        if (data.type === 'login') {
-          console.log('in login')
-        } else if (data.type === 'logout') {
-          console.log('in logout')
-        } else if (data.type === 'say') {
-          console.log('say')
-        }
-      }
-      self.socket.onclose = function () {
-        console.log('ws closed')
-        self.wsConnect()
-      }
-      self.socket.onerror = function () {
-        console.log('ws error')
-      }
-    },
+    // wsConnect () {
+    //   const self = this
+    //   self.roomid = `${ENV.SocketBokaApi}-news-${self.query.id}`
+    //   Roomid.set(self.roomid)
+    //   if (!self.socket || !self.socket.url) {
+    //     self.socket = new WebSocket(ENV.SocketApi)
+    //     BkSocket.set(self.socket)
+    //   }
+    //   self.socket.onopen = function () {
+    //     let loginData = {
+    //       type: 'login',
+    //       uid: self.loginUser.uid,
+    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+    //       room_id: self.roomid
+    //     }
+    //     self.socket.send(JSON.stringify(loginData))
+    //   }
+    //   self.socket.onmessage = function (e) {
+    //     const data = JSON.parse(e.data)
+    //     if (data.type === 'login') {
+    //       console.log('in login')
+    //     } else if (data.type === 'logout') {
+    //       console.log('in logout')
+    //     } else if (data.type === 'say') {
+    //       console.log('say')
+    //       let edata = JSON.parse(e.data)
+    //       let saycontent = edata.content
+    //       if (!self.$util.isNull(saycontent)) {
+    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+    //       }
+    //       let saydata = {
+    //         uid: edata.from_uid,
+    //         content: saycontent,
+    //         dateline: edata.time,
+    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
+    //         picurl: edata.picurl ? edata.picurl : '',
+    //         thumb: edata.thumb ? edata.thumb : '',
+    //         username: edata.from_client_name,
+    //         id: edata.msgid,
+    //         roomid: edata.room_id,
+    //         avatar: edata.avatar,
+    //         newsdata: edata.newsdata
+    //       }
+    //     }
+    //   }
+    //   self.socket.onclose = function () {
+    //     console.log('ws closed')
+    //     self.wsConnect()
+    //   }
+    //   self.socket.onerror = function () {
+    //     console.log('ws error')
+    //   }
+    // },
     toStore () {
       const self = this
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.createdFun(this.$route)
-  },
-  beforeRouteUpdate (to, from, next) {
-    const self = this
-    self.createdFun(to, from, next)
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.createdFun(this.$route)
-    }
-    self.doCreated = false
+    this.refresh()
   }
+  // beforeRouteUpdate (to, from, next) {
+  //   const self = this
+  //   self.init(to, from, next)
+  // }
 }
 </script>
 <style lang="less">

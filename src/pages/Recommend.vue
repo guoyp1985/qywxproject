@@ -161,18 +161,20 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/seller/myRetailerList`)
       .then(res => {
         self.$vux.loading.hide()
-        this.list = res.data
+        self.list = res.data
         self.disList = true
       })
     },
     getBuyRetailer () {
+      const self = this
       this.$http.get(`${ENV.BokaApi}/api/seller/buyRetailerList`)
       .then(res => {
-        this.list1 = res.data
+        self.$vux.loading.hide()
+        self.list1 = res.data
       })
     },
-    clickTabItem (index) {
-      switch (index) {
+    clickTabItem () {
+      switch (this.selectedIndex) {
         case 0:
           this.getMyRetailer()
           break
@@ -193,28 +195,27 @@ export default {
     bringCustomerClick () {
       this.$router.push({path: '/bringCustomer'})
     },
-    getRebateInfo () {
+    getData () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/seller/rebateinfo`)
       .then(res => {
         self.rebateInfo = res.data
+        self.clickTabItem()
       })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$vux.loading.show()
-    self.getRebateInfo()
-    this.getMyRetailer()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      !self.list.length && self.getMyRetailer()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

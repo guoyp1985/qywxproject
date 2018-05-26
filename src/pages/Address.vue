@@ -82,15 +82,6 @@ export default {
     }
   },
   methods: {
-    getData () {
-      const self = this
-      this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
-      .then(res => {
-        if (res.data.length) {
-          self.items = res.data
-        }
-      })
-    },
     onDelete (item) {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/user/address/delete`, {id: item.id})
@@ -114,21 +105,23 @@ export default {
       .then(res => {
         self.$vux.toast.text(self.$t('Setting Default Success For Address'))
       })
-    }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    this.getData()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    // this.getWxAddress()
-  },
-  activated () {
-    const self = this
-    if (!self.doCreated && self.items.length === 0) {
+    },
+    getData () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/user/address/list`)
+      .then(res => {
+        if (res.data.length) {
+          self.items = res.data
+        }
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.getData()
     }
-    self.doCreated = false
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

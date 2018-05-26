@@ -57,7 +57,7 @@ let webpackConfig = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        include: [resolve('src'), resolve('libs'), resolve('test')]
       },
       {
         test: /\.yml$/,

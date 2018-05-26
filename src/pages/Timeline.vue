@@ -73,7 +73,6 @@ export default {
       showSos: false,
       sosTitle: '该用户不存在',
       showContainer: false,
-      doCreated: false,
       query: {},
       viewuser: {},
       data: [],
@@ -83,57 +82,42 @@ export default {
   computed: {
   },
   methods: {
-    initInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      ).then(function (res) {
-        let data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'timeline' })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } } ))
+      .then(res => {
+        const data = res.data
         if (data.flag !== 1) {
           self.$vux.loading.hide()
           self.sosTitle = data.error
           self.showSos = true
           self.showContainer = false
-        } else {
-          self.showSos = false
-          self.showContainer = true
-          self.viewuser = data.data ? data.data : data
-          document.title = `${self.viewuser.linkman}的行为`
-          let params = { params: { uid: self.query.uid } }
-          return self.$http.get(`${ENV.BokaApi}/api/user/timeLine`, params)
         }
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          let retdata = data.data ? data.data : data
-          self.data = retdata
-          self.disdatalist = true
-        }
+        self.showSos = false
+        self.showContainer = true
+        self.viewuser = data.data ? data.data : data
+        document.title = `${self.viewuser.linkman}的行为`
+        const params = { params: { uid: self.query.uid } }
+        return self.$http.get(`${ENV.BokaApi}/api/user/timeLine`, params)
       })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.data = retdata
+        self.disdatalist = true
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.query = this.$route.query
+      this.getData()
     }
-  },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'timeline'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo()
-      }
-    })
   },
   activated () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    if (!self.doCreated && self.showSos) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.getData()
   }
 }
 </script>

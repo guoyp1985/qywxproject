@@ -27,19 +27,21 @@ export default {
   },
   data () {
     return {
+      data: {},
       showSos: false,
       sosTitle: '',
-      showContainer: false,
-      doCreated: false,
-      query: {},
-      data: ''
+      showContainer: false
     }
   },
-  methods: {
-    initData () {
+  methods : {
+    getData () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/getPoster`).then(function (res) {
-        let data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'posterdetail'
+      }).then(function () {
+        return self.$http.post(`${ENV.BokaApi}/api/retailer/getPoster`)
+      }).then(function (res) {
+        const data = res.data
         self.$vux.loading.hide()
         if (data.flag !== 1) {
           self.sosTitle = data.error
@@ -51,29 +53,20 @@ export default {
           self.data = data.data ? data.data : data
         }
       })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'posterdetail'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initData()
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && !self.data.id) {
-      self.$vux.loading.show()
-      self.initData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

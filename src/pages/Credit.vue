@@ -43,7 +43,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: {},
       disList: false,
       list: [],
@@ -73,9 +72,17 @@ export default {
         }
       })
     },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
     getData () {
       const self = this
-      let params = { pagestart: self.pagestart, limit: self.limit }
+      const params = { pagestart: this.pagestart, limit: this.limit }
       this.$http.get(`${ENV.BokaApi}/api/user/creditsList`, {
         params: params
       })
@@ -87,27 +94,19 @@ export default {
         self.disList = true
       })
     },
-    getDateState: function (dt) {
-      return this.$util.getDateState(dt)
+    init () {
+      this.$vux.loading.show()
+      this.getData()
     },
-    getDateClass: function (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$vux.loading.show()
-    self.getData()
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.list.length === 0) {
-      self.getData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

@@ -167,49 +167,32 @@ export default {
         btn.react()
       }
     },
-    setInfo () {
-      const self = this
+    getData () {
       const user = User.get()
-      self.avatarHref = user.avatar
-      self.linkMan = user.linkman
-      self.userCredits = user.credit
-      self.userLevels = user.levels
-      self.messages = user.messages
-      self.profile = {
-        linkman: user.linkman,
-        avatar: user.avatar,
-        sex: user.sex,
-        mobile: user.mobile,
-        company: user.company
+      if (user) {
+        this.avatarHref = user.avatar
+        this.linkMan = user.linkman
+        this.userCredits = user.credit
+        this.userLevels = user.levels
+        this.messages = user.messages
+        this.profile = {
+          linkman: user.linkman,
+          avatar: user.avatar,
+          sex: user.sex,
+          mobile: user.mobile,
+          company: user.company
+        }
+      } else {
+        this.$http.get(`${ENV.BokaApi}/api/user/show`)
       }
     },
-    initInfo () {
-      const self = this
-      const user = User.get()
-      if (user && user.uid) {
-        self.setInfo()
-      } else {
-        self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          if (res.status === 200) {
-            User.set(res.data)
-            self.setInfo()
-          }
-        })
-      }
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    self.initInfo()
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

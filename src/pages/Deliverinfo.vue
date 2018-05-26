@@ -32,9 +32,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import { Timeline, TimelineItem } from 'vux'
 import Sos from '@/components/Sos'
@@ -46,7 +43,7 @@ export default {
     Timeline, TimelineItem, Sos
   },
   filters: {
-    dateformat: function (dt) {
+    dateformat (dt) {
       let newtime = new Time(dt * 1000)
       let year = newtime.year()
       let month = newtime.month()
@@ -71,13 +68,12 @@ export default {
       }
       return state
     },
-    dateformat1: function (value) {
+    dateformat1 (value) {
       return new Time(value * 1000).dateFormat('hh:mm')
     }
   },
   data () {
     return {
-      doCreated: false,
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -88,51 +84,36 @@ export default {
     }
   },
   methods: {
-    initInfo () {
+    getData () {
       const self = this
-      if (self.query.id) {
-        self.$vux.loading.show()
-        let params = { id: self.query.id }
-        self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, { params: params }).then(function (res) {
-          let data = res.data
-          self.deliverinfo = data.data ? data.data : data
-          return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
-        }).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          if (data.flag !== 1) {
-            self.sosTitle = data.error
-            self.showSos = true
-            self.$vux.loading.hide()
-          } else {
-            self.showContainer = true
-            let retdata = data.data ? data.data : data
-            if (!retdata.status) {
-              for (let i = 0; i < retdata.length; i++) {
-                let d = retdata[i]
-                d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
-              }
-              self.data = retdata
-            }
-            self.showData = true
+      const params = { id: this.query.id }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, { params: params }).then(function (res) {
+        const data = res.data
+        self.deliverinfo = data.data ? data.data : data
+        return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
+      }).then(function (res) {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.$vux.loading.hide()
+        if (!retdata.status) {
+          for (let i = 0; i < retdata.length; i++) {
+            let d = retdata[i]
+            d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
           }
-        })
-      }
+          self.data = retdata
+        }
+        self.showData = true
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
-  },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.initInfo()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.data.length === 0) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

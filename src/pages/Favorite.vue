@@ -115,7 +115,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       selectedIndex: 0,
       avatar: '',
       name: '',
@@ -126,16 +125,16 @@ export default {
     }
   },
   methods: {
-    onItemClick (index) {
-      switch (index) {
+    onItemClick () {
+      switch (this.selectedIndex) {
         case 0:
-          this.getArticles()
+          !this.articles.length && this.getArticles()
           break
         case 1:
-          this.getCommodities()
+          !this.commodities.length && this.getCommodities()
           break
         case 2:
-          this.getStores()
+          !this.stores.length && this.getStores()
           break
       }
     },
@@ -195,35 +194,19 @@ export default {
       this.avatar = user.avatar
       this.name = user.linkman
       this.coins = user.credit
+      this.onItemClick()
+    },
+    refresh () {
+      this.getData()
     }
   },
   filters: {
-    dateFormat: function (isoDate) {
+    dateFormat (isoDate) {
       return `收藏时间: ${new Time(isoDate * 1000).dateFormat('yyyy-MM-dd hh:mm')}`
     }
   },
-  created () {
-    const self = this
-    self.doCreated = true
-    this.getData()
-    this.getArticles()
-  },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      switch (self.selectedIndex) {
-        case 0:
-          !self.articles.length && self.getArticles()
-          break
-        case 1:
-          !self.commodities.length && this.getCommodities()
-          break
-        case 2:
-          !self.stores.length && this.getStores()
-          break
-      }
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

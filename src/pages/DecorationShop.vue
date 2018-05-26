@@ -124,7 +124,6 @@ export default {
       showSos: false,
       sosTitle: '',
       showContainer: false,
-      doCreated: false,
       loginUser: {},
       productdata: [],
       clickdata: {},
@@ -148,13 +147,13 @@ export default {
       return this.photoarr.length
     }
   },
-  computed: {
-    getquery: function () {
-      return this.$route.query
-    }
-  },
+  // computed: {
+  //   getquery: function () {
+  //     return this.$route.query
+  //   }
+  // },
   methods: {
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -162,19 +161,9 @@ export default {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData()
           }
         }
-      })
-    },
-    getdata1 () {
-      const self = this
-      let params = { params: { from: 'myshop', pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
       })
     },
     showRolling (item, index) {
@@ -318,44 +307,41 @@ export default {
     popupCancel () {
       this.popupShow = false
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'decorationshop'
-      }).then(function (res) {
-        if (res.status === 200) {
-          let data = res.data
-          if (data.flag !== 1) {
-            self.sosTitle = data.error
-            self.showSos = true
-            self.$vux.loading.hide()
-          } else {
-            self.showContainer = true
-            if (self.clickdata && self.clickdata.rollingphoto && self.clickdata.rollingphoto !== '') {
-              self.havenum = self.clickdata.rollingphoto.split(',')
-            } else {
-              self.havenum = 0
-            }
-            self.getdata1()
-          }
-        }
+      const params = { params: { from: 'myshop', pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.$vux.loading.hide()
+        self.productdata = self.productdata.concat(retdata)
       })
+    },
+    init () {
+      const self = this
+      this.loginUser = User.get()
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'decorationshop'
+      })
+      .then(res => {
+        self.getData()
+      })
+      if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
+        this.havenum = this.clickdata.rollingphoto.split(',')
+      } else {
+        this.havenum = 0
+      }
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.loginUser = User.get()
-    self.initInfo()
+  created () {
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.productdata.length === 0) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

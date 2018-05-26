@@ -2,13 +2,13 @@
   <div class="containerarea bg-page font14 bringcustomer">
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
-        <tab v-model="tabmodel" class="v-tab">
+        <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item :class="`swiperitem scroll-container${index}`" v-for="(tabitem, index) in tabtxts" :key="index">
           <div class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)" v-if="(index == 0)">
             <div v-if="distabdata1" class="scroll_list">
@@ -75,10 +75,9 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
-      query: Object,
+      query: {},
       tabtxts: [ '全部', '购买客户' ],
-      tabmodel: 0,
+      selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
       tabdata1: [],
@@ -89,93 +88,95 @@ export default {
     }
   },
   methods: {
-    handleScroll: function (refname, index) {
+    handleScroll1 (index) {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.$refs.scrollContainer1[0],
+        callback: function () {
+          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+            self.pagestart1++
+            self.$vux.loading.show()
+            self.getData1()
+          }
+        }
+      })
+    },
+    handleScroll2 (index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (index === 0) {
-            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
-              self.$vux.loading.show()
-              self.getdata1()
-            }
-          } else if (index === 1) {
-            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-              self.pagestart2++
-              self.$vux.loading.show()
-              self.getdata2()
-            }
+          if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+            self.pagestart2++
+            self.$vux.loading.show()
+            self.getData2()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
       let params = { pagestart: self.pagestart1, limit: self.limit }
       if (self.query.wid) {
         params.wid = self.query.wid
       }
-      self.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params).then(function (res) {
-        let data = res.data
+      self.$http.post(`${ENV.BokaApi}/api/seller/bringCustomer`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
       const self = this
       let params = { pagestart: self.pagestart2, limit: self.limit }
       if (self.query.wid) {
         params.wid = self.query.wid
       }
-      self.$http.post(`${ENV.BokaApi}/api/seller/buyCustomer`, params).then(function (res) {
-        let data = res.data
+      self.$http.post(`${ENV.BokaApi}/api/seller/buyCustomer`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 0) {
-        if (self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (index === 1) {
-        if (self.pagestart2 === 0) {
-          self.$vux.loading.show()
-          self.getdata2()
-        }
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && self.getData1()
+          break
+        case 1:
+          !this.tabdata2.length && self.getData2()
+          break
       }
     },
-    getDateState: function (dt) {
+    getDateState (dt) {
       return this.$util.getDateState(dt)
     },
-    getDateClass: function (dt) {
+    getDateClass (dt) {
       let ret = this.$util.getDateClass(dt)
       ret = `${ret} mr5`
       return ret
+    },
+    init () {
+      this.$vux.loading.show()
+      this.swiperChange()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.getdata1()
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.tabdata1.length === 0) {
-      self.getdata1()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

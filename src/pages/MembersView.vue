@@ -192,12 +192,12 @@ export default {
     }
   },
   watch: {
-    userIntention: function () {
+    userIntention () {
       return this.userIntention
     }
   },
   computed: {
-    getprioritycss: function () {
+    getprioritycss () {
       let ret = ''
       let self = this
       if (self.viewuser.priority) {
@@ -205,7 +205,7 @@ export default {
       }
       return ret
     },
-    getsex: function () {
+    getsex () {
       let val = this.viewuser.sex
       let ret = '未知'
       if (val === 1) {
@@ -222,13 +222,13 @@ export default {
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
         { action: 'stickcustomer', customeruid: self.query.uid }
-      ).then(function (res) {
-        let data = res.data
+      ).then(res => {
+        const data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               self.viewuser.priority = !self.viewuser.priority
             }
@@ -245,13 +245,13 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
             { inviteuid: self.query.uid }
-          ).then(function (res) {
-            let data = res.data
+          ).then(res => {
+            const data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
               time: self.$util.delay(data.error),
-              onHide: function () {
+              onHide: () => {
                 if (data.flag === 1) {
                   self.viewuser.isseller = true
                 }
@@ -296,13 +296,13 @@ export default {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
             { action: 'update', customeruid: self.query.uid, char: char, value: val }
-          ).then(function (res) {
-            let data = res.data
+          ).then(res => {
+            const data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
               time: self.$util.delay(data.error),
-              onHide: function () {
+              onHide: () => {
                 if (data.flag === 1) {
                   self.viewuser[char] = val
                 }
@@ -328,8 +328,8 @@ export default {
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/user/refreshLocation`,
         { uid: self.query.uid }
-      ).then(function (res) {
-        let data = res.data
+      ).then(res => {
+        const data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
           let retdata = data.data
@@ -354,14 +354,14 @@ export default {
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
         { action: 'update', customeruid: self.query.uid, char: 'intention', value: self.userIntention }
-      ).then(function (res) {
-        let data = res.data
+      ).then(res => {
+        const data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           type: data.flag === 1 ? 'success' : 'warn',
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
               self.viewuser.intention = self.userIntention
               self.viewuser.intentiondesc = self.intentionObject[self.userIntention]
@@ -370,17 +370,20 @@ export default {
         })
       })
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      ).then(function (res) {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'membersview', id: this.query.uid
+      }).then(res => {
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
+          { params: { customeruid: self.query.uid } }
+        )
+      }).then(res => {
         self.$vux.loading.hide()
-        let data = res.data
+        const data = res.data
         if (data.flag !== 1) {
           self.sosTitle = data.error
           self.showSos = true
-          self.showContainer = false
           return false
         }
         if (data) {
@@ -392,31 +395,23 @@ export default {
           self.userIntention = self.viewuser.intention
         }
         self.showContainer = true
-        self.showSos = false
       })
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
   },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    this.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'membersview', id: self.query.uid
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo()
-      }
-    })
+  created () {
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && !self.viewuser.uid) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

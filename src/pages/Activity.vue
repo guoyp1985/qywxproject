@@ -8,7 +8,7 @@
         <bargainbuy-view :data="data" :crowduser="crowduser" :cutdown-end="cutdownCallback" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
       </template>
       <template v-if="showBargianbuyDetail">
-        <bargainbuy-detail :data="data" :crowduser="crowduser" :user="loginUser":cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
+        <bargainbuy-detail :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
       </template>
       <share-success
         v-show="showShareSuccess"
@@ -27,9 +27,10 @@ import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import ShareSuccess from '@/components/ShareSuccess'
-import urlParse from 'url-parse'
+import Time from '#/time'
 import ENV from 'env'
-import { User, BkSocket, Roomid } from '#/storage'
+import { User } from '#/storage'
+import Socket from '#/socket'
 
 export default {
   components: {
@@ -49,9 +50,9 @@ export default {
       product: {},
       crowduserid: null,
       crowduser: null,
-      cutData: [],
-      roomid: '',
-      socket: BkSocket.get()
+      cutData: []
+      // roomid: '',
+      // socket: BkSocket.get()
     }
   },
   watch: {
@@ -87,20 +88,20 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    getInfo () {
+    getData () {
       const self = this
-      self.$vux.loading.show()
-      let infoparams = { id: self.query.id }
-      if (self.crowduserid) {
-        infoparams.crowduserid = self.crowduserid
+      this.$vux.loading.show()
+      let infoparams = { id: this.query.id }
+      if (this.crowduserid) {
+        infoparams.crowduserid = this.crowduserid
       }
-      if (self.query.share_uid) {
-        infoparams.share_uid = self.query.share_uid
+      if (this.query.share_uid) {
+        infoparams.share_uid = this.query.share_uid
       }
-      if (self.query.lastshareuid) {
-        infoparams.lastshareuid = self.query.lastshareuid
+      if (this.query.lastshareuid) {
+        infoparams.lastshareuid = this.query.lastshareuid
       }
-      self.$http.get(`${ENV.BokaApi}/api/activity/info`, {
+      this.$http.get(`${ENV.BokaApi}/api/activity/info`, {
         params: infoparams
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -168,114 +169,129 @@ export default {
       })
     },
     joinSuccess (crowduserid) {
-      const self = this
-      self.crowduserid = crowduserid
-      self.getInfo()
+      this.crowduserid = crowduserid
+      this.getData()
     },
     cutSuccess () {
-      const self = this
-      self.getInfo()
-      self.getCudata()
+      this.getData()
+      this.getCudata()
     },
     getCudata () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
-        let data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: this.crowduser.id }).then(function (res) {
+        const data = res.data
         self.cutData = data.data ? data.data : data
       })
     },
     cutdownCallback () {
-      const self = this
-      self.getInfo()
+      this.getData()
     },
-    wsConnect () {
-      const self = this
-      self.roomid = `${ENV.SocketBokaApi}-activity-${self.query.id}`
-      Roomid.set(self.roomid)
-      if (!self.socket || !self.socket.url) {
-        self.socket = new WebSocket(ENV.SocketApi)
-        BkSocket.set(self.socket)
-      }
-      self.socket.onopen = function () {
-        let loginData = {
-          type: 'login',
-          uid: self.loginUser.uid,
-          client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-          room_id: self.roomid
-        }
-        self.socket.send(JSON.stringify(loginData))
-      }
-      self.socket.onmessage = function (e) {
-        const data = JSON.parse(e.data)
-        if (data.type === 'login') {
-          console.log('in login')
-        } else if (data.type === 'logout') {
-          console.log('in logout')
-        } else if (data.type === 'say') {
-          console.log('say')
-        }
-      }
-      self.socket.onclose = function () {
-        console.log('ws closed')
-        self.wsConnect()
-      }
-      self.socket.onerror = function () {
-        console.log('ws error')
-      }
+    // wsConnect () {
+    //   const self = this
+    //   self.roomid = `${ENV.SocketBokaApi}-activity-${self.query.id}`
+    //   Roomid.set(self.roomid)
+    //   if (!self.socket || !self.socket.url) {
+    //     self.socket = new WebSocket(ENV.SocketApi)
+    //     BkSocket.set(self.socket)
+    //   }
+    //   self.socket.onopen = function () {
+    //     let loginData = {
+    //       type: 'login',
+    //       uid: self.loginUser.uid,
+    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
+    //       room_id: self.roomid
+    //     }
+    //     self.socket.send(JSON.stringify(loginData))
+    //   }
+    //   self.socket.onmessage = function (e) {
+    //     const data = JSON.parse(e.data)
+    //     if (data.type === 'login') {
+    //       console.log('in login')
+    //     } else if (data.type === 'logout') {
+    //       console.log('in logout')
+    //     } else if (data.type === 'say') {
+    //       console.log('say')
+    //       let edata = JSON.parse(e.data)
+    //       let saycontent = edata.content
+    //       if (!self.$util.isNull(saycontent)) {
+    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+    //       }
+    //       let saydata = {
+    //         uid: edata.from_uid,
+    //         content: saycontent,
+    //         dateline: edata.time,
+    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
+    //         picurl: edata.picurl ? edata.picurl : '',
+    //         thumb: edata.thumb ? edata.thumb : '',
+    //         username: edata.from_client_name,
+    //         id: edata.msgid,
+    //         roomid: edata.room_id,
+    //         avatar: edata.avatar,
+    //         newsdata: edata.newsdata
+    //       }
+    //     }
+    //   }
+    //   self.socket.onclose = function () {
+    //     console.log('ws closed')
+    //     self.wsConnect()
+    //   }
+    //   self.socket.onerror = function () {
+    //     console.log('ws error')
+    //   }
+    // },
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      const room = this.query.id
+      Socket.create()
+      Socket.listening(uid, linkman, room)
     },
-    access () {
-      const user = User.get()
-      const lUrl = urlParse(location.href, true)
-      const code = lUrl.query.code
-      if (user && user.subscribe === 0) {
-        if (code) {
-          this.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
-          .then(res => {
-            if (res.data.flag) {
-              User.set({
-                ...user,
-                ...res.data.data
-              })
-              location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-            }
-          })
-        } else {
-          const originHref = encodeURIComponent(location.href)
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-        }
-      } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          if (res.status === 200) {
-            User.set(res.data)
-          }
-        })
-      }
+    init () {
+      this.$util.wxAccess()
+      this.loginUser = User.get()
+      // this.wsConnect()
+      // this.refresh(query)
     },
-    createdFun (query) {
-      const self = this
-      self.access()
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
-      this.$store.commit('updateToggleTabbar', {toggleBar: false})
-      this.query = query
+      this.query = this.$route.query
       if (this.query.crowduserid) {
         this.crowduserid = this.query.crowduserid
       }
-      this.loginUser = User.get()
-      this.wsConnect()
-      this.getInfo()
+      this.createSocket()
+      this.getData()
     }
+    // access () {
+    //   const user = User.get()
+    //   const lUrl = urlParse(location.href, true)
+    //   const code = lUrl.query.code
+    //   if (user && user.subscribe === 0) {
+    //     if (code) {
+    //       this.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+    //       .then(res => {
+    //         if (res.data.flag) {
+    //           User.set({
+    //             ...user,
+    //             ...res.data.data
+    //           })
+    //           location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+    //         }
+    //       })
+    //     } else {
+    //       const originHref = encodeURIComponent(location.href)
+    //       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+    //     }
+    //   } else {
+    //     this.$http.get(`${ENV.BokaApi}/api/user/show`)
+    //   }
+    // }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    this.createdFun(this.$route.query)
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      this.createdFun(this.$route.query)
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

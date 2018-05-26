@@ -324,7 +324,7 @@ export default {
     }
   },
   methods: {
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer[0],
@@ -332,12 +332,12 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(function (res) {
@@ -405,35 +405,31 @@ export default {
         self.$router.push({path: '/addActivity', query: {type: type}})
       }
     },
-    getRetailerInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(function (res) {
-        let data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'activitylist'
+      }).then(function () {
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
+      }).then(function (res) {
+        const data = res.data
         self.retailerInfo = data.data ? data.data : data
+        self.getData1()
       })
+    },
+    init() {
+      this.$vux.loading.show()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'activitylist'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.getRetailerInfo()
-        self.getdata1()
-      }
-    })
+  created () {
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      !self.retailerInfo.uid && self.getRetailerInfo()
-      !self.tabdata1.length && self.getdata1()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

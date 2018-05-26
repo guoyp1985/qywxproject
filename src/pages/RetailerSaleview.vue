@@ -157,9 +157,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg } from 'vux'
 import Sos from '@/components/Sos'
@@ -183,7 +180,6 @@ export default {
       showSos: false,
       sosTitle: '该记录不存在',
       showContainer: false,
-      doCreated: false,
       query: {},
       sellerUser: { avatar: '/src/assets/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
       isshowpopup: false,
@@ -230,50 +226,53 @@ export default {
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { selleruid: self.query.uid, action: 'orders', pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { selleruid: self.query.uid, action: 'orders', pagestart: self.pagestart1, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { selleruid: self.query.uid, action: 'shares', pagestart: self.pagestart2, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { selleruid: self.query.uid, action: 'shares', pagestart: self.pagestart2, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { selleruid: self.query.uid, action: 'customers', pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { selleruid: self.query.uid, action: 'customers', pagestart: self.pagestart3, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerAction`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
       })
     },
     swiperChange () {
-      const self = this
-      if (self.selectedIndex === 0 && self.tabdata1.length === 0) {
-        self.$vux.loading.show()
-        self.getdata1()
-      } else if (self.selectedIndex === 1 && self.tabdata2.length === 0) {
-        self.$vux.loading.show()
-        self.getdata2()
-      } else if (self.selectedIndex === 2 && self.tabdata3.length === 0) {
-        self.$vux.loading.show()
-        self.getdata3()
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break;
+        case 1:
+          !this.tabdata2.length && this.getData2()
+          break
+        case 2:
+          !this.tabdata3.length && this.getData3()
+          break
       }
     },
     percentclick () {
@@ -286,13 +285,13 @@ export default {
       const self = this
       self.$router.push(`/${item.module}?id=${item.moduleid}&wid=${item.kefuid}`)
     },
-    initInfo (callback) {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,
-        { params: { selleruid: self.query.uid } }
-      ).then(function (res) {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'saleview' })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/sellerView`,{ params: { selleruid: self.query.uid } }))
+      .then(res => {
         self.$vux.loading.hide()
-        let data = res.data
+        const data = res.data
         if (data.flag !== 1) {
           self.sosTitle = data.error
           self.showSos = true
@@ -306,36 +305,24 @@ export default {
             self.showSos = false
             self.showContainer = true
             document.title = self.sellerUser.username
-            callback && callback()
+            self.swiperChange()
           }
         }
       })
+    },
+    init () {
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'saleview'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo(function () {
-          self.getdata1()
-        })
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.initInfo(function () {
-        self.swiperChange()
-      })
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

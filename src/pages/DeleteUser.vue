@@ -17,9 +17,6 @@
   </div>
 </template>
 
-<i18n>
-</i18n>
-
 <script>
 import ENV from 'env'
 import { Token, User, Access } from '#/storage'
@@ -77,7 +74,7 @@ export default {
       })
     }
   },
-  created () {
+  activated () {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   }
 }

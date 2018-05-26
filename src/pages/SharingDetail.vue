@@ -33,7 +33,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       loginUser: {},
       query: {},
       disList: false,
@@ -64,6 +63,14 @@ export default {
         }
       })
     },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
     getData () {
       const self = this
       let params = { uid: self.loginUser.uid, moduleid: self.query.id, pagestart: self.pagestart, limit: self.limit }
@@ -78,31 +85,20 @@ export default {
         self.disList = true
       })
     },
-    getDateState: function (dt) {
-      return this.$util.getDateState(dt)
+    init () {
+      this.loginUser = User.get()
+      this.$vux.loading.show()
+      this.getData()
     },
-    getDateClass: function (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
+    refresh () {
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$vux.loading.show()
-    self.getData()
+    this.init()
   },
   activated () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-    if (!self.doCreated && self.list.length === 0) {
-      self.$vux.loading.show()
-      self.getData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

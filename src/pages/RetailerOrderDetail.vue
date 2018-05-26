@@ -259,65 +259,53 @@ export default {
         }
       })
     },
-    initInfo () {
-      const self = this
-      if (self.query.id) {
-        self.$vux.loading.show()
-        self.deliverdata.id = self.query.id
-        let params = { params: { id: self.query.id } }
-        self.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, params).then(function (res) {
-          self.$vux.loading.hide()
-          let data = res.data
-          if (data.flag !== 1) {
-            self.sosTitle = data.error
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'orderdetail', id: this.query.id
+      })
+      this.deliverdata.id = this.query.id
+      const params = { params: { id: this.query.id } }
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, params).then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.data = data.data
+          if (self.data.length === 0) {
             self.showSos = true
             self.showContainer = false
           } else {
-            self.data = data.data
-            if (self.data.length === 0) {
-              self.showSos = true
-              self.showContainer = false
-            } else {
-              self.showSos = false
-              self.showContainer = true
-              if (self.data.flag !== 2) {
-                self.bottomcss = 'nobottom'
-              }
-              let total = 0
-              for (let i = 0; i < self.data.orderlist.length; i++) {
-                let o = self.data.orderlist[i]
-                total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
-              }
-              self.totalPrice = total.toFixed(2)
-              if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
-                self.deliverdata.delivercompany = self.data.delivercompany
-                self.deliverdata.delivercode = self.data.delivercode
-              }
+            self.showSos = false
+            self.showContainer = true
+            if (self.data.flag !== 2) {
+              self.bottomcss = 'nobottom'
+            }
+            let total = 0
+            for (let i = 0; i < self.data.orderlist.length; i++) {
+              let o = self.data.orderlist[i]
+              total += parseFloat(o.special.replace(/,/g, '')) * parseInt(o.quantity)
+            }
+            self.totalPrice = total.toFixed(2)
+            if (self.data.delivercompany && self.$util.trim(self.data.delivercompany) !== '') {
+              self.deliverdata.delivercompany = self.data.delivercompany
+              self.deliverdata.delivercode = self.data.delivercode
             }
           }
-        })
-      }
+        }
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
     }
-  },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    self.query = self.$route.query
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'orderdetail', id: self.query.id
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo()
-      }
-    })
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.data.length === 0) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

@@ -1,26 +1,24 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
-
-      <div class="s-topbanner">
-        <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
-          <div class="vux-1px-r">
-            <div class="color-white font14">访问量</div>
-            <div class="color-white font21 mt10">{{ viewdata.views }}</div>
-          </div>
-          <div class="vux-1px-r">
-            <div class="color-white font14">分享数</div>
-            <div class="color-white font21 mt10">{{ viewdata.share }}</div>
-          </div>
-          <div class="vux-1px-r">
-            <div class="color-white font14">销售额</div>
-            <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
-          </div>
+    <div class="s-topbanner">
+      <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
+        <div class="vux-1px-r">
+          <div class="color-white font14">访问量</div>
+          <div class="color-white font21 mt10">{{ viewdata.views }}</div>
         </div>
-        <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-        </tab>
+        <div class="vux-1px-r">
+          <div class="color-white font14">分享数</div>
+          <div class="color-white font21 mt10">{{ viewdata.share }}</div>
+        </div>
+        <div class="vux-1px-r">
+          <div class="color-white font14">销售额</div>
+          <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
+        </div>
       </div>
-
+      <tab v-model="selectedIndex" class="v-tab">
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+      </tab>
+    </div>
     <div class="pagemiddle bg-white pl12 pr12">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
@@ -134,7 +132,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       selectedIndex: 0,
       tabtxts: [ '分享', '浏览' ],
       viewdata: { orders: '0.00', share: 0, views: 0 },
@@ -166,82 +163,78 @@ export default {
             if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
               self.pagestart1++
               self.$vux.loading.show()
-              self.getdata1()
+              self.getData1()
             }
           } else {
             if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
               self.pagestart2++
               self.$vux.loading.show()
-              self.getdata2()
+              self.getData2()
             }
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { action: 'shares', pagestart: self.pagestart1, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        let data = res.data
+        const data = res.data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disdatalist1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { action: 'views', pagestart: self.pagestart2, limit: self.limit } }
+      const params = { params: { action: 'views', pagestart: self.pagestart2, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceList`, params).then(function (res) {
-        let data = res.data
+        const data = res.data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.disdatalist2 = true
       })
     },
     swiperChange () {
-      const self = this
-      if (self.selectedIndex === 0) {
-        if (self.tabdata1.length === 0 && self.tabdata1.length === 0) {
-          self.$vux.loading.show()
-          self.getdata1()
-        }
-      } else if (self.selectedIndex === 1 && self.tabdata2.length === 0) {
-        self.$vux.loading.show()
-        self.getdata2()
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getData2()
+          break
       }
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`).then(function (res) {
-        let data = res.data
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'salechance'
+      })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/saleChanceView`))
+      .then(res => {
+        const data = res.data
         if (data && data.flag === 1) {
           self.viewdata = data.data
         }
-        self.getdata1()
+        self.swiperChange()
       })
+    },
+    init () {
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.$vux.loading.show()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'salechance'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo()
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.swiperChange()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

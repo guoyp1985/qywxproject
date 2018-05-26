@@ -53,14 +53,13 @@ Control text:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg } from 'vux'
-import Sos from '@/components/Sos'
+import { Search, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Search, XImg, Sos
+    Search, XImg
   },
   filters: {
     dateformat: function (value) {
@@ -96,25 +95,25 @@ export default {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
-      let params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword1
+      const params = { params: { uid: self.query.uid, buyonline: 1, pagestart: self.pagestart1, limit: self.limit } }
+      const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(function (res) {
-        let data = res.data
+      self.$http.get(`${ENV.BokaApi}/api/user/salesList`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
       })
@@ -128,7 +127,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel1 () {
       const self = this
@@ -137,61 +136,36 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`,
-        { params: { customeruid: self.query.uid } }
-      ).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
-          self.showSos = true
-          self.showContainer = false
-        } else {
-          self.showSos = false
-          self.showContainer = true
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting', id: this.query.uid })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
+      .then(res => {
+        const data = res.data
+        if (data) {
           self.viewuser = data.data ? data.data : data
           document.title = `${self.viewuser.linkman}`
         }
+        self.showContainer = true
+        self.getData1()
       })
+    },
+    init () {
+      this.$vux.loading.show()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'setting', id: self.query.uid
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo(function () {
-          self.getdata1()
-        })
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
-    if (!self.doCreated) {
-      self.$vux.loading.show()
-      if (self.showSos) {
-        self.initInfo(function () {
-          if (self.tabdata1.length === 0) {
-            self.getdata1()
-          }
-        })
-      } else {
-        if (self.tabdata1.length === 0) {
-          self.getdata1()
-        }
-      }
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

@@ -124,7 +124,6 @@ export default {
       showSos: false,
       sosTitle: '',
       showContainer: false,
-      doCreated: false,
       query: {},
       data: {},
       coverphotoarr: [],
@@ -276,7 +275,7 @@ export default {
         })
       })
     },
-    initData () {
+    getData () {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'poster', id: self.query.id
@@ -303,24 +302,18 @@ export default {
           }
         }
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.submitdata.type = this.query.module
+      this.submitdata.id = this.query.id
+      this.$vux.loading.show()
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.submitdata.type = self.query.module
-    self.submitdata.id = self.query.id
-    self.$vux.loading.show()
-    self.initData()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && !self.data.id) {
-      self.initData()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

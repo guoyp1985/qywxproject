@@ -87,11 +87,15 @@ export default {
     }
   },
   methods: {
-    initInfo () {
+    getData () {
       const self = this
-      self.$store.commit('updateToggleTabbar', {toggleBar: false})
-      self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
-        params: { id: self.query.id }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'accountdetail', id: this.query.id
+      }).then(function () {
+        return self.$http.get(`${ENV.BokaApi}/api/accounting/info`, {
+          params: { id: self.query.id }
+        })
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -101,28 +105,15 @@ export default {
           self.showOrders = true
         }
       })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
     }
-  },
-  created: function () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'accountdetail', id: self.query.id
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.initInfo()
-      }
-    })
   },
   activated () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    if (!self.doCreated) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

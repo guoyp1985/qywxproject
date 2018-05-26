@@ -121,7 +121,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: {},
       loginUser: {},
       autofixed: false,
@@ -143,7 +142,7 @@ export default {
     }
   },
   methods: {
-    handleScroll2: function () {
+    handleScroll2 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer2[0],
@@ -157,14 +156,26 @@ export default {
       })
     },
     getnewsdata () {
+      this.$vux.loading.show()
       const self = this
-      let params = { do: 'list', pagestart: self.pagestart, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
-        let data = res.data
+      const params = { do: 'list', pagestart: self.pagestart, limit: self.limit }
+      this.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params)
+      .then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
         self.newsdata = self.newsdata.concat(retdata)
         self.disNewslist = true
+      })
+    },
+    getHistoryData () {
+      this.$vux.loading.show()
+      const self = this
+      const params = { do: 'history', pagestart: 0, limit: 15 }
+      this.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params)
+      .then(res => {
+        const data = res.data
+        self.keywordsData = data.data ? data.data : data
       })
     },
     onChange (val) {
@@ -191,7 +202,7 @@ export default {
         self.searchFun(kw)
       }
     },
-    handleScroll1: function () {
+    handleScroll1 () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer1[0],
@@ -226,13 +237,14 @@ export default {
         self.searchFun(kw)
       }
     },
-    swiperChange (index) {
-      const self = this
-      if (index === 1) {
-        if (self.pagestart === 0 && !self.isBindScroll) {
-          self.$vux.loading.show()
-          self.getnewsdata()
-        }
+    swiperChange () {
+      switch (this.selectedIndex) {
+        case 0:
+          this.getHistoryData()
+          break
+        case 1:
+          !this.pagestart && this.getnewsdata()
+          break
       }
     },
     collect (item, index) {
@@ -244,7 +256,7 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
             { do: 'download', url: item.url }
           ).then(function (res) {
-            let data = res.data
+            const data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
@@ -272,7 +284,7 @@ export default {
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
         { do: 'download', url: self.collecturl }
       ).then(function (res) {
-        let data = res.data
+        const data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
@@ -285,40 +297,28 @@ export default {
         })
       })
     },
-    getHistory () {
+    getData () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, {
-        do: 'history', pagestart: 0, limit: 15
-      }).then(function (res) {
-        let data = res.data
-        self.keywordsData = data.data ? data.data : data
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'goodeazy'
+      }).then(() => {
+        self.swiperChange()
       })
+    },
+    init () {
+      this.loginUser = User.get()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.loginUser = User.get()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'goodeazy'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.getHistory()
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      if (self.selectedIndex === 0) {
-        self.getHistory()
-      } else if (self.selectedIndex === 1 && self.newsdata.length === 0) {
-        self.getnewsdata()
-      }
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

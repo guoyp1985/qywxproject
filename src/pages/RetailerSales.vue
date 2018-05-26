@@ -165,35 +165,36 @@ export default {
             if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
               self.pagestart1++
               self.$vux.loading.show()
-              self.getdata1()
+              self.getData1()
             }
           } else if (index === 1) {
             if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
               self.pagestart2++
               self.$vux.loading.show()
-              self.getdata2()
+              self.getData2()
             }
           } else if (index === 2) {
             if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
               self.pagestart3++
               self.$vux.loading.show()
-              self.getdata3()
+              self.getData3()
             }
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      let keyword = self.searchword1
+      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
@@ -201,31 +202,33 @@ export default {
         self.distabdata1 = true
       })
     },
-    getdata2 () {
+    getData2 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { pagestart: self.pagestart2, limit: self.limit }
-      let keyword = self.searchword2
+      const params = { pagestart: self.pagestart2, limit: self.limit }
+      const keyword = self.searchword2
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult2 = true
         params.keyword = keyword
       } else {
         self.searchresult2 = false
       }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(function (res) {
-        let data = res.data
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerRecommend`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
     },
-    getdata3 () {
+    getData3 () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list?from=retailer`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { pagestart: self.pagestart3, limit: self.limit } }
+      self.$http.get(`${ENV.BokaApi}/api/accounting/list?from=retailer`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
       })
@@ -239,7 +242,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel1 () {
       const self = this
@@ -248,7 +251,7 @@ export default {
       self.distabdata1 = false
       self.tabdata1 = []
       self.pagestart1 = 0
-      self.getdata1()
+      self.getData1()
     },
     onCancel2 () {
       const self = this
@@ -257,7 +260,7 @@ export default {
       self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
-      self.getdata2()
+      self.getData2()
     },
     onChange2 (val) {
       this.searchword2 = val
@@ -268,19 +271,19 @@ export default {
       self.distabdata2 = false
       self.tabdata2 = []
       self.pagestart2 = 0
-      self.getdata2()
+      self.getData2()
     },
     swiperChange () {
-      const self = this
-      if (self.selectedIndex === 0 && self.tabdata1.length === 0) {
-        self.$vux.loading.show()
-        self.getdata1()
-      } else if (self.selectedIndex === 1 && self.tabdata2.length === 0) {
-        self.$vux.loading.show()
-        self.getdata2()
-      } else if (self.selectedIndex === 2 && self.tabdata3.length === 0) {
-        self.$vux.loading.show()
-        self.getdata3()
+      switch (this.selectedIndex) {
+        case 0:
+          !this.tabdata1.length && this.getData1()
+          break
+        case 1:
+          !this.tabdata2.length && this.getData2()
+          break
+        case 2:
+          !this.tabdata3.length && this.getData3()
+          break
       }
     },
     inviteevent (item, index) {
@@ -293,10 +296,9 @@ export default {
         content: content,
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`,
-            { inviteuid: item.uid }
-          ).then(function (res) {
-            let data = res.data
+          self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid })
+          .then(res => {
+            const data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
               text: data.error,
@@ -310,27 +312,27 @@ export default {
           })
         }
       })
+    },
+    getData () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'sales'
+      })
+      .then(res => {
+        self.swiperChange()
+      })
+    },
+    init () {
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {
-    const self = this
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.loginUser = User.get()
-    self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-      module: 'retailer', action: 'sales'
-    }).then(function (res) {
-      if (res.status === 200) {
-        self.$vux.loading.show()
-        self.getdata1()
-      }
-    })
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.swiperChange()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

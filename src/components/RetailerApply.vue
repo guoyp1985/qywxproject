@@ -1,3 +1,6 @@
+/*
+ * 已废弃
+*/
 <template>
   <div class="containerarea font14 bg-white retailerapply notop">
     <div class="pagemiddle bg-white" style="bottom: 50px;">

@@ -90,20 +90,40 @@ export default {
           }
         }
       })
+    },
+    getData () {
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' })
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/home`))
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retailerInfo = data.data ? data.data : data
+        if (retailerInfo.buyonline) {
+          self.isOnline = true
+          self.isOffline = false
+        } else {
+          self.isOnline = false
+          self.isOffline = true
+        }
+        for (let key in self.submitdata) {
+          self.submitdata[key] = retailerInfo[key]
+        }
+        let qrcode = self.submitdata.qrcode
+        if (qrcode && self.$util.trim(qrcode) !== '') {
+          self.photoarr = qrcode.split(',')
+        }
+        self.havenum = self.photoarr.length
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.initInfo()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

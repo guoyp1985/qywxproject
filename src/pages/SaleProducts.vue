@@ -56,45 +56,42 @@ export default {
   computed: {
   },
   methods: {
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
           if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
-            self.$vux.loading.show()
-            self.getdata1()
+            self.getData()
           }
         }
       })
     },
-    getdata1 () {
+    getData () {
+      this.$vux.loading.show()
       const self = this
-      let params = { params: { do: 'all', pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(function (res) {
-        let data = res.data
+      const params = { params: { do: 'all', pagestart: self.pagestart1, limit: self.limit } }
+      this.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
+        const data = res.data
+        const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disData = true
       })
+    },
+    init () {
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-    self.$vux.loading.show()
-    self.getdata1()
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.tabdata1.length === 0) {
-      self.$vux.loading.show()
-      self.getdata1()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

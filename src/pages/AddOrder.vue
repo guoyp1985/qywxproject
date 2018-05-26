@@ -261,69 +261,56 @@ export default {
         })
       }
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/order/shopShow`).then(function (res) {
-        let data = res.data
-        if (data.length === 0) {
-          self.showContainer = false
-          self.showSos = true
-        } else {
-          self.showContainer = true
-          self.orderdata = data
-          let total = 0
-          for (let i = 0; i < self.orderdata.length; i++) {
-            let order = self.orderdata[i]
-            let postd = { shopinfo: [], content: '' }
-            let productinfos = order.info
-            for (let j = 0; j < productinfos.length; j++) {
-              let info = productinfos[j]
-              let p = { shopid: info.id, quantity: info.quantity }
-              postd.shopinfo.push(p)
-              total += parseFloat(info.special) * info.quantity
-            }
-            self.submitdata.postdata.push(postd)
-          }
-          self.payPrice = total.toFixed(2)
-          return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
-        }
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          if (retdata) {
-            self.addressdata = retdata
-            for (let i = 0; i < self.addressdata.length; i++) {
-              let a = self.addressdata[i]
-              if (a.isdefault) {
-                self.selectaddress = a
-                break
-              }
-            }
-            if (!self.selectaddress && self.addressdata.length > 0) {
-              self.selectaddress = self.addressdata[0]
-            }
-            if (self.selectaddress) {
-              self.submitdata.addressid = self.selectaddress.id
+      this.$http.get(`${ENV.BokaApi}/api/user/address/list`).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (retdata) {
+          self.addressdata = retdata
+          for (let i = 0; i < self.addressdata.length; i++) {
+            let a = self.addressdata[i]
+            if (a.isdefault) {
+              self.selectaddress = a
+              break
             }
           }
+          if (!self.selectaddress && self.addressdata.length > 0) {
+            self.selectaddress = self.addressdata[0]
+          }
+          if (self.selectaddress) {
+            self.submitdata.addressid = self.selectaddress.id
+          }
         }
+        return self.$http.get(`${ENV.BokaApi}/api/order/shopShow`)
       })
+      .then(res => {
+        const data = res.data
+        self.orderdata = data
+        let total = 0
+        for (let i = 0; i < self.orderdata.length; i++) {
+          const order = self.orderdata[i]
+          let postd = { shopinfo: [], content: '' }
+          const productinfos = order.info
+          for (let j = 0; j < productinfos.length; j++) {
+            const info = productinfos[j]
+            const p = { shopid: info.id, quantity: info.quantity }
+            postd.shopinfo.push(p)
+            total += parseFloat(info.special) * info.quantity
+          }
+          self.submitdata.postdata.push(postd)
+        }
+        self.payPrice = total.toFixed(2)
+      })
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.getData()
     }
-  },
-  created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.query = self.$route.query
-    self.initInfo()
   },
   activated () {
-    const self = this
-    if (!self.doCreated) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>

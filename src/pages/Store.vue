@@ -203,7 +203,7 @@ export default {
     }
   },
   watch: {
-    favoritecss: function () {
+    favoritecss () {
       if (this.isfavorite) {
         this.favoritecss = 'have'
       } else {
@@ -211,7 +211,7 @@ export default {
       }
       return this.favoritecss
     },
-    isfavorite: function () {
+    isfavorite () {
       if (this.isfavorite) {
         this.favoritecss = 'have'
       } else {
@@ -221,7 +221,7 @@ export default {
     }
   },
   computed: {
-    isshowdot: function () {
+    isshowdot () {
       if (this.addata.length > 1) {
         this.showdot = true
       } else {
@@ -231,7 +231,7 @@ export default {
     }
   },
   methods: {
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -239,12 +239,12 @@ export default {
           if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
-            self.getdata1()
+            self.getData1()
           }
         }
       })
     },
-    getdata1 () {
+    getData1 () {
       const self = this
       let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
       if (self.query.wid) {
@@ -253,11 +253,11 @@ export default {
         params.params.from = 'myshop'
       }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
-        let data = res.data
+        const data = res.data
         if (self.hideloading) {
           self.$vux.loading.hide()
         }
-        let retdata = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
         self.productdata = self.productdata.concat(retdata)
         self.disproductdata = true
       })
@@ -265,11 +265,11 @@ export default {
     getnewsdata () {
       const self = this
       if (self.isgetnews) {
-        let params = { params: { pagestart: self.newspagestart, limit: self.newslimit, uploader: self.query.wid } }
-        self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(function (res) {
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          if (retdata.length === 0 && self.toplinedata.length > 0) {
+        const params = { params: { pagestart: self.newspagestart, limit: self.newslimit, uploader: self.query.wid } }
+        self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(res => {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length === 0) {
             self.newspagestart = 0
             self.getnewsdata()
           } else {
@@ -359,96 +359,77 @@ export default {
         self.$router.push('/centerSales')
       }
     },
-    initInfo () {
+    getData () {
       const self = this
-      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'store'
-      }).then(function (res) {
-        if (res.status === 200) {
-          let infoparams = { uid: self.query.wid }
-          if (self.query.share_uid) {
-            infoparams.share_uid = self.query.share_uid
-          }
-          if (self.query.lastshareuid) {
-            infoparams.lastshareuid = self.query.lastshareuid
-          }
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-            params: infoparams
-          })
-        }
-      }).then(function (res) {
-        if (res) {
-          self.$vux.loading.hide()
-          self.hideloading = true
-          let data = res.data
-          if (data.flag !== 1) {
-            self.sosTitle = data.error
-            self.showSos = true
-            self.showContainer = false
-          } else {
-            self.showSos = false
-            self.showContainer = true
-            self.retailerInfo = data.data ? data.data : data
-            document.title = self.retailerInfo.title
-            self.wid = self.retailerInfo.uid
-            self.$util.handleWxShare({
-              module: 'store',
-              moduleid: self.wid,
-              lastshareuid: self.query.share_uid,
-              title: self.retailerInfo.title,
-              desc: self.retailerInfo.title,
-              photo: self.retailerInfo.avatar,
-              link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
-              successCallback: function () {
-                self.showShareSuccess = true
-              }
-            })
-            if (self.wid !== self.loginUser.uid) {
-              self.getCollectStaus()
-            }
-            return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
-          }
-        }
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          for (let i = 0; i < retdata.length; i++) {
-            let p = retdata[i]
-            p.img = p.photo
-            p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
-          }
-          self.addata = retdata
-          let params = { do: 'store', pagestart: 0, limit: 20, wid: self.wid }
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
-            params: params
-          })
-        }
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          self.activitydata = data.data ? data.data : data
-          self.getdata1()
-          self.getnewsdata()
-        }
       })
+      .then(res => {
+        let infoparams = { uid: self.query.wid }
+        if (self.query.share_uid) {
+          infoparams.share_uid = self.query.share_uid
+        }
+        if (self.query.lastshareuid) {
+          infoparams.lastshareuid = self.query.lastshareuid
+        }
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: infoparams })
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        self.hideloading = true
+        const data = res.data
+        self.retailerInfo = data.data ? data.data : data
+        document.title = self.retailerInfo.title
+        self.wid = self.retailerInfo.uid
+        self.$util.handleWxShare({
+          module: 'store',
+          moduleid: self.wid,
+          lastshareuid: self.query.share_uid,
+          title: self.retailerInfo.title,
+          desc: self.retailerInfo.title,
+          photo: self.retailerInfo.avatar,
+          link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
+          successCallback: function () {
+            self.showShareSuccess = true
+          }
+        })
+        if (self.retailerInfo.uid !== self.loginUser.uid) {
+          self.getCollectStaus()
+        }
+        return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let p = retdata[i]
+          p.img = p.photo
+          p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+        }
+        self.addata = retdata
+        const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
+      }).then(res => {
+        const data = res.data
+        self.activitydata = data.data ? data.data : data
+        self.getData1()
+        self.getnewsdata()
+      })
+    },
+    init () {
+      this.loginUser = User.get()
+      this.$vux.loading.show()
+      this.getData()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
     }
   },
   created () {
-    const self = this
-    self.doCreated = true
-    self.$store.commit('updateToggleTabbar', {toggleBar: false})
-    self.loginUser = User.get()
-    self.query = self.$route.query
-    self.initInfo()
+    this.init()
   },
   activated () {
-    const self = this
-    if (!self.doCreated && self.showSos) {
-      self.initInfo()
-    }
-    self.doCreated = false
+    this.refresh()
   }
 }
 </script>
