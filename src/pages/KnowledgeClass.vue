@@ -6,18 +6,20 @@
 <template>
   <div class="containerarea font14 bg-white knowledgeclass notop">
     <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
-      <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
-        <div class="pic">
-          <div class="inner">
-            <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+      <template v-if="disData">
+        <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无数据</div>
+        <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
+          <div class="pic">
+            <div class="inner">
+              <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+            </div>
           </div>
-        </div>
-        <div class="padding15 border-box">
-          <div class="font16">{{ item.title }}</div>
-          <div class="color-gray clamp2">{{ item.summary }}</div>
-        </div>
-      </router-link>
+          <div class="padding15 border-box">
+            <div class="font16">{{ item.title }}</div>
+            <div class="color-gray clamp2">{{ item.summary }}</div>
+          </div>
+        </router-link>
+      </template>
     </div>
     <div class="pagebottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
@@ -63,8 +65,9 @@ export default {
     return {
       query: {},
       data: [],
-      limit: 20,
-      pagestart1: 0
+      limit: 10,
+      pagestart1: 0,
+      disData: false
     }
   },
   methods: {
@@ -93,6 +96,7 @@ export default {
         const retdata = data.data ? data.data : data
         self.$vux.loading.hide()
         self.data = self.data.concat(retdata)
+        self.disData = true
       })
     },
     onShow () {
@@ -105,7 +109,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.$vux.loading.show()
-      this.getData()
+      if (this.data.length < this.limit) {
+        this.getData()
+      }
     }
   },
   activated () {

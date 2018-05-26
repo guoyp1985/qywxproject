@@ -5,7 +5,7 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
-        <div class="scroll_list bg-page">
+        <div v-if="disData" class="scroll_list bg-page">
           <template v-if="!productdata || productdata.length == 0">
             <div class="emptyitem">
               <div class="t-table" style="padding-top:20%;">
@@ -23,7 +23,7 @@
             <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
               <div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl10 v_middle" style="width:90px;">
-                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
+                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;"></x-img>
           			</div>
           			<div class="t-cell v_middle">
                   <div class="clamp2 font15 pr10">{{item.title}}</div>
@@ -132,11 +132,12 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       rollingData: null,
       cutImg: '',
-      popupShow: false
+      popupShow: false,
+      disData: false
     }
   },
   watch: {
@@ -147,11 +148,6 @@ export default {
       return this.photoarr.length
     }
   },
-  // computed: {
-  //   getquery: function () {
-  //     return this.$route.query
-  //   }
-  // },
   methods: {
     handleScroll () {
       const self = this
@@ -168,7 +164,7 @@ export default {
     },
     showRolling (item, index) {
       event.preventDefault()
-      let self = this
+      const self = this
       self.showphotopop = !this.showphotopop
       self.clickdata = item
       self.clickindex = index
@@ -315,6 +311,7 @@ export default {
         const retdata = data.data ? data.data : data
         self.$vux.loading.hide()
         self.productdata = self.productdata.concat(retdata)
+        self.disData = true
       })
     },
     init () {
@@ -323,9 +320,19 @@ export default {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'decorationshop'
-      })
-      .then(res => {
-        self.getData()
+      }).then(function (res) {
+        if (res.status === 200) {
+          let data = res.data
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+            self.showContainer = false
+            self.$vux.loading.hide()
+          } else {
+            self.showSos = false
+            self.showContainer = true
+          }
+        }
       })
       if (this.clickdata && this.clickdata.rollingphoto && this.clickdata.rollingphoto !== '') {
         this.havenum = this.clickdata.rollingphoto.split(',')
@@ -335,6 +342,12 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if (this.showContainer && this.productdata.length < this.limit) {
+        this.disData = false
+        this.productdata = []
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   created () {

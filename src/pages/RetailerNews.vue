@@ -174,19 +174,14 @@ export default {
       ],
       showpopup: false,
       clickdata: {},
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      isBindScroll1: false,
-      isBindScroll2: false,
-      scrollArea1: null,
-      scrollArea2: null,
       showpush: false,
       customerdata: [],
       pushdata: [],
       checkAll: false,
       customerPagestart: 0,
-      isBindCustomerScroll: false,
       searchword1: '',
       searchresult1: false
     }
@@ -281,20 +276,6 @@ export default {
         }
       }
     },
-    // tabitemclick (index) {
-    //   const self = this
-    //   if (index === 0) {
-    //     if (self.tabdata1.length === 0) {
-    //       self.$vux.loading.show()
-    //       self.getData1()
-    //     }
-    //   } else if (index === 1) {
-    //     if (self.pagestart2 === 0 && !self.isBindScroll2) {
-    //       self.$vux.loading.show()
-    //       self.getdata2()
-    //     }
-    //   }
-    // },
     closepush () {
       this.showpush = false
       self.isBindCustomerScroll = false
@@ -356,20 +337,20 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
-    getData () {
-      const self = this
+    init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'news'
       }).then(res => {
-        self.getData1()
       })
-    },
-    init () {
-      this.$vux.loading.show()
-      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if (this.tabdata1.length < this.limit) {
+        this.distabdata1 = false
+        this.tabdata1 = []
+        this.$vux.loading.show()
+        this.getData1()
+      }
     }
   },
   created () {

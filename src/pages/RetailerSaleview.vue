@@ -191,7 +191,7 @@ export default {
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0
@@ -268,13 +268,25 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getData1()
+          if (this.tabdata1.length < this.limit) {
+            this.distabdata1 = false
+            this.tabdata1 = []
+            this.getData1()
+          }
           break
         case 1:
-          !this.tabdata2.length && this.getData2()
+          if (this.tabdata2.length < this.limit) {
+            this.distabdata2 = false
+            this.tabdata2 = []
+            this.getData2()
+          }
           break
         case 2:
-          !this.tabdata3.length && this.getData3()
+          if (this.tabdata3.length < this.limit) {
+            this.distabdata3 = false
+            this.tabdata3 = []
+            this.getData3()
+          }
           break
       }
     },
@@ -319,6 +331,9 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.showContainer) {
+        this.swiperChange()
+      }
     }
   },
   created () {

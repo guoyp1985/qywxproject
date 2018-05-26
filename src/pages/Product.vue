@@ -524,7 +524,10 @@ export default {
     popupevluate () {
       const self = this
       this.showevluate = true
-      if (self.evluatedata1.length === 0) {
+      if (self.evluatedata1.length < self.limit) {
+        self.disPopEvluate = false
+        self.evluatedata1 = []
+        self.$vux.loading.show()
         this.getEvaluateList()
       }
     },

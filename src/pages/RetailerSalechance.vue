@@ -137,7 +137,7 @@ export default {
       viewdata: { orders: '0.00', share: 0, views: 0 },
       tabdata1: [],
       tabdata2: [],
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       disdatalist1: false,
@@ -205,14 +205,24 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getData1()
+          if (this.tabdata1.length < this.limit) {
+            this.distabdata1 = false
+            this.tabdata1 = []
+            this.getData1()
+          }
           break
         case 1:
-          !this.tabdata2.length && this.getData2()
+          if (this.tabdata2.length < this.limit) {
+            this.distabdata2 = false
+            this.tabdata2 = []
+            this.getData2()
+          }
           break
       }
     },
     getData () {
+    },
+    init () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'salechance'
@@ -223,14 +233,11 @@ export default {
         if (data && data.flag === 1) {
           self.viewdata = data.data
         }
-        self.swiperChange()
       })
-    },
-    init () {
-      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.swiperChange()
     }
   },
   created () {

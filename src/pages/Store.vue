@@ -190,7 +190,7 @@ export default {
       activitydata: [],
       disproductdata: false,
       productdata: [],
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       newspagestart: 0,
       newslimit: 3,
@@ -436,6 +436,12 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.showContainer && this.productdata.length < this.limit) {
+        this.disproductdata = false
+        this.productdata = []
+        this.$vux.loading.show()
+        this.getData1()
+      }
     }
   },
   created () {

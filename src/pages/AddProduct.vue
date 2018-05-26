@@ -218,7 +218,7 @@ export default {
         if (type === 'photo' && self.photoarr.length < self.maxnum) {
           self.photoarr.push(data.data)
           self.submitdata.photo = self.photoarr.join(',')
-        } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1){
+        } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
           self.photoarr1.push(data.data)
           self.submitdata.contentphoto = self.photoarr1.join(',')
         }

@@ -48,7 +48,7 @@ export default {
     return {
       tabdata1: [],
       disData: false,
-      limit: 20,
+      limit: 10,
       pagestart1: 0
     }
   },
@@ -79,15 +79,15 @@ export default {
         self.disData = true
       })
     },
-    init () {
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      if (this.tabdata1.length < this.limit) {
+        this.disData = false
+        this.tabdata1 = []
+        this.$vux.loading.hide()
+        this.getData()
+      }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

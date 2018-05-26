@@ -89,7 +89,7 @@ export default {
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
-      limit: 20,
+      limit: 10,
       pagestart1: 1,
       pagestart2: 1,
       pagestart3: 1,

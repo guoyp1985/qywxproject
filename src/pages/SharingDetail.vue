@@ -38,7 +38,7 @@ export default {
       disList: false,
       list: [],
       pagestart: 0,
-      limit: 20
+      limit: 10
     }
   },
   filters: {
@@ -87,11 +87,14 @@ export default {
     },
     init () {
       this.loginUser = User.get()
-      this.$vux.loading.show()
-      this.getData()
     },
     refresh () {
       this.query = this.$route.query
+      if (this.list.length < this.limit) {
+        this.disList = false
+        this.list = []
+        this.getData()
+      }
     }
   },
   created () {

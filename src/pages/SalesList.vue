@@ -81,7 +81,7 @@ export default {
       searchresult1: false,
       searchword2: '',
       searchresult2: false,
-      limit: 20,
+      limit: 10,
       pagestart1: 0
     }
   },
@@ -142,13 +142,18 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting', id: this.query.uid })
       .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
       .then(res => {
-        const data = res.data
-        if (data) {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
           self.viewuser = data.data ? data.data : data
           document.title = `${self.viewuser.linkman}`
         }
-        self.showContainer = true
-        self.getData1()
       })
     },
     init () {
@@ -158,6 +163,12 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
       this.query = this.$route.query
+      if (this.showContainer && this.tabdata1.length < this.limit) {
+        this.distabdata1 = false
+        this.tabdata1 = []
+        this.$vux.loading.show()
+        this.getData1()
+      }
     }
   },
   created () {

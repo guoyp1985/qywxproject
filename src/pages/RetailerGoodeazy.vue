@@ -24,6 +24,7 @@
                 ref="search">
               </search>
               <checker
+              v-if="keywordsData.length > 0"
               class="v-checker pt10 pl10 pr10"
               type="radio"
               v-model="keyword"
@@ -131,14 +132,15 @@ export default {
       searchword: '',
       showSearchEmpty: false,
       collecturl: '',
-      limit: 20,
+      limit: 10,
       pagestart: 0,
       keywordsData: [],
       keyword: '',
       disNewslist: false,
       pagestart1: 0,
       limit1: 10,
-      clickSearchword: ''
+      clickSearchword: '',
+      historyLimit: 15
     }
   },
   methods: {
@@ -171,7 +173,7 @@ export default {
     getHistoryData () {
       this.$vux.loading.show()
       const self = this
-      const params = { do: 'history', pagestart: 0, limit: 15 }
+      const params = { do: 'history', pagestart: 0, limit: self.historyLimit }
       this.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -244,10 +246,17 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          this.getHistoryData()
+          if (this.keywordsData.length < this.historyLimit) {
+            this.keywordsData = []
+            this.getHistoryData()
+          }
           break
         case 1:
-          !this.newsdata.length && this.getnewsdata()
+          if (this.newsdata.length < this.limit) {
+            this.disNewslist = false
+            this.newsdata = []
+            this.getnewsdata()
+          }
           break
       }
     },
@@ -301,21 +310,16 @@ export default {
         })
       })
     },
-    getData () {
-      const self = this
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'goodeazy'
-      }).then(() => {
-        self.swiperChange()
-      })
-    },
     init () {
       this.loginUser = User.get()
-      this.getData()
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'goodeazy'
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.swiperChange()
     }
   },
   created () {

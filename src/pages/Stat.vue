@@ -251,7 +251,7 @@ export default {
       statData: [],
       tabsdata: [],
       tabtop: 'auto',
-      limit: 20,
+      limit: 10,
       scrollData: [],
       datalist: [],
       isFirst: true,
@@ -318,7 +318,11 @@ export default {
       }
       switch (index1) {
         case 0:
-          !this.datalist[index1].length && this.getData1()
+          if (this.datalist[index1].length < this.limit) {
+            this.datalist[index1] = []
+            self.$vux.loading.show()
+            this.getData1()
+          }
           break
       }
     },
@@ -353,6 +357,10 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.module = this.query.module
+      console.log(this.showContainer)
+      if (this.showContainer) {
+        this.swiperChange()
+      }
     }
   },
   created () {

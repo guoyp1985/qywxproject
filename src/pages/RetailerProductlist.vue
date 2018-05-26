@@ -170,7 +170,7 @@ export default {
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       showpush: false,
       customerdata: [],
@@ -363,21 +363,20 @@ export default {
         self.disproductdata = true
       })
     },
-    getData () {
-      const self = this
+    init () {
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'productlist'
       })
-      .then(res => {
-        self.getData1()
-      })
-    },
-    init () {
-      this.$vux.loading.show()
-      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if (this.productdata.length < this.limit) {
+        this.disproductdata = false
+        this.productdata = []
+        this.$vux.loading.show()
+        this.getData1()
+      }
     }
   },
   created () {

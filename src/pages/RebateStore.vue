@@ -165,7 +165,7 @@ export default {
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,

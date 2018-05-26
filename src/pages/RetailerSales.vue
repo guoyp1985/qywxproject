@@ -278,13 +278,25 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getData1()
+          if (this.tabdata1.length < this.limit) {
+            this.distabdata1 = false
+            this.tabdata1 = []
+            this.getData1()
+          }
           break
         case 1:
-          !this.tabdata2.length && this.getData2()
+          if (this.tabdata2.length < this.limit) {
+            this.distabdata2 = false
+            this.tabdata2 = []
+            this.getData2()
+          }
           break
         case 2:
-          !this.tabdata3.length && this.getData3()
+          if (this.tabdata3.length < this.limit) {
+            this.distabdata3 = false
+            this.tabdata3 = []
+            this.getData3()
+          }
           break
       }
     },
@@ -315,21 +327,15 @@ export default {
         }
       })
     },
-    getData () {
-      const self = this
+    init () {
+      this.loginUser = User.get()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'sales'
       })
-      .then(res => {
-        self.swiperChange()
-      })
-    },
-    init () {
-      this.loginUser = User.get()
-      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.swiperChange()
     }
   },
   created () {

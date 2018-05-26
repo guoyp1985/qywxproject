@@ -98,7 +98,6 @@ export default {
   },
   data () {
     return {
-      // query: {},
       loginUser: {},
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       showShareSuccess: false,
@@ -106,7 +105,8 @@ export default {
       addata: [],
       activitydata: [],
       productdata: [],
-      limit: 20,
+      disData: false,
+      limit: 10,
       pagestart1: 0
     }
   },
@@ -150,6 +150,7 @@ export default {
     getData () {
       const user = User.get()
       const query = this.$route.query
+      this.loginUser = user
       if (user) {
         let retailerInfo = null
         let addata = null
@@ -191,7 +192,6 @@ export default {
               self.showShareSuccess = true
             }
           })
-          self.getData1()
         })
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
@@ -202,6 +202,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      if (this.loginUser && this.productdata.length < this.limit) {
+        this.$vux.loading.show()
+        this.productdata = []
+        this.getData1()
+      }
     }
   },
   created () {

@@ -40,7 +40,7 @@ export default {
       data: [],
       disData: false,
       WeixinQrcode: ENV.WeixinQrcode,
-      limit: 20,
+      limit: 10,
       pagestart1: 0
     }
   },
@@ -55,9 +55,6 @@ export default {
     }
   },
   methods: {
-    // getQrcode () {
-    //   return ENV.WeixinQrcode
-    // },
     getDateState (dt) {
       return this.$util.getDateState(dt)
     },
@@ -90,11 +87,7 @@ export default {
       })
     },
     getData () {
-      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'subscribeinfo' })
-      .then(res => {
-        self.getData1()
-      })
     },
     init () {
       this.$vux.loading.show()
@@ -102,6 +95,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if (this.data.length < this.limit) {
+        this.disData = false
+        this.data = []
+        this.getData1()
+      }
     }
   },
   created () {

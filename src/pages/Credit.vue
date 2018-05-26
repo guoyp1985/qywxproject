@@ -9,7 +9,10 @@
     <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll" style="bottom:53px;">
       <group>
         <div v-if="disList" class="scroll_list">
-          <cell v-if="list && list.length > 0" v-for="(item, index) in list" :key="index" class="credit-item" align-items >
+          <div v-if="!list || list.length == 0" class="no-related-x color-gray">
+            <span>{{$t('No Related Data')}}</span>
+          </div>
+          <cell v-else v-for="(item, index) in list" :key="index" class="credit-item" align-items >
             <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container=".scroll-container"></x-img>
             <div slot="inline-desc">
               <div class="t-table">
@@ -24,9 +27,6 @@
               </div>
             </div>
           </cell>
-          <div v-else class="no-related-x color-gray">
-            <span>{{$t('No Related Data')}}</span>
-          </div>
         </div>
       </group>
     </div>
@@ -47,7 +47,7 @@ export default {
       disList: false,
       list: [],
       pagestart: 0,
-      limit: 20
+      limit: 10
     }
   },
   filters: {
@@ -95,11 +95,15 @@ export default {
       })
     },
     init () {
-      this.$vux.loading.show()
-      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      if (this.list.length < this.limit) {
+        this.disList = false
+        this.list = []
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   created () {

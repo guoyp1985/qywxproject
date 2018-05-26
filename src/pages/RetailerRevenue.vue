@@ -271,7 +271,7 @@ export default {
       checkedData: [],
       checkedAll: true,
       showpopup: false,
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0
@@ -425,30 +425,36 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getData1()
+          if (this.tabdata1.length < this.limit) {
+            this.distabdata1 = false
+            this.tabdata1 = []
+            this.getData1()
+          }
           break
         case 1:
-          !this.tabdata2.length && this.getData2()
+          if (this.tabdata2.length < this.limit) {
+            this.distabdata2 = false
+            this.tabdata2 = []
+            this.getData2()
+          }
           break
         case 2:
-          !this.tabdata3.length && this.getData3()
+          if (this.tabdata3.length < this.limit) {
+            this.distabdata3 = false
+            this.tabdata3 = []
+            this.getData3()
+          }
           break
       }
     },
-    getData () {
-      const self = this
+    init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'revenue'
       })
-      .then(res => {
-        self.swiperChange()
-      })
-    },
-    init () {
-      this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.swiperChange()
     }
   },
   created () {

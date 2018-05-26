@@ -305,7 +305,7 @@ export default {
       showbargainbuy: false,
       showdiscount: false,
       isShowLoading: false,
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       isBindScroll1: false,
       scrollArea1: null

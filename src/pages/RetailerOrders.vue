@@ -228,7 +228,7 @@ export default {
       tabdata2: [],
       tabdata3: [],
       tabdata4: [],
-      limit: 20,
+      limit: 10,
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
@@ -317,21 +317,38 @@ export default {
       })
     },
     swiperChange (index) {
+      const self = this
       if (index !== undefined) {
         this.selectedIndex = index
       }
       switch (this.selectedIndex) {
         case 0:
-          !this.tabdata1.length && this.getData1()
+          if (this.tabdata1.length < this.limit) {
+            self.distabdata1 = false
+            this.tabdata1 = []
+            self.getData1()
+          }
           break
         case 1:
-          !this.tabdata2.length && this.getData2()
+          if (this.tabdata2.length < this.limit) {
+            self.distabdata2 = false
+            this.tabdata2 = []
+            self.getData2()
+          }
           break
         case 2:
-          !this.tabdata3.length && this.getData3()
+          if (this.tabdata3.length < this.limit) {
+            self.distabdata3 = false
+            this.tabdata3 = []
+            self.getData3()
+          }
           break
         case 3:
-          !this.tabdata4.length && this.getData4()
+          if (this.tabdata4.length < this.limit) {
+            self.distabdata4 = false
+            this.tabdata4 = []
+            self.getData4()
+          }
           break
       }
     },
@@ -419,12 +436,8 @@ export default {
       })
     },
     getData () {
-      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'orders'
-      })
-      .then(res => {
-        self.swiperChange()
       })
     },
     init () {
@@ -434,6 +447,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.swiperChange()
     }
   },
   created () {

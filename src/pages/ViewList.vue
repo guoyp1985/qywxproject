@@ -96,7 +96,7 @@ export default {
       data: [],
       searchword1: '',
       searchresult1: false,
-      limit: 20,
+      limit: 10,
       pagestart1: 0
     }
   },
@@ -187,6 +187,12 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.showContainer && this.data.length < this.limit) {
+        this.disdata = false
+        this.data = []
+        this.$vux.loading.show()
+        this.getData1()
+      }
     }
   },
   created () {
