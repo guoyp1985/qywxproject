@@ -215,10 +215,10 @@ export default {
     photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        if (type === 'photo' && self.photoarr.length < maxnum) {
+        if (type === 'photo' && self.photoarr.length < self.maxnum) {
           self.photoarr.push(data.data)
           self.submitdata.photo = self.photoarr.join(',')
-        } else if (self.photoarr1.length < maxnum1){
+        } else if (self.photoarr1.length < self.maxnum1){
           self.photoarr1.push(data.data)
           self.submitdata.contentphoto = self.photoarr1.join(',')
         }
