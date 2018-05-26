@@ -140,8 +140,7 @@ export default {
     },
     cutData: Array,
     onJoin: Function,
-    onCut: Function,
-    cuting: false
+    onCut: Function
   },
   components: {
     XImg
@@ -154,7 +153,8 @@ export default {
       canbuy: true,
       lefthour: '',
       leftminute: '',
-      leftsecond: ''
+      leftsecond: '',
+      cuting: false
     }
   },
   filters: {
