@@ -117,7 +117,7 @@ export default {
     }
   },
   activated () {
-    this.getData()
+    this.refresh()
   }
 }
 </script>
