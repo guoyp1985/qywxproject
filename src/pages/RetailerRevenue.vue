@@ -419,7 +419,10 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    swiperChange () {
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData1()

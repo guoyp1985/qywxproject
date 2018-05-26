@@ -140,7 +140,10 @@ export default {
         self.distabdata2 = true
       })
     },
-    swiperChange () {
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && self.getData1()

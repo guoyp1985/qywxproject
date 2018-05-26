@@ -302,20 +302,23 @@ export default {
         }
       })
     },
-    swiperChange () {
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       const self = this
-      const index = this.selectedIndex
-      this.clickTabitem = this.tabsdata[index]
-      this.arrData = this.datalist[index]
+      const index1 = this.selectedIndex
+      this.clickTabitem = this.tabsdata[index1]
+      this.arrData = this.datalist[index1]
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
           self.datalist.push([])
         }
       }
-      switch (index) {
+      switch (index1) {
         case 0:
-          !this.datalist[index].length && this.getData1()
+          !this.datalist[index1].length && this.getData1()
           break
       }
     },

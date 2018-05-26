@@ -174,6 +174,7 @@ export default {
       const params = { do: 'history', pagestart: 0, limit: 15 }
       this.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params)
       .then(res => {
+        self.$vux.loading.hide()
         const data = res.data
         self.keywordsData = data.data ? data.data : data
       })
@@ -237,13 +238,16 @@ export default {
         self.searchFun(kw)
       }
     },
-    swiperChange () {
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           this.getHistoryData()
           break
         case 1:
-          !this.pagestart && this.getnewsdata()
+          !this.newsdata.length && this.getnewsdata()
           break
       }
     },

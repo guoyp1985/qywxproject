@@ -272,7 +272,10 @@ export default {
       self.pagestart2 = 0
       self.getData2()
     },
-    swiperChange () {
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           !this.tabdata1.length && this.getData1()
