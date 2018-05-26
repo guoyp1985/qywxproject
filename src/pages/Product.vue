@@ -951,10 +951,10 @@ export default {
   activated () {
     this.refresh()
   },
-  beforeRouteLeave () {
-    console.log('dddddd')
+  beforeRouteLeave (to, from, next) {
     const room = this.query.id
     Socket.destory(room)
+    next()
   }
 }
 </script>
