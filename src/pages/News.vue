@@ -187,8 +187,6 @@ export default {
       this.replyPopupShow = true
     },
     onCommentShow () {
-      alert(JSON.stringify(this.loginUser))
-      alert(JSON.stringify(this.loginUser.subscribe))
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {

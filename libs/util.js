@@ -120,6 +120,9 @@ Util.install = function (Vue, options) {
         }
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+        .then(res => {
+          User.set(res.data)
+        })
       }
     },
     // webSocketFactory: (() => {
