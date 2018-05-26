@@ -56,7 +56,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: Object,
       cutImg: '',
       popupShow: false,

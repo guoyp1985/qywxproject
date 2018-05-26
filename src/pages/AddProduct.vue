@@ -160,7 +160,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: {},
       data: {},
       photoarr: [],

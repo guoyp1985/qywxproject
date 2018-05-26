@@ -158,7 +158,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       loginUser: {},
       productdata: [],
       controldata1: [

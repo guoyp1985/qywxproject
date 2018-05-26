@@ -28,7 +28,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       showSetting: false,
       showApply: false,
       retailerInfo: {},

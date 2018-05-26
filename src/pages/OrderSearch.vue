@@ -80,7 +80,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,

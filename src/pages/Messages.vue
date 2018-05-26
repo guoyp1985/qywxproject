@@ -47,7 +47,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       data: [],
       disData: false
     }

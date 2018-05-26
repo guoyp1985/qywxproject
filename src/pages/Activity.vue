@@ -37,7 +37,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       bargainbuyType: false,
       showShareSuccess: false,
       showBargainbuy: false,

@@ -259,7 +259,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       tabtxts: [ '待提现', '待结算', '已提现' ],
       selectedIndex: 0,
       tabdata1: [],

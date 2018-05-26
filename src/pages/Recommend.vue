@@ -143,7 +143,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       selectedIndex: 0,
       list: [],
       list1: [],

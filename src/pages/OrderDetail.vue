@@ -104,7 +104,6 @@ export default {
       showSos: false,
       sosTitle: '该订单不存在',
       showContainer: false,
-      doCreated: false,
       id: 0,
       data: {},
       retailerInfo: {},

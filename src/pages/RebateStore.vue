@@ -155,7 +155,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: {},
       rebateInfo: {},
       selectedIndex: 0,

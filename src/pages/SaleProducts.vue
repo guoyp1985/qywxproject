@@ -46,7 +46,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       tabdata1: [],
       disData: false,
       limit: 20,

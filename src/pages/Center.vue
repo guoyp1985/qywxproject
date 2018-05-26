@@ -81,7 +81,6 @@ export default {
   data () {
     const self = this
     return {
-      doCreated: false,
       btns: [
         {
           name: 'To Recommend',

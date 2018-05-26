@@ -75,7 +75,6 @@ export default {
       showSos: false,
       sosTitle: '',
       showContainer: false,
-      doCreated: false,
       autofixed: false,
       query: {},
       viewuser: {},

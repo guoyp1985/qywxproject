@@ -178,7 +178,6 @@ export default {
       showSos: false,
       sosTitle: '',
       showContainer: false,
-      doCreated: false,
       module: 'store',
       query: {},
       loginUser: {},

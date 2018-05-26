@@ -132,7 +132,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: {},
       loginUser: Object,
       WeixinName: ENV.WeixinName,
@@ -522,10 +521,6 @@ export default {
     Socket.destory(room)
     next()
   }
-  // beforeRouteUpdate (to, from, next) {
-  //   const self = this
-  //   self.init(to, from, next)
-  // }
 }
 </script>
 <style lang="less">

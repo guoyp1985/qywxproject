@@ -162,7 +162,6 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       query: {},
       loginUser: {},
       showSos: false,

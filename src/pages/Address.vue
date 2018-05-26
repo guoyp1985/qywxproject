@@ -51,29 +51,9 @@ export default {
   },
   data () {
     return {
-      doCreated: false,
       items: []
     }
   },
-  // computed: {
-  //   getItems () {
-  //     let data = this.$route.params.data
-  //     if (typeof data === 'object') {
-  //       let match = false
-  //       this.items = this.items.map(item => {
-  //         if (item.id === data.id) {
-  //           match = true
-  //           return data
-  //         }
-  //         return item
-  //       })
-  //       if (!match) {
-  //         this.items.push(data)
-  //       }
-  //     }
-  //     return this.items
-  //   }
-  // },
   filters: {
     addressFormat: function (item) {
       return `${item.province}${item.city}${item.counties} ${item.address}`
