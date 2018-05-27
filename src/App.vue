@@ -118,11 +118,6 @@ export default {
       return 'vux-' + (this.direction === 'forward' ? 'in' : 'out')
     }
   },
-  created () {
-    document.title = this.$t('tIndex')
-    this.$util.wxConfig()
-    this.getData()
-  },
   methods: {
     getTitle (path) {
       let name = path.substr(1).replace(/([a-z])(.*)/, (match, p1, p2) => `t${p1.toUpperCase()}${p2}`)
@@ -141,6 +136,12 @@ export default {
         })
       }
     }
+  },
+  created () {
+    console.info('app start up')
+    document.title = this.$t('tIndex')
+    this.$util.wxConfig()
+    this.getData()
   }
 }
 </script>

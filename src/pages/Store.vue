@@ -10,7 +10,7 @@
           v-if="addata && addata.length > 0"
           :list="addata"
           dots-position="center"
-          :interval=6000
+          :interval="6000"
           :show-dots="isshowdot"
           :aspect-ratio="500/900"
           auto
@@ -73,20 +73,20 @@
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
           </productitemplate>
         </div>
-        <template v-if="toplinedata.length > 0">
-          <div class="bg-white mt5 padding10 b_top_after">
-            <div class="t-table">
-              <div class="t-cell v_middle align_left">
-        			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
-              </div>
-              <div class="t-cell v_middle align_right">
-                <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
-      						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
-      					</div>
-              </div>
+        <div class="bg-white mt5 padding10 b_top_after">
+          <div class="t-table">
+            <div class="t-cell v_middle align_left">
+      			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
             </div>
-      		</div>
-          <div class="b_top_after"></div>
+            <div class="t-cell v_middle align_right">
+              <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
+    						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
+    					</div>
+            </div>
+          </div>
+    		</div>
+        <div class="b_top_after"></div>
+        <template v-if="toplinedata.length > 0">
           <div class="productlist">
             <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
               <x-img slot="photo" class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width: 70px; height: 50px;" :offset="0" container=".scroll-container"></x-img>
@@ -161,6 +161,12 @@ import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
+const limit = 10
+const newsLimit = 3
+let initNewsData = []
+let pageStart = 0
+let newPageStart = 0
+
 export default {
   directives: {
     TransferDom
@@ -182,7 +188,7 @@ export default {
       query: {},
       loginUser: {},
       showShareSuccess: false,
-      wid: 0,
+      // wid: 0,
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       showqrcode: false,
       showdot: true,
@@ -190,11 +196,11 @@ export default {
       activitydata: [],
       disproductdata: false,
       productdata: [],
-      limit: 10,
-      pagestart1: 0,
-      newspagestart: 0,
-      newslimit: 3,
-      isgetnews: true,
+      // limit: 10,
+      // pageStart: 0,
+      // newPageStart: 0,
+      // newsLimit: 3,
+      // isgetnews: true,
       toplinedata: [],
       favoritecss: 'none',
       isfavorite: false,
@@ -235,8 +241,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.productdata.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getData1()
           }
@@ -245,7 +251,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      let params = { params: { pagestart: pageStart, limit: limit } }
       if (self.query.wid) {
         params.params.uploader = self.query.wid
       } else {
@@ -263,29 +269,42 @@ export default {
     },
     getnewsdata () {
       const self = this
-      if (self.isgetnews) {
-        const params = { params: { pagestart: self.newspagestart, limit: self.newslimit, uploader: self.query.wid } }
-        self.$http.get(`${ENV.BokaApi}/api/list/news`, params).then(res => {
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          if (retdata.length === 0) {
-            self.newspagestart = 0
-            self.getnewsdata()
-          } else {
-            if (retdata.length < self.newslimit) {
-              self.toplinedata = retdata
-              if (self.newspagestart === 0) {
-                self.isgetnews = false
-              } else {
-                self.newspagestart = 0
-              }
-            } else if (retdata.length === self.newslimit) {
-              self.toplinedata = retdata
-              self.newspagestart++
-            }
-          }
-        })
-      }
+      // if (self.isgetnews) {
+      const params = { params: { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid } }
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, params)
+      .then(res => {
+        const data = res.data
+        if (newPageStart === 0) {
+          initNewsData = data
+        }
+        if (data.length === 0) {
+          self.toplinedata = initNewsData
+        } else {
+          self.toplinedata = data
+        }
+        if (data.length === newsLimit) {
+          newPageStart++
+        } else if (data.length < newsLimit) {
+          newPageStart = 0
+        }
+          // if (retdata.length === 0) {
+          //   newPageStart = 0
+          //   self.getnewsdata()
+          // } else {
+          //   if (retdata.length < newsLimit) {
+          //     self.toplinedata = retdata
+          //     if (newPageStart === 0) {
+          //       self.isgetnews = false
+          //     } else {
+          //       newPageStart = 0
+          //     }
+          //   } else if (retdata.length === newsLimit) {
+          //     self.toplinedata = retdata
+          //     newPageStart++
+          //   }
+          // }
+      })
+      // }
     },
     changeNews () {
       this.getnewsdata()
@@ -374,10 +393,10 @@ export default {
         return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: infoparams })
       })
       .then(res => {
-        if (res) {
+        // if (res) {
           self.$vux.loading.hide()
           self.hideloading = true
-          let data = res.data
+          const data = res.data
           if (data.flag !== 1) {
             self.sosTitle = data.error
             self.showSos = true
@@ -387,27 +406,27 @@ export default {
             self.showContainer = true
             self.retailerInfo = data.data ? data.data : data
             document.title = self.retailerInfo.title
-            self.wid = self.retailerInfo.uid
+            const wid = self.retailerInfo.uid
             self.$util.handleWxShare({
               module: 'store',
-              moduleid: self.wid,
+              moduleid: wid,
               lastshareuid: self.query.share_uid,
               title: self.retailerInfo.title,
               desc: self.retailerInfo.title,
               photo: self.retailerInfo.avatar,
-              link: `${ENV.Host}/#/store?wid=${self.wid}&share_uid=${self.loginUser.uid}`,
+              link: `${ENV.Host}/#/store?wid=${wid}&share_uid=${self.loginUser.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
             })
-            if (self.wid !== self.loginUser.uid) {
+            if (wid !== self.loginUser.uid) {
               self.getCollectStaus()
             }
             return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
           }
-        }
+        // }
       }).then(res => {
-        if (res) {
+        // if (res) {
           const data = res.data
           const retdata = data.data ? data.data : data
           for (let i = 0; i < retdata.length; i++) {
@@ -418,30 +437,40 @@ export default {
           self.addata = retdata
           const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
           return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-        }
+        // }
       }).then(res => {
-        if (res) {
+        // if (res) {
           const data = res.data
           self.activitydata = data.data ? data.data : data
-          self.getData1()
+          // self.getData1()
           self.getnewsdata()
-        }
+        // }
       })
     },
     init () {
       this.loginUser = User.get()
-      this.$vux.loading.show()
-      this.getData()
+      // if (this.showContainer && this.productdata.length < limit) {
+      //   this.disproductdata = false
+      //   this.productdata = []
+        // this.$vux.loading.show()
+      // this.query = this.$route.query
+      // this.getData1()
+      // }
     },
     refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.showContainer && this.productdata.length < this.limit) {
-        this.disproductdata = false
+      if (this.query.wid !== this.$route.query.wid) {
+        pageStart = 0
+        newPageStart = 0
+        this.addata = []
+        this.activitydata = []
         this.productdata = []
+        this.toplinedata = []
+        this.query = this.$route.query
         this.$vux.loading.show()
         this.getData1()
+        this.getData()
       }
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {

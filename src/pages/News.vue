@@ -153,22 +153,22 @@ export default {
       isdig: 0,
       photoarr: [],
       previewerPhotoarr: [],
-      disComments: false,
+      // disComments: false,
       pagestart: 0,
       limit: 20,
       replyData: null
     }
   },
   filters: {
-    dateFormat: function (date) {
+    dateFormat (date) {
       return new Time(date * 1000).dateFormat('yyyy-MM-dd')
     },
-    readingCountFormat: function (count) {
+    readingCountFormat (count) {
       return count > 100000 ? '100000+' : count
     }
   },
   watch: {
-    isdig: function () {
+    isdig () {
       return this.isdig
     }
   },
@@ -292,7 +292,7 @@ export default {
           }
         }
         self.comments = self.comments.concat(retdata)
-        self.disComments = true
+        // self.disComments = true
       })
     },
     getData () {
@@ -490,6 +490,10 @@ export default {
         }
       }
     },
+    toStore () {
+      const self = this
+      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
+    },
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
@@ -497,24 +501,29 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
-    refresh () {
+    init () {
       this.loginUser = User.get()
+    },
+    refresh () {
+      if (this.query.id !== this.$route.query.id) {
+        this.comments = []
+        this.pagestart = 0
+        this.query = this.$route.query
+        this.showsharetip = false
+        this.getData()
+        this.createSocket()
+      }
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.showsharetip = false
-      this.getData()
-      this.createSocket()
       if (this.query.newadd) {
         const self = this
         setTimeout(() => {
           self.showsharetip = false
         }, 10000)
       }
-    },
-    toStore () {
-      const self = this
-      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()
