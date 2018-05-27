@@ -459,6 +459,7 @@ export default {
     },
     refresh () {
       if (this.query.wid !== this.$route.query.wid) {
+        initNewsData = []
         pageStart = 0
         newPageStart = 0
         this.addata = []
