@@ -66,12 +66,14 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
+let room = ''
 export default {
   components: {
     Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Sos
   },
   data () {
     return {
+      module: 'knowledge',
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -126,7 +128,7 @@ export default {
       console.log(value)
       this.commentPopupShow = false
       const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: 'knowledge', message: value})
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: this.module, message: value})
       .then(res => {
         if (res.data.flag) {
           self.comments.push(res.data.data)
@@ -147,7 +149,7 @@ export default {
     getData () {
       const self = this
       const id = self.query.id
-      this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, { params: { id: self.query.id, module: 'knowledge' } }) // 获取文章
+      this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, { params: { id: self.query.id, module: this.module } }) // 获取文章
       .then(res => {
         let data = res.data
         if (data.flag !== 1) {
@@ -167,13 +169,13 @@ export default {
             }
           })
         }
-        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: 'knowledge'}) // 获取评论
+        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: this.module}) // 获取评论
       })
       .then(res => {
         if (res.data) {
           self.comments = res.data
         }
-        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: 'knowledge'})
+        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: this.module})
       })
       .then(res => {
         if (res.data.flag < 1) {
@@ -187,7 +189,7 @@ export default {
       const self = this
       if (this.notFavorite) {
         this.notFavorite = false
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: 'knowledge'})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: this.module})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Favorite Success'))
@@ -195,7 +197,7 @@ export default {
         })
       } else {
         this.notFavorite = true
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: 'knowledge'})
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: this.module})
         .then(res => {
           if (res.data.flag) {
             self.$vux.toast.text(self.$t('Cancel Favorite'))
@@ -269,7 +271,7 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = this.query.id
+      room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
@@ -278,9 +280,11 @@ export default {
       console.log(this.loginUser)
     },
     refresh () {
+      if (this.query.id !== this.$route.query.id) {
+        this.query = this.$route.query
+        this.getData()
+      }
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
       this.createSocket()
     }
   },
@@ -291,7 +295,6 @@ export default {
     this.refresh()
   },
   beforeRouteLeave (to, from, next) {
-    const room = this.query.id
     Socket.destory(room)
     next()
   }

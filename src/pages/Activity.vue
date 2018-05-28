@@ -15,7 +15,7 @@
         v-if="data.uploader == loginUser.uid || query.wid == loginUser.uid || data.identity != 'user'"
         :data="data"
         :loginUser="loginUser"
-        module="activity"
+        :module="module"
         :on-close="closeShareSuccess">
       </share-success>
     </div>
@@ -31,12 +31,14 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
+let room = ''
 export default {
   components: {
     Bargainbuy, BargainbuyView, BargainbuyDetail, ShareSuccess
   },
   data () {
     return {
+      module: 'activity',
       bargainbuyType: false,
       showShareSuccess: false,
       showBargainbuy: false,
@@ -150,7 +152,7 @@ export default {
             }
           }
           self.$util.handleWxShare({
-            module: 'activity',
+            module: self.module,
             moduleid: self.data.id,
             lastshareuid: self.query.share_uid,
             title: sharetitle,
@@ -185,7 +187,7 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = this.query.id
+      room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
@@ -213,7 +215,6 @@ export default {
     this.refresh()
   },
   beforeRouteLeave (to, from, next) {
-    const room = this.query.id
     Socket.destory(room)
     next()
   }
