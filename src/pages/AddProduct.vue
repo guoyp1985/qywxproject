@@ -212,6 +212,22 @@ export default {
     }
   },
   methods: {
+    initSubmitData () {
+      this.submitdata = {
+        title: '',
+        price: '',
+        storage: '',
+        unit: '件',
+        rebate: '',
+        photo: '',
+        content: '',
+        contentphoto: '',
+        seotitle: '',
+        seodescription: ''
+      }
+      this.photoarr = []
+      this.photoarr1 = []
+    },
     photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
@@ -390,6 +406,9 @@ export default {
     }
   },
   activated () {
+    if (this.query.id !== this.$route.query.id) {
+      this.initSubmitData()
+    }
     this.refresh()
   }
 }
