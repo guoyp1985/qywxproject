@@ -1,4 +1,4 @@
-pl12 pr12 pt10 pb10<template>
+<template>
   <div class="containerarea bg-page font14 s-havebottom store">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
@@ -36,7 +36,7 @@ pl12 pr12 pt10 pb10<template>
       		</div>
         </template>
         <template v-if="activitydata && activitydata.length > 0">
-          <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+          <div class="bg-white mt5 padding10 b_top_after">
       			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
       		</div>
           <div class="b_top_after"></div>
@@ -60,7 +60,7 @@ pl12 pr12 pt10 pb10<template>
             </div>
           </div>
         </template>
-        <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+        <div class="bg-white mt5 padding10 b_top_after">
     			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
     		</div>
         <div class="b_top_after"></div>
@@ -73,7 +73,7 @@ pl12 pr12 pt10 pb10<template>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
           </productitemplate>
         </div>
-        <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+        <div class="bg-white mt5 padding10 b_top_after">
           <div class="t-table">
             <div class="t-cell v_middle align_left">
       			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
@@ -95,13 +95,13 @@ pl12 pr12 pt10 pb10<template>
             </newsitemplate>
           </div>
         </template>
-        <div class="pl12 pr12 pt12 pb12">
+        <div class="padding10">
           <div class="btn-open" @click="openShop" style="display: block;background-color: #e10c00">我也要开店</div>
         </div>
       </div>
-      <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-white color-white h_100 flex_center" style="border-right:#dddddd 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232;">{{ $t('Online consulting') }}</span></router-link>
-        <div class="flex_cell bg-white color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin font18" style="padding-right:3px;color:#36ab60"></i><span style="color:#323232;">{{ $t('Wechat contact') }}</span></div>
+      <div class="s-bottom flex_center">
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</router-link>
+        <div class="flex_cell bg-red color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin2 color-fff font18" style="padding-right:3px;"></i>{{ $t('Wechat contact') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showqrcode" height="100%">
@@ -393,6 +393,10 @@ export default {
         return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: infoparams })
       })
       .then(res => {
+<<<<<<< HEAD
+        // if (res) {
+=======
+>>>>>>> 7c4f34c91b3289a3b6b02788e9eb2b12e34191ab
         self.$vux.loading.hide()
         self.hideloading = true
         const data = res.data
@@ -423,7 +427,13 @@ export default {
           }
           return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
         }
+<<<<<<< HEAD
+        // }
       }).then(res => {
+        // if (res) {
+=======
+      }).then(res => {
+>>>>>>> 7c4f34c91b3289a3b6b02788e9eb2b12e34191ab
         const data = res.data
         const retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
@@ -434,11 +444,21 @@ export default {
         self.addata = retdata
         const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
         return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
+<<<<<<< HEAD
+        // }
       }).then(res => {
+        // if (res) {
+=======
+      }).then(res => {
+>>>>>>> 7c4f34c91b3289a3b6b02788e9eb2b12e34191ab
         const data = res.data
         self.activitydata = data.data ? data.data : data
         // self.getData1()
         self.getnewsdata()
+<<<<<<< HEAD
+        // }
+=======
+>>>>>>> 7c4f34c91b3289a3b6b02788e9eb2b12e34191ab
       })
     },
     init () {
