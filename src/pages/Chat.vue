@@ -681,6 +681,7 @@ export default {
       }
     },
     createSocket () {
+      const self = this
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
