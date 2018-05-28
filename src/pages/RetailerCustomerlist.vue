@@ -393,6 +393,7 @@ export default {
       self.getData3()
     },
     swiperChange (index) {
+      const self = this
       if (index !== undefined) {
         this.selectedIndex = index
       }
