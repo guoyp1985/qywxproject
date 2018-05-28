@@ -209,10 +209,16 @@ export default {
     }
   },
   created () {
+    console.log('in created')
     this.init()
   },
   activated () {
+    console.log('in activated')
     this.refresh()
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.refresh()
+    next && next()
   },
   beforeRouteLeave (to, from, next) {
     Socket.destory(room)
