@@ -5,16 +5,14 @@
 */
 <template>
   <div id="personal-favorite" class="containerarea bg-page font14">
-    <div class="pagetop">
-      <div class="top-banner">
-        <tab class="b-tab" v-model="selectedIndex">
-          <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
-          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
-          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
-        </tab>
-      </div>
+    <div class="s-topbanner s-topbanner1">
+      <tab class="b-tab" v-model="selectedIndex">
+        <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
+        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
+        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
+      </tab>
     </div>
-    <div class="pagemiddle" style="bottom:53px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+    <div class="s-container s-container1" style="bottom:53px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <swipeout v-show="selectedIndex===0">
         <template v-if="disData1">
           <template v-if="articles.length">
@@ -26,8 +24,8 @@
                 <div class="img-cell">
                   <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                 </div>
-                <div class="info-cell">
-                  <div class="font14">
+                <div class="info-cell flex_cell">
+                  <div class="font14 clamp1">
                     {{article.title}}
                   </div>
                   <div class="font12 color-gray">
@@ -55,8 +53,8 @@
                 <div class="img-cell">
                   <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                 </div>
-                <div class="info-cell">
-                  <div class="font14">
+                <div class="info-cell flex_cell">
+                  <div class="font14 clamp1">
                     {{commodity.title}}
                   </div>
                   <div class="font12 color-gray">
@@ -84,8 +82,8 @@
                 <div class="img-cell">
                   <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
                 </div>
-                <div class="info-cell">
-                  <div class="font14">
+                <div class="info-cell flex_cell">
+                  <div class="font14 clamp1">
                     {{store.title}}
                   </div>
                   <div class="font12 color-gray">
