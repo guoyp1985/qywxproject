@@ -32,8 +32,8 @@
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
-                  <x-img class="imgcover v_middle" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" style="width:100px;height:100px;" :offset="0" container=".scroll-container"></x-img>
-          			</div>
+                  <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='../src/assets/images/nopic.jpg'" />
+                </div>
           			<div class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
                   <div class="t-table pr12 border-box mt15">

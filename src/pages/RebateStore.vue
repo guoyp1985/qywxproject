@@ -56,7 +56,7 @@
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
@@ -81,7 +81,7 @@
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                  <x-img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -109,7 +109,7 @@
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                <x-img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
                       <span class="v_middle">{{ item.dateline | dateFormat }}</span>
@@ -178,6 +178,9 @@ export default {
     }
   },
   methods: {
+    getPhoto: function (photo) {
+      return this.$util.getPhoto(photo)
+    },
     handleScroll: function () {
       const self = this
       self.$util.scrollEvent({
@@ -296,6 +299,7 @@ export default {
     },
     init () {
       this.$vux.loading.show()
+      this.query = this.$route.query
       this.getData()
     },
     refresh () {

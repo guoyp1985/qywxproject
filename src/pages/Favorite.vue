@@ -5,7 +5,7 @@
 */
 <template>
   <div id="personal-favorite" class="containerarea bg-page font14">
-    <div class="pagetop">
+    <div class="s-topbanner s-topbanner1">
       <div class="top-banner">
         <tab class="b-tab" v-model="selectedIndex">
           <tab-item selected class="">{{ $t('Article') }}</tab-item>
@@ -14,37 +14,39 @@
         </tab>
       </div>
     </div>
-    <div class="pagemiddle">
+    <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <swipeout v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
             <template v-if="disData1">
-              <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
-                <div slot="right-menu">
-                  <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-                </div>
-                <div slot="content" class="item-content vux-1px-t">
-                  <div class="img-cell">
-                    <x-img :src="getPhoto(article.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+              <template v-if="articles.length > 0">
+                <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
+                  <div slot="right-menu">
+                    <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
                   </div>
-                  <div class="info-cell">
-                    <div class="font14">
-                      {{article.title}}
+                  <div slot="content" class="item-content vux-1px-t">
+                    <div class="img-cell">
+                      <x-img :src="getPhoto(article.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                     </div>
-                    <div class="font12 color-gray">
-                      {{article.dateline | dateFormat}}
+                    <div class="info-cell">
+                      <div class="font14">
+                        {{article.title}}
+                      </div>
+                      <div class="font12 color-gray">
+                        {{article.dateline | dateFormat}}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </swipeout-item>
+                </swipeout-item>
+              </template>
+              <div v-else class="no-related-x color-gray">
+                <span>{{$t('No Related Data')}}</span>
+              </div>
             </template>
-            <div v-else class="no-related-x color-gray">
-              <span>{{$t('No Related Data')}}</span>
-            </div>
           </swipeout>
           <swipeout v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <template v-if="disData2">
-              <template v-if="articles.length">
+              <template v-if="commodities.length">
                 <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
                   <div slot="right-menu">
                     <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>

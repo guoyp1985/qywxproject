@@ -4,23 +4,18 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="ctitle  bg-page">
+  <div class="ctitle bg-page">
     <div class="info-area">
-      <div class="bg">
-        <img src="../assets/images/v_centerbg.png" width="100%">
-      </div>
+      <div class="bg"></div>
       <div class="card_box">
-      <div class="card bg-white" >
-        <div class="content">
-          <div class="content-box">
-            <div class="user-info pt10">
+      <div class="card bg-white list-shadow02">
+        <div class="content-box">
+            <div class="user-info pt10 pb5">
               <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
-                <div class="c_pic">
-                  <img :src="avatar"/>
-                </div>
+                <div class="c_pic"><img :src="avatar"/></div>
               </router-link>
             </div>
-            <div class="flex_center" style="display:flex;">
+            <div class="flex_center">
               <div class="user-info pr5" style="color:#323232;">
                 <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
                   <div class="user-name" >
@@ -31,22 +26,19 @@
               </div>
               <div class="user-credits">
                 <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-                  <img src="../assets/images/jb_icon.png" style="width: 16px;
-    height: 16px;" />
-                  <span class="u-credits color-yellow1">{{ credits }}</span>
+                  <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
+                  <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
                 </router-link>
               </div>
             </div>
           </div>
-        </div>
-        <img src="../assets/images/v_yinying.png" style="width:100%;height:23px;position: absolute;
-    bottom: 0;" />
+        <img src="../assets/images/v_yinying.png" class="mt5 db" style="width:100%;" />
       </div>
       </div>
     </div>
     <div class="message-btn">
       <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
-        <span class="al al-pinglun color-white font22"></span>
+        <span class="al al-xiaoxi1 color-white font22"></span>
         <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
         <span class="msg-badge" v-if="messages >= 100">···</span>
       </router-link>
@@ -113,23 +105,29 @@ export default {
 </script>
 
 <style lang="less">
+.ctitle .bg{
+  height: 140px;
+  background: url(/static/img/v_centerbg.9da14bc.png);
+  background-size: cover;
+  background-position: bottom;
+}
 .ctitle .info-area {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 200px;
+  height: auto;
   border-radius: 0;
 }
 .ctitle .card_box{
     width:  100%;
     padding:0 12px;
     box-sizing:  border-box;
-    position:  absolute;
-    top: 48px;
+    position:  relative;
+    top: -90px;
+    z-index: 1;
 }
 .ctitle .card{
   width:100%;
-  height:142px;
   border-radius:5px;
   position: relative;
   overflow: hidden;
@@ -140,12 +138,6 @@ export default {
   border-radius: 50%;
   vertical-align: middle;
   border: 2px solid #fff;
-}
-
-.ctitle .content {
-  position: absolute;
-  z-index: 2;
-  width: 100%;
 }
 
 .ctitle .content .content-box {
@@ -182,14 +174,14 @@ export default {
 }
 .ctitle .message-btn {
   position: absolute;
-  right: 20px;
+  right: 15px;
   top: 10px;
   z-index: 3
 }
 .ctitle .message-btn .msg-badge {
   position: absolute;
   top: -2px;
-  right: -11px;
+  right: -8px;
   z-index: 3
 }
 
