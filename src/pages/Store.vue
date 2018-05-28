@@ -99,9 +99,9 @@
           <div class="btn-open" @click="openShop" style="display: block;background-color: #e10c00">我也要开店</div>
         </div>
       </div>
-      <div class="s-bottom flex_center">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</router-link>
-        <div class="flex_cell bg-red color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin2 color-fff font18" style="padding-right:3px;"></i>{{ $t('Wechat contact') }}</div>
+      <div class="s-bottom flex_center list-shadow">
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-white color-white h_100 flex_center" style="border-right:#ddd 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
+        <div class="flex_cell bg-white color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showqrcode" height="100%">

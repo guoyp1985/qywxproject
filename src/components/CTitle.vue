@@ -113,7 +113,7 @@ export default {
 }
 .ctitle .bg{
   height: 140px;
-  background: url(../images/v_centerbg.png);
+  background: url(../assets/images/v_centerbg.png);
   background-size: cover;
   background-position: bottom;
 }
