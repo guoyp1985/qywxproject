@@ -10,7 +10,7 @@
         <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db pt10 pb10">
           <div class="t-table">
 						<div class="t-cell w50 v_middle">
-              <x-img class="avtarimg" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+              <img class="avatarimg1" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
 						</div>
 						<div class="t-cell v_middle">
 							<div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.username }}</div>
