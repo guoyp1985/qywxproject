@@ -887,6 +887,7 @@ export default {
     },
     refresh () {
       if (this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
+        this.showShareSuccess = false
         this.previewerPhotoarr = []
         this.query = this.$route.query
         this.$vux.loading.show()
