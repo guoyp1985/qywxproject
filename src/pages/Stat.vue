@@ -211,6 +211,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 
+const limit = 10
 export default {
   components: {
     Tab, TabItem, Swiper, SwiperItem, XImg, Sos
@@ -251,7 +252,6 @@ export default {
       statData: [],
       tabsdata: [],
       tabtop: 'auto',
-      limit: 10,
       scrollData: [],
       datalist: [],
       isFirst: true,
@@ -272,7 +272,7 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * self.limit) {
+          if (self.datalist[index].length === (self.scrollData[index].pagestart + 1) * limit) {
             self.scrollData[index].pagestart++
             self.$vux.loading.show()
             self.getData1()
@@ -284,7 +284,7 @@ export default {
       const self = this
       const item = self.clickTabitem
       const index = this.selectedIndex
-      let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: self.limit } }
+      let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: limit } }
       self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -316,14 +316,10 @@ export default {
           self.datalist.push([])
         }
       }
-      switch (index1) {
-        case 0:
-          if (this.datalist[index1].length < this.limit) {
-            this.datalist[index1] = []
-            self.$vux.loading.show()
-            this.getData1()
-          }
-          break
+      if (this.datalist[index1].length < limit) {
+        this.datalist[index1] = []
+        self.$vux.loading.show()
+        this.getData1()
       }
     },
     getData () {
@@ -357,7 +353,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.module = this.query.module
-      console.log(this.showContainer)
       if (this.showContainer) {
         this.swiperChange()
       }

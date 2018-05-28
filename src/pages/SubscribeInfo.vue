@@ -7,13 +7,13 @@
 			<div class="pb10 border font16 color-gray b_bottom_after">我推荐的用户</div>
 			<div v-if="disData" class="scroll_list">
         <div v-if="!data || data.length == 0" class="flex_center emptyitem">您还没有好友关注，去分享给好友关注吧</div>
-        <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db">
+        <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db pt10 pb10">
           <div class="t-table">
-						<div class="t-cell w50">
+						<div class="t-cell w50 v_middle">
               <x-img class="avtarimg" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
 						</div>
-						<div class="t-cell">
-							<div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
+						<div class="t-cell v_middle">
+							<div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.username }}</div>
 						</div>
 					</div>
         </div>
@@ -78,7 +78,7 @@ export default {
     },
     getData1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/user/uploadByMe`).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/user/friendList`).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data

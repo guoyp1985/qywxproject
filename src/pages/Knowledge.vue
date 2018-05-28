@@ -275,6 +275,7 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
