@@ -397,7 +397,6 @@ export default {
           }
           // let sendtxt = JSON.stringify(senddata)
           // websocket.send(sendtxt)
-          console.log(senddata)
           Socket.send(senddata)
           self.data.push(senddata)
           self.msgTextarea.value = ''
@@ -682,6 +681,7 @@ export default {
       }
     },
     createSocket () {
+      const self = this
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)

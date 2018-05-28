@@ -56,7 +56,7 @@
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='../src/assets/images/nopic.jpg'" />
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
                     零售价：{{$t('RMB')}}{{item.price}}
@@ -81,7 +81,7 @@
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                  <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='../src/assets/images/nopic.jpg'" />
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -89,7 +89,7 @@
               </template>
               <template v-else>
                 <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
-                  <x-img slot="icon" class="product-img imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                  <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='../src/assets/images/nopic.jpg'" />
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
                   </div>
@@ -109,7 +109,7 @@
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
               <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
-                <x-img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" default-src="../src/assets/images/nopic.jpg" :offset='0' container=".scroll-container"></x-img>
+                <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='../src/assets/images/nopic.jpg'" />
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
                       <span class="v_middle">{{ item.dateline | dateFormat }}</span>
@@ -146,6 +146,9 @@ import { Group, Cell, Card, Tab, TabItem, ViewBox, XImg, Sticky, XDialog, Transf
 import Time from '#/time'
 import ENV from 'env'
 
+let pageStart1 = 0
+let pageStart2 = 0
+let pageStart3 = 0
 export default {
   directives: {
     TransferDom
@@ -166,9 +169,6 @@ export default {
       tabdata2: [],
       tabdata3: [],
       limit: 10,
-      pagestart1: 0,
-      pagestart2: 0,
-      pagestart3: 0,
       storeQrcode: null
     }
   },
@@ -178,6 +178,20 @@ export default {
     }
   },
   methods: {
+    initData: function () {
+      this.query = this.$route.query
+      this.selectedIndex = 0
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      pageStart1 = 0
+      pageStart2 = 0
+      pageStart3 = 0
+      this.storeQrcode = null
+    },
     getPhoto: function (photo) {
       return this.$util.getPhoto(photo)
     },
@@ -188,22 +202,22 @@ export default {
         callback: function () {
           switch (self.selectedIndex) {
             case 0:
-              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-                self.pagestart1++
+              if (self.tabdata1.length === (pageStart1 + 1) * self.limit) {
+                pageStart1++
                 self.$vux.loading.show()
                 self.getData1()
               }
               break
             case 1:
-              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-                self.pagestart2++
+              if (self.tabdata2.length === (pageStart2 + 1) * self.limit) {
+                pageStart2++
                 self.$vux.loading.show()
                 self.getData2()
               }
               break
             case 2:
-              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-                self.pagestart3++
+              if (self.tabdata3.length === (pageStart3 + 1) * self.limit) {
+                pageStart3++
                 self.$vux.loading.show()
                 self.getData3()
               }
@@ -214,7 +228,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = { wid: self.query.wid, pagestart: self.pagestart1, limit: self.limit }
+      let params = { wid: self.query.wid, pagestart: pageStart1, limit: self.limit }
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
       .then(res => {
         let data = res.data
@@ -226,7 +240,7 @@ export default {
     },
     getData2 () {
       const self = this
-      let params = { wid: self.query.wid, pagestart: self.pagestart2, limit: self.limit }
+      let params = { wid: self.query.wid, pagestart: pageStart2, limit: self.limit }
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, params)
       .then(res => {
         let data = res.data
@@ -238,7 +252,7 @@ export default {
     },
     getData3 () {
       const self = this
-      let params = { wid: self.query.wid, pagestart: self.pagestart3, limit: self.limit }
+      let params = { wid: self.query.wid, pagestart: pageStart3, limit: self.limit }
       this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, params)
       .then(res => {
         let data = res.data
@@ -304,7 +318,10 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
+      if (this.query.wid !== this.$route.query.wid) {
+        this.initData()
+        this.getData()
+      }
     }
   },
   created () {
