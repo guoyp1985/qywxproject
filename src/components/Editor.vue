@@ -492,7 +492,7 @@ export default {
               type: (data.flag !== 1 ? 'warn' : 'success'),
               time: self.$util.delay(data.error),
               onHide: function () {
-                self.$router.push('/sos')
+                self.$router.go('-1')
               }
             })
           })

@@ -234,7 +234,8 @@ export default {
       initNewsData = []
       pageStart = 0
       newPageStart = 0
-      this.query = this.$route.query
+      this.query = {}
+      this.retailerInfo = {}
       this.showSos = false
       this.sosTitle = ''
       this.showContainer = false
@@ -281,9 +282,15 @@ export default {
     },
     getnewsdata () {
       const self = this
-      // if (self.isgetnews) {
-      const params = { params: { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid } }
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, params)
+      const params = { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid }
+      if (!self.query.wid) {
+        params.uploader = self.loginUser.uid
+      } else {
+        params.uploader = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+        params: params
+      })
       .then(res => {
         const data = res.data
         if (newPageStart === 0) {
@@ -299,24 +306,7 @@ export default {
         } else if (data.length < newsLimit) {
           newPageStart = 0
         }
-          // if (retdata.length === 0) {
-          //   newPageStart = 0
-          //   self.getnewsdata()
-          // } else {
-          //   if (retdata.length < newsLimit) {
-          //     self.toplinedata = retdata
-          //     if (newPageStart === 0) {
-          //       self.isgetnews = false
-          //     } else {
-          //       newPageStart = 0
-          //     }
-          //   } else if (retdata.length === newsLimit) {
-          //     self.toplinedata = retdata
-          //     newPageStart++
-          //   }
-          // }
       })
-      // }
     },
     changeNews () {
       this.getnewsdata()
@@ -436,31 +426,34 @@ export default {
           return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
         }
       }).then(res => {
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          let p = retdata[i]
-          p.img = p.photo
-          p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+        if (res) {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            let p = retdata[i]
+            p.img = p.photo
+            p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+          }
+          self.addata = retdata
+          const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
         }
-        self.addata = retdata
-        const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
       }).then(res => {
-        const data = res.data
-        self.activitydata = data.data ? data.data : data
-        // self.getData1()
-        self.getnewsdata()
+        if (res) {
+          const data = res.data
+          self.activitydata = data.data ? data.data : data
+          // self.getData1()
+          self.getnewsdata()
+        }
       })
     },
     init () {
       this.loginUser = User.get()
     },
     refresh () {
-      console.log(this.query.wid)
-      console.log(this.$route.query.wid)
-      if (this.query.wid !== this.$route.query.wid) {
+      if (this.$route.query.wid === undefined || this.query.wid !== this.$route.query.wid) {
         this.initData()
+        this.query = this.$route.query
         this.$vux.loading.show()
         this.getData()
       }
@@ -472,11 +465,9 @@ export default {
     }
   },
   created () {
-    console.log('in created')
     this.init()
   },
   activated () {
-    console.log('in activated')
     this.refresh()
   }
 }
