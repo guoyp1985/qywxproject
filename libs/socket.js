@@ -3,12 +3,11 @@ let ws = null
 const Socket = {
   create: () => ws = (ws ? ws : new WebSocket(ENV.SocketApi)),
   listening: (room, uid, linkman, callback) => {
-    const roomId = `${ENV.SocketBokaApi}-news-${room}`
+    const roomId = `${ENV.SocketBokaApi}-${room}`
     if (!ws) {
       console.error('WS: ws undefined')
       return
     }
-    console.log(linkman)
     ws.onopen = () => {
       const loginData = {
         type: 'login',
@@ -20,6 +19,7 @@ const Socket = {
     }
     ws.onmessage = e => {
       const data = JSON.parse(e.data)
+      console.log(data)
       if (data.type === 'login') {
         console.info(`WS: Login Room ${roomId}`)
       } else if (data.type === 'logout') {
@@ -55,10 +55,10 @@ const Socket = {
       console.info('WS: Connecting Error')
     }
   },
-  send: (data) => {
+  send: data => {
     ws && ws.send(JSON.stringify(data))
   },
-  destory: (room) => {
+  destory: room => {
     Socket.send({
       type: 'logout',
       room_id: room
