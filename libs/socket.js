@@ -59,7 +59,6 @@ const Socket = {
     ws && ws.send(JSON.stringify(data))
   },
   destory: (room) => {
-    console.log(room)
     Socket.send({
       type: 'logout',
       room_id: room

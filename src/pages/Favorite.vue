@@ -5,97 +5,101 @@
 */
 <template>
   <div id="personal-favorite" class="containerarea bg-page font14">
-    <div class="pagetop" style="height:154px;">
+    <div class="pagetop">
       <div class="top-banner">
         <tab class="b-tab" v-model="selectedIndex">
-          <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
-          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
-          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
+          <tab-item selected class="">{{ $t('Article') }}</tab-item>
+          <tab-item>{{ $t('Commodity') }}</tab-item>
+          <tab-item>{{ $t('Store') }}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="pagemiddle" style="top:154px;">
-      <swipeout v-show="selectedIndex===0">
-        <template v-if="articles.length">
-          <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
-            <div slot="right-menu">
-              <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-            </div>
-            <div slot="content" class="item-content vux-1px-t">
-              <div class="img-cell">
-                <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
-              </div>
-              <div class="info-cell">
-                <div class="font14">
-                  {{article.title}}
+    <div class="pagemiddle">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+          <swipeout v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
+            <template v-if="disData1">
+              <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
+                <div slot="right-menu">
+                  <swipeout-button @click.native.stop="cancelArticel(article)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
                 </div>
-                <div class="font12 color-gray">
-                  {{article.dateline | dateFormat}}
+                <div slot="content" class="item-content vux-1px-t">
+                  <div class="img-cell">
+                    <x-img :src="getPhoto(article.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                  </div>
+                  <div class="info-cell">
+                    <div class="font14">
+                      {{article.title}}
+                    </div>
+                    <div class="font12 color-gray">
+                      {{article.dateline | dateFormat}}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </swipeout-item>
+            </template>
+            <div v-else class="no-related-x color-gray">
+              <span>{{$t('No Related Data')}}</span>
             </div>
-          </swipeout-item>
-        </template>
-        <template v-else>
-          <div class="no-related-x color-gray">
-            <span>{{$t('No Related Data')}}</span>
-          </div>
-        </template>
-      </swipeout>
-      <swipeout v-show="selectedIndex===1">
-        <template v-if="commodities.length">
-          <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
-            <div slot="right-menu">
-              <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-            </div>
-            <div slot="content" class="item-content vux-1px-t">
-              <div class="img-cell">
-                <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+          </swipeout>
+          <swipeout v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
+            <template v-if="disData2">
+              <template v-if="articles.length">
+                <swipeout-item transition-mode="follow" @click.native="commodityItemClick(commodity)" v-for="(commodity, index) in commodities" :key="index">
+                  <div slot="right-menu">
+                    <swipeout-button @click.native.stop="cancelCommodity(commodity)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+                  </div>
+                  <div slot="content" class="item-content vux-1px-t">
+                    <div class="img-cell">
+                      <x-img :src="getPhoto(commodity.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                    </div>
+                    <div class="info-cell">
+                      <div class="font14">
+                        {{commodity.title}}
+                      </div>
+                      <div class="font12 color-gray">
+                        {{commodity.dateline | dateFormat}}
+                      </div>
+                    </div>
+                  </div>
+                </swipeout-item>
+              </template>
+              <div v-else class="no-related-x color-gray">
+                <span>{{$t('No Related Data')}}</span>
               </div>
-              <div class="info-cell">
-                <div class="font14">
-                  {{commodity.title}}
+            </template>
+          </swipeout>
+          <swipeout v-show="index===2" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
+            <template v-if="disData3">
+              <template v-if="stores.length">
+                <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
+                  <div slot="right-menu">
+                    <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
+                  </div>
+                  <div slot="content" class="item-content vux-1px-t">
+                    <div class="img-cell">
+                      <x-img default-src="/src/assets/images/nopic.jpg" :src="getPhoto(store.photo)" container="#vux_view_box_body"></x-img>
+                    </div>
+                    <div class="info-cell">
+                      <div class="font14">
+                        {{store.title}}
+                      </div>
+                      <div class="font12 color-gray">
+                        {{store.dateline | dateFormat}}
+                      </div>
+                    </div>
+                  </div>
+                </swipeout-item>
+              </template>
+              <template v-else>
+                <div class="no-related-x color-gray">
+                  <span>{{$t('No Related Data')}}</span>
                 </div>
-                <div class="font12 color-gray">
-                  {{commodity.dateline | dateFormat}}
-                </div>
-              </div>
-            </div>
-          </swipeout-item>
-        </template>
-        <template v-else>
-          <div class="no-related-x color-gray">
-            <span>{{$t('No Related Data')}}</span>
-          </div>
-        </template>
-      </swipeout>
-      <swipeout v-show="selectedIndex===2">
-        <template v-if="stores.length">
-          <swipeout-item transition-mode="follow" @click.native="storeItemClick(store)" v-for="(store, index) in stores" :key="index">
-            <div slot="right-menu">
-              <swipeout-button @click.native.stop="cancelStore(store)" type="primary" background-color="#D23934">{{$t('Cancel')}}</swipeout-button>
-            </div>
-            <div slot="content" class="item-content vux-1px-t">
-              <div class="img-cell">
-                <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
-              </div>
-              <div class="info-cell">
-                <div class="font14">
-                  {{store.title}}
-                </div>
-                <div class="font12 color-gray">
-                  {{store.dateline | dateFormat}}
-                </div>
-              </div>
-            </div>
-          </swipeout-item>
-        </template>
-        <template v-else>
-          <div class="no-related-x color-gray">
-            <span>{{$t('No Related Data')}}</span>
-          </div>
-        </template>
-      </swipeout>
+              </template>
+            </template>
+          </swipeout>
+        </swiper-item>
+      </swiper>
     </div>
   </div>
 </template>
@@ -109,6 +113,11 @@ import { Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutIte
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+
+const limit = 10
+let pageStart1 = 0
+let pageStart2 = 0
+let pageStart3 = 0
 export default {
   components: {
     Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg
@@ -116,25 +125,76 @@ export default {
   data () {
     return {
       selectedIndex: 0,
+      tabtxts: [ '文章', '商品', '店铺' ],
       avatar: '',
       name: '',
       coins: 50,
       articles: [],
       commodities: [],
-      stores: []
+      stores: [],
+      disData1: false,
+      disData2: false,
+      disData3: false
     }
   },
   methods: {
-    onItemClick () {
+    getPhoto (photo) {
+      return this.$util.getPhoto(photo)
+    },
+    handleScroll (refname, index) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (index === 0) {
+            if (self.articles.length === (pageStart1 + 1) * limit) {
+              pageStart1++
+              self.$vux.loading.show()
+              self.getArticles()
+            }
+          } else if (index === 1) {
+            if (self.commodities.length === (pageStart2 + 1) * limit) {
+              pageStart2++
+              self.$vux.loading.show()
+              self.getCommodities()
+            }
+          } else if (index === 2) {
+            if (self.stores.length === (pageStart3 + 1) * limit) {
+              pageStart3++
+              self.$vux.loading.show()
+              self.getStores()
+            }
+          }
+        }
+      })
+    },
+    swiperChange (index) {
+      const self = this
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
-          !this.articles.length && this.getArticles()
+          if (this.articles.length < limit) {
+            self.disData1 = false
+            this.articles = []
+            self.getArticles()
+          }
           break
         case 1:
-          !this.commodities.length && this.getCommodities()
+          if (this.commodities.length < limit) {
+            self.disData2 = false
+            this.commodities = []
+            self.getCommodities()
+          }
           break
         case 2:
-          !this.stores.length && this.getStores()
+          if (this.stores.length < limit) {
+            self.disData3 = false
+            this.stores = []
+            self.getStores()
+          }
           break
       }
     },
@@ -146,7 +206,9 @@ export default {
       const user = User.get()
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'news'})
       .then(res => {
+        self.$vux.loading.hide()
         self.articles = res.data
+        self.disData1 = true
       })
     },
     getCommodities () {
@@ -154,7 +216,9 @@ export default {
       const user = User.get()
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'product'})
       .then(res => {
+        self.$vux.loading.hide()
         self.commodities = res.data
+        self.disData2 = true
       })
     },
     getStores () {
@@ -162,7 +226,9 @@ export default {
       const user = User.get()
       this.$http.post(`${ENV.BokaApi}/api/user/favorite/list`, {uploader: user.uid, type: 'store'})
       .then(res => {
+        self.$vux.loading.hide()
         self.stores = res.data
+        self.disData3 = true
       })
     },
     articleItemClick (item) {
@@ -194,7 +260,7 @@ export default {
       this.avatar = user.avatar
       this.name = user.linkman
       this.coins = user.credit
-      this.onItemClick()
+      this.swiperChange()
     },
     refresh () {
       this.getData()

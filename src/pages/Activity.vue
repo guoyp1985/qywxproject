@@ -52,13 +52,13 @@ export default {
     }
   },
   watch: {
-    data: function () {
+    data () {
       return this.data
     },
-    crowduser: function () {
+    crowduser () {
       return this.crowduser
     },
-    crowduserid: function () {
+    crowduserid () {
       return this.crowduserid
     }
   },
@@ -194,14 +194,16 @@ export default {
       this.loginUser = User.get()
     },
     refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
-      this.query = this.$route.query
-      if (this.query.crowduserid) {
-        this.crowduserid = this.query.crowduserid
+      if (this.query.id !== this.$route.query.id) {
+        this.query = this.$route.query
+        if (this.query.crowduserid) {
+          this.crowduserid = this.query.crowduserid
+        }
+        this.$vux.loading.show()
+        this.getData()
       }
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
-      this.getData()
     }
   },
   created () {
