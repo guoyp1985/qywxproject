@@ -9,20 +9,17 @@
     <div class="s-container" style="top:44px">
       <swiper v-model="tabmodel" class="x-swiper no-indicator">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="tabdata1.length > 0 && index === 0">
-            <div class="scroll_list swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll">
-              <div v-if="tabdata1.length == 0" class="scroll_item pt10 pb10 align_center color-gray">
-                <div class="t-table">
-                  <div class="t-cell">
-                    <div><i class="al al-cuxiaohuodong font60"></i></div>
-                    <div>还没有创建活动哦，创建活动可以：</div>
-                    <div>1.增加商品的销售量</div>
-                    <div>2.分享活动快速获得客户</div>
-                    <div>3.邀请返点客帮你赚钱</div>
-                  </div>
-                </div>
+          <div v-if="tabdata1.length > 0 && index === 0" class="swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll">
+            <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
+              <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
+              <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+                <div>活动只有立即分享才会发挥作用哦！分享后你可以：</div>
+                <div>1. 知道查看活动的用户和他们的兴趣度；</div>
+                <div>2. 可以带来更多客户及购买量。</div>
               </div>
-              <div v-else v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
+            </div>
+            <div class="scroll_list">
+              <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
                 <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
                   <div v-if="item.isfinished === 1" class="icon finished"></div>
                   <div class="t-table">
@@ -82,7 +79,7 @@
                 </router-link>
               </div>
             </div>
-          </template>
+          </div>
           <template v-if="tabdata1.length == 0 || index == 1">
             <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('groupbuy')">
               <div class="flex_left" style="width:110px;">
@@ -479,5 +476,13 @@ export default {
 }
 .ractivitylist .x-toptab, .x-toptab.vux-tab-warp{
   height: 44px;
+}
+.ractivitylist .pro_list_top{
+  background: url("../assets/images/product_list_top.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-size: 100%;
+  height: 20px;
 }
 </style>
