@@ -295,7 +295,7 @@ export default {
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
-        v[key] = self.submitdata[key]
+        v[key] = self.submitdata[key] ? self.submitdata[key] : ''
         validateData.push(v)
       }
       let iscontinue = self.$util.validateQueue(validateData,
