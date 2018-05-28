@@ -123,6 +123,7 @@ import jQuery from 'jquery'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
+let room = ''
 export default {
   directives: {
     TransferDom
@@ -132,10 +133,10 @@ export default {
   },
   data () {
     return {
-      query: {},
-      loginUser: Object,
-      WeixinName: ENV.WeixinName,
       module: 'news',
+      query: {},
+      loginUser: {},
+      WeixinName: ENV.WeixinName,
       showSos: false,
       sosTitle: '',
       showContainer: false,
@@ -497,7 +498,7 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = this.query.id
+      room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
@@ -529,7 +530,6 @@ export default {
     this.refresh()
   },
   beforeRouteLeave (to, from, next) {
-    const room = this.query.id
     Socket.destory(room)
     next()
   }
