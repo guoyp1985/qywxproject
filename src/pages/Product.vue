@@ -678,7 +678,7 @@ export default {
       if (self.query.share_uid) {
         shareData.lastshareuid = self.query.share_uid
       }
-      if (self.activityInfo && self.activityInfo.id) {
+      if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
         shareData.title = self.productdata.title
         shareData.desc = `${self.loginUser.linkman}向你推荐团购商品，参团购买可立享优惠，了解详情`
         shareData.photo = self.photoarr[0]

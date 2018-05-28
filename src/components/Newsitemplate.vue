@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{path: '/news', query: {id: data.id}}" class="bk-newsitem scroll_item font14 bg-white mb5 pt10 pb10 db">
+  <router-link :to="{path: '/news', query: {id: data.id}}" class="bk-newsitem scroll_item font14 bg-white pt10 pb10 db" style="border-top:1px solid #f5f5f5">
       <div class="t-table">
         <div class="t-cell v_middle pl10" style="width:90px;">
           <slot name="photo"></slot>
