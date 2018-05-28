@@ -1,4 +1,4 @@
-pl12 pr12 pt10 pb10<template>
+<template>
   <div class="containerarea bg-page font14 s-havebottom store">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
@@ -36,7 +36,7 @@ pl12 pr12 pt10 pb10<template>
       		</div>
         </template>
         <template v-if="activitydata && activitydata.length > 0">
-          <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+          <div class="bg-white mt5 padding10 b_top_after">
       			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
       		</div>
           <div class="b_top_after"></div>
@@ -60,7 +60,7 @@ pl12 pr12 pt10 pb10<template>
             </div>
           </div>
         </template>
-        <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+        <div class="bg-white mt5 padding10 b_top_after">
     			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
     		</div>
         <div class="b_top_after"></div>
@@ -73,20 +73,20 @@ pl12 pr12 pt10 pb10<template>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
           </productitemplate>
         </div>
-        <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
-          <div class="t-table">
-            <div class="t-cell v_middle align_left">
-      			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
-            </div>
-            <div class="t-cell v_middle align_right">
-              <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
-    						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
-    					</div>
-            </div>
-          </div>
-    		</div>
-        <div class="b_top_after"></div>
         <template v-if="toplinedata.length > 0">
+          <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+            <div class="t-table">
+              <div class="t-cell v_middle align_left">
+        			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
+              </div>
+              <div class="t-cell v_middle align_right">
+                <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
+      						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
+      					</div>
+              </div>
+            </div>
+      		</div>
+          <div class="b_top_after"></div>
           <div class="productlist">
             <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
               <x-img slot="photo" class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width: 70px; height: 50px;" :offset="0" container=".scroll-container"></x-img>
@@ -95,13 +95,13 @@ pl12 pr12 pt10 pb10<template>
             </newsitemplate>
           </div>
         </template>
-        <div class="pl12 pr12 pt12 pb12">
+        <div class="padding10">
           <div class="btn-open" @click="openShop" style="display: block;background-color: #e10c00">我也要开店</div>
         </div>
       </div>
-      <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-white color-white h_100 flex_center" style="border-right:#dddddd 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232;">{{ $t('Online consulting') }}</span></router-link>
-        <div class="flex_cell bg-white color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin font18" style="padding-right:3px;color:#36ab60"></i><span style="color:#323232;">{{ $t('Wechat contact') }}</span></div>
+      <div class="s-bottom flex_center">
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</router-link>
+        <div class="flex_cell bg-red color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin2 color-fff font18" style="padding-right:3px;"></i>{{ $t('Wechat contact') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showqrcode" height="100%">
@@ -188,7 +188,6 @@ export default {
       query: {},
       loginUser: {},
       showShareSuccess: false,
-      // wid: 0,
       retailerInfo: { avatar: '/src/assets/images/user.jpg' },
       showqrcode: false,
       showdot: true,
@@ -196,11 +195,6 @@ export default {
       activitydata: [],
       disproductdata: false,
       productdata: [],
-      // limit: 10,
-      // pageStart: 0,
-      // newPageStart: 0,
-      // newsLimit: 3,
-      // isgetnews: true,
       toplinedata: [],
       favoritecss: 'none',
       isfavorite: false,
@@ -236,6 +230,24 @@ export default {
     }
   },
   methods: {
+    initData () {
+      initNewsData = []
+      pageStart = 0
+      newPageStart = 0
+      this.query = this.$route.query
+      this.showSos = false
+      this.sosTitle = ''
+      this.showContainer = false
+      this.showShareSuccess = false
+      this.showqrcode = false
+      this.addata = []
+      this.activitydata = []
+      this.disproductdata = false
+      this.productdata = []
+      this.toplinedata = []
+      this.isfavorite = false
+      this.hideloading = false
+    },
     handleScroll () {
       const self = this
       self.$util.scrollEvent({
@@ -443,35 +455,28 @@ export default {
     },
     init () {
       this.loginUser = User.get()
-      // if (this.showContainer && this.productdata.length < limit) {
-      //   this.disproductdata = false
-      //   this.productdata = []
-        // this.$vux.loading.show()
-      // this.query = this.$route.query
-      // this.getData1()
-      // }
     },
     refresh () {
+      console.log(this.query.wid)
+      console.log(this.$route.query.wid)
       if (this.query.wid !== this.$route.query.wid) {
-        initNewsData = []
-        pageStart = 0
-        newPageStart = 0
-        this.addata = []
-        this.activitydata = []
-        this.toplinedata = []
-        this.query = this.$route.query
+        this.initData()
         this.$vux.loading.show()
         this.getData()
       }
-      this.productdata = []
-      this.getData1()
+      if (this.productdata.length < limit) {
+        this.productdata = []
+        this.getData1()
+      }
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
   created () {
+    console.log('in created')
     this.init()
   },
   activated () {
+    console.log('in activated')
     this.refresh()
   }
 }

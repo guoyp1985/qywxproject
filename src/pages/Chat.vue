@@ -398,7 +398,6 @@ export default {
           // let sendtxt = JSON.stringify(senddata)
           // websocket.send(sendtxt)
           Socket.send(senddata)
-          self.data.push(senddata)
           self.msgTextarea.value = ''
           self.msgcontent = ''
           self.showSend = false
