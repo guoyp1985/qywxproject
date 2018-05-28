@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-center" class="page-padding-bottom bg-page font14" v-cloak>
+  <div id="personal-center" class="bg-page font14" v-cloak>
     <c-title :avatar-href="avatarHref"
             :user-name="linkMan"
             :user-credits="userCredits"
@@ -12,12 +12,11 @@
             :profile="profile"
             :messages="messages">
     </c-title>
-    <div class="pl12 pr12">
-      <div class="list-shadow border-box bg-white mb10 radius10">
+    <div class="pl12 pr12 posi_r" style="top:-80px;z-index:2;">
+      <div class="list-shadow border-box bg-white mb10 radius5">
         <group>
-          <cell :link="{path:'/orderSearch'}" class="pl12 pr12 pt10 pb10 ">
+          <cell class="pl12 pr12 pt10 pb10 ">
             <div slot="inline-desc">{{ $t('My orders') }}</div>
-            <div class="align_right font14 db">{{ $t('All orders') }}</div>
           </cell>
         </group>
         <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
@@ -28,13 +27,13 @@
           </grid-item>
         </grid>
       </div>
-      <group class="list-shadow radius10 no-after">
+      <group class="list-shadow radius5 no-after">
         <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
           <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
         </cell>
       </group>
-      <div class=" mt10 list-shadow radius10">
-        <group class="bg-white radius10">
+      <div class=" mt10 list-shadow radius5">
+        <group class="bg-white radius5">
           <cell>
             <div slot="inline-desc">{{ $t('Service') }}</div>
           </cell>
@@ -69,16 +68,16 @@ export default {
     return {
       btns: [
         {
-          name: 'Pending payment',
+          name: 'All orders',
           icon: 'al-daifukuan',
           // color: 'rgba01',
-          link: '/orderSearch' //去推荐
+          link: '/orderSearch'
         },
         {
           name: 'To Be Delivered',
           icon: 'al-wodedaifahuo3dtouchshangpinxiangqing',
           // color: 'rgba02',
-          link: '/orderSearch' //查订单
+          link: '/orderSearch'
         },
         {
           name: 'Shipped',
@@ -172,7 +171,7 @@ export default {
       }
     },
     refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.getData()
     }
   },
@@ -233,8 +232,8 @@ export default {
 #personal-center .weui-grid__label{font-size:12px !important;}
 #personal-center .weui-cells:before,#personal-center .no-after .weui-cells:after{display: none;}
 #personal-center .weui-cells{margin-top:0px !important;}
-#personal-center .radius10, #personal-center .weui-cells, #personal-center .weui-grids{
-  border-radius:@list-border-radius10;
+#personal-center .radius5, #personal-center .weui-cells, #personal-center .weui-grids{
+  border-radius:@list-border-radius5;
 }
 #personal-center .weui-grid__icon + .weui-grid__label{margin-top:0;}
 #personal-center .weui-grid__label{color:#333;}

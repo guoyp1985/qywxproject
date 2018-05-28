@@ -9,16 +9,13 @@
       <div class="bg"></div>
       <div class="card_box">
       <div class="card bg-white list-shadow02">
-        <div class="content">
-          <div class="content-box">
-            <div class="user-info pt10">
+        <div class="content-box">
+            <div class="user-info pt10 pb5">
               <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
-                <div class="c_pic">
-                  <img :src="avatar"/>
-                </div>
+                <div class="c_pic"><img :src="avatar"/></div>
               </router-link>
             </div>
-            <div class="flex_center" style="display:flex;">
+            <div class="flex_center">
               <div class="user-info pr5" style="color:#323232;">
                 <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
                   <div class="user-name" >
@@ -29,16 +26,13 @@
               </div>
               <div class="user-credits">
                 <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-                  <img src="../assets/images/jb_icon.png" style="width: 16px;
-    height: 16px;" />
-                  <span class="u-credits color-yellow1">{{ credits }}</span>
+                  <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
+                  <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
                 </router-link>
               </div>
             </div>
           </div>
-        </div>
-        <img src="../assets/images/v_yinying.png" style="width:100%;height:23px;position: absolute;
-    bottom: 0;" />
+        <img src="../assets/images/v_yinying.png" class="mt5 db" style="width:100%;" />
       </div>
       </div>
     </div>
@@ -121,19 +115,19 @@ export default {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: 200px;
+  height: auto;
   border-radius: 0;
 }
 .ctitle .card_box{
     width:  100%;
     padding:0 12px;
     box-sizing:  border-box;
-    position:  absolute;
-    top: 48px;
+    position:  relative;
+    top: -90px;
+    z-index: 1;
 }
 .ctitle .card{
   width:100%;
-  height:142px;
   border-radius:5px;
   position: relative;
   overflow: hidden;
@@ -144,12 +138,6 @@ export default {
   border-radius: 50%;
   vertical-align: middle;
   border: 2px solid #fff;
-}
-
-.ctitle .content {
-  position: absolute;
-  z-index: 2;
-  width: 100%;
 }
 
 .ctitle .content .content-box {
