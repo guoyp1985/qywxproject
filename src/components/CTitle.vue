@@ -107,7 +107,7 @@ export default {
 <style lang="less">
 .ctitle .bg{
   height: 140px;
-  background: url(/static/img/v_center.png);
+  background: url(/static/img/v_centerbg.png);
   background-size: cover;
   background-position: bottom;
 }
