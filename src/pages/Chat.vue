@@ -182,6 +182,7 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
+let room = ''
 export default {
   directives: {
     TransferDom
@@ -191,15 +192,16 @@ export default {
   },
   data () {
     return {
-      roomid: '',
-      loginUser: Object,
+      // roomid: '',
+      module: 'message',
+      loginUser: {},
       intervalId: null,
       showEmotBox: false,
       showFeatureBox: false,
       showVoiceCom: false,
       textarea: null,
       isPC: this.$util.isPC(),
-      query: Object,
+      query: {},
       data: [],
       focusInterval: null,
       msgcontent: '',
@@ -327,7 +329,7 @@ export default {
                 self.sendData({
                   touid: self.query.uid,
                   content: '',
-                  module: 'message',
+                  module: self.module,
                   sendtype: 'image',
                   picurl: data.data,
                   thumb: ''
@@ -345,7 +347,7 @@ export default {
                 self.sendData({
                   touid: self.query.uid,
                   content: '',
-                  module: 'message',
+                  module: this.module,
                   sendtype: 'image',
                   picurl: data.data,
                   thumb: ''
@@ -378,8 +380,8 @@ export default {
         postdata.frommodule = self.query.frommodule
         postdata.frommoduleid = frommoduleid
       }
-      self.$http.post(`${ENV.BokaApi}/api/message/send`, postdata).then(function (res) {
-        let data = res.data
+      self.$http.post(`${ENV.BokaApi}/api/message/send`, postdata).then(res => {
+        const data = res.data
         if (data.flag === 1) {
           let retdata = data.data
           let senddata = {
@@ -388,7 +390,7 @@ export default {
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
             messageid: retdata.id,
-            room_id: self.roomid
+            room_id: room
           }
           for (let key in retdata) {
             senddata[key] = retdata[key]
@@ -396,6 +398,7 @@ export default {
           // let sendtxt = JSON.stringify(senddata)
           // websocket.send(sendtxt)
           Socket.send(senddata)
+          self.data.push(senddata)
           self.msgTextarea.value = ''
           self.msgcontent = ''
           self.showSend = false
@@ -413,9 +416,9 @@ export default {
       const self = this
       self.msgcontent = self.msgTextarea.value
       let postdata = {
-        touid: self.query.uid,
-        content: self.msgcontent,
-        module: 'message',
+        touid: this.query.uid,
+        content: this.msgcontent,
+        module: this.module,
         sendtype: 'text',
         picurl: '',
         thumb: '',
@@ -678,21 +681,32 @@ export default {
       }
     },
     createSocket () {
+      const self = this
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = this.query.id
+      const sid = Math.min(this.query.uid, uid)
+      const bid = Math.max(this.query.uid, uid)
+      room = `${this.module}-${sid}-${bid}`
       Socket.create()
-      Socket.listening(room, uid, linkman)
+      Socket.listening(room, uid, linkman, data => {
+        self.data.push(data)
+        if (data.isNew) {
+          let scrollarea = self.$refs.scrollContainer
+          if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
+            scrollarea.scrollTop = scrollarea.scrollHeight + 50
+          }
+        }
+      })
     },
-    getData (query) {
+    getData () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'chat', id: query.uid
+        module: 'retailer', action: 'chat', id: this.query.uid
       })
       const self = this
-      const params = { uid: query.uid, pagestart: this.pagestart, limit: this.limit }
+      const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
-        const data = res.data
         self.$vux.loading.hide()
+        const data = res.data
         const retdata = data.data ? data.data : data
         self.data = self.data.concat(retdata)
       })
@@ -725,7 +739,6 @@ export default {
     this.refresh()
   },
   beforeRouteLeave (to, from, next) {
-    const room = this.query.id
     Socket.destory(room)
     next()
   }

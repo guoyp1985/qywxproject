@@ -338,7 +338,7 @@
           v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
-          module="product"
+          :module="module"
           :on-close="closeShareSuccess">
         </share-success>
       </template>
@@ -374,6 +374,7 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
+let room = ''
 export default {
   directives: {
     TransferDom
@@ -388,6 +389,7 @@ export default {
   },
   data () {
     return {
+      module: 'product',
       query: {},
       disTimeout: true,
       showSos: false,
@@ -396,7 +398,6 @@ export default {
       showShareSuccess: false,
       showsharetip: true,
       productid: null,
-      module: 'product',
       productdata: {},
       retailerinfo: {},
       activityInfo: {},
@@ -677,7 +678,7 @@ export default {
       if (self.query.share_uid) {
         shareData.lastshareuid = self.query.share_uid
       }
-      if (self.activityInfo && self.activityInfo.id) {
+      if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
         shareData.title = self.productdata.title
         shareData.desc = `${self.loginUser.linkman}向你推荐团购商品，参团购买可立享优惠，了解详情`
         shareData.photo = self.photoarr[0]
@@ -877,7 +878,7 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const room = this.query.id
+      room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
@@ -886,6 +887,7 @@ export default {
     },
     refresh () {
       if (this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
+        this.showShareSuccess = false
         this.previewerPhotoarr = []
         this.query = this.$route.query
         this.$vux.loading.show()
@@ -902,7 +904,6 @@ export default {
     this.refresh()
   },
   beforeRouteLeave (to, from, next) {
-    const room = this.query.id
     Socket.destory(room)
     next()
   }
