@@ -4,7 +4,7 @@
       <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
 		</div>
 		<div class="padding10 bg-white">
-			<div class="pb10 border font16 color-gray b_bottom_after">我推荐的用户</div>
+			<div class="pb10 border font16 color-gray b_bottom_after">我的好友</div>
 			<div v-if="disData" class="scroll_list">
         <div v-if="!data || data.length == 0" class="flex_center emptyitem">您还没有好友关注，去分享给好友关注吧</div>
         <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db pt10 pb10">
