@@ -95,8 +95,8 @@
             </newsitemplate>
           </div>
         </template>
-        <div class="padding10">
-          <div class="btn-open" @click="openShop" style="display: block;background-color: #e10c00">我也要开店</div>
+        <div v-if="query.wid && query.wid != loginUser.uid" class="padding10">
+          <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
         </div>
       </div>
       <div class="s-bottom flex_center">
@@ -370,14 +370,6 @@ export default {
         })
       }
       self.isfavorite = !self.isfavorite
-    },
-    openShop () {
-      const self = this
-      if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-        self.$router.push('/retailerApply')
-      } else if (self.loginUser.usergroup) {
-        self.$router.push('/centerSales')
-      }
     },
     getData () {
       const self = this
