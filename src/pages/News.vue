@@ -511,8 +511,8 @@ export default {
         this.query = this.$route.query
         this.showsharetip = false
         this.getData()
-        this.createSocket()
       }
+      this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.newadd) {
         const self = this

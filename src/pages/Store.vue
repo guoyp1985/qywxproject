@@ -458,13 +458,13 @@ export default {
         newPageStart = 0
         this.addata = []
         this.activitydata = []
-        this.productdata = []
         this.toplinedata = []
         this.query = this.$route.query
         this.$vux.loading.show()
-        this.getData1()
         this.getData()
       }
+      this.productdata = []
+      this.getData1()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },

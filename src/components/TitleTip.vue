@@ -36,7 +36,7 @@ export default {
     scrollBox: String,
     avatarHref: {
       type: String,
-      default: '../../assets/images/nopic.jpg'
+      default: '../src/assets/images/user.jpg'
     },
     userName: {
       type: String,
