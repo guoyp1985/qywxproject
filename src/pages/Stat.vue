@@ -68,7 +68,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -86,7 +86,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container4"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -104,7 +104,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container5"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -122,7 +122,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container6"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -140,7 +140,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container7"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
@@ -158,7 +158,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container8"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -175,7 +175,7 @@
                       <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                         <div class="flex_left">
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="scroll-container9"></x-img>
+                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='../src/assets/images/user.jpg'" />
                           </router-link>
                           <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                             <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -265,6 +265,16 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.query = this.$route.query
+      this.module = this.query.module
+      this.selectedIndex = 0
+      this.arrData = []
+      this.statData = []
+      this.tabsdata = []
+      this.scrollData = []
+      this.isFirst = true
+    },
     handleScroll (refname) {
       const self = this
       const index = this.selectedIndex
@@ -347,13 +357,16 @@ export default {
     },
     init () {
       this.$vux.loading.show()
+      this.query = this.$route.query
+      this.module = this.query.module
       this.getData()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.module = this.query.module
-      if (this.showContainer) {
+      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+        this.initData()
+        this.getData()
+      } else if (this.showContainer) {
         this.swiperChange()
       }
     }
