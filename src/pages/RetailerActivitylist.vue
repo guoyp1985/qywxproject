@@ -477,4 +477,12 @@ export default {
 .ractivitylist .x-toptab, .x-toptab.vux-tab-warp{
   height: 44px;
 }
+.ractivitylist .pro_list_top{
+  background: url("../assets/images/product_list_top.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-size: 100%;
+  height: 20px;
+}
 </style>
