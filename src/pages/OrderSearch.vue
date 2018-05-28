@@ -252,7 +252,7 @@ export default {
           break
       }
       this.$util.changeItem(list, order.id, function (m) {
-        return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons}
+        return { ...m, flag: status, flagstr: self.$util.getItem(ENV.OrderStatus, status).status, buttons: buttons }
       })
     },
     toggleTab () {

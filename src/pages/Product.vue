@@ -940,13 +940,13 @@ export default {
       this.loginUser = User.get()
     },
     refresh () {
-      if(this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
+      if (this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
         this.previewerPhotoarr = []
         this.query = this.$route.query
         this.$vux.loading.show()
         this.getData()
-        this.createSocket()
       }
+      this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
   },
