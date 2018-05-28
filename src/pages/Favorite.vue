@@ -5,7 +5,7 @@
 */
 <template>
   <div id="personal-favorite" class="containerarea bg-page font14">
-    <div class="pagetop">
+    <div class="s-topbanner s-topbanner1">
       <div class="top-banner">
         <tab class="b-tab" v-model="selectedIndex">
           <tab-item selected class="">{{ $t('Article') }}</tab-item>
@@ -14,7 +14,7 @@
         </tab>
       </div>
     </div>
-    <div class="pagemiddle">
+    <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <swipeout v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
