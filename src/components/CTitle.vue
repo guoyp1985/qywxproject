@@ -4,13 +4,11 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="ctitle  bg-page">
+  <div class="ctitle bg-page">
     <div class="info-area">
-      <div class="bg">
-        <img src="../assets/images/v_centerbg.png" width="100%">
-      </div>
+      <div class="bg"></div>
       <div class="card_box">
-      <div class="card bg-white" >
+      <div class="card bg-white list-shadow02">
         <div class="content">
           <div class="content-box">
             <div class="user-info pt10">
@@ -46,7 +44,7 @@
     </div>
     <div class="message-btn">
       <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
-        <span class="al al-pinglun color-white font22"></span>
+        <span class="al al-xiaoxi1 color-white font22"></span>
         <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
         <span class="msg-badge" v-if="messages >= 100">···</span>
       </router-link>
@@ -113,6 +111,12 @@ export default {
 </script>
 
 <style lang="less">
+.ctitle .bg{
+  height: 140px;
+  background: url(/static/img/v_centerbg.9da14bc.png);
+  background-size: cover;
+  background-position: bottom;
+}
 .ctitle .info-area {
   position: relative;
   width: 100%;
@@ -182,14 +186,14 @@ export default {
 }
 .ctitle .message-btn {
   position: absolute;
-  right: 20px;
+  right: 15px;
   top: 10px;
   z-index: 3
 }
 .ctitle .message-btn .msg-badge {
   position: absolute;
   top: -2px;
-  right: -11px;
+  right: -8px;
   z-index: 3
 }
 

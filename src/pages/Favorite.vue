@@ -5,16 +5,14 @@
 */
 <template>
   <div id="personal-favorite" class="containerarea bg-page font14">
-    <div class="pagetop" style="height:154px;">
-      <div class="top-banner">
-        <tab class="b-tab" v-model="selectedIndex">
-          <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
-          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
-          <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
-        </tab>
-      </div>
+    <div class="s-topbanner s-topbanner1">
+      <tab class="b-tab" v-model="selectedIndex">
+        <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
+        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Commodity') }}</tab-item>
+        <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
+      </tab>
     </div>
-    <div class="pagemiddle" style="top:154px;">
+    <div class="s-container s-container1 scroll-container">
       <swipeout v-show="selectedIndex===0">
         <template v-if="articles.length">
           <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">

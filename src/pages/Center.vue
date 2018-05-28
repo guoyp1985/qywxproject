@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-center" class="page-padding-bottom  bg-page" v-cloak>
+  <div id="personal-center" class="page-padding-bottom bg-page font14" v-cloak>
     <c-title :avatar-href="avatarHref"
             :user-name="linkMan"
             :user-credits="userCredits"
@@ -12,130 +12,116 @@
             :profile="profile"
             :messages="messages">
     </c-title>
-
-    <div class="pt10 pb10 pl12 pr12">
-      <!-- <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-        <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
-          <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white`">
-            <span :class="`fa ${btn.icon}`"></span>
-          </div>
-        </grid-item>
-      </grid> -->
-      <div class="v_order bg-white font13 list-shadow">
-        <div class="t-table v_tit pt5 pb5 pl15 pr15 border-box" style="l-line">
-          <div class="t-cell align_left">{{ $t('My orders') }}</div>
-          <div class="t-cell align_right">{{ $t('All orders') }}</div>
-        </div>
-        <div class="weui-grids vux-grid-no-lr-borders pl12 pr12">
-          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
-            <i class="al al-daifukuan color-blue5"></i>
-            <p class="weui-grid__label">{{ $t('Pending payment') }}</p>
-          </a>
-          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
-            <i class="al al-wodedaifahuo3dtouchshangpinxiangqing color-blue5"></i>
-            <p class="weui-grid__label">{{ $t('To Be Delivered') }}</p>
-          </a>
-          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
-            <i class="al al-buoumaotubiao39 color-blue5"></i>
-            <p class="weui-grid__label">{{ $t('Shipped') }}</p>
-          </a>
-          <a href="" class="weui-grid vux-grid-item-no-border align_center" style="width:25%">
-            <i class="al al-buoumaotubiao48 color-blue5"></i>
-            <p class="weui-grid__label">{{ $t('To be evaluated') }}</p>
-          </a>
+    <div class="pl12 pr12">
+      <div class="list-shadow border-box bg-white mb10 radius10">
+        <group>
+          <cell :link="{path:'/orderSearch'}" class="pl12 pr12 pt10 pb10 ">
+            <div slot="inline-desc">{{ $t('My orders') }}</div>
+            <div class="align_right font14 db">{{ $t('All orders') }}</div>
+          </cell>
+        </group>
+        <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
+          <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
+            <div slot="icon" :class="`color-blue12`">
+              <span :class="`al ${btn.icon} btn_icon`"></span>
+            </div>
+          </grid-item>
+        </grid>
+      </div>
+      <group class="list-shadow radius10 no-after">
+        <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
+          <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
+        </cell>
+      </group>
+      <div class=" mt10 list-shadow radius10">
+        <group class="bg-white radius10">
+          <cell>
+            <div slot="inline-desc">{{ $t('Service') }}</div>
+          </cell>
+        </group>
+        <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
+          <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
+            <div slot="icon" :class="`circle-icon-bg ${btn.color} color-white flex_center mb10`">
+              <span :class="`al ${btn.icon} font20`"></span>
+            </div>
+          </grid-item>
+        </grid>
         </div>
       </div>
-      <a class="pl12 pr12 pt10 pb10 mt10 border-box t-table bg-white list-shadow">
-        <div class="t-cell color-orange2 align_left">  推荐购买赚佣金 </div>
-        <div class="t-cell color-orange2 align_right">  > </div>
-      </a>
-      <div class=" mt10 list-shadow">
-        <div class="grid-title bg-white v_tit" style="">{{ $t('Service') }}</div>
-          <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
-            <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns1" :key="index" @click.native="buttonClick(btn)">
-              <div slot="icon" :class="btn.color">
-                <span :class="`al ${btn.icon}`"></span>
-              </div>
-            </grid-item>
-          </grid>
-        </div>
-      </div>
-
     </div>
-
 </template>
 
 <i18n>
 </i18n>
 
 <script>
-import { Grid, GridItem } from 'vux'
+import { Grid, GridItem, Group, GroupTitle, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import { Token, User } from '#/storage'
 
 export default {
   components: {
-    Grid, GridItem, CTitle
+    Grid, GridItem, CTitle, Group, GroupTitle, Cell
   },
   data () {
     const self = this
     return {
       btns: [
         {
-          name: 'To Recommend',
-          icon: 'fa-users',
-          color: 'rgba01',
-          link: '/recommend'
+          name: 'Pending payment',
+          icon: 'al-daifukuan',
+          // color: 'rgba01',
+          link: '/orderSearch' //去推荐
         },
         {
-          name: 'Search Orders',
-          icon: 'fa-file-text-o',
-          color: 'rgba02',
+          name: 'To Be Delivered',
+          icon: 'al-wodedaifahuo3dtouchshangpinxiangqing',
+          // color: 'rgba02',
+          link: '/orderSearch' //查订单
+        },
+        {
+          name: 'Shipped',
+          icon: 'al-buoumaotubiao39',
+          // color: 'rgba05',
           link: '/orderSearch'
         },
         {
-          name: 'View Productions',
-          icon: 'fa-shopping-bag',
-          color: 'rgba05',
-          link: '/userproducts'
-        },
-        {
-          name: 'View Articles',
-          icon: 'fa-newspaper-o',
-          color: 'rgba04',
-          link: '/articles'
+          name: 'To be evaluated',
+          icon: 'al-buoumaotubiao48',
+          // color: 'rgba04',
+          link: '/orderSearch'
         }
       ],
       btns1: [
         {
           name: 'Manage center',
           icon: 'al-fuwu',
-          color: 'color-sales',
+          color: 'rgba01',
           link: '/centerSales'
         },
         {
           name: 'My Address',
           icon: 'al-wodedizhi',
-          color: 'color-address',
+          color: 'rgba02',
           link: '/address'
         },
         {
           name: 'My Shares',
           icon: 'al-ai-share',
-          color: 'color-share',
+          color: 'rgba03',
           link: '/share'
         },
         {
           name: 'My Favorites',
           icon: 'al-qietu19',
-          color: 'color-favorite',
+          color: 'rgba04',
           link: '/favorite'
         },
         {
           name: 'Exit',
           icon: 'al-tuichu3',
-          color: 'color-exit',
+          color: 'rgba05',
           react: function () {
             Token.remove()
             User.remove()
@@ -243,4 +229,14 @@ export default {
   font-size: 24px;
 }
 #personal-center .weui-grid{padding: 5px;}
+
+#personal-center .weui-grid__label{font-size:12px !important;}
+#personal-center .weui-cells:before,#personal-center .no-after .weui-cells:after{display: none;}
+#personal-center .weui-cells{margin-top:0px !important;}
+#personal-center .radius10, #personal-center .weui-cells, #personal-center .weui-grids{
+  border-radius:@list-border-radius10;
+}
+#personal-center .weui-grid__icon + .weui-grid__label{margin-top:0;}
+#personal-center .weui-grid__label{color:#333;}
+#personal-center .btn_icon{line-height:32px;display: block;height:32px;margin-bottom: 3px;}
 </style>
