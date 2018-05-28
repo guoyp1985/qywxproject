@@ -256,7 +256,7 @@ export default {
   font-size: 8pt;
   min-width: 18px;
   min-height:18px;
-  line-height: 16px;
+  line-height: 18px;
   border:1px solid #fff;
   text-align: center;
 }
@@ -278,7 +278,7 @@ export default {
   font-size: 8pt;
   min-width: 18px;
   min-height:18px;
-  line-height: 16px;
+  line-height: 18px;
   border:1px solid #fff;
   text-align: center;
 }
@@ -294,7 +294,7 @@ export default {
   font-size: 8pt;
   min-width: 18px;
   min-height:18px;
-  line-height: 16px;
+  line-height: 18px;
   border:1px solid #fff;
   text-align: center;
 }

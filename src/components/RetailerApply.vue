@@ -1,9 +1,6 @@
-/*
- * 已废弃
-*/
 <template>
   <div class="containerarea font14 bg-white retailerapply notop">
-    <div class="pagemiddle bg-white" style="bottom: 50px;">
+    <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
             <img src="../assets/images/banner_top.png" width="100%"/>
@@ -83,8 +80,8 @@
         </div>
       </form>
     </div>
-    <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent" style="height:50px;">
-      <div class="flex_cell flex_center btn-bottom-red font16">马上免费入驻</div>
+    <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
+      <div class="flex_cell flex_center btn-bottom-red">马上免费入驻</div>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="isshowpopup" height="100%">
@@ -445,7 +442,8 @@ export default {
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 .retailerapply .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
-.retailerapply .pagebottom{background-color:#fff;}
+.retailerapply .pagebottom{bottom:50px;}
+.retailerapply .pagebottom{background-color:#fff;height:50px;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
 .retailerapply .blue .weui-icon-success{color:#ea3a3a;}
