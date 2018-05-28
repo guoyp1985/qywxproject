@@ -205,24 +205,38 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
       .then(res => {
         const data = res.data
-        if (data.flag) {
-          const retdata = data.data
-          self.data = retdata
-          self.orders = retdata.orderlist
-          self.special = retdata.special
-          self.retailerInfo = retdata.retailer
-          self.shippingAddress = retdata.address
-          self.shippingOrderon = retdata.orderno
-          self.receiver = retdata.linkman
-          self.receiverPhone = retdata.telephone
-          self.expressCompany = retdata.delivercompanyname
-          self.expressNumber = retdata.delivercode
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          let retdata = data.data
+          if (retdata.length === 0) {
+            self.showSos = true
+            self.showContainer = false
+          } else {
+            self.showSos = false
+            self.showContainer = true
+            const retdata = data.data
+            self.data = retdata
+            self.orders = retdata.orderlist
+            self.special = retdata.special
+            self.retailerInfo = retdata.retailer
+            self.shippingAddress = retdata.address
+            self.shippingOrderon = retdata.orderno
+            self.receiver = retdata.linkman
+            self.receiverPhone = retdata.telephone
+            self.expressCompany = retdata.delivercompanyname
+            self.expressNumber = retdata.delivercode
+          }
         }
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.getData()
+      if (this.id !== this.$route.query.id) {
+        this.getData()
+      }
     }
   },
   activated () {
