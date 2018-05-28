@@ -8,40 +8,40 @@
     <div class="info-area">
       <div class="bg"></div>
       <div class="card_box">
-      <div class="card bg-white list-shadow02">
-        <div class="content-box">
-            <div class="user-info pt10 pb5">
-              <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
-                <div class="c_pic"><img :src="avatar"/></div>
-              </router-link>
-            </div>
-            <div class="flex_center">
-              <div class="user-info pr5" style="color:#323232;">
+        <div class="card bg-white list-shadow02">
+          <div class="content-box">
+              <div class="user-info pt10 pb5">
                 <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
-                  <div class="user-name" >
-                    <span class="font16 u-name">{{ name }}</span>
-                  <!-- <span v-for="i in userLevel + 1" class="al al-xing font13 u-star" :key="i"></span> -->
-                  </div>
+                  <div class="c_pic"><img :src="avatar"/></div>
                 </router-link>
               </div>
-              <div class="user-credits">
-                <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-                  <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
-                  <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
-                </router-link>
+              <div class="flex_center">
+                <div class="user-info pr5" style="color:#323232;">
+                  <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
+                    <div class="user-name" >
+                      <span class="font16 u-name">{{ name }}</span>
+                    <!-- <span v-for="i in userLevel + 1" class="al al-xing font13 u-star" :key="i"></span> -->
+                    </div>
+                  </router-link>
+                </div>
+                <div class="user-credits">
+                  <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
+                    <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
+                    <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
+                  </router-link>
+                </div>
               </div>
             </div>
-          </div>
-        <img src="../assets/images/v_yinying.png" class="mt5 db" style="width:100%;" />
+            <div class="head_banner mt5"></div>
+        </div>
       </div>
+      <div class="message-btn">
+        <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
+          <span class="al al-xiaoxi1 color-white font22"></span>
+          <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
+          <span class="msg-badge" v-if="messages >= 100">···</span>
+        </router-link>
       </div>
-    </div>
-    <div class="message-btn">
-      <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
-        <span class="al al-xiaoxi1 color-white font22"></span>
-        <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
-        <span class="msg-badge" v-if="messages >= 100">···</span>
-      </router-link>
     </div>
   </div>
 </template>
@@ -105,6 +105,12 @@ export default {
 </script>
 
 <style lang="less">
+.ctitle .head_banner{
+  height:30px;
+  background: url(../assets/images/v_yinying.png);
+  background-size: cover;
+  background-position: top;
+}
 .ctitle .bg{
   height: 140px;
   background: url(../images/v_centerbg.png);
@@ -114,17 +120,16 @@ export default {
 .ctitle .info-area {
   position: relative;
   width: 100%;
-  overflow: hidden;
   height: auto;
   border-radius: 0;
 }
 .ctitle .card_box{
-    width:  100%;
-    padding:0 12px;
-    box-sizing:  border-box;
-    position:  relative;
-    top: -90px;
-    z-index: 1;
+  width: 100%;
+  padding:0 12px;
+  box-sizing:  border-box;
+  position: absolute;
+  top: 45px;
+  z-index: 1;
 }
 .ctitle .card{
   width:100%;
