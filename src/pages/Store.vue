@@ -393,58 +393,52 @@ export default {
         return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: infoparams })
       })
       .then(res => {
-        // if (res) {
-          self.$vux.loading.hide()
-          self.hideloading = true
-          const data = res.data
-          if (data.flag !== 1) {
-            self.sosTitle = data.error
-            self.showSos = true
-            self.showContainer = false
-          } else {
-            self.showSos = false
-            self.showContainer = true
-            self.retailerInfo = data.data ? data.data : data
-            document.title = self.retailerInfo.title
-            const wid = self.retailerInfo.uid
-            self.$util.handleWxShare({
-              module: 'store',
-              moduleid: wid,
-              lastshareuid: self.query.share_uid,
-              title: self.retailerInfo.title,
-              desc: self.retailerInfo.title,
-              photo: self.retailerInfo.avatar,
-              link: `${ENV.Host}/#/store?wid=${wid}&share_uid=${self.loginUser.uid}`,
-              successCallback: function () {
-                self.showShareSuccess = true
-              }
-            })
-            if (wid !== self.loginUser.uid) {
-              self.getCollectStaus()
+        self.$vux.loading.hide()
+        self.hideloading = true
+        const data = res.data
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          self.retailerInfo = data.data ? data.data : data
+          document.title = self.retailerInfo.title
+          const wid = self.retailerInfo.uid
+          self.$util.handleWxShare({
+            module: 'store',
+            moduleid: wid,
+            lastshareuid: self.query.share_uid,
+            title: self.retailerInfo.title,
+            desc: self.retailerInfo.title,
+            photo: self.retailerInfo.avatar,
+            link: `${ENV.Host}/#/store?wid=${wid}&share_uid=${self.loginUser.uid}`,
+            successCallback: function () {
+              self.showShareSuccess = true
             }
-            return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
+          })
+          if (wid !== self.loginUser.uid) {
+            self.getCollectStaus()
           }
-        // }
+          return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
+        }
       }).then(res => {
-        // if (res) {
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          for (let i = 0; i < retdata.length; i++) {
-            let p = retdata[i]
-            p.img = p.photo
-            p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
-          }
-          self.addata = retdata
-          const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-        // }
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let p = retdata[i]
+          p.img = p.photo
+          p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+        }
+        self.addata = retdata
+        const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
       }).then(res => {
-        // if (res) {
-          const data = res.data
-          self.activitydata = data.data ? data.data : data
-          // self.getData1()
-          self.getnewsdata()
-        // }
+        const data = res.data
+        self.activitydata = data.data ? data.data : data
+        // self.getData1()
+        self.getnewsdata()
       })
     },
     init () {
