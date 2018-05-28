@@ -393,7 +393,6 @@ export default {
         return self.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: infoparams })
       })
       .then(res => {
-        // if (res) {
         self.$vux.loading.hide()
         self.hideloading = true
         const data = res.data
@@ -424,9 +423,7 @@ export default {
           }
           return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
         }
-        // }
       }).then(res => {
-        // if (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
@@ -437,14 +434,11 @@ export default {
         self.addata = retdata
         const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
         return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
-        // }
       }).then(res => {
-        // if (res) {
         const data = res.data
         self.activitydata = data.data ? data.data : data
         // self.getData1()
         self.getnewsdata()
-        // }
       })
     },
     init () {

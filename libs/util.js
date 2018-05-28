@@ -623,6 +623,10 @@ Util.install = function (Vue, options) {
       if (!src) {
         return ''
       }
+      let arr = src.split(',')
+      if (arr.length > 0) {
+        src = arr[0]
+      }
       return src.replace(/\|\|/g, ',')
     }
   }
