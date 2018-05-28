@@ -1,4 +1,4 @@
-pl12 pr12 pt10 pb10<template>
+<template>
   <div class="containerarea bg-page font14 s-havebottom store">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
@@ -36,7 +36,7 @@ pl12 pr12 pt10 pb10<template>
       		</div>
         </template>
         <template v-if="activitydata && activitydata.length > 0">
-          <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+          <div class="bg-white mt5 padding10 b_top_after">
       			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
       		</div>
           <div class="b_top_after"></div>
@@ -60,7 +60,7 @@ pl12 pr12 pt10 pb10<template>
             </div>
           </div>
         </template>
-        <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+        <div class="bg-white mt5 padding10 b_top_after">
     			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
     		</div>
         <div class="b_top_after"></div>
@@ -95,13 +95,13 @@ pl12 pr12 pt10 pb10<template>
             </newsitemplate>
           </div>
         </template>
-        <div class="pl12 pr12 pt12 pb12">
-          <div class="btn-open" @click="openShop" style="display: block;background-color: #e10c00">我也要开店</div>
+        <div v-if="query.wid && query.wid != loginUser.uid" class="padding10">
+          <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
         </div>
       </div>
-      <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-white color-white h_100 flex_center" style="border-right:#dddddd 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232;">{{ $t('Online consulting') }}</span></router-link>
-        <div class="flex_cell bg-white color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin font18" style="padding-right:3px;color:#36ab60"></i><span style="color:#323232;">{{ $t('Wechat contact') }}</span></div>
+      <div class="s-bottom flex_center">
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-orange1 color-white h_100 flex_center" style="border-right:#fff 1px solid;"><i class="al al-pinglun color-fff font18" style="padding-right:3px;"></i>{{ $t('Online consulting') }}</router-link>
+        <div class="flex_cell bg-red color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin2 color-fff font18" style="padding-right:3px;"></i>{{ $t('Wechat contact') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showqrcode" height="100%">
@@ -234,7 +234,8 @@ export default {
       initNewsData = []
       pageStart = 0
       newPageStart = 0
-      this.query = this.$route.query
+      this.query = {}
+      this.retailerInfo = {}
       this.showSos = false
       this.sosTitle = ''
       this.showContainer = false
@@ -281,9 +282,15 @@ export default {
     },
     getnewsdata () {
       const self = this
-      // if (self.isgetnews) {
-      const params = { params: { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid } }
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, params)
+      const params = { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid }
+      if (!self.query.wid) {
+        params.uploader = self.loginUser.uid
+      } else {
+        params.uploader = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+        params: params
+      })
       .then(res => {
         const data = res.data
         if (newPageStart === 0) {
@@ -299,24 +306,7 @@ export default {
         } else if (data.length < newsLimit) {
           newPageStart = 0
         }
-          // if (retdata.length === 0) {
-          //   newPageStart = 0
-          //   self.getnewsdata()
-          // } else {
-          //   if (retdata.length < newsLimit) {
-          //     self.toplinedata = retdata
-          //     if (newPageStart === 0) {
-          //       self.isgetnews = false
-          //     } else {
-          //       newPageStart = 0
-          //     }
-          //   } else if (retdata.length === newsLimit) {
-          //     self.toplinedata = retdata
-          //     newPageStart++
-          //   }
-          // }
       })
-      // }
     },
     changeNews () {
       this.getnewsdata()
@@ -381,14 +371,6 @@ export default {
       }
       self.isfavorite = !self.isfavorite
     },
-    openShop () {
-      const self = this
-      if (!self.loginUser || !self.loginUser.usergroup || self.loginUser.usergroup.length === 0) {
-        self.$router.push('/retailerApply')
-      } else if (self.loginUser.usergroup) {
-        self.$router.push('/centerSales')
-      }
-    },
     getData () {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
@@ -436,31 +418,34 @@ export default {
           return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
         }
       }).then(res => {
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          let p = retdata[i]
-          p.img = p.photo
-          p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+        if (res) {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          for (let i = 0; i < retdata.length; i++) {
+            let p = retdata[i]
+            p.img = p.photo
+            p.url = `/product?id=${p.moduleid}&wid=${self.retailerInfo.uid}`
+          }
+          self.addata = retdata
+          const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
         }
-        self.addata = retdata
-        const params = { params: { do: 'store', pagestart: 0, limit: 20, wid: self.query.wid } }
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params)
       }).then(res => {
-        const data = res.data
-        self.activitydata = data.data ? data.data : data
-        // self.getData1()
-        self.getnewsdata()
+        if (res) {
+          const data = res.data
+          self.activitydata = data.data ? data.data : data
+          // self.getData1()
+          self.getnewsdata()
+        }
       })
     },
     init () {
       this.loginUser = User.get()
     },
     refresh () {
-      console.log(this.query.wid)
-      console.log(this.$route.query.wid)
-      if (this.query.wid !== this.$route.query.wid) {
+      if (this.$route.query.wid === undefined || this.query.wid !== this.$route.query.wid) {
         this.initData()
+        this.query = this.$route.query
         this.$vux.loading.show()
         this.getData()
       }
@@ -472,11 +457,9 @@ export default {
     }
   },
   created () {
-    console.log('in created')
     this.init()
   },
   activated () {
-    console.log('in activated')
     this.refresh()
   }
 }

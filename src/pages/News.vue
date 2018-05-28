@@ -340,18 +340,22 @@ export default {
         }
       })
       .then(res => {
-        self.handleImg()
-        const data = res.data
-        if (data.flag === 1) {
-          self.isdig = 1
+        if (res) {
+          self.handleImg()
+          const data = res.data
+          if (data.flag === 1) {
+            self.isdig = 1
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
-        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
       })
       .then(res => {
-        if (res.data.flag < 1) {
-          self.notFavorite = true
-        } else {
-          self.notFavorite = false
+        if (res) {
+          if (res.data.flag < 1) {
+            self.notFavorite = true
+          } else {
+            self.notFavorite = false
+          }
         }
       })
     },
