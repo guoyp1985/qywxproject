@@ -5,7 +5,7 @@
 */
 <template>
   <div id="personal-favorite" class="containerarea bg-page font14">
-    <div class="pagetop" style="height:154px;">
+    <div class="pagetop">
       <div class="top-banner">
         <tab class="b-tab" v-model="selectedIndex">
           <tab-item selected class="" @on-item-click="onItemClick(selectedIndex)">{{ $t('Article') }}</tab-item>
@@ -14,7 +14,7 @@
         </tab>
       </div>
     </div>
-    <div class="pagemiddle" style="top:154px;">
+    <div class="pagemiddle">
       <swipeout v-show="selectedIndex===0">
         <template v-if="articles.length">
           <swipeout-item transition-mode="follow" @click.native="articleItemClick(article)" v-for="(article, index) in articles" :key="index">
@@ -23,7 +23,7 @@
             </div>
             <div slot="content" class="item-content vux-1px-t">
               <div class="img-cell">
-                <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                <x-img :src="getPhoto(article.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
               </div>
               <div class="info-cell">
                 <div class="font14">
@@ -50,7 +50,7 @@
             </div>
             <div slot="content" class="item-content vux-1px-t">
               <div class="img-cell">
-                <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                <x-img :src="getPhoto(commodity.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
               </div>
               <div class="info-cell">
                 <div class="font14">
@@ -77,7 +77,7 @@
             </div>
             <div slot="content" class="item-content vux-1px-t">
               <div class="img-cell">
-                <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
+                <x-img default-src="/src/assets/images/nopic.jpg" :src="getPhoto(store.photo)" container="#vux_view_box_body"></x-img>
               </div>
               <div class="info-cell">
                 <div class="font14">
@@ -125,6 +125,9 @@ export default {
     }
   },
   methods: {
+    getPhoto (photo) {
+      return this.$util.getPhoto(photo)
+    },
     onItemClick () {
       switch (this.selectedIndex) {
         case 0:
