@@ -35,7 +35,7 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img class="db imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg" @click.native.stop="showBigimg1(index)" />
+              <img class="db imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg" @click="showBigimg1(index)" />
             </swiper-item>
           </swiper>
         </template>
