@@ -112,6 +112,8 @@ import Sos from '@/components/Sos'
 import { User } from '#/storage'
 import ENV from 'env'
 
+const limit = 10
+let pagestart1 = 0
 export default {
   directives: {
     TransferDom
@@ -132,8 +134,6 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      limit: 10,
-      pagestart1: 0,
       rollingData: null,
       cutImg: '',
       popupShow: false,
@@ -154,8 +154,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.productdata.length === (pagestart1 + 1) * limit) {
+            pagestart1++
             self.$vux.loading.show()
             self.getData()
           }
@@ -305,7 +305,7 @@ export default {
     },
     getData () {
       const self = this
-      const params = { params: { from: 'myshop', pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { from: 'myshop', pagestart: pagestart1, limit: limit } }
       self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -331,6 +331,8 @@ export default {
           } else {
             self.showSos = false
             self.showContainer = true
+            self.$vux.loading.show()
+            self.getData()
           }
         }
       })
@@ -342,7 +344,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.showContainer && this.productdata.length < this.limit) {
+      if (this.showContainer && this.productdata.length < limit) {
         this.disData = false
         this.productdata = []
         this.$vux.loading.show()
