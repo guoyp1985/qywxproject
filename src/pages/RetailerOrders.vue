@@ -1,13 +1,13 @@
 <template>
   <div class="containerarea s-havebottom bg-page font14 retailerordes">
-    <div class="s-topbanner">
+    <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
-    <div class="s-container">
+    <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
@@ -461,11 +461,4 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
-.retailerordes .s-topbanner{
-  background: #fff;
-  height: 44px;
-}
-.retailerordes .s-container{
-  top:44px;
-}
 </style>

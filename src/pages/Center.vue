@@ -12,7 +12,7 @@
             :profile="profile"
             :messages="messages">
     </c-title>
-    <div class="pl12 pr12 posi_r" style="top:-80px;z-index:2;">
+    <div class="pl12 pr12 posi_r pb10" style="top:65px;z-index:2;">
       <div class="list-shadow border-box bg-white mb10 radius5">
         <group>
           <cell class="pl12 pr12 pt10 pb10 ">
