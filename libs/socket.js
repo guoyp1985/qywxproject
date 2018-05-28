@@ -56,6 +56,7 @@ const Socket = {
     }
   },
   send: data => {
+    data.room_id = `${ENV.SocketBokaApi}-${data.room_id}`
     ws && ws.send(JSON.stringify(data))
   },
   destory: room => {
