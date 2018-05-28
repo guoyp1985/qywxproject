@@ -234,7 +234,9 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.getData()
+      if (this.id !== this.$route.query.id) {
+        this.getData()
+      }
     }
   },
   activated () {
