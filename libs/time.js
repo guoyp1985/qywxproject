@@ -117,7 +117,7 @@ class Time {
 	}
 	counter (startMillSeconds) {
 		const diffs = new Date().getTime() - startMillSeconds
-		let minutes, seconds, dateStr
+		let minutes, seconds, dateStr, lefts
 		minutes = Math.floor( diffs / TIME_UNIT.MINUTE )
 		lefts = diffs % TIME_UNIT.MINUTE
 		seconds = Math.floor( lefts / TIME_UNIT.SECOND )
