@@ -259,6 +259,7 @@ export default {
     refresh (query) {
       const self = this
       if (this.query.id !== query.id || this.query.crowduserid !== query.crowduserid || this.query.share_uid !== query.share_uid) {
+        this.query = query
         if (self.crowduser && self.crowduser.timeleft) {
           self.lefthour = self.crowduser.timeleft.hour
           self.leftminute = self.crowduser.timeleft.minute
