@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14 rsaleview">
+  <div class="containerarea bg-white font14 rsaleview s-havebottom">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -118,6 +118,13 @@
           </swiper-item>
         </swiper>
       </div>
+      <div class="s-bottom bottomnaviarea b_top_after">
+        <div class="t-table bottomnavi">
+          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
+          <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
+          <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
+        </div>
+      </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="isshowpopup" height="100%">
           <div class="popup1 font14">
@@ -181,6 +188,7 @@ export default {
       sosTitle: '该记录不存在',
       showContainer: false,
       query: {},
+      loginUser: {},
       sellerUser: { avatar: '/src/assets/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
       isshowpopup: false,
       tabtxts: [ '带来消费', '分享记录', '带来客户' ],
