@@ -19,7 +19,8 @@
             </div>
           </div>
         </div>
-        <div class="tabarea bg-white" ref="tabArea" style="border:blue 1px solid;">
+        <div ref="tabArea"></div>
+        <div class="tabarea bg-white" style="border:blue 1px solid;">
           <template v-if="tabsdata && tabsdata.length > 0">
             <tab v-model="selectedIndex" class="v-tab">
               <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
