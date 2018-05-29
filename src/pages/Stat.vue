@@ -317,17 +317,15 @@ export default {
       if (index !== undefined) {
         this.selectedIndex = index
       }
-      alert(this.selectedIndex)
       const index1 = this.selectedIndex
-      alert(index1)
       this.clickTabitem = this.tabsdata[index1]
-      this.arrData = this.datalist[index1]
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
           self.datalist.push([])
         }
       }
+      this.arrData = this.datalist[index1]
       if (this.datalist[index1].length < limit) {
         this.datalist[index1] = []
         self.$vux.loading.show()
@@ -347,18 +345,12 @@ export default {
           self.showSos = true
           self.showContainer = false
         } else {
-          alert(JSON.stringify(data))
           self.showSos = false
           self.showContainer = true
           self.statData = data.data ? data.data : data
-          alert(JSON.stringify(self.statData))
-          alert(self.statData.length)
           self.tabsdata = data.detail
-          alert(JSON.stringify(self.tabsdata))
-          alert(self.tabsdata.length)
           document.title = `统计-${self.data.title}`
           self.clickTabitem = self.tabsdata[0]
-          alert(JSON.stringify(self.clickTabitem))
           self.swiperChange()
         }
       })
