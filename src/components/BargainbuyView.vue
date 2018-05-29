@@ -152,7 +152,6 @@ export default {
   },
   props: {
     data: Object,
-    product: Object,
     crowduser: {
       type: Object,
       default: { 'avatar': '/src/assets/images/user.jpg' }
@@ -172,6 +171,7 @@ export default {
   data () {
     return {
       query: {},
+      product: Object,
       showpopup: false,
       lefthour: '',
       leftminute: '',
@@ -179,6 +179,23 @@ export default {
       cutdata: [],
       showViewPopup: false
     }
+  },
+  created () {
+    const self = this
+    self.query = self.$route.query
+    if (self.data) {
+      self.product = self.data.product
+    }
+    if (self.crowduser && self.crowduser.timeleft) {
+      self.lefthour = self.crowduser.timeleft.hour
+      self.leftminute = self.crowduser.timeleft.minute
+      self.leftsecond = self.crowduser.timeleft.second
+      self.cutdown()
+    }
+    self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
+      let data = res.data
+      self.cutdata = data.data ? data.data : data
+    })
   },
   methods: {
     inviteevent () {
@@ -255,33 +272,7 @@ export default {
     },
     closepopup () {
       this.showViewPopup = false
-    },
-    refresh (query) {
-      const self = this
-      if (this.query.id !== query.id || this.query.crowduserid !== query.crowduserid || this.query.share_uid !== query.share_uid) {
-        this.query = query
-        if (self.crowduser && self.crowduser.timeleft) {
-          self.lefthour = self.crowduser.timeleft.hour
-          self.leftminute = self.crowduser.timeleft.minute
-          self.leftsecond = self.crowduser.timeleft.second
-          self.cutdown()
-        }
-        self.$http.post(`${ENV.BokaApi}/api/activity/bargainUsers`, { id: self.crowduser.id }).then(function (res) {
-          let data = res.data
-          self.cutdata = data.data ? data.data : data
-        })
-      }
     }
-  },
-  created () {
-    this.refresh(this.$route.query)
-  },
-  activated () {
-    this.refresh(this.$route.query)
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.refresh(to.query)
-    next && next()
   }
 }
 </script>

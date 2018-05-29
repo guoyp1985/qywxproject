@@ -277,6 +277,9 @@ import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } f
 import Time from '#/time'
 import ENV from 'env'
 
+const limit = 10
+let pageStart1 = 0
+
 export default {
   directives: {
     TransferDom
@@ -302,8 +305,6 @@ export default {
       showbargainbuy: false,
       showdiscount: false,
       isShowLoading: false,
-      limit: 10,
-      pagestart1: 0,
       isBindScroll1: false,
       scrollArea1: null
     }
@@ -325,8 +326,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer[0],
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+            pageStart1++
             self.$vux.loading.show()
             self.getData1()
           }
@@ -335,7 +336,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      let params = { params: { pagestart: pageStart1, limit: limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -418,7 +419,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.tabdata1.length < this.limit) {
+      if (this.tabdata1.length < limit) {
         this.tabdata1 = []
         this.getData1()
       }
