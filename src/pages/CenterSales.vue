@@ -74,6 +74,7 @@ export default {
       self.$vux.loading.show()
       self.loginUser = User.get()
       if (self.loginUser.subscribe === 1) {
+        this.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
           module: 'retailer', action: 'index'
         }).then(function (res) {
@@ -123,7 +124,6 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.getData()
     }
   },
