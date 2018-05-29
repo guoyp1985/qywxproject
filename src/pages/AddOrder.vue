@@ -318,6 +318,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== this.$route.query.id) {
+        this.submiting = false
         this.query = this.$route.query
         this.getData()
       }
