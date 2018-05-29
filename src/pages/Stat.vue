@@ -313,17 +313,13 @@ export default {
       })
     },
     swiperChange (index) {
-      alert(index)
       if (index !== undefined) {
         this.selectedIndex = index
       }
       const self = this
       const index1 = this.selectedIndex
-      alert(index1)
-      alert(JSON.stringify(this.datalist))
       this.clickTabitem = this.tabsdata[index1]
       this.arrData = this.datalist[index1]
-      alert(JSON.stringify(this.arrData))
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
@@ -349,6 +345,7 @@ export default {
           self.showSos = true
           self.showContainer = false
         } else {
+          alert(JSON.stringify(data))
           self.showSos = false
           self.showContainer = true
           self.statData = data.data ? data.data : data
