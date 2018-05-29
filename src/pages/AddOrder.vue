@@ -200,7 +200,7 @@ export default {
   computed: {
   },
   methods: {
-    initData() {
+    initData () {
       this.showSos = false
       this.sosTitle = '无效订单'
       this.showContainer = false
