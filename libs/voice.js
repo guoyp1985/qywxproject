@@ -1,13 +1,13 @@
 import Vue from 'vue'
-let swicther = true
+let switcher = true
 const Voice = {
   wxVoiceRecord: function (callback) {
     if (!switcher) return
-    swicther = false
+    switcher = false
     Vue.wechat.startRecord()
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
-        swicther = true
+        switcher = true
         const localId = res.localId
         callback && callback(localId)
       }
@@ -16,7 +16,7 @@ const Voice = {
   wxVoiceRecordStop: function (callback) {
     Vue.wechat.stopRecord({
       success: function (res) {
-        swicther = true
+        switcher = true
         const localId = res.localId
         callback && callback(localId)
       }
