@@ -374,6 +374,8 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
+const limit = 10
+let pageStart = 0
 let room = ''
 export default {
   directives: {
@@ -425,10 +427,7 @@ export default {
       ingdata: [],
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
-      replyData: null,
-      roomid: '',
-      pagestart: 0,
-      limit: 20
+      replyData: null
     }
   },
   watch: {
@@ -512,6 +511,40 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.disTimeout = true
+      this.showSos = false
+      this.sosTitle = ''
+      this.showcontainer = false
+      this.showShareSuccess = false
+      this.showsharetip = true
+      this.productid = null
+      this.productdata = {}
+      this.retailerinfo = {}
+      this.activityInfo = {}
+      this.showtopcss = ''
+      this.isshowtop = false
+      this.showFlash = false
+      this.showdot = true
+      this.showpopup = false
+      this.showevluate = false
+      this.favoritecss = 'none'
+      this.isfavorite = false
+      this.flashdata = []
+      this.photoarr = []
+      this.contentphotoarr = []
+      this.previewerPhotoarr = []
+      this.previewerFlasharr = []
+      this.buyuserdata = []
+      this.evluatedata = []
+      this.evluatedata1 = []
+      this.disPopEvluate = false
+      this.replyPopupShow = false
+      this.ingdata = []
+      this.activitydata = []
+      this.submitdata = { flag: 1, quantity: 1 }
+      this.replyData = null
+    },
     toAccess () {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
@@ -531,7 +564,7 @@ export default {
     popupevluate () {
       const self = this
       this.showevluate = true
-      if (self.evluatedata1.length < self.limit) {
+      if (self.evluatedata1.length < limit) {
         self.disPopEvluate = false
         self.evluatedata1 = []
         self.$vux.loading.show()
@@ -543,7 +576,7 @@ export default {
     },
     getEvaluateList () {
       const self = this
-      let params = { module: self.module, nid: self.productid, pagestart: self.pagestart, limit: self.limit }
+      let params = { module: self.module, nid: self.productid, pagestart: pageStart, limit: limit }
       self.$http.get(`${ENV.BokaApi}/api/comment/list`, {
         params: params
       }).then(function (res) {
@@ -560,8 +593,8 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.evluatedata1.length === (self.pagestart + 1) * self.limit) {
-            self.pagestart1++
+          if (self.evluatedata1.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getEvaluateList()
           }
@@ -893,13 +926,12 @@ export default {
       this.loginUser = User.get()
     },
     refresh () {
-      if (this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
-        this.showShareSuccess = false
-        this.previewerPhotoarr = []
-        this.query = this.$route.query
-        this.$vux.loading.show()
-        this.getData()
-      }
+      this.initData()
+      this.showShareSuccess = false
+      this.previewerPhotoarr = []
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     }
