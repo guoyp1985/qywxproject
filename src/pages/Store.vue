@@ -442,10 +442,11 @@ export default {
     init () {
       this.loginUser = User.get()
     },
-    refresh () {
-      if (this.$route.query.wid === undefined || this.query.wid !== this.$route.query.wid) {
+    refresh (query) {
+      if (query.wid === undefined || this.query.wid !== query.wid) {
+        console.log('in refresh')
         this.initData()
-        this.query = this.$route.query
+        this.query = query
         this.$vux.loading.show()
         this.getData()
       }
@@ -460,7 +461,7 @@ export default {
     this.init()
   },
   activated () {
-    this.refresh()
+    this.refresh(this.$route.query)
   }
 }
 </script>
