@@ -689,12 +689,13 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman, data => {
         self.data.push(data)
-        if (data.isNew) {
-          let scrollarea = self.$refs.scrollContainer
-          if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
-            scrollarea.scrollTop = scrollarea.scrollHeight + 50
-          }
-        }
+        console.log(data)
+        // if (data.isNew) {
+        //   let scrollarea = self.$refs.scrollContainer
+        //   if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
+        //     scrollarea.scrollTop = scrollarea.scrollHeight + 50
+        //   }
+        // }
       })
     },
     getData () {
