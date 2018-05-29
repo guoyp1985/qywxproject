@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <div class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller lock-x scrollbar-y class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
@@ -31,6 +31,9 @@
           					</div>
           				</div>
                 </template>
+                <template v-else-if="item.msgtype == 'voice'">
+
+                </template>
                 <template v-else>
                   <div v-html="item.content"></div>
                 </template>
@@ -39,7 +42,7 @@
           </div>
         </template>
       </div>
-    </div>
+    </scroller>
     <div class="bottom-area">
       <div class="input-box">
         <div class="voice-cell">
@@ -176,7 +179,7 @@
   </div>
 </template>
 <script>
-import { ViewBox, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
+import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -189,7 +192,7 @@ export default {
     TransferDom
   },
   components: {
-    ViewBox, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon
+    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon
   },
   data () {
     return {
