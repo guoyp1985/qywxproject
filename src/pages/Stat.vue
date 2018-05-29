@@ -320,6 +320,7 @@ export default {
       const index1 = this.selectedIndex
       this.clickTabitem = this.tabsdata[index1]
       this.arrData = this.datalist[index1]
+      alert(JSON.stringify(this.arrData))
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
