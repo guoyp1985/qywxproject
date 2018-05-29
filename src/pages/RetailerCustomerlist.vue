@@ -254,19 +254,19 @@ export default {
             if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
               self.pagestart1++
               self.$vux.loading.show()
-              self.getdata1()
+              self.getData1()
             }
           } else if (index === 1) {
             if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
               self.pagestart3++
               self.$vux.loading.show()
-              self.getdata3()
+              self.getData3()
             }
           } else if (index === 2) {
             if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
               self.pagestart2++
               self.$vux.loading.show()
-              self.getdata2()
+              self.getData2()
             }
           }
         }

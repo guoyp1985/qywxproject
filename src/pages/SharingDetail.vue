@@ -5,11 +5,11 @@
 */
 <template>
   <div id="sharing-detail" class="containerarea font14 bg-page nobottom">
-    <div class="pagetop flex_left font18 pl10 border-box">{{$t('Share view user')}}</div>
-    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll">
+    <div class="s-topbanner s-topbanner1 flex_left font16 pl10 border-box b_bottom_after">{{$t('Share view user')}}</div>
+    <div class="s-container s-container1 bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll">
       <group>
         <template v-if="disList">
-          <div v-if="!list || list.length == 0" class="emptyitem flex_center">暂无用户查看</div>
+          <div v-if="!list || list.length == 0" class="emptyitem flex_center font14 color-gray">暂无用户查看</div>
           <cell v-else class="font13" v-for="(item, index) in list" :key="index">
             <x-img slot="icon" class="avatarimg2 imgcover" :src="item.avatar" container=".scroll-container"></x-img>
             <div slot="inline-desc" class="pl10 pr10">
@@ -105,7 +105,7 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 #sharing-detail .credit-txt {
   vertical-align: super;
 }
@@ -113,4 +113,8 @@ export default {
   width: 40px;
   height: 40px;
 }
+#sharing-detail .s-topbanner{background:transparent;}
+#sharing-detail .weui-cells{margin-top:0;}
+#sharing-detail .weui-cells:before{display: none;}
+#sharing-detail .weui-cells:last-child::after{display: none;}
 </style>

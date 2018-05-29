@@ -1,7 +1,7 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14">
+  <div class="containerarea s-havebottom bg-white font14 retailersetting">
     <div class="s-container" style="top:0;">
-      <div class="padding10 font16 bg-gray4">{{ $t('Seller info setting') }}</div>
+      <div class="padding10 font16 bg-page">{{ $t('Seller info setting') }}</div>
       <form enctype="multipart/form-data">
         <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
       </form>
@@ -11,7 +11,7 @@
           <input v-model="submitdata.title" type="text" name="title" class="input border-box" :placeholder="$t('Shop name')" />
         </forminputplate>
         <div class="form-item required">
-          <div class="pt10 pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+          <div class="pb5">{{ $t('Wechat qrcode') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span><span class="color-gray">({{ $t('Upload wechat qrcode') }})</span></div>
           <div>
             <input v-model="submitdata.qrcode" type="hidden" name="qrcode" />
             <div class="q_photolist align_left">
@@ -29,7 +29,7 @@
                     <div class="flex_center h_100">
                       <div class="txt">
                         <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                        <div class="mt5">{{ $t('Upload wechat qrcode') }}</div>
+                        <div>点击上传</div>
                       </div>
                     </div>
                   </div>
@@ -42,8 +42,8 @@
         <forminputplate class="required">
           <span slot="title">{{ $t('Pay type') }}</span>
           <div>
-            <check-icon :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
-            <check-icon :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
+            <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+            <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
           </div>
         </forminputplate>
         <div v-show="showmore">
@@ -64,7 +64,9 @@
         <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
       </form>
     </div>
-    <div class="s-bottom flex_center bg-green color-white" @click="submitevent">{{ $t('Save') }}</div>
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" @click="submitevent">
+      <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
+    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showonline" height="100%">
         <div class="popup1">
@@ -293,7 +295,7 @@ export default {
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
-        v[key] = self.submitdata[key]
+        v[key] = self.submitdata[key] ? self.submitdata[key] : ''
         validateData.push(v)
       }
       let iscontinue = self.$util.validateQueue(validateData,
@@ -327,8 +329,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.form-item{position:relative;padding:10px;}
-.form-item:after{
+.retailersetting .form-item{position:relative;padding:10px;}
+.retailersetting .form-item:after{
   content:"";display:block;
 	background-color:@list-border-color;height:1px;overflow:hidden;
 	position: absolute;left: 0;right: 0;bottom:1px;
@@ -337,4 +339,6 @@ export default {
 	-webkit-transform-origin: 0% 0%;
 	transform-origin: 0% 0%;
 }
+.retailersetting .s-havebottom .s-container{bottom:50px;}
+.retailersetting .s-bottom{height:50px;}
 </style>
