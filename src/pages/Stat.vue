@@ -27,7 +27,7 @@
             </tab>
           </div>
           <div ref="tabSwiper" class="tabSwiper w_100">
-            <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange" style="height:auto !important;">
+            <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
               <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
                 <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
                   <template>
