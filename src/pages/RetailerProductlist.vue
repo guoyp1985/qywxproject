@@ -149,6 +149,9 @@ Back go shop:
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 
+let pageStart1 = 0
+let pageStart2 = 0
+const limit = 10
 export default {
   directives: {
     TransferDom
@@ -171,12 +174,10 @@ export default {
       clickdata: {},
       clickindex: 0,
       limit: 10,
-      pagestart1: 0,
       showpush: false,
       customerdata: [],
       pushdata: [],
       checkAll: false,
-      customerPagestart: 0,
       disproductdata: false,
       discustomerdata: false
     }
@@ -202,14 +203,14 @@ export default {
         element: scrollarea,
         callback: function () {
           if (type === 'product') {
-            if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
+            if (self.productdata.length === (pageStart1 + 1) * limit) {
+              pageStart1++
               self.$vux.loading.show()
               self.getData1()
             }
           } else if (type === 'customer') {
-            if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
-              self.customerPagestart++
+            if (self.customerdata.length === (pageStart2 + 1) * limit) {
+              pageStart2++
               self.$vux.loading.show()
               self.getCustomerdata()
             }
@@ -289,7 +290,7 @@ export default {
     getCustomerdata () {
       const self = this
       self.$vux.loading.show()
-      let params = { params: { pagestart: self.customerPagestart, limit: self.limit } }
+      let params = { params: { pagestart: pageStart2, limit: limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -353,7 +354,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { pagestart: pageStart1, limit: limit } }
       this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -371,10 +372,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.productdata.length < this.limit) {
+      if (this.productdata.length < limit) {
         this.disproductdata = false
         this.productdata = []
         this.$vux.loading.show()
+        pageStart1 = 0
         this.getData1()
       }
     }

@@ -1,15 +1,15 @@
 <template>
-  <div class="containerarea font14">
+  <div id="centersales" class="containerarea font14">
     <template v-if="afterApply">
       <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
         <swiper-item>
-          <img class="db mauto" style="max-width:100%;max-height:100%;" src="/src/assets/images/guide1.jpg" />
+          <img class="db mauto" src="/src/assets/images/guide1.jpg" />
         </swiper-item>
         <swiper-item>
-          <img class="db mauto" style="max-width:100%;max-height:100%;" src="/src/assets/images/guide2.jpg" />
+          <img class="db mauto" src="/src/assets/images/guide2.jpg" />
         </swiper-item>
         <swiper-item>
-          <img class="db mauto" style="max-width:100%;max-height:100%;" src="/src/assets/images/guide3.jpg" />
+          <img class="db mauto" src="/src/assets/images/guide3.jpg" />
            <div class="in-btn" @click="inCenter">立即体验</div>
         </swiper-item>
       </swiper>
@@ -38,7 +38,7 @@ export default {
     return {
       showCenter: false,
       showApply: false,
-      afterApply: true,
+      afterApply: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: {},
@@ -128,8 +128,17 @@ export default {
 
 <style lang="less">
 .in-btn{
-  width:80px;height:30px;line-height:30px;text-align:center;border-radius:5px;
-  border:#fff 1px solid;color:#fff;
-  position: absolute;left: 50%;margin-left: -40px;bottom: 20px;
+  width:90px;height:35px;line-height:35px;text-align:center;border-radius:5px;
+  color:#15a3ee;background-color:#fff;box-shadow: 0 0 8px 2px #52c4f4;font-size: 16px !important;
+  position: absolute;left: 50%;margin-left: -45px;bottom: 60px;
 }
+#centersales .vux-swiper-item img{
+  object-fit: cover;
+  width: 100%;
+  height:100%;
+  max-height:100%;
+  overflow: hidden;
+  object-position: center center;
+}
+#centersales .vux-slider > .vux-indicator,#centersales .vux-slider .vux-indicator-right{right:50%;margin-right:-18px;bottom:25px;}
 </style>

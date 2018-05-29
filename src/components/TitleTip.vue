@@ -5,22 +5,27 @@
 */
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
-    <div class="title-tip">
-      <router-link class="avatar-cell" to="/center">
-        <img :src="avatarHref" class="imgavatar"/>
-      </router-link>
-      <router-link class="info-cell" to="/center">
-        <div class="user-name">
-          {{userName}}
-        </div>
-        <div class="user-credit">
-          {{$t('Gain Credit')}}: {{userCredit}}
-        </div>
-      </router-link>
-      <router-link class="op-cell" to="/messages">
-        <span class="al al-pinglun color-black font24"></span>
-      </router-link>
-    </div>
+    <template v-if="user.subscribe == 0" @click="toAccess">
+      <div class="title-tip">您有{{ waitgetcredit }}个金币，点击领取 ></div>
+    </template>
+    <template v-else>
+      <div class="title-tip">
+        <router-link class="avatar-cell" to="/center">
+          <img :src="avatarHref" class="imgavatar"/>
+        </router-link>
+        <router-link class="info-cell" to="/center">
+          <div class="user-name">
+            {{userName}}
+          </div>
+          <div class="user-credit">
+            {{$t('Gain Credit')}}: {{userCredit}}
+          </div>
+        </router-link>
+        <router-link class="op-cell" to="/messages">
+          <span class="al al-pinglun color-black font24"></span>
+        </router-link>
+      </div>
+    </template>
   </sticky>
 </template>
 <i18n>
@@ -33,6 +38,7 @@ export default {
     Sticky
   },
   props: {
+    user: Object,
     scrollBox: String,
     avatarHref: {
       type: String,
@@ -53,7 +59,17 @@ export default {
   },
   data () {
     return {
-      show: true
+      show: true,
+      waitgetcredit: 100
+    }
+  },
+  methods: {
+    toAccess () {
+      if (this.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        this.$router.push('/center')
+      }
     }
   },
   created () {

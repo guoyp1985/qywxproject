@@ -87,6 +87,9 @@ import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
+const limit = 10
+let pageStart = 0
+
 export default {
   components: {
     Swiper, Groupbuyitemplate, Bargainbuyitemplate, Productitemplate, Newsitemplate, ShareSuccess, XImg
@@ -126,8 +129,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.productdata.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.productdata.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getData1()
           }
@@ -136,7 +139,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { pagestart: pageStart, limit: limit } }
       this.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -202,7 +205,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
-      if (this.loginUser && this.productdata.length < this.limit) {
+      if (this.loginUser && this.productdata.length < limit) {
         this.$vux.loading.show()
         this.productdata = []
         this.getData1()

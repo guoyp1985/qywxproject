@@ -76,7 +76,8 @@
               </div>
             </template>
             <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
-              <div class="btn db" @click="joinin">我要参与</div>
+              <div v-if="!user || user.subscribe == 0" class="btn db" @click="toRedirect">我要参与</div>
+              <div v-else class="btn db" @click="joinin">我要参与</div>
             </div>
           </template>
           <div v-if="data.havecreate" class="t-cell">
@@ -172,8 +173,7 @@ export default {
   },
   methods: {
     toRedirect () {
-      const originHref = encodeURIComponent(location.href)
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+      this.$util.wxAccess()
     },
     cutevent () {
       const self = this

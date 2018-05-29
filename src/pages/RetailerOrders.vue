@@ -21,7 +21,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container1"></x-img>
+                  <img slot="photo" class="imgcover" :src="product.photo" onerror="javascript:'this.src=../src/assets/images/nopic.jpg'" style="width:80px;height:80px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -57,7 +57,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container2"></x-img>
+                  <img slot="photo" class="imgcover" :src="product.photo" onerror="javascript:'this.src=../src/assets/images/nopic.jpg'" style="width:80px;height:80px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -85,7 +85,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container3"></x-img>
+                  <img slot="photo" class="imgcover" :src="product.photo" onerror="javascript:'this.src=../src/assets/images/nopic.jpg'" style="width:80px;height:80px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>
@@ -118,7 +118,7 @@
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
-                  <x-img slot="photo" class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container4"></x-img>
+                  <img slot="photo" class="imgcover" :src="product.photo" onerror="javascript:'this.src=../src/assets/images/nopic.jpg'" style="width:80px;height:80px;" />
                   <span slot="name">{{ product.name }}</span>
                   <span slot="special">{{ product.special }}</span>
                   <span slot="quantity" class="font12">{{ product.quantity }}</span>

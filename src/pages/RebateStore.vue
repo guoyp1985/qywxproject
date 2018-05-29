@@ -70,7 +70,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+              <span>{{$t('No relevant data')}}</span>
             </div>
           </template>
         </template>
@@ -99,7 +99,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+              <span>{{$t('No relevant data')}}</span>
             </div>
           </template>
         </template>
@@ -122,7 +122,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>{{$t('No Related Orders')}}</span>
+              <span>{{$t('No relevant data')}}</span>
             </div>
           </template>
         </template>

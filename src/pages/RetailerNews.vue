@@ -197,7 +197,7 @@ export default {
             if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
               self.pagestart1++
               self.$vux.loading.show()
-              self.getdata1()
+              self.getData1()
             }
           } else if (type === 'customer') {
             if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {

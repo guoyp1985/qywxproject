@@ -11,7 +11,7 @@
         <template v-if="disList">
           <div v-if="!list || list.length == 0" class="emptyitem flex_center font14 color-gray">暂无用户查看</div>
           <cell v-else class="font13" v-for="(item, index) in list" :key="index">
-            <x-img slot="icon" class="avatarimg2 imgcover" :src="item.avatar" container=".scroll-container"></x-img>
+            <x-img slot="icon" class="avatarimg2 imgcover" :src="item.avatar" default-src="/src/assets/images/user.jpg" container=".scroll-container"></x-img>
             <div slot="inline-desc" class="pl10 pr10">
               <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
               <div class="mt5 clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
@@ -27,6 +27,9 @@ import { Group, GroupTitle, Cell, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+
+const limit = 10
+let pageStart = 0
 export default {
   components: {
     Group, GroupTitle, Cell, XImg
@@ -36,9 +39,7 @@ export default {
       loginUser: {},
       query: {},
       disList: false,
-      list: [],
-      pagestart: 0,
-      limit: 10
+      list: []
     }
   },
   filters: {
@@ -55,8 +56,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.list.length === (self.pagestart + 1) * self.limit) {
-            self.pagestart++
+          if (self.list.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getData()
           }
@@ -73,7 +74,7 @@ export default {
     },
     getData () {
       const self = this
-      let params = { uid: self.loginUser.uid, moduleid: self.query.id, pagestart: self.pagestart, limit: self.limit }
+      let params = { uid: self.loginUser.uid, moduleid: self.query.id, pagestart: pageStart, limit: limit }
       this.$http.get(`${ENV.BokaApi}/api/list/shareview`, {
         params: params
       })
@@ -90,7 +91,7 @@ export default {
     },
     refresh () {
       this.query = this.$route.query
-      if (this.list.length < this.limit) {
+      if (this.list.length < limit) {
         this.disList = false
         this.list = []
         this.getData()

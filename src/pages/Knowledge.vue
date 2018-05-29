@@ -9,7 +9,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+      <title-tip scroll-box="article-content" :user="reward" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
       <div class="article-view">
         <div class="article-title">
           <h2>{{article.title}}</h2>
@@ -160,6 +160,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.article = res.data.data
+          document.title = self.article.title
           self.$util.wxShare({
             data: {
               title: self.article.seotitle || self.article.title,
@@ -215,59 +216,6 @@ export default {
         onConfirm () {}
       })
     },
-    // wsConnect () {
-    //   const self = this
-    //   self.roomid = `${ENV.SocketBokaApi}-knowledge-${self.query.id}`
-    //   Roomid.set(self.roomid)
-    //   if (!self.socket || !self.socket.url) {
-    //     self.socket = new WebSocket(ENV.SocketApi)
-    //     BkSocket.set(self.socket)
-    //   }
-    //   self.socket.onopen = function () {
-    //     let loginData = {
-    //       type: 'login',
-    //       uid: self.loginUser.uid,
-    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-    //       room_id: self.roomid
-    //     }
-    //     self.socket.send(JSON.stringify(loginData))
-    //   }
-    //   self.socket.onmessage = function (e) {
-    //     const data = JSON.parse(e.data)
-    //     if (data.type === 'login') {
-    //       console.log('in login')
-    //     } else if (data.type === 'logout') {
-    //       console.log('in logout')
-    //     } else if (data.type === 'say') {
-    //       console.log('say')
-    //       let edata = JSON.parse(e.data)
-    //       let saycontent = edata.content
-    //       if (!self.$util.isNull(saycontent)) {
-    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-    //       }
-    //       let saydata = {
-    //         uid: edata.from_uid,
-    //         content: saycontent,
-    //         dateline: edata.time,
-    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
-    //         picurl: edata.picurl ? edata.picurl : '',
-    //         thumb: edata.thumb ? edata.thumb : '',
-    //         username: edata.from_client_name,
-    //         id: edata.msgid,
-    //         roomid: edata.room_id,
-    //         avatar: edata.avatar,
-    //         newsdata: edata.newsdata
-    //       }
-    //     }
-    //   }
-    //   self.socket.onclose = function () {
-    //     console.log('ws closed')
-    //     self.wsConnect()
-    //   }
-    //   self.socket.onerror = function () {
-    //     console.log('ws error')
-    //   }
-    // },
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
@@ -277,7 +225,7 @@ export default {
     },
     init () {
       this.loginUser = User.get()
-      console.log(this.loginUser)
+      this.reward = this.loginUser
     },
     refresh () {
       if (this.query.id !== this.$route.query.id) {

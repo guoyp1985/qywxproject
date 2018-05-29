@@ -1,6 +1,9 @@
 <template>
   <div class="containerarea font14">
-    <div v-show="bargainbuyType" class="h_100">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <div v-if="showContainer && bargainbuyType" class="h_100">
       <template v-if="showBargainbuy">
         <bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></bargainbuy>
       </template>
@@ -27,6 +30,7 @@ import Bargainbuy from '@/components/Bargainbuy'
 import BargainbuyView from '@/components/BargainbuyView'
 import BargainbuyDetail from '@/components/BargainbuyDetail'
 import ShareSuccess from '@/components/ShareSuccess'
+import Sos from '@/components/Sos'
 import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
@@ -34,10 +38,13 @@ import Socket from '#/socket'
 let room = ''
 export default {
   components: {
-    Bargainbuy, BargainbuyView, BargainbuyDetail, ShareSuccess
+    Bargainbuy, BargainbuyView, BargainbuyDetail, ShareSuccess, Sos
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '',
+      showContainer: false,
       module: 'activity',
       bargainbuyType: false,
       showShareSuccess: false,
@@ -104,65 +111,74 @@ export default {
       }).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
-        self.data = data.data ? data.data : data
-        if (self.data.title) {
-          document.title = self.data.title
-        }
-        if (self.data.type === 'bargainbuy') {
-          self.bargainbuyType = true
-          let sharelink = `${ENV.Host}/#/activity?id=${self.data.id}&share_uid=${self.loginUser.uid}`
-          if (self.data.crowduser && self.data.crowduser.id) {
-            self.crowduser = self.data.crowduser
-            sharelink = `${sharelink}&crowduserid=${self.crowduser.id}`
+        if (data.flag !== 1) {
+          self.showSos = true
+          self.sosTitle = data.error
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.sosTitle = ''
+          self.showContainer = true
+          self.data = data.data ? data.data : data
+          if (self.data.title) {
+            document.title = self.data.title
           }
-          self.product = self.data.product
-          let inpage = ''
-          if (self.crowduserid && self.crowduser) {
-            if (self.loginUser.uid === self.crowduser.crowdowner) {
-              self.showView()
-              inpage = 'view'
-            } else {
-              self.showDetail()
-              inpage = 'detail'
+          if (self.data.type === 'bargainbuy') {
+            self.bargainbuyType = true
+            let sharelink = `${ENV.Host}/#/activity?id=${self.data.id}&share_uid=${self.loginUser.uid}`
+            if (self.data.crowduser && self.data.crowduser.id) {
+              self.crowduser = self.data.crowduser
+              sharelink = `${sharelink}&crowduserid=${self.crowduser.id}`
             }
-          } else {
-            if (self.crowduser) {
-              self.showView()
-              inpage = 'view'
+            self.product = self.data.product
+            let inpage = ''
+            if (self.crowduserid && self.crowduser) {
+              if (self.loginUser.uid === self.crowduser.crowdowner) {
+                self.showView()
+                inpage = 'view'
+              } else {
+                self.showDetail()
+                inpage = 'detail'
+              }
             } else {
-              self.showMain()
-              inpage = 'main'
+              if (self.crowduser) {
+                self.showView()
+                inpage = 'view'
+              } else {
+                self.showMain()
+                inpage = 'main'
+              }
             }
+            let sharetitle = self.data.title
+            let sharedesc = self.data.title
+            let sharephoto = self.loginUser.avatar
+            if (inpage === 'view' || inpage === 'detail') {
+              self.getCudata()
+              if (self.data.havecreate) {
+                sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+              } else {
+                sharetitle = `${self.crowduser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
+                sharephoto = self.$util.getPhoto(self.data.photo)
+              }
+              sharedesc = '好友帮帮忙，优惠享更多！'
+            } else {
+              if (!self.data.havecreate) {
+                sharephoto = self.$util.getPhoto(self.data.photo)
+              }
+            }
+            self.$util.handleWxShare({
+              module: self.module,
+              moduleid: self.data.id,
+              lastshareuid: self.query.share_uid,
+              title: sharetitle,
+              desc: sharedesc,
+              photo: sharephoto,
+              link: sharelink,
+              successCallback: function () {
+                self.showShareSuccess = true
+              }
+            })
           }
-          let sharetitle = self.data.title
-          let sharedesc = self.data.title
-          let sharephoto = self.loginUser.avatar
-          if (inpage === 'view' || inpage === 'detail') {
-            self.getCudata()
-            if (self.data.havecreate) {
-              sharetitle = `${self.loginUser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
-            } else {
-              sharetitle = `${self.crowduser.linkman}向你抛了一个媚眼，并诚恳的邀请你帮TA砍一刀！`
-              sharephoto = self.$util.getPhoto(self.data.photo)
-            }
-            sharedesc = '好友帮帮忙，优惠享更多！'
-          } else {
-            if (!self.data.havecreate) {
-              sharephoto = self.$util.getPhoto(self.data.photo)
-            }
-          }
-          self.$util.handleWxShare({
-            module: self.module,
-            moduleid: self.data.id,
-            lastshareuid: self.query.share_uid,
-            title: sharetitle,
-            desc: sharedesc,
-            photo: sharephoto,
-            link: sharelink,
-            successCallback: function () {
-              self.showShareSuccess = true
-            }
-          })
         }
       })
     },
@@ -192,12 +208,11 @@ export default {
       Socket.listening(room, uid, linkman)
     },
     init () {
-      this.$util.wxAccess()
       this.loginUser = User.get()
     },
-    refresh () {
-      if (this.query.id !== this.$route.query.id) {
-        this.query = this.$route.query
+    refresh (query) {
+      if (this.query.id !== query.id || this.query.crowduserid !== query.crowduserid) {
+        this.query = query
         if (this.query.crowduserid) {
           this.crowduserid = this.query.crowduserid
         }
@@ -209,15 +224,13 @@ export default {
     }
   },
   created () {
-    console.log('in created')
     this.init()
   },
   activated () {
-    console.log('in activated')
-    this.refresh()
+    this.refresh(this.$route.query)
   },
   beforeRouteUpdate (to, from, next) {
-    this.refresh()
+    this.refresh(to.query)
     next && next()
   },
   beforeRouteLeave (to, from, next) {

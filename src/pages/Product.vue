@@ -5,7 +5,8 @@
     </template>
     <template v-if="showcontainer">
       <template v-show="isshowtop">
-        <div v-if="loginUser.subscribe == 1 || loginUser.subscribe == 2" class="pagetop">
+        <div v-if="loginUser.subscribe == 0" class="pagetop flex_center color-blue" @click="toAccess">您有{{ waitgetcredit }}个金币，点击领取 ></div>
+        <div v-else class="pagetop">
           <div class="t-table h_100">
             <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
               <x-img class="v_middle imgcover" :src="loginUser.avatar" default-src="../src/assets/images/user.jpg" style="width:36px;height:36px;border-radius:50%"></x-img>
@@ -22,7 +23,6 @@
             </div>
           </div>
         </div>
-        <router-link v-else-if="isshowtop" class="pagetop flex_center color-blue" :to="{path:'/center'}">您有{{ waitgetcredit }}个金币，点击领取 ></router-link>
       </template>
       <div class="pagemiddle scroll-container">
         <template v-if="showFlash">
@@ -512,6 +512,13 @@ export default {
     }
   },
   methods: {
+    toAccess () {
+      if (this.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        this.$router.push('/center')
+      }
+    },
     closeSharetip () {
       this.showsharetip = false
     },

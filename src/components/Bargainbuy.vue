@@ -84,20 +84,24 @@ export default {
   methods: {
     joinin () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.onJoin && self.onJoin(data.data)
+      if (self.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.onJoin && self.onJoin(data.data)
+              }
             }
-          }
+          })
         })
-      })
+      }
     }
   }
 }
