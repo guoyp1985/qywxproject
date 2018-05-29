@@ -313,11 +313,14 @@ export default {
       })
     },
     swiperChange (index) {
+      alert(index)
       if (index !== undefined) {
         this.selectedIndex = index
       }
       const self = this
       const index1 = this.selectedIndex
+      alert(index1)
+      alert(JSON.stringify(this.datalist))
       this.clickTabitem = this.tabsdata[index1]
       this.arrData = this.datalist[index1]
       alert(JSON.stringify(this.arrData))
@@ -365,10 +368,13 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+        this.query = this.$route.query
         this.initData()
         this.getData()
+        console.log(1)
       } else if (this.showContainer) {
         this.swiperChange()
+        console.log(2)
       }
     }
   },
