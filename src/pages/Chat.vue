@@ -9,13 +9,13 @@
       <div class="chatlist" ref="scrollContent">
         <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
-          <div :class="`chatitem ${ getitemclass(item) }`">
+          <div :class="`chatitem ${getitemclass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
             </router-link>
             <div class="name disusername">{{ item.username }}</div>
             <div class="msg">
-              <div class="main message-text">
+              <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
                 <template v-if="item.msgtype == 'image'">
                   <img :src="item.picurl" />
                 </template>
@@ -32,7 +32,10 @@
           				</div>
                 </template>
                 <template v-else-if="item.msgtype == 'voice'">
-
+                  <div class="audio_play_area">
+          					<i class="icon_audio_default"></i>
+          					<i class="icon_audio_playing"></i>
+                  </div>
                 </template>
                 <template v-else>
                   <div v-html="item.content"></div>
@@ -44,7 +47,7 @@
       </div>
     </scroller>
     <div class="bottom-area">
-      <div class="input-box">
+      <div class="input-box no-select">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
             <img src="../assets/images/icon-voice.png"/>
@@ -57,7 +60,7 @@
           <group class="textarea-box">
             <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-change="onChange" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
-          <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
+          <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
         </div>
         <div class="emotion-cell">
           <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
@@ -267,6 +270,12 @@ export default {
       }
       */
     },
+    clickMessageItem (item) {
+      this.data = this.$util.changeItem(this.data, item.id, match => {
+        match.voiceClass = ' playing'
+        return match
+      })
+    },
     toggleVoice () {
       if (this.showEmotBox) {
         this.showEmotBox = false
@@ -315,16 +324,6 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
-    sendVoice (voiceId) {
-      const params = {
-        touid: this.query.uid,
-        content: '',
-        module: self.module,
-        sendtype: 'voice',
-        mediaid: voiceId
-      }
-      this.sendData(params)
-    },
     sendPhoto () {
       const self = this
       if (!window.WeixinJSBridge) {
@@ -372,17 +371,28 @@ export default {
         // })
       }
     },
+    sendVoice (data) {
+      console.log(data)
+      const params = {
+        touid: this.query.uid,
+        content: '',
+        module: self.module,
+        sendtype: 'voice',
+        mediaid: data.vid,
+        mediatime: data.time
+      }
+      this.sendData(params)
+    },
     onTalkRecord () {
       const self = this
-      Voice.voiceRecord(sid => {
-        self.sendVoice(sid)
+      Voice.voiceRecord(res => {
+        self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     onTalkRecordStop () {
       const self = this
-      Voice.voiceRecordStop(sid => {
-        alert(sid)
-        self.sendVoice(sid)
+      Voice.voiceRecordStop(res => {
+        self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     viewUserInfo () {
@@ -391,12 +401,12 @@ export default {
       const self = this
       let ret = ''
       if (item.msgtype === 'news') {
-        ret = 'message-push'
+        ret = 'message-push '
       }
       if (item.uid === parseInt(self.query.uid)) {
-        ret = `${ret} left`
+        ret = `${ret}left`
       } else {
-        ret = `${ret} right`
+        ret = `${ret}right`
       }
       return ret
     },
@@ -919,26 +929,35 @@ export default {
 .chatlist .chatitem.left{padding-right:50px;}
 .chatlist .chatitem.right{padding-left:50px;}
 .chatlist .chatitem .head {
-	position: absolute;top: 0;
-  width: 40px;height: 40px;overflow: hidden;
+	position: absolute;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
 }
 .chatlist .chatitem.left .head {left: 0;}
 .chatlist .chatitem.right .head {right: 0;}
 .chatlist .chatitem .head img {width: 100%;}
-.chatlist .chatitem .name {margin-bottom: 3px;font-size: 12px;color: #999;}
-.chatlist .chatitem .name{margin-left:50px;}
-.chatlist .chatitem.right .name {margin-right:50px;text-align:right;}
+.chatlist .chatitem .name {margin-bottom: 3px;font-size: 12px;color: #999;transform: scale(0.9);}
+.chatlist .chatitem .name{margin-left:40px;}
+.chatlist .chatitem.right .name {margin-right:40px;text-align:right;}
 .chatlist .chatitem .msg {margin: 0 0px 0 50px;}
 .chatlist .chatitem.right .msg {margin: 0 50px 0 0;text-align:right;}
 .chatlist .chatitem .msg .discontent{text-align:left;}
 .chatlist .chatitem .msg .main {
-    	display: inline-block;position: relative;padding:5px;
-    	background:#fff;border: 1px solid #dedede;min-width:40px;
-    	border-radius: 5px;line-height: 24px;min-height:36px;
-    	word-wrap: break-word;word-break: break-all;
+	display: inline-block;
+  position: relative;
+  padding: 5px;
+	background:#fff;
+  border: 1px solid #dedede;
+  min-width:40px;
+	border-radius: 5px;
+  line-height: 24px;
+  min-height:36px;
+	word-wrap: break-word;
+  word-break: break-all;
 }
 .chatlist .chatitem.message-push .msg .main {width:100%;}
-.chatlist .chatitem.message-voice .msg .main{}
 .chatlist .chatitem.message-voice .msg img{width:24px;height:24px;}
 .chatlist .chatitem.message-voice .msg .media_voice.left{float:left;}
 .chatlist .chatitem.message-voice .msg .media_voice.right{float:right;}
@@ -1005,8 +1024,52 @@ export default {
 }
 .chatlist .chatitem.left .msg .main .min {right: -58px;}
 .chatlist .chatitem.right .msg .main .min {left: -58px;}
-.audio_play_area {width:18px;height: 25px;float:left;}
+.audio_play_area {float:left;}
 .chatitem.right .audio_play_area{float:right;}
+.audio_play_area:after{content:"";clear:both;display:block;}
+.audio_play_area .icon_audio_default,
+.audio_play_area .icon_audio_playing{
+	width: 18px;
+  height: 25px;
+  transform: scale(0.7);
+  vertical-align: middle;
+  display: inline-block;
+	background-size: 54px 25px;
+	background-repeat: no-repeat;
+	background-image: url(../assets/images/iconloop.png);
+  float: left;
+}
+.audio_play_area .icon_audio_default {background-position: -36px center;}
+.audio_play_area .icon_audio_playing {
+	-webkit-animation: audio_playing 1s infinite;
+	background-position: 0px center;
+	display: none;
+}
+.chatitem.right .audio_play_area .icon_audio_default,
+.chatitem.right .audio_play_area .icon_audio_playing{
+	background-image:url(../assets/images/iconloop_r.png);
+}
+.chatitem.right .audio_play_area .icon_audio_default {background-position: 0px center;}
+.chatitem.right .audio_play_area .icon_audio_playing {
+	-webkit-animation: audio_playing1 1s infinite;
+	background-position: -36px center;
+}
+.playing .audio_play_area .icon_audio_default {display: none;}
+.playing .audio_play_area .icon_audio_playing {display: inline-block; }
+@-webkit-keyframes audio_playing {
+	30% {background-position: 0px center;}
+	31% {background-position: -18px center;}
+	61% {background-position: -18px center;}
+	61.5% {background-position: -36px center;}
+	100% {background-position: -36px center;}
+}
+@-webkit-keyframes audio_playing1 {
+	30% {background-position: -36px center;}
+	31% {background-position: -18px center;}
+	61% {background-position: -18px center;}
+	61.5% {background-position: 0px center;}
+	100% {background-position: 0px center;}
+}
 
 .message-text .scroll_item{box-sizing: border-box;padding: 10px 0;}
 .message-text .scroll_item:not(:last-child){border-bottom: #ccc 1px solid;}

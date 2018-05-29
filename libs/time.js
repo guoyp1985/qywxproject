@@ -16,7 +16,7 @@ const TIME_UNIT = {
 	YEAR : 31536000000
 }
 class Time {
-	constructor(isodate){ this._date = new Date(isodate); this._now = new Date() }
+	constructor(isodate){ this._date = isodate? new Date(isodate) : new Date(); this._now = new Date() }
 	time(){ return this._date.getTime() }
 	date(){ return this._date.getDate() }
 	day (){ return this._date.getDay() }
@@ -113,6 +113,16 @@ class Time {
 		dateStr += hours ? hours + "小时" : ""
 		dateStr += minutes ? minutes + "分" : ""
 		dateStr += ( hours && !minutes ? minutes + "分" : "" ) + seconds + "秒"
+		return dateStr
+	}
+	counter (startMillSeconds) {
+		const diffs = new Date().getTime() - startMillSeconds
+		let minutes, seconds, dateStr, lefts
+		minutes = Math.floor( diffs / TIME_UNIT.MINUTE )
+		lefts = diffs % TIME_UNIT.MINUTE
+		seconds = Math.floor( lefts / TIME_UNIT.SECOND )
+		dateStr = minutes ? minutes + "'" : ""
+		dateStr += seconds ? seconds + "\"" : ""
 		return dateStr
 	}
 }
