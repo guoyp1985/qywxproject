@@ -371,14 +371,12 @@ export default {
     },
     onTalkRecord () {
       const self = this
-      console.log('hhhh')
       Voice.voiceRecord(sid => {
         self.sendVoice(sid)
       })
     },
     onTalkRecordStop () {
       const self = this
-      console.log('voice')
       Voice.voiceRecordStop(sid => {
         alert(sid)
         self.sendVoice(sid)
