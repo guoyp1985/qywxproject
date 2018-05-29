@@ -366,7 +366,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if ((this.query.flag === undefined && this.$route.query.flag === undefined) ||this.query.flag !== this.$route.query.flag) {
+      if ((this.query.flag === undefined && this.$route.query.flag === undefined) || this.query.flag !== this.$route.query.flag) {
         this.query = this.$route.query
         let flag = parseInt(this.query.flag)
         switch (flag) {

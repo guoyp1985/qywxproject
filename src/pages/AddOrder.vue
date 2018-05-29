@@ -37,7 +37,12 @@
       							<div class="t-cell v_middle" style="width:80px;">购买数量</div>
       							<div class="t-cell v_middle align_right">
                       <group class="x-number db-in">
-                        <x-number v-model="submitdata.postdata[index].shopinfo[index1].quantity" :min="1" @on-change="changenumber()"></x-number>
+                        <template v-if="product.crowdtype == 'bargainbuy'">
+                          <x-number v-model="submitdata.postdata[index].shopinfo[index1].quantity" :min="1" :max="1" @on-change="changenumber()"></x-number>
+                        </template>
+                        <template v-else>
+                          <x-number v-model="submitdata.postdata[index].shopinfo[index1].quantity" :min="1" @on-change="changenumber()"></x-number>
+                        </template>
                       </group>
       							</div>
       						</div>
@@ -312,8 +317,10 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
+      if (this.query.id !== this.$route.query.id) {
+        this.query = this.$route.query
+        this.getData()
+      }
     }
   },
   activated () {
