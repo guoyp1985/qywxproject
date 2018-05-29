@@ -100,8 +100,8 @@
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell bg-white color-white h_100 flex_center" style="border-right:#f6efef 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
-        <div class="flex_cell bg-white color-white h_100 flex_center" @click="clickWetchat"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="border-right:#f6efef 1px solid; background:#f9f9f9;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
+        <div class="flex_cell color-white h_100 flex_center" @click="clickWetchat" style=" background:#f9f9f9;"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showqrcode" height="100%">
