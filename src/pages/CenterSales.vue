@@ -71,7 +71,6 @@ export default {
     },
     getData () {
       const self = this
-      self.$vux.loading.show()
       self.loginUser = User.get()
       if (self.loginUser.subscribe === 1) {
         this.$vux.loading.show()
