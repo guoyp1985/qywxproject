@@ -54,7 +54,7 @@
           <group class="textarea-box">
             <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-change="onChange" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
-          <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.navtive.prevent="onTalkRecord" @touchend.navtive="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
+          <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
         </div>
         <div class="emotion-cell">
           <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
@@ -377,7 +377,6 @@ export default {
     },
     onTalkRecordStop () {
       const self = this
-      alert('voice')
       Voice.voiceRecordStop(sid => {
         alert(sid)
         self.sendVoice(sid)
