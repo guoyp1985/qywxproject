@@ -1,24 +1,32 @@
 <template>
   <div id="centersales" class="containerarea font14">
-    <template v-if="afterApply">
-      <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
-        <swiper-item>
-          <img class="db mauto" src="/src/assets/images/guide1.jpg" />
-        </swiper-item>
-        <swiper-item>
-          <img class="db mauto" src="/src/assets/images/guide2.jpg" />
-        </swiper-item>
-        <swiper-item>
-          <img class="db mauto" src="/src/assets/images/guide3.jpg" />
-           <div class="in-btn" @click="inCenter">立即体验</div>
-        </swiper-item>
-      </swiper>
+    <template v-if="loginUser.subscribe != 1">
+      <div class="pagemiddle flex_center" style="top:0;">
+        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+      </div>
+      <div class="pagebottom flex_center b_top_after font16">请先关注</div>
     </template>
-    <template v-if="showCenter">
-      <center-sales :retailer-info="retailerInfo" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
-    </template>
-    <template v-if="showApply">
-      <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+    <template v-else>
+      <template v-if="afterApply">
+        <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
+          <swiper-item>
+            <img class="db mauto" src="/src/assets/images/guide1.jpg" />
+          </swiper-item>
+          <swiper-item>
+            <img class="db mauto" src="/src/assets/images/guide2.jpg" />
+          </swiper-item>
+          <swiper-item>
+            <img class="db mauto" src="/src/assets/images/guide3.jpg" />
+             <div class="in-btn" @click="inCenter">立即体验</div>
+          </swiper-item>
+        </swiper>
+      </template>
+      <template v-if="showCenter">
+        <center-sales :retailer-info="retailerInfo" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
+      </template>
+      <template v-if="showApply">
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+      </template>
     </template>
   </div>
 </template>
@@ -43,7 +51,8 @@ export default {
       retailerInfo: {},
       loginUser: {},
       marqueeData: [],
-      classData: []
+      classData: [],
+      WeixinQrcode: ENV.WeixinQrcode
     }
   },
   methods: {
@@ -64,48 +73,50 @@ export default {
       const self = this
       self.$vux.loading.show()
       self.loginUser = User.get()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'index'
-      }).then(function (res) {
-        if (res.status !== 200) {
-          self.$vux.loading.hide()
-        } else {
-          let data = res.data
-          if (data.flag === 1) {
-            self.showCenter = true
-            self.showApply = false
-            self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-              if (res.status === 200) {
-                let data = res.data
-                self.retailerInfo = data.data ? data.data : data
-                self.$vux.loading.hide()
-                return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-              }
-            }).then(function (res) {
-              if (res) {
-                let data = res.data
-                self.marqueeData = data.data ? data.data : data
-              }
-            })
+      if (self.loginUser.subscribe === 1) {
+        self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+          module: 'retailer', action: 'index'
+        }).then(function (res) {
+          if (res.status !== 200) {
+            self.$vux.loading.hide()
           } else {
-            self.showCenter = false
-            self.showApply = true
-            self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-              { params: { limit: 100 } }
-            ).then(function (res) {
-              self.$vux.loading.hide()
-              if (res.status === 200) {
-                let data = res.data
-                data = data.data ? data.data : data
-                for (let i = 0; i < data.length; i++) {
-                  data[i].checked = false
+            let data = res.data
+            if (data.flag === 1) {
+              self.showCenter = true
+              self.showApply = false
+              self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                if (res.status === 200) {
+                  let data = res.data
+                  self.retailerInfo = data.data ? data.data : data
+                  self.$vux.loading.hide()
+                  return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
                 }
-                self.classData = data
-              }
-            })
+              }).then(function (res) {
+                if (res) {
+                  let data = res.data
+                  self.marqueeData = data.data ? data.data : data
+                }
+              })
+            } else {
+              self.showCenter = false
+              self.showApply = true
+              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+                { params: { limit: 100 } }
+              ).then(function (res) {
+                self.$vux.loading.hide()
+                if (res.status === 200) {
+                  let data = res.data
+                  data = data.data ? data.data : data
+                  for (let i = 0; i < data.length; i++) {
+                    data[i].checked = false
+                  }
+                  self.classData = data
+                }
+              })
+            }
           }
-        }
-      })
+        })
+      }
     },
     init () {
       this.loginUser = User.get()
