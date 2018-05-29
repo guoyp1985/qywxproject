@@ -24,8 +24,8 @@
       					<div class="b_bottom_after padding10">
       						<div class="t-table">
       							<div class="t-cell v_middle" style="width:65px;">
-                      <x-img class="imgcover" :src="product.photo" default-src="../src/assets/images/nopic.jpg" style="width:45px;height:45px;" ></x-img>
-      							</div>
+                      <img class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg'" />
+                    </div>
       							<div class="t-cell v_middle">
       								<div class="name color-black font15">{{ product.name }}</div>
       							</div>
