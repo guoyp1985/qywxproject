@@ -229,6 +229,7 @@ export default {
         case 0:
           if (this.tabdata1.length < limit) {
             this.distabdata1 = false
+            this.total = '0.00'
             this.tabdata1 = []
             this.getData1()
           }

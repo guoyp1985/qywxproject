@@ -323,9 +323,15 @@ var Eleditor = function(){
 	var _flushEditorControllerLayerPosi = function(){
 			if( _$selected ){
 				_$editorController.css({
+					top: _$selected[0].offsetTop + _$selected[0].offsetHeight,
+					width: _$wrap.width() - 5
+				});
+				/*
+				_$editorController.css({
 					top: _$selected.offset().top + _$selected.outerHeight(),
 					width: _$wrap.width() - 5
 				});
+				*/
 			}
 		},
 		_hideEditorControllerLayer = function(){

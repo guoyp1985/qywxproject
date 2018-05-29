@@ -92,17 +92,24 @@ export default {
         self.deliverinfo = data.data ? data.data : data
         return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
       }).then(function (res) {
-        const data = res.data
-        const retdata = data.data ? data.data : data
+        let data = res.data
         self.$vux.loading.hide()
-        if (!retdata.status) {
-          for (let i = 0; i < retdata.length; i++) {
-            let d = retdata[i]
-            d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
+        if (data.flag !== 1) {
+          self.sosTitle = data.error
+          self.showSos = true
+          self.$vux.loading.hide()
+        } else {
+          self.showContainer = true
+          let retdata = data.data ? data.data : data
+          if (!retdata.status) {
+            for (let i = 0; i < retdata.length; i++) {
+              let d = retdata[i]
+              d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
+            }
+            self.data = retdata
           }
-          self.data = retdata
+          self.showData = true
         }
-        self.showData = true
       })
     },
     refresh () {

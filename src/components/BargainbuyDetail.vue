@@ -76,8 +76,7 @@
               </div>
             </template>
             <div v-if="!data.isfinished && !data.havecreate" class="t-cell">
-              <div v-if="!user || user.subscribe == 0" class="btn db" @click="toRedirect">我要参与</div>
-              <div v-else class="btn db" @click="joinin">我要参与</div>
+              <div class="btn db" @click="joinin">我要参与</div>
             </div>
           </template>
           <div v-if="data.havecreate" class="t-cell">
@@ -131,7 +130,6 @@ export default {
   name: 'BargainbuyDetail',
   props: {
     data: Object,
-    product: Object,
     crowduser: {
       type: Object,
       default: { 'avatar': '/src/assets/images/user.jpg' }
@@ -149,7 +147,7 @@ export default {
   },
   data () {
     return {
-      query: {},
+      product: Object,
       nowdateline: new Date().getTime() / 1000,
       isfull: false,
       canbuy: true,
@@ -168,16 +166,14 @@ export default {
     data () {
       return this.data
     },
-    product () {
-      return this.product
-    },
     crowduser () {
       return this.data.crowduser
     }
   },
   methods: {
     toRedirect () {
-      this.$util.wxAccess()
+      const originHref = encodeURIComponent(location.href)
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
     },
     cutevent () {
       const self = this
@@ -258,29 +254,19 @@ export default {
           self.cutdownEnd && self.cutdownEnd()
         }
       }, 1000)
-    },
-    refresh (query) {
-      const self = this
-      if (this.query.id !== query.id || this.query.crowduserid !== query.crowduserid || this.query.share_uid !== query.share_uid) {
-        this.query = query
-        if (self.crowduser && self.crowduser.timeleft) {
-          self.lefthour = self.crowduser.timeleft.hour
-          self.leftminute = self.crowduser.timeleft.minute
-          self.leftsecond = self.crowduser.timeleft.second
-          self.cutdown()
-        }
-      }
     }
   },
   created () {
-    this.refresh(this.$route.query)
-  },
-  activated () {
-    this.refresh(this.$route.query)
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.refresh(to.query)
-    next && next()
+    const self = this
+    if (self.data) {
+      self.product = self.data.product
+      if (self.crowduser && self.crowduser.timeleft) {
+        self.lefthour = self.crowduser.timeleft.hour
+        self.leftminute = self.crowduser.timeleft.minute
+        self.leftsecond = self.crowduser.timeleft.second
+        self.cutdown()
+      }
+    }
   }
 }
 </script>
