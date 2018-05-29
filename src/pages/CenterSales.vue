@@ -38,7 +38,7 @@ export default {
     return {
       showCenter: false,
       showApply: false,
-      afterApply: false,
+      afterApply: true,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: {},
@@ -57,6 +57,7 @@ export default {
     inCenter () {
       const self = this
       self.$vux.loading.show()
+      self.afterApply = false
       self.refresh()
     },
     getData () {
