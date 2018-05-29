@@ -326,9 +326,9 @@ export default {
           self.datalist.push([])
         }
       }
-      alert(JOSN.stringify(self.scrollData))
+      alert(JSON.stringify(self.scrollData))
       alert(self.datalist.length)
-      alert(JOSN.stringify(self.datalist))
+      alert(JSON.stringify(self.datalist))
       this.arrData = this.datalist[index1]
       if (this.datalist[index1].length < limit) {
         this.datalist[index1] = []
