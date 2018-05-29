@@ -536,10 +536,6 @@ export default {
   beforeRouteLeave (to, from, next) {
     Socket.destory(room)
     next()
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.refresh(to.query)
-    next()
   }
 }
 </script>
