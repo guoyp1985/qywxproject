@@ -37,15 +37,15 @@
           <div id="editor-content" class="article-content" v-html="article.content"></div>
           <div class="operate-area">
             <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-              <span class="fa fa-star-o"></span>
+              <span class="al al-xing3 font14"></span>
               <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
             </x-button>
             <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
-              <span class="fa fa-user"></span>
+              <span class="al al-kefu1 font14"></span>
               <span>{{$t('Advisory')}}</span>
             </x-button>
             <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
-              <span class="fa fa-user"></span>
+              <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
               <span>{{$t('Store')}}</span>
             </x-button>
           </div>
@@ -552,7 +552,8 @@ export default {
 }
 #article-content .operate-area span {
   vertical-align: middle;
-  font-size: 12px !important;
+  font-size: 12px;
+  line-height: 16px;
 }
 #article-content .reading-info {
   padding: 20px 0;
@@ -629,5 +630,8 @@ export default {
   font-size:12px;
   bottom: 15px;right: 9px;border-radius: 15px;background-image: linear-gradient(90deg, #f26f12 0%, #fa3f06 99%);
 }
+.news .weui-btn_mini{border: 1px solid #1aad19 !important;}
+.news .weui-btn_plain-primary{border:0px;}
+.news .weui-btn:after{display: none;}
 .news .editor{}
 </style>

@@ -20,12 +20,12 @@
     <router-link :to="{path:'/orderDetail',query:{id:item.id}}">
       <div class="products-info" v-if="item.orderlist.length > 1">
         <div class="product-img">
-          <x-img v-for="(order, index) in item.orderlist" :src="order.photo" default-src="../src/assets/images/nopic.jpg" :key="index" container=".scroll-container"></x-img>
+          <img v-for="(order, index) in item.orderlist" :key="index" class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg'" />
         </div>
       </div>
       <div class="product-info" v-else>
         <div class="product-img">
-          <x-img :src="item.orderlist[0].photo" default-src="../src/assets/images/nopic.jpg" container=".scroll-container"></x-img>
+          <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg'" />
         </div>
         <div class="product-detail">
           <div class="product-name font12">

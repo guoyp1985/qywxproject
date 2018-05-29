@@ -7,10 +7,10 @@
   <div id="order-search" class="containerarea font14 nobottom">
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
-        <tab-item selected @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
-        <tab-item @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
-        <tab-item @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
-        <tab-item @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
+        <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">{{ $t('All') }}</tab-item>
+        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">{{ $t('To Be Delivered') }}</tab-item>
+        <tab-item :selected="selectedIndex==2" @on-item-click="toggleTab">{{ $t('Shipped') }}</tab-item>
+        <tab-item :selected="selectedIndex==3" @on-item-click="toggleTab">{{ $t('Completed') }}</tab-item>
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
@@ -80,6 +80,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       selectedIndex: 0,
       distabdata1: false,
       distabdata2: false,
@@ -362,10 +363,28 @@ export default {
     },
     init () {
       this.$vux.loading.show()
-      this.toggleTab()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if ((this.query.flag === undefined && this.$route.query.flag === undefined) ||this.query.flag !== this.$route.query.flag) {
+        this.query = this.$route.query
+        let flag = parseInt(this.query.flag)
+        switch (flag) {
+          case 2:
+            this.selectedIndex = 1
+            break
+          case 3:
+            this.selectedIndex = 2
+            break
+          case 4:
+            this.selectedIndex = 3
+            break
+          default :
+            this.selectedIndex = 0
+            break
+        }
+        this.toggleTab()
+      }
     }
   },
   created () {

@@ -77,19 +77,19 @@ export default {
           name: 'To Be Delivered',
           icon: 'al-wodedaifahuo3dtouchshangpinxiangqing',
           // color: 'rgba02',
-          link: '/orderSearch'
+          link: '/orderSearch?flag=2'
         },
         {
           name: 'Shipped',
           icon: 'al-buoumaotubiao39',
           // color: 'rgba05',
-          link: '/orderSearch'
+          link: '/orderSearch?flag=3'
         },
         {
           name: 'To be evaluated',
           icon: 'al-buoumaotubiao48',
           // color: 'rgba04',
-          link: '/orderSearch'
+          link: '/orderSearch?flag=4'
         }
       ],
       btns1: [
