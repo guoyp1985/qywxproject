@@ -369,6 +369,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
         this.query = this.$route.query
+        this.module = this.query.module
         this.initData()
         this.getData()
         console.log(1)
@@ -377,9 +378,6 @@ export default {
         console.log(2)
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
