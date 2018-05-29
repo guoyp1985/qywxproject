@@ -128,16 +128,17 @@ export default {
 
 <style lang="less">
 .in-btn{
-  width:80px;height:30px;line-height:30px;text-align:center;border-radius:5px;
-  border:#fff 1px solid;color:#fff;
-  position: absolute;left: 50%;margin-left: -40px;bottom: 70px;
+  width:90px;height:35px;line-height:35px;text-align:center;border-radius:5px;
+  color:#15a3ee;background-color:#fff;box-shadow: 0 0 8px 2px #52c4f4;font-size: 16px !important;
+  position: absolute;left: 50%;margin-left: -45px;bottom: 60px;
 }
 #centersales .vux-swiper-item img{
   object-fit: cover;
   width: 100%;
+  height:100%;
   max-height:100%;
   overflow: hidden;
-  object-position: center;
+  object-position: center center;
 }
 #centersales .vux-slider > .vux-indicator,#centersales .vux-slider .vux-indicator-right{right:50%;margin-right:-18px;bottom:25px;}
 </style>
