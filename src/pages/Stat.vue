@@ -26,7 +26,8 @@
               <tab-item v-for="(item,index) in tabsdata" :key="index">{{ item.title }}</tab-item>
             </tab>
           </div>
-            <swiper ref="tabSwiper" v-model="selectedIndex" class="no-indicator" @on-index-change="swiperChange">
+          <div ref="tabSwiper" class="w_100 bg-white" style="position:relative;">
+            <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange" style="position:absolute;left:0;top:0;right:0;bottom:0;">
               <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
                 <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
                   <template>
@@ -191,6 +192,7 @@
                     </div>
                   </template>
                 </div>
+              </swiper-item>
             </swiper>
           </div>
         </template>
@@ -308,7 +310,8 @@ export default {
           swiper.style['position'] = 'absolute'
           swiper.style['top'] = `${self.tabtop}px`
           swiper.style['bottom'] = '0px'
-          swiper.style['height'] = window.innerHeight - self.tabtop
+          let h = document.body.clientHeight - self.tabtop
+          swiper.style['height'] = `${h}px`
         }
       })
     },
