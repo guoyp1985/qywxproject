@@ -378,6 +378,7 @@ export default {
     onTalkRecordStop () {
       const self = this
       Voice.voiceRecordStop(sid => {
+        alert(sid)
         self.sendVoice(sid)
       })
     },
