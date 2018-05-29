@@ -169,7 +169,6 @@ export default {
       orderdata: [],
       payprice: '0.00',
       showpopup: false,
-      showalert: false,
       addressdata: [],
       submitdata: {
         addressid: '',
@@ -211,7 +210,6 @@ export default {
       this.orderdata = []
       this.payprice = '0.00'
       this.showpopup = false
-      this.this.showalert = false
       this.addressdata = []
       this.submitdata = {
         addressid: '',
