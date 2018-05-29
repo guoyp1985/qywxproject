@@ -20,182 +20,180 @@
           </div>
         </div>
         <div ref="tabArea"></div>
-        <div class="tabarea bg-white" style="border:blue 1px solid;">
-          <template v-if="tabsdata && tabsdata.length > 0">
+        <template v-if="tabsdata && tabsdata.length > 0">
+          <div class="tabarea bg-white" style="border:blue 1px solid;">
             <tab v-model="selectedIndex" class="v-tab">
-              <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
+              <tab-item v-for="(item,index) in tabsdata" :key="index">{{ item.title }}</tab-item>
             </tab>
-            <div ref="tabSwiper" class="w_100 bg-white" style="border:red 1px solid;">
-              <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-                <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
-                  <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="/src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.linkman }}</div>
-                            <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+          </div>
+            <swiper ref="tabSwiper" v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange" style="border:#000 1px solid;">
+              <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
+                <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="/src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                          <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'buylist'" class="scroll_list border-box swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.username }}</div>
-                            <div class="clamp1 color-gray">订单金额：{{ item.special }}</div>
-                            <div class="clamp1 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'buylist'" class="scroll_list border-box swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.username }}</div>
+                          <div class="clamp1 color-gray">订单金额：{{ item.special }}</div>
+                          <div class="clamp1 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'sharelist'" class="scroll_list border-box swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.username }}</div>
-                            <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
-                            <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'sharelist'" class="scroll_list border-box swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.username }}</div>
+                          <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
+                          <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'asklist'" class="scroll_list border-box swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.linkman }}</div>
-                            <div class="clamp1">{{ item.content }}</div>
-                            <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'asklist'" class="scroll_list border-box swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                          <div class="clamp1">{{ item.content }}</div>
+                          <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'viewlist'" class="scroll_list border-box swiper-inner scroll-container5" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.username }}</div>
-                            <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                            <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'viewlist'" class="scroll_list border-box swiper-inner scroll-container5" ref="scrollContainer5" @scroll="handleScroll('scrollContainer5')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.username }}</div>
+                          <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                          <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'second'" class="scroll_list border-box swiper-inner scroll-container6" ref="scrollContainer6" @scroll="handleScroll('scrollContainer6')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.linkman }}</div>
-                            <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                            <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'second'" class="scroll_list border-box swiper-inner scroll-container6" ref="scrollContainer6" @scroll="handleScroll('scrollContainer6')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                          <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                          <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'crowdlist'" class="scroll_list border-box swiper-inner scroll-container7" ref="scrollContainer7" @scroll="handleScroll('scrollContainer7')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
-                            <div class="color-gray">团员: {{ item.otherusers }}</div>
-                            <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'crowdlist'" class="scroll_list border-box swiper-inner scroll-container7" ref="scrollContainer7" @scroll="handleScroll('scrollContainer7')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
+                          <div class="color-gray">团员: {{ item.otherusers }}</div>
+                          <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list border-box swiper-inner scroll-container8" ref="scrollContainer8" @scroll="handleScroll('scrollContainer8')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.linkman }}</div>
-                            <div class="clamp1 color-gray">{{ item.dateline }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'crowdlist_isdeliver_1'" class="scroll_list border-box swiper-inner scroll-container8" ref="scrollContainer8" @scroll="handleScroll('scrollContainer8')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                          <div class="clamp1 color-gray">{{ item.dateline }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                  <div v-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list border-box swiper-inner scroll-container9" ref="scrollContainer9" @scroll="handleScroll('scrollContainer9')">
-                    <template>
-                      <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                      <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
-                        <div class="flex_left">
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                            <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
-                          </router-link>
-                          <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                            <div class="clamp1 color-gray2">{{ item.linkman }}</div>
-                            <div class="clamp1 color-gray">
-                              <span class="db-in">已砍到: <span class="color-orange">{{ $t('RMB') }}{{ item.currentprice }}</span></span>
-                              <span class="db-in ml5">助力: {{ item.sumothers }}人</span>
-                            </div>
-                            <div class="clamp1 color-gray">{{ item.dateline }}</div>
-                          </router-link>
-                          <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
-                        </div>
+                    </div>
+                  </template>
+                </div>
+                <div v-if="tabitem.type == 'crowdlist_isdeliver_0'" class="scroll_list border-box swiper-inner scroll-container9" ref="scrollContainer9" @scroll="handleScroll('scrollContainer9')">
+                  <template>
+                    <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                    <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                      <div class="flex_left">
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                          <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+                        </router-link>
+                        <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                          <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                          <div class="clamp1 color-gray">
+                            <span class="db-in">已砍到: <span class="color-orange">{{ $t('RMB') }}{{ item.currentprice }}</span></span>
+                            <span class="db-in ml5">助力: {{ item.sumothers }}人</span>
+                          </div>
+                          <div class="clamp1 color-gray">{{ item.dateline }}</div>
+                        </router-link>
+                        <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                       </div>
-                    </template>
-                  </div>
-                </swiper-item>
-              </swiper>
-            </div>
-          </template>
-        </div>
+                    </div>
+                  </template>
+                </div>
+              </swiper-item>
+            </swiper>
+        </template>
       </div>
     </template>
   </div>
@@ -308,6 +306,7 @@ export default {
           self.tabtop = tabArea.offsetTop + 44
           alert(self.tabtop)
           let swiper = self.$refs.tabSwiper[0] ? self.$refs.tabSwiper[0] : self.$refs.tabSwiper
+          console.log(swiper)
           swiper.style['position'] = 'absolute'
           swiper.style['top'] = `${self.tabtop}px`
           swiper.style['bottom'] = '0px'
