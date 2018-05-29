@@ -19,12 +19,12 @@
             </div>
           </div>
         </div>
-        <div class="tabarea bg-white" ref="tabArea">
+        <div class="tabarea bg-white" ref="tabArea" style="border:blue 1px solid;">
           <template v-if="tabsdata && tabsdata.length > 0">
             <tab v-model="selectedIndex" class="v-tab">
               <tab-item v-for="(item,index) in tabsdata" :selected="index == 0" :key="index">{{ item.title }}</tab-item>
             </tab>
-            <div ref="tabSwiper" class="w_100 bg-white">
+            <div ref="tabSwiper" class="w_100 bg-white" style="border:red 1px solid;">
               <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
                 <swiper-item v-for="(tabitem, index) in tabsdata" :key="index">
                   <div v-if="tabitem.type == 'shareview'" class="scroll_list border-box swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1')">
@@ -301,7 +301,6 @@ export default {
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
         self.arrData = self.datalist[index]
-        alert(JSON.stringify(self.arrData))
         if (self.isFirst) {
           self.isFirst = false
           let tabArea = self.$refs.tabArea[0] ? self.$refs.tabArea[0] : self.$refs.tabArea
