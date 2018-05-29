@@ -122,8 +122,8 @@ class Time {
 		lefts = diffs % TIME_UNIT.MINUTE
 		seconds = Math.floor( lefts / TIME_UNIT.SECOND )
 		dateStr = minutes ? minutes + "'" : ""
-		dataStr += seconds ? seconds + "\"" : ""
-		return dataStr
+		dateStr += seconds ? seconds + "\"" : ""
+		return dateStr
 	}
 }
 
