@@ -313,11 +313,13 @@ export default {
       })
     },
     swiperChange (index) {
+      const self = this
       if (index !== undefined) {
         this.selectedIndex = index
       }
-      const self = this
+      alert(this.selectedIndex)
       const index1 = this.selectedIndex
+      alert(index1)
       this.clickTabitem = this.tabsdata[index1]
       this.arrData = this.datalist[index1]
       if (self.scrollData.length === 0) {
@@ -356,6 +358,7 @@ export default {
           alert(self.tabsdata.length)
           document.title = `统计-${self.data.title}`
           self.clickTabitem = self.tabsdata[0]
+          alert(JSON.stringify(self.clickTabitem))
           self.swiperChange()
         }
       })
