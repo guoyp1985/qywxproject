@@ -23,6 +23,11 @@ const Socket = {
         console.info(`WS: Login Room ${room}`)
       } else if (data.type === 'logout') {
         console.info(`WS: Logout Room ${room}`)
+        // ws.onopen = null
+        // ws.onmessage = null
+        // ws.onclose = null
+        // ws.onerror = null
+        ws = null
       } else if (data.type === 'say') {
         console.info(`WS: Receive Message From Room ${room}`)
         const message = JSON.parse(e.data)
@@ -63,11 +68,6 @@ const Socket = {
       type: 'logout',
       room_id: room
     })
-    ws.onopen = null
-    ws.onmessage = null
-    ws.onclose = null
-    ws.onerror = null
-    ws = null
   }
 }
 

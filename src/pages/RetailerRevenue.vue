@@ -24,7 +24,7 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                   <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                    <check-icon class="x-check-icon b_bottom_after pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
                           <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
@@ -37,13 +37,13 @@
                         </div>
                       </div>
                     </check-icon>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                       <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入</div>
+                      <div class="font14 color-999">实际收入：</div>
                       <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                     </div>
                   </template>
@@ -61,14 +61,14 @@
                         </div>
                       </div>
                     </check-icon>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999">
                         <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
                         <span class="v_middle">{{ item.products }}</span>
                       </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入</div>
+                      <div class="font14 color-999">实际收入：</div>
                       <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                     </div>
                   </template>
@@ -77,7 +77,7 @@
             </div>
             <div class="toolbar_bg bg-white list-shadow" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="t-table h_100">
-                <div class="t-cell h_100 v_middle w100">
+                <div class="t-cell h_100 v_middle w100 pl5 border-box">
                   <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent"><span class="color-lightgray">全选</span></check-icon>
                 </div>
                 <div class="t-cell h_100 v_middle align_left color-lightgray">合计：<font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
@@ -94,7 +94,7 @@
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
+                  <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
                         <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
@@ -107,18 +107,18 @@
                       </div>
                     </div>
                   </div>
-                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                     <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
-                    <div class="font14 color-999">实际收入</div>
+                    <div class="font14 color-999">实际收入：</div>
                     <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
                 <template v-else>
-                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
+                  <div class="pl12 pr12 pt10 pb10">
                   <div class="t-table">
                     <div class="t-cell pic v_middle w45 pr10 border-box">
                       <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
@@ -131,14 +131,14 @@
                     </div>
                   </div>
                   </div>
-                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999">
                       <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
                       <span class="v_middle">{{ item.products }}</span>
                     </div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
-                    <div class="font14 color-999">实际收入</div>
+                    <div class="font14 color-999">实际收入：</div>
                     <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
@@ -154,7 +154,7 @@
               </div>
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                 <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
+                  <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
                         <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
@@ -167,18 +167,18 @@
                       </div>
                     </div>
                   </div>
-                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span></div>
                     <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
-                    <div class="font14 color-999">实际收入</div>
+                    <div class="font14 color-999">实际收入：</div>
                     <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
                 <template v-else>
-                  <div class="b_bottom_after pl12 pr12 pt10 pb10">
+                  <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
                         <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
@@ -191,14 +191,14 @@
                       </div>
                     </div>
                   </div>
-                  <div class="pl12 pr12 pt10 pb10 border-box bg-page">
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999">
                       <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
                       <span class="v_middle">{{ item.products }}</span>
                     </div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
-                    <div class="font14 color-999">实际收入</div>
+                    <div class="font14 color-999">实际收入：</div>
                     <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>

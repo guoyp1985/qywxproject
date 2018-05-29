@@ -57,8 +57,8 @@
         </template>
       </template>
     </div>
-    <div class="bg-white pl12 pr12 s-bottom flex_center list-shadow">
-      <router-link class="addproduct flex_center bg-red color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addProduct">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -415,13 +415,9 @@ export default {
   height:8px;
   background:#fff;
 }
-.rproductlist .s-bottom{
-  height: 50px;}
-.rproductlist .addproduct{
-  border-radius: 50px;
-  height: 36px;
-  width: 100%;
-}
+.rproductlist .s-container{bottom:50px;}
+.rproductlist .s-bottom{height: 50px;}
+.rproductlist .addproduct{border-radius: 50px;height: 36px;width: 100%;}
 .rproductlist .pro_list_top{
   background: url("../assets/images/product_list_top.png");
   background-repeat: no-repeat;
