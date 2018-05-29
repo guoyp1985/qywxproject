@@ -1,15 +1,19 @@
 import Vue from 'vue'
+import Time from './time'
 let switcher = true
+let time = null
 const Voice = {
   wxVoiceRecord: function (callback) {
     if (!switcher) return
     switcher = false
+    time = new Time()
     Vue.wechat.startRecord()
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
         switcher = true
-        const localId = res.localId
-        callback && callback(localId)
+        res.time = '60"'
+        // const localId = res.localId
+        callback && callback(res)
       }
     })
   },
@@ -17,15 +21,15 @@ const Voice = {
     Vue.wechat.stopRecord({
       success: function (res) {
         switcher = true
-        console.log(res)
-        const localId = res.localId
-        callback && callback(localId)
+        res.time = time.counter(time.time())
+        // const localId = res.localId
+        callback && callback(res)
       }
     })
   },
-  wxVoiceUpload: function (id, callback) {
+  wxVoiceUpload: function (data, callback) {
     Vue.wechat.uploadVoice({
-      localId: id,
+      localId: data.localId,
       isShowProgressTips: 1,
       success: function (res) {
         const serverId = res.serverId
@@ -59,13 +63,13 @@ const Voice = {
     Vue.wechat.stopVoice({ localId: id })
   },
   voiceRecord: function (callback) {
-    Voice.wxVoiceRecord(lid => {
-      Voice.wxVoiceUpload(lid, callback)
+    Voice.wxVoiceRecord(res => {
+      Voice.wxVoiceUpload(res, callback)
     })
   },
   voiceRecordStop: function(callback) {
-    Voice.wxVoiceRecordStop(lid => {
-      Voice.wxVoiceUpload(lid, callback)
+    Voice.wxVoiceRecordStop(res => {
+      Voice.wxVoiceUpload(res, callback)
     })
   },
   voicePlay: function (sid) {
