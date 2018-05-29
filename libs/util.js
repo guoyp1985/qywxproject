@@ -88,16 +88,16 @@ Util.install = function (Vue, options) {
       }
       return list
     },
-    checkMobile: function (mobile) {
-      if (isNaN(mobile)) return false;
-      if (!mobile || mobile=="" || mobile.length!=11) {
-      	return false;
-      }
-      if (/^13\d{9}$/g.test(mobile) || (/^15[0-35-9]\d{8}$/g.test(mobile)) || (/^18[012345-9]\d{8}$/g.test(mobile)) || (/^17[06578]\d{8}$/g.test(mobile)) || (/^16[6]\d{8}$/g.test(mobile)) || (/^19[89]\d{8}$/g.test(mobile)) || (/^14[57]\d{8}$/g.test(mobile))) {
-      	return true;
-      }
-      return false;
-    },
+    // checkMobile: function (mobile) {
+    //   if (isNaN(mobile)) return false;
+    //   if (!mobile || mobile=="" || mobile.length!=11) {
+    //   	return false;
+    //   }
+    //   if (/^13\d{9}$/g.test(mobile) || (/^15[0-35-9]\d{8}$/g.test(mobile)) || (/^18[012345-9]\d{8}$/g.test(mobile)) || (/^17[06578]\d{8}$/g.test(mobile)) || (/^16[6]\d{8}$/g.test(mobile)) || (/^19[89]\d{8}$/g.test(mobile)) || (/^14[57]\d{8}$/g.test(mobile))) {
+    //   	return true;
+    //   }
+    //   return false;
+    // },
     wxAccess: function () {
       const user = User.get()
       const lUrl = urlParse(location.href, true)
@@ -125,65 +125,6 @@ Util.install = function (Vue, options) {
         })
       }
     },
-    // webSocketFactory: (() => {
-    //   let ws = null
-    //   return () => ws = (ws ? ws : new WebSocket(ENV.SocketApi))
-    // })(),
-    // socketInit: function (uid, linkman, room) {
-    //   const roomId = `${ENV.SocketBokaApi}-news-${room}`
-    //   const ws = this.webSocketFactory()
-    //   Roomid.set(roomId)
-    //   ws.onopen = function () {
-    //     let loginData = {
-    //       type: 'login',
-    //       uid: uid,
-    //       client_name: linkman.replace(/"/g, '\\"'),
-    //       room_id: roomId
-    //     }
-    //     ws.send(JSON.stringify(loginData))
-    //   }
-    //   ws.onmessage = function (e) {
-    //     const data = JSON.parse(e.data)
-    //     if (data.type === 'login') {
-    //       console.log('in login')
-    //     } else if (data.type === 'logout') {
-    //       console.log('in logout')
-    //     } else if (data.type === 'say') {
-    //       console.log('say')
-    //       let edata = JSON.parse(e.data)
-    //       let saycontent = edata.content
-    //       if (!this.isNull(saycontent)) {
-    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-    //       }
-    //       let saydata = {
-    //         uid: edata.from_uid,
-    //         content: saycontent,
-    //         dateline: edata.time,
-    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
-    //         picurl: edata.picurl ? edata.picurl : '',
-    //         thumb: edata.thumb ? edata.thumb : '',
-    //         username: edata.from_client_name,
-    //         id: edata.msgid,
-    //         roomid: edata.room_id,
-    //         avatar: edata.avatar,
-    //         newsdata: edata.newsdata
-    //       }
-    //     }
-    //   }
-    //   ws.onclose = function () {
-    //     console.log('ws closed')
-    //     self.wsConnect()
-    //   }
-    //   ws.onerror = function () {
-    //     console.log('ws error')
-    //   }
-    // },
-    // socketDestory: function (room) {
-    //   socket.send(JSON.stringify({
-    //     type: 'logout',
-    //     room_id: room
-    //   }))
-    // },
     delay: (text) => {
       let ret = 1000
       let len = text.length
@@ -213,7 +154,7 @@ Util.install = function (Vue, options) {
       alert(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
       SHA1(`accesstoken=${accessToken}&appid=${appId}&noncestr=${nonceStr}&timestamp=${timeStamp}&url=${url}`)
     },
-    query : (url) => {
+    query: (url) => {
       if (!url) {
         url = location.href
       }

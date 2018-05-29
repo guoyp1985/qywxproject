@@ -208,7 +208,6 @@ export default {
       Socket.listening(room, uid, linkman)
     },
     init () {
-      this.$util.wxAccess()
       this.loginUser = User.get()
     },
     refresh (query) {

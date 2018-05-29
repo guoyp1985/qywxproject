@@ -38,7 +38,7 @@ export default {
     return {
       showCenter: false,
       showApply: false,
-      afterApply: true,
+      afterApply: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: {},

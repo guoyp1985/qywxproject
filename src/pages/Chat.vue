@@ -54,7 +54,7 @@
           <group class="textarea-box">
             <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-change="onChange" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
-          <x-button class="talk-btn no-select" v-show="showVoiceCom">{{$t('Press And Talk')}}</x-button>
+          <x-button class="talk-btn no-select" v-show="showVoiceCom" @keydown.navtive="onTalkRecord" @keyup.navtive="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
         </div>
         <div class="emotion-cell">
           <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
@@ -181,6 +181,7 @@ import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
+import Voice from '#/voice'
 
 let room = ''
 export default {
@@ -311,6 +312,16 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
+    sendVoice (voiceId) {
+      const params = {
+        touid: this.query.uid,
+        content: '',
+        module: self.module,
+        sendtype: 'voice',
+        mediaid: voiceId
+      }
+      this.sendData(params)
+    },
     sendPhoto () {
       const self = this
       if (!window.WeixinJSBridge) {
@@ -339,24 +350,37 @@ export default {
           }
         })
       } else {
-        self.$wechat.ready(function () {
-          self.$util.wxUploadImage({
-            maxnum: 1,
-            handleCallback: function (data) {
-              if (data.flag === 1 && data.data) {
-                self.sendData({
-                  touid: self.query.uid,
-                  content: '',
-                  module: this.module,
-                  sendtype: 'image',
-                  picurl: data.data,
-                  thumb: ''
-                })
-              }
+        // self.$wechat.ready(function () {
+        self.$util.wxUploadImage({
+          maxnum: 1,
+          handleCallback: function (data) {
+            if (data.flag === 1 && data.data) {
+              self.sendData({
+                touid: self.query.uid,
+                content: '',
+                module: this.module,
+                sendtype: 'image',
+                picurl: data.data,
+                thumb: ''
+              })
             }
-          })
+          }
         })
+        // })
       }
+    },
+    onTalkRecord () {
+      const self = this
+      Voice.voiceRecord(sid => {
+        self.sendVoice(sid)
+      })
+    },
+    onTalkRecordStop () {
+      const self = this
+      Voice.voiceRecordStop(sid => {
+        alert(sid)
+        self.sendVoice(sid)
+      })
     },
     viewUserInfo () {
     },
@@ -390,11 +414,12 @@ export default {
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
             messageid: retdata.id,
-            room_id: room
+            room_id: room,
+            ...retdata
           }
-          for (let key in retdata) {
-            senddata[key] = retdata[key]
-          }
+          // for (let key in retdata) {
+          //   senddata[key] = retdata[key]
+          // }
           // let sendtxt = JSON.stringify(senddata)
           // websocket.send(sendtxt)
           Socket.send(senddata)
@@ -611,6 +636,12 @@ export default {
         }
       })
     },
+    setScrollTop () {
+      this.$nextTick(() => {
+        this.$refs.scrollContainer.scrollTop = 1000//this.$refs.scrollContent.clientHeight
+        console.log(this.$refs.scrollContainer.scrollTop)
+      })
+    },
     getNewsData () {
       const self = this
       let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit1 }
@@ -689,9 +720,7 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman, data => {
         self.data.push(data)
-        this.$nextTick(() => {
-          self.$refs.scrollContainer.scrollTop = self.$refs.scrollContent.clientHeight
-        })
+        self.setScrollTop()
       })
     },
     getData () {
@@ -702,9 +731,10 @@ export default {
       const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
         self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.data = self.data.concat(retdata)
+        const data = res.data.data
+        // const retdata = data.data ? data.data : data
+        self.data = self.data.concat(data)
+        self.setScrollTop()
       })
     },
     init () {
@@ -730,6 +760,7 @@ export default {
     this.msgTextarea.addEventListener('keyup', function () {
       self.setSendStatus()
     })
+    this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
     this.refresh()
@@ -860,21 +891,33 @@ export default {
 }
 
 #chat-room .chat-area{
-  position:absolute;left:0;top:0;right:0;bottom:52px;overflow-y:auto;
+  position:absolute;
+  left:0;
+  top:0;
+  right:0;
+  bottom:52px;
+  overflow-y:auto;
 }
-
+.chatlist {
+  padding: 0 10px;
+  line-height: 1.1;
+}
+.chatlist *{
+  box-sizing: border-box;
+}
 .chatlist .messages-date {
-    text-align: center;font-weight: 500;font-size: 11px;
-    line-height: 1;margin: 10px 15px;color: #8e8e93;
+  text-align: center;
+  font-weight: 500;
+  font-size: 11px;
+  padding: 10px 0;
+  color: #8e8e93;
 }
-.chatlist{width:100%;padding: 0 10px;box-sizing: border-box;}
-.chatlist *{box-sizing: border-box;}
 .chatlist .chatitem {position: relative;margin-bottom: 20px;}
 .chatlist .chatitem.left{padding-right:50px;}
 .chatlist .chatitem.right{padding-left:50px;}
 .chatlist .chatitem .head {
 	position: absolute;top: 0;
-    	width: 40px;height: 40px;overflow: hidden;
+  width: 40px;height: 40px;overflow: hidden;
 }
 .chatlist .chatitem.left .head {left: 0;}
 .chatlist .chatitem.right .head {right: 0;}

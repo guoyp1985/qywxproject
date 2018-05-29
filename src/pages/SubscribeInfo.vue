@@ -30,6 +30,9 @@ import { XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
+const limit = 10
+let pageStart = 0
+
 export default {
   components: {
     XImg
@@ -39,9 +42,7 @@ export default {
       loginUser: {},
       data: [],
       disData: false,
-      WeixinQrcode: ENV.WeixinQrcode,
-      limit: 10,
-      pagestart1: 0
+      WeixinQrcode: ENV.WeixinQrcode
     }
   },
   filters: {
@@ -68,8 +69,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.data.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.data.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getData1()
           }
@@ -95,7 +96,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.data.length < this.limit) {
+      if (this.data.length < limit) {
         this.disData = false
         this.data = []
         this.getData1()

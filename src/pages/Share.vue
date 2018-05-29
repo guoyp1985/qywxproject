@@ -46,6 +46,9 @@ Sharing Details:
 import { Group, GroupTitle, Cell, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+
+const limit = 10
+let pageStart = 0
 export default {
   components: {
     Group, GroupTitle, Cell, XImg
@@ -54,9 +57,7 @@ export default {
     return {
       query: {},
       disList: false,
-      list: [],
-      pagestart: 0,
-      limit: 10
+      list: []
     }
   },
   filters: {
@@ -73,8 +74,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.list.length === (self.pagestart + 1) * self.limit) {
-            self.pagestart++
+          if (self.list.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getData()
           }
@@ -91,7 +92,7 @@ export default {
     },
     getData () {
       const self = this
-      const params = { pagestart: self.pagestart, limit: self.limit }
+      const params = { pagestart: pageStart, limit: limit }
       this.$http.get(`${ENV.BokaApi}/api/user/shareList`, { params: params })
       .then(res => {
         self.$vux.loading.hide()
@@ -103,10 +104,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.list.length < this.limit) {
+      if (this.list.length < limit) {
         this.disList = false
         this.list = []
         this.$vux.loading.show()
+        pageStart = 0
         this.getData()
       }
     }
