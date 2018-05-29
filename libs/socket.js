@@ -18,7 +18,6 @@ const Socket = {
     }
     ws.onmessage = e => {
       const data = JSON.parse(e.data)
-      console.log(data)
       if (data.type === 'login') {
         console.info(`WS: Login Room ${room}`)
       } else if (data.type === 'logout') {

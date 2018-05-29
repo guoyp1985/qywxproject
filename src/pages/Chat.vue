@@ -732,6 +732,7 @@ export default {
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening(room, uid, linkman, data => {
+        console.log(data)
         self.data.push(data)
         self.setScrollTop()
       })
