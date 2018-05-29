@@ -100,7 +100,7 @@
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#f2f2f2 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
         <div class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9" @click="clickWetchat"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
       </div>
       <div v-transfer-dom class="x-popup">
