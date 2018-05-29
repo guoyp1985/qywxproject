@@ -306,10 +306,13 @@ export default {
           self.isFirst = false
           let tabArea = self.$refs.tabArea[0] ? self.$refs.tabArea[0] : self.$refs.tabArea
           self.tabtop = tabArea.offsetTop + 44
+          alert(self.tabtop)
           let swiper = self.$refs.tabSwiper[0] ? self.$refs.tabSwiper[0] : self.$refs.tabSwiper
           swiper.style['position'] = 'absolute'
           swiper.style['top'] = `${self.tabtop}px`
           swiper.style['bottom'] = '0px'
+          console.log(swiper.style['top'])
+          console.log(swiper.style['bottom'])
         }
       })
     },
