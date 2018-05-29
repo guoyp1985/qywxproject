@@ -160,6 +160,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.article = res.data.data
+          document.title = self.article.title
           self.$util.wxShare({
             data: {
               title: self.article.seotitle || self.article.title,
