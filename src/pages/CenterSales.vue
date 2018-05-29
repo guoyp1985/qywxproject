@@ -137,7 +137,7 @@ export default {
   width: 100%;
   max-height:100%;
   overflow: hidden;
-  object-position: top;
+  object-position: center;
 }
 #centersales .vux-slider > .vux-indicator,#centersales .vux-slider .vux-indicator-right{right:50%;margin-right:-18px;bottom:25px;}
 </style>
