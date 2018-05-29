@@ -6,7 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <div class="chat-area bg-white scroll-container" ref="scrollContainer">
-      <div class="chatlist">
+      <div class="chatlist" ref="scrollContent">
         <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
           <div :class="`chatitem ${ getitemclass(item) }`">
@@ -689,13 +689,9 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman, data => {
         self.data.push(data)
-        console.log(data)
-        // if (data.isNew) {
-        //   let scrollarea = self.$refs.scrollContainer
-        //   if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
-        //     scrollarea.scrollTop = scrollarea.scrollHeight + 50
-        //   }
-        // }
+        this.$nextTick(() => {
+          self.$refs.scrollContainer.scrollTop = self.$refs.scrollContent.clientHeight
+        })
       })
     },
     getData () {
