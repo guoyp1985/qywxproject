@@ -17,7 +17,7 @@
     				<img src="../assets/images/share1.jpg" />
     			</div>
     		</div>
-        <title-tip scroll-box="article-content" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <title-tip scroll-box="article-content" :user="reward" :avatar-href="reward.headimgurl" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
