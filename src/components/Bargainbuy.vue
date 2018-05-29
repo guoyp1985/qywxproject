@@ -54,6 +54,7 @@ export default {
   name: 'Bargainbuy',
   props: {
     data: Object,
+    product: Object,
     user: {
       type: Object,
       default: { 'avatar': '/src/assets/images/user.jpg' }
@@ -65,8 +66,6 @@ export default {
   },
   data () {
     return {
-      loginUser: Object,
-      product: Object
     }
   },
   filters: {
@@ -74,17 +73,10 @@ export default {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
-  created () {
-    const self = this
-    self.loginUser = self.user
-    if (self.data) {
-      self.product = self.data.product
-    }
-  },
   methods: {
     joinin () {
       const self = this
-      if (self.loginUser.subscribe === 0) {
+      if (self.user.subscribe === 0) {
         this.$util.wxAccess()
       } else {
         self.$vux.loading.show()

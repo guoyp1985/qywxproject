@@ -5,13 +5,13 @@
     </template>
     <div v-if="showContainer && bargainbuyType" class="h_100">
       <template v-if="showBargainbuy">
-        <bargainbuy :data="data" :user="loginUser" :on-join="joinSuccess"></bargainbuy>
+        <bargainbuy :data="data" :product="product" :user="loginUser" :on-join="joinSuccess"></bargainbuy>
       </template>
       <template v-if="showBargainbuyView">
-        <bargainbuy-view :data="data" :crowduser="crowduser" :cutdown-end="cutdownCallback" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
+        <bargainbuy-view :data="data" :product="product" :crowduser="crowduser" :cutdown-end="cutdownCallback" :user="loginUser" :cut-data="cutData"></bargainbuy-view>
       </template>
       <template v-if="showBargianbuyDetail">
-        <bargainbuy-detail :data="data" :crowduser="crowduser" :user="loginUser" :cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
+        <bargainbuy-detail :data="data" :product="product" :crowduser="crowduser" :user="loginUser" :cut-data="cutData" :on-cut="cutSuccess" :on-join="joinSuccess"></bargainbuy-detail>
       </template>
       <share-success
         v-show="showShareSuccess"
@@ -211,7 +211,7 @@ export default {
       this.loginUser = User.get()
     },
     refresh (query) {
-      if (this.query.id !== query.id || this.query.crowduserid !== query.crowduserid) {
+      if (this.query.id !== query.id || this.query.crowduserid !== query.crowduserid || this.query.share_uid !== query.share_uid) {
         this.query = query
         if (this.query.crowduserid) {
           this.crowduserid = this.query.crowduserid
