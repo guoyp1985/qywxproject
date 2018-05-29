@@ -301,6 +301,7 @@ export default {
         let retdata = data.data ? data.data : data
         self.datalist[index] = self.datalist[index].concat(retdata)
         self.arrData = self.datalist[index]
+        alert(JSON.stringify(self.arrData))
         if (self.isFirst) {
           self.isFirst = false
           let tabArea = self.$refs.tabArea[0] ? self.$refs.tabArea[0] : self.$refs.tabArea
@@ -319,17 +320,12 @@ export default {
       }
       const index1 = this.selectedIndex
       this.clickTabitem = this.tabsdata[index1]
-      alert(self.scrollData.length)
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
           self.datalist.push([])
         }
       }
-      alert(JSON.stringify(self.scrollData))
-      alert(self.datalist.length)
-      alert(JSON.stringify(self.datalist))
-      this.arrData = this.datalist[index1]
       if (this.datalist[index1].length < limit) {
         this.datalist[index1] = []
         self.$vux.loading.show()
