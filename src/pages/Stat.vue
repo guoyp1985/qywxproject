@@ -349,7 +349,11 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.statData = data.data ? data.data : data
+          alert(JSON.stringify(self.statData))
+          alert(self.statData.length)
           self.tabsdata = data.detail
+          alert(JSON.stringify(self.tabsdata))
+          alert(self.tabsdata.length)
           document.title = `统计-${self.data.title}`
           self.clickTabitem = self.tabsdata[0]
           self.swiperChange()
