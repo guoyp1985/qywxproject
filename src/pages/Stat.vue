@@ -319,12 +319,16 @@ export default {
       }
       const index1 = this.selectedIndex
       this.clickTabitem = this.tabsdata[index1]
+      alert(self.scrollData.length)
       if (self.scrollData.length === 0) {
         for (let i = 0; i < self.tabsdata.length; i++) {
           self.scrollData.push({ pagestart: 0 })
           self.datalist.push([])
         }
       }
+      alert(JOSN.stringify(self.scrollData))
+      alert(self.datalist.length)
+      alert(JOSN.stringify(self.datalist))
       this.arrData = this.datalist[index1]
       if (this.datalist[index1].length < limit) {
         this.datalist[index1] = []
