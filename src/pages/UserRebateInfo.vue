@@ -116,6 +116,12 @@
 import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
+
+const limit = 10
+let pageStart1 = 0
+let pageStart2 = 0
+let pageStart3 = 0
+
 export default {
   components: {
     ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton
@@ -134,11 +140,7 @@ export default {
       distabdata3: false,
       tabdata1: [],
       tabdata2: [],
-      tabdata3: [],
-      limit: 10,
-      pagestart1: 0,
-      pagestart2: 0,
-      pagestart3: 0
+      tabdata3: []
     }
   },
   filters: {
@@ -154,20 +156,20 @@ export default {
         element: scrollarea,
         callback: function () {
           if (index === 0) {
-            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
+            if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+              pageStart1++
               self.$vux.loading.show()
               self.getData1()
             }
           } else if (index === 1) {
-            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-              self.pagestart2++
+            if (self.tabdata2.length === (pageStart2 + 1) * limit) {
+              pageStart2++
               self.$vux.loading.show()
               self.getData2()
             }
           } else if (index === 2) {
-            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-              self.pagestart3++
+            if (self.tabdata3.length === (pageStart3 + 1) * limit) {
+              pageStart3++
               self.$vux.loading.show()
               self.getData3()
             }
@@ -178,7 +180,7 @@ export default {
     getData1 () {
       this.$vux.loading.show()
       const self = this
-      const params = { cashed: 0, from: 'user', pagestart: self.pagestart1, limit: self.limit }
+      const params = { cashed: 0, from: 'user', pagestart: pageStart1, limit: limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -198,7 +200,7 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { cashed: 2, from: 'user', pagestart: self.pagestart1, limit: self.limit }
+      const params = { cashed: 2, from: 'user', pagestart: pageStart1, limit: limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -210,7 +212,7 @@ export default {
     getData3 () {
       this.$vux.loading.show()
       const self = this
-      const params = { cashed: 1, from: 'user', pagestart: self.pagestart1, limit: self.limit }
+      const params = { cashed: 1, from: 'user', pagestart: pageStart1, limit: limit }
       self.$http.post(`${ENV.BokaApi}/api/seller/rebateList`, params).then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -225,21 +227,21 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          if (this.tabdata1.length < this.limit) {
+          if (this.tabdata1.length < limit) {
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
           }
           break
         case 1:
-          if (this.tabdata2.length < this.limit) {
+          if (this.tabdata2.length < limit) {
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
           }
           break
         case 2:
-          if (this.tabdata3.length < this.limit) {
+          if (this.tabdata3.length < limit) {
             this.distabdata3 = false
             this.tabdata3 = []
             this.getData3()

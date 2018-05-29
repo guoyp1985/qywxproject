@@ -61,6 +61,8 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 
+const limit = 10
+let pageStart = 0
 export default {
   components: {
     Search, XImg, Sos
@@ -81,9 +83,7 @@ export default {
       disdata: false,
       data: [],
       searchword1: '',
-      searchresult1: false,
-      limit: 10,
-      pagestart1: 0
+      searchresult1: false
     }
   },
   methods: {
@@ -99,7 +99,7 @@ export default {
       self.$vux.loading.show()
       self.disdata = false
       self.data = []
-      self.pagestart1 = 0
+      pageStart = 0
       self.getData1()
     },
     onSubmit1 () {
@@ -107,7 +107,7 @@ export default {
       self.$vux.loading.show()
       self.disdata = false
       self.data = []
-      self.pagestart1 = 0
+      pageStart = 0
       self.getData1()
     },
     handleScroll () {
@@ -115,8 +115,8 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.data.length === (self.pagestart1 + 1) * self.limit) {
-            self.pagestart1++
+          if (self.data.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getData1()
           }
@@ -125,7 +125,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { uid: self.query.uid, pagestart: self.pagestart1, limit: self.limit } }
+      const params = { params: { uid: self.query.uid, pagestart: pageStart, limit: limit } }
       const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -175,7 +175,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      if (this.showContainer && this.data.length < this.limit) {
+      if (this.showContainer && this.data.length < limit) {
         this.disdata = false
         this.data = []
         this.$vux.loading.show()

@@ -22,7 +22,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <x-img :src="article.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                  <x-img :src="getPhoto(article.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -51,7 +51,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <x-img :src="commodity.photo" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                  <x-img :src="getPhoto(commodity.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -80,7 +80,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <x-img default-src="/src/assets/images/nopic.jpg" :src="store.photo" container="#vux_view_box_body"></x-img>
+                  <x-img default-src="/src/assets/images/nopic.jpg" :src="getPhoto(store.photo)" container="#vux_view_box_body"></x-img>
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -137,6 +137,9 @@ export default {
     }
   },
   methods: {
+    getPhoto (src) {
+      return this.$util.getPhoto(src)
+    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
