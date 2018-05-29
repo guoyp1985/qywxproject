@@ -438,11 +438,9 @@ export default {
       return this.loginUser
     },
     productdata: function () {
-      this.submitdata.wid = this.retailerinfo.uid
       return this.productdata
     },
     productid: function () {
-      this.submitdata.id = this.productid
       return this.productid
     },
     retailerinfo: function () {
@@ -648,6 +646,7 @@ export default {
       if (buytype === 'groupbuy' && self.activityInfo.id) {
         self.submitdata['activityid'] = self.activityInfo.id
       }
+      self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerinfo.uid
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
         let data = res.data

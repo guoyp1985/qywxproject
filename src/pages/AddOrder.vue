@@ -163,15 +163,12 @@ export default {
       showSos: false,
       sosTitle: '无效订单',
       showContainer: false,
-      checkvalue: ['b'],
-      checkarr: [ 'a', 'b', 'c' ],
       query: {},
       payPrice: '0.00',
       selectaddress: null,
       orderdata: [],
       payprice: '0.00',
       showpopup: false,
-      showalert: false,
       addressdata: [],
       submitdata: {
         addressid: '',
@@ -203,6 +200,23 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.showSos = false
+      this.sosTitle = '无效订单'
+      this.showContainer = false
+      this.query = {}
+      this.payPrice = '0.00'
+      this.selectaddress = null
+      this.orderdata = []
+      this.payprice = '0.00'
+      this.showpopup = false
+      this.addressdata = []
+      this.submitdata = {
+        addressid: '',
+        postdata: []
+      }
+      this.submiting = false
+    },
     changenumber () {
       const self = this
       let total = 0
@@ -318,7 +332,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== this.$route.query.id) {
-        this.submiting = false
+        this.initData()
         this.query = this.$route.query
         this.getData()
       }

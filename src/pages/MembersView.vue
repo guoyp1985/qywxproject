@@ -208,9 +208,9 @@ export default {
       let val = this.viewuser.sex
       let ret = '未知'
       if (val === 1) {
-        ret = '女'
-      } else if (val === 2) {
         ret = '男'
+      } else if (val === 2) {
+        ret = '女'
       }
       return ret
     }

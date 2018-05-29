@@ -23,13 +23,15 @@
                     <div class="checker-cell">
                       <check-icon :value.sync="item.checked" @click.native.stop="itemCheck(item)"></check-icon>
                     </div>
-                    <div class="avatar-cell">
-                      <x-img :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container1"></x-img>
+                    <div class="avatar-cell w50">
+                      <img class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
                     </div>
-                    <div slot="inline-desc">
-                      <div class="clamp1">{{item.username}}</div>
-                      <div class="clamp1">店铺: {{item.title}}</div>
-                      <div class="clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
+                    <div class="db-flex flex_cell font14">
+                      <div>
+                        <div class="clamp1">{{item.username}}</div>
+                        <div class="clamp1">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
+                      </div>
                     </div>
                     <div class="value-cell font14 color-red align_center" style="width:120px;">
                       <div class="clamp1">{{item.content}}</div>
@@ -62,7 +64,7 @@
               <template v-if="tabdata2.length">
                 <group>
                   <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index">
-                    <x-img slot="icon" :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container2"></x-img>
+                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
                     <div slot="inline-desc">
                       <div class="clamp1">{{item.username}}</div>
                       <div class="clamp1">店铺: {{item.title}}</div>
@@ -87,7 +89,7 @@
               <template v-if="tabdata3.length">
                 <group>
                   <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index">
-                    <x-img slot="icon" :src="item.photo" class="imgcover" default-src="/src/assets/images/nopic.jpg" container=".scroll-container3"></x-img>
+                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
                     <div slot="inline-desc">
                       <div class="clamp1">{{item.username}}</div>
                       <div class="clamp1">店铺: {{item.title}}</div>
