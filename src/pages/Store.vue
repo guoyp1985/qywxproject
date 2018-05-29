@@ -108,8 +108,14 @@
           <div class="popup1 h_100 flex_center font14 bg-black">
             <div class="flex_center" style="width:82%;height:82%;">
               <div class="align_center">
-                <img :src="retailerInfo.qrcode" class="db" style="max-width:100%;max-height:100%;margin:0 auto 15px;">
-        				<div class="color-white bg-blue padding5 border-box" style="background-color: #0f96e8;border-radius:4px;">长按识别二维码成为微信好友</div>
+                <template v-if="!retailerInfo.qrcode || retailerInfo.qrcode == ''">
+                  <router-link v-if="loginUser.uid == retailerInfo.uid" to="/retailerSetting" class="color-white bg-blue padding5 border-box" style="background-color: #0f96e8;border-radius:4px;">上传二维码</router-link>
+                  <div v-else class="color-white bg-blue padding5 border-box" style="background-color: #0f96e8;border-radius:4px;">卖家没有上传二维码</div>
+                </template>
+                <template v-else>
+                  <img :src="retailerInfo.qrcode" class="db" style="max-width:100%;max-height:100%;margin:0 auto 15px;">
+          				<div class="color-white bg-blue padding5 border-box" style="background-color: #0f96e8;border-radius:4px;">长按识别二维码成为微信好友</div>
+                </template>
         				<div style="margin-top:30px;">
         					<span class="db-in" @click="closepopup">
         						<i class="al al-close color-white font36"></i>
