@@ -17,6 +17,7 @@ const Voice = {
     Vue.wechat.stopRecord({
       success: function (res) {
         switcher = true
+        console.log(res)
         const localId = res.localId
         callback && callback(localId)
       }
