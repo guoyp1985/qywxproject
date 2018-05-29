@@ -418,7 +418,6 @@ export default {
             this.tabdata2 = []
             self.getData2()
           }
-          !this.tabdata2.length && this.getData2()
           break
       }
     },
