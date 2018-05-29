@@ -509,17 +509,17 @@ export default {
     init () {
       this.loginUser = User.get()
     },
-    refresh () {
-      if (this.query.id !== this.$route.query.id) {
+    refresh (query) {
+      if (this.query.id !== query.id) {
         this.comments = []
         this.pagestart = 0
-        this.query = this.$route.query
+        this.query = query
         this.showsharetip = false
         this.getData()
       }
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.newadd) {
+      if (query.newadd) {
         const self = this
         setTimeout(() => {
           self.showsharetip = false
@@ -531,10 +531,14 @@ export default {
     this.init()
   },
   activated () {
-    this.refresh()
+    this.refresh(this.$route.query)
   },
   beforeRouteLeave (to, from, next) {
     Socket.destory(room)
+    next()
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.refresh(to.query)
     next()
   }
 }
