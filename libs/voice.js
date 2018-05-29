@@ -32,8 +32,8 @@ const Voice = {
       localId: data.localId,
       isShowProgressTips: 1,
       success: function (res) {
-        const serverId = res.serverId
-        callback && callback(serverId)
+        res.time = data.time
+        callback && callback(res)
       }
     })
   },

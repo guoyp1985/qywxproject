@@ -47,7 +47,7 @@
       </div>
     </scroller>
     <div class="bottom-area">
-      <div class="input-box">
+      <div class="input-box no-select">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
             <img src="../assets/images/icon-voice.png"/>
@@ -324,16 +324,6 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
-    sendVoice (voiceId) {
-      const params = {
-        touid: this.query.uid,
-        content: '',
-        module: self.module,
-        sendtype: 'voice',
-        mediaid: voiceId
-      }
-      this.sendData(params)
-    },
     sendPhoto () {
       const self = this
       if (!window.WeixinJSBridge) {
@@ -381,16 +371,28 @@ export default {
         // })
       }
     },
+    sendVoice (data) {
+      console.log(data)
+      const params = {
+        touid: this.query.uid,
+        content: '',
+        module: self.module,
+        sendtype: 'voice',
+        mediaid: data.vid,
+        mediatime: data.time
+      }
+      this.sendData(params)
+    },
     onTalkRecord () {
       const self = this
-      Voice.voiceRecord(sid => {
-        self.sendVoice(sid)
+      Voice.voiceRecord(res => {
+        self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     onTalkRecordStop () {
       const self = this
-      Voice.voiceRecordStop(sid => {
-        self.sendVoice(sid)
+      Voice.voiceRecordStop(res => {
+        self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     viewUserInfo () {
