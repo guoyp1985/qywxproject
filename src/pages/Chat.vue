@@ -42,7 +42,7 @@
           					<i class="icon_audio_playing"></i>
                   </div>
                   <div class="min">
-                    <span class="discontent">{{item.content}}</span>
+                    <span class="discontent">{{item.content | secondsFormat}}</span>
                   </div>
                 </div>
               </template>
@@ -197,6 +197,7 @@ import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
+import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
 
@@ -249,6 +250,11 @@ export default {
       limit1: 10,
       selectNewsData: null,
       selectProductsData: null
+    }
+  },
+  computed: {
+    secondsFormat (seconds) {
+      return Time.seconds(seconds)
     }
   },
   watch: {

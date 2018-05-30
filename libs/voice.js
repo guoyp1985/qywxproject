@@ -18,7 +18,7 @@ const Voice = {
     })
   },
   wxVoiceRecordStop: function (success, fail) {
-    const time = time.secondCounter(time.time())
+    const time = time.secondsCounter(time.time())
     if (time < 1) {
       fail && fail()
       return
@@ -26,7 +26,7 @@ const Voice = {
     Vue.wechat.stopRecord({
       success: function (res) {
         switcher = true
-        res.time = time.secondCounter(time.time())
+        res.time = time.secondsCounter(time.time())
         // const localId = res.localId
         success && success(res)
       }
