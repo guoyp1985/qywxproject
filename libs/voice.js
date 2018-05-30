@@ -20,14 +20,10 @@ const Voice = {
   wxVoiceRecordStop: function (callback) {
     Vue.wechat.stopRecord({
       success: function (res) {
-        alert(res)
         switcher = true
         res.time = time.counter(time.time())
         // const localId = res.localId
         callback && callback(res)
-      },
-      fail: function(res) {
-        alert(JSON.stringify(res))
       }
     })
   },
