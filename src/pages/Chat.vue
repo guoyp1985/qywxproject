@@ -531,9 +531,7 @@ export default {
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data.data
-        const args = [0, 0].concat(data)
-        console.log(args)
-        self.data = Array.prototype.splice.apply(self.data, args)
+        self.data = Array.prototype.unshift.apply(self.data, data)
         console.log(self.data)
       })
     },
