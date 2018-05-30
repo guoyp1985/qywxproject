@@ -923,3 +923,24 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .red-check .weui-icon-success{color:#ea3a3a;}
 .red-check.vux-check-icon > .weui-icon-success:before{color:#ea3a3a;}
+
+.weui-loading{
+	background:transparent url('/src/assets/images/gxb.png') !important;
+	webkit-animation: weuiLoading1 5s steps(12, end) infinite !important;
+  animation: weuiLoading1 5s steps(12, end) infinite !important;
+}
+.weui-icon_toast.weui-loading{
+	margin:10px !important;
+	width:80px !important;
+	height:80px !important;
+}
+@keyframes weuiLoading1 {
+	0% {
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    transform: scale(0.5) rotate3d(0, 0, 1, 0deg);
+	}
+	100% {
+    -webkit-transform: rotate3d(0, 0, 1, 360deg);
+    transform: scale(0.5) rotate3d(0, 0, 1, 360deg);
+	}
+}

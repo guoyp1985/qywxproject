@@ -134,7 +134,7 @@ export default {
           }
         }
       ],
-      avatarHref: '',
+      avatarHref: '/src/assets/images/user.jpg',
       linkMan: '',
       userCredits: 0,
       userLevels: 0,

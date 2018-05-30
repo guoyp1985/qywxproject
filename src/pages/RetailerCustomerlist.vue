@@ -93,7 +93,7 @@
                 </template>
                 <template v-else>
                   <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                  <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程序</div>
+                  <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程度</div>
                 </template>
               </div>
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">

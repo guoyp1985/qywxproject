@@ -153,6 +153,7 @@ export default {
           self.showContainer = true
           self.viewuser = data.data ? data.data : data
           document.title = `${self.viewuser.linkman}`
+          self.getData1()
         }
       })
     },
