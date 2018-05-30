@@ -109,7 +109,7 @@ export default {
       this.query = this.$route.query
       this.initItem = {
         linkman: '',
-        telephone: ''
+        telephone: '',
         area: [],
         address: ''
       }
