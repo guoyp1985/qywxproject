@@ -380,8 +380,8 @@ Util.install = function (Vue, options) {
         const target = event.target
         if (target.nodeName.toLowerCase() === 'img' && /\wx__img-preview/.test(target.getAttribute('class'))) {
           Vue.wechat.previewImage({
-            current: target.src,
-            urls: [urls]
+            current: target.src
+            // urls: [urls]
           })
         }
       }, false)
