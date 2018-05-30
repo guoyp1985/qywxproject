@@ -289,6 +289,7 @@ export default {
             match.voiceClass = ' playing'
             return match
           })
+          console.log(item.mediaid)
           Voice.play(item.mediaid,
             localId => {
               item.mediaLid = localId
@@ -764,6 +765,7 @@ export default {
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening(room, uid, linkman, data => {
+        console.log(data)
         self.data.push(data)
         self.setScrollTop()
       })
