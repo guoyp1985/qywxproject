@@ -19,8 +19,10 @@ const Voice = {
   },
   wxVoiceRecordStop: function (success, fail) {
     const seconds = time.secondsCounter(time.time())
+    console.log(seconds)
     if (seconds < 1) {
       fail && fail()
+      Vue.wechat.stopRecord()
       return
     }
     Vue.wechat.stopRecord({
