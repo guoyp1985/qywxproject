@@ -1051,11 +1051,15 @@ export default {
 }
 .chatlist .chatitem .msg .main .min{
 	font-family: "microsoft yahei", "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
-	width: 50px;height:30px;line-height: 30px;
-	position: absolute;top: 0;color:#000;
+	width: 50px;
+  height:30px;
+  line-height: 30px;
+	position: absolute;
+  top: 0;
+  color: #cccccc;
 }
-.chatlist .chatitem.left .msg .main .min {right: -58px;}
-.chatlist .chatitem.right .msg .main .min {left: -58px;}
+.chatlist .chatitem.left .msg .main .min {right: -58px; top: 3px;}
+.chatlist .chatitem.right .msg .main .min {left: -58px; top: 3px;}
 .audio_play_area {float:left;}
 .chatitem.right .audio_play_area{float:right;}
 .audio_play_area:after{content:"";clear:both;display:block;}
