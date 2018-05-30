@@ -289,6 +289,7 @@ export default {
             match.voiceClass = ' playing'
             return match
           })
+          console.log(item.mediaid)
           Voice.play(item.mediaid,
             localId => {
               item.mediaLid = localId
