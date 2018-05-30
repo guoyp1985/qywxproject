@@ -174,6 +174,9 @@ export default {
     }
   },
   methods: {
+    clickInsertProduct (url) {
+      this.$router.push(url)
+    },
     popupSubscribe () {
       this.showSubscribe = true
     },
