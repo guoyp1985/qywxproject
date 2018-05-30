@@ -20,7 +20,7 @@
               <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
-                  <img :src="item.picurl"/>
+                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad" container=".scroll-container"></x-img>
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'news'">
@@ -376,6 +376,9 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
+    imageLoad () {
+      this.setScrollTop()
+    },
     sendPhoto () {
       const self = this
       if (!window.WeixinJSBridge) {
@@ -431,7 +434,7 @@ export default {
         sendtype: 'voice',
         mediaid: data.vid
       }
-      console.log(params)
+      // console.log(params)
       this.sendData(params)
     },
     onTalkRecord () {
@@ -449,8 +452,8 @@ export default {
         self.$vux.toast.text('录音时间过短', 'middle')
       })
     },
-    viewUserInfo () {
-    },
+    // viewUserInfo () {
+    // },
     getitemclass (item) {
       const self = this
       let ret = ''
@@ -774,7 +777,7 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman, item => {
         item.dateline = new Date(item.time).getTime() / 1000
-        console.log(item.dateline)
+        // console.log(item.dateline)
         self.data.push(item)
         self.setScrollTop()
       })
@@ -826,6 +829,7 @@ export default {
   },
   mounted () {
     const self = this
+    this.$util.wxPreviewImage('#chat-room')
     this.msgTextarea = document.querySelector('#chat-textarea textarea')
     this.msgTextarea.addEventListener('focus', function () {
       self.setSendStatus()
@@ -833,7 +837,7 @@ export default {
     this.msgTextarea.addEventListener('keyup', function () {
       self.setSendStatus()
     })
-    this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
+    // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
     this.refresh()
@@ -975,9 +979,9 @@ export default {
   padding: 0 10px;
   line-height: 1.1;
 }
-.chatlist *{
-  box-sizing: border-box;
-}
+// .chatlist *{
+//   box-sizing: border-box;
+// }
 .chatlist .messages-date {
   text-align: center;
   font-weight: 500;
@@ -985,7 +989,7 @@ export default {
   padding: 10px 0;
   color: #8e8e93;
 }
-.chatlist .chatitem {position: relative;margin-bottom: 20px;}
+.chatlist .chatitem {position: relative;padding-bottom: 20px;}
 .chatlist .chatitem.left{padding-right:50px;}
 .chatlist .chatitem.right{padding-left:50px;}
 .chatlist .chatitem .head {
@@ -1014,7 +1018,7 @@ export default {
   max-width: 200px;
 	border-radius: 5px;
   line-height: 24px;
-  min-height:36px;
+  // min-height:36px;
 	word-wrap: break-word;
   word-break: break-all;
 }
