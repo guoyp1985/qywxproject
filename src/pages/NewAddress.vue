@@ -115,10 +115,9 @@ export default {
       this.initItem = {
         linkman: '',
         telephone: '',
-        area: [],
+        area: [null],
         address: ''
       }
-      this.addressData = ChinaAddressV4Data
       this.switcher = true
     }
   },
