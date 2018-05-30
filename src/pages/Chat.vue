@@ -36,7 +36,7 @@
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'voice'">
-                <div style="`width: ${Math.round(5 * Number(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
+                <div :style="`width: ${Math.round(5 * Number(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
                   <div class="audio_play_area">
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
