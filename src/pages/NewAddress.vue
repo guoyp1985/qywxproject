@@ -107,7 +107,12 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.initItem = {}
+      this.initItem = {
+        linkman: '',
+        telephone: ''
+        area: [],
+        address: ''
+      }
       this.switcher = true
     }
   },
