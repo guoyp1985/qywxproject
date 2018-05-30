@@ -423,6 +423,7 @@ export default {
     onTalkRecordStop () {
       const self = this
       Voice.recordStop(res => {
+        alert(res.serverId)
         self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
@@ -790,6 +791,7 @@ export default {
       this.loginUser = User.get()
     },
     refresh () {
+      this.data = []
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
