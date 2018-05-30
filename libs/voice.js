@@ -48,14 +48,14 @@ const Voice = {
     })
   },
   wxVoicePlay: function (id, callback) {
+    Vue.wechat.playVoice({ localId: id })
     Vue.wechat.onVoicePlayEnd({
-      success: function (res) {
+      complete: function (res) {
         console.log('end')
         const localId = res.localId
         callback && callback(localId)
       }
     })
-    Vue.wechat.playVoice({ localId: id })
   },
   wxVoicePause: function (id) {
     Vue.wechat.pauseVoice({ localId: id })
