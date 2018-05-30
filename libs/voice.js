@@ -18,9 +18,9 @@ const Voice = {
     })
   },
   wxVoiceRecordStop: function (callback) {
-    alert(Vue.wechat.stopRecord)
     Vue.wechat.stopRecord({
       success: function (res) {
+        alert(res)
         switcher = true
         res.time = time.counter(time.time())
         // const localId = res.localId
