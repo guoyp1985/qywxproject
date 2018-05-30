@@ -5,7 +5,7 @@
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
-        <title-tip scroll-box="scroll-container" :user="loginUser" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+        <title-tip scroll-box="scroll-container" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -408,7 +408,8 @@ export default {
       ingdata: [],
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
-      replyData: null
+      replyData: null,
+      messages: 0
     }
   },
   watch: {
@@ -503,6 +504,7 @@ export default {
       this.activitydata = []
       this.submitdata = { flag: 1, quantity: 1 }
       this.replyData = null
+      this.messages = 0
     },
     toAccess () {
       if (this.loginUser.subscribe === 0) {
@@ -719,6 +721,7 @@ export default {
       let postdata = self.submitdata
       postdata.crowdowner = item.uid
       postdata.activityid = item.activityid
+      postdata.id = self.productdata.id
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -876,6 +879,7 @@ export default {
       this.loginUser = User.get()
     },
     refresh () {
+      const self = this
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
@@ -884,6 +888,10 @@ export default {
       this.getData()
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
     }
   },
   created () {
