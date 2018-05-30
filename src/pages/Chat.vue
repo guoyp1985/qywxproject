@@ -466,7 +466,7 @@ export default {
     },
     loadingHistory () {
       const minId = this.data[1].id
-      this.getHistoryMessages(minId)
+      this.getMessages(minId)
     },
     sendData (postdata) {
       const self = this
@@ -523,18 +523,6 @@ export default {
         return false
       }
       self.sendData(postdata)
-    },
-    getHistoryMessages (minId) {
-      const self = this
-      const params = { uid: self.query.uid, lastid: minId }
-      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data.data
-        const args = [0, 0].concat(data)
-        self.data = data.concat(self.data)
-        console.log(self.data)
-      })
     },
     // wsConnect () {
     //   const self = this
@@ -791,18 +779,33 @@ export default {
         self.setScrollTop()
       })
     },
+    getMessages (minId, callback) {
+      let params = { uid: this.query.uid }
+      if (typeof minId === 'function') {
+        callback = minId
+      } else {
+        params.lastid = minId
+      }
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
+      .then(res => {
+        if (res.data.flag) {
+          self.$vux.loading.hide()
+          const data = res.data.data
+          self.data = data.concat(self.data)
+          callback && callback()
+        } else {
+          self.$vux.toast.text('加载失败，稍后再试', 'middle')
+        }
+      })
+    },
     getData () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
       const self = this
       // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
-      const params = { uid: this.query.uid }
-      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
-        self.$vux.loading.hide()
-        const data = res.data.data
-        // const retdata = data.data ? data.data : data
-        self.data = self.data.concat(data)
+      this.getMessages(() => {
         self.setScrollTop()
       })
     },
