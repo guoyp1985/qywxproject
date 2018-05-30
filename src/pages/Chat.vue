@@ -285,7 +285,7 @@ export default {
           Voice.playStop(item.mediaLid)
           item.mediaLid = null
         } else {
-
+          console.log('this')
           this.data = this.$util.changeItem(this.data, item.id, match => {
             match.voiceClass = ' playing'
             console.log('play')
