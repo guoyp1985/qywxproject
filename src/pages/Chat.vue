@@ -404,7 +404,7 @@ export default {
       const params = {
         touid: this.query.uid,
         content: '',
-        module: self.module,
+        module: this.module,
         sendtype: 'voice',
         mediaid: data.vid,
         mediatime: data.time
@@ -460,6 +460,7 @@ export default {
             to_client_id: self.query.uid,
             messageid: retdata.id,
             room_id: room,
+            mediatime: retdata.content,
             ...retdata
           }
           // for (let key in retdata) {
