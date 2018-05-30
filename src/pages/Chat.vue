@@ -36,7 +36,7 @@
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'voice'">
-                <div :style="`width: ${Math.round(5 * Number(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
+                <div :style="`width: ${40 + Math.round(5 * parseInt(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
                   <div class="audio_play_area">
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
@@ -997,6 +997,7 @@ export default {
 	background:#fff;
   border: 1px solid #dedede;
   min-width:40px;
+  max-width: 200px;
 	border-radius: 5px;
   line-height: 24px;
   min-height:36px;
