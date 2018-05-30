@@ -37,7 +37,7 @@
           					<i class="icon_audio_playing"></i>
                   </div>
                   <div class="min">
-                    <span class="discontent">{{item.mediatime}}</span>
+                    <span class="discontent">{{item.content}}</span>
                   </div>
                 </template>
                 <template v-else>
@@ -403,11 +403,10 @@ export default {
     sendVoice (data) {
       const params = {
         touid: this.query.uid,
-        content: '',
+        content: data.time,
         module: this.module,
         sendtype: 'voice',
-        mediaid: data.vid,
-        mediatime: data.time
+        mediaid: data.vid
       }
       console.log(params)
       this.sendData(params)
@@ -460,7 +459,6 @@ export default {
             to_client_id: self.query.uid,
             messageid: retdata.id,
             room_id: room,
-            mediatime: retdata.content,
             ...retdata
           }
           // for (let key in retdata) {
