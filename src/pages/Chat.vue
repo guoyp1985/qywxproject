@@ -787,7 +787,7 @@ export default {
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening(room, uid, linkman, item => {
-        item.dateline = new Date(item.time).getTime()
+        item.dateline = new Date(item.time).getTime() / 1000
         console.log(item.dateline)
         self.data.push(item)
         self.setScrollTop()
