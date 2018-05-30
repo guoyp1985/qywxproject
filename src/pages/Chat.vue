@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
@@ -20,7 +20,7 @@
               <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
-                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad" :offset="-100" container=".scroll-container"></x-img>
+                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad" :offset="-100" container="#chat-scoller"></x-img>
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'news'">
