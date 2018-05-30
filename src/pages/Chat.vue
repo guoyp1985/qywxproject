@@ -302,7 +302,7 @@ export default {
           )
         }
       } else if (msgtype === "image") {
-        
+
       }
     },
     toggleVoice () {
@@ -414,13 +414,13 @@ export default {
     },
     onTalkRecord () {
       const self = this
-      Voice.voiceRecord(res => {
+      Voice.record(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     onTalkRecordStop () {
       const self = this
-      Voice.voiceRecordStop(res => {
+      Voice.recordStop(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
