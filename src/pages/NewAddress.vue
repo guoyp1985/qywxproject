@@ -118,6 +118,7 @@ export default {
         area: [],
         address: ''
       }
+      this.addressData = ChinaAddressV4Data
       this.switcher = true
     }
   },
