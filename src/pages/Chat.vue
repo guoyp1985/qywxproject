@@ -415,13 +415,13 @@ export default {
       this.sendData(params)
     },
     onTalkRecord () {
-      alert('t')
       const self = this
       Voice.record(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     onTalkRecordStop () {
+      alert('t')
       const self = this
       Voice.recordStop(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
