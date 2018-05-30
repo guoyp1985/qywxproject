@@ -74,7 +74,7 @@
           </a>
         </div>
         <div v-if="showSend" class="send-cell flex_center">
-          <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendEvent">发送</div>
+          <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
         </div>
         <div v-else class="feature-cell">
           <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
@@ -485,7 +485,7 @@ export default {
       self.msgcontent = self.msgTextarea.value
       self.setSendStatus()
     },
-    sendEvent () {
+    sendMessage () {
       const self = this
       self.msgcontent = self.msgTextarea.value
       let postdata = {
