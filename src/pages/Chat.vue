@@ -20,7 +20,7 @@
               <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
-                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad" :offset="0" container=".scroll-container"></x-img>
+                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad" :offset="-100" container=".scroll-container"></x-img>
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'news'">
