@@ -30,7 +30,7 @@ const Voice = {
   wxVoiceUpload: function (data, callback) {
     Vue.wechat.uploadVoice({
       localId: data.localId,
-      isShowProgressTips: 1,
+      isShowProgressTips: 0,
       success: function (res) {
         res.time = data.time
         callback && callback(res)
@@ -40,7 +40,7 @@ const Voice = {
   wxVoiceDownload: function (id, callback) {
     Vue.wechat.downloadVoice({
       serverId: id,
-      isShowProgressTips: 1,
+      isShowProgressTips: 0,
       success: function (res) {
         const localId = res.localId
         callback && callback(localId)
@@ -62,22 +62,23 @@ const Voice = {
   wxVoiceStop: function (id) {
     Vue.wechat.stopVoice({ localId: id })
   },
-  voiceRecord: function (callback) {
+  record: function (callback) {
     Voice.wxVoiceRecord(res => {
       Voice.wxVoiceUpload(res, callback)
     })
   },
-  voiceRecordStop: function(callback) {
+  recordStop: function(callback) {
     Voice.wxVoiceRecordStop(res => {
       Voice.wxVoiceUpload(res, callback)
     })
   },
-  voicePlay: function (sid) {
+  play: function (sid, callback, stop) {
     Voice.wxVoiceDownload(sid, lid => {
-      Voice.wxVoicePlay(lid)
+      callback && callback(lid)
+      Voice.wxVoicePlay(lid, stop)
     })
   },
-  voicePlayStop: function (lid) {
+  playStop: function (lid) {
     Voice.wxVoiceStop(lid)
   }
 }
