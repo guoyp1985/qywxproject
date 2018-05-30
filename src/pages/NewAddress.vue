@@ -36,7 +36,12 @@ export default {
     return {
       query: {},
       addressData: ChinaAddressV4Data,
-      initItem: {},
+      initItem: {
+        linkman: '',
+        telephone: '',
+        area: [],
+        address: ''
+      },
       switcher: true
     }
   },
@@ -110,7 +115,7 @@ export default {
       this.initItem = {
         linkman: '',
         telephone: '',
-        area: '',
+        area: [],
         address: ''
       }
       this.switcher = true
