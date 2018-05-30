@@ -30,23 +30,24 @@ const Socket = {
       } else if (data.type === 'say') {
         console.info(`WS: Receive Message From Room ${room}`)
         const message = JSON.parse(e.data)
-        let content = message.content
-        if (content) {
-          content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-        }
+        // let content = message.content
+        // if (content) {
+        message.content = message.content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
+        // }
         const sendMessage = {
           uid: message.from_uid,
-          content: content,
+          // content: content,
           dateline: message.time,
-          msgtype: message.msgtype ? message.msgtype : 'text',
-          picurl: message.picurl ? message.picurl : '',
-          thumb: message.thumb ? message.thumb : '',
+          // msgtype: message.msgtype ? message.msgtype : 'text',
+          // picurl: message.picurl ? message.picurl : '',
+          // thumb: message.thumb ? message.thumb : '',
           username: message.from_client_name,
           id: message.msgid,
           roomid: message.room_id,
-          avatar: message.avatar,
-          newsdata: message.newsdata,
-          mediaid: message.mediaid
+          ...message
+          // avatar: message.avatar,
+          // newsdata: message.newsdata,
+          // mediaid: message.mediaid
         }
         callback && callback(sendMessage)
       }
