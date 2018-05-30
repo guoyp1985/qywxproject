@@ -13,13 +13,16 @@
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
             </router-link>
-            <div class="name disusername">{{ item.username }}</div>
+            <div class="name disusername">{{item.username}}</div>
             <div class="msg">
-              <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
-                <template v-if="item.msgtype == 'image'">
-                  <img :src="item.picurl" />
-                </template>
-                <template v-else-if="item.msgtype == 'news'">
+              <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
+              <template v-if="item.msgtype == 'image'">
+                <div class="main message-text">
+                  <img :src="item.picurl"/>
+                </div>
+              </template>
+              <template v-else-if="item.msgtype == 'news'">
+                <div class="main message-text">
                   <div class="scroll_item">
           					<div class="con">
           						<router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
@@ -30,8 +33,10 @@
           						</router-link>
           					</div>
           				</div>
-                </template>
-                <template v-else-if="item.msgtype == 'voice'">
+                </div>
+              </template>
+              <template v-else-if="item.msgtype == 'voice'">
+                <div :style="`width: ${40 + Math.round(5 * parseInt(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
                   <div class="audio_play_area">
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
@@ -39,11 +44,14 @@
                   <div class="min">
                     <span class="discontent">{{item.content}}</span>
                   </div>
-                </template>
-                <template v-else>
+                </div>
+              </template>
+              <template v-else>
+                <div class="main message-text">
                   <div v-html="item.content"></div>
-                </template>
-              </div>
+                </div>
+              </template>
+              <!-- </div> -->
             </div>
           </div>
         </template>
@@ -74,7 +82,7 @@
           </a>
         </div>
         <div v-if="showSend" class="send-cell flex_center">
-          <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendEvent">发送</div>
+          <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
         </div>
         <div v-else class="feature-cell">
           <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
@@ -485,7 +493,7 @@ export default {
       self.msgcontent = self.msgTextarea.value
       self.setSendStatus()
     },
-    sendEvent () {
+    sendMessage () {
       const self = this
       self.msgcontent = self.msgTextarea.value
       let postdata = {
@@ -989,6 +997,7 @@ export default {
 	background:#fff;
   border: 1px solid #dedede;
   min-width:40px;
+  max-width: 200px;
 	border-radius: 5px;
   line-height: 24px;
   min-height:36px;

@@ -42,7 +42,7 @@ const Socket = {
           // picurl: message.picurl ? message.picurl : '',
           // thumb: message.thumb ? message.thumb : '',
           username: message.from_client_name,
-          id: message.msgid,
+          id: message.messageid,
           roomid: message.room_id,
           ...message
           // avatar: message.avatar,
