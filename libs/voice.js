@@ -25,6 +25,9 @@ const Voice = {
         res.time = time.counter(time.time())
         // const localId = res.localId
         callback && callback(res)
+      },
+      fail: function(res) {
+        alert(JSON.stringify(res))
       }
     })
   },
