@@ -115,7 +115,7 @@ export default {
       this.initItem = {
         linkman: '',
         telephone: '',
-        area: [null, null, null],
+        area: [null],
         address: ''
       }
       this.switcher = true
