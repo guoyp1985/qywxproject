@@ -487,11 +487,6 @@ export default {
             room_id: room,
             ...retdata
           }
-          // for (let key in retdata) {
-          //   senddata[key] = retdata[key]
-          // }
-          // let sendtxt = JSON.stringify(senddata)
-          // websocket.send(sendtxt)
           // console.log(senddata)
           Socket.send(senddata)
           self.msgTextarea.value = ''
@@ -528,19 +523,19 @@ export default {
       }
       self.sendData(postdata)
     },
-    // getMsgList (lastid) {
-    //   const self = this
-    //   let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
-    //   if (lastid) {
-    //     params.lastid = lastid
-    //   }
-    //   self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
-    //     let data = res.data
-    //     self.$vux.loading.hide()
-    //     let retdata = data.data ? data.data : data
-    //     self.data = self.data.concat(retdata)
-    //   })
-    // },
+    getMsgList (lastid) {
+      const self = this
+      let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
+      if (lastid) {
+        params.lastid = lastid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.data = self.data.concat(retdata)
+      })
+    },
     // wsConnect () {
     //   const self = this
     //   websocket = new WebSocket(ENV.SocketApi)
@@ -801,7 +796,7 @@ export default {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
       const self = this
-      const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
+      const params = { uid: this.query.uid }
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
         self.$vux.loading.hide()
         const data = res.data.data
