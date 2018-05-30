@@ -44,7 +44,7 @@
             <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
-                  <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" :offset="0" container=".scroll-container"></x-img>
+                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg';" style="width:50px;height:50px;" />
                 </div>
                 <div class="t-cell v_top">
                   <div class="clamp2 font12 align_left">{{ item.name }}</div>
