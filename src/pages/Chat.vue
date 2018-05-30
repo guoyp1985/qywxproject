@@ -465,7 +465,8 @@ export default {
       return ret
     },
     loadingHistory () {
-      console.log('loading')
+      const minId = this.data[1].id
+      this.getHistoryMessages(minId)
     },
     sendData (postdata) {
       const self = this
@@ -523,17 +524,14 @@ export default {
       }
       self.sendData(postdata)
     },
-    getMsgList (lastid) {
+    getHistoryMessages (minId) {
       const self = this
-      let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
-      if (lastid) {
-        params.lastid = lastid
-      }
-      self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
-        let data = res.data
+      const params = { uid: self.query.uid, lastid: minId }
+      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
+      .then(res => {
         self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.data = self.data.concat(retdata)
+        const data = res.data.data
+        self.data = self.data.splice(0, data)
       })
     },
     // wsConnect () {
@@ -796,6 +794,7 @@ export default {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
       const self = this
+      // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       const params = { uid: this.query.uid }
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
         self.$vux.loading.hide()
