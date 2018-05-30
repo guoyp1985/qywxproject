@@ -289,20 +289,20 @@ export default {
             match.voiceClass = ' playing'
             return match
           })
-          console.log(item.mediaid)
           Voice.play(item.mediaid,
-            localId => {
+            localId => { // donwload voice
               item.mediaLid = localId
             },
-            localId => {
+            localId => { // voice playing end
               self.data = self.$util.changeItem(self.data, item.id, match => {
                 match.voiceClass = ''
+                item.mediaLid = null
                 return match
               })
             }
           )
         }
-      } else if (msgtype === 'image') {
+      } else if (item.msgtype === 'image') {
 
       }
     },
