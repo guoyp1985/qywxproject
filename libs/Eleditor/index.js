@@ -595,6 +595,7 @@ var Eleditor = function(){
 				_$selected.after(_$hr);
 
 			_hideEditorControllerLayer();
+			_args.cancelControler && _args.cancelControler();
 		},
 		editText: function(){
 			if( _inArray(_$selected[0].tagName, _notctname) ){
@@ -613,6 +614,7 @@ var Eleditor = function(){
 			}
 			_hideEditorControllerLayer();
 			_correctHtmlStructure(_$wrap, _placeHolder);
+			_args.cancelControler && _args.cancelControler();
 		},
     deleteThis: function(){
             _appendHistory({ m: 'deleteNode', node: _$selected, pnode: _$selected.prev() });
@@ -620,6 +622,7 @@ var Eleditor = function(){
             //editnews();
             _hideEditorControllerLayer();
             _correctHtmlStructure(_$wrap, _placeHolder);
+						_args.cancelControler && _args.cancelControler();
     },
     deleteBefore: function(){
             var _$prev = _$selected.prev();
@@ -643,6 +646,7 @@ var Eleditor = function(){
             //editnews();
             _hideEditorControllerLayer();
             _correctHtmlStructure(_$wrap, _placeHolder);
+						_args.cancelControler && _args.cancelControler();
     },
     deleteAfter: function(){
             var _$next = _$selected.next();
@@ -666,12 +670,15 @@ var Eleditor = function(){
             //editnews();
             _hideEditorControllerLayer();
             _correctHtmlStructure(_$wrap, _placeHolder);
+						_args.cancelControler && _args.cancelControler();
     },
 		undo: function(){
 			_revokeEdit();
+			_args.cancelControler && _args.cancelControler();
 		},
 		cancel: function(){
 			_hideEditorControllerLayer();
+			_args.cancelControler && _args.cancelControler();
 		}
 	};
 
@@ -837,7 +844,6 @@ var Eleditor = function(){
 					_$selected.remove();
 				}
 			}
-
 			_flushEditorControllerLayerPosi();
 		}
 
@@ -848,7 +854,7 @@ var Eleditor = function(){
 		_hideEditorWrapMask();
 		_$editorTextModule.hide();
 		_hideEditorControllerLayer();
-
+		_args.cancelControler && _args.cancelControler();
 	});
 
 	_$editorColorModule.on('click', 'ul li span', function() {
@@ -898,6 +904,7 @@ var Eleditor = function(){
           	_hideEditorControllerLayer();
           	_hideEditorDeleteLayer();
           	_showEditorControllerLayer(_$this);
+						_args.buildControler && _args.buildControler();
 		}
 
           return _e.preventDefault() == 0;

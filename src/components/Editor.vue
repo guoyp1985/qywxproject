@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <flexbox slot="bottom" class="option-area" v-show="showBtnArea">
+    <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
       <flexbox-item>
         <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
       </flexbox-item>
@@ -173,6 +173,7 @@ export default {
       showBtnArea: false,
       showMenuArea: false,
       autofixed: false,
+      showBtnSave: true,
       showselectproduct: true,
       showproductitem: false,
       selectproduct: {},
@@ -216,6 +217,7 @@ export default {
     clickEditHandle () {
       this.showMenuArea = false
       this.showBtnArea = true
+      this.editTipCss = ''
       this.createEditor()
       this.$vux.toast.text(this.$t('Entry Edit Mode'))
       this.$emit('on-edit')
@@ -391,6 +393,7 @@ export default {
               })
             })
           }
+          self.showBtnSave = true
         },
         insertProductCallback: function (callback) {
           self.insertProductCallback = callback
@@ -398,6 +401,14 @@ export default {
           if (self.productdata.length === 0) {
             self.getProductData()
           }
+          self.showBtnSave = true
+        },
+        buildControler: function () {
+          self.showBtnSave = false
+        },
+        cancelControler: function () {
+          console.log('in cancel')
+          self.showBtnSave = true
         }
       })
     },
@@ -678,4 +689,5 @@ export default {
   right:73px;
   transform: translateX(0);
 }
+.Eleditor-wrap.Eleditor-mask{bottom:50px;}
 </style>
