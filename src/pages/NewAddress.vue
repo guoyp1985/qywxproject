@@ -39,7 +39,7 @@ export default {
       initItem: {
         linkman: '',
         telephone: '',
-        area: [],
+        area: ['', '', ''],
         address: ''
       },
       switcher: true
@@ -115,7 +115,7 @@ export default {
       this.initItem = {
         linkman: '',
         telephone: '',
-        area: [],
+        area: ['', '', ''],
         address: ''
       }
       this.switcher = true
