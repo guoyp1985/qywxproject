@@ -290,12 +290,13 @@ export default {
             return match
           })
           Voice.play(item.mediaid,
-            localId => {
+            localId => { // donwload voice
               item.mediaLid = localId
             },
-            localId => {
+            localId => { // voice playing end
               self.data = self.$util.changeItem(self.data, item.id, match => {
                 match.voiceClass = ''
+                item.mediaLid = null
                 return match
               })
             }
