@@ -289,7 +289,6 @@ export default {
             match.voiceClass = ' playing'
             return match
           })
-          console.log(item.mediaid)
           Voice.play(item.mediaid,
             localId => {
               item.mediaLid = localId
@@ -302,7 +301,7 @@ export default {
             }
           )
         }
-      } else if (msgtype === 'image') {
+      } else if (item.msgtype === 'image') {
 
       }
     },
