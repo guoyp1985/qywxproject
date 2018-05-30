@@ -301,7 +301,7 @@ export default {
             }
           )
         }
-      } else if (msgtype === "image") {
+      } else if (msgtype === 'image') {
 
       }
     },
@@ -401,7 +401,6 @@ export default {
       }
     },
     sendVoice (data) {
-      console.log(data)
       const params = {
         touid: this.query.uid,
         content: '',
@@ -410,6 +409,7 @@ export default {
         mediaid: data.vid,
         mediatime: data.time
       }
+      console.log(params)
       this.sendData(params)
     },
     onTalkRecord () {
