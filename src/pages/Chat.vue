@@ -7,8 +7,8 @@
   <div id="chat-room" class="font14">
     <scroller lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
-        <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
+          <div v-if="data[index + 1] && (data[index + 1].dateline - data[index].dateline > 300)" class="messages-date">{{data[index].dateline}}</div>
           <div :class="`chatitem ${getitemclass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
@@ -254,7 +254,6 @@ export default {
   },
   filters: {
     secondsFormat (seconds) {
-      console.log(seconds)
       return Time.seconds(seconds)
     }
   },
