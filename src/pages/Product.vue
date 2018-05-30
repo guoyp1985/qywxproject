@@ -721,6 +721,7 @@ export default {
       let postdata = self.submitdata
       postdata.crowdowner = item.uid
       postdata.activityid = item.activityid
+      postdata.id = self.productdata.id
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
