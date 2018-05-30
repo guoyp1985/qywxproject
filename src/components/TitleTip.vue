@@ -6,7 +6,7 @@
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
     <template v-if="user.subscribe == 0">
-      <div class="title-tip color-blue" @click="toAccess">您有待领取的金币，点击领取 ></div>
+      <div class="title-tip color-blue align_center" @click="toAccess">您有待领取的金币，点击领取 ></div>
     </template>
     <template v-else>
       <div class="title-tip">
