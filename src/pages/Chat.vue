@@ -421,7 +421,7 @@ export default {
       })
     },
     onTalkRecordStop () {
-      alert('t')
+      alert('s')
       const self = this
       Voice.recordStop(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
