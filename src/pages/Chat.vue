@@ -460,7 +460,6 @@ export default {
             to_client_id: self.query.uid,
             messageid: retdata.id,
             room_id: room,
-            mediatime: postdata.mediatime,
             ...retdata
           }
           // for (let key in retdata) {
