@@ -7,7 +7,6 @@ const Voice = {
     if (!switcher) return
     switcher = false
     time = new Time()
-    Vue.wechat.startRecord()
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
         switcher = true
@@ -16,6 +15,7 @@ const Voice = {
         callback && callback(res)
       }
     })
+    Vue.wechat.startRecord()
   },
   wxVoiceRecordStop: function (callback) {
     Vue.wechat.stopRecord({
@@ -48,7 +48,6 @@ const Voice = {
     })
   },
   wxVoicePlay: function (id, callback) {
-    Vue.wechat.playVoice({ localId: id })
     Vue.wechat.onVoicePlayEnd({
       success: function (res) {
         console.log('end')
@@ -56,6 +55,7 @@ const Voice = {
         callback && callback(localId)
       }
     })
+    Vue.wechat.playVoice({ localId: id })
   },
   wxVoicePause: function (id) {
     Vue.wechat.pauseVoice({ localId: id })
