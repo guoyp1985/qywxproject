@@ -39,7 +39,7 @@ export default {
       initItem: {
         linkman: '',
         telephone: '',
-        area: ['', '', ''],
+        area: [],
         address: ''
       },
       switcher: true
