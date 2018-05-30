@@ -168,12 +168,17 @@ export default {
   width: 24px;
 }
 .emotion-box .swiper-page {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: start; */
+  /* align-items: flex-start; */
+  align-content: flex-start;
   box-sizing: border-box;
   padding: 10px;
 }
 .emotion-delete,
 .vux-emotion {
   margin: 5px 10px;
-  float: left;
+  /* float: left; */
 }
 </style>

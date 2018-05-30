@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller lock-x scrollbar-y class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <div class="messages-date">03-24 13:01</div>
         <template v-for="(item,index) in data">
@@ -35,6 +35,9 @@
                   <div class="audio_play_area">
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
+                  </div>
+                  <div class="min">
+                    <span class="discontent">{{item.mediatime}}</span>
                   </div>
                 </template>
                 <template v-else>
@@ -271,10 +274,36 @@ export default {
       */
     },
     clickMessageItem (item) {
-      this.data = this.$util.changeItem(this.data, item.id, match => {
-        match.voiceClass = ' playing'
-        return match
-      })
+      const self = this
+      if (item.msgtype === 'voice') {
+        if (item.mediaLid) {
+          this.data = this.$util.changeItem(this.data, item.id, match => {
+            match.voiceClass = ''
+            match.voicePlaying = false
+            return match
+          })
+          Voice.playStop(item.mediaLid)
+          item.mediaLid = null
+        } else {
+          this.data = this.$util.changeItem(this.data, item.id, match => {
+            match.voiceClass = ' playing'
+            return match
+          })
+          Voice.play(item.mediaid,
+            localId => {
+              item.mediaLid = localId
+            },
+            localId => {
+              self.data = self.$util.changeItem(self.data, item.id, match => {
+                match.voiceClass = ''
+                return match
+              })
+            }
+          )
+        }
+      } else if (msgtype === "image") {
+        
+      }
     },
     toggleVoice () {
       if (this.showEmotBox) {
@@ -409,6 +438,9 @@ export default {
         ret = `${ret}right`
       }
       return ret
+    },
+    loadingHistory () {
+      console.log('loading')
     },
     sendData (postdata) {
       const self = this
@@ -651,8 +683,8 @@ export default {
     },
     setScrollTop () {
       this.$nextTick(() => {
-        this.$refs.scrollContainer.scrollTop = 1000//this.$refs.scrollContent.clientHeight
-        console.log(this.$refs.scrollContainer.scrollTop)
+        const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
+        this.$refs.scrollContainer.reset({ top: top })
       })
     },
     getNewsData () {
@@ -732,7 +764,6 @@ export default {
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening(room, uid, linkman, data => {
-        console.log(data)
         self.data.push(data)
         self.setScrollTop()
       })
@@ -904,14 +935,14 @@ export default {
   border-bottom: none;
 }
 
-#chat-room .chat-area{
-  position:absolute;
-  left:0;
-  top:0;
-  right:0;
-  bottom:52px;
-  overflow-y:auto;
-}
+// #chat-room .chat-area{
+//   position:absolute;
+//   left:0;
+//   top:0;
+//   right:0;
+//   bottom:52px;
+//   overflow-y:auto;
+// }
 .chatlist {
   padding: 0 10px;
   line-height: 1.1;
