@@ -414,7 +414,6 @@ export default {
   z-index:50;
 }
 .retailerapply .logo img{width:50%;display: block;}
-.retailerapply .pagemiddle{padding:0;}
 .retailerapply .x-input .weui-input{padding: 5px;font-size: 14px;}
 .retailerapply .form-item{padding:7px 10px;}
 .retailerapply .form-item:after{background-color:transparent;}
@@ -442,7 +441,7 @@ export default {
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 .retailerapply .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
-.retailerapply .pagebottom{bottom:50px;}
+.retailerapply .pagemiddle{bottom:50px;}
 .retailerapply .pagebottom{background-color:#fff;height:50px;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}

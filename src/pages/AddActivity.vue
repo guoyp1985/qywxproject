@@ -422,6 +422,9 @@ export default {
       const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
       this.selectdatetxt1 = ''
       this.selectdatetxt2 = ''
+      this.showselectproduct = true
+      this.showproductitem = false
+      this.selectproduct = null
       const submitdata = {
         productid: '',
         starttime: startime,
