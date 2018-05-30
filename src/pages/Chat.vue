@@ -790,6 +790,7 @@ export default {
       this.loginUser = User.get()
     },
     refresh () {
+      this.data = []
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
