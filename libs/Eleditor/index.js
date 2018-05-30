@@ -539,8 +539,10 @@ var Eleditor = function(){
 	var _editorModuleEvents = {
     insertProduct: function(){
         _args.insertProductCallback && _args.insertProductCallback(function(data){
-		      let rethtml = '<a href="#/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+data.price+' | 查看详情</div></a>'
-            var _buildWordHtml = '';
+					//必须为div标签，其它标签会被拆分
+		      var rethtml = '<div linkurl="/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+data.price+' | 查看详情</div></div>'
+					//var rethtml = '<router-link to="/product?id='+data.id+'&wid='+data.uploader+'" class="insertproduct db"><img class="v_middle imgcover" src="'+data.photo+'" /><div class="iteminfo">￥'+data.price+' | 查看详情</div></router-link>'
+						var _buildWordHtml = '';
             var _buildWordHtml = $(rethtml);
 
             _$selected.after(_buildWordHtml);
@@ -554,6 +556,7 @@ var Eleditor = function(){
             _hideEditorWrapMask();
             _$editorTextModule.hide();
             _hideEditorControllerLayer();
+						_args.clickInsertProduct && _args.clickInsertProduct(_buildWordHtml[0],data)
         });
     },
 		insertText: function(){

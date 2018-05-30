@@ -403,6 +403,11 @@ export default {
           }
           self.showBtnSave = true
         },
+        clickInsertProduct: function (area, d) {
+          area.addEventListener('click', function () {
+            self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
+          })
+        },
         buildControler: function () {
           self.showBtnSave = false
         },
@@ -606,6 +611,16 @@ export default {
     setTimeout(function () {
       self.editTipCss = ''
     }, 5000)
+    let items = document.querySelectorAll('.insertproduct')
+    for (let i = 0; i < items.length; i++) {
+      let cur = items[i]
+      let linkurl = cur.getAttribute('linkurl')
+      cur.addEventListener('click', function () {
+        if (!self.showBtnArea) {
+          self.$router.push(linkurl)
+        }
+      })
+    }
   }
 }
 </script>
