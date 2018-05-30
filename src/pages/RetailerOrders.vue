@@ -35,7 +35,7 @@
                     </div>
                   </div>
                   <div class="t-table pt5 color-lightgray font13 deliverarea" >
-                    <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2">
+                    <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
                       <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>
                     <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
@@ -98,7 +98,7 @@
                       <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                     </div>
                   </div>
-                  <div class="t-table pt5 color-lightgray font13 deliverarea">
+                  <div v-if="item.candeliver" class="t-table pt5 color-lightgray font13 deliverarea">
                     <div class="t-cell middle-cell appendcontrol align_right w80">
                       <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                     </div>

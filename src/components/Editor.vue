@@ -407,7 +407,6 @@ export default {
           self.showBtnSave = false
         },
         cancelControler: function () {
-          console.log('in cancel')
           self.showBtnSave = true
         }
       })
