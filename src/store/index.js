@@ -14,7 +14,7 @@ store.registerModule('vux', {
     demoScrollTop: 0,
     isLoading: false,
     direction: 'forward',
-    toggleTabbar: true
+    toggleTabbar: false
   },
   mutations: {
     updateDemoPosition (state, payload) {
