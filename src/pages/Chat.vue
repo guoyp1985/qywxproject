@@ -454,13 +454,13 @@ export default {
         if (data.flag === 1) {
           let retdata = data.data
           let senddata = {
-            module: postdata.module,
+            // module: postdata.module,
+            ...postdata,
             type: 'say',
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
             messageid: retdata.id,
             room_id: room,
-            ...retdata
           }
           // for (let key in retdata) {
           //   senddata[key] = retdata[key]
