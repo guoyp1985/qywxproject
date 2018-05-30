@@ -254,6 +254,7 @@ export default {
   },
   computed: {
     secondsFormat (seconds) {
+      console.log(seconds)
       return Time.seconds(seconds)
     }
   },
