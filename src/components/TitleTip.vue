@@ -54,7 +54,7 @@ export default {
     },
     delay: {
       type: Number,
-      default: 50000
+      default: 5000
     }
   },
   data () {
