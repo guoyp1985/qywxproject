@@ -257,7 +257,7 @@ export default {
       return Time.seconds(seconds)
     },
     dateFormat (seconds) {
-      return new Time().timer(seconds * 1000)
+      return new Time(seconds * 1000).format()
     }
   },
   watch: {
