@@ -115,16 +115,15 @@ class Time {
 		dateStr += ( hours && !minutes ? minutes + "分" : "" ) + seconds + "秒"
 		return dateStr
 	}
-	counter (startMillSeconds) {
+	secondsCounter (startMillSeconds) {
 		const diffs = new Date().getTime() - startMillSeconds
-		let minutes, seconds, dateStr, lefts
-		minutes = Math.floor( diffs / TIME_UNIT.MINUTE )
-		lefts = diffs % TIME_UNIT.MINUTE
-		seconds = Math.floor( lefts / TIME_UNIT.SECOND )
-		dateStr = minutes ? minutes + "'" : ""
-		dateStr += seconds ? seconds + "\'\'" : ""
-		return dateStr
+		let seconds = Math.floor( diffs / TIME_UNIT.SECOND )
+		return seconds
 	}
+}
+
+Time.seconds = function (seconds) {
+	return seconds + "\'\'"
 }
 
 export default Time

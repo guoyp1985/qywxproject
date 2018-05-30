@@ -11,19 +11,26 @@ const Voice = {
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
         switcher = true
-        res.time = '60"'
+        res.time = 60
         // const localId = res.localId
         callback && callback(res)
       }
     })
   },
-  wxVoiceRecordStop: function (callback) {
+  wxVoiceRecordStop: function (success, fail) {
+    const seconds = time.secondsCounter(time.time())
+    console.log(seconds)
+    if (seconds < 1) {
+      fail && fail()
+      Vue.wechat.stopRecord()
+      return
+    }
     Vue.wechat.stopRecord({
       success: function (res) {
         switcher = true
-        res.time = time.counter(time.time())
+        res.time = seconds
         // const localId = res.localId
-        callback && callback(res)
+        success && success(res)
       }
     })
   },
@@ -67,10 +74,10 @@ const Voice = {
       Voice.wxVoiceUpload(res, callback)
     })
   },
-  recordStop: function(callback) {
+  recordStop: function(success, fail) {
     Voice.wxVoiceRecordStop(res => {
-      Voice.wxVoiceUpload(res, callback)
-    })
+      Voice.wxVoiceUpload(res, success)
+    }, fail)
   },
   play: function (sid, callback, stop) {
     Voice.wxVoiceDownload(sid, lid => {
