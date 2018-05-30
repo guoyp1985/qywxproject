@@ -489,7 +489,7 @@ export default {
           // }
           // let sendtxt = JSON.stringify(senddata)
           // websocket.send(sendtxt)
-          console.log(senddata)
+          // console.log(senddata)
           Socket.send(senddata)
           self.msgTextarea.value = ''
           self.msgcontent = ''
@@ -788,6 +788,7 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman, item => {
         item.dateline = new Date(item.time).getTime()
+        console.log(item.dateline)
         self.data.push(item)
         self.setScrollTop()
       })
