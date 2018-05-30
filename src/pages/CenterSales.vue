@@ -22,7 +22,7 @@
         </swiper>
       </template>
       <template v-if="showCenter">
-        <center-sales :retailer-info="retailerInfo" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
+        <center-sales :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
       </template>
       <template v-if="showApply">
         <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
@@ -52,7 +52,8 @@ export default {
       loginUser: {},
       marqueeData: [],
       classData: [],
-      WeixinQrcode: ENV.WeixinQrcode
+      WeixinQrcode: ENV.WeixinQrcode,
+      messages: 0
     }
   },
   methods: {
@@ -89,6 +90,12 @@ export default {
                   let data = res.data
                   self.retailerInfo = data.data ? data.data : data
                   self.$vux.loading.hide()
+                  return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+                }
+              }).then(function (res) {
+                if (res) {
+                  let data = res.data
+                  self.messages = data.data
                   return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
                 }
               }).then(function (res) {

@@ -17,7 +17,7 @@
     				<img src="../assets/images/share1.jpg" />
     			</div>
     		</div>
-        <title-tip scroll-box="article-content" :user="reward" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <title-tip scroll-box="article-content" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
@@ -157,7 +157,8 @@ export default {
       // disComments: false,
       pagestart: 0,
       limit: 20,
-      replyData: null
+      replyData: null,
+      messages: 0
     }
   },
   filters: {
@@ -513,6 +514,7 @@ export default {
       this.loginUser = User.get()
     },
     refresh (query) {
+      const self = this
       if (this.query.id !== query.id) {
         this.comments = []
         this.pagestart = 0
@@ -522,6 +524,10 @@ export default {
       }
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
       if (query.newadd) {
         const self = this
         setTimeout(() => {

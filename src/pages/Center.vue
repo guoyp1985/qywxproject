@@ -156,13 +156,13 @@ export default {
     },
     getData () {
       const user = User.get()
+      const self = this
       this.loginUser = user
       if (user) {
         this.avatarHref = user.avatar
         this.linkMan = user.linkman
         this.userCredits = user.credit
         this.userLevels = user.levels
-        this.messages = user.messages
         this.profile = {
           linkman: user.linkman,
           avatar: user.avatar,
@@ -170,6 +170,10 @@ export default {
           mobile: user.mobile,
           company: user.company
         }
+        this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+          let data = res.data
+          self.messages = data.data
+        })
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
           this.loginUser = res.data.data

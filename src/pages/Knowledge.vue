@@ -9,7 +9,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <title-tip scroll-box="article-content" :user="reward" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+      <title-tip scroll-box="article-content" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
       <div class="article-view">
         <div class="article-title">
           <h2>{{article.title}}</h2>
@@ -86,7 +86,8 @@ export default {
       reward: {},
       article: {},
       comments: [],
-      roomid: ''
+      roomid: '',
+      messages: 0
       // socket: BkSocket.get()
     }
   },
@@ -228,10 +229,15 @@ export default {
       this.reward = this.loginUser
     },
     refresh () {
+      const self = this
       if (this.query.id !== this.$route.query.id) {
         this.query = this.$route.query
         this.getData()
       }
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }

@@ -23,6 +23,7 @@
         </router-link>
         <router-link class="op-cell" to="/messages">
           <span class="al al-pinglun color-black font24"></span>
+          <span v-if="messages > 0" class="numicon">{{ messages }}</span>
         </router-link>
       </div>
     </template>
@@ -55,6 +56,10 @@ export default {
     delay: {
       type: Number,
       default: 5000
+    },
+    messages: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -114,8 +119,21 @@ export default {
 .title-tip .op-cell {
   width: 50px;
   text-align: right;
+  position:relative;
 }
 .title-tip .user-credit {
   color: @keywords-color;
+}
+.title-tip .numicon {
+    position: absolute;
+    top: 0;
+    right: -15px;
+    background: #f06825;
+    padding: 0 1px;
+    border-radius: 16%;
+    color: #fff;
+    font-size: 10px;
+    min-width: 18px;
+    text-align: center;
 }
 </style>
