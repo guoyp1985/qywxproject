@@ -13,13 +13,16 @@
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
             </router-link>
-            <div class="name disusername">{{ item.username }}</div>
+            <div class="name disusername">{{item.username}}</div>
             <div class="msg">
-              <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
-                <template v-if="item.msgtype == 'image'">
-                  <img :src="item.picurl" />
-                </template>
-                <template v-else-if="item.msgtype == 'news'">
+              <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
+              <template v-if="item.msgtype == 'image'">
+                <div class="main message-text">
+                  <img :src="item.picurl"/>
+                </div>
+              </template>
+              <template v-else-if="item.msgtype == 'news'">
+                <div class="main message-text">
                   <div class="scroll_item">
           					<div class="con">
           						<router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
@@ -30,8 +33,10 @@
           						</router-link>
           					</div>
           				</div>
-                </template>
-                <template v-else-if="item.msgtype == 'voice'">
+                </div>
+              </template>
+              <template v-else-if="item.msgtype == 'voice'">
+                <div :style="`width: ${Math.round(5 * Number(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
                   <div class="audio_play_area">
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
@@ -39,11 +44,14 @@
                   <div class="min">
                     <span class="discontent">{{item.content}}</span>
                   </div>
-                </template>
-                <template v-else>
+                </div>
+              </template>
+              <template v-else>
+                <div class="main message-text">
                   <div v-html="item.content"></div>
-                </template>
-              </div>
+                </div>
+              </template>
+              <!-- </div> -->
             </div>
           </div>
         </template>
