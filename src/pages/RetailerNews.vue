@@ -278,7 +278,6 @@ export default {
     },
     closepush () {
       this.showpush = false
-      self.isBindCustomerScroll = false
     },
     submitpush () {
       const self = this
@@ -288,6 +287,7 @@ export default {
         })
         return false
       }
+      self.showpush = false
       self.$vux.loading.show()
       let subdata = { id: self.clickdata.id, sendmodule: 'news', uid: self.pushdata }
       self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
@@ -295,15 +295,9 @@ export default {
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.showpush = false
-            }
-          }
+          time: self.$util.delay(data.error)
         })
       })
-      self.isBindCustomerScroll = false
     },
     radioclick (data, index) {
       const self = this

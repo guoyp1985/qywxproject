@@ -27,11 +27,13 @@
           </grid-item>
         </grid>
       </div>
-      <group class="list-shadow radius5 no-after">
-        <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
-          <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
-        </cell>
-      </group>
+      <template v-if="loginUser.whoseseller && loginUser.whoseseller.length > 0">
+        <group class="list-shadow radius5 no-after">
+          <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
+            <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
+          </cell>
+        </group>
+      </template>
       <div class=" mt10 list-shadow radius5">
         <group class="bg-white radius5">
           <cell>
@@ -140,7 +142,8 @@ export default {
       userLevels: 0,
       profile: {},
       messages: 0,
-      direct: ''
+      direct: '',
+      loginUser: {}
     }
   },
   methods: {
@@ -153,6 +156,7 @@ export default {
     },
     getData () {
       const user = User.get()
+      this.loginUser = user
       if (user) {
         this.avatarHref = user.avatar
         this.linkMan = user.linkman
@@ -167,7 +171,9 @@ export default {
           company: user.company
         }
       } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`)
+        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+          this.loginUser = res.data.data
+        })
       }
     },
     refresh () {

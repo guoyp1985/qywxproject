@@ -245,6 +245,11 @@ import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XImg }
 import Time from '#/time'
 import ENV from 'env'
 
+const limit = 10
+let pageStart1 = 0
+let pageStart2 = 0
+let pageStart3 = 0
+
 export default {
   directives: {
     TransferDom
@@ -271,10 +276,7 @@ export default {
       checkedData: [],
       checkedAll: true,
       showpopup: false,
-      limit: 10,
-      pagestart1: 0,
-      pagestart2: 0,
-      pagestart3: 0
+      eventIng: false
     }
   },
   computed: {
@@ -286,17 +288,17 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (index === 0 && self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+          if (index === 0 && self.tabdata1.length === (pageStart1 + 1) * limit) {
             self.$vux.loading.show()
-            self.pagestart1++
+            pageStart1++
             self.getData1()
-          } else if (index === 1 && self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+          } else if (index === 1 && self.tabdata2.length === (pageStart2 + 1) * limit) {
             self.$vux.loading.show()
-            self.pagestart2++
+            pageStart2++
             self.getData2()
-          } else if (index === 2 && self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+          } else if (index === 2 && self.tabdata3.length === (pageStart3 + 1) * limit) {
             self.$vux.loading.show()
-            self.pagestart3 += self.limit
+            pageStart3 += limit
             self.getData3()
           }
         }
@@ -305,7 +307,7 @@ export default {
     getData1 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: self.pagestart1, limit: self.limit, cashed: 0 } }
+      const params = { params: { from: 'retailerrevenue', pagestart: pageStart1, limit: limit, cashed: 0 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -325,7 +327,7 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: self.pagestart2, limit: self.limit, cashed: 2 } }
+      const params = { params: { from: 'retailerrevenue', pagestart: pageStart2, limit: limit, cashed: 2 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -338,7 +340,7 @@ export default {
     getData3 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: self.pagestart3, limit: self.limit, cashed: 1 } }
+      const params = { params: { from: 'retailerrevenue', pagestart: pageStart3, limit: limit, cashed: 1 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -377,41 +379,48 @@ export default {
     },
     getcash () {
       const self = this
-      if (self.checkedData.length === 0) {
-        self.$vux.toast.show({
-          text: '请选择提现数据'
-        })
-        return false
-      }
-      self.$vux.confirm.show({
-        content: `本次提现金额为<span class='color-orange'>${self.totalPrice}元</span>，确认提现吗？`,
-        onConfirm () {
-          self.$vux.loading.show()
-          let subdata = { ids: self.checkedData }
-          self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  for (let i = 0; i < self.checkedData.length; i++) {
-                    let ckid = self.checkedData[i]
-                    for (let j = 0; j < self.tabdata1.length; j++) {
-                      if (self.tabdata1[j].id === ckid) {
-                        self.tabdata1.splice(j, 1)
-                        break
+      if (!self.eventIng) {
+        self.eventIng = true
+        if (self.checkedData.length === 0) {
+          self.$vux.toast.show({
+            text: '请选择提现数据',
+            onHide: function () {
+              self.eventIng = false
+            }
+          })
+          return false
+        }
+        self.$vux.confirm.show({
+          content: `本次提现金额为<span class='color-orange'>${self.totalPrice}元</span>，确认提现吗？`,
+          onConfirm () {
+            self.$vux.loading.show()
+            let subdata = { ids: self.checkedData }
+            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    for (let i = 0; i < self.checkedData.length; i++) {
+                      let ckid = self.checkedData[i]
+                      for (let j = 0; j < self.tabdata1.length; j++) {
+                        if (self.tabdata1[j].id === ckid) {
+                          self.tabdata1.splice(j, 1)
+                          break
+                        }
                       }
                     }
+                    self.totalPrice = '0.00'
                   }
-                  self.totalPrice = '0.00'
+                  self.eventIng = false
                 }
-              }
+              })
             })
-          })
-        }
-      })
+          }
+        })
+      }
     },
     popupexplain () {
       this.showpopup = !this.showpopup
@@ -425,7 +434,7 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          if (this.tabdata1.length < this.limit) {
+          if (this.tabdata1.length < limit) {
             this.distabdata1 = false
             this.totalPrice = '0.00'
             this.tabdata1 = []
@@ -433,14 +442,14 @@ export default {
           }
           break
         case 1:
-          if (this.tabdata2.length < this.limit) {
+          if (this.tabdata2.length < limit) {
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
           }
           break
         case 2:
-          if (this.tabdata3.length < this.limit) {
+          if (this.tabdata3.length < limit) {
             this.distabdata3 = false
             this.tabdata3 = []
             this.getData3()
