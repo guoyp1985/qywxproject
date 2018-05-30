@@ -30,11 +30,11 @@
           <div class="t-cell">暂无相关订单</div>
         </div>
       </div>
-      <router-link :to="{ path: '/orderDetail', query: { id: item.orderid } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
+      <router-link :to="{ path: '/retailerOrderDetail', query: { id: item.orderid } }" class="scroll_item mb10 db" v-else v-for="(item,index1) in orders" :key="item.id">
         <div class="padding10">
           <div class="t-table">
             <div class="t-cell w60">
-              <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:50px;height:50px;" ></x-img>
+              <img class="imgcover" :src="item.photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg';" style="width:50px;height:50px;" />
             </div>
             <div class="t-cell v_middle">
               <div class="clamp2 font12 color-gray5">{{ item.name }}</div>
