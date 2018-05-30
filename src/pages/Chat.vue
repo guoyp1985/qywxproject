@@ -9,7 +9,8 @@
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
-          <div v-else-if="data[index + 1] && (data[index + 1].dateline - data[index].dateline > 60)" class="messages-date">{{data[index].dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 < data.length && data[index].dateline - data[index - 1].dateline > 60" class="messages-date">{{data[index].dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 == data.length && data[index].dateline - data[index - 1].dateline > 60" class="messages-date">{{data[index].dateline | dateFormat}}</div>
           <div :class="`chatitem ${getitemclass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
