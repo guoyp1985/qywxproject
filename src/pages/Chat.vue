@@ -431,8 +431,10 @@ export default {
     onTalkRecordStop () {
       const self = this
       Voice.recordStop(res => {
-        alert(res.serverId)
         self.sendVoice({vid: res.serverId, time: res.time})
+      },
+      res => {
+        self.$vux.toast.text('录音时间过短', 'middle')
       })
     },
     viewUserInfo () {
