@@ -45,7 +45,8 @@ const Socket = {
           id: message.msgid,
           roomid: message.room_id,
           avatar: message.avatar,
-          newsdata: message.newsdata
+          newsdata: message.newsdata,
+          mediaid: message.mediaid
         }
         callback && callback(sendMessage)
       }
