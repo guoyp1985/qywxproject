@@ -276,7 +276,7 @@ export default {
     clickMessageItem (item) {
       const self = this
       if (item.msgtype === 'voice') {
-        if (item.mediaLid) {
+        if (item.mediaLid) { // stop voice
           this.data = this.$util.changeItem(this.data, item.id, match => {
             match.voiceClass = ''
             match.voicePlaying = false
@@ -284,11 +284,13 @@ export default {
           })
           Voice.playStop(item.mediaLid)
           item.mediaLid = null
-        } else {
+        } else { // play voice
           this.data = this.$util.changeItem(this.data, item.id, match => {
             match.voiceClass = ' playing'
+            console.log('play')
             return match
           })
+          console.log(this.data)
           Voice.play(item.mediaid,
             localId => { // donwload voice
               item.mediaLid = localId
