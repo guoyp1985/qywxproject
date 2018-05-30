@@ -532,6 +532,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data.data
         self.data = self.data.splice(0, 0, data)
+        console.log(self.data)
       })
     },
     // wsConnect () {
