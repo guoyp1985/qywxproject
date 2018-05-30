@@ -122,7 +122,7 @@ class Time {
 	}
 }
 
-Time.second = function (seconds) {
+Time.seconds = function (seconds) {
 	return seconds + "\'\'"
 }
 
