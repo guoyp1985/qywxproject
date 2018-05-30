@@ -786,9 +786,9 @@ export default {
       const bid = Math.max(this.query.uid, uid)
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
-      Socket.listening(room, uid, linkman, data => {
-        console.log(data)
-        self.data.push(data)
+      Socket.listening(room, uid, linkman, item => {
+        item.dateline = new Date(item.time).getTime()
+        self.data.push(item)
         self.setScrollTop()
       })
     },
