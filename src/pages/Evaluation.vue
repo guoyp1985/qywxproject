@@ -60,24 +60,33 @@ export default {
       sosTitle: '',
       showContainer: false,
       query: {},
-      list: []
+      list: [],
+      eventIng: false
     }
   },
   methods: {
     onSubmit (product) {
       const self = this
-      const orderId = this.$route.query.id
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {message: product.comment, module: 'product', nid: product.pid, type: 'orders', orderid: orderId})
-      .then(res => {
-        if (res.data.flag) {
-          self.$vux.toast.text(res.data.error)
-          setTimeout(() => {
-            self.$router.go(-1)
-          }, 2000)
-        } else {
-          self.$vux.toast.text(res.data.error)
-        }
-      })
+      if (!self.eventIng) {
+        self.eventIng = true
+        const orderId = this.$route.query.id
+        self.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/comment/add`, {message: product.comment, module: 'product', nid: product.pid, type: 'orders', orderid: orderId})
+        .then(res => {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.$router.go(-1)
+              }
+              self.eventIng = false
+            }
+          })
+        })
+      }
     },
     onCancel () {
       this.$router.go(-1)

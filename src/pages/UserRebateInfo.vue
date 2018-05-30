@@ -142,7 +142,8 @@ export default {
       distabdata3: false,
       tabdata1: [],
       tabdata2: [],
-      tabdata3: []
+      tabdata3: [],
+      eventIng: false
     }
   },
   filters: {
@@ -285,41 +286,48 @@ export default {
     },
     getCash () {
       const self = this
-      if (self.checkedData.length === 0) {
-        self.$vux.toast.show({
-          text: '请选择提现数据'
-        })
-        return false
-      }
-      self.$vux.confirm.show({
-        content: `本次提现金额为<span class='color-orange'>${self.total}元</span>，确认提现吗？`,
-        onConfirm () {
-          self.$vux.loading.show()
-          let subdata = { ids: self.checkedData, identity: 'seller' }
-          self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  for (let i = 0; i < self.checkedData.length; i++) {
-                    let ckid = self.checkedData[i]
-                    for (let j = 0; j < self.tabdata1.length; j++) {
-                      if (self.tabdata1[j].id === ckid) {
-                        self.tabdata1.splice(j, 1)
-                        break
+      if (!self.eventIng) {
+        self.eventIng = true
+        if (self.checkedData.length === 0) {
+          self.$vux.toast.show({
+            text: '请选择提现数据',
+            onHide: function () {
+              self.eventIng = false
+            }
+          })
+          return false
+        }
+        self.$vux.confirm.show({
+          content: `本次提现金额为<span class='color-orange'>${self.total}元</span>，确认提现吗？`,
+          onConfirm () {
+            self.$vux.loading.show()
+            let subdata = { ids: self.checkedData, identity: 'seller' }
+            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    for (let i = 0; i < self.checkedData.length; i++) {
+                      let ckid = self.checkedData[i]
+                      for (let j = 0; j < self.tabdata1.length; j++) {
+                        if (self.tabdata1[j].id === ckid) {
+                          self.tabdata1.splice(j, 1)
+                          break
+                        }
                       }
                     }
+                    self.total = '0.00'
                   }
-                  self.total = '0.00'
+                  self.eventIng = false
                 }
-              }
+              })
             })
-          })
-        }
-      })
+          }
+        })
+      }
     },
     getData () {
       this.swiperChange()
