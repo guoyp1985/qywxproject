@@ -252,7 +252,7 @@ export default {
       selectProductsData: null
     }
   },
-  computed: {
+  filters: {
     secondsFormat (seconds) {
       console.log(seconds)
       return Time.seconds(seconds)
