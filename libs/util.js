@@ -268,7 +268,7 @@ Util.install = function (Vue, options) {
           }
         })
         Vue.wechat.onMenuShareTimeline({
-          title: wxData.timelineTitle,
+          title: wxData.title,
           link: wxshareurl,
           imgUrl: wxData.photo,
           trigger: function (res) {
