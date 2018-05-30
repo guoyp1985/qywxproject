@@ -18,6 +18,7 @@ const Voice = {
     })
   },
   wxVoiceRecordStop: function (callback) {
+    alert(Vue.wechat.stopRecord)
     Vue.wechat.stopRecord({
       success: function (res) {
         switcher = true
