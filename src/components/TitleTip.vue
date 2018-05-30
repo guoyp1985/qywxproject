@@ -5,8 +5,8 @@
 */
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
-    <template v-if="user.subscribe == 0" @click="toAccess">
-      <div class="title-tip">您有{{ waitgetcredit }}个金币，点击领取 ></div>
+    <template v-if="user.subscribe == 0">
+      <div class="title-tip color-blue" @click="toAccess">您有待领取的金币，点击领取 ></div>
     </template>
     <template v-else>
       <div class="title-tip">
@@ -18,7 +18,7 @@
             {{userName}}
           </div>
           <div class="user-credit">
-            {{$t('Gain Credit')}}: {{userCredit}}
+            {{$t('Credit')}}: {{userCredit}}
           </div>
         </router-link>
         <router-link class="op-cell" to="/messages">

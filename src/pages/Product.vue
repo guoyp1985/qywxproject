@@ -1,30 +1,11 @@
 <template>
-  <div :class="`containerarea bg-white font14 product ${showtopcss}`">
+  <div class="containerarea bg-white font14 product notop">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
-      <template v-show="isshowtop">
-        <div v-if="loginUser.subscribe == 0" class="pagetop flex_center color-blue" @click="toAccess">您有{{ waitgetcredit }}个金币，点击领取 ></div>
-        <div v-else class="pagetop">
-          <div class="t-table h_100">
-            <router-link class="t-cell v_middle pl10" style="width:46px;" :to="{path:'/center'}">
-              <x-img class="v_middle imgcover" :src="loginUser.avatar" default-src="../src/assets/images/user.jpg" style="width:36px;height:36px;border-radius:50%"></x-img>
-            </router-link>
-            <router-link class="t-cell v_middle color-black" :to="{path:'/center'}">
-              <div>{{ loginUser.linkman }}</div>
-              <div class="font12 color-orange">金币：{{ loginUser.credits }}</div>
-            </router-link>
-            <div class="t-cell v_middle align_center" style="width:65px;">
-              <router-link class="db-in" style="position:relative;" :to="{path:'/messages'}">
-                <i class="al al-pinglun color-black" style="font-size:24px;"></i>
-                <span v-if="retailerinfo.newmessage > 0" class="numicon">{{ retailerinfo.newmessage }}</span>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </template>
-      <div class="pagemiddle scroll-container">
+      <div id="scroll-container" class="pagemiddle scroll-container">
+        <title-tip scroll-box="scroll-container" :user="loginUser" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -369,6 +350,7 @@ import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
 import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
+import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -382,7 +364,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg, TitleTip
   },
   filters: {
     dateformat: function (value) {
@@ -404,7 +386,6 @@ export default {
       retailerinfo: {},
       activityInfo: {},
       loginUser: {},
-      showtopcss: '',
       isshowtop: false,
       waitgetcredit: 100,
       showFlash: false,
@@ -450,17 +431,6 @@ export default {
     buyuserdata: function () {
       return this.buyuserdata
     },
-    showtopcss: function () {
-      return this.showtopcss
-    },
-    isshowtop: function () {
-      let css = 'notop'
-      if (this.isshowtop) {
-        css = ''
-      }
-      this.showtopcss = css
-      return this.isshowtop
-    },
     favoritecss: function () {
       if (this.isfavorite) {
         this.favoritecss = 'have'
@@ -499,13 +469,6 @@ export default {
         this.showdot = false
       }
       return this.showdot
-    },
-    showtop: function () {
-      let css = 'notop'
-      if (this.isshowtop) {
-        css = ''
-      }
-      return css
     }
   },
   methods: {
@@ -520,8 +483,6 @@ export default {
       this.productdata = {}
       this.retailerinfo = {}
       this.activityInfo = {}
-      this.showtopcss = ''
-      this.isshowtop = false
       this.showFlash = false
       this.showdot = true
       this.showpopup = false
@@ -687,15 +648,6 @@ export default {
     closeShareSuccess () {
       this.showShareSuccess = false
     },
-    handleTop () {
-      const self = this
-      if (self.loginUser) {
-        self.isshowtop = true
-        setTimeout(function () {
-          self.isshowtop = false
-        }, 5000)
-      }
-    },
     handleNewAdd () {
       const self = this
       if (self.query.newadd) {
@@ -839,7 +791,6 @@ export default {
               self.activityInfo = self.productdata.activityinfo
             }
             document.title = self.productdata.title
-            self.handleTop()
             self.handleNewAdd()
             const photo = self.productdata.photo
             if (photo && self.$util.trim(photo) !== '') {
