@@ -51,7 +51,6 @@ const Voice = {
     Vue.wechat.playVoice({ localId: id })
     Vue.wechat.onVoicePlayEnd({
       success: function (res) {
-        alert('end')
         const localId = res.localId
         callback && callback(localId)
       }
