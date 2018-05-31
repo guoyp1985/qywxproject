@@ -88,6 +88,11 @@ Util.install = function (Vue, options) {
       }
       return list
     },
+    emotionPrase: function(text) {
+      if (this.trim(text) !== '') {
+        // text.replace(/\[\]/)
+      }
+    },
     // checkMobile: function (mobile) {
     //   if (isNaN(mobile)) return false;
     //   if (!mobile || mobile=="" || mobile.length!=11) {
