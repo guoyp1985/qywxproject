@@ -205,6 +205,7 @@ import Voice from '#/voice'
 
 let room = ''
 let minIdFlag = 0
+let intervalId = null
 export default {
   directives: {
     TransferDom
@@ -217,7 +218,6 @@ export default {
       // roomid: '',
       module: 'message',
       loginUser: {},
-      intervalId: null,
       showEmotBox: false,
       showFeatureBox: false,
       showVoiceCom: false,
@@ -225,7 +225,7 @@ export default {
       isPC: this.$util.isPC(),
       query: {},
       data: [],
-      focusInterval: null,
+      // focusInterval: null,
       msgcontent: '',
       showSend: false,
       diffSeconds: 300,
@@ -277,12 +277,12 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      this.intervalId = setInterval(function () {
-        document.body.scrollTop = document.body.scrollHeight
-      }, 200)
+      // intervalId = setInterval(function () {
+      //   document.body.scrollTop = document.body.scrollHeight
+      // }, 200)
     },
     onBlur () {
-      clearInterval(this.intervalId)
+      // clearInterval(intervalId)
     },
     onChange (val) {
       /*

@@ -388,17 +388,17 @@ Util.install = function (Vue, options) {
     },
     taskData: function (os) {
       let data = os.data
-      let handleFunction = os.handleFunction
+      const handleFunction = os.handleFunction
       if(data && data.length > 0) {
-        let ascdesc = os.ascdesc ? os.ascdesc : "asc"
-        let callback = os.callback
+        const ascdesc = os.ascdesc ? os.ascdesc : "asc"
+        const callback = os.callback
         let tasks = []
-        let _serial = function () {
+        const _serial = function () {
           if (tasks.length === 0) {
             callback && callback()
             return
           }
-          let task = tasks[0]
+          const task = tasks[0]
           tasks.splice(0, 1)
           task(_serial)
         }
@@ -418,7 +418,7 @@ Util.install = function (Vue, options) {
       const self = this
       let maxnum = os.maxnum ? os.maxnum : 9
       Vue.wechat.chooseImage({
-        count:maxnum,
+        count: maxnum,
         success: function (res) {
           let localIds = res.localIds
           if(localIds.length > maxnum){
