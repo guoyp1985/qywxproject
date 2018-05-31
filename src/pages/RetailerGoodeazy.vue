@@ -31,7 +31,7 @@
               default-item-class="ck-item"
               selected-item-class="ck-item-selected"
               @on-change="searchEvent">
-                <checker-item v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">{{ kw }}</checker-item>
+                <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">{{ kw }}</checker-item>
               </checker>
               <div class="scroll_list pl10 pr10 mb12">
                 <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
@@ -311,15 +311,17 @@ export default {
       })
     },
     init () {
+      const self = this
       this.loginUser = User.get()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'goodeazy'
+      }).then(function () {
+        self.swiperChange()
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.swiperChange()
     }
   },
   created () {
@@ -334,9 +336,4 @@ export default {
 <style lang="less" scoped>
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
-.keylist .item{
-  display:inline-block; padding:5px 10px;border:@list-border-color 1px solid;
-  border-radius:5px;
-}
-.keylist .item.active{border-color:green;}
 </style>
