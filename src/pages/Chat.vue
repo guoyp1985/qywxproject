@@ -283,11 +283,9 @@ export default {
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
-      this.setScrollToBottom()
     },
     onBlur () {
       clearInterval(intervalId)
-      this.setScrollToBottom()
     },
     onChange (val) {
       /*
@@ -346,6 +344,7 @@ export default {
       } else {
         this.showVoiceCom = true
       }
+      this.setScrollToBottom()
     },
     toggleEmotion () {
       if (this.showVoiceCom) {
@@ -355,6 +354,7 @@ export default {
         this.showFeatureBox = false
       }
       this.showEmotBox = true
+      this.setScrollToBottom()
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
@@ -381,6 +381,7 @@ export default {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
       }
+      this.setScrollToBottom()
     },
     imageLoad (item) {
       if (item.id > minIdFlag) {
