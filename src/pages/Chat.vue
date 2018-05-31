@@ -722,7 +722,7 @@ export default {
           const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
           self.$refs.scrollContainer.reset({ top: top })
           // this.$refs.scrollContainer.scrollTo(0, top, false)
-        }, 80)
+        }, 100)
       })
     },
     getNewsData () {
