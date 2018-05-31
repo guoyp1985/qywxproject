@@ -714,7 +714,7 @@ export default {
         setTimeout(() => {
           const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
           this.$refs.scrollContainer.reset({ top: top })
-        }, 100)
+        }, 10)
       })
     },
     getNewsData () {
