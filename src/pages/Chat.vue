@@ -71,7 +71,7 @@
         </div>
         <div class="input-cell">
           <group class="textarea-box">
-            <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-change="onChange" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+            <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
           <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
         </div>
@@ -287,6 +287,7 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
@@ -294,15 +295,53 @@ export default {
     onBlur () {
       clearInterval(intervalId)
     },
-    onChange (val) {
-      /*
-      const self = this
-      if (self.$util.isNull(val)) {
-        self.showSend = false
-      } else {
-        self.showSend = true
+    toggleVoice () {
+      if (this.showEmotBox) {
+        this.showEmotBox = false
       }
-      */
+      if (this.showFeatureBox) {
+        this.showFeatureBox = false
+      }
+      if (this.showVoiceCom) {
+        this.showVoiceCom = false
+      } else {
+        this.showVoiceCom = true
+      }
+    },
+    toggleEmotion () {
+      if (this.showVoiceCom) {
+        this.showVoiceCom = false
+      }
+      if (this.showFeatureBox) {
+        this.showFeatureBox = false
+      }
+      this.showEmotBox = true
+    },
+    toggleKeyboard () {
+      if (this.showEmotBox) {
+        this.showEmotBox = false
+      }
+      if (this.showFeatureBox) {
+        this.showFeatureBox = false
+      }
+      if (this.showVoiceCom) {
+        this.showVoiceCom = false
+      }
+      this.$refs.text.$refs.textarea.focus()
+    },
+    toggleFeatureBoard () {
+      if (this.showVoiceCom) {
+        this.showVoiceCom = false
+      }
+      if (this.showEmotBox) {
+        this.showEmotBox = false
+      }
+      if (!this.showFeatureBox) {
+        this.showFeatureBox = true
+      } else {
+        this.showFeatureBox = false
+        this.$refs.text.$refs.textarea.focus()
+      }
     },
     setViewHeight () {
       const self = this
@@ -345,58 +384,6 @@ export default {
       } else if (item.msgtype === 'image') {
 
       }
-    },
-    toggleVoice () {
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      } else {
-        this.showVoiceCom = true
-      }
-    },
-    toggleEmotion () {
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      this.showEmotBox = true
-      // this.setViewHeight()
-      // this.setScrollToBottom()
-    },
-    toggleKeyboard () {
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      this.$refs.text.$refs.textarea.focus()
-    },
-    toggleFeatureBoard () {
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (!this.showFeatureBox) {
-        this.showFeatureBox = true
-      } else {
-        this.showFeatureBox = false
-        this.$refs.text.$refs.textarea.focus()
-      }
-      // this.setViewHeight()
-      // this.setScrollToBottom()
     },
     imageLoad (item) {
       if (item.id > minIdFlag) {
