@@ -115,40 +115,38 @@ Util.install = function (Vue, options) {
     // },
     wxAccess: function () {
       const user = User.get()
-      const lUrl = urlParse(location.href, true)
-      const code = lUrl.query.code
       if (user && user.subscribe === 0) {
-        alert(code)
-        if (code) {
-          Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
-          .then(
-            res => {
-              if (res.data.flag) {
-                User.set({
-                  ...user,
-                  ...res.data.data
-                })
-                alert(JSON.stringify(User.get()))
-                location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-              }
-            },
-            error => {
-              Vue.$vux.toast.show({
-                text: '服务器错误',
-                type: 'warn',
-              })
-            }
-          )
-        } else {
-          const originHref = encodeURIComponent(location.href)
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-        }
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
-          // alert(JSON.stringify(res.data))
           User.set(res.data)
         })
+      }
+    },
+    wxAccessListening () {
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      if (code) {
+        Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+        .then(
+          res => {
+            if (res.data.flag) {
+              User.set({
+                ...user,
+                ...res.data.data
+              })
+              location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+            }
+          },
+          error => {
+            Vue.$vux.toast.show({
+              text: '服务器错误',
+              type: 'warn',
+            })
+          }
+        )
       }
     },
     delay: (text) => {
