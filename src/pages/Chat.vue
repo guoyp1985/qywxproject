@@ -382,6 +382,7 @@ export default {
       }
     },
     imageLoad (item) {
+      console.log(item.id > minIdFlag)
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
