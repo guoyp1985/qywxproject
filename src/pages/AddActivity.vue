@@ -425,6 +425,8 @@ export default {
       this.showselectproduct = true
       this.showproductitem = false
       this.selectproduct = null
+      this.productdata = []
+      this.radiodata = []
       const submitdata = {
         productid: '',
         starttime: startime,
