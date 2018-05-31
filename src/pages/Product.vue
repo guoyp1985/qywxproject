@@ -879,6 +879,8 @@ export default {
     refresh () {
       const self = this
       this.loginUser = User.get()
+      alert('in product')
+      alert(JSON.stringify(this.loginUser))
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
