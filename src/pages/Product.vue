@@ -55,7 +55,7 @@
             <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w50">
-                  <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle align_left">
                   <div class="clamp1">{{ item.username }}</div>
