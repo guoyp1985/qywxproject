@@ -813,7 +813,6 @@ export default {
         if (res.data.flag) {
           self.$vux.loading.hide()
           const data = res.data.data
-          minIdFlag = data[data.length - 1].id
           self.data = data.concat(self.data)
           callback && callback()
         } else {
@@ -828,6 +827,7 @@ export default {
       const self = this
       // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.getMessages(() => {
+        minIdFlag = self.data[0].id
         self.setScrollToBottom()
       })
     },
