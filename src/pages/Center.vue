@@ -88,7 +88,7 @@ export default {
           link: '/orderSearch?flag=3'
         },
         {
-          name: 'To be evaluated',
+          name: 'Completed',
           icon: 'al-buoumaotubiao48',
           // color: 'rgba04',
           link: '/orderSearch?flag=4'

@@ -10,7 +10,7 @@
         </div>
         <div class="txt-cell">
           <div class="font17 color-white">{{ retailerInfo.linkman }}</div>
-          <div class="font13 color-white mt5">{{ $t('With the customer rebate money together!') }}</div>
+          <div class="font13 color-white mt5">{{ $t('Business tool') }}</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
