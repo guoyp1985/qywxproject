@@ -220,7 +220,7 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const fromId = this.query.fromid
+      // const fromId = this.query.fromid
       room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})

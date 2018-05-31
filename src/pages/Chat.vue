@@ -94,8 +94,8 @@
       </div>
       <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" :click-callback="clickEmotionCallback">
       </emotion-box>
-      <form class="uploadImageForm hide" enctype="multipart/form-data">
-        <input style="opacity:0;" type="file" name="files" />
+      <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
+        <input style="opacity:0;" type="file" name="files" @change="pcUploadImg"/>
       </form>
       <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
         <grid-item @click.native="sendPhoto">
@@ -202,7 +202,7 @@ import { User } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
-console.log('chat')
+
 let room = ''
 let minIdFlag = 0
 let intervalId = null
@@ -263,7 +263,7 @@ export default {
     },
     dateFormat (seconds) {
       return new Time(seconds * 1000).format2()
-    },
+    }
   },
   watch: {
     showSend () {
@@ -388,40 +388,62 @@ export default {
         this.setScrollToTop()
       }
     },
-    sendPhoto () {
-      const self = this
-      if (!window.WeixinJSBridge) {
-        let fileForm = document.querySelector('.uploadImageForm')
-        let fileInput = document.querySelector('.uploadImageForm input')
-        fileInput.click()
-        fileInput.addEventListener('change', function (e) {
-          let files = e.target.files
-          if (files.length > 0) {
-            let filedata = new FormData(fileForm)
-            self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
-              self.toggleFeatureBoard()
-              const data = res.data
-              self.$vux.loading.hide()
-              if (data.flag === 1 && data.data) {
-                self.sendData({
-                  touid: self.query.uid,
-                  content: '',
-                  module: self.module,
-                  sendtype: 'image',
-                  picurl: data.data,
-                  thumb: ''
-                })
-              }
+    pcUploadImg (event) {
+      const uploadFiles = event.target.files
+      if (uploadFiles.length > 0) {
+        let formData = new FormData(this.$refs.uploadForm)
+        const self = this
+        this.$vux.loading.show()
+        this.toggleFeatureBoard()
+        this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData).then(res => {
+          const data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1 && data.data) {
+            self.sendData({
+              touid: self.query.uid,
+              content: '',
+              module: self.module,
+              sendtype: 'image',
+              picurl: data.data,
+              thumb: ''
             })
           }
         })
-      } else {
+      }
+    },
+    sendPhoto () {
+      const self = this
+      if (window.WeixinJSBridge) {
+        // let fileForm = document.querySelector('.uploadImageForm')
+        // let fileInput = document.querySelector('.uploadImageForm input')
+        // fileInput.click()
+        // fileInput.addEventListener('change', function (e) {
+          // if (files.length > 0) {
+          //   let filedata = new FormData(fileForm)
+          //   self.$vux.loading.show()
+          //   self.toggleFeatureBoard()
+          //   self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+          //     const data = res.data
+          //     self.$vux.loading.hide()
+          //     if (data.flag === 1 && data.data) {
+          //       self.sendData({
+          //         touid: self.query.uid,
+          //         content: '',
+          //         module: self.module,
+          //         sendtype: 'image',
+          //         picurl: data.data,
+          //         thumb: ''
+          //       })
+          //     }
+          //   })
+          // }
+        // })
+      // } else {
         // self.$wechat.ready(function () {
+        self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
-            self.toggleFeatureBoard()
             if (data.flag === 1 && data.data) {
               self.sendData({
                 touid: self.query.uid,
