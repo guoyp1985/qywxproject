@@ -711,7 +711,6 @@ export default {
     setScrollToBottom () {
       this.$nextTick(() => {
         const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
-        alert(top)
         this.$refs.scrollContainer.reset({ top: top })
       })
     },
