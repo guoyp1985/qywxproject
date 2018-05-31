@@ -283,9 +283,11 @@ export default {
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
+      this.setScrollToBottom()
     },
     onBlur () {
       clearInterval(intervalId)
+      this.setScrollToBottom()
     },
     onChange (val) {
       /*
