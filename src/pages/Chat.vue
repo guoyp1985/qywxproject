@@ -95,7 +95,7 @@
       <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" :click-callback="clickEmotionCallback">
       </emotion-box>
       <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
-        <input style="opacity:0;" type="file" name="files" @change="pcUploadImg"/>
+        <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
       </form>
       <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
         <grid-item @click.native="sendPhoto">
@@ -385,6 +385,7 @@ export default {
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
+        alert('ok')
         this.setScrollToTop()
       }
     },
@@ -395,7 +396,8 @@ export default {
         const self = this
         this.$vux.loading.show()
         this.toggleFeatureBoard()
-        this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData)
+        .then(res => {
           const data = res.data
           self.$vux.loading.hide()
           if (data.flag === 1 && data.data) {
@@ -414,32 +416,6 @@ export default {
     sendPhoto () {
       const self = this
       if (window.WeixinJSBridge) {
-        // let fileForm = document.querySelector('.uploadImageForm')
-        // let fileInput = document.querySelector('.uploadImageForm input')
-        // fileInput.click()
-        // fileInput.addEventListener('change', function (e) {
-          // if (files.length > 0) {
-          //   let filedata = new FormData(fileForm)
-          //   self.$vux.loading.show()
-          //   self.toggleFeatureBoard()
-          //   self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
-          //     const data = res.data
-          //     self.$vux.loading.hide()
-          //     if (data.flag === 1 && data.data) {
-          //       self.sendData({
-          //         touid: self.query.uid,
-          //         content: '',
-          //         module: self.module,
-          //         sendtype: 'image',
-          //         picurl: data.data,
-          //         thumb: ''
-          //       })
-          //     }
-          //   })
-          // }
-        // })
-      // } else {
-        // self.$wechat.ready(function () {
         self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
@@ -456,7 +432,8 @@ export default {
             }
           }
         })
-        // })
+      } else {
+        this.$refs.uploadInput.click()
       }
     },
     sendVoice (data) {
