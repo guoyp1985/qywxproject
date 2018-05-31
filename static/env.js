@@ -7,7 +7,7 @@ var ENV = {
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
   SocketBokaApi: 'laravel.boka.cn',//'laravel.boka.cn', // test: 124.207.246.107 // vux: vuxserver.boka.cn
-  BokaCDN: 'http://vue.boka.cn',
+  // BokaCDN: 'http://vue.boka.cn',
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
   OrderStatus: [

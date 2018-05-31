@@ -5,10 +5,12 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
-          <div v-if="data[index + 1] && (data[index + 1].dateline - data[index].dateline > 300)" class="messages-date">{{data[index].dateline}}</div>
+          <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 < data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 == data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
           <div :class="`chatitem ${getitemclass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
@@ -18,7 +20,7 @@
               <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
-                  <img :src="item.picurl"/>
+                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'news'">
@@ -202,6 +204,7 @@ import Socket from '#/socket'
 import Voice from '#/voice'
 
 let room = ''
+let minIdFlag = 0
 export default {
   directives: {
     TransferDom
@@ -225,6 +228,7 @@ export default {
       focusInterval: null,
       msgcontent: '',
       showSend: false,
+      diffSeconds: 300,
       pagestart: 0,
       limit: 5,
       msgType: 'text',
@@ -255,6 +259,9 @@ export default {
   filters: {
     secondsFormat (seconds) {
       return Time.seconds(seconds)
+    },
+    dateFormat (seconds) {
+      return new Time(seconds * 1000).format2()
     }
   },
   watch: {
@@ -370,6 +377,13 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
+    imageLoad (item) {
+      if (item.id > minIdFlag) {
+        this.setScrollToBottom()
+      } else {
+        this.setScrollToTop()
+      }
+    },
     sendPhoto () {
       const self = this
       if (!window.WeixinJSBridge) {
@@ -425,7 +439,7 @@ export default {
         sendtype: 'voice',
         mediaid: data.vid
       }
-      console.log(params)
+      // console.log(params)
       this.sendData(params)
     },
     onTalkRecord () {
@@ -443,8 +457,8 @@ export default {
         self.$vux.toast.text('录音时间过短', 'middle')
       })
     },
-    viewUserInfo () {
-    },
+    // viewUserInfo () {
+    // },
     getitemclass (item) {
       const self = this
       let ret = ''
@@ -459,7 +473,9 @@ export default {
       return ret
     },
     loadingHistory () {
-      console.log('loading')
+      const minId = this.data[1].id
+      minIdFlag = minId
+      this.getMessages(minId)
     },
     sendData (postdata) {
       const self = this
@@ -481,12 +497,7 @@ export default {
             room_id: room,
             ...retdata
           }
-          // for (let key in retdata) {
-          //   senddata[key] = retdata[key]
-          // }
-          // let sendtxt = JSON.stringify(senddata)
-          // websocket.send(sendtxt)
-          console.log(senddata)
+          // console.log(senddata)
           Socket.send(senddata)
           self.msgTextarea.value = ''
           self.msgcontent = ''
@@ -522,19 +533,6 @@ export default {
       }
       self.sendData(postdata)
     },
-    // getMsgList (lastid) {
-    //   const self = this
-    //   let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
-    //   if (lastid) {
-    //     params.lastid = lastid
-    //   }
-    //   self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
-    //     let data = res.data
-    //     self.$vux.loading.hide()
-    //     let retdata = data.data ? data.data : data
-    //     self.data = self.data.concat(retdata)
-    //   })
-    // },
     // wsConnect () {
     //   const self = this
     //   websocket = new WebSocket(ENV.SocketApi)
@@ -701,7 +699,12 @@ export default {
         }
       })
     },
-    setScrollTop () {
+    setScrollToTop () {
+      this.$nextTick(() => {
+        this.$refs.scrollContainer.reset({ top: 0 })
+      })
+    },
+    setScrollToBottom () {
       this.$nextTick(() => {
         const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
         this.$refs.scrollContainer.reset({ top: top })
@@ -783,10 +786,31 @@ export default {
       const bid = Math.max(this.query.uid, uid)
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
-      Socket.listening(room, uid, linkman, data => {
-        console.log(data)
-        self.data.push(data)
-        self.setScrollTop()
+      Socket.listening(room, uid, linkman, item => {
+        item.dateline = new Date(item.time).getTime() / 1000
+        // console.log(item.dateline)
+        self.data.push(item)
+        self.setScrollToBottom()
+      })
+    },
+    getMessages (minId, callback) {
+      let params = { uid: this.query.uid }
+      if (typeof minId === 'function') {
+        callback = minId
+      } else {
+        params.lastid = minId
+      }
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
+      .then(res => {
+        if (res.data.flag) {
+          self.$vux.loading.hide()
+          const data = res.data.data
+          self.data = data.concat(self.data)
+          callback && callback()
+        } else {
+          self.$vux.toast.text('加载失败，稍后再试', 'middle')
+        }
       })
     },
     getData () {
@@ -794,19 +818,17 @@ export default {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
       const self = this
-      const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
-      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
-        self.$vux.loading.hide()
-        const data = res.data.data
-        // const retdata = data.data ? data.data : data
-        self.data = self.data.concat(data)
-        self.setScrollTop()
+      // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
+      this.getMessages(() => {
+        self.setScrollToBottom()
       })
     },
     init () {
       this.loginUser = User.get()
     },
     refresh () {
+      room = ''
+      minIdFlag = 0
       this.data = []
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
@@ -820,6 +842,7 @@ export default {
   },
   mounted () {
     const self = this
+    this.$util.wxPreviewImage('#chat-room')
     this.msgTextarea = document.querySelector('#chat-textarea textarea')
     this.msgTextarea.addEventListener('focus', function () {
       self.setSendStatus()
@@ -827,7 +850,7 @@ export default {
     this.msgTextarea.addEventListener('keyup', function () {
       self.setSendStatus()
     })
-    this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
+    // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
     this.refresh()
@@ -969,9 +992,9 @@ export default {
   padding: 0 10px;
   line-height: 1.1;
 }
-.chatlist *{
-  box-sizing: border-box;
-}
+// .chatlist *{
+//   box-sizing: border-box;
+// }
 .chatlist .messages-date {
   text-align: center;
   font-weight: 500;
@@ -979,7 +1002,7 @@ export default {
   padding: 10px 0;
   color: #8e8e93;
 }
-.chatlist .chatitem {position: relative;margin-bottom: 20px;}
+.chatlist .chatitem {position: relative;padding-bottom: 20px;}
 .chatlist .chatitem.left{padding-right:50px;}
 .chatlist .chatitem.right{padding-left:50px;}
 .chatlist .chatitem .head {
@@ -1008,7 +1031,7 @@ export default {
   max-width: 200px;
 	border-radius: 5px;
   line-height: 24px;
-  min-height:36px;
+  // min-height:36px;
 	word-wrap: break-word;
   word-break: break-all;
 }
