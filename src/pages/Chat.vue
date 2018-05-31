@@ -814,7 +814,7 @@ export default {
         if (res.data.flag) {
           self.$vux.loading.hide()
           const data = res.data.data
-          minIdFlag = data[0].id
+          minIdFlag = data[1].id
           self.data = data.concat(self.data)
           callback && callback()
         } else {
