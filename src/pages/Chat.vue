@@ -346,9 +346,7 @@ export default {
     },
     setViewHeight () {
       this.$nextTick(() => {
-        self.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
-        // console.log(this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight)
-        // console.log(this.$refs.scrollContainer.height)
+        this.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         // console.log(this.viewHeight)
         this.setScrollToBottom()
@@ -482,10 +480,11 @@ export default {
       return ret
     },
     loadingHistory () {
+      const self = this
       setTimeout(() => {
         const minId = this.data[0].id
         // minIdFlag = minId
-        this.getMessages(minId)
+        self.getMessages(minId)
       }, 200)
     },
     sendData (postdata) {
@@ -718,9 +717,10 @@ export default {
     },
     setScrollToBottom () {
       this.$nextTick(() => {
+        const self = this
         setTimeout(() => {
           const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
-          this.$refs.scrollContainer.reset({ top: top })
+          self.$refs.scrollContainer.reset({ top: top })
           // this.$refs.scrollContainer.scrollTo(0, top, false)
         }, 80)
       })
