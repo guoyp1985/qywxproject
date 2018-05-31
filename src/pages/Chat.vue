@@ -479,7 +479,7 @@ export default {
       return ret
     },
     loadingHistory () {
-      const minId = this.data[1].id
+      const minId = this.data[0].id
       minIdFlag = minId
       this.getMessages(minId)
     },
@@ -814,7 +814,7 @@ export default {
         if (res.data.flag) {
           self.$vux.loading.hide()
           const data = res.data.data
-          minIdFlag = data[1].id
+          minIdFlag = data[0].id
           self.data = data.concat(self.data)
           callback && callback()
         } else {
