@@ -364,10 +364,8 @@ export default {
         } else { // play voice
           this.data = this.$util.changeItem(this.data, item.id, match => {
             match.voiceClass = ' playing'
-            console.log('play')
             return match
           })
-          console.log(this.data)
           Voice.play(item.mediaid,
             localId => { // donwload voice
               item.mediaLid = localId
@@ -381,8 +379,6 @@ export default {
             }
           )
         }
-      } else if (item.msgtype === 'image') {
-
       }
     },
     imageLoad (item) {
@@ -818,6 +814,7 @@ export default {
         if (res.data.flag) {
           self.$vux.loading.hide()
           const data = res.data.data
+          minIdFlag = data[0].id
           self.data = data.concat(self.data)
           callback && callback()
         } else {
