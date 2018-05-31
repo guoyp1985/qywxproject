@@ -140,6 +140,7 @@ export default {
       this.rangeData = Cursor.get(this.textarea)
     },
     deleteEmotion () {
+      console.log('okoko')
       this.rangeData = Cursor.get(this.textarea)
       let preText = this.textarea.value.substr(0, this.rangeData.end)
       let sufText = this.textarea.value.substr(this.rangeData.end)

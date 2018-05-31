@@ -280,12 +280,12 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      // intervalId = setInterval(function () {
-      //   document.body.scrollTop = document.body.scrollHeight
-      // }, 200)
+      intervalId = setInterval(function () {
+        document.body.scrollTop = document.body.scrollHeight
+      }, 200)
     },
     onBlur () {
-      // clearInterval(intervalId)
+      clearInterval(intervalId)
     },
     onChange (val) {
       /*
@@ -789,9 +789,11 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
+      const module = this.query.frommodule
+      const fromId = this.query.fromId
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
-      Socket.listening(room, uid, linkman, item => {
+      Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
         self.data.push(item)
@@ -828,13 +830,14 @@ export default {
         self.setScrollToBottom()
       })
     },
-    init () {
-      this.loginUser = User.get()
-    },
+    // init () {
+    //   this.loginUser = User.get()
+    // },
     refresh () {
       room = ''
       minIdFlag = 0
       this.data = []
+      this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
@@ -842,9 +845,9 @@ export default {
       // this.wsConnect()
     }
   },
-  created () {
-    this.init()
-  },
+  // created () {
+  //   this.init()
+  // },
   mounted () {
     const self = this
     this.$util.wxPreviewImage('#chat-room')
