@@ -289,7 +289,6 @@ const handleUserInfo = (response) => {
   const code = lUrl.query.code
   if (code) {
     // Access.set(true)
-    alert(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -301,7 +300,6 @@ const handleUserInfo = (response) => {
     .then(
       res => {
         User.set(res.data)
-        alert(JSON.stringify(User.get()))
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
