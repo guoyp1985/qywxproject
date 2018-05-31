@@ -121,6 +121,8 @@ Util.install = function (Vue, options) {
         if (code) {
           Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
           .then(res => {
+            alert('授权后')
+            alert(JSON.stringify(res.data.data))
             if (res.data.flag) {
               User.set({
                 ...user,
