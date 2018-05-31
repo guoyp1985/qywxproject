@@ -203,6 +203,7 @@ export default {
         self.searchdata = []
         self.pagestart1 = 0
         self.searchFun(kw)
+        self.keyword = ''
       }
     },
     handleScroll1 () {
