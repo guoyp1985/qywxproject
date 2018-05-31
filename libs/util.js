@@ -117,7 +117,7 @@ Util.install = function (Vue, options) {
       const user = User.get()
       if (user && user.subscribe === 0) {
         const originHref = encodeURIComponent(location.href)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=userAccess#wechat_redirect`)
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
@@ -128,7 +128,8 @@ Util.install = function (Vue, options) {
     wxAccessListening: function () {
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      if (code) {
+      const state = lUrl.query.state
+      if (state === 'userAccess' && code) {
         Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
           res => {

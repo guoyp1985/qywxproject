@@ -287,7 +287,8 @@ Vue.http.interceptors.request.use(config => {
 const handleUserInfo = (response) => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
-  if (code) {
+  const state = lUrl.query.state
+  if (state === 'defaultAccess' && code) {
     // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -310,7 +311,7 @@ const handleUserInfo = (response) => {
         router.push({name: 'tLogin'})
       } else {
         const originHref = encodeURIComponent(location.href)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=fromWx#wechat_redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
       }
     })
   }
