@@ -301,6 +301,7 @@ const handleUserInfo = (response) => {
     .then(
       res => {
         User.set(res.data)
+        alert(JSON.stringify(User.get()))
         // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
