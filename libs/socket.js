@@ -2,7 +2,7 @@ import ENV from 'env'
 let ws = null
 const Socket = {
   create: () => ws = (ws ? ws : new WebSocket(ENV.SocketApi)),
-  listening: (room, uid, linkman, callback) => {
+  listening: (params, callback) => {
     if (!ws) {
       console.error('WS: ws undefined')
       return
@@ -10,25 +10,27 @@ const Socket = {
     ws.onopen = () => {
       const loginData = {
         type: 'login',
-        uid: uid,
-        client_name: linkman.replace(/"/g, '\\"'),
-        room_id: room
+        uid: params.uid,
+        client_name: params.linkman.replace(/"/g, '\\"'),
+        room_id: params.room,
+        frommodule: params.fromModule,
+        fromid: params.fromId
       }
       Socket.send(loginData)
     }
     ws.onmessage = e => {
       const data = JSON.parse(e.data)
       if (data.type === 'login') {
-        console.info(`WS: Login Room ${room}`)
+        console.info(`WS: Login Room ${params.room}`)
       } else if (data.type === 'logout') {
-        console.info(`WS: Logout Room ${room}`)
+        console.info(`WS: Logout Room ${params.room}`)
         // ws.onopen = null
         // ws.onmessage = null
         // ws.onclose = null
         // ws.onerror = null
-        ws = null
+        Socket.listening(params, callback)
       } else if (data.type === 'say') {
-        console.info(`WS: Receive Message From Room ${room}`)
+        console.info(`WS: Receive Message From Room ${params.room}`)
         const message = JSON.parse(e.data)
         // let content = message.content
         // if (content) {
@@ -54,7 +56,7 @@ const Socket = {
     }
     ws.onclose = () => {
       console.info('WS: Closed')
-      Socket.listening(room, uid, linkman, callback)
+      Socket.listening(params, callback)
     }
     ws.onerror = () => {
       console.info('WS: Connecting Error')
