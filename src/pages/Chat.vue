@@ -20,7 +20,7 @@
               <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
-                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad" :offset="-100" container="#chat-scoller"></x-img>
+                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'news'">
@@ -204,6 +204,7 @@ import Socket from '#/socket'
 import Voice from '#/voice'
 
 let room = ''
+let minIdFlag = 0
 export default {
   directives: {
     TransferDom
@@ -376,8 +377,12 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
-    imageLoad () {
-      this.setScrollTop()
+    imageLoad (item) {
+      if (item.id > minIdFlag) {
+        this.setScrollToBottom()
+      } else {
+        this.setScrollToTop()
+      }
     },
     sendPhoto () {
       const self = this
@@ -469,6 +474,7 @@ export default {
     },
     loadingHistory () {
       const minId = this.data[1].id
+      minIdFlag = minId
       this.getMessages(minId)
     },
     sendData (postdata) {
@@ -693,7 +699,12 @@ export default {
         }
       })
     },
-    setScrollTop () {
+    setScrollToTop () {
+      this.$nextTick(() => {
+        this.$refs.scrollContainer.reset({ top: 0 })
+      })
+    },
+    setScrollToBottom () {
       this.$nextTick(() => {
         const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
         this.$refs.scrollContainer.reset({ top: top })
@@ -779,7 +790,7 @@ export default {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
         self.data.push(item)
-        self.setScrollTop()
+        self.setScrollToBottom()
       })
     },
     getMessages (minId, callback) {
@@ -809,13 +820,15 @@ export default {
       const self = this
       // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.getMessages(() => {
-        self.setScrollTop()
+        self.setScrollToBottom()
       })
     },
     init () {
       this.loginUser = User.get()
     },
     refresh () {
+      room = ''
+      minIdFlag = 0
       this.data = []
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
