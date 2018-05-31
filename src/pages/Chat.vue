@@ -479,9 +479,11 @@ export default {
       return ret
     },
     loadingHistory () {
-      const minId = this.data[0].id
-      // minIdFlag = minId
-      this.getMessages(minId)
+      setTimeout(() => {
+        const minId = this.data[0].id
+        // minIdFlag = minId
+        this.getMessages(minId)
+      }, 200)
     },
     sendData (postdata) {
       const self = this
