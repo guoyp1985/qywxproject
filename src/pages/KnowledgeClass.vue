@@ -41,7 +41,7 @@
           </popover>
         </div>
       -->
-        <router-link class="t-cell item" :to="{path: '/knowledgeclass', query: {classid: 1}}">{{ $t('Newcomer Guide') }}</router-link>
+        <router-link class="t-cell item" :to="{path: '/knowledgeClass', query: {classid: 1}}">{{ $t('Newcomer Guide') }}</router-link>
       </div>
     </div>
   </div>
