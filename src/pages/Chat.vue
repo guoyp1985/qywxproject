@@ -195,7 +195,8 @@
   </div>
 </template>
 <script>
-import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
+import { Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
+import Scroller from 'vue-scroller'
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'

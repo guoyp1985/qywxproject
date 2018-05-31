@@ -11,7 +11,14 @@ var ENV = {
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
   SocketApi: 'ws://124.207.246.109:7272',
-  
+  OrderStatus: [
+    {id: 0, status: '订单取消'},
+    {id: 1, status: '已确认订单'},
+    {id: 2, status: '待发货'},
+    {id: 3, status: '已发货'},
+    {id: 4, status: '已确认收货'},
+    {id: 100, status: '已完成'}
+  ],
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
     '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过',
