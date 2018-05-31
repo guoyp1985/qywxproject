@@ -120,6 +120,7 @@ Util.install = function (Vue, options) {
       if (user && user.subscribe === 0) {
         if (code) {
           alert(code)
+          alert(JSON.stringify(user))
           Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
           .then(
             res => {
@@ -146,7 +147,6 @@ Util.install = function (Vue, options) {
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
-          alert(JSON.stringify(res.data))
           User.set(res.data)
         })
       }
