@@ -126,6 +126,7 @@ Util.install = function (Vue, options) {
                 ...user,
                 ...res.data.data
               })
+              alert(JSON.stringify(User.get()))
               location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
             }
           })
