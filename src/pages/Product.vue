@@ -876,11 +876,14 @@ export default {
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
+    init () {
+      this.$util.wxAccess()
+    },
     refresh () {
       const self = this
       this.loginUser = User.get()
-      alert('in product')
-      alert(JSON.stringify(this.loginUser))
+      // alert('in product')
+      // alert(JSON.stringify(this.loginUser))
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
@@ -894,6 +897,9 @@ export default {
         self.messages = data.data
       })
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()
