@@ -50,7 +50,7 @@
               </template>
               <template v-else>
                 <div class="main message-text">
-                  <div v-html="item.content"></div>
+                  <div v-html="filterEmot(item.content)"></div>
                 </div>
               </template>
               <!-- </div> -->
@@ -202,7 +202,7 @@ import { User } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
-
+console.log('chat')
 let room = ''
 let minIdFlag = 0
 let intervalId = null
@@ -262,7 +262,7 @@ export default {
     },
     dateFormat (seconds) {
       return new Time(seconds * 1000).format2()
-    }
+    },
   },
   watch: {
     showSend () {
@@ -270,6 +270,9 @@ export default {
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },

@@ -88,10 +88,20 @@ Util.install = function (Vue, options) {
       }
       return list
     },
-    emotionPrase: function(text) {
-      if (this.trim(text) !== '') {
-        // text.replace(/\[\]/)
-      }
+    emotPrase: function(text) {
+      if(!Reg.rEmot.test(text)) return text
+      text = text.replace(Reg.rEmot, (match, p1, offset, string) => {
+        const emotStr = p1.match(/\[([^\]]+)\]/)[1]
+        let eIndex = 0
+        for (let i = 0; i < ENV.Emots.length; i++) {
+          if (ENV.Emots[i] === emotStr) {
+            eIndex = i
+            break
+          }
+        }
+        return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${eIndex}.gif"/>`
+      })
+      return this.emotPrase(text)
     },
     // checkMobile: function (mobile) {
     //   if (isNaN(mobile)) return false;

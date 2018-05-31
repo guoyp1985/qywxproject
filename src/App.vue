@@ -57,7 +57,8 @@ import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import { User } from '#/storage'
 import ENV from 'env'
-
+let count = 0
+console.log(count ++)
 export default {
   name: 'app',
   directives: {
@@ -142,6 +143,9 @@ export default {
     document.title = this.$t('tIndex')
     this.$util.wxConfig()
     this.getData()
+  },
+  mounted () {
+    console.log('mmmmmm')
   }
 }
 </script>

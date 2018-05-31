@@ -510,8 +510,6 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
-    init () {
-    },
     refresh (query) {
       const self = this
       this.loginUser = User.get()
@@ -523,6 +521,7 @@ export default {
         this.showsharetip = false
         this.getData()
       }
+      this.loginUser = User.get()
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
@@ -536,9 +535,6 @@ export default {
         }, 10000)
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh(this.$route.query)

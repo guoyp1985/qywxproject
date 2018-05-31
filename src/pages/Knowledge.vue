@@ -224,8 +224,6 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
-    init () {
-    },
     refresh () {
       const self = this
       this.loginUser = User.get()
@@ -241,9 +239,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

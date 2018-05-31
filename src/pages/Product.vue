@@ -875,8 +875,6 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
-    init () {
-    },
     refresh () {
       const self = this
       this.loginUser = User.get()
@@ -893,9 +891,6 @@ export default {
         self.messages = data.data
       })
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
