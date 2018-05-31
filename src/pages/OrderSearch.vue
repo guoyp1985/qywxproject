@@ -130,9 +130,11 @@ export default {
             ]
             break
           case 2:
-            item.buttons = [
-              {id: 3, name: '申请退款'}
-            ]
+            if (item.canback) {
+              item.buttons = [
+                {id: 3, name: '申请退款'}
+              ]
+            }
             break
           case 3:
             item.buttons = [

@@ -61,7 +61,7 @@
       <div class="padding10 align_right">
         <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
         <x-button v-if="data.flag == 1 && data.payorder == ''" :link="{path: '/pay', query: {id: data.id}}" mini class="font12">去支付</x-button>
-        <x-button v-if="data.flag == 2" mini @click.native="refund" class="font12">申请退款</x-button>
+        <x-button v-if="data.flag == 2 && data.canback" mini @click.native="refund" class="font12">申请退款</x-button>
         <x-button v-if="data.flag == 3" mini @click.native="confirm" class="font12">确认收货</x-button>
         <x-button v-if="data.flag == 4" mini @click.native="evaluate" class="font12">评价</x-button>
       </div>
