@@ -511,11 +511,9 @@ export default {
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
-    // init () {
-    //   this.loginUser = User.get()
-    // },
     refresh (query) {
       const self = this
+      this.loginUser = User.get()
       if (this.query.id !== query.id) {
         room = ''
         this.comments = []
@@ -539,9 +537,6 @@ export default {
       }
     }
   },
-  // created () {
-  //   this.init()
-  // },
   activated () {
     this.refresh(this.$route.query)
   },

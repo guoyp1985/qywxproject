@@ -239,10 +239,8 @@ export default {
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
-    // init () {
-    //   this.loginUser = User.get()
-    // },
     refresh (query) {
+      this.loginUser = User.get()
       this.initData()
       this.query = query
       if (this.query.crowduserid) {
@@ -255,9 +253,6 @@ export default {
       this.createSocket()
     }
   },
-  // created () {
-  //   this.init()
-  // },
   activated () {
     this.refresh(this.$route.query)
   },

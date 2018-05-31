@@ -876,11 +876,9 @@ export default {
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
-    init () {
-      this.loginUser = User.get()
-    },
     refresh () {
       const self = this
+      this.loginUser = User.get()
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
@@ -894,9 +892,6 @@ export default {
         self.messages = data.data
       })
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

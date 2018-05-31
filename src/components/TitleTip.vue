@@ -55,7 +55,7 @@ export default {
     },
     delay: {
       type: Number,
-      default: 5000
+      default: 15000
     },
     messages: {
       type: Number,

@@ -225,12 +225,10 @@ export default {
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
-    init () {
-      this.loginUser = User.get()
-      this.reward = this.loginUser
-    },
     refresh () {
       const self = this
+      this.loginUser = User.get()
+      this.reward = this.loginUser
       if (this.query.id !== this.$route.query.id) {
         this.query = this.$route.query
         this.getData()
@@ -242,9 +240,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
