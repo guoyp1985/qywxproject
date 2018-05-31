@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
@@ -59,7 +59,7 @@
         </template>
       </div>
     </scroller>
-    <div class="bottom-area">
+    <div class="bottom-area" ref="bottomArea">
       <div class="input-box no-select">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -226,6 +226,7 @@ export default {
       query: {},
       data: [],
       // focusInterval: null,
+      viewHeight: '-52',
       msgcontent: '',
       showSend: false,
       diffSeconds: 300,
@@ -267,6 +268,12 @@ export default {
   watch: {
     showSend () {
       return this.showSend
+    },
+    showEmotBox () {
+      this.setViewHeight()
+    },
+    showFeatureBox () {
+      this.setViewHeight()
     }
   },
   methods: {
@@ -296,6 +303,13 @@ export default {
         self.showSend = true
       }
       */
+    },
+    setViewHeight () {
+      const self = this
+      this.$nextTick(() => {
+        self.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
+        self.setScrollToBottom()
+      })
     },
     clickMessageItem (item) {
       const self = this
@@ -344,7 +358,6 @@ export default {
       } else {
         this.showVoiceCom = true
       }
-      this.setScrollToBottom()
     },
     toggleEmotion () {
       if (this.showVoiceCom) {
@@ -354,7 +367,8 @@ export default {
         this.showFeatureBox = false
       }
       this.showEmotBox = true
-      this.setScrollToBottom()
+      // this.setViewHeight()
+      // this.setScrollToBottom()
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
@@ -381,7 +395,8 @@ export default {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
       }
-      this.setScrollToBottom()
+      // this.setViewHeight()
+      // this.setScrollToBottom()
     },
     imageLoad (item) {
       if (item.id > minIdFlag) {
@@ -854,6 +869,7 @@ export default {
   mounted () {
     const self = this
     this.$util.wxPreviewImage('#chat-room')
+    this.setViewHeight()
     this.msgTextarea = document.querySelector('#chat-textarea textarea')
     this.msgTextarea.addEventListener('focus', function () {
       self.setSendStatus()
