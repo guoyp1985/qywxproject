@@ -11,7 +11,7 @@
     <template v-else>
       <div class="title-tip">
         <router-link class="avatar-cell" to="/center">
-          <img :src="avatarHref" class="imgavatar"/>
+          <img :src="avatarHref" class="imgavatar" onerror="javascript:this.src='/src/assets/images/user.jpg';"/>
         </router-link>
         <router-link class="info-cell" to="/center">
           <div class="user-name">
