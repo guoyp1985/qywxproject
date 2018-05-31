@@ -225,11 +225,11 @@ export default {
       Socket.listening(room, uid, linkman)
     },
     init () {
-      this.loginUser = User.get()
-      this.reward = this.loginUser
     },
     refresh () {
       const self = this
+      this.loginUser = User.get()
+      this.reward = this.loginUser
       if (this.query.id !== this.$route.query.id) {
         this.query = this.$route.query
         this.getData()

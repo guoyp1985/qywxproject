@@ -876,10 +876,10 @@ export default {
       Socket.listening(room, uid, linkman)
     },
     init () {
-      this.loginUser = User.get()
     },
     refresh () {
       const self = this
+      this.loginUser = User.get()
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []

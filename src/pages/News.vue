@@ -511,10 +511,10 @@ export default {
       Socket.listening(room, uid, linkman)
     },
     init () {
-      this.loginUser = User.get()
     },
     refresh (query) {
       const self = this
+      this.loginUser = User.get()
       if (this.query.id !== query.id) {
         room = ''
         this.comments = []

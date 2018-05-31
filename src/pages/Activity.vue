@@ -239,9 +239,9 @@ export default {
       Socket.listening(room, uid, linkman)
     },
     init () {
-      this.loginUser = User.get()
     },
     refresh (query) {
+      this.loginUser = User.get()
       this.initData()
       this.query = query
       if (this.query.crowduserid) {
