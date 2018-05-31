@@ -382,10 +382,10 @@ export default {
       }
     },
     imageLoad (item) {
+      alert(item.id > minIdFlag)
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
-        alert('ok')
         this.setScrollToTop()
       }
     },
