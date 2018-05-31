@@ -516,6 +516,7 @@ export default {
     refresh (query) {
       const self = this
       if (this.query.id !== query.id) {
+        room = ''
         this.comments = []
         this.pagestart = 0
         this.query = query
