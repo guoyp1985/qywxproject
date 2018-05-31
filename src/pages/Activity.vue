@@ -238,24 +238,25 @@ export default {
       Socket.create()
       Socket.listening(room, uid, linkman)
     },
-    init () {
-      this.loginUser = User.get()
-    },
+    // init () {
+    //   this.loginUser = User.get()
+    // },
     refresh (query) {
       this.initData()
       this.query = query
       if (this.query.crowduserid) {
         this.crowduserid = this.query.crowduserid
       }
+      this.loginUser = User.get()
       this.$vux.loading.show()
       this.getData()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }
   },
-  created () {
-    this.init()
-  },
+  // created () {
+  //   this.init()
+  // },
   activated () {
     this.refresh(this.$route.query)
   },
