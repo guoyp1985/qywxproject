@@ -147,6 +147,7 @@ Util.install = function (Vue, options) {
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
+          alert(JSON.stringify(res.data))
           User.set(res.data)
         })
       }
