@@ -6,7 +6,7 @@
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
     <template v-if="user.subscribe == 0">
-      <div class="title-tip color-blue flex_center" @click="toAccess">您有待领取的金币，点击领取 ></div>
+      <div class="title-tip color-blue flex_center" @click="access">您有待领取的金币，点击领取 ></div>
     </template>
     <template v-else>
       <div class="title-tip">
@@ -69,12 +69,8 @@ export default {
     }
   },
   methods: {
-    toAccess () {
-      if (this.user.subscribe === 0) {
-        this.$util.wxAccess()
-      } else {
-        this.$router.push('/center')
-      }
+    access () {
+      this.emit('access')
     }
   },
   created () {

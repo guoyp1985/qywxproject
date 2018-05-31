@@ -125,7 +125,7 @@ Util.install = function (Vue, options) {
         })
       }
     },
-    wxAccessListening () {
+    wxAccessListening: function () {
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
       if (code) {

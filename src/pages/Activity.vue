@@ -25,7 +25,8 @@
           :user="loginUser"
           :cut-data="cutData"
           :on-cut="cutSuccess"
-          :on-join="joinSuccess">
+          :on-join="joinSuccess"
+          @access="access">
         </bargainbuy-detail>
       </template>
       <share-success
@@ -123,6 +124,9 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+    },
+    access () {
+      this.$util.wxAccess()
     },
     getData () {
       const self = this
@@ -239,6 +243,9 @@ export default {
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
+    init () {
+      this.$util.wxAccessListening()
+    },
     refresh (query) {
       this.loginUser = User.get()
       this.initData()
@@ -252,6 +259,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh(this.$route.query)

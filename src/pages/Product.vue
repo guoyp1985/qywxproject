@@ -5,7 +5,7 @@
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
-        <title-tip scroll-box="scroll-container" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -506,7 +506,7 @@ export default {
       this.replyData = null
       this.messages = 0
     },
-    toAccess () {
+    access () {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {
@@ -877,7 +877,8 @@ export default {
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
     init () {
-      this.$util.wxAccess()
+      // this.$util.wxAccess()
+      this.$util.wxAccessListening()
     },
     refresh () {
       const self = this
