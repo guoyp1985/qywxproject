@@ -382,7 +382,6 @@ export default {
       }
     },
     imageLoad (item) {
-      alert(item.id > minIdFlag)
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
@@ -712,6 +711,7 @@ export default {
     setScrollToBottom () {
       this.$nextTick(() => {
         const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
+        alert(top)
         this.$refs.scrollContainer.reset({ top: top })
       })
     },
