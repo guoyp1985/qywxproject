@@ -14,9 +14,9 @@ import { Token, User } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import VueScroller from 'vue-scroller'
-
-Vue.use(VueScroller)
+// import VueScroller from 'vue-scroller'
+//
+// Vue.use(VueScroller)
 Vue.use(VueRouter)
 Vue.use(Util)
 Vue.use(AjaxPlugin)

@@ -5,8 +5,8 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <!-- <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
-    <scroller :on-refresh="loadingHistory" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
@@ -196,7 +196,7 @@
   </div>
 </template>
 <script>
-import { Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
+import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -212,7 +212,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon
+    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon
   },
   data () {
     return {
@@ -345,10 +345,13 @@ export default {
       }
     },
     setViewHeight () {
-      const self = this
       this.$nextTick(() => {
         self.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
-        self.setScrollToBottom()
+        // console.log(this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight)
+        // console.log(this.$refs.scrollContainer.height)
+        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        // console.log(this.viewHeight)
+        this.setScrollToBottom()
       })
     },
     clickMessageItem (item) {
@@ -709,16 +712,16 @@ export default {
     },
     setScrollToTop () {
       this.$nextTick(() => {
-        // this.$refs.scrollContainer.reset({ top: 0 })
-        this.$refs.scrollContainer.scrollTo(0, 0, false)
+        this.$refs.scrollContainer.reset({ top: 0 })
+        // this.$refs.scrollContainer.scrollTo(0, 0, false)
       })
     },
     setScrollToBottom () {
       this.$nextTick(() => {
         setTimeout(() => {
           const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
-          // this.$refs.scrollContainer.reset({ top: top })
-          this.$refs.scrollContainer.scrollTo(0, top, false)
+          this.$refs.scrollContainer.reset({ top: top })
+          // this.$refs.scrollContainer.scrollTo(0, top, false)
         }, 80)
       })
     },
@@ -846,6 +849,7 @@ export default {
       minIdFlag = 0
       this.data = []
       this.loginUser = User.get()
+      this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
@@ -859,7 +863,6 @@ export default {
   mounted () {
     const self = this
     this.$util.wxPreviewImage('#chat-room')
-    this.setViewHeight()
     this.msgTextarea = document.querySelector('#chat-textarea textarea')
     this.msgTextarea.addEventListener('focus', function () {
       self.setSendStatus()
