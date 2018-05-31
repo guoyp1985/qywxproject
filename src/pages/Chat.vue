@@ -395,8 +395,9 @@ export default {
           if (files.length > 0) {
             let filedata = new FormData(fileForm)
             self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-              let data = res.data
+            self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
+              self.toggleFeatureBoard()
+              const data = res.data
               self.$vux.loading.hide()
               if (data.flag === 1 && data.data) {
                 self.sendData({
@@ -416,6 +417,7 @@ export default {
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
+            self.toggleFeatureBoard()
             if (data.flag === 1 && data.data) {
               self.sendData({
                 touid: self.query.uid,
