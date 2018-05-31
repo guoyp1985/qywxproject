@@ -36,7 +36,7 @@
         <div class="mt10 bg-white padding10 b_bottom_after">
           <div class="t-table">
             <div class="t-cell">创建时间：{{ data.dateline | dateformat }}</div>
-            <div class="t-cell w60 align_right color-orange5">{{ data.flagstr }}</div>
+            <div class="t-cell align_right color-orange5" style="width:110px;">{{ data.flagstr }}</div>
           </div>
         </div>
         <div class="bg-white">
