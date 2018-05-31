@@ -348,7 +348,7 @@ export default {
       this.$nextTick(() => {
         this.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-        // console.log(this.viewHeight)
+        console.log(this.viewHeight)
         this.setScrollToBottom()
       })
     },
