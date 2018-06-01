@@ -881,6 +881,7 @@ export default {
       this.loginUser = User.get()
       alert('in product')
       alert(JSON.stringify(this.loginUser))
+      this.wxAccess()
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
