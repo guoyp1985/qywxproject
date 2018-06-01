@@ -196,10 +196,7 @@ export default {
     },
     onCommentShow () {
       if (this.loginUser.subscribe === 0) {
-        // this.$util.wxAccess()
-        const originHref = encodeURIComponent(location.href)
-        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+        this.$util.wxAccess()
       } else {
         this.commentPopupShow = true
       }
