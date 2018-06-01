@@ -74,7 +74,7 @@ export default {
       // this.$emit('access')
       const originHref = encodeURIComponent(location.href)
       const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
     }
   },
   created () {

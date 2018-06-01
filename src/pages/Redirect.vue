@@ -20,6 +20,7 @@ export default {
       const state = query.state
       alert(location.href)
       alert(code)
+      alert(state)
       if (code) {
         self.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
