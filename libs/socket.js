@@ -16,6 +16,7 @@ const Socket = {
         frommodule: params.fromModule,
         fromid: params.fromId
       }
+      console.log(loginData)
       Socket.send(loginData)
     }
     ws.onmessage = e => {
