@@ -877,11 +877,11 @@ export default {
   },
   activated () {
     this.refresh()
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 <style lang="less">
