@@ -6,6 +6,7 @@
 <script>
 import ENV from 'env'
 import { User } from '#/storage'
+import urlParse from 'url-parse'
 export default {
   data () {
     return {
@@ -15,10 +16,10 @@ export default {
     refresh () {
       const self = this
       self.$vux.loading.show()
-      const query = self.$route.query
-      const code = query.code
-      const state = query.state
-      alert(location.href)
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      const state = lUrl.query.state
+      alert(lUrl)
       alert(code)
       alert(state)
       if (code) {
