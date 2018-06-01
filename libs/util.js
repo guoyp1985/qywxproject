@@ -130,8 +130,6 @@ Util.install = function (Vue, options) {
       const code = lUrl.query.code
       const state = lUrl.query.state
       if (state === 'userAccess' && code) {
-        alert(state)
-        alert(code)
         Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
           res => {

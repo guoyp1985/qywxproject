@@ -70,7 +70,10 @@ export default {
   },
   methods: {
     access () {
-      this.$emit('access')
+      // this.$emit('access')
+      const originHref = encodeURIComponent(location.href)
+      const callbackHref = encodeURIComponent(`${Host}/#/redirect`)
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_base&state=${originHref}#wechat_redirect`)
     }
   },
   created () {
