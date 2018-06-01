@@ -393,11 +393,11 @@ export default {
     onAdvisory () {
       if (this.loginUser.subscribe === 0) {
         // this.$util.wxAccess()
-        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&frommodule=news&fromid=${this.query.id}`)
+        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=news&fromId=${this.query.id}`)
         const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
       } else {
-        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, frommodule: 'news', fromid: this.query.id}})
+        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id}})
       }
     },
     onStore () {
@@ -512,10 +512,10 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      // const fromId = this.query.fromid
+      // const fromId = this.query.fromId
       room = `${this.module}-${this.query.id}`
       Socket.create()
-      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
+      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
       this.$util.wxAccessListening()
