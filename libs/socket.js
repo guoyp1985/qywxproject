@@ -1,7 +1,7 @@
 import ENV from 'env'
 let ws = null
 const Socket = {
-  create: () => ws = (ws ? ws : new WebSocket(ENV.SocketApi)),
+  create: () => ws = new WebSocket(ENV.SocketApi),
   listening: (params, callback) => {
     if (!ws) {
       console.error('WS: ws undefined')
