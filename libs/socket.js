@@ -1,7 +1,7 @@
 import ENV from 'env'
 let ws = null
 const Socket = {
-  create: () => ws = (ws ? ws : new WebSocket(ENV.SocketApi)),
+  create: () => ws = (ws ? ws : new WebSocket(ENV.SocketServer)),
   listening: (room, uid, linkman, callback) => {
     if (!ws) {
       console.error('WS: ws undefined')
@@ -61,7 +61,7 @@ const Socket = {
     }
   },
   send: data => {
-    data.room_id = `${ENV.SocketBokaApi}-${data.room_id}`
+    data.room_id = `${ENV.SocketBokaRoom}-${data.room_id}`
     ws && ws.send(JSON.stringify(data))
   },
   destory: room => {

@@ -6,10 +6,11 @@ var ENV = {
   WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
-  SocketBokaApi: 'laravel.boka.cn',//'laravel.boka.cn', // test: 124.207.246.107 // vux: vuxserver.boka.cn
   BokaCDN: 'http://vue.boka.cn',
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
+  SocketBokaRoom: 'laravel.boka.cn',
+  SocketServer: 'ws://124.207.246.109:7272',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
@@ -17,6 +18,5 @@ var ENV = {
     {id: 3, status: '已发货'},
     {id: 4, status: '已确认收货'},
     {id: 100, status: '已完成'}
-  ],
-  SocketApi: 'ws://124.207.246.109:7272'
+  ]
 }
