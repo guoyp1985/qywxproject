@@ -1,13 +1,8 @@
 import ENV from 'env'
 let pool = {}
 const Socket = {
-<<<<<<< HEAD
-  create: () => ws = (ws ? ws : new WebSocket(ENV.SocketServer)),
-  listening: (room, uid, linkman, callback) => {
-=======
   create: (room) => {
     let ws = pool[room]
->>>>>>> 749b593bdbc8015aa18688130d8a25d32ed93a1e
     if (!ws) {
       ws = new WebSocket(ENV.SocketApi)
       pool[room] = ws
@@ -72,22 +67,11 @@ const Socket = {
     }
   },
   send: data => {
-<<<<<<< HEAD
-    data.room_id = `${ENV.SocketBokaRoom}-${data.room_id}`
-    ws && ws.send(JSON.stringify(data))
-  },
-  destory: room => {
-    Socket.send({
-      type: 'logout',
-      room_id: room
-    })
-=======
     const ws = pool[data.room_id]
     if (ws) {
       data.room_id = `${ENV.SocketBokaApi}-${data.room_id}`
       ws.send(JSON.stringify(data))
     }
->>>>>>> 749b593bdbc8015aa18688130d8a25d32ed93a1e
   }
   // destory: room => {
   //   Socket.send({
