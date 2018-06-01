@@ -18,6 +18,8 @@ export default {
       const query = self.$route.query
       const code = query.code
       const state = query.state
+      alert(location.href)
+      alert(code)
       if (code) {
         self.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
