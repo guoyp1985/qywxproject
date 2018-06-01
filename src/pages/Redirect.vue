@@ -19,6 +19,7 @@ export default {
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
       const state = lUrl.query.state
+      alert(state)
       if (code) {
         self.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
