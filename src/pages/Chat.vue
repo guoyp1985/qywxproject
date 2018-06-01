@@ -802,7 +802,6 @@ export default {
       const bid = Math.max(this.query.uid, uid)
       const module = this.query.frommodule
       const fromId = this.query.fromid
-      console.log(this.module)
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
@@ -861,6 +860,7 @@ export default {
       this.query = this.$route.query
       this.getData()
       this.createSocket()
+      console.log('rw')
       // this.wsConnect()
     }
   },
