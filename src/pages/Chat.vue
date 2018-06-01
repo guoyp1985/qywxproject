@@ -802,6 +802,7 @@ export default {
       const bid = Math.max(this.query.uid, uid)
       const module = this.query.fromModule
       const fromId = this.query.fromId
+      console.log(this.module)
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
@@ -841,8 +842,10 @@ export default {
       const self = this
       // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.getMessages(() => {
-        minIdFlag = self.data[0].id
-        self.setScrollToBottom()
+        if (self.data.length > 0) {
+          minIdFlag = self.data[0].id
+          self.setScrollToBottom()
+        }
       })
     },
     // init () {
