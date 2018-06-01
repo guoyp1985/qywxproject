@@ -821,7 +821,7 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
       .then(res => {
         if (res.data.flag) {
-          if (!res.data.length) {
+          if (!res.data.data.length) {
             self.$vux.toast.text('没有更多记录', 'middle')
           }
           self.$vux.loading.hide()
