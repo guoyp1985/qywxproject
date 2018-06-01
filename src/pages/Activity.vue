@@ -240,7 +240,6 @@ export default {
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
       room = `${this.module}-${this.query.id}`
-      Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
@@ -269,11 +268,11 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.refresh(to.query)
     next && next()
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 

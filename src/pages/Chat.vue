@@ -804,7 +804,6 @@ export default {
       const fromId = this.query.fromid
       room = `${this.module}-${sid}-${bid}`
       console.log(room)
-      Socket.create()
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
