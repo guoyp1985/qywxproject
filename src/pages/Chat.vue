@@ -718,6 +718,7 @@ export default {
     setScrollToBottom () {
       this.$nextTick(() => {
         const self = this
+        if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
         setTimeout(() => {
           const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
           self.$refs.scrollContainer.reset({ top: top })
