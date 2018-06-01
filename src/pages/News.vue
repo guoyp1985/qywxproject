@@ -196,7 +196,10 @@ export default {
     },
     onCommentShow () {
       if (this.loginUser.subscribe === 0) {
-        this.$util.wxAccess()
+        // this.$util.wxAccess()
+        const originHref = encodeURIComponent(location.href)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
       } else {
         this.commentPopupShow = true
       }
@@ -392,7 +395,10 @@ export default {
     },
     onAdvisory () {
       if (this.loginUser.subscribe === 0) {
-        this.$util.wxAccess()
+        // this.$util.wxAccess()
+        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&frommodule=news&fromid=${this.query.id}`)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
       } else {
         this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, frommodule: 'news', fromid: this.query.id}})
       }

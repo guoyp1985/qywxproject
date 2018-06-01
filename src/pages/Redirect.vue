@@ -24,12 +24,6 @@ export default {
         .then(
           res => {
             if (res.data.flag) {
-              /*
-              User.set({
-                ...user,
-                ...res.data.data
-              })
-              */
               User.set(res.data.data)
               location.href = state
               // location.replace(`${state}`)
