@@ -73,7 +73,7 @@ class Time {
 		if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
 			return "昨天" + hour + ":" + minute
 		} else if ( time > sevenDaysTimeBegin && time < yesterdayTimeBegin ) {
-			return "星期" + weekDays[ self.day() ] + " " + hour + ":" + minute
+			return "星期" + weekDays[ this.day() ] + " " + hour + ":" + minute
 		} else if( time < sevenDaysTimeBegin ) {
 			return year + "年" + month + "月" + date + "日 " + hour + ":" + minute
 		} else {

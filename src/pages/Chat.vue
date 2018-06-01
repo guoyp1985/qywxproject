@@ -6,6 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
@@ -94,8 +95,8 @@
       </div>
       <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" :click-callback="clickEmotionCallback">
       </emotion-box>
-      <form class="uploadImageForm hide" enctype="multipart/form-data">
-        <input style="opacity:0;" type="file" name="files" />
+      <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
+        <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
       </form>
       <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
         <grid-item @click.native="sendPhoto">
@@ -202,7 +203,7 @@ import { User } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
-console.log('chat')
+
 let room = ''
 let minIdFlag = 0
 let intervalId = null
@@ -263,7 +264,7 @@ export default {
     },
     dateFormat (seconds) {
       return new Time(seconds * 1000).format2()
-    },
+    }
   },
   watch: {
     showSend () {
@@ -344,10 +345,11 @@ export default {
       }
     },
     setViewHeight () {
-      const self = this
       this.$nextTick(() => {
-        self.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
-        self.setScrollToBottom()
+        this.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
+        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        console.log(this.viewHeight)
+        this.setScrollToBottom()
       })
     },
     clickMessageItem (item) {
@@ -382,46 +384,44 @@ export default {
       }
     },
     imageLoad (item) {
+      console.log(item.id +'>'+ minIdFlag)
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
         this.setScrollToTop()
       }
     },
-    sendPhoto () {
-      const self = this
-      if (!window.WeixinJSBridge) {
-        let fileForm = document.querySelector('.uploadImageForm')
-        let fileInput = document.querySelector('.uploadImageForm input')
-        fileInput.click()
-        fileInput.addEventListener('change', function (e) {
-          let files = e.target.files
-          if (files.length > 0) {
-            let filedata = new FormData(fileForm)
-            self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(res => {
-              self.toggleFeatureBoard()
-              const data = res.data
-              self.$vux.loading.hide()
-              if (data.flag === 1 && data.data) {
-                self.sendData({
-                  touid: self.query.uid,
-                  content: '',
-                  module: self.module,
-                  sendtype: 'image',
-                  picurl: data.data,
-                  thumb: ''
-                })
-              }
+    pcUploadImg (event) {
+      const uploadFiles = event.target.files
+      if (uploadFiles.length > 0) {
+        let formData = new FormData(this.$refs.uploadForm)
+        const self = this
+        this.$vux.loading.show()
+        this.toggleFeatureBoard()
+        this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData)
+        .then(res => {
+          const data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1 && data.data) {
+            self.sendData({
+              touid: self.query.uid,
+              content: '',
+              module: self.module,
+              sendtype: 'image',
+              picurl: data.data,
+              thumb: ''
             })
           }
         })
-      } else {
-        // self.$wechat.ready(function () {
+      }
+    },
+    sendPhoto () {
+      const self = this
+      if (window.WeixinJSBridge) {
+        self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
-            self.toggleFeatureBoard()
             if (data.flag === 1 && data.data) {
               self.sendData({
                 touid: self.query.uid,
@@ -434,7 +434,8 @@ export default {
             }
           }
         })
-        // })
+      } else {
+        this.$refs.uploadInput.click()
       }
     },
     sendVoice (data) {
@@ -479,9 +480,12 @@ export default {
       return ret
     },
     loadingHistory () {
-      const minId = this.data[0].id
-      minIdFlag = minId
-      this.getMessages(minId)
+      const self = this
+      setTimeout(() => {
+        const minId = this.data[0].id
+        // minIdFlag = minId
+        self.getMessages(minId)
+      }, 200)
     },
     sendData (postdata) {
       const self = this
@@ -708,12 +712,18 @@ export default {
     setScrollToTop () {
       this.$nextTick(() => {
         this.$refs.scrollContainer.reset({ top: 0 })
+        // this.$refs.scrollContainer.scrollTo(0, 0, false)
       })
     },
     setScrollToBottom () {
       this.$nextTick(() => {
-        const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
-        this.$refs.scrollContainer.reset({ top: top })
+        const self = this
+        if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
+        setTimeout(() => {
+          const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
+          self.$refs.scrollContainer.reset({ top: top })
+          // this.$refs.scrollContainer.scrollTo(0, top, false)
+        }, 100)
       })
     },
     getNewsData () {
@@ -812,9 +822,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
       .then(res => {
         if (res.data.flag) {
+          if (!res.data.data.length) {
+            self.$vux.toast.text('没有更多记录', 'middle')
+          }
           self.$vux.loading.hide()
           const data = res.data.data
-          minIdFlag = data[0].id
           self.data = data.concat(self.data)
           callback && callback()
         } else {
@@ -829,6 +841,7 @@ export default {
       const self = this
       // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.getMessages(() => {
+        minIdFlag = self.data[0].id
         self.setScrollToBottom()
       })
     },
@@ -840,6 +853,7 @@ export default {
       minIdFlag = 0
       this.data = []
       this.loginUser = User.get()
+      this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
@@ -853,7 +867,6 @@ export default {
   mounted () {
     const self = this
     this.$util.wxPreviewImage('#chat-room')
-    this.setViewHeight()
     this.msgTextarea = document.querySelector('#chat-textarea textarea')
     this.msgTextarea.addEventListener('focus', function () {
       self.setSendStatus()
@@ -865,11 +878,11 @@ export default {
   },
   activated () {
     this.refresh()
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 <style lang="less">

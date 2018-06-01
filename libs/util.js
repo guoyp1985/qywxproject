@@ -115,33 +115,39 @@ Util.install = function (Vue, options) {
     // },
     wxAccess: function () {
       const user = User.get()
-      const lUrl = urlParse(location.href, true)
-      const code = lUrl.query.code
-      alert(code)
       if (user && user.subscribe === 0) {
-        if (code) {
-          Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
-          .then(res => {
-            alert('授权后')
-            alert(JSON.stringify(res.data.data))
-            if (res.data.flag) {
-              User.set({
-                ...user,
-                ...res.data.data
-              })
-              alert(JSON.stringify(User.get()))
-              location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-            }
-          })
-        } else {
-          const originHref = encodeURIComponent(location.href)
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-        }
+        const originHref = encodeURIComponent(location.href)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=userAccess#wechat_redirect`)
       } else {
         Vue.http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
           User.set(res.data)
         })
+      }
+    },
+    wxAccessListening: function () {
+      const lUrl = urlParse(location.href, true)
+      const code = lUrl.query.code
+      const state = lUrl.query.state
+      if (state === 'userAccess' && code) {
+        Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+        .then(
+          res => {
+            if (res.data.flag) {
+              User.set({
+                ...user,
+                ...res.data.data
+              })
+              location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+            }
+          },
+          error => {
+            Vue.$vux.toast.show({
+              text: '服务器错误',
+              type: 'warn',
+            })
+          }
+        )
       }
     },
     delay: (text) => {
@@ -211,6 +217,10 @@ Util.install = function (Vue, options) {
         Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
           // alert("微信还没有准备好，请刷新页面");
+          Vue.$vux.toast.show({
+            text: '微信还没有准备好，请刷新页面',
+            type: 'warn',
+          })
         })
         callback && callback()
       })

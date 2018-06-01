@@ -9,7 +9,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <title-tip scroll-box="article-content" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+      <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
       <div class="article-view">
         <div class="article-title">
           <h2>{{article.title}}</h2>
@@ -100,6 +100,9 @@ export default {
     }
   },
   methods: {
+    access () {
+      this.$util.wxAccess()
+    },
     closeSharetip () {
       this.showsharetip = false
     },
@@ -220,10 +223,13 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const fromId = this.query.fromid
+      // const fromId = this.query.fromid
       room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
+    },
+    init () {
+      this.$uitl.wxAccessListening()
     },
     refresh () {
       const self = this
@@ -240,6 +246,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

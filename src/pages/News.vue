@@ -17,7 +17,7 @@
     				<img src="../assets/images/share1.jpg" />
     			</div>
     		</div>
-        <title-tip scroll-box="article-content" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
@@ -175,6 +175,9 @@ export default {
     }
   },
   methods: {
+    access () {
+      this.$util.wxAccess()
+    },
     clickInsertProduct (url) {
       this.$router.push(url)
     },
@@ -271,7 +274,7 @@ export default {
         }
       })
     },
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -506,10 +509,13 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const fromId = this.query.fromid
+      // const fromId = this.query.fromid
       room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
+    },
+    init () {
+      this.$util.wxAccessListening()
     },
     refresh (query) {
       const self = this
@@ -536,6 +542,9 @@ export default {
         }, 10000)
       }
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh(this.$route.query)

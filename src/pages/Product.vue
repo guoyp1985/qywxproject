@@ -5,7 +5,7 @@
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
-        <title-tip scroll-box="scroll-container" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -506,7 +506,7 @@ export default {
       this.replyData = null
       this.messages = 0
     },
-    toAccess () {
+    access () {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {
@@ -871,17 +871,20 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
-      const fromId = this.query.fromid
+      // const fromId = this.query.fromid
       room = `${this.module}-${this.query.id}`
       Socket.create()
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module})
     },
+    init () {
+      // this.$util.wxAccess()
+      this.$util.wxAccessListening()
+    },
     refresh () {
       const self = this
       this.loginUser = User.get()
-      alert('in product')
-      alert(JSON.stringify(this.loginUser))
-      this.wxAccess()
+      // alert('in product')
+      // alert(JSON.stringify(this.loginUser))
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
@@ -895,6 +898,9 @@ export default {
         self.messages = data.data
       })
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()
