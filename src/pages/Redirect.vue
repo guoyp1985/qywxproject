@@ -29,7 +29,8 @@ export default {
                 ...user,
                 ...res.data.data
               })
-              location.replace(`${state}`)
+              location.href = state
+              // location.replace(`${state}`)
             }
           },
           error => {
