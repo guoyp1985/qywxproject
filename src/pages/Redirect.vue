@@ -4,6 +4,8 @@
 </template>
 
 <script>
+import ENV from 'env'
+import { User } from '#/storage'
 export default {
   data () {
     return {
@@ -12,11 +14,12 @@ export default {
   methods: {
     refresh () {
       const self = this
+      self.$vux.loading.show()
       const query = self.$route.query
       const code = query.code
       const state = query.state
       if (code) {
-        Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+        self.$http.get(`${ENV.BokaApi}/api/authUser/${code}`)
         .then(
           res => {
             alert(JSON.stringify(res.data))
@@ -29,9 +32,9 @@ export default {
             }
           },
           error => {
-            Vue.$vux.toast.show({
+            self.$vux.toast.show({
               text: '服务器错误',
-              type: 'warn',
+              type: 'warn'
             })
           }
         )
