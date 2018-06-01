@@ -800,8 +800,8 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
-      const module = this.query.fromModule
-      const fromId = this.query.fromId
+      const module = this.query.frommodule
+      const fromId = this.query.fromid
       console.log(this.module)
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
