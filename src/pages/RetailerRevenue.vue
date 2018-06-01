@@ -27,7 +27,7 @@
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
-                          <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 font14 color-999">{{item.buyername}}</div>
@@ -51,7 +51,7 @@
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
-                          <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -97,7 +97,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -121,7 +121,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                   <div class="t-table">
                     <div class="t-cell pic v_middle w45 pr10 border-box">
-                      <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -157,7 +157,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -181,7 +181,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <x-img class="avatarimg6 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>

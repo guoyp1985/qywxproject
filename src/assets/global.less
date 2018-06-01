@@ -902,20 +902,25 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .v-search .weui-search-bar__cancel-btn {line-height:35px;}
 
 .v-checker .ck-item{
-	font-size: 13px;
+	font-size:13px;
   display: inline-block;
   padding: 0 15px;
   height: 30px;
   line-height: 30px;
+  border:0px;
   text-align: center;
   border-radius: 3px;
-  border: 1px solid #ccc;
   background-color: #fff;
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
   box-sizing: border-box;
 }
+.v-checker .ck-item-selected {
+  background: #ffffff url(images/checker.png) no-repeat right bottom;
+  border-color: #ff4a00;
+}
+.v-checker .ck-item.ck-item-selected:after{border:1px solid #ea3a3a;}
 
 .swiper-inner{position:absolute;left:0;top:0;right:0;bottom:0;overflow-y:auto;}
 .v-top{width: 100%;background:linear-gradient(#ff6a61,#f63f3d);color:#fff;padding:10px;box-sizing: border-box}
@@ -926,8 +931,8 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .weui-loading{
 	background:transparent url('/src/assets/images/gxb.png') !important;
-	webkit-animation: weuiLoading1 5s steps(12, end) infinite !important;
-  animation: weuiLoading1 5s steps(12, end) infinite !important;
+	webkit-animation: weuiLoading1 3s steps(60, end) infinite !important;
+  animation: weuiLoading1 3s steps(60, end) infinite !important;
 }
 .weui-icon_toast.weui-loading{
 	margin:10px !important;

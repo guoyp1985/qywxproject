@@ -5,7 +5,7 @@
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
-        <title-tip scroll-box="scroll-container" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -55,7 +55,7 @@
             <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w50">
-                  <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle align_left">
                   <div class="clamp1">{{ item.username }}</div>
@@ -158,7 +158,7 @@
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
             <div class="buylist pt10 pb15 pl10 pr10">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid, frommodule: 'product', fromid: query.id}}" v-for="(item,index) in buyuserdata" :key="index">
+              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid, fromModule: 'product', fromId: query.id}}" v-for="(item,index) in buyuserdata" :key="index">
                 <div class="align_center">
                   <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       					</div>
@@ -195,13 +195,13 @@
   				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
   					<i class="al font12 mr3"></i>
           </div>
-          <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, frommodule: 'product', fromid: query.id}}">我要咨询</router-link>
+          <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}">我要咨询</router-link>
   			</div>
   		</div>
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <router-link class="t-cell h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, frommodule: 'product', fromid: query.id}}" style="width:50px;">
+            <router-link class="t-cell h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}" style="width:50px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </router-link>
@@ -224,7 +224,7 @@
       				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
       					<i class="al font12 mr3"></i>
       				</div>
-              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, frommodule: 'product', fromid: query.id}}">我要咨询</router-link>
+              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}">我要咨询</router-link>
       				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
       				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
       			</div>
@@ -234,7 +234,7 @@
       				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
       					<i class="al font12 mr3"></i>
       				</div>
-              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, frommodule: 'product', fromid: query.id}}">我要咨询</router-link>
+              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}">我要咨询</router-link>
       			</div>
       		</div>
         </template>
@@ -506,7 +506,7 @@ export default {
       this.replyData = null
       this.messages = 0
     },
-    toAccess () {
+    access () {
       if (this.loginUser.subscribe === 0) {
         this.$util.wxAccess()
       } else {
@@ -871,15 +871,19 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
+      // const fromId = this.query.fromId
       room = `${this.module}-${this.query.id}`
-      Socket.create()
-      Socket.listening(room, uid, linkman)
+      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
-      this.loginUser = User.get()
+      // this.$util.wxAccess()
+      this.$util.wxAccessListening()
     },
     refresh () {
       const self = this
+      this.loginUser = User.get()
+      // alert('in product')
+      // alert(JSON.stringify(this.loginUser))
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
@@ -899,11 +903,11 @@ export default {
   },
   activated () {
     this.refresh()
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 

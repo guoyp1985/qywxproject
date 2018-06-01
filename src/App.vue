@@ -142,6 +142,9 @@ export default {
     document.title = this.$t('tIndex')
     this.$util.wxConfig()
     this.getData()
+  },
+  mounted () {
+    console.log('mmmmmm')
   }
 }
 </script>

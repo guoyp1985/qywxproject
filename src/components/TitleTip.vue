@@ -6,12 +6,12 @@
 <template>
   <sticky :scroll-box="scrollBox" v-show="show">
     <template v-if="user.subscribe == 0">
-      <div class="title-tip color-blue flex_center" @click="toAccess">您有待领取的金币，点击领取 ></div>
+      <div class="title-tip color-blue flex_center" @click="access">您有待领取的金币，点击领取 ></div>
     </template>
     <template v-else>
       <div class="title-tip">
         <router-link class="avatar-cell" to="/center">
-          <img :src="avatarHref" class="imgavatar"/>
+          <img :src="avatarHref" class="imgavatar" onerror="javascript:this.src='/src/assets/images/user.jpg';"/>
         </router-link>
         <router-link class="info-cell" to="/center">
           <div class="user-name">
@@ -55,7 +55,7 @@ export default {
     },
     delay: {
       type: Number,
-      default: 5000
+      default: 15000
     },
     messages: {
       type: Number,
@@ -69,12 +69,8 @@ export default {
     }
   },
   methods: {
-    toAccess () {
-      if (this.user.subscribe === 0) {
-        this.$util.wxAccess()
-      } else {
-        this.$router.push('/center')
-      }
+    access () {
+      this.$util.wxAccess()
     }
   },
   created () {

@@ -405,7 +405,9 @@ export default {
         },
         clickInsertProduct: function (area, d) {
           area.addEventListener('click', function () {
-            self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
+            if (!self.showBtnArea) {
+              self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
+            }
           })
         },
         buildControler: function () {

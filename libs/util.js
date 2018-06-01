@@ -88,6 +88,21 @@ Util.install = function (Vue, options) {
       }
       return list
     },
+    emotPrase: function(text) {
+      if(!Reg.rEmot.test(text)) return text
+      text = text.replace(Reg.rEmot, (match, p1, offset, string) => {
+        const emotStr = p1.match(/\[([^\]]+)\]/)[1]
+        let eIndex = 0
+        for (let i = 0; i < ENV.Emots.length; i++) {
+          if (ENV.Emots[i] === emotStr) {
+            eIndex = i
+            break
+          }
+        }
+        return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${eIndex}.gif"/>`
+      })
+      return this.emotPrase(text)
+    },
     // checkMobile: function (mobile) {
     //   if (isNaN(mobile)) return false;
     //   if (!mobile || mobile=="" || mobile.length!=11) {
@@ -100,12 +115,26 @@ Util.install = function (Vue, options) {
     // },
     wxAccess: function () {
       const user = User.get()
+      if (user && user.subscribe === 0) {
+        const originHref = encodeURIComponent(location.href)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      } else {
+        Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+        .then(res => {
+          User.set(res.data)
+        })
+      }
+    },
+    wxAccessListening: function () {
       const lUrl = urlParse(location.href, true)
       const code = lUrl.query.code
-      if (user && user.subscribe === 0) {
-        if (code) {
-          Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
-          .then(res => {
+      const state = lUrl.query.state
+      if (state === 'userAccess' && code) {
+        Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
+        .then(
+          res => {
+            alert(JSON.stringify(res.data))
             if (res.data.flag) {
               User.set({
                 ...user,
@@ -113,16 +142,14 @@ Util.install = function (Vue, options) {
               })
               location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
             }
-          })
-        } else {
-          const originHref = encodeURIComponent(location.href)
-          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
-        }
-      } else {
-        Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-        .then(res => {
-          User.set(res.data)
-        })
+          },
+          error => {
+            Vue.$vux.toast.show({
+              text: '服务器错误',
+              type: 'warn',
+            })
+          }
+        )
       }
     },
     delay: (text) => {
@@ -192,6 +219,10 @@ Util.install = function (Vue, options) {
         Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
           // alert("微信还没有准备好，请刷新页面");
+          Vue.$vux.toast.show({
+            text: '微信还没有准备好，请刷新页面',
+            type: 'warn',
+          })
         })
         callback && callback()
       })
@@ -268,7 +299,7 @@ Util.install = function (Vue, options) {
           }
         })
         Vue.wechat.onMenuShareTimeline({
-          title: wxData.timelineTitle,
+          title: wxData.title,
           link: wxshareurl,
           imgUrl: wxData.photo,
           trigger: function (res) {
@@ -369,13 +400,16 @@ Util.install = function (Vue, options) {
       })
     },
     wxPreviewImage: function(viewId) {
-      const triggerView = document.getElementById(viewId)
-      const images = document.querySelectorAll(`#${viewId} .wx__img-preview`)
-      const urls = []
-      images.map(img => urls.push(img.src))
+      const triggerView = document.querySelector(viewId)
       triggerView.addEventListener('click', function(event) {
+        const images = document.querySelectorAll(`${viewId} .wx__img-preview`)
+        if (!images.length) return
+        const urls = []
+        for (let img of images) {
+          urls.push(img.src)
+        }
         const target = event.target
-        if (target.nodeName.toLowerCase() === 'img' && /\.wx__img-preview/.test(target.getAttribute('class'))) {
+        if (target.nodeName.toLowerCase() === 'img' && /\wx__img-preview/.test(target.getAttribute('class'))) {
           Vue.wechat.previewImage({
             current: target.src,
             urls: urls
@@ -385,17 +419,17 @@ Util.install = function (Vue, options) {
     },
     taskData: function (os) {
       let data = os.data
-      let handleFunction = os.handleFunction
+      const handleFunction = os.handleFunction
       if(data && data.length > 0) {
-        let ascdesc = os.ascdesc ? os.ascdesc : "asc"
-        let callback = os.callback
+        const ascdesc = os.ascdesc ? os.ascdesc : "asc"
+        const callback = os.callback
         let tasks = []
-        let _serial = function () {
+        const _serial = function () {
           if (tasks.length === 0) {
             callback && callback()
             return
           }
-          let task = tasks[0]
+          const task = tasks[0]
           tasks.splice(0, 1)
           task(_serial)
         }
@@ -415,7 +449,7 @@ Util.install = function (Vue, options) {
       const self = this
       let maxnum = os.maxnum ? os.maxnum : 9
       Vue.wechat.chooseImage({
-        count:maxnum,
+        count: maxnum,
         success: function (res) {
           let localIds = res.localIds
           if(localIds.length > maxnum){

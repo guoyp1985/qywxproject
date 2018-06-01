@@ -24,6 +24,8 @@
     <div class="pagebottom bottomnaviarea b_top_after">
       <div class="t-table bottomnavi">
         <router-link class="t-cell item" to="/centerSales">{{ $t('I am the seller') }}</router-link>
+        <router-link class="t-cell item" to="/center">{{ $t('Center') }}</router-link>
+        <!--
         <div class="t-cell item">
           <popover class="x-popover" placement="top" @on-show="onShow" @on-hide="onHide" >
             <div slot="content" class="popover-demo-content">
@@ -38,7 +40,8 @@
             <div><img class="ico" src="../assets/images/icon-menu.png" /><span class="v_middle">{{ $t('Sales Assistant') }}</span></div>
           </popover>
         </div>
-        <router-link class="t-cell item" :to="{path: '/knowledgeclass', query: {classid: 1}}">{{ $t('Newcomer Guide') }}</router-link>
+      -->
+        <router-link class="t-cell item" :to="{path: '/knowledgeClass', query: {classid: 1}}">{{ $t('Newcomer Guide') }}</router-link>
       </div>
     </div>
   </div>

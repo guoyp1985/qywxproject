@@ -12,6 +12,7 @@ const TIME_UNIT = {
 	HOUR : 3600000,
 	HALFDAY : 43200000,
 	DAY : 86400000,
+	WEEK : 604800000,
 	MONTH : 2592000000,
 	YEAR : 31536000000
 }
@@ -28,6 +29,7 @@ class Time {
 	millisecond() { return this._date.getMilliseconds() }
 	todayTimeBegin() { return this._now.getTime() - this._now.getHours() * TIME_UNIT.HOUR - this._now.getMinutes() * TIME_UNIT.MINUTE - this._now.getSeconds() * TIME_HEX.SECOND }
 	yesterdayTimeBegin() { return this.todayTimeBegin() - TIME_UNIT.DAY }
+	sevenDaysTimeBegin() { return this.todayTimeBegin() - TIME_UNIT.WEEK }
 	deltaTime() { return Math.max(this._now.getTime(),this._date.getTime()) - Math.min(this._now.getTime(),this._date.getTime()) }
 	format() {
 		let time = this.time(),
@@ -41,7 +43,7 @@ class Time {
 				deltaTime = this.deltaTime()
 		minute = minute < 10 ? "0" + minute : minute
 		if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
-			return "昨天" + hour + ":" + minute;
+			return "昨天" + hour + ":" + minute
 		} else if( time < yesterdayTimeBegin ) {
 			return year + "-" + month + "-" + date + " "
 		}
@@ -55,7 +57,30 @@ class Time {
 			return parseInt( deltaTime / TIME_UNIT.HOUR ) + "小时" + parseInt( deltaTime % TIME_UNIT.HOUR / TIME_UNIT.MINUTE ) + "分钟前"
 		}
 	}
-	dateFormat(format) {
+	format2 () {
+		let time = this.time(),
+				minute = this.minute(),
+				hour = this.hour(),
+				date = this.date(),
+				day = this.day(),
+				month = this.month(),
+				year = this.year(),
+				yesterdayTimeBegin = this.yesterdayTimeBegin(),
+				sevenDaysTimeBegin = this.sevenDaysTimeBegin(),
+				todayTimeBegin = this.todayTimeBegin(),
+				deltaTime = this.deltaTime()
+		minute = minute < 10 ? "0" + minute : minute
+		if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
+			return "昨天" + hour + ":" + minute
+		} else if ( time > sevenDaysTimeBegin && time < yesterdayTimeBegin ) {
+			return "星期" + weekDays[ this.day() ] + " " + hour + ":" + minute
+		} else if( time < sevenDaysTimeBegin ) {
+			return year + "年" + month + "月" + date + "日 " + hour + ":" + minute
+		} else {
+			return hour + ":" + minute
+		}
+	}
+	dateFormat (format) {
 		if( this._date == "Invalid Date") return "--"
 		let o = {
 			"M+" : this.month(), //month

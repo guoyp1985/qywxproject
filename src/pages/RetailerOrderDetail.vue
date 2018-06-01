@@ -35,8 +35,8 @@
         </div>
         <div class="mt10 bg-white padding10 b_bottom_after">
           <div class="t-table">
-            <div class="t-cell">创建时间：{{ data.dateline | dateformat }}</div>
-            <div class="t-cell w60 align_right color-orange5">{{ data.flagstr }}</div>
+            <div class="t-cell">创建时间: {{ data.dateline | dateformat }}</div>
+            <div class="t-cell align_right color-orange5" style="width:110px;">{{ data.flagstr }}</div>
           </div>
         </div>
         <div class="bg-white">
@@ -73,7 +73,7 @@
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
       </div>
-      <div v-if="data.flag == 2" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
+      <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
       <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
         <popup v-model="showpopup" height="100%">
@@ -280,7 +280,7 @@ export default {
           } else {
             self.showSos = false
             self.showContainer = true
-            if (self.data.flag !== 2) {
+            if (self.data.flag !== 2 || (self.data.flag === 2 && !self.data.candeliver)) {
               self.bottomcss = 'nobottom'
             }
             let total = 0

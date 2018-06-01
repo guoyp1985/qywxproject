@@ -271,7 +271,7 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 // self.$router.push({path: '/pay', query: {id: data.id}})
-                location.replace(`${ENV.BokaCDN}/#/pay?id=${data.id}`)
+                location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
               } else {
                 self.submiting = false
               }

@@ -405,7 +405,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.$router.push('/retailerActivitylist')
+                  self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                 }
               }
             })
@@ -422,6 +422,11 @@ export default {
       const endtime = this.dateformat(parseInt((nowdate + 7 * 24 * 60 * 60 * 1000) / 1000))
       this.selectdatetxt1 = ''
       this.selectdatetxt2 = ''
+      this.showselectproduct = true
+      this.showproductitem = false
+      this.selectproduct = null
+      this.productdata = []
+      this.radiodata = []
       const submitdata = {
         productid: '',
         starttime: startime,

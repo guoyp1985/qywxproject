@@ -71,7 +71,7 @@
                 <div class="btn db">已完成砍价</div>
               </div>
               <div v-else-if="!crowduser.isovertime" class="t-cell">
-                <div v-if="!user || user.subscribe == 0" class="btn db" @click="toRedirect">帮TA砍价</div>
+                <div v-if="!user || user.subscribe == 0" class="btn db" @click="access">帮TA砍价</div>
                 <div v-else class="btn db" @click="cutevent">帮TA砍价</div>
               </div>
             </template>
@@ -171,9 +171,8 @@ export default {
     }
   },
   methods: {
-    toRedirect () {
-      const originHref = encodeURIComponent(location.href)
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=fromWx#wechat_redirect`)
+    access () {
+      this.$util.wxAccess()
     },
     cutevent () {
       const self = this
@@ -198,20 +197,24 @@ export default {
     },
     joinin () {
       const self = this
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.onJoin && self.onJoin(data.data)
+      if (self.user.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/activity/createBargain`, { id: self.data.id }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.onJoin && self.onJoin(data.data)
+              }
             }
-          }
+          })
         })
-      })
+      }
     },
     toMyActivity () {
       const self = this

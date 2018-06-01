@@ -5,10 +5,13 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" height="-52" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
-          <div v-if="data[index + 1] && (data[index + 1].dateline - data[index].dateline > 300)" class="messages-date">{{data[index].dateline}}</div>
+          <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 < data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 == data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
           <div :class="`chatitem ${getitemclass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
@@ -18,7 +21,7 @@
               <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
-                  <img :src="item.picurl"/>
+                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
                 </div>
               </template>
               <template v-else-if="item.msgtype == 'news'">
@@ -48,7 +51,7 @@
               </template>
               <template v-else>
                 <div class="main message-text">
-                  <div v-html="item.content"></div>
+                  <div v-html="filterEmot(item.content)"></div>
                 </div>
               </template>
               <!-- </div> -->
@@ -57,7 +60,7 @@
         </template>
       </div>
     </scroller>
-    <div class="bottom-area">
+    <div class="bottom-area" ref="bottomArea">
       <div class="input-box no-select">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -69,7 +72,7 @@
         </div>
         <div class="input-cell">
           <group class="textarea-box">
-            <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-change="onChange" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+            <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
           <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
         </div>
@@ -92,8 +95,8 @@
       </div>
       <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" :click-callback="clickEmotionCallback">
       </emotion-box>
-      <form class="uploadImageForm hide" enctype="multipart/form-data">
-        <input style="opacity:0;" type="file" name="files" />
+      <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
+        <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
       </form>
       <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
         <grid-item @click.native="sendPhoto">
@@ -202,6 +205,8 @@ import Socket from '#/socket'
 import Voice from '#/voice'
 
 let room = ''
+let minIdFlag = 0
+let intervalId = null
 export default {
   directives: {
     TransferDom
@@ -214,7 +219,6 @@ export default {
       // roomid: '',
       module: 'message',
       loginUser: {},
-      intervalId: null,
       showEmotBox: false,
       showFeatureBox: false,
       showVoiceCom: false,
@@ -222,9 +226,11 @@ export default {
       isPC: this.$util.isPC(),
       query: {},
       data: [],
-      focusInterval: null,
+      // focusInterval: null,
+      viewHeight: '-52',
       msgcontent: '',
       showSend: false,
+      diffSeconds: 300,
       pagestart: 0,
       limit: 5,
       msgType: 'text',
@@ -255,14 +261,26 @@ export default {
   filters: {
     secondsFormat (seconds) {
       return Time.seconds(seconds)
+    },
+    dateFormat (seconds) {
+      return new Time(seconds * 1000).format2()
     }
   },
   watch: {
     showSend () {
       return this.showSend
+    },
+    showEmotBox () {
+      this.setViewHeight()
+    },
+    showFeatureBox () {
+      this.setViewHeight()
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -270,57 +288,13 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      this.intervalId = setInterval(function () {
+      this.showFeatureBox = false
+      intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
     },
     onBlur () {
-      clearInterval(this.intervalId)
-    },
-    onChange (val) {
-      /*
-      const self = this
-      if (self.$util.isNull(val)) {
-        self.showSend = false
-      } else {
-        self.showSend = true
-      }
-      */
-    },
-    clickMessageItem (item) {
-      const self = this
-      if (item.msgtype === 'voice') {
-        if (item.mediaLid) { // stop voice
-          this.data = this.$util.changeItem(this.data, item.id, match => {
-            match.voiceClass = ''
-            match.voicePlaying = false
-            return match
-          })
-          Voice.playStop(item.mediaLid)
-          item.mediaLid = null
-        } else { // play voice
-          this.data = this.$util.changeItem(this.data, item.id, match => {
-            match.voiceClass = ' playing'
-            console.log('play')
-            return match
-          })
-          console.log(this.data)
-          Voice.play(item.mediaid,
-            localId => { // donwload voice
-              item.mediaLid = localId
-            },
-            localId => { // voice playing end
-              self.data = self.$util.changeItem(self.data, item.id, match => {
-                match.voiceClass = ''
-                item.mediaLid = null
-                return match
-              })
-            }
-          )
-        }
-      } else if (item.msgtype === 'image') {
-
-      }
+      clearInterval(intervalId)
     },
     toggleVoice () {
       if (this.showEmotBox) {
@@ -370,35 +344,81 @@ export default {
         this.$refs.text.$refs.textarea.focus()
       }
     },
-    sendPhoto () {
+    setViewHeight () {
+      this.$nextTick(() => {
+        this.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
+        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        console.log(this.viewHeight)
+        this.setScrollToBottom()
+      })
+    },
+    clickMessageItem (item) {
       const self = this
-      if (!window.WeixinJSBridge) {
-        let fileForm = document.querySelector('.uploadImageForm')
-        let fileInput = document.querySelector('.uploadImageForm input')
-        fileInput.click()
-        fileInput.addEventListener('change', function (e) {
-          let files = e.target.files
-          if (files.length > 0) {
-            let filedata = new FormData(fileForm)
-            self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              if (data.flag === 1 && data.data) {
-                self.sendData({
-                  touid: self.query.uid,
-                  content: '',
-                  module: self.module,
-                  sendtype: 'image',
-                  picurl: data.data,
-                  thumb: ''
-                })
-              }
+      if (item.msgtype === 'voice') {
+        if (item.mediaLid) { // stop voice
+          this.data = this.$util.changeItem(this.data, item.id, match => {
+            match.voiceClass = ''
+            match.voicePlaying = false
+            return match
+          })
+          Voice.playStop(item.mediaLid)
+          item.mediaLid = null
+        } else { // play voice
+          this.data = this.$util.changeItem(this.data, item.id, match => {
+            match.voiceClass = ' playing'
+            return match
+          })
+          Voice.play(item.mediaid,
+            localId => { // donwload voice
+              item.mediaLid = localId
+            },
+            localId => { // voice playing end
+              self.data = self.$util.changeItem(self.data, item.id, match => {
+                match.voiceClass = ''
+                item.mediaLid = null
+                return match
+              })
+            }
+          )
+        }
+      }
+    },
+    imageLoad (item) {
+      // console.log(item.id +'>'+ minIdFlag)
+      if (item.id > minIdFlag) {
+        this.setScrollToBottom()
+      } else {
+        this.setScrollToTop()
+      }
+    },
+    pcUploadImg (event) {
+      const uploadFiles = event.target.files
+      if (uploadFiles.length > 0) {
+        let formData = new FormData(this.$refs.uploadForm)
+        const self = this
+        this.$vux.loading.show()
+        this.toggleFeatureBoard()
+        this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData)
+        .then(res => {
+          const data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1 && data.data) {
+            self.sendData({
+              touid: self.query.uid,
+              content: '',
+              module: self.module,
+              sendtype: 'image',
+              picurl: data.data,
+              thumb: ''
             })
           }
         })
-      } else {
-        // self.$wechat.ready(function () {
+      }
+    },
+    sendPhoto () {
+      const self = this
+      if (window.WeixinJSBridge) {
+        self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
@@ -414,7 +434,8 @@ export default {
             }
           }
         })
-        // })
+      } else {
+        this.$refs.uploadInput.click()
       }
     },
     sendVoice (data) {
@@ -425,7 +446,7 @@ export default {
         sendtype: 'voice',
         mediaid: data.vid
       }
-      console.log(params)
+      // console.log(params)
       this.sendData(params)
     },
     onTalkRecord () {
@@ -444,8 +465,8 @@ export default {
         self.$vux.toast.text('录音时间过短', 'middle')
       })
     },
-    viewUserInfo () {
-    },
+    // viewUserInfo () {
+    // },
     getitemclass (item) {
       const self = this
       let ret = ''
@@ -460,13 +481,18 @@ export default {
       return ret
     },
     loadingHistory () {
-      console.log('loading')
+      const self = this
+      setTimeout(() => {
+        const minId = this.data[0].id
+        // minIdFlag = minId
+        self.getMessages(minId)
+      }, 200)
     },
     sendData (postdata) {
       const self = this
-      if (self.query.frommodule) {
-        let frommoduleid = self.query.frommoduleid ? self.query.frommoduleid : self.query.moduleid
-        postdata.frommodule = self.query.frommodule
+      if (self.query.fromModule) {
+        let frommoduleid = self.query.fromId
+        postdata.frommodule = self.query.fromModule
         postdata.frommoduleid = frommoduleid
       }
       self.$http.post(`${ENV.BokaApi}/api/message/send`, postdata).then(res => {
@@ -482,12 +508,7 @@ export default {
             room_id: room,
             ...retdata
           }
-          // for (let key in retdata) {
-          //   senddata[key] = retdata[key]
-          // }
-          // let sendtxt = JSON.stringify(senddata)
-          // websocket.send(sendtxt)
-          console.log(senddata)
+          // console.log(senddata)
           Socket.send(senddata)
           self.msgTextarea.value = ''
           self.msgcontent = ''
@@ -523,19 +544,6 @@ export default {
       }
       self.sendData(postdata)
     },
-    // getMsgList (lastid) {
-    //   const self = this
-    //   let params = { uid: self.query.uid, pagestart: self.pagestart, limit: self.limit }
-    //   if (lastid) {
-    //     params.lastid = lastid
-    //   }
-    //   self.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(function (res) {
-    //     let data = res.data
-    //     self.$vux.loading.hide()
-    //     let retdata = data.data ? data.data : data
-    //     self.data = self.data.concat(retdata)
-    //   })
-    // },
     // wsConnect () {
     //   const self = this
     //   websocket = new WebSocket(ENV.SocketApi)
@@ -551,7 +559,7 @@ export default {
     //     }
     //     if (self.query.frommodule) {
     //       loginData.frommodule = self.query.frommodule
-    //       loginData.fromid = self.query.fromid
+    //       loginData.fromid = self.query.fromId
     //     }
     //     websocket.send(JSON.stringify(loginData))
     //   }
@@ -702,10 +710,21 @@ export default {
         }
       })
     },
-    setScrollTop () {
+    setScrollToTop () {
       this.$nextTick(() => {
-        const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
-        this.$refs.scrollContainer.reset({ top: top })
+        this.$refs.scrollContainer.reset({ top: 0 })
+        // this.$refs.scrollContainer.scrollTo(0, 0, false)
+      })
+    },
+    setScrollToBottom () {
+      this.$nextTick(() => {
+        const self = this
+        if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
+        setTimeout(() => {
+          const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
+          self.$refs.scrollContainer.reset({ top: top })
+          // this.$refs.scrollContainer.scrollTo(0, top, false)
+        }, 100)
       })
     },
     getNewsData () {
@@ -782,12 +801,38 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
+      const module = this.query.frommodule
+      const fromId = this.query.fromid
       room = `${this.module}-${sid}-${bid}`
-      Socket.create()
-      Socket.listening(room, uid, linkman, data => {
-        console.log(data)
-        self.data.push(data)
-        self.setScrollTop()
+      console.log(room)
+      Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
+        item.dateline = new Date(item.time).getTime() / 1000
+        // console.log(item.dateline)
+        self.data.push(item)
+        self.setScrollToBottom()
+      })
+    },
+    getMessages (minId, callback) {
+      let params = { uid: this.query.uid }
+      if (typeof minId === 'function') {
+        callback = minId
+      } else {
+        params.lastid = minId
+      }
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
+      .then(res => {
+        if (res.data.flag) {
+          if (!res.data.data.length) {
+            self.$vux.toast.text('没有更多记录', 'middle')
+          }
+          self.$vux.loading.hide()
+          const data = res.data.data
+          self.data = data.concat(self.data)
+          callback && callback()
+        } else {
+          self.$vux.toast.text('加载失败，稍后再试', 'middle')
+        }
       })
     },
     getData () {
@@ -795,32 +840,37 @@ export default {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
       const self = this
-      const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
-      this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params).then(res => {
-        self.$vux.loading.hide()
-        const data = res.data.data
-        // const retdata = data.data ? data.data : data
-        self.data = self.data.concat(data)
-        self.setScrollTop()
+      // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
+      this.getMessages(() => {
+        if (self.data.length > 0) {
+          minIdFlag = self.data[0].id
+          self.setScrollToBottom()
+        }
       })
     },
-    init () {
-      this.loginUser = User.get()
-    },
+    // init () {
+    //   this.loginUser = User.get()
+    // },
     refresh () {
+      room = ''
+      minIdFlag = 0
       this.data = []
+      this.loginUser = User.get()
+      this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
       this.createSocket()
+      console.log('rw')
       // this.wsConnect()
     }
   },
-  created () {
-    this.init()
-  },
+  // created () {
+  //   this.init()
+  // },
   mounted () {
     const self = this
+    this.$util.wxPreviewImage('#chat-room')
     this.msgTextarea = document.querySelector('#chat-textarea textarea')
     this.msgTextarea.addEventListener('focus', function () {
       self.setSendStatus()
@@ -828,15 +878,15 @@ export default {
     this.msgTextarea.addEventListener('keyup', function () {
       self.setSendStatus()
     })
-    this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
+    // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
     this.refresh()
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 <style lang="less">
@@ -970,9 +1020,9 @@ export default {
   padding: 0 10px;
   line-height: 1.1;
 }
-.chatlist *{
-  box-sizing: border-box;
-}
+// .chatlist *{
+//   box-sizing: border-box;
+// }
 .chatlist .messages-date {
   text-align: center;
   font-weight: 500;
@@ -980,7 +1030,7 @@ export default {
   padding: 10px 0;
   color: #8e8e93;
 }
-.chatlist .chatitem {position: relative;margin-bottom: 20px;}
+.chatlist .chatitem {position: relative;padding-bottom: 20px;}
 .chatlist .chatitem.left{padding-right:50px;}
 .chatlist .chatitem.right{padding-left:50px;}
 .chatlist .chatitem .head {
@@ -1009,7 +1059,7 @@ export default {
   max-width: 200px;
 	border-radius: 5px;
   line-height: 24px;
-  min-height:36px;
+  // min-height:36px;
 	word-wrap: break-word;
   word-break: break-all;
 }

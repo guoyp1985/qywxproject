@@ -25,7 +25,8 @@
           :user="loginUser"
           :cut-data="cutData"
           :on-cut="cutSuccess"
-          :on-join="joinSuccess">
+          :on-join="joinSuccess"
+          @access="access">
         </bargainbuy-detail>
       </template>
       <share-success
@@ -123,6 +124,9 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+    },
+    access () {
+      this.$util.wxAccess()
     },
     getData () {
       const self = this
@@ -234,19 +238,21 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
+      // const fromId = this.query.fromId
       room = `${this.module}-${this.query.id}`
-      Socket.create()
-      Socket.listening(room, uid, linkman)
+      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
-      this.loginUser = User.get()
+      this.$util.wxAccessListening()
     },
     refresh (query) {
+      this.loginUser = User.get()
       this.initData()
       this.query = query
       if (this.query.crowduserid) {
         this.crowduserid = this.query.crowduserid
       }
+      this.loginUser = User.get()
       this.$vux.loading.show()
       this.getData()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -262,11 +268,11 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.refresh(to.query)
     next && next()
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 

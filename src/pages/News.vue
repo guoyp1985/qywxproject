@@ -17,7 +17,7 @@
     				<img src="../assets/images/share1.jpg" />
     			</div>
     		</div>
-        <title-tip scroll-box="article-content" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
@@ -175,6 +175,9 @@ export default {
     }
   },
   methods: {
+    access () {
+      this.$util.wxAccess()
+    },
     clickInsertProduct (url) {
       this.$router.push(url)
     },
@@ -271,7 +274,7 @@ export default {
         }
       })
     },
-    handleScroll: function () {
+    handleScroll () {
       const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
@@ -389,9 +392,12 @@ export default {
     },
     onAdvisory () {
       if (this.loginUser.subscribe === 0) {
-        this.$util.wxAccess()
+        // this.$util.wxAccess()
+        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=news&fromId=${this.query.id}`)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
       } else {
-        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, frommodule: 'news', fromid: this.query.id}})
+        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id}})
       }
     },
     onStore () {
@@ -506,22 +512,25 @@ export default {
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
+      // const fromId = this.query.fromId
       room = `${this.module}-${this.query.id}`
-      Socket.create()
-      Socket.listening(room, uid, linkman)
+      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
-      this.loginUser = User.get()
+      this.$util.wxAccessListening()
     },
     refresh (query) {
       const self = this
+      this.loginUser = User.get()
       if (this.query.id !== query.id) {
+        room = ''
         this.comments = []
         this.pagestart = 0
         this.query = query
         this.showsharetip = false
         this.getData()
       }
+      this.loginUser = User.get()
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
@@ -541,11 +550,11 @@ export default {
   },
   activated () {
     this.refresh(this.$route.query)
-  },
-  beforeRouteLeave (to, from, next) {
-    Socket.destory(room)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
 <style lang="less">

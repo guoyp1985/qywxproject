@@ -36,7 +36,12 @@ export default {
     return {
       query: {},
       addressData: ChinaAddressV4Data,
-      initItem: {},
+      initItem: {
+        linkman: '',
+        telephone: '',
+        area: [],
+        address: ''
+      },
       switcher: true
     }
   },
@@ -107,6 +112,13 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.initItem = {
+        linkman: '',
+        telephone: '',
+        area: [null],
+        address: ''
+      }
+      this.switcher = true
     }
   },
   activated () {
