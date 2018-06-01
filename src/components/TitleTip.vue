@@ -33,7 +33,6 @@
 </i18n>
 <script>
 import { Sticky } from 'vux'
-import ENV from 'env'
 export default {
   name: 'TitleTip',
   components: {
@@ -71,10 +70,7 @@ export default {
   },
   methods: {
     access () {
-      // this.$emit('access')
-      const originHref = encodeURIComponent(location.href)
-      const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      this.$util.wxAccess()
     }
   },
   created () {

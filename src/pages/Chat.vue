@@ -489,9 +489,9 @@ export default {
     },
     sendData (postdata) {
       const self = this
-      if (self.query.frommodule) {
-        let frommoduleid = self.query.frommoduleid ? self.query.frommoduleid : self.query.moduleid
-        postdata.frommodule = self.query.frommodule
+      if (self.query.fromModule) {
+        let frommoduleid = self.query.fromId
+        postdata.frommodule = self.query.fromModule
         postdata.frommoduleid = frommoduleid
       }
       self.$http.post(`${ENV.BokaApi}/api/message/send`, postdata).then(res => {
@@ -558,7 +558,7 @@ export default {
     //     }
     //     if (self.query.frommodule) {
     //       loginData.frommodule = self.query.frommodule
-    //       loginData.fromid = self.query.fromid
+    //       loginData.fromid = self.query.fromId
     //     }
     //     websocket.send(JSON.stringify(loginData))
     //   }
@@ -800,8 +800,9 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
-      const module = this.query.frommodule
+      const module = this.query.fromModule
       const fromId = this.query.fromId
+      console.log(this.module)
       room = `${this.module}-${sid}-${bid}`
       Socket.create()
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
@@ -841,8 +842,10 @@ export default {
       const self = this
       // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
       this.getMessages(() => {
-        minIdFlag = self.data[0].id
-        self.setScrollToBottom()
+        if (self.data.length > 0) {
+          minIdFlag = self.data[0].id
+          self.setScrollToBottom()
+        }
       })
     },
     // init () {

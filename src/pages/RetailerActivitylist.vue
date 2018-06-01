@@ -156,6 +156,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       showContainer: false,
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
@@ -232,7 +233,8 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.tabdata1.length < limit) {
+      this.query = this.$route.query
+      if (this.tabdata1.length < limit || this.query.from === 'add') {
         this.tabdata1 = []
         this.getData1()
       }

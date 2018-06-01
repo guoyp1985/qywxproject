@@ -405,7 +405,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.$router.push('/retailerActivitylist')
+                  self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                 }
               }
             })
