@@ -34,8 +34,9 @@
                   <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
                   <div class="clamp1 color-gray font12">
                     <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.visitor}}次</span>
-                    <span class="v_middle">分享时间：{{ item.dateline | dateformat }}</span>
+                    <span class="v_middle"><i class="al al-fenxiang font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}次</span>
                   </div>
+                  <div class="clamp1 color-gray font12">分享时间：{{ item.dateline | dateformat }}</div>
                 </div>
               </div>
             </router-link>
