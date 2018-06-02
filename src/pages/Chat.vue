@@ -8,10 +8,10 @@
     <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchstart.native.prevent="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
     <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
-        <template v-for="(item,index) in data">
+        <template v-for="(item,index) in messages">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
-          <div v-else-if="index + 1 < data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
-          <div v-else-if="index + 1 == data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
+          <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
           <div :class="`chatitem ${getItemClass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
@@ -228,12 +228,12 @@ export default {
       // textarea: null,
       // isPC: this.$util.isPC(),
       query: {},
-      data: [],
+      messages: [],
       // focusInterval: null,
       viewHeight: '-52',
       diffSeconds: 300,
-      pagestart: 0,
-      limit: 5,
+      // pagestart: 0,
+      // limit: 5,
       msgType: 'text',
       // client_list: '',
       // uid_list: [],
@@ -370,7 +370,7 @@ export default {
       const self = this
       if (item.msgtype === 'voice') {
         if (item.mediaLid) { // stop voice
-          this.data = this.$util.changeItem(this.data, item.id, match => {
+          this.messages = this.$util.changeItem(this.messages, item.id, match => {
             match.voiceClass = ''
             match.voicePlaying = false
             return match
@@ -378,7 +378,7 @@ export default {
           Voice.playStop(item.mediaLid)
           item.mediaLid = null
         } else { // play voice
-          this.data = this.$util.changeItem(this.data, item.id, match => {
+          this.messages = this.$util.changeItem(this.messages, item.id, match => {
             match.voiceClass = ' playing'
             return match
           })
@@ -387,7 +387,7 @@ export default {
               item.mediaLid = localId
             },
             localId => { // voice playing end
-              self.data = self.$util.changeItem(self.data, item.id, match => {
+              self.messages = self.$util.changeItem(self.messages, item.id, match => {
                 match.voiceClass = ''
                 item.mediaLid = null
                 return match
@@ -495,7 +495,7 @@ export default {
     loadingHistory () {
       const self = this
       setTimeout(() => {
-        const minId = this.data[0].id
+        const minId = this.messages[0].id
         // minIdFlag = minId
         self.getMessages(minId)
       }, 200)
@@ -600,7 +600,7 @@ export default {
     //         newsdata: edata.newsdata,
     //         isNew: edata.isNew
     //       }
-    //       self.data.push(saydata)
+    //       self.messages.push(saydata)
     //       if (saydata.isNew) {
     //         let scrollarea = self.$refs.scrollContainer
     //         if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
@@ -817,7 +817,7 @@ export default {
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
-        self.data.push(item)
+        self.messages.push(item)
         self.setScrollToBottom()
       })
     },
@@ -837,7 +837,7 @@ export default {
           }
           self.$vux.loading.hide()
           const data = res.data.data
-          self.data = data.concat(self.data)
+          self.messages = data.concat(self.messages)
           callback && callback()
         } else {
           self.$vux.toast.text('加载失败，稍后再试', 'middle')
@@ -857,8 +857,8 @@ export default {
           document.title = res.data.linkman
         }
         self.getMessages(() => {
-          if (self.data.length > 0) {
-            minIdFlag = self.data[0].id
+          if (self.messages.length > 0) {
+            minIdFlag = self.messages[0].id
             self.setScrollToBottom()
           }
         })
@@ -873,7 +873,13 @@ export default {
     refresh () {
       room = ''
       minIdFlag = 0
-      this.data = []
+      this.message = ''
+      this.messages = []
+      this.showEmotBox = false,
+      this.showFeatureBox = false,
+      this.showVoiceCom = false,
+      this.showSendBtn = false,
+      this.viewHeight = '-52',
       this.loginUser = User.get()
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
