@@ -5,14 +5,14 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchstart.native.prevent="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
     <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in data">
           <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
           <div v-else-if="index + 1 < data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
           <div v-else-if="index + 1 == data.length && data[index].dateline - data[index - 1].dateline > diffSeconds" class="messages-date">{{data[index].dateline | dateFormat}}</div>
-          <div :class="`chatitem ${getitemclass(item)}`">
+          <div :class="`chatitem ${getItemClass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar">
             </router-link>
@@ -72,7 +72,7 @@
         </div>
         <div class="input-cell">
           <group class="textarea-box">
-            <x-textarea v-model='msgcontent' ref="text" id="chat-textarea" @click.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+            <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
           <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
         </div>
@@ -84,7 +84,7 @@
             <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
           </a>
         </div>
-        <div v-if="showSend" class="send-cell flex_center">
+        <div v-if="showSendBtn" class="send-cell flex_center">
           <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
         </div>
         <div v-else class="feature-cell">
@@ -93,7 +93,7 @@
           </a>
         </div>
       </div>
-      <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" :click-callback="clickEmotionCallback">
+      <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" @input="inputEmot">
       </emotion-box>
       <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
         <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
@@ -219,27 +219,27 @@ export default {
       // roomid: '',
       module: 'message',
       loginUser: {},
+      message: '',
       showEmotBox: false,
       showFeatureBox: false,
       showVoiceCom: false,
-      textarea: null,
-      isPC: this.$util.isPC(),
+      showSendBtn: false,
+      showImgTxt: false,
+      // textarea: null,
+      // isPC: this.$util.isPC(),
       query: {},
       data: [],
       // focusInterval: null,
       viewHeight: '-52',
-      msgcontent: '',
-      showSend: false,
       diffSeconds: 300,
       pagestart: 0,
       limit: 5,
       msgType: 'text',
-      client_list: '',
-      uid_list: [],
-      to_client_id: '',
-      to_client_name: '',
-      msgTextarea: null,
-      showImgTxt: false,
+      // client_list: '',
+      // uid_list: [],
+      // to_client_id: '',
+      // to_client_name: '',
+      // msgTextarea: null,
       tabmodel: 0,
       tabtxts: [ '文章', '产品', '外链' ],
       autofixed: false,
@@ -267,9 +267,9 @@ export default {
     }
   },
   watch: {
-    showSend () {
-      return this.showSend
-    },
+    // showSendBtn () {
+    //   return this.showSendBtn
+    // },
     showEmotBox () {
       this.setViewHeight()
     },
@@ -283,6 +283,20 @@ export default {
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
+    },
+    touchContainer () {
+      this.showEmotBox = false
+      this.showFeatureBox = false
+    },
+    inputText (value) {
+      this.showSendBtn = true
+      if (this.$util.trim(value) === '') {
+        this.showSendBtn = false
+      }
+    },
+    inputEmot (value) {
+      this.message = value
+      this.inputText(value)
     },
     onTextClick () {
       this.showEmotBox = false
@@ -465,9 +479,7 @@ export default {
         self.$vux.toast.text('录音时间过短', 'middle')
       })
     },
-    // viewUserInfo () {
-    // },
-    getitemclass (item) {
+    getItemClass (item) {
       const self = this
       let ret = ''
       if (item.msgtype === 'news') {
@@ -488,47 +500,45 @@ export default {
         self.getMessages(minId)
       }, 200)
     },
-    sendData (postdata) {
+    sendData (postData) {
       const self = this
-      if (self.query.fromModule) {
-        let frommoduleid = self.query.fromId
-        postdata.frommodule = self.query.fromModule
-        postdata.frommoduleid = frommoduleid
+      if (this.query.fromModule) {
+        postData.frommodule = this.query.fromModule
+        postData.frommoduleid = this.query.fromId
       }
-      self.$http.post(`${ENV.BokaApi}/api/message/send`, postdata).then(res => {
-        const data = res.data
-        if (data.flag === 1) {
-          let retdata = data.data
-          let senddata = {
-            module: postdata.module,
+      this.$http.post(`${ENV.BokaApi}/api/message/send`, postData)
+      .then(res => {
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          let sendData = {
+            module: postData.module,
             type: 'say',
             from_uid: self.loginUser.uid,
             to_client_id: self.query.uid,
-            messageid: retdata.id,
+            messageid: data.id,
             room_id: room,
-            ...retdata
+            ...data
           }
-          // console.log(senddata)
-          Socket.send(senddata)
-          self.msgTextarea.value = ''
-          self.msgcontent = ''
-          self.showSend = false
-          self.showEmotBox = false
-          self.msgTextarea.focus()
+          // console.log(sendData)
+          Socket.send(sendData)
+          // self.msgTextarea.value = ''
+          self.message = ''
+          // self.showSendBtn = false
+          // self.showEmotBox = false
+          // self.msgTextarea.focus()
         }
       })
     },
-    clickEmotionCallback () {
-      const self = this
-      self.msgcontent = self.msgTextarea.value
-      self.setSendStatus()
-    },
+    // clickEmotionCallback () {
+    //   const self = this
+    //   self.message = self.msgTextarea.value
+    //   self.setSendStatus()
+    // },
     sendMessage () {
-      const self = this
-      self.msgcontent = self.msgTextarea.value
-      let postdata = {
+      // this.message = this.msgTextarea.value
+      let postData = {
         touid: this.query.uid,
-        content: this.msgcontent,
+        content: this.message,
         module: this.module,
         sendtype: 'text',
         picurl: '',
@@ -536,13 +546,13 @@ export default {
         inroom: 1,
         isNew: true
       }
-      if (!self.$util.isNull(postdata.content)) {
-        postdata.content = postdata.content.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
+      if (!this.$util.isNull(postData.content)) {
+        postData.content = postData.content.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
       }
-      if (self.msgType === 'text' && self.$util.trim(postdata.content) === '') {
+      if (this.msgType === 'text' && this.$util.trim(postData.content) === '') {
         return false
       }
-      self.sendData(postdata)
+      this.sendData(postData)
     },
     // wsConnect () {
     //   const self = this
@@ -607,15 +617,15 @@ export default {
     //     console.log('ws error')
     //   }
     // },
-    setSendStatus () {
-      const self = this
-      let val = self.msgTextarea.value.toString()
-      if (self.$util.trim(val) === '') {
-        self.showSend = false
-      } else {
-        self.showSend = true
-      }
-    },
+    // setSendStatus () {
+    //   const self = this
+    //   let val = self.msgTextarea.value.toString()
+    //   if (self.$util.trim(val) === '') {
+    //     self.showSendBtn = false
+    //   } else {
+    //     self.showSendBtn = true
+    //   }
+    // },
     showImgTxtPopup () {
       const self = this
       this.showImgTxt = true
@@ -835,25 +845,27 @@ export default {
       })
     },
     getData () {
+      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
-      const self = this
-      // const params = { uid: this.query.uid, pagestart: this.pagestart, limit: this.limit }
-      this.getMessages(() => {
-        if (self.data.length > 0) {
-          minIdFlag = self.data[0].id
-          self.setScrollToBottom()
-        }
+      .then(res => {
+        return self.setContactUser()
       })
-    },
-    setContactUser () {
-      this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
       .then(res => {
         if (res.data) {
           document.title = res.data.linkman
         }
+        self.getMessages(() => {
+          if (self.data.length > 0) {
+            minIdFlag = self.data[0].id
+            self.setScrollToBottom()
+          }
+        })
       })
+    },
+    setContactUser () {
+      return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
     // init () {
     //   this.loginUser = User.get()
@@ -868,7 +880,7 @@ export default {
       this.query = this.$route.query
       this.getData()
       this.createSocket()
-      this.setContactUser()
+      // this.setContactUser()
       // this.wsConnect()
     }
   },
@@ -876,15 +888,15 @@ export default {
   //   this.init()
   // },
   mounted () {
-    const self = this
+    // const self = this
     this.$util.wxPreviewImage('#chat-room')
-    this.msgTextarea = document.querySelector('#chat-textarea textarea')
-    this.msgTextarea.addEventListener('focus', function () {
-      self.setSendStatus()
-    })
-    this.msgTextarea.addEventListener('keyup', function () {
-      self.setSendStatus()
-    })
+    // this.msgTextarea = document.querySelector('#chat-textarea textarea')
+    // this.msgTextarea.addEventListener('focus', function () {
+    //   self.setSendStatus()
+    // })
+    // this.msgTextarea.addEventListener('keyup', function () {
+    //   self.setSendStatus()
+    // })
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
@@ -1062,7 +1074,7 @@ export default {
   padding: 5px;
 	background:#fff;
   border: 1px solid #dedede;
-  min-width:40px;
+  min-width: 30px;
   max-width: 200px;
 	border-radius: 5px;
   line-height: 24px;

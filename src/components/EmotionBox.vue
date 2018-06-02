@@ -27,7 +27,7 @@
       </swiper-item>
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions5" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
-        <div class="emotion-delete" @click="deleteEmotion">
+        <div class="emotion-delete" @click="onDelete">
           <img src="http://vuxlaravel.boka.cn/images/delete.png"/>
         </div>
       </swiper-item>
@@ -89,8 +89,8 @@ export default {
   },
   props: {
     bindTextarea: String,
-    className: '',
-    clickCallback: Function
+    className: ''
+    // clickCallback: Function
     // value: Boolean
   },
   data () {
@@ -108,9 +108,11 @@ export default {
   methods: {
     onClick (emot) {
       this.onClickEmotion(emot)
+      this.$emit('input', this.textarea.value)
     },
     onDelete () {
       this.deleteEmotion()
+      this.$emit('input', this.textarea.value)
     },
     onTextFocus () {
       if (this.rangeData) {
@@ -133,14 +135,13 @@ export default {
           text: emot
         }
         this.textarea.value = emot
-        this.clickCallback && this.clickCallback()
+        // this.clickCallback && this.clickCallback()
       }
     },
     onInput () {
       this.rangeData = Cursor.get(this.textarea)
     },
     deleteEmotion () {
-      console.log('okoko')
       this.rangeData = Cursor.get(this.textarea)
       let preText = this.textarea.value.substr(0, this.rangeData.end)
       let sufText = this.textarea.value.substr(this.rangeData.end)
