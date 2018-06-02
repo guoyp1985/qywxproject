@@ -875,11 +875,11 @@ export default {
       minIdFlag = 0
       this.message = ''
       this.messages = []
-      this.showEmotBox = false,
-      this.showFeatureBox = false,
-      this.showVoiceCom = false,
-      this.showSendBtn = false,
-      this.viewHeight = '-52',
+      this.showEmotBox = false
+      this.showFeatureBox = false
+      this.showVoiceCom = false
+      this.showSendBtn = false
+      this.viewHeight = '-52'
       this.loginUser = User.get()
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
