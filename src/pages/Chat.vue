@@ -801,10 +801,9 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
-      const module = this.query.frommodule
-      const fromId = this.query.fromid
+      const module = this.query.fromModule
+      const fromId = this.query.fromId
       room = `${this.module}-${sid}-${bid}`
-      console.log(room)
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)

@@ -399,22 +399,33 @@ Util.install = function (Vue, options) {
         }
       })
     },
-    wxPreviewImage: function(viewId) {
+    wxPreviewImage: function(viewId, texture) {
+      let images
       const triggerView = document.querySelector(viewId)
+      if (texture) {
+        images = document.querySelectorAll(`${viewId} ${texture}`)
+      } else {
+        images = document.querySelectorAll(`${viewId} .wx__img-preview`)
+      }
+      if (!images.length) return
+      const urls = []
+      for (let img of images) {
+        urls.push(img.src)
+      }
       triggerView.addEventListener('click', function(event) {
-        const images = document.querySelectorAll(`${viewId} .wx__img-preview`)
-        if (!images.length) return
-        const urls = []
-        for (let img of images) {
-          urls.push(img.src)
-        }
         const target = event.target
-        if (target.nodeName.toLowerCase() === 'img' && /\wx__img-preview/.test(target.getAttribute('class'))) {
-          Vue.wechat.previewImage({
-            current: target.src,
-            urls: urls
-          })
+        if (target.nodeName.toLowerCase() === 'img') {
+          for (let img of images) {
+            if (target.src === img.src) {
+              Vue.wechat.previewImage({
+                current: target.src,
+                urls: urls
+              })
+              break
+            }
+          }
         }
+        return false
       }, false)
     },
     taskData: function (os) {

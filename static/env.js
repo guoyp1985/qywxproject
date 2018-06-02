@@ -9,7 +9,7 @@ var ENV = {
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
   SocketBokaRoom: 'laravel.boka.cn',
-  SocketServer: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272',
+  SocketServer: 'ws://124.207.246.109:7272', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
