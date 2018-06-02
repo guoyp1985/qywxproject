@@ -3,7 +3,7 @@
     <div class="bk-salestop">
       <div class="flex_left" style="height:108px;">
         <div class="img-cell">
-          <x-img class="imgcover" :src="retailerInfo.avatar" default-src="src/assets/images/user.jpg" @click.native.stop="showBigimg(0)"></x-img>
+          <x-img class="imgcover" :src="retailerInfo.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" @click.native.stop="showBigimg(0)"></x-img>
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>

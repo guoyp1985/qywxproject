@@ -24,7 +24,7 @@
       					<div class="b_bottom_after padding10">
       						<div class="t-table">
       							<div class="t-cell v_middle" style="width:65px;">
-                      <img class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg'" />
+                      <img class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </div>
       							<div class="t-cell v_middle">
       								<div class="name color-black font15">{{ product.name }}</div>

@@ -60,7 +60,7 @@
         <group v-if="list.length">
           <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
             <div class="store-img">
-              <x-img class="imgcover" :src="item.avatar" default-src="../src/assets/images/nopic.jpg"></x-img>
+              <x-img class="imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg"></x-img>
             </div>
             <div class="store-info font14">
               <div class="store-name">

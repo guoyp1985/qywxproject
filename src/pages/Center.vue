@@ -136,7 +136,7 @@ export default {
           }
         }
       ],
-      avatarHref: './../assets/images/user.jpg',
+      avatarHref: 'http://vuxlaravel.boka.cn/images/user.jpg',
       linkMan: '',
       userCredits: 0,
       userLevels: 0,

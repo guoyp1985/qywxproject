@@ -34,7 +34,7 @@
         <div class="padding10">
           <div class="t-table">
             <div class="t-cell w60">
-              <img class="imgcover" :src="item.photo" onerror="javascript:this.src='/src/assets/images/nopic.jpg';" style="width:50px;height:50px;" />
+              <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"style="width:50px;height:50px;" />
             </div>
             <div class="t-cell v_middle">
               <div class="clamp2 font12 color-gray5">{{ item.name }}</div>

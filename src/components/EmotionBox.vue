@@ -4,31 +4,31 @@
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions1" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
-          <img src="../assets/images/delete.png"/>
+          <img src="http://vuxlaravel.boka.cn/images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions2" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
-          <img src="../assets/images/delete.png"/>
+          <img src="http://vuxlaravel.boka.cn/images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions3" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
-          <img src="../assets/images/delete.png"/>
+          <img src="http://vuxlaravel.boka.cn/images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions4" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="onDelete">
-          <img src="../assets/images/delete.png"/>
+          <img src="http://vuxlaravel.boka.cn/images/delete.png"/>
         </div>
       </swiper-item>
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions5" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
         <div class="emotion-delete" @click="deleteEmotion">
-          <img src="../assets/images/delete.png"/>
+          <img src="http://vuxlaravel.boka.cn/images/delete.png"/>
         </div>
       </swiper-item>
     </swiper>

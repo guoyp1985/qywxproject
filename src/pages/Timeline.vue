@@ -5,7 +5,7 @@
     </template>
     <template v-if="showContainer">
       <div class="s-topbanner flex_left color-white pl15 pr15 border-box">
-          <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
+          <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
           <div class="flex_cell pr20 pl10">
             <div class="font16 clamp1">{{ viewuser.linkman }}</div>
             <div class="font13">成交概率 {{ viewuser.percent }}%</div>

@@ -20,7 +20,7 @@
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
         		<div class="t-table">
         			<div class="t-cell v_middle w50">
-                <x-img class="avatarimg1 imgcover" :src="retailerInfo.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                <x-img class="avatarimg1 imgcover" :src="retailerInfo.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
         			</div>
         			<div class="t-cell v_middle shopkeeper_txt">
         				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
@@ -43,7 +43,7 @@
           <div class="activitylist">
             <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
               <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
-                <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
+                <x-img slot="photo" class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
                 <span slot="title">{{ item.title }}</span>
                 <span slot="numbers">{{ item.numbers }}</span>
                 <span slot="havetuan">{{ item.havetuan }}</span>
@@ -51,7 +51,7 @@
                 <span slot="price">{{ item.price }}</span>
               </groupbuyitemplate>
               <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
-                <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
+                <x-img slot="photo" class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:80px;height:80px;" :offset="0" container=".scroll-container"></x-img>
                 <span slot="title">{{ item.title }}</span>
                 <span slot="saveprice">{{ item.saveprice }}</span>
                 <span slot="minprice">{{ item.minprice }}</span>
@@ -67,7 +67,7 @@
         <div v-if="disproductdata" class="productlist squarepic">
           <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
           <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
-            <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+            <x-img slot="photo" class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
@@ -89,7 +89,7 @@
           <div class="b_top_after"></div>
           <div class="productlist">
             <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
-              <x-img slot="photo" class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width: 70px; height: 50px;" :offset="0" container=".scroll-container"></x-img>
+              <x-img slot="photo" class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width: 70px; height: 50px;" :offset="0" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="date">{{ item.dateline | dateformat }}</span>
             </newsitemplate>
@@ -194,7 +194,7 @@ export default {
       query: {},
       loginUser: {},
       showShareSuccess: false,
-      retailerInfo: { avatar: '/src/assets/images/user.jpg' },
+      retailerInfo: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
       showqrcode: false,
       showdot: true,
       addata: [],

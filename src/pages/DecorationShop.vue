@@ -23,7 +23,7 @@
             <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
               <div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl10 v_middle" style="width:90px;">
-                    <x-img class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;"></x-img>
+                    <x-img class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:80px;height:80px;"></x-img>
           			</div>
           			<div class="t-cell v_middle">
                   <div class="clamp2 font15 pr10">{{item.title}}</div>

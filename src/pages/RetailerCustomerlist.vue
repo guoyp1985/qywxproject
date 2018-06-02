@@ -50,7 +50,7 @@
               <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -99,7 +99,7 @@
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -142,7 +142,7 @@
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -169,14 +169,14 @@
                   <div class="pro" >
                     <div class="pro-sucess">
                       <div class="flex_left">
-                        <img class="v_middle" src="../assets/images/infor.png"/>
+                        <img class="v_middle" src="http://vuxlaravel.boka.cn/images/infor.png"/>
                         <div class="color-blue">什么是成交概率</div>
                       </div>
                       <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为购买客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
                     </div>
                     <div class="pro-push">
                       <div class="flex_left">
-                        <img class="v_middle" src="../assets/images/infor.png"/>
+                        <img class="v_middle" src="http://vuxlaravel.boka.cn/images/infor.png"/>
                         <div class="color-blue">如何提升成交概率</div>
                       </div>
                       <div class="font12">1、推送客户感兴趣的文章;</div>

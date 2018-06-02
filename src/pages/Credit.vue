@@ -13,7 +13,7 @@
             <span>{{$t('No Related Data')}}</span>
           </div>
           <cell v-else v-for="(item, index) in list" :key="index" class="credit-item" align-items >
-            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="../src/assets/images/nopic.jpg" :src="item.photo" :offset=0 container=".scroll-container"></x-img>
+            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :src="item.photo" :offset=0 container=".scroll-container"></x-img>
             <div slot="inline-desc">
               <div class="t-table">
                 <div class="t-cell v_middle">

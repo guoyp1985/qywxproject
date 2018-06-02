@@ -26,7 +26,7 @@
                 </div>
                 <div class="user-credits">
                   <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-                    <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
+                    <img src="http://vuxlaravel.boka.cn/images/jb_icon.png" style="width: 20px;height: 20px;" />
                     <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
                   </router-link>
                 </div>
@@ -48,6 +48,7 @@
 
 <script>
 import { Grid, GridItem, Badge } from 'vux'
+
 export default {
   name: 'CTitle',
   components: {
@@ -59,7 +60,7 @@ export default {
     profile: Object,
     avatarHref: {
       type: String,
-      default: '../src/assets/images/user.jpg'
+      default: 'http://vuxlaravel.boka.cn/images/user.jpg'
     },
     userName: {
       type: String,
