@@ -64,10 +64,10 @@
       <div class="input-box no-select">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
-            <img src="../assets/images/icon-voice.png"/>
+            <img src="http://vuxlaravel.boka.cn/images/icon-voice.png"/>
           </a>
           <a v-else class="emotion-btn" @click="toggleKeyboard">
-            <img src="../assets/images/icon-keyboard.png"/>
+            <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
           </a>
         </div>
         <div class="input-cell">
@@ -78,10 +78,10 @@
         </div>
         <div class="emotion-cell">
           <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
-            <img src="../assets/images/icon-face.png"/>
+            <img src="http://vuxlaravel.boka.cn/images/icon-face.png"/>
           </a>
           <a v-else class="emotion-btn" @click="toggleKeyboard">
-            <img src="../assets/images/icon-keyboard.png"/>
+            <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
           </a>
         </div>
         <div v-if="showSend" class="send-cell flex_center">
@@ -89,7 +89,7 @@
         </div>
         <div v-else class="feature-cell">
           <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
-            <img src="../assets/images/icon-add.png"/>
+            <img src="http://vuxlaravel.boka.cn/images/icon-add.png"/>
           </a>
         </div>
       </div>
@@ -149,7 +149,7 @@
                     <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
+                          <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1">{{item.title}}</div>
@@ -171,7 +171,7 @@
                     <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
+                          <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1">{{item.title}}</div>
@@ -1145,7 +1145,7 @@ export default {
   display: inline-block;
 	background-size: 54px 25px;
 	background-repeat: no-repeat;
-	background-image: url(../assets/images/iconloop.png);
+	background-image: url(http://vuxlaravel.boka.cn/images/iconloop.png);
   float: left;
 }
 .audio_play_area .icon_audio_default {background-position: -36px center;}
@@ -1156,7 +1156,7 @@ export default {
 }
 .chatitem.right .audio_play_area .icon_audio_default,
 .chatitem.right .audio_play_area .icon_audio_playing{
-	background-image:url(../assets/images/iconloop_r.png);
+	background-image:url(http://vuxlaravel.boka.cn/images/iconloop_r.png);
 }
 .chatitem.right .audio_play_area .icon_audio_default {background-position: 0px center;}
 .chatitem.right .audio_play_area .icon_audio_playing {

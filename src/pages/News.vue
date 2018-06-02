@@ -14,7 +14,7 @@
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
     			<div class="pic">
-    				<img src="../assets/images/share1.jpg" />
+    				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
     			</div>
     		</div>
         <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
@@ -56,7 +56,7 @@
           <div class="qrcode-area">
             <div class="qrcode-bg">
               <div class="qrcode">
-                <img src="../assets/images/fingerprint.gif"/>
+                <img src="http://vuxlaravel.boka.cn/images/fingerprint.gif"/>
                 <div class="scan-area">
                   <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
                   <img v-else :src="WeixinQrcode">
@@ -145,7 +145,7 @@ export default {
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: { headimgurl: '/src/assets/images/user.jpg', avatar: '/src/assets/images/user.jpg', linkman: '', credit: 0 },
+      reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       retailerInfo: {},
       comments: [],
@@ -588,7 +588,7 @@ export default {
   padding: 15px;
   position: relative;
   vertical-align: middle;
-  background: url(../assets/images/qrbg.gif);
+  background: url(http://vuxlaravel.boka.cn/images/qrbg.gif);
 }
 #article-content .qrcode-bg {
   margin: 0 auto;

@@ -122,16 +122,16 @@
           <div class="popup-middle">
             <div class="padding10">
                 <div class="align_center">
-                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode.png" />
+                  <img class="v_middle" style="max-width:80%;" src="http://vuxlaravel.boka.cn/images/saveqrcode.png" />
                 </div>
                 <div class="align_center mt5">
-                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode1.png" />
+                  <img class="v_middle" style="max-width:80%;" src="http://vuxlaravel.boka.cn/images/saveqrcode1.png" />
                 </div>
                 <div class="align_center mt5">
-                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode3.png" />
+                  <img class="v_middle" style="max-width:80%;" src="http://vuxlaravel.boka.cn/images/saveqrcode3.png" />
                 </div>
                 <div class="align_center mt5">
-                  <img class="v_middle" style="max-width:80%;" src="../assets/images/saveqrcode2.png" />
+                  <img class="v_middle" style="max-width:80%;" src="http://vuxlaravel.boka.cn/images/saveqrcode2.png" />
                 </div>
             </div>
           </div>

@@ -7,7 +7,7 @@
       <div class="pagemiddle">
         <div class="picarea bg-white">
           <div class="inner">
-            <img src="../assets/images/poster.png">
+            <img src="http://vuxlaravel.boka.cn/images/poster.png">
           </div>
         </div>
         <div v-if="coverphotoarr && coverphotoarr.length > 0" class="mt10 bg-white padding10 mt5 bg-white">
@@ -19,7 +19,7 @@
                   <div class="item pic-photo border01">
                     <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
                     <div class="pic-layer">
-                      <x-img :src="item.photo" default-src="../src/assets/images/nopic.jpg"></x-img>
+                      <x-img :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg"></x-img>
                     </div>
                   </div>
                 </div>

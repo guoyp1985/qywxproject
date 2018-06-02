@@ -27,7 +27,7 @@ export default {
 .bk-nameplate {
   width: 100%;
   height: 100px;
-  background-image: url(../assets/images/bannerbg.png);
+  background-image: url(http://vuxlaravel.boka.cn/images/bannerbg.png);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

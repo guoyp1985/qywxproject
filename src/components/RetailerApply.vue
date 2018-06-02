@@ -3,21 +3,21 @@
     <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
-            <img src="../assets/images/banner_top.png" width="100%"/>
+            <img src="http://vuxlaravel.boka.cn/images/banner_top.png" width="100%"/>
             <div class="waveWrapper waveAnimation">
               <div class="waveWrapperInner bgTop">
-                <div class="wave waveTop" style="background-image: url('src/assets/images/wave-top.png')"></div>
+                <div class="wave waveTop"></div>
               </div>
               <div class="waveWrapperInner bgMiddle">
-                <div class="wave waveMiddle" style="background-image: url('src/assets/images/wave-mid.png')"></div>
+                <div class="wave waveMiddle"></div>
               </div>
               <div class="waveWrapperInner bgBottom">
-                <div class="wave waveBottom" style="background-image: url('src/assets/images/wave-top.png')"></div>
+                <div class="wave waveBottom"></div>
               </div>
             </div>
           </div>
           <div class="posi_a logo">
-            <img src="../assets/images/logo_red.png"/>
+            <img src="http://vuxlaravel.boka.cn/images/logo_red.png"/>
           </div>
       </div>
       <form class="applyform pr12 pl12">
@@ -393,7 +393,7 @@ export default {
 
 <style lang="less">
 .retailerapply .banner_top{
-  background: url("../assets/images/banner_top.png") no-repeat top center;
+  background: url("http://vuxlaravel.boka.cn/images/banner_top.png") no-repeat top center;
   background-size:100% 100%;
   width:100%;
   height:128px;
@@ -464,10 +464,10 @@ export default {
 .bgMiddle{z-index: 10;opacity: 0.75;}
 .bgBottom{z-index: 5;}
 .wave{position: absolute;left: 0;bottom:0px;width: 200%;height: 70px;background-repeat: repeat no-repeat;background-position: 0 bottom;transform-origin: center bottom;}
-.waveTop{background-size: 50% 45%;}
+.waveTop{background-size: 50% 45%;background-image: url('http://vuxlaravel.boka.cn/images/wave-top.png');}
 .waveAnimation .waveTop{animation: move-wave 3s;-webkit-animation: move-wave 3s;-webkit-animation-delay: 1s;animation-delay: 1s;}
-.waveMiddle{background-size: 50% 50%;}
+.waveMiddle{background-size: 50% 50%;background-image: url('http://vuxlaravel.boka.cn/images/wave-mid.png');}
 .waveAnimation .waveMiddle{animation: move_wave 8s linear infinite;}
-.waveBottom{background-size: 50% 45%;}
+.waveBottom{background-size: 50% 45%;background-image: url('http://vuxlaravel.boka.cn/images/wave-top.png');}
 .waveAnimation .waveBottom{animation: move_wave 12s linear infinite;}
 </style>

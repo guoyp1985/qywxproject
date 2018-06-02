@@ -6,9 +6,9 @@
 <template>
   <div class="comment">
     <div class="avatar-cell">
-      <img :src="item.avatar" default-src="../src/assets/images/user.jpg" @on-error="imgError('avatar')" />
+      <img :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" @on-error="imgError('avatar')" />
       <!--
-      <img  :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg'" />
+      <img  :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
     -->
     </div>
     <div class="detail-cell">
@@ -56,7 +56,7 @@ export default {
       type: Object,
       default: () => {
         return {
-          userAvatar: '../src/assets/images/nopic.jpg',
+          userAvatar: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
           userName: 'unkown',
           date: 1522659301220,
           diggCount: 0,

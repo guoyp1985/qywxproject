@@ -16,7 +16,7 @@
             auto
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img class="db imgcover w_100 h_100" :src="item" default-src="../src/assets/images/nopic.jpg" @click="showBigimg1(index)" />
+              <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
             </swiper-item>
           </swiper>
         </template>
@@ -55,7 +55,7 @@
             <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w50">
-                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='/src/assets/images/user.jpg';" />
+                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                 </div>
                 <div class="t-cell v_middle align_left">
                   <div class="clamp1">{{ item.username }}</div>
@@ -82,7 +82,7 @@
                   <div class="scroll_item padding10">
           					<div class="t-table">
           						<div class="t-cell v_middle w50">
-                        <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                        <x-img class="v_middle avatarimg1 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
           						</div>
           						<div class="t-cell v_middle align_left">
           							<div class="clamp1">{{ item.username }}</div>
@@ -130,7 +130,7 @@
               <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
       					<div class="t-table">
       						<div class="t-cell pic" style="width:40px;">
-                    <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                    <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       						</div>
       						<div class="t-cell">{{ item.username }}</div>
       						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -160,7 +160,7 @@
             <div class="buylist pt10 pb15 pl10 pr10">
               <router-link class="item" :to="{path:'/chat',query:{uid:item.uid, fromModule: 'product', fromId: query.id}}" v-for="(item,index) in buyuserdata" :key="index">
                 <div class="align_center">
-                  <x-img class="avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
+                  <x-img class="avatarimg imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container"></x-img>
       					</div>
       					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
               </router-link>
@@ -172,7 +172,7 @@
         <div class="padding10 b_bottom_after">
           <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
     				<div class="t-cell v_middle" style="width:70px;">
-              <x-img class="v_middle imgcover" :src="retailerinfo.avatar" default-src="../src/assets/images/user.jpg" style="width:60px;height:60px;" container=".scroll-container"></x-img>
+              <x-img class="v_middle imgcover" :src="retailerinfo.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" style="width:60px;height:60px;" container=".scroll-container"></x-img>
     				</div>
     				<div class="t-cell v_middle">
     					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
@@ -243,7 +243,7 @@
   			<div class="ico"><i class="al al-feiji"></i></div>
   			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
   			<div class="pic">
-  				<img src="../assets/images/share1.jpg" />
+  				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
   			</div>
   		</div>
       <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
@@ -281,7 +281,7 @@
                 <div v-else v-for="(item,index) in evluatedata1" :key="item.id" class="scroll_item padding10">
         					<div class="t-table">
         						<div class="t-cell pic" style="width:40px;">
-                      <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="../src/assets/images/user.jpg" ></x-img>
+                      <x-img class="v_middle avatarimg imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" ></x-img>
         						</div>
         						<div class="t-cell">{{ item.username }}</div>
         						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -978,7 +978,7 @@ export default {
   height: 45px;
   color: #fff;
   font-size: 12px;
-  background-image: url('../assets/images/productbg.png');
+  background-image: url('http://vuxlaravel.boka.cn/images/productbg.png');
   background-repeat: no-repeat;
   background-position: left top;
   background-size: cover;

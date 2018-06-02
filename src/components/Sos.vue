@@ -50,7 +50,7 @@ export default {
   margin:0 auto;
   padding-top:15%;
   box-sizing:border-box;
-  background:url(../assets/images/404_icon.png) no-repeat center 90%;
+  background:url(http://vuxlaravel.boka.cn/images/404_icon.png) no-repeat center 90%;
   background-size:40%;
   box-shadow:0px 10px 20px rgba(0,0,0,0.05);
   border-radius:7%;
@@ -88,7 +88,7 @@ export default {
     height:80%;
     padding-top:15%;
     box-sizing:border-box;
-    background:url(../assets/images/404_icon.png) no-repeat center 90%;
+    background:url(http://vuxlaravel.boka.cn/images/404_icon.png) no-repeat center 90%;
     background-size:20%;
     box-shadow:0px 10px 20px rgba(0,0,0,0.05);
     border-radius:7%;
@@ -101,7 +101,7 @@ export default {
     height:80%;
     padding-top:15%;
     box-sizing:border-box;
-    background:url(../assets/images/404_icon.png) no-repeat center 90%;
+    background:url(http://vuxlaravel.boka.cn/images/404_icon.png) no-repeat center 90%;
     background-size:15%;
     box-shadow:0px 10px 20px rgba(0,0,0,0.05);
     border-radius:7%;

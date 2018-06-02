@@ -26,7 +26,7 @@
                 </div>
                 <div class="user-credits">
                   <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-                    <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
+                    <img src="http://vuxlaravel.boka.cn/images/jb_icon.png" style="width: 20px;height: 20px;" />
                     <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
                   </router-link>
                 </div>
@@ -59,7 +59,7 @@ export default {
     profile: Object,
     avatarHref: {
       type: String,
-      default: '../src/assets/images/user.jpg'
+      default: 'http://vuxlaravel.boka.cn/images/user.jpg'
     },
     userName: {
       type: String,
@@ -107,13 +107,13 @@ export default {
 <style lang="less">
 .ctitle .head_banner{
   height:30px;
-  background: url(../assets/images/v_yinying.png);
+  background: url(http://vuxlaravel.boka.cn/images/v_yinying.png);
   background-size: cover;
   background-position: top;
 }
 .ctitle .bg{
   height: 140px;
-  background: url(../assets/images/v_centerbg.png);
+  background: url(http://vuxlaravel.boka.cn/images/v_centerbg.png);
   background-size: cover;
   background-position: bottom;
 }

@@ -22,7 +22,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <x-img :src="getPhoto(article.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                  <x-img :src="getPhoto(article.photo)" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -51,7 +51,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <x-img :src="getPhoto(commodity.photo)" default-src="/src/assets/images/nopic.jpg" container="#vux_view_box_body"></x-img>
+                  <x-img :src="getPhoto(commodity.photo)" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" container="#vux_view_box_body"></x-img>
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -80,7 +80,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <x-img default-src="/src/assets/images/nopic.jpg" :src="getPhoto(store.photo)" container="#vux_view_box_body"></x-img>
+                  <x-img default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :src="getPhoto(store.photo)" container="#vux_view_box_body"></x-img>
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">

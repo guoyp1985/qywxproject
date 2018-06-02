@@ -6,7 +6,7 @@
     <template v-if="showContainer">
       <div class="pagemiddle" style="padding:20px;">
         <div class="boxouter flex_center">
-          <x-img class="pic" :src="data" default-src="../src/assets/images/nopic.jpg"></x-img>
+          <x-img class="pic" :src="data" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg"></x-img>
         </div>
       </div>
       <div class="pagebottom flex_center">(长按图片保存到相册)</div>

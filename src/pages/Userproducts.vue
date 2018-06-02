@@ -16,7 +16,7 @@
         <div class="activitylist">
           <div v-for="(item,index) in activitydata" :key="index" class="bg-page">
             <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#efeff4 !important;">
-              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;" container=".scroll-container"></x-img>
+              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:80px;height:80px;" container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
@@ -24,7 +24,7 @@
               <span slot="price">{{ item.price }}</span>
             </groupbuyitemplate>
             <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#efeff4 !important;">
-              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:80px;height:80px;"container=".scroll-container"></x-img>
+              <x-img slot="photo" class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:80px;height:80px;"container=".scroll-container"></x-img>
               <span slot="title">{{ item.title }}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{ item.minprice }}</span>
@@ -40,7 +40,7 @@
         <div class="b_top_after"></div>
         <div class="productlist squarepic mb12">
           <productitemplate :data="item" v-for="(item,index) in productdata" :key="index">
-            <x-img slot="photo" class="imgcover" :src="item.photo" default-src="../src/assets/images/nopic.jpg" container=".scroll-container"></x-img>
+            <x-img slot="photo" class="imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" container=".scroll-container"></x-img>
             <span slot="title">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
@@ -102,7 +102,7 @@ export default {
   data () {
     return {
       loginUser: {},
-      retailerInfo: { avatar: '/src/assets/images/user.jpg' },
+      retailerInfo: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
       showShareSuccess: false,
       showdot: true,
       addata: [],

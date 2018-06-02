@@ -43,7 +43,7 @@
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                   <div class="t-table">
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
-                      <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container1" ></x-img>
+                      <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container1" ></x-img>
                     </router-link>
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -67,7 +67,7 @@
                 <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
                   <div class="t-table">
                     <div class="t-cell v_middle w80">
-                      <x-img class="imgcover v_middle" :src="item.photo" default-src="../src/assets/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container2"></x-img>
+                      <x-img class="imgcover v_middle" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container2"></x-img>
                     </div>
                     <div class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
@@ -96,7 +96,7 @@
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                   <div class="t-table">
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
-                      <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="../src/assets/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                      <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
                     </router-link>
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -136,14 +136,14 @@
                     <div class="pro" >
                       <div class="pro-sucess">
                         <div class="flex_left">
-                          <img class="v_middle" src="../assets/images/infor.png"/>
+                          <img class="v_middle" src="http://vuxlaravel.boka.cn/images/infor.png"/>
                           <div class="color-blue">什么是成交概率</div>
                         </div>
                         <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为购买客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
                       </div>
                       <div class="pro-push">
                         <div class="flex_left">
-                          <img class="v_middle" src="../assets/images/infor.png"/>
+                          <img class="v_middle" src="http://vuxlaravel.boka.cn/images/infor.png"/>
                           <div class="color-blue">如何提升成交概率</div>
                         </div>
                         <div class="font12">1、推送客户感兴趣的文章;</div>
@@ -189,7 +189,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      sellerUser: { avatar: '/src/assets/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
+      sellerUser: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
       isshowpopup: false,
       tabtxts: [ '带来消费', '分享记录', '带来客户' ],
       selectedIndex: 0,
