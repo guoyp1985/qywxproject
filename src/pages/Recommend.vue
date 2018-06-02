@@ -66,7 +66,6 @@
               <div class="store-name">
                 {{item.title}}
               </div>
-              <div class="store-money color-gray mt5 font12">进入店铺</div>
             </div>
           </cell-box>
         </group>
