@@ -848,9 +848,11 @@ export default {
       })
     },
     setContactUser (uid) {
-      this.$http.post(`${ENV.BokaApi}/api/getUser/${uid}`)
+      this.$http.get(`${ENV.BokaApi}/api/getUser/${uid}`)
       .then(res => {
-        console.log(res)
+        if (res.data) {
+          document.title = res.data.linkman
+        }
       })
     },
     // init () {
