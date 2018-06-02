@@ -847,8 +847,8 @@ export default {
         }
       })
     },
-    setContactUser (uid) {
-      this.$http.get(`${ENV.BokaApi}/api/getUser/${uid}`)
+    setContactUser () {
+      this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
       .then(res => {
         if (res.data) {
           document.title = res.data.linkman
@@ -865,12 +865,10 @@ export default {
       this.loginUser = User.get()
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.uid !== this.$route.query.uid) {
-        this.setContactUser(this.$route.query.uid)
-      }
       this.query = this.$route.query
       this.getData()
       this.createSocket()
+      this.setContactUser()
       // this.wsConnect()
     }
   },
