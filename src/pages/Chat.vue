@@ -847,6 +847,12 @@ export default {
         }
       })
     },
+    setContactUser (uid) {
+      this.$http.post(`${ENV.BokaApi}/api/getUser/${uid}`)
+      .then(res => {
+        console.log(res)
+      })
+    },
     // init () {
     //   this.loginUser = User.get()
     // },
@@ -857,10 +863,12 @@ export default {
       this.loginUser = User.get()
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      if (this.query.uid !== this.$route.query.uid) {
+        this.setContactUser(this.$route.query.uid)
+      }
       this.query = this.$route.query
       this.getData()
       this.createSocket()
-      console.log('rw')
       // this.wsConnect()
     }
   },
