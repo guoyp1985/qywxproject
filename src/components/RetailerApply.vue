@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="posi_a logo">
-            <img src="../assets/images/logo_red.png"/>
+            <img src="./../assets/images/logo_red.png"/>
           </div>
       </div>
       <form class="applyform pr12 pl12">
