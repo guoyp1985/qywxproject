@@ -545,7 +545,7 @@ export default {
     },
     // wsConnect () {
     //   const self = this
-    //   websocket = new WebSocket(ENV.SocketApi)
+    //   websocket = new WebSocket(ENV.SocketServer)
     //   let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
     //   let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
     //   self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`

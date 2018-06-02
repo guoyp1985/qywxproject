@@ -4,7 +4,7 @@ const Socket = {
   create: (room) => {
     let ws = pool[room]
     if (!ws) {
-      ws = new WebSocket(ENV.SocketApi)
+      ws = new WebSocket(ENV.SocketServer)
       pool[room] = ws
     }
     return ws
