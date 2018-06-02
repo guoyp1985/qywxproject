@@ -1,10 +1,18 @@
 import ENV from 'env'
-let ws = null
+let pool = {}
 const Socket = {
-  create: () => ws = (ws ? ws : new WebSocket(ENV.SocketApi)),
-  listening: (params, callback) => {
+  create: (room) => {
+    let ws = pool[room]
     if (!ws) {
-      console.error('WS: ws undefined')
+      ws = new WebSocket(ENV.SocketServer)
+      pool[room] = ws
+    }
+    return ws
+  },
+  listening: (params, callback) => {
+    const ws = Socket.create(params.room)
+    if (!ws) {
+      console.error('WS: ws not created')
       return
     }
     ws.onopen = () => {
@@ -16,6 +24,7 @@ const Socket = {
         frommodule: params.fromModule,
         fromid: params.fromId
       }
+      console.log(params)
       Socket.send(loginData)
     }
     ws.onmessage = e => {
@@ -24,11 +33,6 @@ const Socket = {
         console.info(`WS: Login Room ${params.room}`)
       } else if (data.type === 'logout') {
         console.info(`WS: Logout Room ${params.room}`)
-        // ws.onopen = null
-        // ws.onmessage = null
-        // ws.onclose = null
-        // ws.onerror = null
-        Socket.listening(params, callback)
       } else if (data.type === 'say') {
         console.info(`WS: Receive Message From Room ${params.room}`)
         const message = JSON.parse(e.data)
@@ -63,15 +67,18 @@ const Socket = {
     }
   },
   send: data => {
-    data.room_id = `${ENV.SocketBokaApi}-${data.room_id}`
-    ws && ws.send(JSON.stringify(data))
-  },
-  destory: room => {
-    Socket.send({
-      type: 'logout',
-      room_id: room
-    })
+    const ws = pool[data.room_id]
+    if (ws) {
+      data.room_id = `${ENV.SocketBokaRoom}-${data.room_id}`
+      ws.send(JSON.stringify(data))
+    }
   }
+  // destory: room => {
+  //   Socket.send({
+  //     type: 'logout',
+  //     room_id: room
+  //   })
+  // }
 }
 
 export default Socket

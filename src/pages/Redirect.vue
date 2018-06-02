@@ -28,12 +28,6 @@ export default {
               location.href = state
               // location.replace(`${state}`)
             }
-          },
-          error => {
-            self.$vux.toast.show({
-              text: '服务器错误',
-              type: 'warn'
-            })
           }
         )
       }

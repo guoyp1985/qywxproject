@@ -384,7 +384,7 @@ export default {
       }
     },
     imageLoad (item) {
-      console.log(item.id +'>'+ minIdFlag)
+      // console.log(item.id +'>'+ minIdFlag)
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
@@ -457,7 +457,8 @@ export default {
     },
     onTalkRecordStop () {
       const self = this
-      Voice.recordStop(res => {
+      Voice.recordStop(
+      res => {
         self.sendVoice({vid: res.serverId, time: res.time})
       },
       res => {
@@ -545,7 +546,7 @@ export default {
     },
     // wsConnect () {
     //   const self = this
-    //   websocket = new WebSocket(ENV.SocketApi)
+    //   websocket = new WebSocket(ENV.SocketServer)
     //   let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
     //   let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
     //   self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
@@ -800,11 +801,10 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
-      const module = this.query.fromModule
-      const fromId = this.query.fromId
-      console.log(this.module)
+      const module = this.query.frommodule
+      const fromId = this.query.fromid
       room = `${this.module}-${sid}-${bid}`
-      Socket.create()
+      console.log(room)
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
@@ -861,6 +861,7 @@ export default {
       this.query = this.$route.query
       this.getData()
       this.createSocket()
+      console.log('rw')
       // this.wsConnect()
     }
   },
