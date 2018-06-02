@@ -60,10 +60,13 @@ const Socket = {
     }
     ws.onclose = () => {
       console.info('WS: Closed')
+      Socket.destroy(params.room)
       Socket.listening(params, callback)
     }
     ws.onerror = () => {
       console.info('WS: Connecting Error')
+      Socket.destroy(params.room)
+      Socket.listening(params, callback)
     }
   },
   send: data => {
@@ -72,13 +75,10 @@ const Socket = {
       data.room_id = `${ENV.SocketBokaRoom}-${data.room_id}`
       ws.send(JSON.stringify(data))
     }
+  },
+  destory: room => {
+    pool[room] = null
   }
-  // destory: room => {
-  //   Socket.send({
-  //     type: 'logout',
-  //     room_id: room
-  //   })
-  // }
 }
 
 export default Socket
