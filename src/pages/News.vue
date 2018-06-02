@@ -481,16 +481,24 @@ export default {
           let curimg = imgTags[i]
           if (jQuery(curimg).parents('.insertproduct').length === 0) {
             self.photoarr.push(imgTags[i].getAttribute('src'))
-            curimg.removeEventListener('click', function () {
-              return self.showBigimg(i)
-            })
-            curimg.addEventListener('click', function () {
-              return self.showBigimg(i)
-            })
+            curimg.removeEventListener('click', self.clickImg)
+            curimg.addEventListener('click', self.clickImg)
           }
         }
       }
       self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+    },
+    clickImg (event) {
+      const node = event.target
+      const src = node.getAttribute('src')
+      let index = 0
+      for (let i = 0; i < this.photoarr.length; i++) {
+        if (this.photoarr[i] === src) {
+          index = i
+          break
+        }
+      }
+      this.showBigimg(index)
     },
     showBigimg (index) {
       const self = this

@@ -595,6 +595,18 @@ export default {
         self.isMove = false
       }, 10)
       return false // 取消元素事件向下冒泡
+    },
+    clickProduct (event) {
+      let node = event.target
+      if (!self.showBtnArea) {
+        while (node) {
+          if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
+            this.$router.push(node.getAttribute('linkurl'))
+            break
+          }
+          node = node.parentNode
+        }
+      }
     }
   },
   mounted () {
@@ -616,12 +628,7 @@ export default {
     let items = document.querySelectorAll('.insertproduct')
     for (let i = 0; i < items.length; i++) {
       let cur = items[i]
-      let linkurl = cur.getAttribute('linkurl')
-      cur.addEventListener('click', function () {
-        if (!self.showBtnArea) {
-          self.$router.push(linkurl)
-        }
-      })
+      cur.addEventListener('click', self.clickProduct)
     }
   }
 }

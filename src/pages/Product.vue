@@ -40,7 +40,7 @@
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
-            <div v-if="productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerinfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
+            <div v-if="productdata.buyonline == 1 && (!activityInfo.id || (activityInfo.id && activityInfo.type == 'bargainbuy')) && ((loginUser && loginUser.uid == retailerInfo.uid) || productdata.identity != 'user')" class="t-cell v_middle border-box align_right">
               <span class="color-red">佣金: {{ $t('RMB') }}{{ productdata.rebate }}</span>
             </div>
   					<div v-if="productdata.buyonline != 1" class="t-cell v_middle align_right " @click="popupbuy">
@@ -170,13 +170,13 @@
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after">
-          <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerinfo.uid}}" style="color:inherit;">
+          <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
     				<div class="t-cell v_middle" style="width:70px;">
-              <x-img class="v_middle imgcover" :src="retailerinfo.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" style="width:60px;height:60px;" container=".scroll-container"></x-img>
+              <x-img class="v_middle imgcover" :src="retailerInfo.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" style="width:60px;height:60px;" container=".scroll-container"></x-img>
     				</div>
     				<div class="t-cell v_middle">
-    					<div class="distitle clamp2">{{ retailerinfo.title }}</div>
-    					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerinfo.productcount }}件</div>
+    					<div class="distitle clamp2">{{ retailerInfo.title }}</div>
+    					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
     				</div>
     				<div class="t-cell v_middle align_right">
     					<div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
@@ -195,16 +195,16 @@
   				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
   					<i class="al font12 mr3"></i>
           </div>
-          <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}">我要咨询</router-link>
-  			</div>
+          <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+        </div>
   		</div>
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <router-link class="t-cell h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}" style="width:50px;">
+            <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
-            </router-link>
+            </div>
     				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
     					<i class="al font18 mr3"></i>
     				</div>
@@ -224,7 +224,7 @@
       				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
       					<i class="al font12 mr3"></i>
       				</div>
-              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}">我要咨询</router-link>
+              <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
       				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
       			</div>
@@ -234,7 +234,7 @@
       				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
       					<i class="al font12 mr3"></i>
       				</div>
-              <router-link class="t-cell bg-orange1 color-white h_100 v_middle align_center" :to="{path: '/chat', query: {uid: retailerinfo.uid, fromModule: 'product', fromId: query.id}}">我要咨询</router-link>
+              <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       			</div>
       		</div>
         </template>
@@ -383,7 +383,7 @@ export default {
       showsharetip: true,
       productid: null,
       productdata: {},
-      retailerinfo: {},
+      retailerInfo: {},
       activityInfo: {},
       loginUser: {},
       isshowtop: false,
@@ -425,9 +425,9 @@ export default {
     productid: function () {
       return this.productid
     },
-    retailerinfo: function () {
-      this.submitdata.wid = this.retailerinfo.uid
-      return this.retailerinfo
+    retailerInfo: function () {
+      this.submitdata.wid = this.retailerInfo.uid
+      return this.retailerInfo
     },
     buyuserdata: function () {
       return this.buyuserdata
@@ -482,7 +482,7 @@ export default {
       this.showsharetip = true
       this.productid = null
       this.productdata = {}
-      this.retailerinfo = {}
+      this.retailerInfo = {}
       this.activityInfo = {}
       this.showFlash = false
       this.showdot = true
@@ -505,6 +505,15 @@ export default {
       this.submitdata = { flag: 1, quantity: 1 }
       this.replyData = null
       this.messages = 0
+    },
+    toChat () {
+      if (this.loginUser.subscribe === 0) {
+        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=product&fromId=${this.query.id}`)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      } else {
+        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'product', fromId: this.query.id}})
+      }
     },
     access () {
       if (this.loginUser.subscribe === 0) {
@@ -610,7 +619,7 @@ export default {
         self.submitdata['activityid'] = self.activityInfo.id
       }
       self.submitdata.id = self.productdata.id
-      self.submitdata.wid = self.retailerinfo.uid
+      self.submitdata.wid = self.retailerInfo.uid
       self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -789,7 +798,7 @@ export default {
           } else {
             self.showcontainer = true
             self.productdata = data.data
-            self.retailerinfo = self.productdata.retailerinfo
+            self.retailerInfo = self.productdata.retailerinfo
             if (self.productdata.activityinfo) {
               self.activityInfo = self.productdata.activityinfo
             }
@@ -813,7 +822,7 @@ export default {
             }
             self.handelShare()
             return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-              params: { wid: self.retailerinfo.uid, productid: self.productid }
+              params: { wid: self.retailerInfo.uid, productid: self.productid }
             })
           }
         }
