@@ -8,7 +8,7 @@
     <div class="avatar-cell">
       <img :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" @on-error="imgError('avatar')" />
       <!--
-      <img  :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+      <img  :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
     -->
     </div>
     <div class="detail-cell">

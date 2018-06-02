@@ -48,6 +48,7 @@
 
 <script>
 import { Grid, GridItem, Badge } from 'vux'
+
 export default {
   name: 'CTitle',
   components: {
@@ -107,13 +108,13 @@ export default {
 <style lang="less">
 .ctitle .head_banner{
   height:30px;
-  background: url(http://vuxlaravel.boka.cn/images/v_yinying.png);
+  background: url(../assets/images/v_yinying.png);
   background-size: cover;
   background-position: top;
 }
 .ctitle .bg{
   height: 140px;
-  background: url(http://vuxlaravel.boka.cn/images/v_centerbg.png);
+  background: url(../assets/images/v_centerbg.png);
   background-size: cover;
   background-position: bottom;
 }

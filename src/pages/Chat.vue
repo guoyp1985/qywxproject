@@ -801,10 +801,9 @@ export default {
       const linkman = this.loginUser.linkman
       const sid = Math.min(this.query.uid, uid)
       const bid = Math.max(this.query.uid, uid)
-      const module = this.query.frommodule
-      const fromId = this.query.fromid
+      const module = this.query.fromModule
+      const fromId = this.query.fromId
       room = `${this.module}-${sid}-${bid}`
-      console.log(room)
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
@@ -1146,7 +1145,7 @@ export default {
   display: inline-block;
 	background-size: 54px 25px;
 	background-repeat: no-repeat;
-	background-image: url(http://vuxlaravel.boka.cn/images/iconloop.png);
+	background-image: url(../assets/images/iconloop.png);
   float: left;
 }
 .audio_play_area .icon_audio_default {background-position: -36px center;}
@@ -1157,7 +1156,7 @@ export default {
 }
 .chatitem.right .audio_play_area .icon_audio_default,
 .chatitem.right .audio_play_area .icon_audio_playing{
-	background-image:url(http://vuxlaravel.boka.cn/images/iconloop_r.png);
+	background-image:url(../assets/images/iconloop_r.png);
 }
 .chatitem.right .audio_play_area .icon_audio_default {background-position: 0px center;}
 .chatitem.right .audio_play_area .icon_audio_playing {

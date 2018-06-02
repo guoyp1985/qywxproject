@@ -282,7 +282,7 @@ export default {
 .bk-salestop {
   width: 100%;
   height: 130px;
-  background-image: url(http://vuxlaravel.boka.cn/images/bannerbg1.png);
+  background-image: url(../assets/images/bannerbg1.png);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;

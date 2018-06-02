@@ -49,7 +49,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -67,7 +67,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -85,7 +85,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -103,7 +103,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
@@ -121,7 +121,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -139,7 +139,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
@@ -157,7 +157,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
@@ -174,7 +174,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg'" />
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>

@@ -4,7 +4,7 @@
       <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
         <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
         <div class="align_right" style="width:150px;">
-          <div class="qbtn font12 color-white" style="border:#fff 1px solid;"  @click="popupexplain">{{$t('Get cash explain')}}</div>
+          <div class="qbtn font12 color-white" style="border:#fff 1px solid;" @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
       <tab v-model="selectedIndex" class="v-tab">
@@ -27,7 +27,7 @@
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 font14 color-999">{{item.buyername}}</div>
@@ -51,7 +51,7 @@
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -97,7 +97,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -121,7 +121,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                   <div class="t-table">
                     <div class="t-cell pic v_middle w45 pr10 border-box">
-                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -157,7 +157,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -181,7 +181,7 @@
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>

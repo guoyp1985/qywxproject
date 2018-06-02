@@ -595,7 +595,7 @@ export default {
   padding: 15px;
   position: relative;
   vertical-align: middle;
-  background: url(http://vuxlaravel.boka.cn/images/qrbg.gif);
+  background: url(../assets/images/qrbg.gif);
 }
 #article-content .qrcode-bg {
   margin: 0 auto;

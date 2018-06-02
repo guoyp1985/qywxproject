@@ -55,7 +55,7 @@
             <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w50">
-                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                 </div>
                 <div class="t-cell v_middle align_left">
                   <div class="clamp1">{{ item.username }}</div>
@@ -986,7 +986,7 @@ export default {
   height: 45px;
   color: #fff;
   font-size: 12px;
-  background-image: url('http://vuxlaravel.boka.cn/images/productbg.png');
+  background-image: url(../assets/images/productbg.png);
   background-repeat: no-repeat;
   background-position: left top;
   background-size: cover;
