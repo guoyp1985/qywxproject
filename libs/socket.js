@@ -4,7 +4,7 @@ const Socket = {
   create: (room) => {
     let ws = pool[room]
     if (!ws) {
-      ws = new WebSocket(ENV.SocketApi)
+      ws = new WebSocket(ENV.SocketServer)
       pool[room] = ws
     }
     return ws
@@ -69,7 +69,7 @@ const Socket = {
   send: data => {
     const ws = pool[data.room_id]
     if (ws) {
-      data.room_id = `${ENV.SocketBokaApi}-${data.room_id}`
+      data.room_id = `${ENV.SocketBokaRoom}-${data.room_id}`
       ws.send(JSON.stringify(data))
     }
   }

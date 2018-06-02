@@ -6,19 +6,10 @@ var ENV = {
   WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
-<<<<<<< HEAD
-  BokaCDN: 'http://vue.boka.cn',
   WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
   SocketBokaRoom: 'laravel.boka.cn',
-  SocketServer: 'ws://124.207.246.109:7272',
-=======
-  SocketBokaApi: 'laravel.boka.cn',//'laravel.boka.cn', // test: 124.207.246.107 // vux: vuxserver.boka.cn
-  // BokaCDN: 'http://vue.boka.cn',
-  WeixinQrcode: 'http://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
-  WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
-  SocketApi: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272',
->>>>>>> 749b593bdbc8015aa18688130d8a25d32ed93a1e
+  SocketServer: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},
@@ -26,8 +17,6 @@ var ENV = {
     {id: 3, status: '已发货'},
     {id: 4, status: '已确认收货'},
     {id: 100, status: '已完成'}
-<<<<<<< HEAD
-=======
   ],
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
@@ -44,6 +33,5 @@ var ENV = {
     '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻',
     '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手',
     '激动', '街舞', '献吻', '左太极', '右太极'
->>>>>>> 749b593bdbc8015aa18688130d8a25d32ed93a1e
   ]
 }
