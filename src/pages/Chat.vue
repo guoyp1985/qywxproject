@@ -1066,7 +1066,7 @@ export default {
 .chatlist .chatitem.message-voice .msg img{width:24px;height:24px;}
 .chatlist .chatitem.message-voice .msg .media_voice.left{float:left;}
 .chatlist .chatitem.message-voice .msg .media_voice.right{float:right;}
-.chatlist .chatitem.right .msg .main{background:#00d449;color:#fff;border: 1px solid #00d449;}
+.chatlist .chatitem.right .msg .main{background:#00d449;color:#fff;border: 1px solid #00d449;text-align:left;}
 .chatlist .chatitem.hongbao.right .msg .main,
 .chatlist .chatitem.hongbao.left .msg .main{background:#fa9e3b;color:#fff;border: 1px solid #fa9e3b;}
 .chatlist .chatitem.right.message-push .msg .main{
