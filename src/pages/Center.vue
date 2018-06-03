@@ -59,14 +59,59 @@
 import { Grid, GridItem, Group, GroupTitle, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
+import Reg from '#/reg'
 import { Token, User } from '#/storage'
+
+let featureBtns = [
+  {
+    name: 'Manage center',
+    icon: 'al-fuwu',
+    color: 'rgba01',
+    link: '/centerSales'
+  },
+  {
+    name: 'My Address',
+    icon: 'al-wodedizhi',
+    color: 'rgba02',
+    link: '/address'
+  },
+  {
+    name: 'My Shares',
+    icon: 'al-ai-share',
+    color: 'rgba03',
+    link: '/share'
+  },
+  {
+    name: 'My Favorites',
+    icon: 'al-qietu19',
+    color: 'rgba04',
+    link: '/favorite'
+  }
+]
+
+if (!Reg.rPlatfrom.test(navigator.userAgent)) {
+  featureBtns.push({
+    name: 'Exit',
+    icon: 'al-tuichu3',
+    color: 'rgba05',
+    react: function () {
+      Token.remove()
+      User.remove()
+      // if (this.$util.isPC()) {
+      this.$router.push({name: 'tLogin'})
+      // } else {
+      //   this.$router.push({name: 'tUserproducts'})
+      // }
+    }
+  })
+}
 
 export default {
   components: {
     Grid, GridItem, CTitle, Group, GroupTitle, Cell
   },
   data () {
-    const self = this
+    // const self = this
     return {
       btns: [
         {
@@ -94,48 +139,7 @@ export default {
           link: '/orderSearch?flag=4'
         }
       ],
-      btns1: [
-        {
-          name: 'Manage center',
-          icon: 'al-fuwu',
-          color: 'rgba01',
-          link: '/centerSales'
-        },
-        {
-          name: 'My Address',
-          icon: 'al-wodedizhi',
-          color: 'rgba02',
-          link: '/address'
-        },
-        {
-          name: 'My Shares',
-          icon: 'al-ai-share',
-          color: 'rgba03',
-          link: '/share'
-        },
-        {
-          name: 'My Favorites',
-          icon: 'al-qietu19',
-          color: 'rgba04',
-          link: '/favorite'
-        },
-        {
-          name: 'Exit',
-          icon: 'al-tuichu3',
-          color: 'rgba05',
-          react: function () {
-            Token.remove()
-            User.remove()
-            // if (self.$util.isAndroid()) {
-            // }
-            if (self.$util.isPC()) {
-              self.$router.push({name: 'tLogin'})
-            } else {
-              self.$router.push({name: 'tUserproducts'})
-            }
-          }
-        }
-      ],
+      btns1: featureBtns,
       avatarHref: 'http://vuxlaravel.boka.cn/images/user.jpg',
       linkMan: '',
       userCredits: 0,
@@ -151,7 +155,7 @@ export default {
       if (btn.link) {
         this.$router.push({path: btn.link})
       } else {
-        btn.react()
+        btn.react.call(this)
       }
     },
     getData () {

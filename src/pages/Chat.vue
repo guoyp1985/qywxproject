@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchstart.native.prevent="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native.prevent="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
     <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in messages">
@@ -60,6 +60,7 @@
         </template>
       </div>
     </scroller>
+    <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
     <div class="bottom-area" ref="bottomArea">
       <div class="input-box no-select">
         <div class="voice-cell">
@@ -203,7 +204,9 @@ import { User } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
+import Reg from '#/reg'
 
+const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
 let room = ''
 let minIdFlag = 0
 let intervalId = null
@@ -225,6 +228,8 @@ export default {
       showVoiceCom: false,
       showSendBtn: false,
       showImgTxt: false,
+      isUserTouch: false,
+      hasNewMessage: false,
       // textarea: null,
       // isPC: this.$util.isPC(),
       query: {},
@@ -285,8 +290,24 @@ export default {
       return this.$util.getPhoto(src)
     },
     touchContainer () {
+      this.isUserTouch = this.isUserScroll()
+      // console.log(this.isUserTouch)
       this.showEmotBox = false
       this.showFeatureBox = false
+    },
+    isUserScroll () {
+      const transform = this.$refs.scrollContainer.$el.children[0].style[`${prefix}Transform`]
+      const matches = transform.match(Reg.rTranslateY)
+      if (matches && matches[1]) {
+        const tTop = parseInt(matches[1])
+        const dTop = this.$refs.scrollContainer.$el.clientHeight - this.$refs.scrollContent.clientHeight
+        console.log(`${tTop} ${dTop}`)
+        if (tTop === dTop) {
+          this.hasNewMessage = false
+          return false
+        }
+      }
+      return true
     },
     inputText (value) {
       this.showSendBtn = true
@@ -523,6 +544,7 @@ export default {
           Socket.send(sendData)
           // self.msgTextarea.value = ''
           self.message = ''
+          self.isUserTouch = false
           // self.showSendBtn = false
           // self.showEmotBox = false
           // self.msgTextarea.focus()
@@ -727,11 +749,12 @@ export default {
       })
     },
     setScrollToBottom () {
+      if (this.isUserTouch) return
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
         setTimeout(() => {
-          const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
+          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
           self.$refs.scrollContainer.reset({ top: top })
           // this.$refs.scrollContainer.scrollTo(0, top, false)
         }, 100)
@@ -817,6 +840,9 @@ export default {
       Socket.listening({ room: room, uid: uid, linkman: linkman, fromModule: module, fromId: fromId }, item => {
         item.dateline = new Date(item.time).getTime() / 1000
         // console.log(item.dateline)
+        if (uid !== item.uid) {
+          self.hasNewMessage = true
+        }
         self.messages.push(item)
         self.setScrollToBottom()
       })
@@ -880,6 +906,8 @@ export default {
       this.showVoiceCom = false
       this.showSendBtn = false
       this.viewHeight = '-52'
+      this.isUserTouch = false
+      this.hasNewMessage = false
       this.loginUser = User.get()
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -1031,6 +1059,21 @@ export default {
 #chat-room .weui-grid:after {
   height: 0;
   border-bottom: none;
+}
+
+#chat-room .message-tips {
+  position: absolute;
+  bottom: 62px;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  width: 80px;
+  padding: 4px 2px;
+  border-radius: 4px;
+  font-size: 12px;
 }
 
 // #chat-room .chat-area{
