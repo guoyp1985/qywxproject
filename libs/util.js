@@ -429,6 +429,7 @@ Util.install = function (Vue, options) {
                 urls.unshift(target.src)
                 params.urls = urls.reverse()
               }
+              console.log(params)
               Vue.wechat.previewImage(params)
               break
             }
