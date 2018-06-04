@@ -414,18 +414,23 @@ Util.install = function (Vue, options) {
           images = document.querySelectorAll(`${viewId} .wx__img-preview`)
         }
         if (!images.length) return
-        const urls = []
+        let urls = []
         for (let img of images) {
           urls.push(img.src)
         }
         const target = event.target
         if (target.nodeName.toLowerCase() === 'img') {
-          for (let img of images) {
+          for (let i = 0; i < images.length; i++) {
+            const img = images[i]
             if (target.src === img.src) {
               let params = {curent: target.src}
               if (!self.isAndroid()) {
-                // params.urls = urls
+                console.log(params)
+                urls = urls.splice(i, 1)
+                urls.unshift(target.src)
+                params.urls = urls.reverse()
               }
+              console.log(params)
               Vue.wechat.previewImage(params)
               break
             }
