@@ -6,7 +6,7 @@
     <template v-if="showContainer">
       <div class="s-topbanner flex_left pl15 pr15 border-box">
         <div class="">
-          <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" @click="showBigimg(0)"></x-img>
+          <img class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" @click="showBigimg(0)" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>

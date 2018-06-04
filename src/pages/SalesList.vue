@@ -28,7 +28,7 @@
           </div>
           <router-link v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10 db" :to="{path: '/retailerOrderDetail', query: {id: item.orderid}}">
             <div class="flex_left">
-              <x-img class="imgcover avatarimg2 radius0" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+              <img class="imgcover avatarimg2 radius0" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               <div class="flex_cell pl10">
                 <div class="clamp1">{{ item.title }}</div>
                 <div class="clamp1 color-gray font12">

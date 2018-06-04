@@ -6,7 +6,7 @@
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <x-img class="imgcover" :src="crowduser.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg"></x-img>
+          <img class="imgcover" :src="crowduser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
         </div>
         <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
@@ -16,7 +16,7 @@
         <div class="innerbg">
           <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
             <div class="t-cell v_middle w80">
-              <x-img class="imgcover" :src="product.photo" style="width:70px;height:70px;" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg"></x-img>
+              <img class="imgcover" :src="product.photo" style="width:70px;height:70px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="t-cell">
               <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
@@ -85,7 +85,7 @@
           <div v-else v-for="(item,index) in cutdata" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
-                <x-img class="v_middle imgcover avatarimg1" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" container=".scroll-container"></x-img>
+                <img class="v_middle imgcover avatarimg1" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
               </div>
               <div class="t-cell v_middle" style="padding-right:25px;">
                 <div class="clamp1 font13">{{ item.linkman }}</div>

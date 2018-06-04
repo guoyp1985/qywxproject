@@ -11,7 +11,7 @@
         <template v-if="disList">
           <div v-if="!list || list.length == 0" class="emptyitem flex_center font14 color-gray">暂无用户查看</div>
           <cell v-else class="font13" v-for="(item, index) in list" :key="index">
-            <x-img slot="icon" class="avatarimg2 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" container=".scroll-container"></x-img>
+            <img slot="icon" class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
             <div slot="inline-desc" class="pl10 pr10">
               <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
               <div class="mt5 clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>

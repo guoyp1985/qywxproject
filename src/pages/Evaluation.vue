@@ -13,7 +13,7 @@
         <div class="evaluation" v-for="(item, index) in list" :key="index">
           <group>
             <cell :title="item.name" class="product-rater font14">
-              <x-img class="product-img" slot="icon" :src="item.photo"></x-img>
+              <img class="product-img" slot="icon" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               <div slot="inline-desc">
                 <rater v-model="item.stars"></rater>
               </div>

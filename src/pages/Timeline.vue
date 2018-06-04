@@ -5,12 +5,12 @@
     </template>
     <template v-if="showContainer">
       <div class="s-topbanner flex_left color-white pl15 pr15 border-box">
-          <x-img class="avatarimg5 imgcover" :src="viewuser.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container="#vux_view_box_body"></x-img>
-          <div class="flex_cell pr20 pl10">
-            <div class="font16 clamp1">{{ viewuser.linkman }}</div>
-            <div class="font13">成交概率 {{ viewuser.percent }}%</div>
-          </div>
-          <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
+        <img class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+        <div class="flex_cell pr20 pl10">
+          <div class="font16 clamp1">{{ viewuser.linkman }}</div>
+          <div class="font13">成交概率 {{ viewuser.percent }}%</div>
+        </div>
+        <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
       </div>
       <div class="s-container">
         <div class="b_top_after padding10 flex_center bg-white list-shadow01">
@@ -93,20 +93,24 @@ export default {
           self.sosTitle = data.error
           self.showSos = true
           self.showContainer = false
+        } else {
+          self.sosTitle = ''
+          self.showSos = false
+          self.showContainer = true
+          self.viewuser = data.data ? data.data : data
+          document.title = `${self.viewuser.linkman}的行为`
+          const params = { params: { uid: self.query.uid } }
+          return self.$http.get(`${ENV.BokaApi}/api/user/timeLine`, params)
         }
-        self.showSos = false
-        self.showContainer = true
-        self.viewuser = data.data ? data.data : data
-        document.title = `${self.viewuser.linkman}的行为`
-        const params = { params: { uid: self.query.uid } }
-        return self.$http.get(`${ENV.BokaApi}/api/user/timeLine`, params)
       })
       .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.data = retdata
-        self.disdatalist = true
+        if (res) {
+          self.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          self.data = retdata
+          self.disdatalist = true
+        }
       })
     },
     refresh () {

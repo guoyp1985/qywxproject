@@ -28,7 +28,7 @@
           </div>
           <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
             <div class="flex_left">
-              <x-img class="imgcover avatarimg2 radius0" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :offset="0" container=".scroll-container"></x-img>
+              <img class="imgcover avatarimg2 radius0" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               <div class="flex_cell pl10">
                 <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
                 <div class="clamp1 color-gray font12">浏览次数: {{ item.number }}</div>
@@ -182,22 +182,16 @@ export default {
         }
       })
     },
-    init () {
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.showContainer && this.data.length < limit) {
+      if (this.query.uid !== this.$route.query.uid) {
+        this.query = this.$route.query
         this.disdata = false
         this.data = []
         this.$vux.loading.show()
-        this.getData1()
+        this.getData()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
