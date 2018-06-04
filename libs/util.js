@@ -429,6 +429,7 @@ Util.install = function (Vue, options) {
                 const current = urls.splice(i, 1)
                 urls.unshift(current)
                 params.urls = urls
+                alert(params.urls.length)
               } else {
                 params.curent = target.src
               }
