@@ -18,7 +18,7 @@
               </div>
               <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="flex_left">
-                  <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container0"></x-img>
+                  <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                   <div class="flex_cell pl10">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                     <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
@@ -35,7 +35,7 @@
               </div>
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="flex_left">
-                  <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                  <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                   <div class="flex_cell pl10">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                     <div class="clamp1 mt5 font14 color-gray">{{item.dateline | dateformat}}</div>
@@ -64,6 +64,10 @@ import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 
+const limit = 10
+let pageStart1 = 0
+let pageStart2 = 0
+
 export default {
   components: {
     Tab, TabItem, Swiper, SwiperItem, XImg
@@ -81,13 +85,18 @@ export default {
       distabdata1: false,
       distabdata2: false,
       tabdata1: [],
-      tabdata2: [],
-      limit: 10,
-      pagestart1: 0,
-      pagestart2: 0
+      tabdata2: []
     }
   },
   methods: {
+    initData () {
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      pageStart1 = 0
+      pageStart2 = 0
+    },
     handleScroll: function (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -95,14 +104,14 @@ export default {
         element: scrollarea,
         callback: function () {
           if (index === 0) {
-            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
+            if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+              pageStart1++
               self.$vux.loading.show()
               self.getData1()
             }
           } else if (index === 1) {
-            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-              self.pagestart2++
+            if (self.tabdata2.length === (pageStart2 + 1) * limit) {
+              pageStart2++
               self.$vux.loading.show()
               self.getData2()
             }
@@ -112,7 +121,7 @@ export default {
     },
     getData1 () {
       const self = this
-      let params = { pagestart: self.pagestart1, limit: self.limit }
+      let params = { pagestart: pageStart1, limit: limit }
       if (self.query.wid) {
         params.wid = self.query.wid
       }
@@ -127,7 +136,7 @@ export default {
     },
     getData2 () {
       const self = this
-      let params = { pagestart: self.pagestart2, limit: self.limit }
+      let params = { pagestart: pageStart2, limit: limit }
       if (self.query.wid) {
         params.wid = self.query.wid
       }
@@ -146,17 +155,21 @@ export default {
       }
       switch (this.selectedIndex) {
         case 0:
-          if (this.tabdata1.length < this.limit) {
+          if (this.tabdata1.length < limit) {
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
+          } else {
+            this.$vux.loading.hide()
           }
           break
         case 1:
-          if (this.tabdata2.length < this.limit) {
+          if (this.tabdata2.length < limit) {
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
+          } else {
+            this.$vux.loading.hide()
           }
           break
       }
@@ -171,9 +184,14 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.$vux.loading.show()
-      this.swiperChange()
+      if (this.query.wid !== this.$route.query.wid) {
+        this.query = this.$route.query
+        this.initData()
+        this.swiperChange()
+      } else {
+        this.query = this.$route.query
+        this.swiperChange()
+      }
     }
   },
   activated () {
