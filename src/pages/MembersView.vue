@@ -128,7 +128,10 @@
           @on-click-left="showPopupLevel = false"
           @on-click-right="updateIntention"></popup-header>
           <group gutter="0">
-            <radio v-model="userIntention" :options="intentionArr"></radio>
+            <radio
+              v-model="userIntention"
+              :options="intentionArr"
+              :selected-label-style="{color: '#ee9f25'}"></radio>
           </group>
         </popup>
       </div>
