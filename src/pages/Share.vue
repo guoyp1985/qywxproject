@@ -17,7 +17,7 @@
           class="share-item font14 scroll_item"
           align-items
           :link="{path: '/sharingDetail', query: {id: item.moduleid}}">
-            <x-img class="imgcover" style="width:60px;height:60px;" slot="icon" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :src="item.photo" :offset=0 container=".scroll-container"></x-img>
+            <img class="imgcover" style="width:60px;height:60px;" slot="icon" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
             <div slot="inline-desc">
               <div class="t-table">
                 <div class="t-cell v_middle">

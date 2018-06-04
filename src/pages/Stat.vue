@@ -32,7 +32,7 @@
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <x-img class="avatarimg2 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>

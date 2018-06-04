@@ -19,7 +19,7 @@
                   <div class="item pic-photo border01">
                     <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
                     <div class="pic-layer">
-                      <x-img :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg"></x-img>
+                      <img :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                     </div>
                   </div>
                 </div>

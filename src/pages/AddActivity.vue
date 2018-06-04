@@ -10,7 +10,7 @@
           <div v-if="showproductitem" class="scroll_item border db">
             <div class="t-table">
               <div class="t-cell v_middle" style="width:50px;">
-                <x-img class="v_middle imgcover" :src="selectproduct.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" ></x-img>
+                <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1">{{ selectproduct.title }}</div>
@@ -75,7 +75,7 @@
               <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                 <div class="t-table">
                   <div class="t-cell pic v_middle w50">
-                    <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".selectpopup-container" ></x-img>
+                    <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
                   </div>
                   <div class="t-cell v_middle" style="color:inherit;">
                     <div class="clamp1">{{item.title}}</div>

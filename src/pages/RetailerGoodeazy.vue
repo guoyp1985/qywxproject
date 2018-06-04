@@ -79,7 +79,7 @@
               <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
                 <div class="flex_left">
                   <div class="">
-                    <x-img class="imgcover v_middle avatarimg1 radius0" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <img class="imgcover v_middle avatarimg1 radius0" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                   </div>
                   <div class="flex_cell pl10">
                     <div class="clamp1 font14">{{item.title}}</div>

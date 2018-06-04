@@ -113,7 +113,7 @@
                 <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
                   <div class="t-table">
                     <div class="t-cell v_middle w50">
-                      <x-img class="avatarimg imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".customer-popup-container"></x-img>
+                      <img class="avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{ item.linkman }}</div>

@@ -7,7 +7,7 @@
       <div class="s-topbanner">
         <div class="flex_left h_100 toprow color-white pl15 pr15">
           <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }">
-            <x-img class="avatarimg5 v_middle imgcover" :src="sellerUser.avatar" ></x-img>
+            <img class="avatarimg5 v_middle imgcover" :src="sellerUser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
           </router-link>
           <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="font16 clamp1 pl10 flex_cell">{{ sellerUser.username }}</router-link>
           <div class="align_center">
@@ -43,7 +43,7 @@
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                   <div class="t-table">
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
-                      <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container1" ></x-img>
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                     </router-link>
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -67,7 +67,7 @@
                 <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
                   <div class="t-table">
                     <div class="t-cell v_middle w80">
-                      <x-img class="imgcover v_middle" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:70px;height:70px;" :offset="0" container=".scroll-container2"></x-img>
+                      <img class="imgcover v_middle" style="width:70px;height:70px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                     </div>
                     <div class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
@@ -96,7 +96,7 @@
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                   <div class="t-table">
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
-                      <x-img class="avatarimg3 imgcover v_middle" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                     </router-link>
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -333,19 +333,13 @@ export default {
         }
       })
     },
-    init () {
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.showContainer) {
-        this.swiperChange()
+      if (this.query.uid !== this.$route.query.uid) {
+        this.query = this.$route.query
+        this.getData()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

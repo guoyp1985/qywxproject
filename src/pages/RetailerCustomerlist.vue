@@ -50,7 +50,7 @@
               <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container1"></x-img>
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -99,7 +99,7 @@
               <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container3"></x-img>
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
@@ -142,7 +142,7 @@
               <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <x-img class="avatarimg3 imgcover" :src="item.avatar" default-src="http://vuxlaravel.boka.cn/images/user.jpg" :offset="0" container=".scroll-container2"></x-img>
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                   </router-link>
                   <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
