@@ -414,7 +414,7 @@ Util.install = function (Vue, options) {
           images = document.querySelectorAll(`${viewId} .wx__img-preview`)
         }
         if (!images.length) return
-        const urls = []
+        let urls = []
         for (let img of images) {
           urls.push(img.src)
         }
