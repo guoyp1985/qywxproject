@@ -424,7 +424,7 @@ Util.install = function (Vue, options) {
             if (target.src === img.src) {
               let params = {curent: target.src}
               if (!self.isAndroid()) {
-                params.urls = urls
+                // params.urls = urls
               }
               Vue.wechat.previewImage(params)
               break
