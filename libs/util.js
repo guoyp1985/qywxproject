@@ -425,6 +425,7 @@ Util.install = function (Vue, options) {
             if (target.src === img.src) {
               let params = {curent: target.src}
               if (!self.isAndroid()) {
+                console.log(params)
                 urls = urls.splice(i, 1)
                 urls.unshift(target.src)
                 params.urls = urls.reverse()
