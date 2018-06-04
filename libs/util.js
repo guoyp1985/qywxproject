@@ -401,6 +401,10 @@ Util.install = function (Vue, options) {
     },
     wxPreviewImage: function(viewId, texture) {
       const triggerView = document.querySelector(viewId)
+      if (!triggerView) {
+        console.error('node mounted error')
+        return
+      }
       triggerView.addEventListener('click', function(event) {
         let images
         if (texture) {
@@ -409,6 +413,7 @@ Util.install = function (Vue, options) {
           images = document.querySelectorAll(`${viewId} .wx__img-preview`)
         }
         if (!images.length) return
+        alert('img')
         const urls = []
         for (let img of images) {
           urls.push(img.src)
