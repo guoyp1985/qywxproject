@@ -418,13 +418,13 @@ Util.install = function (Vue, options) {
           urls.push(img.src)
         }
         const target = event.target
-        console.log(urls)
+        // console.log(urls)
         if (target.nodeName.toLowerCase() === 'img') {
           for (let img of images) {
             if (target.src === img.src) {
               Vue.wechat.previewImage({
-                current: target.src,
-                urls: urls
+                current: target.src
+                // urls: urls
               })
               break
             }
