@@ -422,10 +422,10 @@ Util.install = function (Vue, options) {
         if (target.nodeName.toLowerCase() === 'img') {
           for (let img of images) {
             if (target.src === img.src) {
-              let params = {curent: target.src}
-              if (!self.isAndroid()) {
-                // params.urls = urls
-              }
+              let params = {urls: urls} //{curent: target.src}
+              // if (!self.isAndroid()) {
+              //   params.urls = urls
+              // }
               Vue.wechat.previewImage(params)
               break
             }
