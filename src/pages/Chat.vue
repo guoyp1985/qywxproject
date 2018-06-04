@@ -44,6 +44,7 @@
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
                   </div>
+                  <div v-if="item.unread" class="new-voice-tips"></div>
                   <div class="min">
                     <span class="discontent">{{item.content | secondsFormat}}</span>
                   </div>
@@ -62,7 +63,7 @@
     </scroller>
     <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
     <div class="bottom-area" ref="bottomArea">
-      <div class="input-box no-select">
+      <div class="input-box">
         <div class="voice-cell">
           <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
             <img src="http://vuxlaravel.boka.cn/images/icon-voice.png"/>
@@ -401,6 +402,7 @@ export default {
         } else { // play voice
           this.messages = this.$util.changeItem(this.messages, item.id, match => {
             match.voiceClass = ' playing'
+            match.unread = false
             return match
           })
           Voice.play(item.mediaid,
@@ -486,9 +488,7 @@ export default {
     },
     onTalkRecord () {
       const self = this
-      this.$vux.loading.show({
-       text: '开始讲话'
-      })
+      this.$vux.loading.show({text: '开始讲话'})
       Voice.record(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
       })
@@ -846,6 +846,9 @@ export default {
         // console.log(item.dateline)
         if (uid !== item.uid) {
           self.hasNewMessage = true
+          if (item.msgtype === 'voice') {
+            item.unread = true
+          }
         }
         self.messages.push(item)
         self.setScrollToBottom()
@@ -1081,6 +1084,16 @@ export default {
   font-size: 12px;
 }
 
+#chat-room .new-voice-tips {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: red;
+  position: absolute;
+  left: -18px;
+  top: 13px;
+}
+
 // #chat-room .chat-area{
 //   position:absolute;
 //   left:0;
@@ -1198,15 +1211,15 @@ export default {
 }
 .chatlist .chatitem .msg .main .min{
 	font-family: "microsoft yahei", "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
-	width: 50px;
+	width: 30px;
   height:30px;
   line-height: 30px;
 	position: absolute;
   top: 0;
   color: #cccccc;
 }
-.chatlist .chatitem.left .msg .main .min {right: -58px; top: 3px;}
-.chatlist .chatitem.right .msg .main .min {left: -58px; top: 3px;}
+.chatlist .chatitem.left .msg .main .min {right: -48px; top: 3px;}
+.chatlist .chatitem.right .msg .main .min {left: -48px; top: 3px;}
 .audio_play_area {float:left;}
 .chatitem.right .audio_play_area{float:right;}
 .audio_play_area:after{content:"";clear:both;display:block;}
