@@ -73,6 +73,9 @@ export default {
     getData () {
       const self = this
       self.loginUser = User.get()
+      if (!self.loginUser) {
+        self.loginUser = {}
+      }
       if (self.loginUser.subscribe === 1) {
         this.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
@@ -125,17 +128,10 @@ export default {
         })
       }
     },
-    init () {
-      this.loginUser = User.get()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.getData()
     }
-  },
-  created () {
-    this.init()
-    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
   },
   activated () {
     this.refresh()
