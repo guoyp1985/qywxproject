@@ -44,7 +44,7 @@
           					<i class="icon_audio_default"></i>
           					<i class="icon_audio_playing"></i>
                   </div>
-                  <div v-if="item.unread" class="new-voice-tips"></div>
+                  <div class="new-voice-tips"></div>
                   <div class="min">
                     <span class="discontent">{{item.content | secondsFormat}}</span>
                   </div>
