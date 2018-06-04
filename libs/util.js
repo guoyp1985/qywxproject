@@ -429,7 +429,6 @@ Util.install = function (Vue, options) {
                 urls.unshift(current)
                 params.urls = urls
               }
-              alert(JSON.stringify(params))
               Vue.wechat.previewImage(params)
               break
             }
