@@ -33,7 +33,7 @@
               <x-img class="imgcover" :src="$util.getPhoto(item.photo)" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:60px;height:60px;" :offset="0" container=".scroll-container"></x-img>
             </div>
             <div class="t-cell v_middle">
-              <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
+              <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
               <div class="clamp1 font14 color-gray v_middle mt5">
                   <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
                   <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
