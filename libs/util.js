@@ -430,7 +430,7 @@ Util.install = function (Vue, options) {
                 urls.unshift(current)
                 params.current = current
                 params.urls = urls
-                alert(params.urls.length)
+                alert(current)
               } else {
                 params.current = target.src
               }
