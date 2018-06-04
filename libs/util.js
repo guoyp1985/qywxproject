@@ -426,7 +426,7 @@ Util.install = function (Vue, options) {
               let params = {}
               if (!self.isAndroid()) {
                 console.log(params)
-                const current = urls.splice(i, 1)
+                const current = urls.splice(i, 1)[0]
                 urls.unshift(current)
                 params.current = current
                 params.urls = urls
