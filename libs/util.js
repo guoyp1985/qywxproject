@@ -434,7 +434,7 @@ Util.install = function (Vue, options) {
               } else {
                 params.current = target.src
               }
-              console.log(params)
+              console.log(JSON.stringify(params))
               Vue.wechat.previewImage(params)
               break
             }
