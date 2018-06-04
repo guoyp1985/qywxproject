@@ -229,21 +229,25 @@ export default {
       self.$vux.confirm.show({
         title: '确定要删除图像吗？',
         onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'delete', id: self.rollingData.id }).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  self.rollingData = null
-                  self.photoarr.splice(index, 1)
+          if (!self.rollingData) {
+            self.photoarr.splice(index, 1)
+          } else {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/topBanner/product`, { do: 'delete', id: self.rollingData.id }).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.rollingData = null
+                    self.photoarr.splice(index, 1)
+                  }
                 }
-              }
+              })
             })
-          })
+          }
         }
       })
     },
