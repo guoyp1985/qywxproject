@@ -486,12 +486,16 @@ export default {
     },
     onTalkRecord () {
       const self = this
+      this.$vux.loading.show({
+       text: '开始讲话'
+      })
       Voice.record(res => {
         self.sendVoice({vid: res.serverId, time: res.time})
       })
     },
     onTalkRecordStop () {
       const self = this
+      this.$vux.loading.hide()
       Voice.recordStop(
       res => {
         self.sendVoice({vid: res.serverId, time: res.time})
