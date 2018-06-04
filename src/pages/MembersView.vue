@@ -119,7 +119,7 @@
           <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
         </div>
       </div>
-      <div v-transfer-dom>
+      <div v-transfer-dom class="red-popup">
         <popup v-model="showPopupLevel">
           <popup-header
           :left-text="$t('Cancel')"
@@ -127,8 +127,11 @@
           :show-bottom-border="false"
           @on-click-left="showPopupLevel = false"
           @on-click-right="updateIntention"></popup-header>
-          <group gutter="0">
-            <radio v-model="userIntention" :options="intentionArr"></radio>
+          <group gutter="0" class="red-radio">
+            <radio
+              v-model="userIntention"
+              :options="intentionArr"
+              :selected-label-style="{color: '#ea3a3a'}"></radio>
           </group>
         </popup>
       </div>
