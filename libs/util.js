@@ -413,7 +413,6 @@ Util.install = function (Vue, options) {
           images = document.querySelectorAll(`${viewId} .wx__img-preview`)
         }
         if (!images.length) return
-        alert('img')
         const urls = []
         for (let img of images) {
           urls.push(img.src)
@@ -423,8 +422,8 @@ Util.install = function (Vue, options) {
           for (let img of images) {
             if (target.src === img.src) {
               Vue.wechat.previewImage({
-                current: target.src,
-                urls: urls
+                current: target.src
+                // urls: urls
               })
               break
             }
