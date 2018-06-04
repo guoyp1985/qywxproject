@@ -400,6 +400,7 @@ Util.install = function (Vue, options) {
       })
     },
     wxPreviewImage: function(viewId, texture) {
+      const self = this
       const triggerView = document.querySelector(viewId)
       if (!triggerView) {
         console.error('node mounted error')
@@ -413,7 +414,6 @@ Util.install = function (Vue, options) {
           images = document.querySelectorAll(`${viewId} .wx__img-preview`)
         }
         if (!images.length) return
-        alert('img')
         const urls = []
         for (let img of images) {
           urls.push(img.src)
@@ -422,10 +422,11 @@ Util.install = function (Vue, options) {
         if (target.nodeName.toLowerCase() === 'img') {
           for (let img of images) {
             if (target.src === img.src) {
-              Vue.wechat.previewImage({
-                current: target.src,
-                urls: urls
-              })
+              let params = {curent: target.src}
+              if (!self.isAndroid()) {
+                params.urls = urls
+              }
+              Vue.wechat.previewImage(params)
               break
             }
           }

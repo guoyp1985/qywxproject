@@ -17,11 +17,14 @@ const TIME_UNIT = {
 	YEAR : 31536000000
 }
 class Time {
-	constructor(isodate){ this._date = isodate? new Date(isodate) : new Date(); this._now = new Date() }
-	time(){ return this._date.getTime() }
-	date(){ return this._date.getDate() }
-	day (){ return this._date.getDay() }
-	year(){ return this._date.getFullYear() }
+	constructor(isodate) {
+		this._date = isodate ? new Date(isodate) : new Date()
+		this._now = new Date()
+	}
+	time() { return this._date.getTime() }
+	date() { return this._date.getDate() }
+	day () { return this._date.getDay() }
+	year() { return this._date.getFullYear() }
 	month() { return this._date.getMonth() + 1 }
 	hour () { return this._date.getHours() }
 	minute() { return this._date.getMinutes() }
@@ -32,15 +35,15 @@ class Time {
 	sevenDaysTimeBegin() { return this.todayTimeBegin() - TIME_UNIT.WEEK }
 	deltaTime() { return Math.max(this._now.getTime(),this._date.getTime()) - Math.min(this._now.getTime(),this._date.getTime()) }
 	format() {
-		let time = this.time(),
-				minute = this.minute(),
-				hour = this.hour(),
-				date = this.date(),
-				month = this.month(),
-				year = this.year(),
-				yesterdayTimeBegin = this.yesterdayTimeBegin(),
-				todayTimeBegin = this.todayTimeBegin(),
-				deltaTime = this.deltaTime()
+		const time = this.time()
+		let minute = this.minute()
+		const hour = this.hour()
+		const date = this.date()
+		const month = this.month()
+		const year = this.year()
+		const yesterdayTimeBegin = this.yesterdayTimeBegin()
+		const todayTimeBegin = this.todayTimeBegin()
+		const deltaTime = this.deltaTime()
 		minute = minute < 10 ? "0" + minute : minute
 		if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
 			return "昨天" + hour + ":" + minute
@@ -58,17 +61,17 @@ class Time {
 		}
 	}
 	format2 () {
-		let time = this.time(),
-				minute = this.minute(),
-				hour = this.hour(),
-				date = this.date(),
-				day = this.day(),
-				month = this.month(),
-				year = this.year(),
-				yesterdayTimeBegin = this.yesterdayTimeBegin(),
-				sevenDaysTimeBegin = this.sevenDaysTimeBegin(),
-				todayTimeBegin = this.todayTimeBegin(),
-				deltaTime = this.deltaTime()
+		const time = this.time()
+		let minute = this.minute()
+		const hour = this.hour()
+		const date = this.date()
+		const day = this.day()
+		const month = this.month()
+		const year = this.year()
+		const yesterdayTimeBegin = this.yesterdayTimeBegin()
+		const sevenDaysTimeBegin = this.sevenDaysTimeBegin()
+		const todayTimeBegin = this.todayTimeBegin()
+		// const deltaTime = this.deltaTime()
 		minute = minute < 10 ? "0" + minute : minute
 		if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
 			return "昨天" + hour + ":" + minute
