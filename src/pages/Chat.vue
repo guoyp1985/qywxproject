@@ -1212,7 +1212,7 @@ export default {
 }
 .chatlist .chatitem .msg .main .min{
 	font-family: "microsoft yahei", "Helvetica Neue", Helvetica, STHeiTi, sans-serif;
-	width: 30px;
+	width: 26px;
   height:30px;
   line-height: 30px;
 	position: absolute;
