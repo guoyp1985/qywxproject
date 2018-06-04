@@ -1090,7 +1090,7 @@ export default {
   border-radius: 50%;
   background-color: red;
   position: absolute;
-  left: -18px;
+  right: -18px;
   top: 13px;
 }
 
