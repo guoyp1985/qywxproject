@@ -16,7 +16,7 @@
         <span>{{$t('Scan To Login')}}</span>
       </div>
       <div>
-        <span>{{$t('Boka Authorization Center')}}</span>
+        <span>{{ WeixinName }}</span>
       </div>
     </div>
   </div>
@@ -31,7 +31,8 @@ export default {
       qrCode: {
         url: '',
         verifycode: 0
-      }
+      },
+      WeixinName: ENV.WeixinName
     }
   },
   methods: {
