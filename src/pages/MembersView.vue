@@ -37,7 +37,7 @@
           </div>
           <div class="b_top_after flex_center bg-white h45">
             <div class="t-table align_center color-gray2">
-              <template v-if="viewuser.subscribe == 1">
+              <template v-if="viewuser.subscribe != 0">
                 <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
                   <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
                 </div>
