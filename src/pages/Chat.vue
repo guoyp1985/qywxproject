@@ -1219,8 +1219,8 @@ export default {
   top: 0;
   color: #cccccc;
 }
-.chatlist .chatitem.left .msg .main .min {right: -42px; top: 3px;}
-.chatlist .chatitem.right .msg .main .min {left: -42px; top: 3px;}
+.chatlist .chatitem.left .msg .main .min {right: -36px; top: 3px;}
+.chatlist .chatitem.right .msg .main .min {left: -36px; top: 3px;}
 .audio_play_area {float:left;}
 .chatitem.right .audio_play_area{float:right;}
 .audio_play_area:after{content:"";clear:both;display:block;}
