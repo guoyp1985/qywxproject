@@ -1134,7 +1134,8 @@ export default {
 .chatlist .chatitem.right .name {margin-right:40px;text-align:right;}
 .chatlist .chatitem .msg {margin: 0 0px 0 50px;}
 .chatlist .chatitem.right .msg {margin: 0 50px 0 0;text-align:right;}
-.chatlist .chatitem .msg .discontent{text-align:left;}
+.chatlist .chatitem.left .msg .discontent{text-align:left;}
+.chatlist .chatitem.right .msg .discontent{text-align:right;}
 .chatlist .chatitem .msg .main {
 	display: inline-block;
   position: relative;
