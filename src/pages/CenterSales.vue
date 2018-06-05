@@ -80,6 +80,8 @@ export default {
         this.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
           module: 'retailer', action: 'index'
+        }).then(function (res) {
+          alert(JSON.stringify(res))
         })
       } else if (self.loginUser.subscribe === 1) {
         this.$vux.loading.show()
