@@ -12,7 +12,7 @@
         </div>
         <div class="vux-1px-r">
           <div class="color-white font14">销售额</div>
-          <div class="color-white font21 mt10">{{ viewdata.orders }}</div>
+          <div class="color-white font21 mt10">{{$t('RMB')}}{{ viewdata.orders }}</div>
         </div>
       </div>
       <tab v-model="selectedIndex" class="v-tab">
