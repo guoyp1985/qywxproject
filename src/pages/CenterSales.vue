@@ -68,9 +68,18 @@ export default {
     },
     inCenter () {
       const self = this
-      self.$vux.loading.show()
-      self.afterApply = false
-      self.refresh()
+      // self.$vux.loading.show()
+      // self.afterApply = false
+      // self.refresh()
+      let text = '添加完商品后才可体验更多功能'
+      self.$vux.toast.show({
+        text: text,
+        type: 'success',
+        time: self.$util.delay(text),
+        onHide: function () {
+          self.$router.push({path: '/addProduct', query: {from: 'apply'}})
+        }
+      })
     },
     getData () {
       const self = this
