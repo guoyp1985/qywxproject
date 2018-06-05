@@ -109,10 +109,12 @@
           <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
           <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
         </grid-item>
-        <grid-item @click.native="viewUserInfo">
-          <span slot="icon" class="feature-icon al al-yonghuxinxi color-gray"></span>
-          <span slot="label" class="color-gray">{{$t('User Info')}}</span>
-        </grid-item>
+        <template v-if="showUserInfo">
+          <grid-item @click.native="viewUserInfo">
+            <span slot="icon" class="feature-icon al al-yonghuxinxi color-gray"></span>
+            <span slot="label" class="color-gray">{{$t('User Info')}}</span>
+          </grid-item>
+        </template>
       </grid>
     </div>
     <div v-transfer-dom class="x-popup">
@@ -261,7 +263,8 @@ export default {
       pagestart2: 0,
       limit1: 10,
       selectNewsData: null,
-      selectProductsData: null
+      selectProductsData: null,
+      showUserInfo: false
     }
   },
   filters: {
@@ -652,6 +655,9 @@ export default {
     //     self.showSendBtn = true
     //   }
     // },
+    viewUserInfo () {
+      this.$router.push({path: 'membersView', query: {uid: this.query.uid}})
+    },
     showImgTxtPopup () {
       const self = this
       this.showImgTxt = true
@@ -916,6 +922,15 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
+      const usergroup = this.loginUser.usergroup
+      if (usergroup && usergroup.length > 0) {
+        for (let i = 0; i < usergroup.length; i++) {
+          if (usergroup[i] === 3) {
+            this.showUserInfo = true
+            break
+          }
+        }
+      }
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query

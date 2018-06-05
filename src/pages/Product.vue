@@ -172,7 +172,7 @@
         <div class="padding10 b_bottom_after">
           <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
     				<div class="t-cell v_middle" style="width:70px;">
-              <img class="v_middle imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
             </div>
     				<div class="t-cell v_middle">
     					<div class="distitle clamp2">{{ retailerInfo.title }}</div>
