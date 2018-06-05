@@ -4,9 +4,9 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-credit" class="containerarea font14 bg-page">
+  <div id="personal-credit" class="containerarea font14 bg-page nobottom">
     <div class="pagetop flex_left font18 pl10 border-box">{{$t('Credit Details')}}</div>
-    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll" style="bottom:53px;">
+    <div class="pagemiddle bg-white scroll-container" ref="scrollContainer" @scroll="handleScroll">
       <group>
         <div v-if="disList" class="scroll_list">
           <div v-if="!list || list.length == 0" class="no-related-x color-gray">
@@ -97,7 +97,7 @@ export default {
     init () {
     },
     refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: true})
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.list.length < this.limit) {
         this.disList = false
         this.list = []
