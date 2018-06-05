@@ -74,12 +74,14 @@ export default {
     },
     getData () {
       const self = this
+      self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
         if (res.status === 200) {
           self.loginUser = res.data
           User.set(self.loginUser)
-          if (self.loginUser.subscribe === 1) {
-            self.$vux.loading.show()
+          if (self.loginUser.subscribe !== 1) {
+            self.$vux.loading.hide()
+          } else {
             self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
               module: 'retailer', action: 'index'
             }).then(function (res) {
