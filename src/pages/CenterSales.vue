@@ -78,7 +78,7 @@ export default {
       alert(JSON.stringify(self.loginUser))
       if (!self.loginUser) {
         this.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
           alert(JSON.stringify(res))
         })
       } else if (self.loginUser.subscribe === 1) {
