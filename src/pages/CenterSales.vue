@@ -126,6 +126,8 @@ export default {
             }
           }
         })
+      } else {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
       }
     },
     refresh () {
