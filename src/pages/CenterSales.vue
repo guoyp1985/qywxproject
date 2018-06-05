@@ -1,31 +1,33 @@
 <template>
   <div id="centersales" class="containerarea font14">
-    <template v-if="loginUser.subscribe != 1">
-      <div class="pagemiddle flex_center" style="top:0;">
-        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
-      </div>
-      <div class="pagebottom flex_center b_top_after font16">请先关注</div>
-    </template>
-    <template v-else>
-      <template v-if="afterApply">
-        <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
-          <swiper-item>
-            <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide1.jpg" />
-          </swiper-item>
-          <swiper-item>
-            <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide2.jpg" />
-          </swiper-item>
-          <swiper-item>
-            <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide3.jpg" />
-             <div class="in-btn" @click="inCenter">立即体验</div>
-          </swiper-item>
-        </swiper>
+    <template v-if="loginUser">
+      <template v-if="loginUser.subscribe != 1">
+        <div class="pagemiddle flex_center" style="top:0;">
+          <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+        </div>
+        <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
-      <template v-if="showCenter">
-        <center-sales :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
-      </template>
-      <template v-if="showApply">
-        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+      <template v-else>
+        <template v-if="afterApply">
+          <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
+            <swiper-item>
+              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide1.jpg" />
+            </swiper-item>
+            <swiper-item>
+              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide2.jpg" />
+            </swiper-item>
+            <swiper-item>
+              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide3.jpg" />
+               <div class="in-btn" @click="inCenter">立即体验</div>
+            </swiper-item>
+          </swiper>
+        </template>
+        <template v-if="showCenter">
+          <center-sales :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
+        </template>
+        <template v-if="showApply">
+          <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+        </template>
       </template>
     </template>
   </div>
@@ -73,11 +75,12 @@ export default {
     getData () {
       const self = this
       self.loginUser = User.get()
-      if (!self.loginUser) {
-        self.loginUser = {}
-      }
       this.$vux.loading.show()
-      if (self.loginUser.subscribe === 1) {
+      if (!self.loginUser) {
+        self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+          module: 'retailer', action: 'index'
+        })
+      } else if (self.loginUser.subscribe === 1) {
         self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
           module: 'retailer', action: 'index'
         }).then(function (res) {
@@ -126,8 +129,6 @@ export default {
             }
           }
         })
-      } else {
-        self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
       }
     },
     refresh () {
