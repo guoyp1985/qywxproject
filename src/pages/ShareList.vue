@@ -170,22 +170,16 @@ export default {
         }
       })
     },
-    init () {
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.showContainer && this.data.length < limit) {
+      if (this.query.uid !== this.$route.query.uid) {
+        this.query = this.$route.query
         this.disdata = false
         this.data = []
         this.$vux.loading.show()
-        this.getData1()
+        this.getData()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
