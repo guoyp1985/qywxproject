@@ -21,12 +21,12 @@
             ref="search">
           </search>
         </div>
-        <div v-if="distabdata1" class="scroll_list swiper-inner pl10 pr10 border-box scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
-          <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item emptyitem flex_center">
+        <div v-if="disdata" class="scroll_list swiper-inner pl10 pr10 border-box scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll">
+          <div v-if="!data || data.length === 0" class="scroll_item emptyitem flex_center">
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无订单</template>
           </div>
-          <router-link v-else v-for="item in tabdata1" :key="item.id" class="scroll_item padding10 db" :to="{path: '/retailerOrderDetail', query: {id: item.orderid}}">
+          <router-link v-else v-for="item in data" :key="item.id" class="scroll_item padding10 db" :to="{path: '/retailerOrderDetail', query: {id: item.orderid}}">
             <div class="flex_left">
               <img class="imgcover avatarimg2 radius0" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               <div class="flex_cell pl10">
@@ -75,8 +75,8 @@ export default {
       query: Object,
       viewuser: Object,
       tabmodel: 0,
-      distabdata1: false,
-      tabdata1: [],
+      disdata: false,
+      data: [],
       searchword1: '',
       searchresult1: false,
       searchword2: '',
@@ -91,7 +91,7 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+          if (self.data.length === (self.pagestart1 + 1) * self.limit) {
             self.pagestart1++
             self.$vux.loading.show()
             self.getData1()
@@ -113,8 +113,8 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.tabdata1 = self.tabdata1.concat(retdata)
-        self.distabdata1 = true
+        self.data = self.data.concat(retdata)
+        self.disdata = true
       })
     },
     onChange1 (val) {
@@ -123,8 +123,8 @@ export default {
     onSubmit1 () {
       const self = this
       self.$vux.loading.show()
-      self.distabdata1 = false
-      self.tabdata1 = []
+      self.disdata = false
+      self.data = []
       self.pagestart1 = 0
       self.getData1()
     },
@@ -132,8 +132,8 @@ export default {
       const self = this
       self.searchword1 = ''
       self.$vux.loading.show()
-      self.distabdata1 = false
-      self.tabdata1 = []
+      self.disdata = false
+      self.data = []
       self.pagestart1 = 0
       self.getData1()
     },
@@ -157,23 +157,16 @@ export default {
         }
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
-      this.query = this.$route.query
-      if (this.showContainer && this.tabdata1.length < this.limit) {
-        this.distabdata1 = false
-        this.tabdata1 = []
+      if (this.query.uid !== this.$route.query.uid) {
+        this.query = this.$route.query
+        this.disdata = false
+        this.data = []
         this.$vux.loading.show()
-        this.getData1()
+        this.getData()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
