@@ -871,11 +871,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
       .then(res => {
         if (res.data.flag) {
-          if (self.messages.length && !res.data.data.length) {
+          const data = res.data.data
+          if (self.messages.length && !data.length) {
             self.$vux.toast.text('没有更多记录', 'middle')
           }
           self.$vux.loading.hide()
-          const data = res.data.data
           self.messages = data.concat(self.messages)
           callback && callback()
         } else {
