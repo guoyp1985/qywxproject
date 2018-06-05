@@ -76,6 +76,7 @@ export default {
       const self = this
       self.loginUser = User.get()
       if (!self.loginUser) {
+        this.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
           module: 'retailer', action: 'index'
         })
