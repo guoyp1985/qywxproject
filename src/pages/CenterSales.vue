@@ -51,7 +51,7 @@ export default {
       afterApply: false,
       selectedIndex: 0,
       retailerInfo: {},
-      loginUser: {},
+      loginUser: null,
       marqueeData: [],
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
@@ -74,64 +74,63 @@ export default {
     },
     getData () {
       const self = this
-      self.loginUser = User.get()
-      alert(JSON.stringify(self.loginUser))
-      if (!self.loginUser) {
-        this.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-          module: 'retailer', action: 'index'
-        })
-      } else if (self.loginUser.subscribe === 1) {
-        this.$vux.loading.show()
-        self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-          module: 'retailer', action: 'index'
-        }).then(function (res) {
-          if (res.status !== 200) {
-            self.$vux.loading.hide()
-          } else {
-            let data = res.data
-            if (data.flag === 1) {
-              self.showCenter = true
-              self.showApply = false
-              self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-                if (res.status === 200) {
-                  let data = res.data
-                  self.retailerInfo = data.data ? data.data : data
-                  self.$vux.loading.hide()
-                  return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-                }
-              }).then(function (res) {
-                if (res) {
-                  let data = res.data
-                  self.messages = data.data
-                  return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-                }
-              }).then(function (res) {
-                if (res) {
-                  let data = res.data
-                  self.marqueeData = data.data ? data.data : data
-                }
-              })
-            } else {
-              self.showCenter = false
-              self.showApply = true
-              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                { params: { limit: 100 } }
-              ).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+        if (res.status === 200) {
+          self.loginUser = res.data
+          User.set(self.loginUser)
+          if (self.loginUser.subscribe === 1) {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+              module: 'retailer', action: 'index'
+            }).then(function (res) {
+              if (res.status !== 200) {
                 self.$vux.loading.hide()
-                if (res.status === 200) {
-                  let data = res.data
-                  data = data.data ? data.data : data
-                  for (let i = 0; i < data.length; i++) {
-                    data[i].checked = false
-                  }
-                  self.classData = data
+              } else {
+                let data = res.data
+                if (data.flag === 1) {
+                  self.showCenter = true
+                  self.showApply = false
+                  self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                    if (res.status === 200) {
+                      let data = res.data
+                      self.retailerInfo = data.data ? data.data : data
+                      self.$vux.loading.hide()
+                      return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+                    }
+                  }).then(function (res) {
+                    if (res) {
+                      let data = res.data
+                      self.messages = data.data
+                      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+                    }
+                  }).then(function (res) {
+                    if (res) {
+                      let data = res.data
+                      self.marqueeData = data.data ? data.data : data
+                    }
+                  })
+                } else {
+                  self.showCenter = false
+                  self.showApply = true
+                  self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+                    { params: { limit: 100 } }
+                  ).then(function (res) {
+                    self.$vux.loading.hide()
+                    if (res.status === 200) {
+                      let data = res.data
+                      data = data.data ? data.data : data
+                      for (let i = 0; i < data.length; i++) {
+                        data[i].checked = false
+                      }
+                      self.classData = data
+                    }
+                  })
                 }
-              })
-            }
+              }
+            })
           }
-        })
-      }
+        }
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
