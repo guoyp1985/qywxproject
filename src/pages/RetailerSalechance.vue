@@ -4,15 +4,15 @@
       <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
         <div class="vux-1px-r">
           <div class="color-white font14">访问量</div>
-          <div class="color-white font21 mt10">{{ viewdata.views }}</div>
+          <div class="color-white font21 mt10 clamp1">{{ viewdata.views }}</div>
         </div>
         <div class="vux-1px-r">
           <div class="color-white font14">分享数</div>
-          <div class="color-white font21 mt10">{{ viewdata.share }}</div>
+          <div class="color-white font21 mt10 clamp1">{{ viewdata.share }}</div>
         </div>
         <div class="vux-1px-r">
           <div class="color-white font14">销售额</div>
-          <div class="color-white font21 mt10">{{$t('RMB')}}{{ viewdata.orders }}</div>
+          <div class="color-white font21 mt10 clamp1">{{$t('RMB')}}{{ viewdata.orders }}</div>
         </div>
       </div>
       <tab v-model="selectedIndex" class="v-tab">
