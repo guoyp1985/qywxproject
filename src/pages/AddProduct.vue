@@ -340,7 +340,11 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
+              if (self.query.from === 'apply') {
+                self.$router.push({path: '/centerSales'})
+              } else {
+                self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
+              }
             }
           }
         })
