@@ -170,7 +170,8 @@ export default {
     if (!self.$util.isNull(self.className)) {
       css = `.${self.className} #${self.bindTextarea} textarea`
     }
-    this.textarea = document.querySelector(css)
+    let textareas = document.querySelectorAll(css)
+    this.textarea = textareas[textareas.length - 1]
     this.textareaEventBind()
   }
 }

@@ -98,7 +98,8 @@ export default {
     onSubmit () {
       const self = this
       if (!this.textarea) {
-        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
+        let textareas = document.querySelectorAll(`.${self.className} #comment-textarea textarea`)
+        this.textarea = textareas[textareas.length - 1]
       }
       let val = this.textarea.value
       this.textarea.value = ''
@@ -107,7 +108,8 @@ export default {
     onCancel () {
       const self = this
       if (!this.textarea) {
-        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
+        let textareas = document.querySelectorAll(`.${self.className} #comment-textarea textarea`)
+        this.textarea = textareas[textareas.length - 1]
       }
       this.textarea.value = ''
       this.$emit('on-cancel', this.textarea)
