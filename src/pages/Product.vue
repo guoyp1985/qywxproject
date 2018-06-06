@@ -135,7 +135,7 @@
       						<div class="t-cell">{{ item.username }}</div>
       						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
       					</div>
-      					<div class="mt5" v-html="item.message"></div>
+      					<div class="mt5" v-html="filterEmot(item.message)"></div>
       					<div class="mt5 align_right" v-if="productdata.uploader == loginUser.uid">
                   <div class="bg-orange color-white qbtn" style="width:50px;padding:0px;line-height:25px;" @click="onReply(item)">回复</div>
       					</div>
@@ -144,7 +144,7 @@
           					<div class="title clear pt5 pb5">
           						<div class="color-gray font12" style="padding-left:6px;position:relative;">
           							<div class="bg-green" style="position: absolute;left: 0;top: 0px;bottom: 0px;width: 2px;"></div>
-          							<span class="color-orange">卖家</span> 回复 :<span v-html="citem.message"></span>
+          							<span class="color-orange">卖家</span> 回复 :<span v-html="filterEmot(citem.message)"></span>
           						</div>
           					</div>
           				</div>
@@ -286,7 +286,7 @@
         						<div class="t-cell">{{ item.username }}</div>
         						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
         					</div>
-        					<div class="mt5" v-html="item.message"></div>
+        					<div class="mt5" v-html="filterEmot(item.message)"></div>
         					<div class="mt5 align_right" v-if="productdata.uploader == loginUser.uid">
                     <div class="bg-orange color-white qbtn" style="width:50px;padding:0px;line-height:25px;" @click="onReply(item)">回复</div>
         					</div>
@@ -295,7 +295,7 @@
             					<div class="title clear pt5 pb5">
             						<div class="color-gray font12" style="padding-left:6px;position:relative;">
             							<div class="bg-green" style="position: absolute;left: 0;top: 0px;bottom: 0px;width: 2px;"></div>
-            							<span class="color-orange">卖家</span> 回复 :<span v-html="citem.message"></span>
+            							<span class="color-orange">卖家</span> 回复 :<span v-html="filterEmot(citem.message)"></span>
             						</div>
             					</div>
             				</div>
@@ -505,6 +505,9 @@ export default {
       this.submitdata = { flag: 1, quantity: 1 }
       this.replyData = null
       this.messages = 0
+    },
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
     },
     toChat () {
       if (this.loginUser.subscribe === 0) {
