@@ -1,5 +1,5 @@
 <template>
-  <div class="emotion-box">
+  <div ref="emots" class="emotion-box">
     <swiper :show-desc-mask="false" dots-position="center" height="200px">
       <swiper-item class="swiper-page">
         <emotion v-for="(item, index) in emotions1" :key="index" is-gif @click.native.stop="onClick(item)">{{item}}</emotion>
@@ -101,8 +101,8 @@ export default {
       emotions4: emotions[3],
       emotions5: emotions[4],
       textarea: null,
-      rangeData: undefined,
-      show: false
+      rangeData: undefined
+      // show: false
     }
   },
   methods: {
@@ -165,12 +165,14 @@ export default {
     }
   },
   mounted () {
-    const self = this
-    let css = `#${self.bindTextarea} textarea`
-    if (!self.$util.isNull(self.className)) {
-      css = `.${self.className} #${self.bindTextarea} textarea`
-    }
-    this.textarea = document.querySelector(css)
+    // const self = this
+    // let css = `#${self.bindTextarea} textarea`
+    // if (!self.$util.isNull(self.className)) {
+    //   css = `.${self.className} #${self.bindTextarea} textarea`
+    // }
+    //
+    // this.textarea = document.querySelector(css)
+    this.textarea = this.$parent.$el.querySelector(`${this.bindTextarea} textarea`)
     this.textareaEventBind()
   }
 }

@@ -4,24 +4,22 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div v-transfer-dom>
-    <popup v-show="show" height="100%">
-      <div :class="`comment-popup ${className}`">
-        <div class="comment-article-title">
-          <h4>{{title}}</h4>
-        </div>
-        <group>
-          <x-textarea ref="textarea" id="comment-textarea" v-model="value" @on-change="valueChange" class="font14" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
-        </group>
-        <emotion-box bind-textarea="comment-textarea" :class-name="className">
-        </emotion-box>
-        <box gap="20px">
-          <x-button type="primary" @click.native="onSubmit">{{$t('Comment')}}</x-button>
-          <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
-        </box>
+  <popup v-show="show" height="100%">
+    <div :class="`comment-popup ${className}`">
+      <div class="comment-article-title">
+        <h4>{{title}}</h4>
       </div>
-    </popup>
-  </div>
+      <group>
+        <x-textarea ref="textarea" id="comment-textarea" v-model="value" @on-change="valueChange" class="font14" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
+      </group>
+      <emotion-box bind-textarea="#comment-textarea" :class-name="className">
+      </emotion-box>
+      <box gap="20px">
+        <x-button type="primary" @click.native="onSubmit">{{$t('Comment')}}</x-button>
+        <x-button type="default" @click.native="onCancel">{{$t('Cancel')}}</x-button>
+      </box>
+    </div>
+  </popup>
 </template>
 <i18n>
 </i18n>
@@ -96,21 +94,28 @@ export default {
       this.value = val
     },
     onSubmit () {
-      const self = this
-      if (!this.textarea) {
-        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
-      }
-      let val = this.textarea.value
-      this.textarea.value = ''
+      // const self = this
+      const textarea = this.$refs.textarea.$refs.textarea
+      // if (!this.textarea) {
+        // this.textarea = self.className ?
+        //                 document.querySelector(`.${self.className} #comment-textarea textarea`) :
+        //                 document.querySelector('#comment-textarea textarea')
+      // }
+      let val = textarea.value
+      textarea.value = ''
       this.$emit('on-submit', val)
     },
     onCancel () {
-      const self = this
-      if (!this.textarea) {
-        this.textarea = document.querySelector(`.${self.className} #comment-textarea textarea`)
-      }
-      this.textarea.value = ''
-      this.$emit('on-cancel', this.textarea)
+      // const self = this
+      // console.log(this.$refs)
+      const textarea = this.$refs.textarea.$refs.textarea
+      // if (!this.textarea) {
+        // this.textarea = self.className ?
+        //                 document.querySelector(`.${self.className} #comment-textarea textarea`) :
+        //                 document.querySelector('#comment-textarea textarea')
+      // }
+      textarea.value = ''
+      this.$emit('on-cancel', textarea)
     },
     onTextFocus () {
       this.$emit('on-text-focus')

@@ -93,7 +93,7 @@
           </a>
         </div>
       </div>
-      <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" @input="inputEmot">
+      <emotion-box v-show="showEmotBox" bind-textarea="#chat-textarea" @input="inputEmot">
       </emotion-box>
       <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
         <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
@@ -555,6 +555,7 @@ export default {
       if (this.msgType === 'text' && this.$util.trim(postData.content) === '') {
         return false
       }
+      this.$refs.text.updateAutosize()
       this.sendData(postData)
     },
     viewUserInfo () {
