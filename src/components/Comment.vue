@@ -27,8 +27,8 @@
           {{item.dateline | dateFormat}}
         </div>
         <div class="btns-cell" v-if="params.uploader == params.uid">
-          <div class="qbtn bg-orange color-white w50" style="padding:3px 0;" @click="onReply">{{$t('Reply')}}</div>
-          <div class="qbtn bg-red color-white w50" v-if="params.uploader == params.commentuid" style="padding:3px 0;" @click="onDelete">{{$t('Delete')}}</div>
+          <div class="qbtn bg-orange color-white w50 font12" style="padding:5px 0;" @click="onReply">{{$t('Reply')}}</div>
+          <div class="qbtn bg-red color-white w50 font12" v-if="params.uploader == params.commentuid" style="padding:5px 0;" @click="onDelete">{{$t('Delete')}}</div>
         </div>
       </div>
       <div class="reply-area">
