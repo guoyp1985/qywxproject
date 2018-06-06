@@ -632,7 +632,10 @@ export default {
       if (!self.showBtnArea) {
         while (node) {
           if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-            self.$router.push(node.getAttribute('linkurl'))
+            const linkurl = node.getAttribute('linkurl')
+            if (linkurl) {
+              self.$router.push(linkurl)
+            }
             break
           }
           node = node.parentNode

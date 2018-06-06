@@ -304,10 +304,14 @@ export default {
       })
     },
     clickProduct (event) {
+      const self = this
       let node = event.target
       while (node) {
         if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-          this.$router.push(node.getAttribute('linkurl'))
+          const linkurl = node.getAttribute('linkurl')
+          if (linkurl) {
+            self.$router.push(linkurl)
+          }
           break
         }
         node = node.parentNode
