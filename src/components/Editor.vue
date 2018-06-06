@@ -452,8 +452,6 @@ export default {
       }
       this.showBtnArea = false
       this.showMenuArea = true
-      this.showEditIcon = false
-      this.showMenuIcon = false
       this.$emit('on-menu')
     },
     onSetting () {
