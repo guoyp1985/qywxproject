@@ -323,7 +323,7 @@
           :on-close="closeShareSuccess">
         </share-success>
       </template>
-      <comment-popup class-name="productCommentPopup" :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit" @on-cancel="replyPopupCancel"></comment-popup>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit" @on-cancel="replyPopupCancel"></comment-popup>
     </template>
   </div>
 </template>
