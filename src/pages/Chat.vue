@@ -791,9 +791,10 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'chat', id: this.query.uid
       })
-      .then(res => {
-        return self.setContactUser()
-      })
+      // .then(res => {
+      //   return self.setContactUser()
+      // })
+      self.setContactUser()
       .then(res => {
         if (res.data) {
           document.title = res.data.linkman
