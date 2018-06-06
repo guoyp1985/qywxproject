@@ -627,11 +627,12 @@ export default {
       return false // 取消元素事件向下冒泡
     },
     clickProduct (event) {
+      const self = this
       let node = event.target
       if (!self.showBtnArea) {
         while (node) {
           if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-            this.$router.push(node.getAttribute('linkurl'))
+            self.$router.push(node.getAttribute('linkurl'))
             break
           }
           node = node.parentNode
