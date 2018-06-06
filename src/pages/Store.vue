@@ -204,7 +204,8 @@ export default {
       toplinedata: [],
       favoritecss: 'none',
       isfavorite: false,
-      hideloading: false
+      hideloading: false,
+      isNextNews: true
     }
   },
   watch: {
@@ -254,6 +255,7 @@ export default {
       this.toplinedata = []
       this.isfavorite = false
       this.hideloading = false
+      this.isNextNews = true
     },
     handleScroll () {
       const self = this
@@ -288,31 +290,38 @@ export default {
     },
     getnewsdata () {
       const self = this
-      const params = { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid }
-      if (!self.query.wid) {
-        params.uploader = self.loginUser.uid
-      } else {
-        params.uploader = self.query.wid
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
-        params: params
-      })
-      .then(res => {
-        const data = res.data
-        if (newPageStart === 0) {
-          initNewsData = data
-        }
-        if (data.length === 0) {
-          self.toplinedata = initNewsData
+      if (self.isNextNews) {
+        self.isNextNews = false
+        const params = { pagestart: newPageStart, limit: newsLimit, uploader: self.query.wid }
+        if (!self.query.wid) {
+          params.uploader = self.loginUser.uid
         } else {
-          self.toplinedata = data
+          params.uploader = self.query.wid
         }
-        if (data.length === newsLimit) {
-          newPageStart++
-        } else if (data.length < newsLimit) {
-          newPageStart = 0
-        }
-      })
+        self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+          params: params
+        })
+        .then(res => {
+          self.isNextNews = true
+          const data = res.data
+          if (newPageStart === 0) {
+            initNewsData = data
+          }
+          let isEmpty = false
+          if (data.length === 0) {
+            self.toplinedata = initNewsData
+            newPageStart = 1
+            isEmpty = true
+          } else {
+            self.toplinedata = data
+          }
+          if (data.length === newsLimit) {
+            newPageStart++
+          } else if (data.length < newsLimit && !isEmpty) {
+            newPageStart = 0
+          }
+        })
+      }
     },
     changeNews () {
       this.getnewsdata()
@@ -450,7 +459,6 @@ export default {
     },
     refresh (query) {
       if (query.wid === undefined || this.query.wid !== query.wid) {
-        console.log('in refresh')
         this.initData()
         this.query = query
         this.$vux.loading.show()
