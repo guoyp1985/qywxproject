@@ -5,14 +5,14 @@
 */
 <template>
   <popup v-show="show" height="100%">
-    <div :class="`comment-popup ${className}`">
+    <div class="comment-popup">
       <div class="comment-article-title">
         <h4>{{title}}</h4>
       </div>
       <group>
-        <x-textarea ref="textarea" id="comment-textarea" v-model="value" @on-change="valueChange" class="font14" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
+        <x-textarea ref="textarea" v-model="value" @on-change="valueChange" class="font14 pop-textarea" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
       </group>
-      <emotion-box bind-textarea="#comment-textarea" :class-name="className">
+      <emotion-box bind-textarea=".pop-textarea">
       </emotion-box>
       <box gap="20px">
         <x-button type="primary" @click.native="onSubmit">{{$t('Comment')}}</x-button>

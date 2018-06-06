@@ -88,8 +88,8 @@ export default {
     Swiper, SwiperItem, emotion
   },
   props: {
-    bindTextarea: String,
-    className: ''
+    bindTextarea: String
+    // className: ''
     // clickCallback: Function
     // value: Boolean
   },
