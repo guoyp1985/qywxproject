@@ -4,91 +4,128 @@
 * @created_date: 2018-05-05
 */
 <template>
-  <div id="article-content" class="containerarea">
+  <div class="containerarea font14 bg-white notop nobottom news">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
-      <div class="article-view">
-        <div class="article-title">
-          <h2>{{article.title}}</h2>
+      <div id="article-content" class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
+        <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <div class="article-view">
+          <div class="article-title">
+            <h2>{{article.title}}</h2>
+          </div>
+          <div class="article-vice-title">
+            <h4>{{article.vicetitle}}</h4>
+          </div>
+          <div class="article-info font14">
+            <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
+            <span class="article-ex"></span>
+            <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+          </div>
+          <div id="editor-content" class="article-content" v-html="article.content"></div>
+          <div class="operate-area">
+            <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
+              <span class="fa fa-star-o"></span>
+              <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
+            </x-button>
+          </div>
+          <div class="reading-info">
+            <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
+          </div>
         </div>
-        <div class="article-vice-title">
-          <h4>{{article.vicetitle}}</h4>
+        <!--
+        <div class="comment-area">
+          <div class="comment-op font14">
+            <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
+          </div>
+          <template v-if="article.comments">
+            <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
+          </template>
+          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader, commentuid: comment.uid}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
+            <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
+          </comment>
         </div>
-        <div class="article-info font14">
-          <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-          <span class="article-ex"></span>
-          <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+      -->
+        <share-success
+          v-show="showShareSuccess"
+          v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
+          :data="article"
+          :loginUser="reward"
+          :module="module"
+          :on-close="closeShareSuccess">
+        </share-success>
+        <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+        <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+        <div v-transfer-dom class="x-popup">
+          <popup v-model="showSubscribe" height="100%">
+            <div class="popup1">
+              <div class="popup-top flex_center">关注</div>
+              <div class="popup-middle font14 flex_center">
+            			<img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+              </div>
+              <div class="popup-bottom flex_center">
+                <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeSubscribe">{{ $t('Close') }}</div>
+              </div>
+            </div>
+          </popup>
         </div>
-        <div id="editor-content" class="article-content" v-html="article.content"></div>
-        <div class="operate-area">
-          <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-            <span class="fa fa-star-o"></span>
-            <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
-          </x-button>
-          <x-button mini plain type="primary" @click.native="onAdvisory">
-            <span class="fa fa-user"></span>
-            <span>{{$t('Advisory')}}</span>
-          </x-button>
-        </div>
-        <div class="reading-info">
-          <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-          <span class="font14 color-gray"><span class="digicon"></span> {{article.dig}}</span>
+        <div v-transfer-dom>
+          <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
         </div>
       </div>
-      <div class="comment-area">
-        <div class="comment-op font14">
-          <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
-        </div>
-        <template v-if="article.comments">
-          <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
-        </template>
-        <comment v-if="comments.length > 0" v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow">
-          <reply slot="replies" v-for="(item, index) in comment.replies" :item="item" :key="index"></reply>
-        </comment>
-      </div>
-      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </template>
   </div>
 </template>
 <script>
-import { Popup, XButton, Divider } from 'vux'
+import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
 import CommentPopup from '@/components/CommentPopup'
+import ShareSuccess from '@/components/ShareSuccess'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import jQuery from 'jquery'
 import { User } from '#/storage'
 import Socket from '#/socket'
 
 let room = ''
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Sos
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, ShareSuccess, Previewer, Sos
   },
   data () {
     return {
       module: 'knowledge',
+      query: {},
+      loginUser: {},
+      WeixinName: ENV.WeixinName,
       showSos: false,
       sosTitle: '',
       showContainer: false,
-      query: {},
-      loginUser: {},
+      showShareSuccess: false,
       showsharetip: true,
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: {},
+      reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       comments: [],
-      roomid: '',
+      showSubscribe: false,
+      WeixinQrcode: ENV.WeixinQrcode,
+      isdig: 0,
+      photoarr: [],
+      previewerPhotoarr: [],
+      pagestart: 0,
+      limit: 20,
+      replyData: null,
       messages: 0
-      // socket: BkSocket.get()
     }
   },
   filters: {
@@ -103,6 +140,12 @@ export default {
     access () {
       this.$util.wxAccess()
     },
+    popupSubscribe () {
+      this.showSubscribe = true
+    },
+    closeSubscribe () {
+      this.showSubscribe = false
+    },
     closeSharetip () {
       this.showsharetip = false
     },
@@ -111,16 +154,6 @@ export default {
     },
     onCommentShow () {
       this.commentPopupShow = true
-    },
-    onCommentDelete (comment) {
-      const self = this
-      this.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
-      .then(res => {
-        if (res.data.flag) {
-          self.$util.deleteItem(self.comments, comment.id)
-          self.$vux.toast.text(self.$t('Delete Success'))
-        }
-      })
     },
     commentPopupCancel () {
       this.commentPopupShow = false
@@ -173,14 +206,20 @@ export default {
               photo: self.article.photo.split(',')[0]
             }
           })
+          return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
+            params: {id: id, module: self.module}
+          })
         }
-        return self.$http.post(`${ENV.BokaApi}/api/comment/list`, {nid: id, module: this.module}) // 获取评论
       })
       .then(res => {
-        if (res.data) {
-          self.comments = res.data
+        if (res) {
+          self.handleImg()
+          const data = res.data
+          if (data.flag === 1) {
+            self.isdig = 1
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
-        return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: this.module})
       })
       .then(res => {
         if (res.data.flag < 1) {
@@ -210,6 +249,36 @@ export default {
         })
       }
     },
+    clickDig () {
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (self.isdig) {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: self.query.id,
+        module: 'knowledge'
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (self.isdig) {
+            self.isdig = 0
+            self.article.dig = self.article.dig - 1
+          } else {
+            self.isdig = 1
+            self.article.dig = self.article.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
     editSetting () {
       this.$router.push({name: 'tArticleInfoEdit', params: {id: this.article.id}})
     },
@@ -220,15 +289,111 @@ export default {
         onConfirm () {}
       })
     },
+    onCommentDelete (comment) {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除该评论吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.$util.deleteItem(self.comments, comment.id)
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    handleScroll () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.$refs.scrollContainer,
+        callback: function () {
+          if (self.comments.length === self.pagestart * self.limit) {
+            self.$vux.loading.show()
+            self.getCommentsList()
+            self.pagestart++
+          }
+        }
+      })
+    },
+    getCommentsList () {
+      const self = this
+      let params = { nid: self.query.id, module: self.module, pagestart: self.pagestart, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/comment/list`, params).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          if (!retdata[i].comment) {
+            retdata[i].comment = []
+          }
+        }
+        self.comments = self.comments.concat(retdata)
+        // self.disComments = true
+      })
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
+    },
+    handleImg () {
+      const self = this
+      self.photoarr = []
+      self.previewerPhotoarr = []
+      // let imgTags = document.querySelectorAll('.news .article-content img')
+      let imgTags = self.$refs.scrollContainer.querySelectorAll('.article-content img')
+      if (imgTags.length > 0) {
+        for (let i = 0; i < imgTags.length; i++) {
+          let curimg = imgTags[i]
+          if (jQuery(curimg).parents('.insertproduct').length === 0) {
+            self.photoarr.push(imgTags[i].getAttribute('src'))
+            curimg.removeEventListener('click', self.clickImg)
+            curimg.addEventListener('click', self.clickImg)
+          }
+        }
+      }
+      self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+    },
+    clickImg (event) {
+      const node = event.target
+      const src = node.getAttribute('src')
+      let index = 0
+      for (let i = 0; i < this.photoarr.length; i++) {
+        if (this.photoarr[i] === src) {
+          index = i
+          break
+        }
+      }
+      this.showBigimg(index)
+    },
+    showBigimg (index) {
+      const self = this
+      if (!document.querySelector('.Eleditor-area')) {
+        if (self.$util.isPC()) {
+          self.$refs.previewer.show(index)
+        } else {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: self.photoarr[index],
+            urls: self.photoarr
+          })
+        }
+      }
+    },
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
       // const fromId = this.query.fromId
       room = `${this.module}-${this.query.id}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
-    },
-    init () {
-      this.$uitl.wxAccessListening()
     },
     refresh () {
       const self = this
@@ -245,9 +410,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.createSocket()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
