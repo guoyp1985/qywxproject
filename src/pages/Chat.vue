@@ -994,7 +994,7 @@ export default {
   border-radius: 50%;
   background-color: red;
   position: absolute;
-  right: -18px;
+  right: -15px;
   top: 13px;
 }
 
@@ -1122,9 +1122,10 @@ export default {
 	position: absolute;
   top: 0;
   color: #cccccc;
+  text-align: center;
 }
-.chatlist .chatitem.left .msg .main .min {right: -36px; top: 3px;}
-.chatlist .chatitem.right .msg .main .min {left: -36px; top: 3px;}
+.chatlist .chatitem.left .msg .main .min {right: -40px; top: 3px;}
+.chatlist .chatitem.right .msg .main .min {left: -40px; top: 3px;}
 .audio_play_area {float:left;}
 .chatitem.right .audio_play_area{float:right;}
 .audio_play_area:after{content:"";clear:both;display:block;}
