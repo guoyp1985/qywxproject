@@ -43,8 +43,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     //   parallel: true
     // }),
     new UglifyJsPlugin({
+      sourceMap: config.build.productionSourceMap,
+      parallel: true,
       uglifyOptions: {
-        ecma: 5,
+        ecma: 8,
         warnings: false
       }
     }),

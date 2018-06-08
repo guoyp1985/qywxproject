@@ -228,7 +228,7 @@ export default {
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
-      this.$uitl.wxAccessListening()
+      this.$util.wxAccessListening()
     },
     refresh () {
       const self = this
