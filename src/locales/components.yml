@@ -291,6 +291,10 @@ en:
   Delivery of goods: Delivery of goods
   Cancel the roof: Cancel the roof
   Customer Behavior: Customer Behavior
+  Fatory name: Fatory name
+  Fatory manager: Fatory manager
+  Product summary: Product summary
+  Add factory: Add factory
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -778,4 +782,12 @@ zh-CN:
   tMessageList: 消息列表
   No relevant data: 暂无相关数据
   Business tool: 微商创业工具
-  tRedirect:  授权中...
+  tRedirect: 授权中...
+  tAddFactory: 添加厂商
+  Fatory name: 厂商名称
+  Fatory manager: 管理员
+  Product summary: 厂商简介
+  tFactoryList: 厂商列表
+  Add factory: 添加厂商
+  tFactory: 厂商
+  Time of admission: 入驻时间
