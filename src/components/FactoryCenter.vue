@@ -70,7 +70,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item label="厂商" :link="{path:'/factoryList'}" style="position:relative;">
+          <grid-item label="卖家" :link="{path:`/retailerList?id=${loginUser.uid}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-kehu1"></i>
             </div>
@@ -78,6 +78,14 @@
         </div>
       </grid>
     </div>
+    <group class="list-shadow02 order_list_show posi_r">
+      <cell :link="{path:`/factorySetting?id=${loginUser.uid}`}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Setting')}}</span>
+        </div>
+      </cell>
+    </group>
   </div>
 </template>
 

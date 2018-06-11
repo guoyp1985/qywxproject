@@ -102,7 +102,19 @@ export default {
     },
     getData () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' })
+      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' }).then(function () {
+        return self.$http.get(`${ENV.BokaApi}/api/factory/info`,
+          { params: { fid: self.query.id } }
+        )
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        let levelpolicy = retdata.levelpolicy
+        for (let key in levelpolicy) {
+          self.levelData.push({money: levelpolicy[key]})
+        }
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

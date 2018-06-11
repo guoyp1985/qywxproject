@@ -14,65 +14,18 @@
         <template v-else>
           <div class="scroll_list ">
             <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="t-table bg-white pt10 pb10">
+              <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                <div class="t-cell v_middle w70">
+                  <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                </div>
           			<div class="t-cell v_middle pl12">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="t-table pr12 border-box mt15">
-                    <div class="t-cell color-999 font14">
-                      <div class="clamp1">{{ item.summary }}</span></div>
-                    </div>
-                    <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                        <i class="al al-asmkticon0165 v_middle"></i>
-                      </div>
-                    </div>
-                  </div>
           			</div>
           		</div>
             </router-link>
           </div>
         </template>
       </template>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showPopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickData">
-            <div class="item">
-              <div class="inner" @click="clickPopup('push')">设置管理员</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('set')">设置</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('edit')">编辑</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('retailer')">卖家</div>
-            </div>
-            <div class="item close mt10" @click="clickPopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
-            </div>
-          </div>
-        </div>
-      </popup>
-    </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showQrcode" height="100%">
-        <div class="popup1 font14">
-          <div class="popup-top flex_center">设置管理员</div>
-          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-            <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
-          </div>
-          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div>扫描二维码设置管理员</div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
-          </div>
-        </div>
-      </popup>
     </div>
   </div>
 </template>
