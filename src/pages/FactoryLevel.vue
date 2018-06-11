@@ -69,6 +69,10 @@ export default {
     },
     submitEvent () {
       const self = this
+      if (self.levelData.length === 0) {
+        self.$vux.toast.text('请添加内容', 'middle')
+        return false
+      }
       let iscontinue = true
       let salesmoney = {}
       for (let i = 0; i < self.levelData.length; i++) {

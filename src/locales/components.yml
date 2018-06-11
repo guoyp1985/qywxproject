@@ -794,5 +794,7 @@ zh-CN:
   Time of admission: 入驻时间
   Apply join: 申请加入
   tFactoryCenter: 厂商管理中心
-  tFactorySetting: 厂商设置
+  tFactoryLevel: 厂商等级管理
   tRetailerList: 卖家列表
+  Seller: 卖家
+  Level manage: 等级管理

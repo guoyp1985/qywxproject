@@ -60,6 +60,17 @@
               </div>
           </grid-item>
         </div>
+        <!--
+        <div class="gridlist">
+          <grid-item :label="$t('Activity')" :link="{path:'/retailerActivitylist'}">
+              <div slot="icon" style="position:relative;">
+                <i class="al al-huodong"></i>
+                <div class="numicon" v-if="retailerInfo.newactivity > 0 && retailerInfo.newactivity < 100">{{ retailerInfo.newactivity }}</div>
+                <div class="numicon" v-if="retailerInfo.newactivity >= 100">···</div>
+              </div>
+          </grid-item>
+        </div>
+      -->
         <div class="gridlist">
           <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
             <div slot="icon" style="position:relative;">
@@ -69,22 +80,71 @@
             </div>
           </grid-item>
         </div>
-        <div class="gridlist">
-          <grid-item label="卖家" :link="{path:`/retailerList?id=${loginUser.uid}`}" style="position:relative;">
-            <div slot="icon">
-              <i class="al al-kehu1"></i>
-            </div>
-          </grid-item>
-        </div>
+        <template v-if="retailerInfo.products > 0">
+          <div class="gridlist">
+            <grid-item :label="$t('Seller')" :link="{path:`/retailerList?id=${loginUser.uid}`}" style="position:relative;">
+              <div slot="icon">
+                <i class="al al-kehu1"></i>
+              </div>
+            </grid-item>
+          </div>
+          <div class="gridlist">
+            <grid-item :label="$t('Contact customer')" :link="{path:'/retailerCustomerlist'}" style="position:relative;">
+              <div slot="icon">
+                <i class="al al-lianxiren"></i>
+              </div>
+              <div class="numicon" v-if="retailerInfo.newcustomers > 0 && retailerInfo.newcustomers < 100">{{ retailerInfo.newcustomers }}</div>
+              <div class="numicon" v-if="retailerInfo.newcustomers >= 100">···</div>
+            </grid-item>
+          </div>
+        </template>
+        <template v-else>
+          <div class="gridlist disabled" @click="clickDisabled">
+            <grid-item :label="$t('Seller')" style="position:relative;">
+              <div slot="icon">
+                <i class="al al-xiaoshou db-in"></i>
+              </div>
+            </grid-item>
+          </div>
+          <div class="gridlist disabled" @click="clickDisabled">
+            <grid-item :label="$t('Contact customer')">
+              <div slot="icon">
+                <i class="al al-lianxiren db-in"></i>
+              </div>
+            </grid-item>
+          </div>
+        </template>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
-      <cell :link="{path:`/factorySetting?id=${loginUser.uid}`}" style="position:relative">
-        <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
-        <div slot="inline-desc">
-          <span class="font15">{{$t('Setting')}}</span>
-        </div>
-      </cell>
+      <template v-if="retailerInfo.products > 0">
+        <cell :link="{path:'/retailerOrders'}" style="position:relative">
+          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+          <div slot="inline-desc">
+            <span class="font15">{{$t('Order list')}}</span>
+          </div>
+          <div slot="child">
+            <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
+            <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
+          </div>
+        </cell>
+      </template>
+      <template v-else >
+        <cell class="listitem disabled" @click.native.stop="clickDisabled">
+          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+          <div slot="inline-desc">
+            <span class="font15">{{$t('Order list')}}</span>
+          </div>
+        </cell>
+      </template>
+      <template>
+        <cell :link="{path:`/factoryLevel?id=${loginUser.uid}`}" style="position:relative">
+          <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
+          <div slot="inline-desc">
+            <span class="font15">{{$t('Level manage')}}</span>
+          </div>
+        </cell>
+      </template>
     </group>
   </div>
 </template>
