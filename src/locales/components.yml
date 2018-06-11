@@ -295,6 +295,7 @@ en:
   Fatory manager: Fatory manager
   Product summary: Product summary
   Add factory: Add factory
+  Apply join: Apply join
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -791,3 +792,7 @@ zh-CN:
   Add factory: 添加厂商
   tFactory: 厂商
   Time of admission: 入驻时间
+  Apply join: 申请加入
+  tFactoryCenter: 厂商管理中心
+  tFactorySetting: 厂商设置
+  tRetailerList: 卖家列表

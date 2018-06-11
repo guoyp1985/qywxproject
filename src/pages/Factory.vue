@@ -1,27 +1,34 @@
 <template>
-  <div class="containerarea bg-white font14">
-    <div class="form-item">
-      <div class="t-table">
-        <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}</div>
-        <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.title }}</div>
+  <div class="containerarea bg-white font14 notop">
+    <div class="pagemiddle">
+      <div class="form-item">
+        <div class="t-table">
+          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}</div>
+          <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.title }}</div>
+        </div>
+      </div>
+      <div class="form-item bg-white">
+        <div class="t-table">
+          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
+          <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.summary }}</div>
+        </div>
+      </div>
+      <div class="form-item bg-white">
+        <div class="t-table">
+          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Time of admission') }}</div>
+          <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.dateline | dateformat }}</div>
+        </div>
       </div>
     </div>
-    <div class="form-item bg-white">
-      <div class="t-table">
-        <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
-        <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.summary }}</div>
-      </div>
-    </div>
-    <div class="form-item bg-white">
-      <div class="t-table">
-        <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Time of admission') }}</div>
-        <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.dateline | dateformat }}</div>
-      </div>
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="flex_cell flex_center btn-bottom-red" @click="joinEvent">{{ $t('Apply join') }}</div>
     </div>
   </div>
 </template>
 
 <i18n>
+Apply join:
+  zh-CN: 申请加入
 </i18n>
 
 <script>
@@ -46,6 +53,26 @@ export default {
     }
   },
   methods: {
+    joinEvent () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要申请加入该厂商吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
+            fid: self.query.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

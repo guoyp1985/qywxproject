@@ -20,19 +20,20 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border-box padding10" v-if="classData.length > 0">
-          <input v-model="submitData.productclass" type="hidden" name="productclass" />
-          <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-          <checker
-          class="x-checker"
-          type="checkbox"
-          v-model="submitData.productclass"
-          :max="3"
-          default-item-class="ck-item"
-          selected-item-class="ck-item-selected">
-            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
-          </checker>
-        </div>
+        <template v-if="disClassData">
+          <div class="form-item required border-box padding10" v-if="classData.length > 0">
+            <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <checker
+            class="x-checker"
+            type="checkbox"
+            v-model="productClass"
+            :max="3"
+            default-item-class="ck-item"
+            selected-item-class="ck-item-selected">
+              <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
+            </checker>
+          </div>
+        </template>
       </form>
     </div>
     <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div>
@@ -58,9 +59,11 @@ export default {
       autofixed: false,
       query: {},
       allowsubmit: true,
-      submitData: { title: '', summary: '', productclass: '' },
+      submitData: { title: '', summary: '' },
       requireddata: { title: '', productclass: '' },
-      classData: []
+      classData: [],
+      productClass: [],
+      disClassData: false
     }
   },
   watch: {
@@ -72,15 +75,20 @@ export default {
     },
     requireddata: function () {
       return this.requireddata
+    },
+    productClass: function () {
+      return this.productClass
     }
   },
   methods: {
     saveEvent () {
       const self = this
+      let postData = self.submitData
+      postData.productclass = self.productClass
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
-        v[key] = self.submitData[key]
+        v[key] = postData[key]
         validateData.push(v)
       }
       let iscontinue = self.$util.validateQueue(validateData,
@@ -94,31 +102,44 @@ export default {
       if (!iscontinue) {
         return false
       }
+      let con = '确认添加该厂商吗？'
+      if (self.query.id) {
+        con = '确认更新该厂商信息吗？'
+        postData.id = self.query.id
+      }
       self.$vux.confirm.show({
-        content: '确认添加该厂商吗？',
+        content: con,
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/add`, self.submitData).then(function (res) {
+          self.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                }
-              }
-            })
+            if (data.flag === 1) {
+              self.$router.push('/factoryList')
+            } else {
+              self.$vux.toast.show({
+                text: data.error,
+                type: 'warn',
+                time: self.$util.delay(data.error)
+              })
+            }
           })
         }
       })
     },
+    setProductClass () {
+      const self = this
+      for (let i = 0; i < self.classData.length; i++) {
+        for (let j = 0; j < self.productClass.length; j++) {
+          if (parseInt(self.productClass[j]) === self.classData[i].id) {
+            self.classData[i].checked = true
+            break
+          }
+        }
+      }
+    },
     refresh () {
       const self = this
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'fatory', action: 'add'
       }).then(function () {
@@ -129,10 +150,22 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         data = data.data ? data.data : data
-        for (let i = 0; i < data.length; i++) {
-          data[i].checked = false
-        }
         self.classData = data
+        self.disClassData = true
+        if (self.$route.query.id && self.query.id !== self.$route.query.id) {
+          self.query = self.$route.query
+          self.$vux.loading.show()
+          self.$http.get(`${ENV.BokaApi}/api/factory/info`,
+            { params: { fid: self.query.id } }
+          ).then(function (res) {
+            self.$vux.loading.hide()
+            let data = res.data
+            let retdata = data.data ? data.data : data
+            for (let key in self.submitData) {
+              self.submitData[key] = retdata[key]
+            }
+          })
+        }
       })
     }
   },

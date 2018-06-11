@@ -1,12 +1,12 @@
 <template>
-  <div class="containerarea bg-page font14 s-havebottom rproductlist">
+  <div class="containerarea bg-page font14 rproductlist">
     <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
       <template v-if="disList">
         <template v-if="!Data || Data.length == 0">
           <div class="scroll_list">
             <div class="emptyitem">
               <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">暂无厂商数据</div>
+                <div class="t-cell padding10">暂无卖家数据</div>
               </div>
             </div>
           </div>
@@ -34,9 +34,6 @@
           </div>
         </template>
       </template>
-    </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactory">{{ $t('Add factory') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showPopup1">
@@ -170,8 +167,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/factory/list`, params)
+      const params = { params: { fid: self.query.id, pagestart: pageStart1, limit: limit } }
+      this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
