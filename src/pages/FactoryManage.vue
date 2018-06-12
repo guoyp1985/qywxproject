@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14 rproductlist">
+  <div class="containerarea bg-page font14 s-havebottom rproductlist">
     <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
       <template v-if="disList">
         <template v-if="!Data || Data.length == 0">
@@ -22,6 +22,11 @@
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">{{ item.summary }}</span></div>
                     </div>
+                    <div class="align_right t-cell v_bottom w80">
+                      <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                        <i class="al al-asmkticon0165 v_middle"></i>
+                      </div>
+                    </div>
                   </div>
           			</div>
           		</div>
@@ -29,6 +34,9 @@
           </div>
         </template>
       </template>
+    </div>
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactory">{{ $t('Add factory') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showPopup1">
@@ -49,6 +57,22 @@
             <div class="item close mt10" @click="clickPopup('row.key')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
+          </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showQrcode" height="100%">
+        <div class="popup1 font14">
+          <div class="popup-top flex_center">设置管理员</div>
+          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+            <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+          </div>
+          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+            <div>扫描二维码设置管理员</div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
           </div>
         </div>
       </popup>
@@ -82,6 +106,7 @@ export default {
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
+      showQrcode: false,
       disList: false
     }
   },
@@ -102,6 +127,46 @@ export default {
           }
         }
       })
+    },
+    controlPopup1 (item, index) {
+      event.preventDefault()
+      this.showPopup1 = !this.showPopup1
+      this.clickData = item
+      this.clickIndex = index
+    },
+    clickPopup (key) {
+      const self = this
+      if (key === 'push') {
+        self.showPopup1 = false
+        self.showQrcode = true
+        self.$vux.loading.show()
+        self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
+          params: {fid: self.clickData.id}
+        }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1) {
+            let img = self.$refs.adminQrcode[0] ? self.$refs.adminQrcode[0] : self.$refs.adminQrcode
+            img.src = data.data
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      } else if (key === 'edit') {
+        self.$router.push(`/addFactory?id=${self.clickData.id}`)
+      } else if (key === 'set') {
+        self.$router.push(`/factorySetting?id=${self.clickData.id}`)
+      } else if (key === 'retailer') {
+        self.$router.push(`/retailerList?id=${self.clickData.id}`)
+      } else {
+        self.showPopup1 = false
+      }
+    },
+    closeQrcode () {
+      this.showQrcode = false
     },
     getData1 () {
       const self = this
