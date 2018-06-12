@@ -930,7 +930,7 @@ export default {
   // },
   mounted () {
     // const self = this
-    console.log('mounted')
+    // console.log('mounted')
     this.$util.wxPreviewImage('#chat-room')
     // this.msgTextarea = document.querySelector('#chat-textarea textarea')
     // this.msgTextarea.addEventListener('focus', function () {
