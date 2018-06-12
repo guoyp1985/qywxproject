@@ -34,7 +34,7 @@
           </cell>
         </group>
       </template>
-      <div class=" mt10 list-shadow radius5">
+      <div v-if="showBtn1" class=" mt10 list-shadow radius5">
         <group class="bg-white radius5">
           <cell>
             <div slot="inline-desc">{{ $t('Service') }}</div>
@@ -145,6 +145,7 @@ export default {
           link: '/orderSearch?flag=4'
         }
       ],
+      showBtn1: false,
       btns1: featureBtns,
       avatarHref: 'http://vuxlaravel.boka.cn/images/user.jpg',
       linkMan: '',
@@ -180,6 +181,10 @@ export default {
           mobile: user.mobile,
           company: user.company
         }
+        if (!(this.loginUser.fid > 0)) {
+          this.btns1.splice(1, 1)
+        }
+        this.showBtn1 = true
         this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
           let data = res.data
           self.messages = data.data
@@ -187,6 +192,10 @@ export default {
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
           this.loginUser = res.data.data
+          if (!(this.loginUser.fid > 0)) {
+            this.btns1.splice(1, 1)
+          }
+          this.showBtn1 = true
         })
       }
     },
