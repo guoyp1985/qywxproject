@@ -70,6 +70,12 @@ let featureBtns = [
     link: '/centerSales'
   },
   {
+    name: 'Factory center',
+    icon: 'al-kehu1',
+    color: 'rgba05',
+    link: '/factoryCenter'
+  },
+  {
     name: 'My Address',
     icon: 'al-wodedizhi',
     color: 'rgba02',
