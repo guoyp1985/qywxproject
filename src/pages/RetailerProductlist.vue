@@ -162,6 +162,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      query: {},
       productdata: [],
       controldata1: [
         { key: 'edit', title: '编辑' },
@@ -349,7 +350,13 @@ export default {
     getData1 () {
       const self = this
       const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params)
+      let ajaxUrl = `${ENV.BokaApi}/api/list/product`
+      if (self.query.from === 'factory') {
+        ajaxUrl = `${ajaxUrl}?moodule=factoryproduct`
+      } else {
+        ajaxUrl = `${ajaxUrl}?from=retailer`
+      }
+      this.$http.get(ajaxUrl, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -366,6 +373,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       if (this.productdata.length < limit) {
         this.disproductdata = false
         this.productdata = []

@@ -52,7 +52,7 @@
     <div class="list-shadow01">
       <grid :cols="3" class="bk-grid bg-white">
         <div class="gridlist">
-          <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
+          <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist?from=factory'}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-guanlizhongxin1"></i>
                 <div class="numicon" v-if="retailerInfo.newproduct > 0 && retailerInfo.newproduct < 100">{{ retailerInfo.newproduct }}</div>
@@ -61,7 +61,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
+          <grid-item :label="$t('News')" :link="{path:'/retailerNews?from=factory'}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
               <div class="numicon" v-if="retailerInfo.newnews > 0 && retailerInfo.newnews < 100">{{ retailerInfo.newnews }}</div>
