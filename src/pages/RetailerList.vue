@@ -18,8 +18,10 @@
                 <div class="t-cell v_middle w70">
                   <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
                 </div>
-          			<div class="t-cell v_middle pl12">
-                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10">{{item.title}}</div>
+                  <div class="clamp1 pr10 color-lightgray">当前等级: {{item.level}}级</div>
+                  <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
           			</div>
           		</div>
             </router-link>

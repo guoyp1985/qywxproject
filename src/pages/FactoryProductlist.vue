@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="scroll_list ">
-            <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/factoryProduct',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -58,14 +58,14 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addProduct">{{ $t('Add product') }}</router-link>
+      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactoryProduct">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item" v-if="clickdata.activityid == 0">
-              <router-link class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
+              <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id}}">编辑</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
@@ -81,6 +81,9 @@
             </div>
             <div class="item">
               <div class="inner" @click="clickpopup('push')">推送给返点客</div>
+            </div>
+            <div class="item">
+              <div class="inner" @click="clickpopup('fee')">设置佣金</div>
             </div>
             <div class="item close mt10" @click="clickpopup('row.key')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
@@ -277,13 +280,16 @@ export default {
         })
       } else if (key === 'edit') {
         self.showpopup1 = false
-        self.$router.push({ path: '/addProduct', query: { id: self.clickdata.id } })
+        self.$router.push({ path: '/addFactoryProduct', query: { id: self.clickdata.id } })
       } else if (key === 'push') {
         self.showpopup1 = false
         self.showpush = true
         if (self.customerdata.length === 0) {
           self.getCustomerdata()
         }
+      } else if (key === 'fee') {
+        self.showpopup1 = false
+        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id } })
       } else {
         self.showpopup1 = false
       }
@@ -350,7 +356,7 @@ export default {
     getData1 () {
       const self = this
       const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params)
+      this.$http.get(`${ENV.BokaApi}/api/list/product?module=factoryproduct`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -362,7 +368,7 @@ export default {
     init () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'productlist'
+        module: 'factory', action: 'productlist'
       })
     },
     refresh () {
