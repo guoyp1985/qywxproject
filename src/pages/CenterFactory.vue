@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <template v-if="showCenter">
-          <factory-center :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></factory-center>
+          <center-factory :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-factory>
         </template>
       </template>
     </template>
@@ -18,13 +18,13 @@
 
 <script>
 import { Swiper, SwiperItem } from 'vux'
-import FactoryCenter from '@/components/FactoryCenter'
+import CenterFactory from '@/components/CenterFactory'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, FactoryCenter
+    Swiper, SwiperItem, CenterFactory
   },
   data () {
     return {

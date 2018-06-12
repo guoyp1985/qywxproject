@@ -166,7 +166,7 @@ import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Gr
 import Time from '#/time'
 
 export default {
-  name: 'CenterSales',
+  name: 'CenterFactory',
   props: {
     loginUser: {
       type: Object,
