@@ -30,13 +30,15 @@
             <span class="font18 mr5">价格: {{ $t('RMB') }}</span>{{ productdata.price }}
           </div>
         </div>
-        <div class="bg-page" style="height:10px;"></div>
-        <div class="b_top_after"></div>
-        <div class="padding10 b_bottom_after">
-          <div class="font18 color-red" v-for="(item,index) in feeData" :key="index">
-            <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
+        <template v-if="feeData.length > 0">
+          <div class="bg-page" style="height:10px;"></div>
+          <div class="b_top_after"></div>
+          <div class="padding10 b_bottom_after">
+            <div class="font18 color-red" v-for="(item,index) in feeData" :key="index">
+              <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
+            </div>
           </div>
-        </div>
+        </template>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after">
