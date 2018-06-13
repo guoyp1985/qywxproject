@@ -54,7 +54,7 @@
         <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/factoryGoodeazy">{{ $t('Goodeazy') }}</router-link>
       </div>
       <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addFactoryNews" >{{ $t('Create news') }}</router-link>
+        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addMaterial" >{{ $t('Create training materials') }}</router-link>
       </div>
     </div>
     <div v-transfer-dom>

@@ -1,47 +1,48 @@
 <template>
-  <div id="article-info-edit" class="font14">
-    <group label-width="5em">
-      <group class="textarea-outer">
-        <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+  <div id="article-info-edit" class="font14 containerarea notop">
+    <div class="pagemiddle">
+      <group label-width="5em">
+        <group class="textarea-outer">
+          <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+        </group>
+        <cell :title="$t('Cover photo')" class="font14">
+          {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
+        </cell>
       </group>
-      <cell :title="$t('Cover photo')" class="font14">
-        {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
-      </cell>
-    </group>
-    <div class="img-operate-area">
-      <input v-model="submitdata.photo" type="hidden" name="photo" />
-      <form enctype="multipart/form-data">
-        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
-      </form>
-      <div class="q_photolist align_left">
-        <template v-if="photoarr.length > 0">
-          <div v-for="(item, index) in photoarr" :key="index" class="img-box">
-            <img class="img" :src="item"/>
-            <a class="setting-btn" @click="clipPhoto(item)">
-              <i class="al al-set font16"></i>
-            </a>
-            <a class="delete-btn" @click="deletePhoto(item, index)">
-              <i class="al al-guanbi font16"></i>
-            </a>
-          </div>
-        </template>
-        <div v-if="photoarr.length < maxnum" class="img-box upload-box" @click="uploadPhoto">
-          <div class="img">
-            <div class="img-info-box">
-              <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-              <div class="font12 color-gray"><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+      <div class="img-operate-area">
+        <input v-model="submitdata.photo" type="hidden" name="photo" />
+        <form enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        </form>
+        <div class="q_photolist align_left">
+          <template v-if="photoarr.length > 0">
+            <div v-for="(item, index) in photoarr" :key="index" class="img-box">
+              <img class="img" :src="item"/>
+              <a class="setting-btn" @click="clipPhoto(item)">
+                <i class="al al-set font16"></i>
+              </a>
+              <a class="delete-btn" @click="deletePhoto(item, index)">
+                <i class="al al-guanbi font16"></i>
+              </a>
+            </div>
+          </template>
+          <div v-if="photoarr.length < maxnum" class="img-box upload-box" @click="uploadPhoto">
+            <div class="img">
+              <div class="img-info-box">
+                <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                <div class="font12 color-gray"><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <group class="option-area" label-width="6em">
+        <x-textarea class="font14" :title="$t('Share description')" :placeholder="$t('Share description placeholder')" v-model="submitdata.seodescription" :rows="1" autosize></x-textarea>
+        <x-textarea class="font14" :title="$t('Summary')" :placeholder="$t('Summary')" v-model="submitdata.summary" :rows="1" autosize></x-textarea>
+      </group>
     </div>
-    <group class="option-area" label-width="6em">
-      <x-textarea class="font14" :title="$t('Share description')" :placeholder="$t('Share description placeholder')" v-model="submitdata.seodescription" :rows="1" autosize></x-textarea>
-      <x-textarea class="font14" :title="$t('Summary')" :placeholder="$t('Summary')" v-model="submitdata.summary" :rows="1" autosize></x-textarea>
-    </group>
-    <div class="submit-area">
-      <x-button type="primary" @click.native="save">{{$t('Save')}}</x-button>
-      <x-button @click.native="cancel">{{$t('Cancel')}}</x-button>
+    <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
     </div>
     <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
   </div>
@@ -124,9 +125,6 @@ export default {
     deletePhoto (item, index) {
       this.photoarr.splice(index, 1)
       this.submitdata.photo = this.photoarr.join(',')
-    },
-    cancel () {
-      this.$router.go(-1)
     },
     save () {
       const self = this

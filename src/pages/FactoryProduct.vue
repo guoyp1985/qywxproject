@@ -66,7 +66,7 @@
       <template v-if="loginUser">
         <share-success
           v-show="showShareSuccess"
-          v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
+          v-if="productdata.uploader === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
           :module="module"
@@ -244,7 +244,7 @@ export default {
       let shareData = {
         module: self.module,
         moduleid: self.productid,
-        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        link: `${ENV.Host}/#/factoryProduct?id=${self.productid}&share_uid=${self.loginUser.uid}`,
         successCallback: function () {
           self.showShareSuccess = true
         }
@@ -259,9 +259,6 @@ export default {
       const self = this
       this.productid = this.query.id
       let infoparams = { id: this.productid, module: this.module }
-      if (this.query.wid) {
-        infoparams.wid = this.query.wid
-      }
       if (this.query.share_uid) {
         infoparams.share_uid = this.query.share_uid
       }

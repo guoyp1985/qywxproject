@@ -74,7 +74,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Business school')" style="position:relative;">
+          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool'}" style="position:relative;">
             <div slot="icon">
               <i class="al al-address"></i>
             </div>

@@ -6,7 +6,7 @@
           <div class="scroll_list">
             <div class="emptyitem">
               <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">暂无卖家数据</div>
+                <div class="t-cell padding10">还没有卖家帮你销售商品！</div>
               </div>
             </div>
           </div>
@@ -20,20 +20,23 @@
                 </div>
           			<div class="t-cell v_middle">
                   <div class="clamp1 font16 pr10">{{item.title}}</div>
-                  <div class="clamp1 pr10 color-lightgray">当前等级: {{item.level}}级</div>
+                  <div class="clamp1 pr10 color-lightgray">{{item.level}}级代理</div>
                   <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
           			</div>
+                <!--
                 <div class="align_right t-cell v_bottom w80">
                   <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                     <i class="al al-asmkticon0165 v_middle"></i>
                   </div>
                 </div>
+              -->
           		</div>
             </div>
           </div>
         </template>
       </template>
     </div>
+    <!--
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showPopup1">
         <div class="popup0">
@@ -54,6 +57,7 @@
         </div>
       </popup>
     </div>
+  -->
   </div>
 </template>
 
