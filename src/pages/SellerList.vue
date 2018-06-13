@@ -23,11 +23,36 @@
                   <div class="clamp1 pr10 color-lightgray">当前等级: {{item.level}}级</div>
                   <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
           			</div>
+                <div class="align_right t-cell v_bottom w80">
+                  <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                    <i class="al al-asmkticon0165 v_middle"></i>
+                  </div>
+                </div>
           		</div>
             </div>
           </div>
         </template>
       </template>
+    </div>
+    <div v-transfer-dom>
+      <popup class="menuwrap" v-model="showPopup1">
+        <div class="popup0">
+          <div class="list" v-if="clickData">
+            <div class="item" v-if="clickData.activityid == 0">
+              <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickData.id}}">编辑</router-link>
+            </div>
+            <div class="item">
+              <router-link class="inner" :to="{path: '/stat', query: {id: clickData.id, module: 'factoryproduct'}}">统计</router-link>
+            </div>
+            <div class="item">
+              <div class="inner" @click="clickPopup('fee')">设置佣金</div>
+            </div>
+            <div class="item close mt10" @click="clickPopup('row.key')">
+              <div class="inner">{{ $t('Cancel txt') }}</div>
+            </div>
+          </div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
@@ -109,7 +134,7 @@ export default {
         })
       } else if (key === 'edit') {
         self.$router.push(`/addFactory?id=${self.clickData.id}`)
-      } else if (key === 'set') {
+      } else if (key === 'fee') {
         self.$router.push(`/factorySetting?id=${self.clickData.id}`)
       } else if (key === 'retailer') {
         self.$router.push(`/retailerList?id=${self.clickData.id}`)

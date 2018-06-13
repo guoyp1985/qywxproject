@@ -16,15 +16,6 @@
           </div>
         </template>
         <template v-else>
-          <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-            <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
-            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
-              <div>厂商商品列表：</div>
-              <div>1.</div>
-              <div>2.</div>
-              <div>3.</div>
-            </div>
-          </div>
           <div class="scroll_list ">
             <router-link :to="{path:'/factoryProduct',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>

@@ -53,7 +53,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Seller')" :link="{path:`/retailerList?id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Seller')" :link="{path:`/sellerList?id=${loginUser.uid}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-kehu1"></i>
             </div>
