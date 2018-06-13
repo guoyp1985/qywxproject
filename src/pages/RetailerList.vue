@@ -13,7 +13,7 @@
         </template>
         <template v-else>
           <div class="scroll_list ">
-            <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
+            <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
               <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
                 <div class="t-cell v_middle w70">
                   <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
@@ -24,7 +24,7 @@
                   <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
           			</div>
           		</div>
-            </router-link>
+            </div>
           </div>
         </template>
       </template>

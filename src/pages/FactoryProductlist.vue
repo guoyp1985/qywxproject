@@ -8,10 +8,8 @@
               <div class="t-table" style="padding-top:20%;">
                 <div class="t-cell padding10">
                   <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                  <div>还没有添加商品哦，及时添加商品可以：</div>
-                  <div>1.创建促销活动 </div>
-                  <div>2.分享商品获得客户</div>
-                  <div>3.邀请返点客帮你赚钱</div>
+                  <div class="align_center">竟然一个商品也没有！</div>
+                  <div class="align_center">及时添加商品卖家才可以帮你带来更多销量哦</div>
                 </div>
               </div>
             </div>
@@ -21,10 +19,10 @@
           <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
             <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
             <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
-              <div>悄悄告诉你，立即分享新发布的商品可以：</div>
-              <div>1. 接收好友查看商品的通知；</div>
-              <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-              <div>3. 获得到更多潜在客户及销售机会。</div>
+              <div>厂商商品列表：</div>
+              <div>1.</div>
+              <div>2.</div>
+              <div>3.</div>
             </div>
           </div>
           <div class="scroll_list ">

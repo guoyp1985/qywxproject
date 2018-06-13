@@ -160,6 +160,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       loginUser: {},
       autofixed: false,
       tabtxts: [ '我的文章', '采集记录' ],
@@ -341,6 +342,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.loginUser = User.get()
       if (this.tabdata1.length < this.limit) {
         this.distabdata1 = false

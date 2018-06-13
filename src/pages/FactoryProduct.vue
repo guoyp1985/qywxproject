@@ -5,7 +5,9 @@
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container" style="bottom:0;">
+        <!--
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+-->
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
