@@ -25,7 +25,7 @@
           <span class="nav_icon bg-blue11 al al-a166 font16"></span>
           <span class="ml10 font15">{{$t('Join qrcode')}}</span>
         </div>
-        <router-link class="flex_cell flex_center color-gray2" to="/retailerRevenue">
+        <router-link class="flex_cell flex_center color-gray2" to="/factoryRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
           <span class="ml10 font15">{{$t('Myrevenue')}}</span>
         </router-link>
@@ -35,7 +35,7 @@
     <div class="list-shadow01">
       <grid :cols="3" class="bk-grid bg-white">
         <div class="gridlist">
-          <grid-item :label="$t('Product')" :link="{path:'/factoryProductlist'}">
+          <grid-item :label="$t('Product')" :link="{path:'/factoryProductlist', query: {fid: factoryInfo.id}}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-guanlizhongxin1"></i>
                 <div class="numicon" v-if="factoryInfo.newproduct > 0 && factoryInfo.newproduct < 100">{{ factoryInfo.newproduct }}</div>
@@ -44,7 +44,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/factoryNews'}">
+          <grid-item :label="$t('News')" :link="{path:'/factoryNews', query: {fid: factoryInfo.id}}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
               <div class="numicon" v-if="factoryInfo.newnews > 0 && factoryInfo.newnews < 100">{{ factoryInfo.newnews }}</div>
@@ -83,7 +83,7 @@
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
-      <cell :link="{path:'/retailerOrders'}" style="position:relative">
+      <cell :link="{path:'/factoryOrders'}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
         <div slot="inline-desc">
           <span class="font15">{{$t('Order list')}}</span>

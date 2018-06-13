@@ -213,7 +213,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.loginUser.uid, pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
