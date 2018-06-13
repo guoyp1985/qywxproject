@@ -794,7 +794,7 @@ zh-CN:
   tFactory: 厂商
   Time of admission: 入驻时间
   Apply join: 申请加入
-  tFactoryCenter: 厂商管理中心
+  tCenterFactory: 厂商管理中心
   Factory center: 厂商中心
   tFactoryLevel: 厂商等级管理
   tRetailerList: 卖家列表
@@ -804,3 +804,9 @@ zh-CN:
   Join qrcode: 加盟二维码
   Business school: 商学院
   I want to distribute: 我要分销
+  tFactoryProductlist: 商品列表
+  tFactoryNews: 文章列表
+  tAddFactoryProduct: 添加商品
+  Channel price: 渠道价
+  tFactoryAgentFee: 设置佣金
+  tFactoryProduct: 商品详情

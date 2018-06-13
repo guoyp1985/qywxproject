@@ -9,7 +9,7 @@
       </template>
       <template v-else>
         <template v-if="showCenter">
-          <factory-center :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></factory-center>
+          <center-factory :factory-info="factoryinfo" :messages="messages" :login-user="loginUser"></center-factory>
         </template>
       </template>
     </template>
@@ -18,13 +18,13 @@
 
 <script>
 import { Swiper, SwiperItem } from 'vux'
-import FactoryCenter from '@/components/FactoryCenter'
+import CenterFactory from '@/components/CenterFactory'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, FactoryCenter
+    Swiper, SwiperItem, CenterFactory
   },
   data () {
     return {
@@ -32,9 +32,8 @@ export default {
       showApply: false,
       afterApply: false,
       selectedIndex: 0,
-      retailerInfo: {},
+      factoryinfo: {},
       loginUser: null,
-      marqueeData: [],
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
       messages: 0
@@ -52,7 +51,7 @@ export default {
             self.$vux.loading.hide()
           } else {
             self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-              module: 'retailer', action: 'index'
+              module: 'factory', action: 'index'
             }).then(function (res) {
               if (res.status !== 200) {
                 self.$vux.loading.hide()
@@ -60,10 +59,10 @@ export default {
                 let data = res.data
                 if (data.flag === 1) {
                   self.showCenter = true
-                  self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                  self.$http.get(`${ENV.BokaApi}/api/factory/info`).then(function (res) {
                     if (res.status === 200) {
                       let data = res.data
-                      self.retailerInfo = data.data ? data.data : data
+                      self.factoryinfo = data.data ? data.data : data
                       self.$vux.loading.hide()
                       return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
                     }
@@ -71,12 +70,6 @@ export default {
                     if (res) {
                       let data = res.data
                       self.messages = data.data
-                      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-                    }
-                  }).then(function (res) {
-                    if (res) {
-                      let data = res.data
-                      self.marqueeData = data.data ? data.data : data
                     }
                   })
                 }

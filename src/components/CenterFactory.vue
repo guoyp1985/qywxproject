@@ -3,14 +3,14 @@
     <div class="bk-salestop">
       <div class="flex_left" style="height:108px;">
         <div class="img-cell">
-          <img class="imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" @click="showBigimg(0)" />
+          <img class="imgcover" :src="factoryInfo.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" @click="showBigimg(0)" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
         </div>
         <div class="txt-cell">
-          <div class="font17 color-white">{{ retailerInfo.linkman }}</div>
-          <div class="font13 color-white mt5">{{ $t('Business tool') }}</div>
+          <div class="font17 color-white">{{ factoryInfo.title }}</div>
+          <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
@@ -31,41 +31,24 @@
         </router-link>
       </div>
     </div>
-    <div v-if="!marqueeData || marqueeData.length == 0" class="bg-white" style="height:40px;"></div>
-    <div v-else class="center-marquee">
-      <marquee :item-height="30" :interval="5000" :duration="1000">
-        <marquee-item v-for="(item,index) in marqueeData" :key="item.id">
-          <group class="marqueeitem">
-            <router-link :to="{path: '/stat', query: {id: item.moduleid, module: item.module}}" class="t-table font14 pl20 pr20 border-box" style="height:40px;">
-              <div class="t-cell v_middle h_100">
-                <div class="clamp1">
-                  <span class="v_middle color-blue11 mr3">{{item.linkman}}</span>
-                  <span class="v_middle color-gray">查看了《{{item.title}}》</span>
-                </div>
-              </div>
-              <div class="t-cell v_middle h_100 font12 w100 align_right color-gray">{{ item.dateline | dateFormat }}</div>
-            </router-link>
-          </group>
-        </marquee-item>
-      </marquee>
-    </div>
+    <div class="bg-white" style="height:40px;"></div>
     <div class="list-shadow01">
       <grid :cols="3" class="bk-grid bg-white">
         <div class="gridlist">
-          <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
+          <grid-item :label="$t('Product')" :link="{path:'/factoryProductlist'}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-guanlizhongxin1"></i>
-                <div class="numicon" v-if="retailerInfo.newproduct > 0 && retailerInfo.newproduct < 100">{{ retailerInfo.newproduct }}</div>
-                <div class="numicon" v-if="retailerInfo.newproduct >= 100">···</div>
+                <div class="numicon" v-if="factoryInfo.newproduct > 0 && factoryInfo.newproduct < 100">{{ factoryInfo.newproduct }}</div>
+                <div class="numicon" v-if="factoryInfo.newproduct >= 100">···</div>
               </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
+          <grid-item :label="$t('News')" :link="{path:'/factoryNews'}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
-              <div class="numicon" v-if="retailerInfo.newnews > 0 && retailerInfo.newnews < 100">{{ retailerInfo.newnews }}</div>
-              <div class="numicon" v-if="retailerInfo.newnews >= 100">···</div>
+              <div class="numicon" v-if="factoryInfo.newnews > 0 && factoryInfo.newnews < 100">{{ factoryInfo.newnews }}</div>
+              <div class="numicon" v-if="factoryInfo.newnews >= 100">···</div>
             </div>
           </grid-item>
         </div>
@@ -106,8 +89,8 @@
           <span class="font15">{{$t('Order list')}}</span>
         </div>
         <div slot="child">
-          <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
-          <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
+          <div class="numicon" v-if="factoryInfo.neworders > 0 && factoryInfo.neworders < 100">{{ factoryInfo.neworders }}</div>
+          <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
         </div>
       </cell>
     </group>
@@ -166,19 +149,15 @@ import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Gr
 import Time from '#/time'
 
 export default {
-  name: 'CenterSales',
+  name: 'CenterFactory',
   props: {
     loginUser: {
       type: Object,
       default: {}
     },
-    retailerInfo: {
+    factoryInfo: {
       type: Object,
       default: {}
-    },
-    marqueeData: {
-      type: Array,
-      default: []
     },
     messages: {
       type: Number,
@@ -204,12 +183,6 @@ export default {
     }
   },
   watch: {
-    retailerInfo () {
-      return this.imgarr
-    },
-    marqueeData () {
-      return this.wximgarr
-    }
   },
   methods: {
     disJoinQrcode () {
@@ -241,10 +214,10 @@ export default {
       const self = this
       if (self.imgarr.length === 0) {
         self.imgarr.push({
-          msrc: self.retailerInfo.avatar,
-          src: self.retailerInfo.avatar
+          msrc: self.factoryInfo.avatar,
+          src: self.factoryInfo.avatar
         })
-        self.wximgarr.push(self.retailerInfo.avatar)
+        self.wximgarr.push(self.factoryInfo.avatar)
       }
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)

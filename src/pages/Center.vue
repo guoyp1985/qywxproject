@@ -73,7 +73,7 @@ let featureBtns = [
     name: 'Factory center',
     icon: 'al-kehu1',
     color: 'rgba05',
-    link: '/factoryCenter'
+    link: '/centerFactory'
   },
   {
     name: 'My Address',
