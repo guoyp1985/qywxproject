@@ -74,13 +74,7 @@
               <div class="inner" @click="clickpopup('down')">下架</div>
             </div>
             <div class="item">
-              <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'product'}}">统计</router-link>
-            </div>
-            <div class="item">
-              <router-link class="inner" :to="{path: '/poster', query: {id: clickdata.id, module: 'product'}}">生成海报</router-link>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickpopup('push')">推送给返点客</div>
+              <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
             </div>
             <div class="item">
               <div class="inner" @click="clickpopup('fee')">设置佣金</div>
@@ -92,60 +86,10 @@
         </div>
       </popup>
     </div>
-    <div v-transfer-dom class="x-popup popupCustomer">
-      <popup v-model="showpush" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">选择返点客</div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
-            <div class="w_100">
-              <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
-                <div class="flex_left">全选</div>
-              </check-icon>
-            </div>
-          </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollCustomer" @scroll="handleScroll('scrollCustomer', 'customer')">
-            <div class=" pt10 pb10 pl12 pr12">
-              <div v-show="discustomerdata" class="scroll_list">
-                <template v-if="customerdata.length == 0">
-                  <div class="scroll_item emptyitem">
-          					<div class="t-table">
-          						<div class="t-cell" style="padding:10px;">暂无返点客</div>
-          					</div>
-          				</div>
-                </template>
-                <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell v_middle w50">
-                      <img class="avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{ item.linkman }}</div>
-                    </div>
-                  </div>
-                </check-icon>
-              </div>
-  					</div>
-          </div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div class="w_100">
-              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
-            </div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
-          </div>
-        </div>
-      </popup>
-    </div>
   </div>
 </template>
 
 <i18n>
-Add product:
-  zh-CN: 添加商品
-Back go shop:
-  zh-CN: 返回店铺
 </i18n>
 
 <script>
@@ -154,8 +98,8 @@ import ENV from 'env'
 import { User } from '#/storage'
 
 let pageStart1 = 0
-let pageStart2 = 0
 const limit = 10
+
 export default {
   directives: {
     TransferDom
@@ -168,33 +112,15 @@ export default {
       loginUser: {},
       query: {},
       productdata: [],
-      controldata1: [
-        { key: 'edit', title: '编辑' },
-        { key: 'up', title: '上架' },
-        { key: 'down', title: '下架' },
-        { key: 'stat', title: '统计' },
-        { key: 'createposter', title: '生成海报' }
-      ],
       showpopup1: false,
       clickdata: {},
       clickindex: 0,
-      limit: 10,
-      showpush: false,
-      customerdata: [],
-      pushdata: [],
-      checkAll: false,
-      disproductdata: false,
-      discustomerdata: false
+      disproductdata: false
     }
   },
   watch: {
     productdata: function () {
       return this.productdata
-    }
-  },
-  computed: {
-    getquery: function () {
-      return this.$route.query
     }
   },
   methods: {
@@ -212,12 +138,6 @@ export default {
               pageStart1++
               self.$vux.loading.show()
               self.getData1()
-            }
-          } else if (type === 'customer') {
-            if (self.customerdata.length === (pageStart2 + 1) * limit) {
-              pageStart2++
-              self.$vux.loading.show()
-              self.getCustomerdata()
             }
           }
         }
@@ -237,7 +157,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 1 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -261,7 +181,7 @@ export default {
           onConfirm () {
             self.$vux.loading.show()
             let params = { id: self.clickdata.id, moderate: 0 }
-            self.$http.post(`${ENV.BokaApi}/api/moderate/product`, params).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/moderate/factoryproduct`, params).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -282,76 +202,11 @@ export default {
       } else if (key === 'edit') {
         self.showpopup1 = false
         self.$router.push({ path: '/addFactoryProduct', query: { id: self.clickdata.id } })
-      } else if (key === 'push') {
-        self.showpopup1 = false
-        self.showpush = true
-        if (self.customerdata.length === 0) {
-          self.getCustomerdata()
-        }
       } else if (key === 'fee') {
         self.showpopup1 = false
         self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id } })
       } else {
         self.showpopup1 = false
-      }
-    },
-    getCustomerdata () {
-      const self = this
-      self.$vux.loading.show()
-      let params = { params: { pagestart: pageStart2, limit: limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.customerdata = self.customerdata.concat(retdata)
-        self.discustomerdata = true
-      })
-    },
-    closepush () {
-      this.showpush = false
-    },
-    submitpush () {
-      const self = this
-      if (self.pushdata.length === 0) {
-        self.$vux.toast.show({
-          text: '请选择返点客'
-        })
-        return false
-      }
-      self.showpush = false
-      self.$vux.loading.show()
-      let subdata = { id: self.clickdata.id, sendmodule: 'product', uid: self.pushdata }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error)
-        })
-      })
-    },
-    radioclick (data, index) {
-      const self = this
-      if (data.checked) {
-        self.pushdata.push(data.uid)
-      } else {
-        self.checkAll = false
-        for (let i = 0; i < self.pushdata.length; i++) {
-          if (self.pushdata[i] === data.uid) {
-            self.pushdata.splice(i, 1)
-            break
-          }
-        }
-      }
-    },
-    checkAllEvent () {
-      const self = this
-      for (let i = 0; i < self.customerdata.length; i++) {
-        if (self.checkAll) {
-          self.customerdata[i].checked = true
-        } else {
-          delete self.customerdata[i].checked
-        }
       }
     },
     getData1 () {
