@@ -47,7 +47,7 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactoryProduct">{{ $t('Add product') }}</router-link>
+      <router-link class="addproduct flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryProduct', query: {fid: query.fid}}">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">

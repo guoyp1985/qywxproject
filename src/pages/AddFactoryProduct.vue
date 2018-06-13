@@ -314,7 +314,7 @@ export default {
       if (self.query.id) {
         postdata.id = self.query.id
       }
-      postdata.fid = self.loginUser.uid
+      postdata.fid = self.query.fid
       self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

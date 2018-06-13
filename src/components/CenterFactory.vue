@@ -191,7 +191,7 @@ export default {
       /*
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/factory/`, {
-        params: {fid: self.loginUser.uid}
+        params: {fid: self.loginUser.fid}
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

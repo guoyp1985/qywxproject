@@ -65,7 +65,7 @@ export default {
         self.$vux.toast.text('必填项不能为空', 'middle')
         return false
       }
-      let postData = { fid: self.loginUser.uid, agentfee: agentfee, id: self.query.id }
+      let postData = { fid: self.loginUser.fid, agentfee: agentfee, id: self.query.id }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/factory/addAgentFee`, postData).then(function (res) {
         self.$vux.loading.hide()
@@ -85,7 +85,7 @@ export default {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' }).then(function () {
         return self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.loginUser.uid } }
+          { params: { fid: self.loginUser.fid } }
         )
       }).then(function (res) {
         self.$vux.loading.hide()

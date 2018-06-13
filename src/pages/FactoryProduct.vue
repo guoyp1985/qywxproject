@@ -301,7 +301,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.loginUser.uid})
+            return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.loginUser.fid})
           }
         }
       }).then(function (res) {
