@@ -47,6 +47,9 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.levelData = []
+    },
     addItem () {
       const self = this
       self.levelData.push({title: '', money: ''})
@@ -115,8 +118,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
+      if (this.query.id !== this.$route.query.id) {
+        this.initData()
+        this.query = this.$route.query
+        this.getData()
+      }
     }
   },
   activated () {
