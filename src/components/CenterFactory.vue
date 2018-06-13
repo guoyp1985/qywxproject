@@ -2,7 +2,7 @@
   <div class="containerarea font14 centersales">
     <div class="bk-salestop">
       <div class="flex_left" style="height:108px;">
-        <div class="img-cell">
+        <div class="img-cell" v-if="factoryInfo.photo && factoryInfo.photo != ''">
           <img class="imgcover" :src="factoryInfo.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" @click="showBigimg(0)" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
