@@ -193,7 +193,7 @@ export default {
         self.$router.push({ path: '/addFactoryProduct', query: { id: self.clickdata.id } })
       } else if (key === 'fee') {
         self.showpopup1 = false
-        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id } })
+        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id, fid: self.query.fid } })
       } else {
         self.showpopup1 = false
       }

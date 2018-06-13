@@ -162,10 +162,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               let params = { id: data.data }
-              if (self.query.id) {
-                params.newadd = 1
-              }
-              self.$router.push({ path: '/news', query: params })
+              self.$router.push({ path: '/material', query: params })
             }
           }
         })

@@ -30,7 +30,7 @@
             <span class="font18 mr5">价格: {{ $t('RMB') }}</span>{{ productdata.price }}
           </div>
         </div>
-        <template v-if="feeData.length > 0">
+        <template v-if="feeData.length != 0">
           <div class="bg-page" style="height:10px;"></div>
           <div class="b_top_after"></div>
           <div class="padding10 b_bottom_after">

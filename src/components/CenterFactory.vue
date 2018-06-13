@@ -53,28 +53,28 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Seller')" :link="{path:`/sellerList?id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Seller')" :link="{path:`/sellerList?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-kehu1"></i>
             </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-zongshuju"></i>
             </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool'}" style="position:relative;">
+          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', id: factoryInfo.id}" style="position:relative;">
             <div slot="icon">
               <i class="al al-address"></i>
             </div>
