@@ -151,6 +151,7 @@ Back go shop:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -355,8 +356,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/list/product?module=factoryproduct`, params)
+      const params = { params: { fid: self.loginUser.uid, pagestart: pageStart1, limit: limit } }
+      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -367,6 +368,7 @@ export default {
     },
     init () {
       this.$vux.loading.show()
+      this.loginUser = User.get()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'factory', action: 'productlist'
       })
