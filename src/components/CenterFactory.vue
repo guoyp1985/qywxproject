@@ -8,7 +8,7 @@
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
         </div>
-        <div class="txt-cell">
+        <div class="txt-cell pl10">
           <div class="font17 color-white">{{ factoryInfo.title }}</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
         </div>
