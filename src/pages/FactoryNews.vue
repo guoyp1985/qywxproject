@@ -137,6 +137,7 @@ Control text:
 <script>
 import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
 import Time from '#/time'
+import { User } from '#/storage'
 import ENV from 'env'
 
 export default {
@@ -159,6 +160,7 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       autofixed: false,
       tabtxts: [ '我的文章', '采集记录' ],
       tabmodel: 0,
@@ -211,7 +213,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.loginUser.uid, pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -219,7 +221,7 @@ export default {
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+      self.$http.get(`${ENV.BokaApi}/api/list/facgtorynews`, {
         params: params
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -339,6 +341,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       if (this.tabdata1.length < this.limit) {
         this.distabdata1 = false
         this.tabdata1 = []
