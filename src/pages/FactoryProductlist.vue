@@ -211,7 +211,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { fid: self.loginUser.uid, pagestart: pageStart1, limit: limit } }
+      const params = { params: { fid: self.loginUser.uid, from: 'factory', pagestart: pageStart1, limit: limit } }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, params)
       .then(res => {
         self.$vux.loading.hide()

@@ -22,9 +22,16 @@
         </template>
         <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
       		<div class="clamp2">
-            <span class="v_middle db-in bold">{{ productdata.title }}</span>
+            <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
           </div>
-          <div class="font24 color-red" v-for="(item,index) in feeData" :key="index">
+          <div class="font24 color-red">
+            <span class="font18 mr5">价格: {{ $t('RMB') }}</span>{{ productdata.price }}
+          </div>
+        </div>
+        <div class="bg-page" style="height:10px;"></div>
+        <div class="b_top_after"></div>
+        <div class="padding10 b_bottom_after">
+          <div class="font18 color-red" v-for="(item,index) in feeData" :key="index">
             <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
           </div>
         </div>
@@ -32,12 +39,12 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after">
           <div class="t-table">
-    				<div class="t-cell v_middle w70">
-              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+    				<div class="t-cell v_middle w70" v-if="factoryinfo.photo && factoryinfo.photo != ''">
+              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
             </div>
     				<div class="t-cell v_middle">
-    					<div class="distitle clamp2">{{ retailerInfo.title }}</div>
-    					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
+    					<div class="distitle clamp2">{{ factoryinfo.title }}</div>
+    					<div class="distitle clamp2 color-gray font12 mt5">{{ factoryinfo.summary }}</div>
     				</div>
           </div>
         </div>
@@ -117,7 +124,7 @@ export default {
       showShareSuccess: false,
       productid: null,
       productdata: {},
-      retailerInfo: {},
+      factoryinfo: {},
       loginUser: {},
       isshowtop: false,
       waitgetcredit: 100,
@@ -150,8 +157,8 @@ export default {
     productid: function () {
       return this.productid
     },
-    retailerInfo: function () {
-      return this.retailerInfo
+    factoryinfo: function () {
+      return this.factoryinfo
     },
     photoarr: function () {
       const self = this
@@ -183,7 +190,7 @@ export default {
       this.showShareSuccess = false
       this.productid = null
       this.productdata = {}
-      this.retailerInfo = {}
+      this.factoryinfo = {}
       this.showFlash = false
       this.showdot = true
       this.flashdata = []
@@ -274,7 +281,7 @@ export default {
           } else {
             self.showcontainer = true
             self.productdata = data.data
-            self.retailerInfo = self.productdata.retailerinfo
+            self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
             const photo = self.productdata.photo
             if (photo && self.$util.trim(photo) !== '') {
