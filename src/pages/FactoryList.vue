@@ -9,6 +9,9 @@
           <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " style="color:inherit;">
             <div v-if="item.moderate == 0" class="icon down"></div>
         		<div class="t-table bg-white pt10 pb10">
+      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              </div>
         			<div class="t-cell v_middle pl12">
                 <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
                 <div class="t-table pr12 border-box mt15">
