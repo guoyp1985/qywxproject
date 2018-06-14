@@ -53,6 +53,7 @@ Center:
 </i18n>
 
 <script>
+alert(222)
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import { User } from '#/storage'
