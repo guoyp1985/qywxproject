@@ -37,7 +37,7 @@
             </div>
           </div>
         </template>
-        <template v-if="productdata.identity == 'retailer' || productdata.joinstatus == 1">
+        <template v-if="productdata.identity == 'retailer' && productdata.joinstatus == 1">
           <div class="bg-page" style="height:10px;"></div>
           <div class="b_top_after"></div>
           <div class="padding10 b_bottom_after">
