@@ -9,7 +9,7 @@
     <div class="pagemiddle" style="top:44px;">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+          <div v-if="index === 0" class="swiper-inner" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
             <template v-if="disTabData1">
               <template v-if="!tabData1 || tabData1.length == 0">
                 <div class="scroll_list">
@@ -39,7 +39,7 @@
               </template>
             </template>
           </div>
-          <div v-if="index === 1" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 'product')">
+          <div v-if="index === 1" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 1)">
             <template v-if="disTabData2">
               <template v-if="!tabData2 || tabData2.length == 0">
                 <div class="scroll_list">
@@ -143,10 +143,18 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.Data.length === (pageStart1 + 1) * limit) {
-            pageStart1++
-            self.$vux.loading.show()
-            self.getData1()
+          if (index === 0) {
+            if (self.tabData1.length === (pageStart1 + 1) * limit) {
+              pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabData2.length === (pageStart2 + 1) * limit) {
+              pageStart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
           }
         }
       })

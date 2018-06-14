@@ -58,7 +58,7 @@
       </div>
       <div class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red">我要代理</div>
+          <div class="flex_cell flex_center btn-bottom-red" @click="importProduct">我要代理</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -258,6 +258,29 @@ export default {
       }
       shareData.data = self.productdata
       self.$util.handleWxShare(shareData)
+    },
+    importProduct () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要代理该商品吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
+            id: self.query.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                self.$router.go(-1)
+              }
+            })
+          })
+        }
+      })
     },
     getData () {
       const self = this

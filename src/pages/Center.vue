@@ -169,6 +169,7 @@ export default {
       const user = User.get()
       const self = this
       this.loginUser = user
+      alert(JSON.stringify(user))
       if (user) {
         this.avatarHref = user.avatar
         this.linkMan = user.linkman
@@ -201,6 +202,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      alert('in refresh')
       this.getData()
     }
   },
