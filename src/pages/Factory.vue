@@ -19,9 +19,6 @@
           <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.dateline | dateformat }}</div>
         </div>
       </div>
-      <div class="bg-white mt5 padding10 b_top_after">
-        <div class="flex_center btn-bottom-red" @click="upAll">一键上架所有商品</div>
-      </div>
       <div class="b_top_after"></div>
       <div class="bg-white mt5 padding10 b_top_after">
         <span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
@@ -54,7 +51,7 @@
         <router-link class="flex_center btn-bottom-orange" style="width:85%;" :to="{path: '/chat', query: {uid: viewData.uploader}}">{{ $t('Contact factory') }}</router-link>
       </div>
       <div class="align_center flex_center flex_cell">
-        <div class="flex_center btn-bottom-red" style="width:85%;" @click="joinEvent">{{ $t('Apply join') }}</div>
+        <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll">一键上架</div>
       </div>
     </div>
   </div>
@@ -120,7 +117,7 @@ export default {
         content: '确定要上架该厂商的所有商品？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/`, {
+          self.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryProduct`, {
             fid: self.query.id
           }).then(function (res) {
             let data = res.data

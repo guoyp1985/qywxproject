@@ -327,6 +327,8 @@ export default {
         })
         return false
       }
+      postdata.price = price
+      postdata.rebate = rebate
       self.$vux.loading.show()
       if (self.query.id) {
         postdata.id = self.query.id
