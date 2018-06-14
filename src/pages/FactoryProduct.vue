@@ -1,13 +1,10 @@
 <template>
-  <div class="containerarea bg-white font14 product notop nobottom">
+  <div class="containerarea bg-white font14 product notop">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container" style="bottom:0;">
-        <!--
-        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
--->
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -58,6 +55,11 @@
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+      </div>
+      <div class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+        <div class="align_center flex_center flex_cell">
+          <div class="flex_cell flex_center btn-bottom-red">我要代理</div>
+        </div>
       </div>
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>

@@ -23,18 +23,35 @@
         <span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
       </div>
       <div class="b_top_after"></div>
-      <div v-if="disProductData" class="productlist squarepic">
+      <div v-if="disProductData" class="productlist squarepic pb10">
         <div v-if="productData.length == 0" class="emptyitem flex_center">暂无商品</div>
-        <productitemplate v-else :data="item" v-for="(item,index) in productData" :key="item.id">
-          <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-          <span slot="title">{{ item.title }}</span>
-          <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
-          <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-        </productitemplate>
+        <router-link v-else v-for="(item,index) in productData" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+      		<div class="inner list-shadow">
+      			<div class="picarea">
+      				<div class="pic">
+                <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              </div>
+      			</div>
+      			<div class="desbox" style="overflow:hidden;">
+      				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
+      				<div class="clamp1">
+      					<div class="flex_table padding5">
+      						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+      						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
+      					</div>
+      				</div>
+      			</div>
+      		</div>
+        </router-link>
       </div>
     </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center btn-bottom-red" @click="joinEvent">{{ $t('Apply join') }}</div>
+    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+      <div class="align_center flex_center flex_cell">
+        <router-link class="flex_center btn-bottom-orange" style="width:85%;" :to="{path: '/chat', query: {uid: viewData.uploader}}">{{ $t('Contact factory') }}</router-link>
+      </div>
+      <div class="align_center flex_center flex_cell">
+        <div class="flex_center btn-bottom-red" style="width:85%;" @click="joinEvent">{{ $t('Apply join') }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -45,7 +62,6 @@ Apply join:
 </i18n>
 
 <script>
-import Productitemplate from '@/components/Productitemplate'
 import ENV from 'env'
 import Time from '#/time'
 
@@ -54,7 +70,6 @@ let pageStart = 0
 
 export default {
   components: {
-    Productitemplate
   },
   filters: {
     dateformat: function (value) {
