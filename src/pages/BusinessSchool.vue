@@ -22,7 +22,7 @@
               <div class="t-cell v_middle">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">空空如也~</div>
-                <div class="align_left mt5">赶快<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/factoryGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布，为卖家提供素材可有效提高销量哦</div>
+                <div class="align_center mt5">赶快<router-link to="/addMaterial" class="color-blue">{{ $t('Create training materials') }}</router-link>为卖家提供素材可有效提高销量哦</div>
               </div>
             </div>
           </template>
@@ -51,10 +51,7 @@
     </div>
     <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
-        <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/factoryGoodeazy">{{ $t('Goodeazy') }}</router-link>
-      </div>
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addFactoryNews" >{{ $t('Create news') }}</router-link>
+        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addMaterial" >{{ $t('Create training materials') }}</router-link>
       </div>
     </div>
     <div v-transfer-dom>

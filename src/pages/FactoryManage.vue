@@ -46,7 +46,7 @@
               <div class="inner" @click="clickPopup('push')">设置管理员</div>
             </div>
             <div class="item">
-              <div class="inner" @click="clickPopup('set')">设置</div>
+              <div class="inner" @click="clickPopup('set')">设置佣金</div>
             </div>
             <div class="item">
               <div class="inner" @click="clickPopup('edit')">编辑</div>
@@ -158,7 +158,7 @@ export default {
       } else if (key === 'edit') {
         self.$router.push(`/addFactory?id=${self.clickData.id}`)
       } else if (key === 'set') {
-        self.$router.push(`/factorySetting?id=${self.clickData.id}`)
+        self.$router.push(`/factoryAgentFee?id=${self.clickData.id}`)
       } else if (key === 'retailer') {
         self.$router.push(`/retailerList?id=${self.clickData.id}`)
       } else {

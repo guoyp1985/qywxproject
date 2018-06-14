@@ -5,7 +5,9 @@
     </template>
     <template v-if="showcontainer">
       <div id="scroll-container" class="pagemiddle scroll-container" style="bottom:0;">
+        <!--
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+-->
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -28,13 +30,15 @@
             <span class="font18 mr5">价格: {{ $t('RMB') }}</span>{{ productdata.price }}
           </div>
         </div>
-        <div class="bg-page" style="height:10px;"></div>
-        <div class="b_top_after"></div>
-        <div class="padding10 b_bottom_after">
-          <div class="font18 color-red" v-for="(item,index) in feeData" :key="index">
-            <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
+        <template v-if="feeData.length != 0">
+          <div class="bg-page" style="height:10px;"></div>
+          <div class="b_top_after"></div>
+          <div class="padding10 b_bottom_after">
+            <div class="font18 color-red" v-for="(item,index) in feeData" :key="index">
+              <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
+            </div>
           </div>
-        </div>
+        </template>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after">
@@ -64,7 +68,7 @@
       <template v-if="loginUser">
         <share-success
           v-show="showShareSuccess"
-          v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
+          v-if="productdata.uploader === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
           :module="module"
@@ -242,7 +246,7 @@ export default {
       let shareData = {
         module: self.module,
         moduleid: self.productid,
-        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        link: `${ENV.Host}/#/factoryProduct?id=${self.productid}&share_uid=${self.loginUser.uid}`,
         successCallback: function () {
           self.showShareSuccess = true
         }
@@ -257,9 +261,6 @@ export default {
       const self = this
       this.productid = this.query.id
       let infoparams = { id: this.productid, module: this.module }
-      if (this.query.wid) {
-        infoparams.wid = this.query.wid
-      }
       if (this.query.share_uid) {
         infoparams.share_uid = this.query.share_uid
       }
@@ -300,7 +301,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.loginUser.uid})
+            return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.loginUser.fid})
           }
         }
       }).then(function (res) {

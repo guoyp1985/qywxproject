@@ -2,13 +2,13 @@
   <div class="containerarea font14 centersales">
     <div class="bk-salestop">
       <div class="flex_left" style="height:108px;">
-        <div class="img-cell">
+        <div class="img-cell" v-if="factoryInfo.photo && factoryInfo.photo != ''">
           <img class="imgcover" :src="factoryInfo.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" @click="showBigimg(0)" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
         </div>
-        <div class="txt-cell">
+        <div class="txt-cell pl10">
           <div class="font17 color-white">{{ factoryInfo.title }}</div>
           <div class="font13 color-white mt5">{{ factoryInfo.summary }}</div>
         </div>
@@ -25,7 +25,7 @@
           <span class="nav_icon bg-blue11 al al-a166 font16"></span>
           <span class="ml10 font15">{{$t('Join qrcode')}}</span>
         </div>
-        <router-link class="flex_cell flex_center color-gray2" to="/retailerRevenue">
+        <router-link class="flex_cell flex_center color-gray2" to="/factoryRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
           <span class="ml10 font15">{{$t('Myrevenue')}}</span>
         </router-link>
@@ -35,7 +35,7 @@
     <div class="list-shadow01">
       <grid :cols="3" class="bk-grid bg-white">
         <div class="gridlist">
-          <grid-item :label="$t('Product')" :link="{path:'/factoryProductlist'}">
+          <grid-item :label="$t('Product')" :link="{path:'/factoryProductlist', query: {fid: factoryInfo.id}}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-guanlizhongxin1"></i>
                 <div class="numicon" v-if="factoryInfo.newproduct > 0 && factoryInfo.newproduct < 100">{{ factoryInfo.newproduct }}</div>
@@ -44,7 +44,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/factoryNews'}">
+          <grid-item :label="$t('News')" :link="{path:'/factoryNews', query: {fid: factoryInfo.id}}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
               <div class="numicon" v-if="factoryInfo.newnews > 0 && factoryInfo.newnews < 100">{{ factoryInfo.newnews }}</div>
@@ -53,28 +53,28 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Seller')" :link="{path:`/retailerList?id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Seller')" :link="{path:`/sellerList?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-kehu1"></i>
             </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${loginUser.uid}`}" style="position:relative;">
+          <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-zongshuju"></i>
             </div>
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Business school')" style="position:relative;">
+          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', id: factoryInfo.id}" style="position:relative;">
             <div slot="icon">
               <i class="al al-address"></i>
             </div>
@@ -83,7 +83,7 @@
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
-      <cell :link="{path:'/retailerOrders'}" style="position:relative">
+      <cell :link="{path:'/factoryOrders'}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
         <div slot="inline-desc">
           <span class="font15">{{$t('Order list')}}</span>
@@ -191,7 +191,7 @@ export default {
       /*
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/factory/`, {
-        params: {fid: self.loginUser.uid}
+        params: {fid: self.loginUser.fid}
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

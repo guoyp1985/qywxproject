@@ -8,27 +8,16 @@
               <div class="t-table" style="padding-top:20%;">
                 <div class="t-cell padding10">
                   <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                  <div>还没有添加商品哦，及时添加商品可以：</div>
-                  <div>1.创建促销活动 </div>
-                  <div>2.分享商品获得客户</div>
-                  <div>3.邀请返点客帮你赚钱</div>
+                  <div class="align_center">竟然一个商品也没有！</div>
+                  <div class="align_center">及时添加商品卖家才可以帮你带来更多销量哦</div>
                 </div>
               </div>
             </div>
           </div>
         </template>
         <template v-else>
-          <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-            <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
-            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
-              <div>悄悄告诉你，立即分享新发布的商品可以：</div>
-              <div>1. 接收好友查看商品的通知；</div>
-              <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
-              <div>3. 获得到更多潜在客户及销售机会。</div>
-            </div>
-          </div>
           <div class="scroll_list ">
-            <router-link :to="{path:'/factoryProduct',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+            <router-link :to="{path:'/factoryProduct',query:{id:item.id}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
               <div v-if="item.moderate == 0" class="icon down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
@@ -58,7 +47,7 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactoryProduct">{{ $t('Add product') }}</router-link>
+      <router-link class="addproduct flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryProduct', query: {fid: query.fid}}">{{ $t('Add product') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -204,15 +193,17 @@ export default {
         self.$router.push({ path: '/addFactoryProduct', query: { id: self.clickdata.id } })
       } else if (key === 'fee') {
         self.showpopup1 = false
-        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id } })
+        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id, fid: self.query.fid } })
       } else {
         self.showpopup1 = false
       }
     },
     getData1 () {
       const self = this
-      const params = { params: { fid: self.loginUser.uid, from: 'factory', pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, params)
+      const params = { fid: self.query.fid, from: 'factory', pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+        params: params
+      })
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data

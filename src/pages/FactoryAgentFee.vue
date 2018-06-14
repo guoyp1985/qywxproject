@@ -1,8 +1,14 @@
 <template>
   <div class="containerarea font14 notop fsetting">
     <div class="pagemiddle">
-      <div class="listarea">
-        <div v-for="(item,index) in feeData" :key="index" class="itemarea">
+      <div class="listarea" v-if="disFeeData">
+        <div v-if="!feeData || feeData.length == 0" class="emptyitem flex_center">
+          <div>
+            <div>您还未设置代理等级</div>
+            <div>点击此处<router-link class="color-blue" :to="{ path: '/factoryLevel', query: {id: query.fid} }">设置等级</router-link></div>
+          </div>
+        </div>
+        <div v-else v-for="(item,index) in feeData" :key="index" class="itemarea">
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell font14 v_middle bold">{{ index + 1 }}级代理</div>
@@ -38,8 +44,9 @@ export default {
   data () {
     return {
       query: {},
-      feeData: [],
       loginUser: {},
+      feeData: [],
+      disFeeData: false,
       levelpolicy: []
     }
   },
@@ -65,7 +72,7 @@ export default {
         self.$vux.toast.text('必填项不能为空', 'middle')
         return false
       }
-      let postData = { fid: self.loginUser.uid, agentfee: agentfee, id: self.query.id }
+      let postData = { fid: self.loginUser.fid, agentfee: agentfee, id: self.query.id }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/factory/addAgentFee`, postData).then(function (res) {
         self.$vux.loading.hide()
@@ -85,26 +92,27 @@ export default {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' }).then(function () {
         return self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.loginUser.uid } }
+          { params: { fid: self.loginUser.fid } }
         )
       }).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
         let retdata = data.data ? data.data : data
         self.levelpolicy = retdata.levelpolicy
-        return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id})
+        return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.query.fid})
       }).then(function (res) {
         let data = res.data
         let retdata = data.data ? data.data : data
         for (let key in self.levelpolicy) {
           self.feeData.push({agentfee: retdata[key] ? retdata[key] : '0.00', key: key})
+          self.disFeeData = true
         }
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.query.id !== this.$route.query.id) {
+      if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
         this.feeData = []
         this.query = this.$route.query
         this.getData()

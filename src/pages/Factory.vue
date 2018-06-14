@@ -111,7 +111,7 @@ export default {
     },
     getData1 () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+      self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: { uploader: self.query.id, pagestart: pageStart, limit: limit }
       }).then(function (res) {
         const data = res.data
