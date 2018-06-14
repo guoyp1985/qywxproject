@@ -337,6 +337,7 @@ export default {
         self.showpopup1 = false
         self.showFeePopup = true
         self.feeData = self.clickdata
+        self.postFee = self.feeData.rebate
       } else {
         self.showpopup1 = false
       }

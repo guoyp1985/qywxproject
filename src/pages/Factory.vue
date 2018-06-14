@@ -20,6 +20,10 @@
         </div>
       </div>
       <div class="bg-white mt5 padding10 b_top_after">
+        <div class="flex_center btn-bottom-red">一键上架所有商品</div>
+      </div>
+      <div class="b_top_after"></div>
+      <div class="bg-white mt5 padding10 b_top_after">
         <span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
       </div>
       <div class="b_top_after"></div>
