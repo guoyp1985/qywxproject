@@ -1,73 +1,49 @@
 <template>
-  <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-      <template v-if="disproductdata">
-        <template v-if="!productdata || productdata.length == 0">
-          <div class="scroll_list">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">暂无厂商数据</div>
+  <div class="containerarea bg-page font14 rproductlist nobottom notop">
+    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
+      <template v-if="disTabData1">
+        <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
+          <div>暂无加盟厂商</div>
+        </div>
+        <div v-else class="scroll_list ">
+          <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " style="color:inherit;">
+            <div v-if="item.moderate == 0" class="icon down"></div>
+        		<div class="t-table bg-white pt10 pb10">
+      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               </div>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="scroll_list ">
-            <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="t-table bg-white pt10 pb10">
-          			<div class="t-cell v_middle pl12">
-                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="t-table pr12 border-box mt15">
-                    <div class="t-cell color-999 font14">
-                      <div class="clamp1">{{ item.summary }}</span></div>
-                    </div>
-                    <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
-                        <i class="al al-asmkticon0165 v_middle"></i>
-                      </div>
-                    </div>
+        			<div class="t-cell v_middle pl12">
+                <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                <div class="t-table pr12 border-box mt15">
+                  <div class="t-cell color-999 font14">
+                    <div class="clamp1">{{ item.summary }}</span></div>
                   </div>
-          			</div>
-          		</div>
-            </router-link>
-          </div>
-        </template>
+                </div>
+        			</div>
+        		</div>
+          </router-link>
+        </div>
       </template>
     </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addProduct">{{ $t('Add factory') }}</router-link>
-    </div>
     <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup1">
+      <popup class="menuwrap" v-model="showPopup1">
         <div class="popup0">
-          <div class="list" v-if="clickdata">
+          <div class="list" v-if="clickData">
             <div class="item">
-              <div class="inner" @click="clickpopup('push')">设置管理员</div>
+              <div class="inner" @click="clickPopup('push')">设置管理员</div>
             </div>
-            <div class="item close mt10" @click="clickpopup('row.key')">
+            <div class="item">
+              <div class="inner" @click="clickPopup('set')">设置</div>
+            </div>
+            <div class="item">
+              <div class="inner" @click="clickPopup('edit')">编辑</div>
+            </div>
+            <div class="item">
+              <div class="inner" @click="clickPopup('retailer')">卖家</div>
+            </div>
+            <div class="item close mt10" @click="clickPopup('row.key')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
-          </div>
-        </div>
-      </popup>
-    </div>
-    <div v-transfer-dom class="x-popup popupCustomer">
-      <popup v-model="showpush" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">设置管理员</div>
-          <div class="popup-middle font14">
-            <div class=" pt10 pb10 pl12 pr12">
-  					</div>
-          </div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div class="w_100">
-              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
-            </div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
           </div>
         </div>
       </popup>
@@ -81,84 +57,104 @@ Add factory:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
 
 let pageStart1 = 0
 let pageStart2 = 0
 const limit = 10
+
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem
   },
   data () {
     return {
+      query: {},
       loginUser: {},
-      productdata: [],
-      showpopup1: false,
-      clickdata: {},
-      clickindex: 0,
-      showpush: false
+      tabtxts: [ '已分销', '未分销' ],
+      selectedIndex: 0,
+      tabData1: [],
+      tabData2: [],
+      disTabData1: false,
+      disTabData2: false,
+      showPopup1: false,
+      clickData: {},
+      clickIndex: 0
     }
   },
   methods: {
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
-    controlpopup1 (item, index) {
-      event.preventDefault()
-      this.showpopup1 = !this.showpopup1
-      this.clickdata = item
-      this.clickindex = index
-    },
-    clickpopup (key) {
+    handleScroll: function (refname, index) {
       const self = this
-      if (key === 'push') {
-        self.showpopup1 = false
-        self.showpush = true
-        if (self.customerdata.length === 0) {
-          self.getCustomerdata()
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (index === 0) {
+            if (self.tabData1.length === (pageStart1 + 1) * limit) {
+              pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabData2.length === (pageStart2 + 1) * limit) {
+              pageStart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
+          }
         }
-      } else {
-        self.showpopup1 = false
-      }
-    },
-    closepush () {
-      this.showpush = false
-    },
-    submitpush () {
-      const self = this
-      if (self.pushdata.length === 0) {
-        self.$vux.toast.show({
-          text: '请选择返点客'
-        })
-        return false
-      }
-      self.showpush = false
-      self.$vux.loading.show()
-      let subdata = { id: self.clickdata.id, sendmodule: 'product', uid: self.pushdata }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error)
-        })
       })
+    },
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.tabData1.length < limit) {
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < limit) {
+            this.disTabData2 = false
+            this.tabData2 = []
+            this.getData2()
+          }
+          break
+      }
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
+      const params = { pagestart: pageStart1, limit: limit }
+      this.$http.post(`${ENV.BokaApi}/api/retailer/factoryList`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData1 = self.tabData1.concat(retdata)
+        self.disTabData1 = true
+      })
+    },
+    getData2 () {
+      const self = this
+      const params = { params: { pagestart: pageStart2, limit: limit } }
       this.$http.get(`${ENV.BokaApi}/api/factory/list`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.productdata = self.productdata.concat(retdata)
-        self.disproductdata = true
+        self.tabData2 = self.tabData2.concat(retdata)
+        self.disTabData2 = true
       })
     },
     init () {
@@ -169,11 +165,10 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.productdata.length < limit) {
-        this.disproductdata = false
-        this.productdata = []
-        this.$vux.loading.show()
-        pageStart1 = 0
+      this.query = this.$route.query
+      if (this.tabData1.length < limit) {
+        this.disTabData1 = false
+        this.tabData1 = []
         this.getData1()
       }
     }

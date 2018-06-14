@@ -79,15 +79,6 @@
             </div>
           </div>
         </div>
-        <div class="form-item bg-white" v-if="showRebate">
-          <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
-            <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
-            </div>
-            <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
-          </div>
-        </div>
         <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
         <group class="textarea-outer textarea-text bg-white">
           <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
@@ -153,6 +144,7 @@
 <script>
 import { Group, XInput, XTextarea } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -161,6 +153,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       data: {},
       photoarr: [],
       maxnum: 9,
@@ -174,7 +167,6 @@ export default {
         price: '',
         storage: '',
         unit: '件',
-        rebate: '',
         photo: '',
         content: '',
         contentphoto: '',
@@ -183,7 +175,7 @@ export default {
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
-      showRebate: false
+      levels: []
     }
   },
   watch: {
@@ -197,10 +189,6 @@ export default {
     havenum1: function (val) {
       this.havenum1 = this.photoarr1.length
       return this.havenum1
-    },
-    showRebate: function () {
-      const self = this
-      return self.showRebate
     }
   },
   computed: {
@@ -218,7 +206,6 @@ export default {
         price: '',
         storage: '',
         unit: '件',
-        rebate: '',
         photo: '',
         content: '',
         contentphoto: '',
@@ -309,11 +296,7 @@ export default {
         return false
       }
       let price = postdata.price.replace(/,/g, '')
-      let rebate = postdata.rebate
-      if (self.$util.trim(rebate) !== '') {
-        rebate = rebate.replace(/,/g, '')
-      }
-      if (isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
+      if (isNaN(price) || price <= 0) {
         self.$vux.alert.show({
           title: '',
           content: '请输入正确的价格'
@@ -327,13 +310,12 @@ export default {
         })
         return false
       }
-      postdata.price = price
-      postdata.rebate = rebate
       self.$vux.loading.show()
       if (self.query.id) {
         postdata.id = self.query.id
       }
-      self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
+      postdata.fid = self.query.fid
+      self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -342,11 +324,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.query.from === 'apply') {
-                self.$router.push({path: '/centerSales'})
-              } else {
-                self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
-              }
+              self.$router.push({ path: '/factoryProduct', query: { id: data.data } })
             }
           }
         })
@@ -378,7 +356,7 @@ export default {
       const params1 = { module: 'product', action: 'add' }
       if (this.query.id) {
         params1.id = this.query.id
-        const params2 = { params: { id: this.query.id, module: 'product' } }
+        const params2 = { params: { id: this.query.id, module: 'factoryproduct' } }
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
           self.data = data.data ? data.data : data
@@ -400,13 +378,11 @@ export default {
       }).then(res => {
         const data = res.data
         self.retailerInfo = data.data ? data.data : data
-        if (self.retailerInfo.buyonline === 1) {
-          self.showRebate = true
-        }
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       this.getData()
     }
