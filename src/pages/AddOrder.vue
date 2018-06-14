@@ -167,7 +167,7 @@ export default {
       payPrice: '0.00',
       selectaddress: null,
       orderdata: [],
-      payprice: '0.00',
+      // payprice: '0.00',
       showpopup: false,
       addressdata: [],
       submitdata: {
@@ -181,9 +181,9 @@ export default {
     query: function () {
       return this.query
     },
-    payprice: function () {
-      return this.payprice
-    },
+    // payprice: function () {
+    //   return this.payprice
+    // },
     orderdata: function () {
       return this.orderdata
     },
@@ -208,7 +208,7 @@ export default {
       this.payPrice = '0.00'
       this.selectaddress = null
       this.orderdata = []
-      this.payprice = '0.00'
+      // this.payprice = '0.00'
       this.showpopup = false
       this.addressdata = []
       this.submitdata = {
