@@ -70,7 +70,7 @@
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item" v-if="clickdata.activityid == 0">
-              <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置佣金</div>
+              <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
               <router-link v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
@@ -144,7 +144,7 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showFeePopup" height="100%">
         <div class="popup1">
-          <div class="popup-top flex_center">设置佣金</div>
+          <div class="popup-top flex_center">设置返点佣金</div>
           <div class="popup-middle font14">
             <div class="pt10 pb10 pl12 pr12">
               <div class="t-table bg-white pt10 pb10">
@@ -166,9 +166,9 @@
           		</div>
               <div class="form-item">
                 <div class="t-table">
-                  <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Commission') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                  <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="postFee" type="text" class="input" :placeholder="$t('Commission')" />
+                    <input v-model="postFee" type="text" class="input" :placeholder="$t('Rebate Commission')" />
                   </div>
                 </div>
               </div>

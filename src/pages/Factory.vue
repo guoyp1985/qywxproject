@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="bg-white mt5 padding10 b_top_after">
-        <div class="flex_center btn-bottom-red">一键上架所有商品</div>
+        <div class="flex_center btn-bottom-red" @click="upAll">一键上架所有商品</div>
       </div>
       <div class="b_top_after"></div>
       <div class="bg-white mt5 padding10 b_top_after">
@@ -101,6 +101,26 @@ export default {
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
+            fid: self.query.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
+    upAll () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要上架该厂商的所有商品？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/`, {
             fid: self.query.id
           }).then(function (res) {
             let data = res.data
