@@ -58,11 +58,19 @@ export default {
         return false
       }
       let iscontinue = true
+      let errortip = ''
       let agentfee = {}
       let levelname = {}
       for (let i = 0; i < self.feeData.length; i++) {
-        if (self.$util.trim(self.feeData[i].agentfee) === '' || self.$util.trim(self.feeData[i].levelname) === '') {
+        let curfee = self.feeData[i].agentfee
+        let curname = self.feeData[i].levelname
+        if (self.$util.trim(curfee) === '' || self.$util.trim(curname) === '') {
           iscontinue = false
+          errortip = '必填项不能为空'
+          break
+        } else if (isNaN(curfee) || parseFloat(curfee) < 0) {
+          iscontinue = false
+          errortip = '请输入正确的佣金'
           break
         } else {
           let level = i + 1
@@ -71,7 +79,7 @@ export default {
         }
       }
       if (!iscontinue) {
-        self.$vux.toast.text('必填项不能为空', 'middle')
+        self.$vux.toast.text(errortip, 'middle')
         return false
       }
       let postData = { fid: self.loginUser.fid, agentfee: agentfee, levelname: levelname, id: self.query.id }
