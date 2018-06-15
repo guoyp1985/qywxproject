@@ -168,6 +168,9 @@
         </cell>
       </template>
     </group>
+    <div class="bottom_propaganda">
+      <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
+    </div>
   </div>
 </template>
 
