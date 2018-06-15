@@ -77,6 +77,7 @@ export default {
         type: 'success',
         time: self.$util.delay(text),
         onHide: function () {
+          self.afterApply = false
           self.$router.push({path: '/addProduct', query: {from: 'apply'}})
         }
       })

@@ -59,9 +59,9 @@
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'news'}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata.id}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'news'}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews'}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'factorynews'}}">{{ row.title }}</router-link>
               <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
@@ -69,52 +69,6 @@
             <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
-          </div>
-        </div>
-      </popup>
-    </div>
-    <div v-transfer-dom class="x-popup popupCustomer">
-      <popup v-model="showpush" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">选择返点客</div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
-            <div class="w_100">
-              <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
-                <div class="flex_left">全选</div>
-              </check-icon>
-            </div>
-          </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1','customer')">
-            <div class="padding10">
-              <div class="scroll_list">
-                <template v-if="customerdata.length == 0">
-                  <div class="scroll_item emptyitem">
-          					<div class="t-table">
-          						<div class="t-cell" style="padding:10px;">暂无返点客</div>
-          					</div>
-          				</div>
-                </template>
-                <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell v_middle w50">
-                      <img class="avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{ item.linkman }}</div>
-                    </div>
-                  </div>
-                </check-icon>
-              </div>
-  					</div>
-          </div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div class="w_100">
-              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
-            </div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
           </div>
         </div>
       </popup>
@@ -167,9 +121,8 @@ export default {
       tabdata1: [],
       tabdata2: [],
       controldata: [
-        { key: 'push', title: '推送给返点客' },
         { key: 'set', title: '更多设置' },
-        { key: 'stat', title: '文章统计' },
+        { key: 'stat', title: '统计' },
         { key: 'createposter', title: '生成海报' }
       ],
       showpopup: false,
@@ -177,11 +130,6 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      showpush: false,
-      customerdata: [],
-      pushdata: [],
-      checkAll: false,
-      customerPagestart: 0,
       searchword1: '',
       searchresult1: false
     }
@@ -211,7 +159,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.query.fid, classid: 100, pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -269,59 +217,6 @@ export default {
     clickpopup (key, item) {
       const self = this
       this.showpopup = false
-      if (key === 'push') {
-        this.showpush = true
-        if (self.customerdata.length === 0) {
-          self.getCustomerdata()
-        }
-      }
-    },
-    closepush () {
-      this.showpush = false
-    },
-    submitpush () {
-      const self = this
-      if (self.pushdata.length === 0) {
-        self.$vux.toast.show({
-          text: '请选择返点客'
-        })
-        return false
-      }
-      self.showpush = false
-      self.$vux.loading.show()
-      let subdata = { id: self.clickdata.id, sendmodule: 'news', uid: self.pushdata }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error)
-        })
-      })
-    },
-    radioclick (data, index) {
-      const self = this
-      if (data.checked) {
-        self.pushdata.push(data.uid)
-      } else {
-        self.checkAll = false
-        for (let i = 0; i < self.pushdata.length; i++) {
-          if (self.pushdata[i] === data.uid) {
-            self.pushdata.splice(i, 1)
-            break
-          }
-        }
-      }
-    },
-    checkAllEvent () {
-      const self = this
-      for (let i = 0; i < self.customerdata.length; i++) {
-        if (self.checkAll) {
-          self.customerdata[i].checked = true
-        } else {
-          delete self.customerdata[i].checked
-        }
-      }
     },
     getDateState (dt) {
       return this.$util.getDateState(dt)
