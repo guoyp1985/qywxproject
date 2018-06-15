@@ -44,7 +44,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/factoryNews', query: {fid: factoryInfo.id}}">
+          <grid-item :label="$t('News')" :link="{path:'/factoryNewsList', query: {fid: factoryInfo.id}}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
               <div class="numicon" v-if="factoryInfo.newnews > 0 && factoryInfo.newnews < 100">{{ factoryInfo.newnews }}</div>

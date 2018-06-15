@@ -1,354 +1,576 @@
+/*
+* @description: 文章详情页
+* @auther: simon
+* @created_date: 2018-4-20
+*/
 <template>
-  <div class="containerarea s-havebottom font14 rnews bg-page">
-    <div class="pagetop b_bottom_after flex_center" style="height:55px;">
-      <search
-        class="v-search"
-        v-model='searchword1'
-        :auto-fixed="autofixed"
-        @on-submit="onSubmit1"
-        @on-change="onChange1"
-        @on-cancel="onCancel1"
-        ref="search">
-      </search>
-    </div>
-    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer','news')">
-      <div v-if="distabdata1" class="scroll_list ">
-        <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-          <template v-if="searchresult1">
-            <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-          </template>
-          <template v-else>
-            <div class="t-table">
-              <div class="t-cell v_middle">
-                <div><i class="al al-wushuju font60 pt20"></i></div>
-                <div class="mt5">空空如也~</div>
-                <div class="align_left mt5">赶快<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/factoryGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布，为卖家提供素材可有效提高销量哦</div>
-              </div>
+  <div class="containerarea font14 bg-white news notop nobottom">
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div id="article-content" class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
+        <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
+    			<div class="ico"><i class="al al-feiji"></i></div>
+    			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
+    			<div class="pic">
+    				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
+    			</div>
+    		</div>
+        <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <div class="article-view">
+          <div class="article-title">
+            <h2>{{article.title}}</h2>
+          </div>
+          <div class="article-vice-title">
+            <h4>{{article.vicetitle}}</h4>
+          </div>
+          <div class="article-info" style="position:relative;">
+            <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
+            <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
+            <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
+            <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
+            <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
+              <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
-          </template>
-        </div>
-        <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
-          <div class="t-table">
-            <div class="t-cell v_middle w70">
-              <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="t-cell v_middle">
-              <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-              <div class="clamp1 font14 color-gray v_middle mt5">
-                  <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
-                  <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                  <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
-              </div>
-            </div>
-            <div class="align_right t-cell v_bottom w80 pb8">
-                <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
-                  <i class="al al-asmkticon0165 v_middle"></i>
+          </div>
+          <div id="editor-content" class="article-content" v-html="article.content"></div>
+          <div class="operate-area">
+            <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
+              <span class="al al-xing3 font14"></span>
+              <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
+            </x-button>
+            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
+              <span class="al al-kefu1 font14"></span>
+              <span>{{$t('Advisory')}}</span>
+            </x-button>
+            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
+              <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
+              <span>{{$t('Store')}}</span>
+            </x-button>
+          </div>
+          <div class="reading-info">
+            <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
+          </div>
+          <div class="qrcode-area">
+            <div class="qrcode-bg">
+              <div class="qrcode">
+                <img src="http://vuxlaravel.boka.cn/images/fingerprint.gif"/>
+                <div class="scan-area">
+                  <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
+                  <img v-else :src="WeixinQrcode">
                 </div>
-            </div>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/factoryGoodeazy">{{ $t('Goodeazy') }}</router-link>
-      </div>
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addFactoryNews" >{{ $t('Create news') }}</router-link>
-      </div>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup">
-        <div class="popup0">
-          <div class="list">
-            <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'news'}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addNews',query:{id:clickdata.id}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'news'}}">{{ row.title }}</router-link>
-              <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
-                <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
-            </div>
-            <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
+              <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
             </div>
           </div>
         </div>
-      </popup>
-    </div>
-    <div v-transfer-dom class="x-popup popupCustomer">
-      <popup v-model="showpush" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center">选择返点客</div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;top:46px;height:40px;">
-            <div class="w_100">
-              <check-icon class="x-check-icon w_100" :value.sync="checkAll" @click.native.stop="checkAllEvent">
-                <div class="flex_left">全选</div>
-              </check-icon>
-            </div>
+        <div class="comment-area">
+          <div class="comment-op font14">
+            <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
           </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1','customer')">
-            <div class="padding10">
-              <div class="scroll_list">
-                <template v-if="customerdata.length == 0">
-                  <div class="scroll_item emptyitem">
-          					<div class="t-table">
-          						<div class="t-cell" style="padding:10px;">暂无返点客</div>
-          					</div>
-          				</div>
-                </template>
-                <check-icon v-else class="x-check-icon scroll_item pt10 pb10" v-for="(item,index) in customerdata" :key="item.uid" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell v_middle w50">
-                      <img class="avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">{{ item.linkman }}</div>
-                    </div>
-                  </div>
-                </check-icon>
-              </div>
-  					</div>
-          </div>
-          <div class="flex_left border-box pl10 pr10" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div class="w_100">
-              <div class="align_left color-red font12 w_100">提示：只有48小时内互动过的返点客才可以收到通知！</div>
-            </div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closepush">{{ $t('Close') }}</div>
-            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitpush">提交</div>
-          </div>
+          <template v-if="article.comments">
+            <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
+          </template>
+          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader, commentuid: comment.uid}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
+            <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
+          </comment>
         </div>
-      </popup>
-    </div>
+      </div>
+      <share-success
+        v-show="showShareSuccess"
+        v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
+        :data="article"
+        :loginUser="reward"
+        :module="module"
+        :on-close="closeShareSuccess">
+      </share-success>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showSubscribe" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">关注</div>
+            <div class="popup-middle font14 flex_center">
+          			<img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeSubscribe">{{ $t('Close') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+      </div>
+    </template>
   </div>
 </template>
-
-<i18n>
-Goodeazy:
-  zh-CN: 易采集
-Create news:
-  zh-CN: 创建文章
-Control text:
-  zh-CN: 操作
-</i18n>
-
 <script>
-import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
+import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
+import TitleTip from '@/components/TitleTip'
+import Comment from '@/components/Comment'
+import Reply from '@/components/Reply'
+import CommentPopup from '@/components/CommentPopup'
+import Editor from '@/components/Editor'
+import ShareSuccess from '@/components/ShareSuccess'
+import Sos from '@/components/Sos'
 import Time from '#/time'
-import { User } from '#/storage'
 import ENV from 'env'
+import jQuery from 'jquery'
+import { User } from '#/storage'
+import Socket from '#/socket'
 
+let room = ''
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, CheckIcon, XImg, Search
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    },
-    photoFormat: function (photo) {
-      const self = this
-      let parr = photo.split(',')
-      let retphoto = parr[0]
-      return self.$util.getPhoto(retphoto)
-    }
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos
   },
   data () {
     return {
+      module: 'factorynews',
       query: {},
       loginUser: {},
-      autofixed: false,
-      tabtxts: [ '我的文章', '采集记录' ],
-      tabmodel: 0,
-      distabdata1: false,
-      distabdata2: false,
-      tabdata1: [],
-      tabdata2: [],
-      controldata: [
-        { key: 'push', title: '推送给返点客' },
-        { key: 'set', title: '更多设置' },
-        { key: 'stat', title: '文章统计' },
-        { key: 'createposter', title: '生成海报' }
-      ],
-      showpopup: false,
-      clickdata: {},
-      limit: 10,
-      pagestart1: 0,
-      pagestart2: 0,
-      showpush: false,
-      customerdata: [],
-      pushdata: [],
-      checkAll: false,
-      customerPagestart: 0,
-      searchword1: '',
-      searchresult1: false
+      WeixinName: ENV.WeixinName,
+      showSos: false,
+      sosTitle: '',
+      showContainer: false,
+      showShareSuccess: false,
+      showsharetip: true,
+      commentPopupShow: false,
+      replyPopupShow: false,
+      notFavorite: true,
+      reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
+      article: {},
+      retailerInfo: {},
+      comments: [],
+      showSubscribe: false,
+      WeixinQrcode: ENV.WeixinQrcode,
+      isdig: 0,
+      photoarr: [],
+      previewerPhotoarr: [],
+      // disComments: false,
+      pagestart: 0,
+      limit: 20,
+      replyData: null,
+      messages: 0
+    }
+  },
+  filters: {
+    dateFormat (date) {
+      return new Time(date * 1000).dateFormat('yyyy-MM-dd')
+    },
+    readingCountFormat (count) {
+      return count > 100000 ? '100000+' : count
+    }
+  },
+  watch: {
+    isdig () {
+      return this.isdig
     }
   },
   methods: {
-    handleScroll (refname, type) {
+    access () {
+      this.$util.wxAccess()
+    },
+    clickInsertProduct (url) {
+      this.$router.push(url)
+    },
+    popupSubscribe () {
+      this.showSubscribe = true
+    },
+    closeSubscribe () {
+      this.showSubscribe = false
+    },
+    closeSharetip () {
+      this.showsharetip = false
+    },
+    onReplyShow (item) {
+      this.replyData = item
+      this.replyPopupShow = true
+    },
+    onCommentShow () {
+      if (this.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        this.commentPopupShow = true
+      }
+    },
+    onCommentDelete (comment) {
       const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$vux.confirm.show({
+        title: '确定要删除该评论吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
+          .then(res => {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.$util.deleteItem(self.comments, comment.id)
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    commentPopupCancel () {
+      this.commentPopupShow = false
+    },
+    replyPopupCancel () {
+      this.replyPopupShow = false
+    },
+    commentSubmit (value) { // 留言提交
+      const self = this
+      this.commentPopupShow = false
+      self.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
+      .then(res => {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag) {
+          let newcomment = data.data
+          newcomment.comment = []
+          let newarr = [ newcomment ]
+          self.comments = newarr.concat(self.comments)
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    replySubmit (value) { // 回复提交
+      const self = this
+      this.replyPopupShow = false
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
+      .then(res => {
+        let data = res.data
+        if (data.flag) {
+          if (!self.replyData.comment) {
+            self.replyData.comment = [ data.data ]
+          } else {
+            self.replyData.comment.push(data.data)
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    handleScroll () {
+      const self = this
       self.$util.scrollEvent({
-        element: scrollarea,
+        element: self.$refs.scrollContainer,
         callback: function () {
-          if (type === 'news') {
-            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
-              self.$vux.loading.show()
-              self.getData1()
-            }
-          } else if (type === 'customer') {
-            if (self.customerdata.length === (self.customerPagestart + 1) * self.limit) {
-              self.customerPagestart++
-              self.$vux.loading.show()
-              self.getCustomerdata()
-            }
+          if (self.comments.length === self.pagestart * self.limit) {
+            self.$vux.loading.show()
+            self.getCommentsList()
+            self.pagestart++
           }
         }
       })
     },
-    getData1 () {
+    getCommentsList () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit }
-      let keyword = self.searchword1
-      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
-        self.searchresult1 = true
-        params.keyword = keyword
-      } else {
-        self.searchresult1 = false
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
-        params: params
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.tabdata1 = self.tabdata1.concat(retdata)
-        self.distabdata1 = true
-      })
-    },
-    onChange1 (val) {
-      this.searchword1 = val
-    },
-    onCancel1 () {
-      const self = this
-      self.searchword1 = ''
-      self.$vux.loading.show()
-      self.distabdata1 = false
-      self.tabdata1 = []
-      self.pagestart1 = 0
-      self.getData1()
-    },
-    onSubmit1 () {
-      const self = this
-      self.$vux.loading.show()
-      self.distabdata1 = false
-      self.tabdata1 = []
-      self.pagestart1 = 0
-      self.getData1()
-    },
-    controlpopup (item) {
-      event.preventDefault()
-      this.showpopup = !this.showpopup
-      this.clickdata = item
-    },
-    getCustomerdata () {
-      const self = this
-      self.$vux.loading.show()
-      let params = { params: { pagestart: self.customerPagestart, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
+      let params = { nid: self.query.id, module: self.module, pagestart: self.pagestart, limit: self.limit }
+      self.$http.post(`${ENV.BokaApi}/api/comment/list`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
-        self.tabdata2 = self.tabdata2.concat(retdata)
-        self.customerdata = self.customerdata.concat(retdata)
+        for (let i = 0; i < retdata.length; i++) {
+          if (!retdata[i].comment) {
+            retdata[i].comment = []
+          }
+        }
+        self.comments = self.comments.concat(retdata)
+        // self.disComments = true
       })
     },
-    clickpopup (key, item) {
+    clickProduct (event) {
       const self = this
-      this.showpopup = false
-      if (key === 'push') {
-        this.showpush = true
-        if (self.customerdata.length === 0) {
-          self.getCustomerdata()
+      let node = event.target
+      while (node) {
+        if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
+          const linkurl = node.getAttribute('linkurl')
+          if (linkurl) {
+            self.$router.push(linkurl)
+          }
+          break
         }
+        node = node.parentNode
       }
     },
-    closepush () {
-      this.showpush = false
-    },
-    submitpush () {
+    getData () {
       const self = this
-      if (self.pushdata.length === 0) {
-        self.$vux.toast.show({
-          text: '请选择返点客'
-        })
-        return false
+      const id = this.query.id
+      const infoparams = { id: id, module: this.module }
+      if (this.query.from === 'poster') {
+        infoparams.from = 'poster'
       }
-      self.showpush = false
+      if (this.query['share_uid']) {
+        infoparams['share_uid'] = self.query.share_uid
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/moduleInfo`, infoparams) // 获取文章
+      .then(res => {
+        const data = res.data
+        if (!isNaN(data.flag)) {
+          self.$vux.loading.hide()
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+            return false
+          }
+          if (res.data.flag) {
+            self.article = res.data.data
+            document.title = self.article.title
+            self.reward = User.get()
+            self.retailerInfo = self.article.retailerinfo
+            self.$util.handleWxShare({
+              data: self.article,
+              module: self.module,
+              moduleid: self.article.id,
+              lastshareuid: self.query.share_uid,
+              link: `${ENV.Host}/#/factorynews?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              successCallback: function () {
+                self.showShareSuccess = true
+              }
+            })
+            self.showContainer = true
+            return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
+              params: {id: id, module: self.module}
+            })
+          }
+        }
+      })
+      .then(res => {
+        if (res) {
+          if (self.reward.uid !== self.article.uploader) {
+            let items = document.querySelectorAll('.insertproduct')
+            for (let i = 0; i < items.length; i++) {
+              let cur = items[i]
+              cur.addEventListener('click', self.clickProduct)
+            }
+          }
+          self.handleImg()
+          const data = res.data
+          if (data.flag === 1) {
+            self.isdig = 1
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
+        }
+      })
+      .then(res => {
+        if (res) {
+          if (res.data.flag < 1) {
+            self.notFavorite = true
+          } else {
+            self.notFavorite = false
+          }
+        }
+      })
+    },
+    onFavorite () {
+      const self = this
+      if (this.notFavorite) {
+        this.notFavorite = false
+        let cururl = `/factorynews?id=${self.query.id}`
+        if (self.query.wid) {
+          cururl = `${cururl}&wid=${self.query.wid}`
+        }
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
+        .then(res => {
+          if (res.data.flag) {
+            self.$vux.toast.text(self.$t('Favorite Success'))
+          }
+        })
+      } else {
+        this.notFavorite = true
+        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: self.module})
+        .then(res => {
+          if (res.data.flag) {
+            self.$vux.toast.text(self.$t('Cancel Favorite'))
+          }
+        })
+      }
+    },
+    onAdvisory () {
+      if (this.loginUser.subscribe === 0) {
+        // this.$util.wxAccess()
+        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=factorynews&fromId=${this.query.id}`)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      } else {
+        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'factorynews', fromId: this.query.id}})
+      }
+    },
+    onStore () {
+      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+    },
+    onShare () {
+    },
+    editSave () {
+      const self = this
+      let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
-      let subdata = { id: self.clickdata.id, sendmodule: 'news', uid: self.pushdata }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/sendGroupNews`, subdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
+        id: self.query.id,
+        content: editorContent.innerHTML
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
+        let toasttype = data.flag !== 1 ? 'warn' : 'success'
         self.$vux.toast.show({
           text: data.error,
-          time: self.$util.delay(data.error)
+          type: toasttype,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.handleImg()
+            }
+          }
         })
       })
     },
-    radioclick (data, index) {
+    editSetting () {
+      this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id}})
+    },
+    editDelete () {
+      this.$vux.confirm.show({
+        title: this.$t('Delete Article Confirm'),
+        onCancel () {},
+        onConfirm () {}
+      })
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
+    },
+    clickDig () {
       const self = this
-      if (data.checked) {
-        self.pushdata.push(data.uid)
-      } else {
-        self.checkAll = false
-        for (let i = 0; i < self.pushdata.length; i++) {
-          if (self.pushdata[i] === data.uid) {
-            self.pushdata.splice(i, 1)
-            break
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (self.isdig) {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: self.query.id,
+        module: 'factorynews'
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (self.isdig) {
+            self.isdig = 0
+            self.article.dig = self.article.dig - 1
+          } else {
+            self.isdig = 1
+            self.article.dig = self.article.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    handleImg () {
+      const self = this
+      self.photoarr = []
+      self.previewerPhotoarr = []
+      let imgTags = document.querySelectorAll('.news .article-content img')
+      if (imgTags.length > 0) {
+        for (let i = 0; i < imgTags.length; i++) {
+          let curimg = imgTags[i]
+          if (jQuery(curimg).parents('.insertproduct').length === 0) {
+            self.photoarr.push(imgTags[i].getAttribute('src'))
+            curimg.removeEventListener('click', self.clickImg)
+            curimg.addEventListener('click', self.clickImg)
           }
         }
       }
+      self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
     },
-    checkAllEvent () {
+    clickImg (event) {
+      const node = event.target
+      const src = node.getAttribute('src')
+      let index = 0
+      for (let i = 0; i < this.photoarr.length; i++) {
+        if (this.photoarr[i] === src) {
+          index = i
+          break
+        }
+      }
+      this.showBigimg(index)
+    },
+    showBigimg (index) {
       const self = this
-      for (let i = 0; i < self.customerdata.length; i++) {
-        if (self.checkAll) {
-          self.customerdata[i].checked = true
+      if (!document.querySelector('.Eleditor-area')) {
+        if (self.$util.isPC()) {
+          self.$refs.previewer.show(index)
         } else {
-          delete self.customerdata[i].checked
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: self.photoarr[index],
+            urls: self.photoarr
+          })
         }
       }
     },
-    getDateState (dt) {
-      return this.$util.getDateState(dt)
+    toStore () {
+      const self = this
+      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     },
-    getDateClass (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      // const fromId = this.query.fromId
+      room = `${this.module}-${this.query.id}`
+      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
     init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'news'
-      }).then(res => {
-      })
+      this.$util.wxAccessListening()
     },
-    refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
+    refresh (query) {
+      const self = this
       this.loginUser = User.get()
-      if (this.tabdata1.length < this.limit) {
-        this.distabdata1 = false
-        this.tabdata1 = []
-        this.$vux.loading.show()
-        this.getData1()
+      if (this.query.id !== query.id) {
+        room = ''
+        this.comments = []
+        this.pagestart = 0
+        this.query = query
+        this.showsharetip = false
+        this.getData()
+      }
+      this.loginUser = User.get()
+      this.createSocket()
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
+      if (query.newadd) {
+        const self = this
+        setTimeout(() => {
+          self.showsharetip = false
+        }, 10000)
       }
     }
   },
@@ -356,35 +578,107 @@ export default {
     this.init()
   },
   activated () {
-    this.refresh()
+    this.refresh(this.$route.query)
   }
+  // beforeRouteLeave (to, from, next) {
+  //   Socket.destory(room)
+  //   next()
+  // }
 }
 </script>
-
 <style lang="less">
-.rnews .bk-listplate1 .iconcell{width:45px;}
-.vux-popup-dialog .weui-cell__bd{text-align:center;}
-.vux-popup-dialog .weui-cell__ft{display:none;}
-.rnews .collect{
-  background:#ee9f25;
-  color: #fff;
-  width: 171px;
-  height: 36px;
-  margin: 0 auto;
-  border-radius: 50px;
+#article-content .article-view {
+  padding: 10px 15px;
+  background: #ffffff;
 }
-.rnews .s-bottom{
-  height: 50px;
+#article-content .article-info {
+  padding: 10px 0;
 }
-.rnews .btnicon{
-  display: inline-block;
-  color: #ea3a3a;
-  border: 1px solid #ea3a3a;
+#article-content .operate-area {
   text-align: center;
-  border-radius: 30px;
-  letter-spacing: 0px;
-  height: 21px;
-  width: 41px;
-  line-height: 21px;
 }
+#article-content .operate-area span {
+  vertical-align: middle;
+  font-size: 12px;
+  line-height: 16px;
+}
+#article-content .reading-info {
+  padding: 20px 0;
+}
+#article-content .reading-info span + span {
+  margin-left: 10px;
+}
+#article-content .article-author {
+  margin-left: 6px;
+  color: #1aad19;
+}
+#article-content .qrcode-area {
+  padding: 15px;
+  position: relative;
+  vertical-align: middle;
+  background: url(../assets/images/qrbg.gif);
+}
+#article-content .qrcode-bg {
+  margin: 0 auto;
+  box-shadow: 1px 0 5px #868181;
+  background-color: #fff;
+}
+#article-content .qrcode {
+  text-align: center;
+  position: relative;
+  margin: 0 auto;
+  display: block;
+}
+#article-content .qrcode>img {
+  width: 100%;
+}
+#article-content .scan-area {
+  width: 50%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  vertical-align: middle;
+}
+#article-content .scan-area img {
+  max-width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  display: block;
+  margin:0 auto;
+}
+#article-content .comment-area {
+  padding: 20px 15px;
+}
+#article-content .comment-op {
+  text-align: right;
+  color: #1aad19;
+}
+#editor-content {
+  overflow: hidden;
+}
+#editor-content img {
+  max-width: 100% !important;
+}
+
+/* vui css hack */
+#article-content .weui-btn_mini {
+  padding: 0 13px;
+}
+
+
+.news .insertproduct{
+  display:block;padding:5px !important;position:relative;text-indent: 0 !important;
+  color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;
+}
+.news .insertproduct img{vertical-align: middle !important;}
+.news .insertproduct .iteminfo{
+  text-align:right;position:absolute;color:#fff;padding-left:10px;padding-right:10px;
+  font-size:12px;
+  bottom: 15px;right: 9px;border-radius: 15px;background-image: linear-gradient(90deg, #f26f12 0%, #fa3f06 99%);
+}
+.news .weui-btn_mini{border: 1px solid #1aad19 !important;}
+.news .weui-btn_plain-primary{border:0px;}
+.news .weui-btn:after{display: none;}
+.news .editor{}
 </style>

@@ -152,7 +152,8 @@ export default {
       } else {
         delete self.submitdata['id']
       }
-      self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+      self.submitdata.fid = self.query.fid
+      self.$http.post(`${ENV.BokaApi}/api/add/factorynews`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -165,7 +166,7 @@ export default {
               if (self.query.id) {
                 params.newadd = 1
               }
-              self.$router.push({ path: '/news', query: params })
+              self.$router.push({ path: '/factoryNews', query: params })
             }
           }
         })
@@ -183,7 +184,7 @@ export default {
         const self = this
         document.title = '更多设置'
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-          params: { id: this.query.id, module: 'news' }
+          params: { id: this.query.id, module: 'factorynews' }
         })
         .then(function (res) {
           const data = res.data
