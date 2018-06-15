@@ -65,7 +65,7 @@
         <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
       </div>
       <div class="align_center flex_center flex_cell">
-        <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">一键上架文章</div>
+        <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
       </div>
     </div>
   </div>
@@ -142,7 +142,7 @@ export default {
         con = '确定要上架该厂商的所有商品？'
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
-        con = '确定要上架该厂商的所有文章？'
+        con = '确定要导入该厂商的所有文章？'
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
       }
       self.$vux.confirm.show({
