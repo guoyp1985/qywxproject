@@ -1,11 +1,13 @@
 <template>
-  <div class="containerarea font14 retailerrevenue bg-page">
+  <div class="containerarea font14 frevenue bg-page">
     <div class="s-topbanner bg-white">
       <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
         <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
+        <!--
         <div class="align_right" style="width:150px;">
           <div class="qbtn font12 color-white" style="border:#fff 1px solid;" @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
+      -->
       </div>
       <tab v-model="selectedIndex" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
@@ -15,7 +17,7 @@
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
+            <div class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
@@ -24,7 +26,7 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                   <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                    <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
                           <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -36,7 +38,7 @@
                           <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
                         </div>
                       </div>
-                    </check-icon>
+                    </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                       <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
@@ -48,7 +50,7 @@
                     </div>
                   </template>
                   <template v-else>
-                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                    <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
                           <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -60,7 +62,7 @@
                           <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
                         </div>
                       </div>
-                    </check-icon>
+                    </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999">
                         <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
@@ -73,15 +75,6 @@
                     </div>
                   </template>
                 </div>
-              </div>
-            </div>
-            <div class="toolbar_bg bg-white list-shadow" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
-              <div class="t-table h_100">
-                <div class="t-cell h_100 v_middle w100 pl5 border-box">
-                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent"><span class="color-lightgray">全选</span></check-icon>
-                </div>
-                <div class="t-cell h_100 v_middle align_left color-lightgray">合计：<font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
-                <div class="t-cell h_100 v_middle font16 align_center bg-red color-white w80" @click="getcash">提现</div>
               </div>
             </div>
           </template>
@@ -272,9 +265,6 @@ export default {
       disData1: false,
       disData2: false,
       disData3: false,
-      totalPrice: '0.00',
-      checkedData: [],
-      checkedAll: true,
       showpopup: false,
       eventIng: false
     }
@@ -313,13 +303,6 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        if (self.checkedAll) {
-          for (let i = 0; i < retdata.length; i++) {
-            retdata[i].checked = true
-            self.checkedData.push(retdata[i].id)
-            self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(retdata[i].money.replace(/,/g, ''))).toFixed(2)
-          }
-        }
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disData1 = true
       })
@@ -349,78 +332,6 @@ export default {
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
-    },
-    checkboxclick (d, index) {
-      const self = this
-      let curmoney = parseFloat(d.money.replace(/,/g, ''))
-      if (d.checked) {
-        self.checkedData.push(d.id)
-        self.totalPrice = (parseFloat(self.totalPrice) + curmoney).toFixed(2)
-      } else {
-        self.checkedAll = false
-        self.$util.deleteValue(self.checkedData, d.id)
-        self.totalPrice = (parseFloat(self.totalPrice) - curmoney).toFixed(2)
-      }
-    },
-    checkAllevent () {
-      const self = this
-      self.totalPrice = '0.00'
-      self.checkedData = []
-      for (let i = 0; i < self.tabdata1.length; i++) {
-        let d = self.tabdata1[i]
-        if (self.checkedAll) {
-          self.checkedData.push(d.id)
-          self.tabdata1[i].checked = true
-          self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(d.money.replace(/,/g, ''))).toFixed(2)
-        } else {
-          delete self.tabdata1[i].checked
-        }
-      }
-    },
-    getcash () {
-      const self = this
-      if (!self.eventIng) {
-        self.eventIng = true
-        if (self.checkedData.length === 0) {
-          self.$vux.toast.show({
-            text: '请选择提现数据',
-            onHide: function () {
-              self.eventIng = false
-            }
-          })
-          return false
-        }
-        self.$vux.confirm.show({
-          content: `本次提现金额为<span class='color-orange'>${self.totalPrice}元</span>，确认提现吗？`,
-          onConfirm () {
-            self.$vux.loading.show()
-            let subdata = { ids: self.checkedData }
-            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              self.$vux.toast.show({
-                text: data.error,
-                time: self.$util.delay(data.error),
-                onHide: function () {
-                  if (data.flag === 1) {
-                    for (let i = 0; i < self.checkedData.length; i++) {
-                      let ckid = self.checkedData[i]
-                      for (let j = 0; j < self.tabdata1.length; j++) {
-                        if (self.tabdata1[j].id === ckid) {
-                          self.tabdata1.splice(j, 1)
-                          break
-                        }
-                      }
-                    }
-                    self.totalPrice = '0.00'
-                  }
-                  self.eventIng = false
-                }
-              })
-            })
-          }
-        })
-      }
     },
     popupexplain () {
       this.showpopup = !this.showpopup
@@ -477,8 +388,8 @@ export default {
 </script>
 
 <style lang="less">
-.retailerrevenue .scroll_list .scroll_item:after{display:none;}
-.retailerrevenue .scroll_list .scroll_item:not(:last-child){margin-bottom:10px;}
-.retailerrevenue .weui-icon-success{color: #ea3a3a;}
-.retailerrevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a;}
+.frevenue .scroll_list .scroll_item:after{display:none;}
+.frevenue .scroll_list .scroll_item{margin-bottom:10px;}
+.frevenue .weui-icon-success{color: #ea3a3a;}
+.frevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a;}
 </style>
