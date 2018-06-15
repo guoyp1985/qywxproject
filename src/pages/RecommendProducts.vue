@@ -82,8 +82,8 @@ export default {
     },
     getData1 () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/recommendFactoryProduct`, {
-        uploader: self.query.id, pagestart: pageStart, limit: limit
+      self.$http.post(`${ENV.BokaApi}/api/retailer/recommendByFids`, {
+        pagestart: pageStart, limit: limit
       }).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
