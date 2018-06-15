@@ -62,19 +62,23 @@ import ENV from 'env'
 import Reg from '#/reg'
 import { Token, User } from '#/storage'
 
-let featureBtns = [
+let manageBtn = [
   {
     name: 'Manage center',
     icon: 'al-fuwu',
     color: 'rgba01',
     link: '/centerSales'
-  },
+  }
+]
+let factoryBtn = [
   {
     name: 'Factory center',
     icon: 'al-kehu1',
     color: 'rgba05',
     link: '/centerFactory'
-  },
+  }
+]
+let featureBtns = [
   {
     name: 'My Address',
     icon: 'al-wodedizhi',
@@ -181,10 +185,13 @@ export default {
           mobile: user.mobile,
           company: user.company
         }
-        if (!(this.loginUser.fid > 0)) {
-          this.btns1.splice(1, 1)
+        if (!this.showBtn1) {
+          if (this.loginUser.fid > 0) {
+            this.btns1 = factoryBtn.concat(this.btns1)
+          }
+          this.btns1 = manageBtn.concat(this.btns1)
+          this.showBtn1 = true
         }
-        this.showBtn1 = true
         this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
           let data = res.data
           self.messages = data.data
@@ -192,10 +199,14 @@ export default {
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
           this.loginUser = res.data.data
-          if (!(this.loginUser.fid > 0)) {
-            this.btns1.splice(1, 1)
+          User.set(this.loginUser)
+          if (!this.showBtn1) {
+            if (this.loginUser.fid > 0) {
+              this.btns1 = factoryBtn.concat(this.btns1)
+            }
+            this.btns1 = manageBtn.concat(this.btns1)
+            this.showBtn1 = true
           }
-          this.showBtn1 = true
         })
       }
     },
