@@ -50,12 +50,7 @@
       </div>
     </div>
     <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/factoryGoodeazy">{{ $t('Goodeazy') }}</router-link>
-      </div>
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
-      </div>
+      <router-link class="flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
