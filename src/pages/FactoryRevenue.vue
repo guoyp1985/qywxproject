@@ -307,7 +307,7 @@ export default {
     getData1 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart1, limit: limit, cashed: 0 } }
+      const params = { params: { from: 'factory', pagestart: pageStart1, limit: limit, cashed: 0 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -327,7 +327,7 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart2, limit: limit, cashed: 2 } }
+      const params = { params: { from: 'factory', pagestart: pageStart2, limit: limit, cashed: 2 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -340,7 +340,7 @@ export default {
     getData3 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart3, limit: limit, cashed: 1 } }
+      const params = { params: { from: 'factory', pagestart: pageStart3, limit: limit, cashed: 1 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -459,7 +459,7 @@ export default {
     },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'revenue'
+        module: 'factory', action: 'revenue'
       })
     },
     refresh () {
