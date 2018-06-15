@@ -136,7 +136,7 @@ export default {
     },
     upAll (type) {
       const self = this
-      let con= ''
+      let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
         con = '确定要上架该厂商的所有商品？'
