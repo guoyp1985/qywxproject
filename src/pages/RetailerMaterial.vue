@@ -51,6 +51,10 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.disData = false
+      this.data = []
+    },
     handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -87,6 +91,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (this.data.length < limit) {
+        this.initData()
         this.getData()
       }
     }
