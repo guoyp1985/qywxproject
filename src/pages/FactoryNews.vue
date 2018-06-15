@@ -4,12 +4,12 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div :class="`containerarea font14 bg-white news notop ${topcss}`">
+  <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div id="article-content" class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
+      <div id="article-content" class="pagemiddle">
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
