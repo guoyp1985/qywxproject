@@ -9,7 +9,7 @@
       </div>
       <div v-if="disProductData" class="productlist squarepic pb10">
         <div v-if="productData.length == 0" class="emptyitem flex_center">还没有厂商提供货源</div>
-        <router-link v-else v-for="(item,index) in productData" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+        <router-link v-else v-for="(item,index) in productData" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
       		<div class="inner list-shadow">
       			<div class="picarea">
       				<div class="pic">
