@@ -205,7 +205,8 @@ export default {
       favoritecss: 'none',
       isfavorite: false,
       hideloading: false,
-      isNextNews: true
+      isNextNews: true,
+      haveMoreNews: false
     }
   },
   watch: {
@@ -256,6 +257,7 @@ export default {
       this.isfavorite = false
       this.hideloading = false
       this.isNextNews = true
+      this.haveMoreNews = false
     },
     handleScroll () {
       const self = this
@@ -309,6 +311,9 @@ export default {
           }
           let isEmpty = false
           if (data.length === 0) {
+            if (newPageStart === 1) {
+              self.$vux.toast.text('不要再戳啦，没有更多咯', 'middle')
+            }
             self.toplinedata = initNewsData
             newPageStart = 1
             isEmpty = true
@@ -317,6 +322,7 @@ export default {
           }
           if (data.length === newsLimit) {
             newPageStart++
+            self.haveMoreNews = true
           } else if (data.length < newsLimit && !isEmpty) {
             newPageStart = 0
           }
@@ -324,7 +330,12 @@ export default {
       }
     },
     changeNews () {
-      this.getnewsdata()
+      const self = this
+      if (!self.haveMoreNews && newPageStart === 0 && self.toplinedata.length < newsLimit) {
+        self.$vux.toast.text('不要再戳啦，没有更多咯', 'middle')
+      } else {
+        this.getnewsdata()
+      }
     },
     clickWetchat () {
       this.showqrcode = true

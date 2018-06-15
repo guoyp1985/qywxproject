@@ -1,13 +1,10 @@
 <template>
-  <div class="containerarea bg-white font14 product notop nobottom">
+  <div :class="`containerarea bg-white font14 product notop ${topcss}`">
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
-      <div id="scroll-container" class="pagemiddle scroll-container" style="bottom:0;">
-        <!--
-        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
--->
+      <div id="scroll-container" class="pagemiddle scroll-container">
         <template v-if="showFlash">
           <swiper
             class="pic-swiper notitle"
@@ -30,13 +27,22 @@
             <span class="font18 mr5">价格: {{ $t('RMB') }}</span>{{ productdata.price }}
           </div>
         </div>
-        <template v-if="feeData.length != 0">
+        <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
+          <div class="bg-page" style="height:10px;"></div>
+          <div class="b_top_after"></div>
+          <div class="padding10 b_bottom_after levelarea">
+            <div class="levelitem" v-for="(item,index) in feeData" :key="index">
+              <div class="font18 color-red">{{levelNameData[index]}}</div>
+              <div>佣金: {{ $t('RMB') }}{{ item }}</div>
+            </div>
+          </div>
+        </template>
+        <template v-if="productdata.identity == 'retailer' && productdata.joinstatus == 1">
           <div class="bg-page" style="height:10px;"></div>
           <div class="b_top_after"></div>
           <div class="padding10 b_bottom_after">
-            <div class="font18 color-red" v-for="(item,index) in feeData" :key="index">
-              <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
-            </div>
+            <div class="font18 color-red">{{ productdata.levelname }}</div>
+            <div>佣金: {{ $t('RMB') }}{{ productdata.agentfee }}</div>
           </div>
         </template>
         <div class="bg-page" style="height:10px;"></div>
@@ -58,6 +64,11 @@
           <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+      </div>
+      <div v-if="productdata.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+        <div class="align_center flex_center flex_cell">
+          <div class="flex_cell flex_center btn-bottom-red" @click="importProduct">我要代理</div>
+        </div>
       </div>
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
@@ -145,7 +156,9 @@ export default {
       replyData: null,
       messages: 0,
       feeData: {},
-      levelpolicy: []
+      levelpolicy: [],
+      levelNameData: {},
+      topcss: ''
     }
   },
   watch: {
@@ -257,10 +270,30 @@ export default {
       shareData.data = self.productdata
       self.$util.handleWxShare(shareData)
     },
+    importProduct () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要代理该商品吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
+            id: self.query.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
     getData () {
       const self = this
       this.productid = this.query.id
-      let infoparams = { id: this.productid, module: this.module }
+      let infoparams = { id: this.productid, module: this.module, fid: self.query.fid }
       if (this.query.share_uid) {
         infoparams.share_uid = this.query.share_uid
       }
@@ -301,13 +334,12 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.loginUser.fid})
+            if (self.productdata.identity !== 'retailer') {
+              self.topcss = 'nobottom'
+            }
+            self.feeData = self.productdata.agentfee
+            self.levelNameData = self.productdata.levelname
           }
-        }
-      }).then(function (res) {
-        if (res) {
-          let data = res.data
-          self.feeData = data.data ? data.data : data
         }
       })
     },
@@ -387,8 +419,8 @@ export default {
 .product .pagetop{
   box-shadow: 0px 0px 10px 3px #d0d0d0;
 }
-.product .pagemiddle{top:50px;}
 .product.notop .pagemiddle{top:0px;}
+.product.nobottom .pagemiddle{bottom:0px;}
 .product .numicon {
     position: absolute;
     top: 0;
@@ -447,4 +479,5 @@ export default {
 
 .product .pagemiddle{bottom:50px;}
 .product .pagebottom{height:50px;}
+.levelarea .levelitem:not(:last-child){margin-bottom:12px;}
 </style>

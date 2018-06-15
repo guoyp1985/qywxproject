@@ -1,40 +1,72 @@
 <template>
   <div class="containerarea bg-white font14 notop">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div class="form-item">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}</div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.title }}</div>
+    <div class="s-topbanner">
+      <div class="flex_left border-box padding10 color-white" style="height:88px;">
+        <div v-if="viewData.photo && viewData.photo != ''" class="w70">
+            <img class="imgcover v_middle" style="width:60px;height:60px;" :src="viewData.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
         </div>
-      </div>
-      <div class="form-item bg-white">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.summary }}</div>
+        <div class="flex_cell">
+          <div class="clamp1">{{ viewData.title }}</div>
+          <div class="font12 clamp2">{{ viewData.summary }}</div>
         </div>
+        <router-link :to="{path: '/chat', query: {uid: viewData.uploader}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       </div>
-      <div class="form-item bg-white">
-        <div class="t-table">
-          <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Time of admission') }}</div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">{{ viewData.dateline | dateformat }}</div>
-        </div>
-      </div>
-      <div class="bg-white mt5 padding10 b_top_after">
-        <span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
-      </div>
-      <div class="b_top_after"></div>
-      <div v-if="disProductData" class="productlist squarepic">
-        <div v-if="productData.length == 0" class="emptyitem flex_center">暂无商品</div>
-        <productitemplate v-else :data="item" v-for="(item,index) in productData" :key="item.id">
-          <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-          <span slot="title">{{ item.title }}</span>
-          <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
-          <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-        </productitemplate>
-      </div>
+      <tab v-model="selectedIndex" class="v-tab">
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
+      </tab>
     </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center btn-bottom-red" @click="joinEvent">{{ $t('Apply join') }}</div>
+    <div class="pagemiddle" style="top:132px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      <template v-if="selectedIndex == 0">
+        <div v-if="disTabData1" class="productlist squarepic pb10">
+          <div v-if="tabData1.length == 0" class="emptyitem flex_center">暂无商品</div>
+          <router-link v-else v-for="(item,index) in tabData1" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+        		<div class="inner list-shadow">
+        			<div class="picarea">
+        				<div class="pic">
+                  <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                </div>
+        			</div>
+        			<div class="desbox" style="overflow:hidden;">
+        				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">{{ item.title }}</div>
+        				<div class="clamp1">
+        					<div class="flex_table padding5">
+        						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+        						<span class="color-gray">{{ $t('Saled txt') }}:<span style="margin-left:1px;">{{ item.saled }}</span></span>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+          </router-link>
+        </div>
+      </template>
+      <template v-if="selectedIndex == 1">
+        <div v-if="disTabData2" class="scroll_list">
+          <div v-if="tabData2.length == 0" class="emptyitem flex_center">暂无文章</div>
+          <router-link :to="{path: '/factorynews', query: {id: item.id, fid: query.id}}" v-else v-for="(item,index1) in tabData2" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+            <div class="t-table">
+              <div class="t-cell v_middle w70">
+                <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="t-cell v_middle">
+                <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                <div class="clamp1 font14 color-gray v_middle mt5">
+                    <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
+                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                    <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                </div>
+              </div>
+            </div>
+          </router-link>
+        </div>
+      </template>
+    </div>
+    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+      <div class="align_center flex_center flex_cell">
+        <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+      </div>
+      <div class="align_center flex_center flex_cell">
+        <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
+      </div>
     </div>
   </div>
 </template>
@@ -45,16 +77,17 @@ Apply join:
 </i18n>
 
 <script>
-import Productitemplate from '@/components/Productitemplate'
+import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 
 const limit = 10
-let pageStart = 0
+let pageStart1 = 0
+let pageStart2 = 0
 
 export default {
   components: {
-    Productitemplate
+    Tab, TabItem
   },
   filters: {
     dateformat: function (value) {
@@ -65,8 +98,14 @@ export default {
     return {
       query: {},
       viewData: {},
+      selectedIndex: 0,
       disProductData: false,
-      productData: []
+      productData: [],
+      tabtxts: [ '商品', '文章' ],
+      tabData1: [],
+      tabData2: [],
+      disTabData1: false,
+      disTabData2: false
     }
   },
   watch: {
@@ -95,32 +134,114 @@ export default {
         }
       })
     },
+    upAll (type) {
+      const self = this
+      let con = ''
+      let ajaxUrl = ''
+      if (type === 'product') {
+        con = '确定要上架该厂商的所有商品？'
+        ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
+      } else if (type === 'factorynews') {
+        con = '确定要导入该厂商的所有文章？'
+        ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
+      }
+      self.$vux.confirm.show({
+        content: con,
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(ajaxUrl, {
+            fid: self.query.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
     handleScroll (refname) {
       const self = this
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollArea,
         callback: function () {
-          if (self.productData.length === (pageStart + 1) * limit) {
-            pageStart++
-            self.$vux.loading.show()
-            self.getData1()
+          switch (this.selectedIndex) {
+            case 0:
+              if (self.tabData1.length === (pageStart1 + 1) * limit) {
+                pageStart1++
+                self.$vux.loading.show()
+                self.getData1()
+              }
+              break
+            case 1:
+              if (self.tabData2.length === (pageStart2 + 1) * limit) {
+                pageStart2++
+                self.$vux.loading.show()
+                self.getData2()
+              }
+              break
           }
         }
       })
     },
+    swiperChange (index) {
+      const self = this
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.tabData1.length < limit) {
+            self.$vux.loading.show()
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < limit) {
+            self.$vux.loading.show()
+            this.disTabData2 = false
+            this.tabData2 = []
+            this.getData2()
+          }
+          break
+      }
+    },
     getData1 () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: { uploader: self.query.id, pagestart: pageStart, limit: limit }
+        params: { fid: self.query.id, pageStart: pageStart1, limit: limit }
       }).then(function (res) {
         const data = res.data
-        if (self.hideloading) {
-          self.$vux.loading.hide()
-        }
+        self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
-        self.productData = self.productData.concat(retdata)
-        self.disProductData = true
+        self.tabData1 = self.tabData1.concat(retdata)
+        self.disTabData1 = true
+      })
+    },
+    getData2 () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
+        params: { fid: self.query.id, pageStart: pageStart2, limit: limit }
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.tabData2 = self.tabData2.concat(retdata)
+        self.disTabData2 = true
       })
     },
     refresh () {
@@ -139,11 +260,7 @@ export default {
         let data = res.data
         let retdata = data.data ? data.data : data
         self.viewData = retdata
-        if (self.query.id && self.productData.length < limit) {
-          self.disProductData = false
-          self.productData = []
-          self.getData1()
-        }
+        self.swiperChange()
       })
     }
   },

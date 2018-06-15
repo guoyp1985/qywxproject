@@ -356,7 +356,7 @@ export default {
       const params1 = { module: 'product', action: 'add' }
       if (this.query.id) {
         params1.id = this.query.id
-        const params2 = { params: { id: this.query.id, module: 'product' } }
+        const params2 = { params: { id: this.query.id, module: 'factoryproduct' } }
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
           self.data = data.data ? data.data : data

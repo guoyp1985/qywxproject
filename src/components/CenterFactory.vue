@@ -44,7 +44,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/factoryNews', query: {fid: factoryInfo.id}}">
+          <grid-item :label="$t('News')" :link="{path:'/factoryNewsList', query: {fid: factoryInfo.id}}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
               <div class="numicon" v-if="factoryInfo.newnews > 0 && factoryInfo.newnews < 100">{{ factoryInfo.newnews }}</div>
@@ -97,7 +97,7 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showQrcode" height="100%">
         <div class="popup1 font14">
-          <div class="popup-top flex_center">{{$t('Level manage')}}</div>
+          <div class="popup-top flex_center">{{$t('Join qrcode')}}</div>
           <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
             <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
           </div>
@@ -147,6 +147,7 @@ With the customer rebate money together!:
 <script>
 import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup } from 'vux'
 import Time from '#/time'
+import ENV from 'env'
 
 export default {
   name: 'CenterFactory',
@@ -188,10 +189,9 @@ export default {
     disJoinQrcode () {
       const self = this
       self.showQrcode = true
-      /*
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/`, {
-        params: {fid: self.loginUser.fid}
+      self.$http.post(`${ENV.BokaApi}/api/factory/joinQRCode`, {
+        fid: self.loginUser.fid
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -205,7 +205,6 @@ export default {
           })
         }
       })
-      */
     },
     closeQrcode () {
       this.showQrcode = false

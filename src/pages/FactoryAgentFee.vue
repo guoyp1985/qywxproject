@@ -11,7 +11,7 @@
         <div v-else v-for="(item,index) in feeData" :key="index" class="itemarea">
           <div class="form-item">
             <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle bold">{{ index + 1 }}级代理</div>
+              <div class="t-cell title-cell font14 v_middle bold">{{ item.levelname }}</div>
             </div>
           </div>
           <div class="form-item">
@@ -58,21 +58,31 @@ export default {
         return false
       }
       let iscontinue = true
+      let errortip = ''
       let agentfee = {}
+      let levelname = {}
       for (let i = 0; i < self.feeData.length; i++) {
-        if (self.$util.trim(self.feeData[i].agentfee) === '') {
+        let curfee = self.feeData[i].agentfee
+        let curname = self.feeData[i].levelname
+        if (self.$util.trim(curfee) === '' || self.$util.trim(curname) === '') {
           iscontinue = false
+          errortip = '必填项不能为空'
+          break
+        } else if (isNaN(curfee) || parseFloat(curfee) < 0) {
+          iscontinue = false
+          errortip = '请输入正确的佣金'
           break
         } else {
           let level = i + 1
           agentfee[level] = self.feeData[i].agentfee
+          levelname[level] = self.feeData[i].levelname
         }
       }
       if (!iscontinue) {
-        self.$vux.toast.text('必填项不能为空', 'middle')
+        self.$vux.toast.text(errortip, 'middle')
         return false
       }
-      let postData = { fid: self.loginUser.fid, agentfee: agentfee, id: self.query.id }
+      let postData = { fid: self.loginUser.fid, agentfee: agentfee, levelname: levelname, id: self.query.id }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/factory/addAgentFee`, postData).then(function (res) {
         self.$vux.loading.hide()
@@ -103,8 +113,10 @@ export default {
       }).then(function (res) {
         let data = res.data
         let retdata = data.data ? data.data : data
+        let agentfee = retdata.agentfee
+        let levelname = retdata.levelname
         for (let key in self.levelpolicy) {
-          self.feeData.push({agentfee: retdata[key] ? retdata[key] : '0.00', key: key})
+          self.feeData.push({agentfee: agentfee[key] ? agentfee[key] : '0.00', levelname: levelname[key]})
           self.disFeeData = true
         }
       })

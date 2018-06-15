@@ -11,7 +11,7 @@
         ref="search">
       </search>
     </div>
-    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer','news')">
+    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer','factorynews')">
       <div v-if="distabdata1" class="scroll_list ">
         <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
           <template v-if="searchresult1">
@@ -22,12 +22,12 @@
               <div class="t-cell v_middle">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">空空如也~</div>
-                <div class="align_center mt5">赶快<router-link to="/addMaterial" class="color-blue">{{ $t('Create training materials') }}</router-link>为卖家提供素材可有效提高销量哦</div>
+                <div class="align_left mt5">赶快<router-link to="/addFactoryNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/factoryGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布，为卖家提供素材可有效提高销量哦</div>
               </div>
             </div>
           </template>
         </div>
-        <router-link :to="{path: '/news', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+        <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
           <div class="t-table">
             <div class="t-cell v_middle w70">
               <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
@@ -50,18 +50,16 @@
       </div>
     </div>
     <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addMaterial" >{{ $t('Create training materials') }}</router-link>
-      </div>
+      <router-link class="flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryNews', query: {fid: query.fid}}" >{{ $t('Create news') }}</router-link>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
         <div class="popup0">
           <div class="list">
             <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews'}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'factorynews'}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews', fid: query.fid}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addFactoryNews',query:{id:clickdata.id, fid: query.fid}}">{{ row.title }}</router-link>
+              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'factorynews', fid: query.fid}}">{{ row.title }}</router-link>
               <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
@@ -141,7 +139,7 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (type === 'news') {
+          if (type === 'factorynews') {
             if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
               self.pagestart1++
               self.$vux.loading.show()
@@ -159,7 +157,7 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { fid: self.query.fid, classid: 100, pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.query.fid, pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
@@ -228,7 +226,7 @@ export default {
     },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'news'
+        module: 'factory', action: 'factorynews'
       }).then(res => {
       })
     },

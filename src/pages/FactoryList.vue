@@ -1,76 +1,25 @@
 <template>
-  <div class="containerarea bg-page font14 rproductlist nobottom">
-    <div class="pagetop">
-      <tab v-model="selectedIndex" class="v-tab">
-        <tab-item :selected="true">已分销</tab-item>
-        <tab-item>未分销</tab-item>
-      </tab>
-    </div>
-    <div class="pagemiddle" style="top:44px;">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-            <template v-if="disTabData1">
-              <template v-if="!tabData1 || tabData1.length == 0">
-                <div class="scroll_list">
-                  <div class="emptyitem">
-                    <div class="t-table" style="padding-top:20%;">
-                      <div class="t-cell padding10">暂无厂商数据</div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="scroll_list ">
-                  <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " style="color:inherit;">
-                    <div v-if="item.moderate == 0" class="icon down"></div>
-                		<div class="t-table bg-white pt10 pb10">
-                			<div class="t-cell v_middle pl12">
-                        <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                        <div class="t-table pr12 border-box mt15">
-                          <div class="t-cell color-999 font14">
-                            <div class="clamp1">{{ item.summary }}</span></div>
-                          </div>
-                        </div>
-                			</div>
-                		</div>
-                  </router-link>
-                </div>
-              </template>
-            </template>
-          </div>
-          <div v-if="index === 1" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', 'product')">
-            <template v-if="disTabData2">
-              <template v-if="!tabData2 || tabData2.length == 0">
-                <div class="scroll_list">
-                  <div class="emptyitem">
-                    <div class="t-table" style="padding-top:20%;">
-                      <div class="t-cell padding10">暂无厂商数据</div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="scroll_list ">
-                  <router-link v-for="(item,index) in tabData2" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " style="color:inherit;">
-                    <div v-if="item.moderate == 0" class="icon down"></div>
-                		<div class="t-table bg-white pt10 pb10">
-                			<div class="t-cell v_middle pl12">
-                        <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                        <div class="t-table pr12 border-box mt15">
-                          <div class="t-cell color-999 font14">
-                            <div class="clamp1">{{ item.summary }}</span></div>
-                          </div>
-                        </div>
-                			</div>
-                		</div>
-                  </router-link>
-                </div>
-              </template>
-            </template>
-          </div>
-        </swiper-item>
-      </swiper>
+  <div class="containerarea bg-page font14 rproductlist nobottom notop">
+    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
+      <template v-if="disTabData1">
+        <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
+          <div>暂无加盟厂商</div>
+        </div>
+        <div v-else class="scroll_list ">
+          <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
+            <div v-if="item.moderate == 0" class="icon down"></div>
+        		<div class="t-table bg-white pt10 pb10">
+      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              </div>
+        			<div class="t-cell v_middle">
+                <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
+        			</div>
+        		</div>
+          </router-link>
+        </div>
+      </template>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showPopup1">
@@ -143,10 +92,18 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.Data.length === (pageStart1 + 1) * limit) {
-            pageStart1++
-            self.$vux.loading.show()
-            self.getData1()
+          if (index === 0) {
+            if (self.tabData1.length === (pageStart1 + 1) * limit) {
+              pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabData2.length === (pageStart2 + 1) * limit) {
+              pageStart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
           }
         }
       })
@@ -174,8 +131,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/factory/list`, params)
+      const params = { pagestart: pageStart1, limit: limit }
+      this.$http.post(`${ENV.BokaApi}/api/retailer/factoryList`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -205,7 +162,11 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.swiperChange()
+      if (this.tabData1.length < limit) {
+        this.disTabData1 = false
+        this.tabData1 = []
+        this.getData1()
+      }
     }
   },
   created () {

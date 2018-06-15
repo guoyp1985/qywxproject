@@ -58,14 +58,20 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addProduct">{{ $t('Add product') }}</router-link>
+      <div class="flex_cell flex_center" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
+        <router-link class="addproduct flex_center btn-bottom-orange" style="width:85%;" to="/recommendProducts">{{ $t('Source of goods') }}</router-link>
+      </div>
+      <div class="flex_cell flex_center">
+        <router-link class="addproduct flex_center btn-bottom-red" style="width:85%;" to="/addProduct">{{ $t('Add product') }}</router-link>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
           <div class="list" v-if="clickdata">
             <div class="item" v-if="clickdata.activityid == 0">
-              <router-link class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
+              <div v-if="clickdata.fpid > 0" class="inner" @click="clickpopup('fee')">设置返点佣金</div>
+              <router-link v-else class="inner" :to="{path: '/addProduct', query: {id: clickdata.id}}">编辑</router-link>
             </div>
             <div class="item" v-if="clickdata.moderate == 0">
               <div class="inner" @click="clickpopup('up')">上架</div>
@@ -135,6 +141,46 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showFeePopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">设置返点佣金</div>
+          <div class="popup-middle font14">
+            <div class="pt10 pb10 pl12 pr12">
+              <div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl12 v_middle" style="width:110px;">
+                  <img class="imgcover v_middle" :src="getPhoto(feeData.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                </div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10 color-lightgray">{{feeData.title}}</div>
+                  <div class="t-table pr12 border-box mt15">
+                    <div class="t-cell color-999 font14">
+                      <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
+                      <div class="clamp1 mt5">
+                          <span class="v_middle db-in">库存: {{ feeData.storage }}{{feeData.unit}}</span>
+                          <span class="v_middle db-in ml5">已售: {{ feeData.saled }}{{feeData.unit}}</span>
+                      </div>
+                    </div>
+                  </div>
+          			</div>
+          		</div>
+              <div class="form-item">
+                <div class="t-table">
+                  <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                  <div class="t-cell input-cell v_middle" style="position:relative;">
+                    <input v-model="postFee" type="text" class="input" :placeholder="$t('Rebate Commission')" />
+                  </div>
+                </div>
+              </div>
+  					</div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeFeePopup">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitFee">提交</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -148,6 +194,7 @@ Back go shop:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -180,7 +227,10 @@ export default {
       pushdata: [],
       checkAll: false,
       disproductdata: false,
-      discustomerdata: false
+      discustomerdata: false,
+      showFeePopup: false,
+      feeData: {},
+      postFee: '0.00'
     }
   },
   watch: {
@@ -284,9 +334,49 @@ export default {
         if (self.customerdata.length === 0) {
           self.getCustomerdata()
         }
+      } else if (key === 'fee') {
+        self.showpopup1 = false
+        self.showFeePopup = true
+        self.feeData = self.clickdata
+        self.postFee = self.feeData.rebate
       } else {
         self.showpopup1 = false
       }
+    },
+    closeFeePopup () {
+      this.showFeePopup = false
+    },
+    submitFee () {
+      const self = this
+      if (self.$util.trim(self.postFee) === '') {
+        self.$vux.toast.show({
+          text: '请输入佣金'
+        })
+        return false
+      }
+      if (isNaN(self.postFee)) {
+        self.$vux.toast.show({
+          text: '请输入正确的佣金'
+        })
+        return false
+      }
+      self.$http.post(`${ENV.BokaApi}/api/retailer/updateRebate`, {
+        id: self.clickdata.id, rebate: self.postFee
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: data.flag !== 1 ? 'warn' : 'success',
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.showFeePopup = false
+              self.productdata[self.clickindex] = data.data
+            }
+          }
+        })
+      })
     },
     getCustomerdata () {
       const self = this
@@ -367,6 +457,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       if (this.productdata.length < limit) {
         this.disproductdata = false
