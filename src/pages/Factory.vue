@@ -21,7 +21,7 @@
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
           <div v-if="tabData1.length == 0" class="emptyitem flex_center">暂无商品</div>
-          <router-link v-else v-for="(item,index) in tabData1" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+          <router-link v-else v-for="(item,index) in tabData1" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
         		<div class="inner list-shadow">
         			<div class="picarea">
         				<div class="pic">
