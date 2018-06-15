@@ -346,7 +346,7 @@ export default {
     getData () {
       const self = this
       const id = this.query.id
-      const infoparams = { id: id, module: this.module }
+      const infoparams = { id: id, module: this.module, fid: self.query.fid }
       if (this.query.from === 'poster') {
         infoparams.from = 'poster'
       }
