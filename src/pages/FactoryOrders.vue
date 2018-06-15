@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-page font14 retailerordes">
+  <div class="containerarea bg-page font14 retailerordes">
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
@@ -17,7 +17,7 @@
                 <div class="mt5">暂无相关订单！</div>
                 <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
-              <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
+              <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" order-link="/factoryOrderDetail">
                 <span slot="orderno">{{ item.orderno }}</span>
                 <span slot="flagstr">{{ item.flagstr }}</span>
                 <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
@@ -143,13 +143,6 @@
         </swiper-item>
       </swiper>
     </div>
-    <div class="s-bottom bottomnaviarea b_top_after">
-      <div class="t-table bottomnavi">
-        <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
-        <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
-        <div class="t-cell item active">{{ $t('My orders') }}</div>
-      </div>
-    </div>
     <div v-transfer-dom class="x-popup popup-deliver">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 font14">
@@ -272,7 +265,7 @@ export default {
       this.$vux.loading.show()
       const self = this
       const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -284,7 +277,7 @@ export default {
       this.$vux.loading.show()
       const self = this
       const params = { params: { flag: 1, pagestart: self.pagestart2, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -296,7 +289,7 @@ export default {
       this.$vux.loading.show()
       const self = this
       const params = { params: { flag: 2, pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -308,7 +301,7 @@ export default {
       this.$vux.loading.show()
       const self = this
       const params = { params: { flag: 3, pagestart: self.pagestart4, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/retailer`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -437,7 +430,7 @@ export default {
     },
     getData () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'orders'
+        module: 'factory', action: 'orders'
       })
     },
     init () {
