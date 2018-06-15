@@ -202,7 +202,7 @@ export default {
     getData () {
       const self = this
       this.id = this.$route.query.id
-      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}`)
+      this.$http.get(`${ENV.BokaApi}/api/order/orderDetail?id=${this.id}&from=user`)
       .then(res => {
         const data = res.data
         if (data.flag !== 1) {
