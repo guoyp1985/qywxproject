@@ -10,14 +10,6 @@
     </template>
     <template v-if="showContainer">
       <div id="article-content" class="pagemiddle" ref="scrollContainer" @scroll="handleScroll">
-        <div v-if="query.newadd && showsharetip" class="sharetiplayer" @click="closeSharetip">
-    			<div class="ico"><i class="al al-feiji"></i></div>
-    			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
-    			<div class="pic">
-    				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
-    			</div>
-    		</div>
-        <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
@@ -30,52 +22,12 @@
             <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
-            <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
-              <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
-            </div>
           </div>
           <div id="editor-content" class="article-content" v-html="article.content"></div>
-          <div class="operate-area">
-            <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-              <span class="al al-xing3 font14"></span>
-              <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
-            </x-button>
-            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
-              <span class="al al-kefu1 font14"></span>
-              <span>{{$t('Advisory')}}</span>
-            </x-button>
-            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
-              <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
-              <span>{{$t('Store')}}</span>
-            </x-button>
-          </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
             <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
           </div>
-          <div class="qrcode-area">
-            <div class="qrcode-bg">
-              <div class="qrcode">
-                <img src="http://vuxlaravel.boka.cn/images/fingerprint.gif"/>
-                <div class="scan-area">
-                  <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
-                  <img v-else :src="WeixinQrcode">
-                </div>
-              </div>
-              <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
-            </div>
-          </div>
-        </div>
-        <div class="comment-area">
-          <div class="comment-op font14">
-            <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
-          </div>
-          <template v-if="article.comments">
-            <divider class="font14 color-gray">{{ $t('Featured Comment') }}</divider>
-          </template>
-          <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader, commentuid: comment.uid}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
-            <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
-          </comment>
         </div>
       </div>
       <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
@@ -91,9 +43,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
-      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="retailernews" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -146,23 +96,15 @@ export default {
       sosTitle: '',
       showContainer: false,
       showShareSuccess: false,
-      showsharetip: true,
-      commentPopupShow: false,
-      replyPopupShow: false,
-      notFavorite: true,
       reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       retailerInfo: {},
-      comments: [],
       showSubscribe: false,
       WeixinQrcode: ENV.WeixinQrcode,
       isdig: 0,
       photoarr: [],
       previewerPhotoarr: [],
       // disComments: false,
-      pagestart: 0,
-      limit: 20,
-      replyData: null,
       messages: 0,
       topcss: ''
     }
@@ -192,122 +134,6 @@ export default {
     },
     closeSubscribe () {
       this.showSubscribe = false
-    },
-    closeSharetip () {
-      this.showsharetip = false
-    },
-    onReplyShow (item) {
-      this.replyData = item
-      this.replyPopupShow = true
-    },
-    onCommentShow () {
-      if (this.loginUser.subscribe === 0) {
-        this.$util.wxAccess()
-      } else {
-        this.commentPopupShow = true
-      }
-    },
-    onCommentDelete (comment) {
-      const self = this
-      self.$vux.confirm.show({
-        title: '确定要删除该评论吗？',
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/comment/delete`, {id: comment.id})
-          .then(res => {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  self.$util.deleteItem(self.comments, comment.id)
-                }
-              }
-            })
-          })
-        }
-      })
-    },
-    commentPopupCancel () {
-      this.commentPopupShow = false
-    },
-    replyPopupCancel () {
-      this.replyPopupShow = false
-    },
-    commentSubmit (value) { // 留言提交
-      const self = this
-      this.commentPopupShow = false
-      self.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
-      .then(res => {
-        self.$vux.loading.hide()
-        let data = res.data
-        if (data.flag) {
-          let newcomment = data.data
-          newcomment.comment = []
-          let newarr = [ newcomment ]
-          self.comments = newarr.concat(self.comments)
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warn',
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
-    },
-    replySubmit (value) { // 回复提交
-      const self = this
-      this.replyPopupShow = false
-      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
-      .then(res => {
-        let data = res.data
-        if (data.flag) {
-          if (!self.replyData.comment) {
-            self.replyData.comment = [ data.data ]
-          } else {
-            self.replyData.comment.push(data.data)
-          }
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warn',
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
-    },
-    handleScroll () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
-        callback: function () {
-          if (self.comments.length === self.pagestart * self.limit) {
-            self.$vux.loading.show()
-            self.getCommentsList()
-            self.pagestart++
-          }
-        }
-      })
-    },
-    getCommentsList () {
-      const self = this
-      let params = { nid: self.query.id, module: self.module, pagestart: self.pagestart, limit: self.limit }
-      self.$http.post(`${ENV.BokaApi}/api/comment/list`, params).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          if (!retdata[i].comment) {
-            retdata[i].comment = []
-          }
-        }
-        self.comments = self.comments.concat(retdata)
-        // self.disComments = true
-      })
     },
     clickProduct (event) {
       const self = this
@@ -585,7 +411,6 @@ export default {
         this.comments = []
         this.pagestart = 0
         this.query = query
-        this.showsharetip = false
         this.getData()
       }
       this.loginUser = User.get()
@@ -595,12 +420,6 @@ export default {
         let data = res.data
         self.messages = data.data
       })
-      if (query.newadd) {
-        const self = this
-        setTimeout(() => {
-          self.showsharetip = false
-        }, 10000)
-      }
     }
   },
   created () {

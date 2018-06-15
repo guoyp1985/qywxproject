@@ -66,6 +66,7 @@
             </div>
           </grid-item>
         </div>
+        <!--
         <div class="gridlist">
           <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
@@ -73,6 +74,7 @@
             </div>
           </grid-item>
         </div>
+      -->
         <div class="gridlist">
           <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', id: factoryInfo.id}" style="position:relative;">
             <div slot="icon">
