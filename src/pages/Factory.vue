@@ -9,7 +9,9 @@
           <div class="clamp1">{{ viewData.title }}</div>
           <div class="font12 clamp2">{{ viewData.summary }}</div>
         </div>
+        <!--
         <router-link :to="{path: '/chat', query: {uid: viewData.uploader}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
+      -->
       </div>
       <tab v-model="selectedIndex" class="v-tab">
         <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
