@@ -254,10 +254,22 @@ export default {
       })
     },
     cancelCommodity (item) {
-      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.moduleid, module: item.type})
+      .then(res => {
+        if (res.data.flag) {
+          self.$util.deleteItem(self.commodities, item.id)
+        }
+      })
     },
     cancelStore (item) {
-      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.id})
+      const self = this
+      this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: item.moduleid, module: item.type})
+      .then(res => {
+        if (res.data.flag) {
+          self.$util.deleteItem(self.stores, item.id)
+        }
+      })
     },
     getData () {
       const user = User.get()

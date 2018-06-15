@@ -58,7 +58,7 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center">
+      <div class="flex_cell flex_center" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
         <router-link class="addproduct flex_center btn-bottom-orange" style="width:85%;" to="/recommendProducts">{{ $t('Source of goods') }}</router-link>
       </div>
       <div class="flex_cell flex_center">
@@ -194,6 +194,7 @@ Back go shop:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -456,6 +457,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       if (this.productdata.length < limit) {
         this.disproductdata = false

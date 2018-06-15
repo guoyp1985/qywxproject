@@ -805,7 +805,8 @@ zh-CN:
   Business school: 商学院
   I want to distribute: 我要分销
   tFactoryProductlist: 商品列表
-  tFactoryNews: 文章列表
+  tFactoryNewsList: 文章列表
+  tFactoryNews: 文章详情
   tAddFactoryProduct: 添加商品
   Channel price: 渠道价
   tFactoryAgentFee: 设置佣金
@@ -813,7 +814,6 @@ zh-CN:
   tFactoryOrders: 订单列表
   tFactoryRevenue: 我的收入
   tAddFactoryNews: 添加文章
-  tSeller: 卖家信息
   tFactoryGoodeazy: 易采集
   tBusinessSchool: 商学院
   Create training materials: 创建培训素材
@@ -822,3 +822,5 @@ zh-CN:
   Contact factory: 联系厂商
   Source of goods: 货源
   tRecommendProducts: 货源
+  tFactoryOrderDetail: 订单详情
+  tRetailerMaterial: 共销宝商学院

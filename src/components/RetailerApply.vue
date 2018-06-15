@@ -365,6 +365,7 @@ export default {
         self.$vux.loading.show()
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         let applydata = Object
+        self.submitdata.fid = self.$route.query.fid
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)

@@ -24,7 +24,7 @@
               </div>
             </div>
           </div>
-          <div class="flex_right padding10">
+          <div class="flex_right padding10" v-if="index > 0">
             <div class="db-in color-red" @click="deleteItem(index)">删除</div>
           </div>
         </div>

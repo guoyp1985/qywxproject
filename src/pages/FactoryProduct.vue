@@ -65,7 +65,7 @@
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
       </div>
-      <div v-if="productdata.identity == 'retailer' && productdata.joinstatus == 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="productdata.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
           <div class="flex_cell flex_center btn-bottom-red" @click="importProduct">我要代理</div>
         </div>
@@ -334,7 +334,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (self.productdata.identity !== 'retailer' || self.productdata.joinstatus === 1) {
+            if (self.productdata.identity !== 'retailer') {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee

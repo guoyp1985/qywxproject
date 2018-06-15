@@ -79,7 +79,7 @@ export default {
   },
   data () {
     return {
-      module: 'news',
+      module: 'factorynews',
       query: {},
       loginUser: {},
       WeixinName: ENV.WeixinName,
@@ -207,7 +207,7 @@ export default {
       const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
+      self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
         id: self.query.id,
         content: editorContent.innerHTML
       }).then(function (res) {
@@ -248,7 +248,7 @@ export default {
       self.$vux.loading.show()
       self.$http.post(url, {
         id: self.query.id,
-        module: 'news'
+        module: self.module
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

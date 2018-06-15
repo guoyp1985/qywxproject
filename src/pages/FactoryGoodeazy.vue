@@ -76,7 +76,7 @@
                   <div class="t-cell">您还没有采集过文章</div>
                 </div>
               </div>
-              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/news', query: {id: item.id}}">
+              <router-link v-else v-for="(item,index) in newsdata" :key="item.id" class="scroll_item pt10 pb10 db" :to="{path: '/factoryNews', query: {id: item.id,fid: query.fid}}">
                 <div class="flex_left">
                   <div class="">
                     <img class="imgcover v_middle avatarimg1 radius0" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
@@ -154,7 +154,7 @@ export default {
       this.$vux.loading.show()
       const self = this
       const params = { do: 'list', pagestart: self.pagestart, limit: self.limit }
-      this.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params)
+      this.$http.post(`${ENV.BokaApi}/api/factorynews/goodeazy`, params)
       .then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -167,7 +167,7 @@ export default {
       this.$vux.loading.show()
       const self = this
       const params = { do: 'history', pagestart: 0, limit: self.historyLimit }
-      this.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params)
+      this.$http.post(`${ENV.BokaApi}/api/factorynews/goodeazy`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
@@ -218,7 +218,7 @@ export default {
       self.clickSearchword = kw
       self.$vux.loading.show()
       let params = { pagestart: self.pagestart1, do: 'get_sogou_list', keyword: kw }
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/factorynews/goodeazy`, params).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = (data.data ? data.data : data)
@@ -260,7 +260,7 @@ export default {
         content: '确定要采集该文章吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+          self.$http.post(`${ENV.BokaApi}/api/factorynews/goodeazy`,
             { do: 'download', url: item.url }
           ).then(function (res) {
             const data = res.data
@@ -270,7 +270,7 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.$router.push({path: '/news', query: {id: data.data.id}})
+                  self.$router.push({path: '/factorynews', query: {id: data.data.id, fid: self.query.fid}})
                 }
               }
             })
@@ -288,7 +288,7 @@ export default {
         return false
       }
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+      self.$http.post(`${ENV.BokaApi}/api/factorynews/goodeazy`,
         { do: 'download', url: self.collecturl }
       ).then(function (res) {
         const data = res.data
@@ -298,7 +298,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({path: '/news', query: {id: data.data.id}})
+              self.$router.push({path: '/factorynews', query: {id: data.data.id, fid: self.query.fid}})
             }
           }
         })
