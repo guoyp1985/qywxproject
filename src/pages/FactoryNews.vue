@@ -77,10 +77,10 @@
             <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
           </comment>
         </div>
-        <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
-          <div class="align_center flex_center flex_cell">
-            <div class="flex_cell flex_center btn-bottom-red" @click="importNews">引入到我的文章</div>
-          </div>
+      </div>
+      <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+        <div class="align_center flex_center flex_cell">
+          <div class="flex_cell flex_center btn-bottom-red" @click="importNews">引入到我的文章</div>
         </div>
       </div>
       <share-success
