@@ -323,7 +323,7 @@ export default {
         node = node.parentNode
       }
     },
-    importProduct () {
+    importNews () {
       const self = this
       self.$vux.confirm.show({
         content: '确定要引入到我的文章吗？',
