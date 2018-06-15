@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="containerarea font14 bg-white news notop nobottom">
+  <div :class="`containerarea font14 bg-white news notop ${topcss}`">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -76,6 +76,11 @@
           <comment v-for="(comment, index) in comments" :item="comment" :key="index" :params="{uid: reward.uid, uploader: article.uploader, commentuid: comment.uid}" @on-delete="onCommentDelete(comment)" @on-reply="onReplyShow(comment)">
             <reply slot="replies" v-for="(item, index1) in comment.comment" :item="item" :key="index1"></reply>
           </comment>
+        </div>
+        <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+          <div class="align_center flex_center flex_cell">
+            <div class="flex_cell flex_center btn-bottom-red" @click="importNews">引入到我的文章</div>
+          </div>
         </div>
       </div>
       <share-success
@@ -158,7 +163,8 @@ export default {
       pagestart: 0,
       limit: 20,
       replyData: null,
-      messages: 0
+      messages: 0,
+      topcss: ''
     }
   },
   filters: {
@@ -317,6 +323,26 @@ export default {
         node = node.parentNode
       }
     },
+    importProduct () {
+      const self = this
+      self.$vux.confirm.show({
+        content: '确定要引入到我的文章吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, {
+            id: self.query.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
     getData () {
       const self = this
       const id = this.query.id
@@ -354,6 +380,9 @@ export default {
               }
             })
             self.showContainer = true
+            if (self.article.identity !== 'retailer') {
+              self.topcss = 'nobottom'
+            }
             return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
               params: {id: id, module: self.module}
             })
