@@ -26,7 +26,7 @@
                 </div>
                 <div class="user-credits">
                   <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
-                    <img src="http://vuxlaravel.boka.cn/images/jb_icon.png" style="width: 20px;height: 20px;" />
+                    <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
                     <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
                   </router-link>
                 </div>
