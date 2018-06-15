@@ -42,7 +42,7 @@
       <template v-if="selectedIndex == 1">
         <div v-if="disTabData2" class="scroll_list">
           <div v-if="tabData2.length == 0" class="emptyitem flex_center">暂无文章</div>
-          <router-link :to="{path: '/factorynews', query: {id: item.id, fid: query.id}}" v-else v-for="(item,index1) in tabData2" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+          <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.id}}" v-else v-for="(item,index1) in tabData2" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
             <div class="t-table">
               <div class="t-cell v_middle w70">
                 <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
