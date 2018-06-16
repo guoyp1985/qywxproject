@@ -57,7 +57,7 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      query: {},
       cutImg: '',
       popupShow: false,
       allowsubmit: true,
@@ -71,6 +71,15 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.cutImg = ''
+      this.popupShow = false
+      this.allowsubmit = true
+      this.photoarr = []
+      this.havenum = 0
+      this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
+      this.requireddata = { title: '', 'photo': '' }
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -207,8 +216,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
+      if (this.query.id !== this.$route.query.id) {
+        this.initData()
+        this.query = this.$route.query
+        this.getData()
+      }
     }
   },
   activated () {

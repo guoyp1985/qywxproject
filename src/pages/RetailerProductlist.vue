@@ -39,6 +39,7 @@
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                      <div class="clamp1 mt5">佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
                       <div class="clamp1 mt5">
                           <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
