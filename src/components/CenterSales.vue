@@ -168,6 +168,9 @@
         </cell>
       </template>
     </group>
+    <router-link class="bottom_propaganda db" to="/retailerMaterial">
+      <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
+    </router-link>
   </div>
 </template>
 

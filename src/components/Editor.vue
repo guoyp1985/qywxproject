@@ -15,7 +15,7 @@
           <span class="color-white font16">{{$t('Edit')}}</span>
         </div>
       </div>
-      <div class="menu-btn-box" v-show="showMenuIcon">
+      <div class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
         <div class="menu-btn" @click="clickMenuHandle">
           <span class="color-white font16">{{$t('Menu')}}</span>
         </div>
@@ -180,7 +180,11 @@ export default {
   },
   props: {
     elem: String,
-    query: Object
+    query: Object,
+    module: {
+      type: String,
+      default: 'news'
+    }
   },
   data () {
     return {

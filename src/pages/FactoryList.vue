@@ -1,33 +1,24 @@
 <template>
-  <div class="containerarea bg-page font14 rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-      <template v-if="disList">
-        <template v-if="!Data || Data.length == 0">
-          <div class="scroll_list">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">暂无厂商数据</div>
+  <div class="containerarea bg-page font14 rproductlist nobottom notop">
+    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
+      <template v-if="disTabData1">
+        <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
+          <div>暂无加盟厂商</div>
+        </div>
+        <div v-else class="scroll_list ">
+          <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
+            <div v-if="item.moderate == 0" class="icon down"></div>
+        		<div class="t-table bg-white pt10 pb10">
+      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               </div>
-            </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="scroll_list ">
-            <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="t-table bg-white pt10 pb10">
-          			<div class="t-cell v_middle pl12">
-                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="t-table pr12 border-box mt15">
-                    <div class="t-cell color-999 font14">
-                      <div class="clamp1">{{ item.summary }}</span></div>
-                    </div>
-                  </div>
-          			</div>
-          		</div>
-            </router-link>
-          </div>
-        </template>
+        			<div class="t-cell v_middle">
+                <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
+        			</div>
+        		</div>
+          </router-link>
+        </div>
       </template>
     </div>
     <div v-transfer-dom>
@@ -62,27 +53,33 @@ Add factory:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
 
 let pageStart1 = 0
+let pageStart2 = 0
 const limit = 10
+
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem
   },
   data () {
     return {
       query: {},
       loginUser: {},
-      Data: [],
+      tabtxts: [ '已分销', '未分销' ],
+      selectedIndex: 0,
+      tabData1: [],
+      tabData2: [],
+      disTabData1: false,
+      disTabData2: false,
       showPopup1: false,
       clickData: {},
-      clickIndex: 0,
-      disList: false
+      clickIndex: 0
     }
   },
   methods: {
@@ -95,24 +92,65 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.Data.length === (pageStart1 + 1) * limit) {
-            pageStart1++
-            self.$vux.loading.show()
-            self.getData1()
+          if (index === 0) {
+            if (self.tabData1.length === (pageStart1 + 1) * limit) {
+              pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else if (index === 1) {
+            if (self.tabData2.length === (pageStart2 + 1) * limit) {
+              pageStart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
           }
         }
       })
     },
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.tabData1.length < limit) {
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < limit) {
+            this.disTabData2 = false
+            this.tabData2 = []
+            this.getData2()
+          }
+          break
+      }
+    },
     getData1 () {
       const self = this
-      const params = { params: { pagestart: pageStart1, limit: limit } }
+      const params = { pagestart: pageStart1, limit: limit }
+      this.$http.post(`${ENV.BokaApi}/api/retailer/factoryList`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData1 = self.tabData1.concat(retdata)
+        self.disTabData1 = true
+      })
+    },
+    getData2 () {
+      const self = this
+      const params = { params: { pagestart: pageStart2, limit: limit } }
       this.$http.get(`${ENV.BokaApi}/api/factory/list`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.Data = self.Data.concat(retdata)
-        self.disList = true
+        self.tabData2 = self.tabData2.concat(retdata)
+        self.disTabData2 = true
       })
     },
     init () {
@@ -124,11 +162,9 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      if (this.Data.length < limit) {
-        this.disList = false
-        this.Data = []
-        this.$vux.loading.show()
-        pageStart1 = 0
+      if (this.tabData1.length < limit) {
+        this.disTabData1 = false
+        this.tabData1 = []
         this.getData1()
       }
     }

@@ -64,7 +64,7 @@ export default {
       photoarr: [],
       maxnum: 1,
       havenum: 0,
-      submitdata: { title: '', photo: '', seodescription: '', summary: '' },
+      submitdata: { title: '', photo: '', seodescription: '', summary: '', classid: 100 },
       requireddata: { title: '', 'photo': '' }
     }
   },
@@ -152,7 +152,7 @@ export default {
       } else {
         delete self.submitdata['id']
       }
-      self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/add/factorynews`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -162,10 +162,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               let params = { id: data.data }
-              if (self.query.id) {
-                params.newadd = 1
-              }
-              self.$router.push({ path: '/news', query: params })
+              self.$router.push({ path: '/material', query: params })
             }
           }
         })
@@ -183,7 +180,7 @@ export default {
         const self = this
         document.title = '更多设置'
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-          params: { id: this.query.id, module: 'news' }
+          params: { id: this.query.id, module: 'factorynews' }
         })
         .then(function (res) {
           const data = res.data

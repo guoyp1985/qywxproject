@@ -30,11 +30,6 @@
           </div>
         </div>
       </div>
-      <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
-        <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importNews">引入到我的文章</div>
-        </div>
-      </div>
       <share-success
         v-show="showShareSuccess"
         v-if="article.uploader == reward.uid || query.wid == reward.uid || article.identity != 'user'"
@@ -43,7 +38,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="retailernews" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="material" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -65,10 +60,6 @@
 </template>
 <script>
 import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
-import TitleTip from '@/components/TitleTip'
-import Comment from '@/components/Comment'
-import Reply from '@/components/Reply'
-import CommentPopup from '@/components/CommentPopup'
 import Editor from '@/components/Editor'
 import ShareSuccess from '@/components/ShareSuccess'
 import Sos from '@/components/Sos'
@@ -84,7 +75,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos
+    Popup, XButton, Divider, Editor, ShareSuccess, Previewer, Sos
   },
   data () {
     return {
@@ -98,15 +89,18 @@ export default {
       showShareSuccess: false,
       reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
-      retailerInfo: {},
+      factoryinfo: {},
+      comments: [],
       showSubscribe: false,
       WeixinQrcode: ENV.WeixinQrcode,
       isdig: 0,
       photoarr: [],
       previewerPhotoarr: [],
       // disComments: false,
-      messages: 0,
-      topcss: ''
+      pagestart: 0,
+      limit: 20,
+      replyData: null,
+      messages: 0
     }
   },
   filters: {
@@ -149,30 +143,10 @@ export default {
         node = node.parentNode
       }
     },
-    importNews () {
-      const self = this
-      self.$vux.confirm.show({
-        content: '确定要引入到我的文章吗？',
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, {
-            id: self.query.id
-          }).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(data.error)
-            })
-          })
-        }
-      })
-    },
     getData () {
       const self = this
       const id = this.query.id
-      const infoparams = { id: id, module: this.module, fid: self.query.fid }
+      const infoparams = { id: id, module: this.module }
       if (this.query.from === 'poster') {
         infoparams.from = 'poster'
       }
@@ -194,21 +168,18 @@ export default {
             self.article = res.data.data
             document.title = self.article.title
             self.reward = User.get()
-            self.retailerInfo = self.article.retailerinfo
+            self.factoryinfo = self.article.factoryinfo
             self.$util.handleWxShare({
               data: self.article,
               module: self.module,
               moduleid: self.article.id,
               lastshareuid: self.query.share_uid,
-              link: `${ENV.Host}/#/factorynews?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
             })
             self.showContainer = true
-            if (self.article.identity !== 'retailer') {
-              self.topcss = 'nobottom'
-            }
             return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
               params: {id: id, module: self.module}
             })
@@ -229,57 +200,8 @@ export default {
           if (data.flag === 1) {
             self.isdig = 1
           }
-          return self.$http.post(`${ENV.BokaApi}/api/user/favorite/show`, {id: self.article.id, module: self.module})
         }
       })
-      .then(res => {
-        if (res) {
-          if (res.data.flag < 1) {
-            self.notFavorite = true
-          } else {
-            self.notFavorite = false
-          }
-        }
-      })
-    },
-    onFavorite () {
-      const self = this
-      if (this.notFavorite) {
-        this.notFavorite = false
-        let cururl = `/factorynews?id=${self.query.id}`
-        if (self.query.wid) {
-          cururl = `${cururl}&wid=${self.query.wid}`
-        }
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/add`, {id: this.article.id, module: self.module, currenturl: encodeURIComponent(cururl)})
-        .then(res => {
-          if (res.data.flag) {
-            self.$vux.toast.text(self.$t('Favorite Success'))
-          }
-        })
-      } else {
-        this.notFavorite = true
-        this.$http.post(`${ENV.BokaApi}/api/user/favorite/delete`, {id: this.article.id, module: self.module})
-        .then(res => {
-          if (res.data.flag) {
-            self.$vux.toast.text(self.$t('Cancel Favorite'))
-          }
-        })
-      }
-    },
-    onAdvisory () {
-      if (this.loginUser.subscribe === 0) {
-        // this.$util.wxAccess()
-        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=factorynews&fromId=${this.query.id}`)
-        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
-      } else {
-        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'factorynews', fromId: this.query.id}})
-      }
-    },
-    onStore () {
-      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
-    },
-    onShare () {
     },
     editSave () {
       const self = this
@@ -305,7 +227,7 @@ export default {
       })
     },
     editSetting () {
-      this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id}})
+      this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
     },
     editDelete () {
       this.$vux.confirm.show({
@@ -326,7 +248,7 @@ export default {
       self.$vux.loading.show()
       self.$http.post(url, {
         id: self.query.id,
-        module: 'factorynews'
+        module: self.module
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -391,7 +313,7 @@ export default {
     },
     toStore () {
       const self = this
-      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
+      self.$router.push({path: '/store', query: {wid: self.factoryinfo.uid}})
     },
     createSocket () {
       const uid = this.loginUser.uid

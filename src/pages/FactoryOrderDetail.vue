@@ -264,7 +264,7 @@ export default {
         module: 'retailer', action: 'orderdetail', id: this.query.id
       })
       this.deliverdata.id = this.query.id
-      const params = { id: this.query.id, from: 'retailer' }
+      const params = { id: this.query.id, from: 'factory' }
       this.$http.get(`${ENV.BokaApi}/api/order/orderDetail`, {
         params: params
       }).then(res => {

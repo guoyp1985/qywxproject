@@ -29,7 +29,7 @@
       							<div class="t-cell v_middle">
       								<div class="name color-black font15">{{ product.name }}</div>
       							</div>
-      							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ submitdata.postdata[index].shopinfo[index1].quantity }}</div>
+      							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ submitdata.quantity }}</div>
       						</div>
       					</div>
       					<div class="b_bottom_after padding10 form-item">
@@ -38,10 +38,10 @@
       							<div class="t-cell v_middle align_right">
                       <group class="x-number db-in">
                         <template v-if="product.crowdtype == 'bargainbuy'">
-                          <x-number v-model="submitdata.postdata[index].shopinfo[index1].quantity" :min="1" :max="1" @on-change="changenumber()"></x-number>
+                          <x-number v-model="submitdata.quantity" :min="1" :max="1" @on-change="changenumber()"></x-number>
                         </template>
                         <template v-else>
-                          <x-number v-model="submitdata.postdata[index].shopinfo[index1].quantity" :min="1" @on-change="changenumber()"></x-number>
+                          <x-number v-model="submitdata.quantity" :min="1" @on-change="changenumber()"></x-number>
                         </template>
                       </group>
       							</div>
@@ -53,7 +53,7 @@
                 <div class="t-cell v_middle" style="width:40px;">留言</div>
                 <div class="t-cell v_middle">
                   <group class="textarea-outer" style="padding:0;">
-                    <x-textarea v-model="submitdata.postdata[index].content" style="padding:5px;" class="x-textarea" :placeholder="$t('To seller message')" :show-counter="false" :rows="1" autosize></x-textarea>
+                    <x-textarea v-model="submitdata.content" style="padding:5px;" class="x-textarea" :placeholder="$t('To seller message')" :show-counter="false" :rows="1" autosize></x-textarea>
                   </group>
                 </div>
               </div>
@@ -172,7 +172,9 @@ export default {
       addressdata: [],
       submitdata: {
         addressid: '',
-        postdata: []
+        quantity: 1,
+        shopid: 0,
+        content: ''
       },
       submiting: false
     }
@@ -213,7 +215,9 @@ export default {
       this.addressdata = []
       this.submitdata = {
         addressid: '',
-        postdata: []
+        quantity: 1,
+        shopid: 0,
+        content: ''
       }
       this.submiting = false
     },
@@ -225,7 +229,7 @@ export default {
         let productinfos = order.info
         for (let j = 0; j < productinfos.length; j++) {
           let pd = productinfos[j]
-          total += parseFloat(pd.special) * self.submitdata.postdata[i].shopinfo[j].quantity
+          total += parseFloat(pd.special) * self.submitdata.quantity
         }
       }
       self.payPrice = total.toFixed(2)
@@ -301,7 +305,7 @@ export default {
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
             }
-            self.submitdata.postdata.push(postd)
+            // self.submitdata.postdata.push(postd)
           }
           self.payPrice = total.toFixed(2)
           return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
@@ -334,6 +338,7 @@ export default {
       if (this.query.id !== this.$route.query.id) {
         this.initData()
         this.query = this.$route.query
+        this.submitdata.shopid = this.query.id
         this.getData()
       }
     }
