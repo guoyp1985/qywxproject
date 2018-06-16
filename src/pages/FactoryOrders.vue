@@ -428,23 +428,12 @@ export default {
         }
       })
     },
-    getData () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'orders'
-      })
-    },
-    init () {
-      this.loginUser = User.get()
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       this.swiperChange()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

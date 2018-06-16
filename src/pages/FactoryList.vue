@@ -154,9 +154,8 @@ export default {
       })
     },
     init () {
-      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'list'
+        module: 'retailer', action: 'factorylist'
       })
     },
     refresh () {

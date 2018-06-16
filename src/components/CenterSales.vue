@@ -160,7 +160,7 @@
             <span class="font15">{{$t('Setting')}}</span>
           </div>
         </cell>
-        <cell :link="{path:'/factoryList'}" style="position:relative">
+        <cell :link="{path:'/factoryList'}" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0" style="position:relative">
           <div slot="icon" class="pr10"><i class="al al-yaoqing1 color-red4 db-in font18"></i></div>
           <div slot="inline-desc">
             <span class="font15">{{$t('I want to distribute')}}</span>
@@ -168,7 +168,7 @@
         </cell>
       </template>
     </group>
-    <router-link class="bottom_propaganda db" to="/retailerMaterial">
+    <router-link class="bottom_propaganda db" to="/retailerMaterial" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
       <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
     </router-link>
   </div>

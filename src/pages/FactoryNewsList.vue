@@ -219,12 +219,6 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
-    init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'factorynews'
-      }).then(res => {
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
@@ -236,9 +230,6 @@ export default {
         this.getData1()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

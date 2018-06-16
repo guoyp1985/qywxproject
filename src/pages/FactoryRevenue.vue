@@ -368,18 +368,10 @@ export default {
           break
       }
     },
-    init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'revenue'
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.swiperChange()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
