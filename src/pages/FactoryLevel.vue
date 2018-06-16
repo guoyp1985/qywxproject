@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center btn-bottom-red" @click="submitEvent">{{ $t('Submit') }}</div>
+      <div class="flex_cell flex_center btn-bottom-red" @click="submitEvent">{{ $t('Save') }}</div>
     </div>
   </div>
 </template>
@@ -95,7 +95,7 @@ export default {
         return false
       }
       self.$vux.confirm.show({
-        content: '等级创建成功后，只能修改不能删除，确定提交吗？',
+        content: '等级创建成功后，只能修改不能删除，确定保存吗？',
         onConfirm () {
           let postData = { fid: self.query.id, salesmoney: salesmoney, levelname: levelname }
           self.$vux.loading.show()
