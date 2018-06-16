@@ -1,0 +1,442 @@
+<template>
+  <div class="containerarea bg-white font14 product notop nobottom">
+    <template v-if="showSos">
+      <sos :title="sosTitle"></sos>
+    </template>
+    <template v-if="showcontainer">
+      <div id="scroll-container" class="pagemiddle scroll-container" style="bottom:0;">
+        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
+        <template v-if="showFlash">
+          <swiper
+            class="pic-swiper notitle"
+            dots-position="center"
+            :interval=6000
+            :show-dots="isshowdot"
+            :aspect-ratio="1/1"
+            auto
+            loop>
+            <swiper-item v-for="(item,index) in photoarr" :key="item.id">
+              <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+            </swiper-item>
+          </swiper>
+        </template>
+        <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
+      		<div class="clamp2">
+            <span class="v_middle db-in bold">{{ productdata.title }}</span>
+          </div>
+          <div class="font24 color-red" v-for="(item,index) in feeData" :key="index">
+            <span class="font18 mr5">{{index}}级代理佣金: {{ $t('RMB') }}</span>{{ item }}
+          </div>
+        </div>
+        <div class="bg-page" style="height:10px;"></div>
+        <div class="b_top_after"></div>
+        <div class="padding10 b_bottom_after">
+          <div class="t-table">
+    				<div class="t-cell v_middle w70">
+              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            </div>
+    				<div class="t-cell v_middle">
+    					<div class="distitle clamp2">{{ retailerInfo.title }}</div>
+    					<div class="distitle clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
+    				</div>
+          </div>
+        </div>
+        <div class="flex_center pt10 pb10 bg-page color-gray">—— 详情 ——</div>
+        <div class="productcontent">
+          <div v-html="productdata.content"></div>
+          <img v-for="(item,index) in previewerPhotoarr" :key="index" :src="item.src" @click="showBigimg(index)" />
+        </div>
+        <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
+      </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+      </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
+      </div>
+      <template v-if="loginUser">
+        <share-success
+          v-show="showShareSuccess"
+          v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
+          :data="productdata"
+          :loginUser="loginUser"
+          :module="module"
+          :on-close="closeShareSuccess">
+        </share-success>
+      </template>
+    </template>
+  </div>
+</template>
+
+<i18n>
+Selection promotion:
+  zh-CN: 精选促销
+All products:
+  zh-CN: 全部商品
+Online consulting:
+  zh-CN: 在线咨询
+Wechat contact:
+  zh-CN: 微信联系
+Shop topline:
+  zh-CN: 店铺头条
+Another batch:
+  zh-CN: 换一批
+</i18n>
+
+<script>
+import { Previewer, Swiper, SwiperItem, TransferDom, Popup, XImg } from 'vux'
+import ShareSuccess from '@/components/ShareSuccess'
+import Sos from '@/components/Sos'
+import TitleTip from '@/components/TitleTip'
+import Time from '#/time'
+import ENV from 'env'
+import { User } from '#/storage'
+import Socket from '#/socket'
+
+let room = ''
+export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip
+  },
+  filters: {
+    dateformat: function (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd')
+    }
+  },
+  data () {
+    return {
+      module: 'factoryproduct',
+      query: {},
+      disTimeout: true,
+      showSos: false,
+      sosTitle: '',
+      showcontainer: false,
+      showShareSuccess: false,
+      productid: null,
+      productdata: {},
+      retailerInfo: {},
+      loginUser: {},
+      isshowtop: false,
+      waitgetcredit: 100,
+      showFlash: false,
+      showdot: true,
+      weixin_qrcode: ENV.WeixinQrcode,
+      flashdata: [],
+      photoarr: [],
+      contentphotoarr: [],
+      previewerPhotoarr: [],
+      previewerFlasharr: [],
+      ingdata: [],
+      activitydata: [],
+      replyData: null,
+      messages: 0,
+      feeData: {},
+      levelpolicy: []
+    }
+  },
+  watch: {
+    query: function () {
+      return this.query
+    },
+    loginUser: function () {
+      return this.loginUser
+    },
+    productdata: function () {
+      return this.productdata
+    },
+    productid: function () {
+      return this.productid
+    },
+    retailerInfo: function () {
+      return this.retailerInfo
+    },
+    photoarr: function () {
+      const self = this
+      if (self.photoarr.length > 0) {
+        self.showFlash = true
+      }
+      return this.photoarr
+    },
+    showFlash: function () {
+      return this.showFlash
+    }
+  },
+  computed: {
+    isshowdot: function () {
+      if (this.photoarr.length > 1) {
+        this.showdot = true
+      } else {
+        this.showdot = false
+      }
+      return this.showdot
+    }
+  },
+  methods: {
+    initData () {
+      this.disTimeout = true
+      this.showSos = false
+      this.sosTitle = ''
+      this.showcontainer = false
+      this.showShareSuccess = false
+      this.productid = null
+      this.productdata = {}
+      this.retailerInfo = {}
+      this.showFlash = false
+      this.showdot = true
+      this.flashdata = []
+      this.photoarr = []
+      this.contentphotoarr = []
+      this.previewerPhotoarr = []
+      this.previewerFlasharr = []
+      this.ingdata = []
+      this.messages = 0
+    },
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
+    access () {
+      if (this.loginUser.subscribe === 0) {
+        this.$util.wxAccess()
+      } else {
+        this.$router.push('/center')
+      }
+    },
+    showBigimg (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewer.show(index)
+      } else {
+        let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: viewarr[index],
+          urls: viewarr
+        })
+      }
+    },
+    showBigimg1 (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerFlash.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.photoarr[index],
+          urls: self.photoarr
+        })
+      }
+    },
+    closeShareSuccess () {
+      this.showShareSuccess = false
+    },
+    handelShare () {
+      const self = this
+      let shareData = {
+        module: self.module,
+        moduleid: self.productid,
+        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        successCallback: function () {
+          self.showShareSuccess = true
+        }
+      }
+      if (self.query.share_uid) {
+        shareData.lastshareuid = self.query.share_uid
+      }
+      shareData.data = self.productdata
+      self.$util.handleWxShare(shareData)
+    },
+    getData () {
+      const self = this
+      this.productid = this.query.id
+      let infoparams = { id: this.productid, module: this.module }
+      if (this.query.wid) {
+        infoparams.wid = this.query.wid
+      }
+      if (this.query.share_uid) {
+        infoparams.share_uid = this.query.share_uid
+      }
+      if (this.query.lastshareuid) {
+        infoparams.lastshareuid = this.query.lastshareuid
+      }
+      if (this.query.from === 'poster') {
+        infoparams.from = 'poster'
+      }
+      this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+        params: infoparams
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag !== 1) {
+            self.sosTitle = data.error
+            self.showSos = true
+          } else {
+            self.showcontainer = true
+            self.productdata = data.data
+            self.retailerInfo = self.productdata.retailerinfo
+            document.title = self.productdata.title
+            const photo = self.productdata.photo
+            if (photo && self.$util.trim(photo) !== '') {
+              self.photoarr = photo.split(',')
+            }
+            if (self.photoarr.length > 0) {
+              self.showFlash = true
+              self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
+            }
+            const content = self.productdata.content
+            const contetnphoto = self.productdata.contentphoto
+            if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+            } else if (contetnphoto && self.$util.trim(contetnphoto) !== '') {
+              self.contentphotoarr = contetnphoto.split(',')
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
+            }
+            self.handelShare()
+            return self.$http.post(`${ENV.BokaApi}/api/factory/getAgentFee`, {id: self.query.id, fid: self.loginUser.uid})
+          }
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          self.feeData = data.data ? data.data : data
+        }
+      })
+    },
+    createSocket () {
+      const uid = this.loginUser.uid
+      const linkman = this.loginUser.linkman
+      // const fromId = this.query.fromId
+      room = `${this.module}-${this.query.id}`
+      Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
+    },
+    init () {
+      this.$util.wxAccessListening()
+    },
+    refresh () {
+      const self = this
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
+      this.initData()
+      this.showShareSuccess = false
+      this.previewerPhotoarr = []
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
+      this.createSocket()
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
+    }
+  },
+  created () {
+    this.init()
+  },
+  activated () {
+    this.refresh()
+  }
+}
+</script>
+
+<style lang="less">
+.notop .pagetop{display:none;}
+.vline{position:relative;}
+.vline:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 2px;
+  top: 4px;
+  bottom: 4px;
+  margin: auto 0;
+  left: -1px;
+  background-color: #ff6600;
+}
+.product .buylist:after{
+  content:'';
+  display:block;
+  clear:both;
+}
+.product .buylist .item{
+  float: left;
+  width: 50px;
+  text-align: center;
+  display:block;
+  color:inherit;;
+}
+.productcontent{
+  padding:20px 15px;
+}
+.product .productcontent img{
+  max-width:100%;
+  vertical-align: middle;
+}
+.product .productarea.scrollend:after {
+    background-color: #f6f6f6;
+}
+
+.product .pagetop{
+  box-shadow: 0px 0px 10px 3px #d0d0d0;
+}
+.product .pagemiddle{top:50px;}
+.product.notop .pagemiddle{top:0px;}
+.product .numicon {
+    position: absolute;
+    top: 0;
+    right: -15px;
+    background: #f06825;
+    padding: 0 1px;
+    border-radius: 16%;
+    color: #fff;
+    font-size: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
+.product .pic-swiper .vux-swiper{
+  position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
+}
+.product .vux-swiper-item {}
+.product .vux-swiper-item img{}
+.product .vux-swiper-desc{display:none !important;}
+.product .grouptitle{
+  width:100%;
+  height: 45px;
+  color: #fff;
+  font-size: 12px;
+  background-image: url(../assets/images/productbg.png);
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: cover;
+  position:relative;
+}
+.product .grouptitle .t-table{height:100%;}
+.product .grouptitle .t-cell{height:100%;vertical-align:middle;}
+.product .grouptitle .col1{padding-left:10px;padding-right:10px;display:inline-block;}
+.product .grouptitle .col2{display:inline-block;margin-top:2px;}
+.product .grouptitle .col3{
+	display:inline-block;border-radius:10px;padding:1px 10px;text-align:center;background-color:rgba(0,0,0,0.1);
+	position:absolute;right:10px;top:50%;margin-top:-9px;
+}
+.product .grouptitle .col2 .colicon{display:inline-block;border-radius:10px;border:#fff 1px solid;padding:1px 10px;text-align:center;}
+.product .help-icon{
+  color:#ff3b30;
+  border:#ff3b30 1px solid;
+  border-radius:50%;
+  display:inline-block;
+  width:13px;height:13px;
+  font-size:10px;
+  text-align:center;
+  line-height:14px;
+}
+
+.product .btnfavorite.have .al:before{content:"\e68c";color:red;}
+.product .btnfavorite.none .al:before{content:"\e68b";}
+.product .groupbybottom .btnfavorite:after{display:block;}
+.product .btnfavorite.none:after{content:"收藏";}
+.product .btnfavorite.have:after{content:"已收藏";}
+
+.product .pagemiddle{bottom:50px;}
+.product .pagebottom{height:50px;}
+</style>

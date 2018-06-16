@@ -10,6 +10,19 @@
     </form>
     <div :class="`outer-eidtor-tip ${editTipCss}`">点击【编辑】按钮可修改内容哦！</div>
     <div class="editor-icon">
+      <div class="edit-btn-box" v-show="showEditIcon">
+        <div class="edit-btn" @click="clickEditHandle">
+          <span class="color-white font16">{{$t('Edit')}}</span>
+        </div>
+      </div>
+      <div class="menu-btn-box" v-show="showMenuIcon">
+        <div class="menu-btn" @click="clickMenuHandle">
+          <span class="color-white font16">{{$t('Menu')}}</span>
+        </div>
+      </div>
+    </div>
+    <!--
+    <div class="editor-icon">
       <div class="edit-btn-box" v-show="!showBtnArea">
         <div class="edit-btn" @click="clickEditHandle">
           <span class="color-white font16">{{$t('Edit')}}</span>
@@ -21,6 +34,7 @@
         </div>
       </div>
     </div>
+  -->
     <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
       <flexbox-item>
         <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
@@ -170,6 +184,8 @@ export default {
   },
   data () {
     return {
+      showEditIcon: true,
+      showMenuIcon: true,
       showBtnArea: false,
       showMenuArea: false,
       autofixed: false,
@@ -215,6 +231,8 @@ export default {
   },
   methods: {
     clickEditHandle () {
+      this.showEditIcon = false
+      this.showMenuIcon = false
       this.showMenuArea = false
       this.showBtnArea = true
       this.editTipCss = ''
@@ -224,6 +242,8 @@ export default {
     },
     closeMenuPopup () {
       this.showMenuArea = false
+      this.showEditIcon = true
+      this.showMenuIcon = true
     },
     pushEvent () {
       const self = this
@@ -236,6 +256,8 @@ export default {
     closepush () {
       const self = this
       self.showpush = false
+      this.showEditIcon = true
+      this.showMenuIcon = true
     },
     submitpush () {
       const self = this
@@ -256,6 +278,8 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.showpush = false
+              self.showEditIcon = true
+              self.showMenuIcon = true
             }
           }
         })
@@ -342,11 +366,15 @@ export default {
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-save')
+      this.showEditIcon = true
+      this.showMenuIcon = true
     },
     onCancel () {
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-cancel')
+      this.showEditIcon = true
+      this.showMenuIcon = true
     },
     createEditor () {
       const self = this
@@ -597,11 +625,15 @@ export default {
       return false // 取消元素事件向下冒泡
     },
     clickProduct (event) {
+      const self = this
       let node = event.target
       if (!self.showBtnArea) {
         while (node) {
           if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-            this.$router.push(node.getAttribute('linkurl'))
+            const linkurl = node.getAttribute('linkurl')
+            if (linkurl) {
+              self.$router.push(linkurl)
+            }
             break
           }
           node = node.parentNode

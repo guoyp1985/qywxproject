@@ -94,6 +94,7 @@ export default {
       if (self.query.classid) {
         params.params.classid = self.query.classid
       }
+      this.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/list/knowledge`, params).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -111,7 +112,6 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      this.$vux.loading.show()
       if (this.data.length < this.limit) {
         this.getData()
       }

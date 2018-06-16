@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="height:100%;" v-cloak>
+  <div id="app" @touchend="globalTouch" style="height:100%;" v-cloak>
     <div v-transfer-dom>
       <loading v-model="isLoading" delay="2"></loading>
     </div>
@@ -135,16 +135,16 @@ export default {
           User.set(res.data)
         })
       }
+    },
+    globalTouch () {
+      this.$vux.loading.hide()
     }
   },
   created () {
-    console.info('app start up')
+    console.info('App Start Up')
     document.title = this.$t('tIndex')
     this.$util.wxConfig()
     this.getData()
-  },
-  mounted () {
-    console.log('mmmmmm')
   }
 }
 </script>
@@ -155,7 +155,7 @@ export default {
 @import '~vux/src/styles/tap.less';
 @import '~vux/src/styles/close.less';
 @import '~vux/src/styles/center.less';
-@import './assets/global';
+@import './assets/global.less';
 @import './assets/fonts.less';
 @import './assets/hack.less';
 

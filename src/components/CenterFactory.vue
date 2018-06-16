@@ -21,10 +21,10 @@
         </router-link>
       </div>
       <div class="header-nav flex_table list-shadow02">
-        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/store', query: {wid:retailerInfo.uid}}">
-          <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
-          <span class="ml10 font15" to="/retailerRevenue">{{$t('My shop')}}</span>
-        </router-link>
+        <div class="flex_cell flex_center color-gray2" @click="disJoinQrcode">
+          <span class="nav_icon bg-blue11 al al-a166 font16"></span>
+          <span class="ml10 font15">{{$t('Join qrcode')}}</span>
+        </div>
         <router-link class="flex_cell flex_center color-gray2" to="/retailerRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
           <span class="ml10 font15">{{$t('Myrevenue')}}</span>
@@ -52,7 +52,7 @@
     <div class="list-shadow01">
       <grid :cols="3" class="bk-grid bg-white">
         <div class="gridlist">
-          <grid-item :label="$t('Product')" :link="{path:'/retailerProductlist'}">
+          <grid-item :label="$t('Product')" :link="{path:'/factoryProductlist'}">
               <div slot="icon" style="position:relative;">
                 <i class="al al-guanlizhongxin1"></i>
                 <div class="numicon" v-if="retailerInfo.newproduct > 0 && retailerInfo.newproduct < 100">{{ retailerInfo.newproduct }}</div>
@@ -61,16 +61,7 @@
           </grid-item>
         </div>
         <div class="gridlist">
-          <grid-item :label="$t('Activity')" :link="{path:'/retailerActivitylist'}">
-              <div slot="icon" style="position:relative;">
-                <i class="al al-huodong"></i>
-                <div class="numicon" v-if="retailerInfo.newactivity > 0 && retailerInfo.newactivity < 100">{{ retailerInfo.newactivity }}</div>
-                <div class="numicon" v-if="retailerInfo.newactivity >= 100">···</div>
-              </div>
-          </grid-item>
-        </div>
-        <div class="gridlist">
-          <grid-item :label="$t('News')" :link="{path:'/retailerNews'}">
+          <grid-item :label="$t('News')" :link="{path:'/factoryNews'}">
             <div slot="icon" style="position:relative;">
               <i class="al al-xiangji-"></i>
               <div class="numicon" v-if="retailerInfo.newnews > 0 && retailerInfo.newnews < 100">{{ retailerInfo.newnews }}</div>
@@ -78,96 +69,64 @@
             </div>
           </grid-item>
         </div>
-        <template v-if="retailerInfo.products > 0">
-          <div class="gridlist">
-            <grid-item :label="$t('Rebate customer')" :link="{path:'/retailerSales'}" style="position:relative;">
-              <div slot="icon">
-                <i class="al al-kehu1"></i>
-              </div>
-              <span class="icon_hot"></span>
-            </grid-item>
-          </div>
-          <div class="gridlist">
-            <grid-item :label="$t('Sale chance')" :link="{path:'/retailerSalechance'}" style="position:relative;">
-              <div slot="icon">
-                <i class="al al-12shangpincuxiao"></i>
-              </div>
-              <div class="numicon" v-if="retailerInfo.newopportunity > 0 && retailerInfo.newopportunity < 100">{{ retailerInfo.newopportunity }}</div>
-              <div class="numicon" v-if="retailerInfo.newopportunity >= 100">···</div>
-            </grid-item>
-          </div>
-          <div class="gridlist">
-            <grid-item :label="$t('Contact customer')" :link="{path:'/retailerCustomerlist'}" style="position:relative;">
-              <div slot="icon">
-                <i class="al al-lianxiren"></i>
-              </div>
-              <div class="numicon" v-if="retailerInfo.newcustomers > 0 && retailerInfo.newcustomers < 100">{{ retailerInfo.newcustomers }}</div>
-              <div class="numicon" v-if="retailerInfo.newcustomers >= 100">···</div>
-            </grid-item>
-          </div>
-        </template>
-        <template v-else>
-          <div class="gridlist disabled" @click="clickDisabled">
-            <grid-item :label="$t('Rebate customer')" style="position:relative;">
-              <div slot="icon">
-                <i class="al al-xiaoshou db-in"></i>
-              </div>
-              <span class="icon_hot"></span>
-            </grid-item>
-          </div>
-          <div class="gridlist disabled" @click="clickDisabled">
-            <grid-item :label="$t('Sale chance')">
-              <div slot="icon">
-                <i class="al al-yewujihui db-in"></i>
-              </div>
-            </grid-item>
-          </div>
-          <div class="gridlist disabled" @click="clickDisabled">
-            <grid-item :label="$t('Contact customer')">
-              <div slot="icon">
-                <i class="al al-lianxiren db-in"></i>
-              </div>
-            </grid-item>
-          </div>
-        </template>
+        <div class="gridlist">
+          <grid-item :label="$t('Seller')" :link="{path:`/retailerList?id=${loginUser.uid}`}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-kehu1"></i>
+            </div>
+          </grid-item>
+        </div>
+        <div class="gridlist">
+          <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${loginUser.uid}`}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-dengji"></i>
+            </div>
+          </grid-item>
+        </div>
+        <div class="gridlist">
+          <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${loginUser.uid}`}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-zongshuju"></i>
+            </div>
+          </grid-item>
+        </div>
+        <div class="gridlist">
+          <grid-item :label="$t('Business school')" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-address"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
-      <template v-if="retailerInfo.products > 0">
-        <cell :link="{path:'/retailerOrders'}" style="position:relative">
-          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
-          <div slot="inline-desc">
-            <span class="font15">{{$t('Order list')}}</span>
-          </div>
-          <div slot="child">
-            <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
-            <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
-          </div>
-        </cell>
-      </template>
-      <template v-else >
-        <cell class="listitem disabled" @click.native.stop="clickDisabled">
-          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
-          <div slot="inline-desc">
-            <span class="font15">{{$t('Order list')}}</span>
-          </div>
-        </cell>
-      </template>
-      <template>
-        <cell :link="{path:'/retailerSetting'}" style="position:relative">
-          <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
-          <div slot="inline-desc">
-            <span class="font15">{{$t('Setting')}}</span>
-          </div>
-        </cell>
-        <cell :link="{path:'/factoryList'}" style="position:relative">
-          <div slot="icon" class="pr10"><i class="al al-yaoqing1 color-red4 db-in font18"></i></div>
-          <div slot="inline-desc">
-            <span class="font15">{{$t('I want to distribute')}}</span>
-          </div>
-        </cell>
-      </template>
+      <cell :link="{path:'/retailerOrders'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Order list')}}</span>
+        </div>
+        <div slot="child">
+          <div class="numicon" v-if="retailerInfo.neworders > 0 && retailerInfo.neworders < 100">{{ retailerInfo.neworders }}</div>
+          <div class="numicon" v-if="retailerInfo.neworders >= 100">···</div>
+        </div>
+      </cell>
     </group>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showQrcode" height="100%">
+        <div class="popup1 font14">
+          <div class="popup-top flex_center">{{$t('Level manage')}}</div>
+          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+            <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+          </div>
+          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+            <div>保存图片发送给好友，邀请加盟</div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -203,11 +162,11 @@ With the customer rebate money together!:
 </i18n>
 
 <script>
-import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg } from 'vux'
+import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup } from 'vux'
 import Time from '#/time'
 
 export default {
-  name: 'CenterSales',
+  name: 'CenterFactory',
   props: {
     loginUser: {
       type: Object,
@@ -230,7 +189,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg
+    Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup
   },
   filters: {
     dateFormat (date) {
@@ -240,7 +199,8 @@ export default {
   data () {
     return {
       imgarr: [],
-      wximgarr: []
+      wximgarr: [],
+      showQrcode: false
     }
   },
   watch: {
@@ -252,6 +212,31 @@ export default {
     }
   },
   methods: {
+    disJoinQrcode () {
+      const self = this
+      self.showQrcode = true
+      /*
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/factory/`, {
+        params: {fid: self.loginUser.uid}
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let img = self.$refs.joinQrcode[0] ? self.$refs.joinQrcode[0] : self.$refs.joinQrcode
+          img.src = data.data
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+      */
+    },
+    closeQrcode () {
+      this.showQrcode = false
+    },
     showBigimg (index) {
       const self = this
       if (self.imgarr.length === 0) {
@@ -269,16 +254,6 @@ export default {
           urls: self.wximgarr
         })
       }
-    },
-    clickDisabled () {
-      const self = this
-      self.$vux.confirm.show({
-        content: '请先添加商品再使用该功能哦！',
-        confirmText: '添加商品',
-        onConfirm () {
-          self.$router.push('/addProduct')
-        }
-      })
     }
   }
 }

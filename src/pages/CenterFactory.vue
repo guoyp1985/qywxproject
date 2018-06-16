@@ -8,25 +8,8 @@
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
       <template v-else>
-        <template v-if="afterApply">
-          <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
-            <swiper-item>
-              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide1.jpg" />
-            </swiper-item>
-            <swiper-item>
-              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide2.jpg" />
-            </swiper-item>
-            <swiper-item>
-              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide3.jpg" />
-               <div class="in-btn" @click="inCenter">立即体验</div>
-            </swiper-item>
-          </swiper>
-        </template>
         <template v-if="showCenter">
-          <center-sales :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
-        </template>
-        <template v-if="showApply">
-          <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+          <center-factory :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-factory>
         </template>
       </template>
     </template>
@@ -35,14 +18,13 @@
 
 <script>
 import { Swiper, SwiperItem } from 'vux'
-import CenterSales from '@/components/CenterSales'
-import RetailerApply from '@/components/RetailerApply'
+import CenterFactory from '@/components/CenterFactory'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply
+    Swiper, SwiperItem, CenterFactory
   },
   data () {
     return {
@@ -59,28 +41,6 @@ export default {
     }
   },
   methods: {
-    applySuccess () {
-      const self = this
-      self.showCenter = false
-      self.showApply = false
-      self.afterApply = true
-      self.$vux.loading.hide()
-    },
-    inCenter () {
-      const self = this
-      // self.$vux.loading.show()
-      // self.afterApply = false
-      // self.refresh()
-      let text = '添加完商品后才可体验更多功能'
-      self.$vux.toast.show({
-        text: text,
-        type: 'success',
-        time: self.$util.delay(text),
-        onHide: function () {
-          self.$router.push({path: '/addProduct', query: {from: 'apply'}})
-        }
-      })
-    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -100,7 +60,6 @@ export default {
                 let data = res.data
                 if (data.flag === 1) {
                   self.showCenter = true
-                  self.showApply = false
                   self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
                     if (res.status === 200) {
                       let data = res.data
@@ -118,22 +77,6 @@ export default {
                     if (res) {
                       let data = res.data
                       self.marqueeData = data.data ? data.data : data
-                    }
-                  })
-                } else {
-                  self.showCenter = false
-                  self.showApply = true
-                  self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                    { params: { limit: 100 } }
-                  ).then(function (res) {
-                    self.$vux.loading.hide()
-                    if (res.status === 200) {
-                      let data = res.data
-                      data = data.data ? data.data : data
-                      for (let i = 0; i < data.length; i++) {
-                        data[i].checked = false
-                      }
-                      self.classData = data
                     }
                   })
                 }

@@ -16,7 +16,7 @@
       </div>
     -->
     </div>
-    <div class="reply-content" v-html="item.message"></div>
+    <div class="reply-content" v-html="filterEmot(item.message)"></div>
     <div class="date-area">
       <div class="date-cell">
         {{item.dateline | dateFormat}}
@@ -59,6 +59,9 @@ export default {
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     onReview () {
       this.$emit('on-review')
     },

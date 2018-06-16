@@ -18,7 +18,6 @@
             </router-link>
             <div class="name disusername">{{item.username}}</div>
             <div class="msg">
-              <!-- <div :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)"> -->
               <template v-if="item.msgtype == 'image'">
                 <div class="main message-text">
                   <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
@@ -55,7 +54,6 @@
                   <div v-html="filterEmot(item.content)"></div>
                 </div>
               </template>
-              <!-- </div> -->
             </div>
           </div>
         </template>
@@ -95,7 +93,7 @@
           </a>
         </div>
       </div>
-      <emotion-box v-show="showEmotBox" bind-textarea="chat-textarea" @input="inputEmot">
+      <emotion-box v-show="showEmotBox" bind-textarea="#chat-textarea" @input="inputEmot">
       </emotion-box>
       <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
         <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
@@ -109,10 +107,12 @@
           <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
           <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
         </grid-item>
-        <grid-item @click.native="viewUserInfo">
-          <span slot="icon" class="feature-icon al al-yonghuxinxi color-gray"></span>
-          <span slot="label" class="color-gray">{{$t('User Info')}}</span>
-        </grid-item>
+        <template v-if="showUserInfo">
+          <grid-item @click.native="viewUserInfo">
+            <span slot="icon" class="feature-icon al al-yonghuxinxi color-gray"></span>
+            <span slot="label" class="color-gray">{{$t('User Info')}}</span>
+          </grid-item>
+        </template>
       </grid>
     </div>
     <div v-transfer-dom class="x-popup">
@@ -220,7 +220,6 @@ export default {
   },
   data () {
     return {
-      // roomid: '',
       module: 'message',
       loginUser: {},
       message: '',
@@ -231,21 +230,11 @@ export default {
       showImgTxt: false,
       isUserTouch: false,
       hasNewMessage: false,
-      // textarea: null,
-      // isPC: this.$util.isPC(),
       query: {},
       messages: [],
-      // focusInterval: null,
       viewHeight: '-52',
       diffSeconds: 300,
-      // pagestart: 0,
-      // limit: 5,
       msgType: 'text',
-      // client_list: '',
-      // uid_list: [],
-      // to_client_id: '',
-      // to_client_name: '',
-      // msgTextarea: null,
       tabmodel: 0,
       tabtxts: [ '文章', '产品', '外链' ],
       autofixed: false,
@@ -261,7 +250,8 @@ export default {
       pagestart2: 0,
       limit1: 10,
       selectNewsData: null,
-      selectProductsData: null
+      selectProductsData: null,
+      showUserInfo: false
     }
   },
   filters: {
@@ -273,9 +263,6 @@ export default {
     }
   },
   watch: {
-    // showSendBtn () {
-    //   return this.showSendBtn
-    // },
     showEmotBox () {
       this.setViewHeight()
     },
@@ -546,22 +533,12 @@ export default {
           }
           // console.log(sendData)
           Socket.send(sendData)
-          // self.msgTextarea.value = ''
           self.message = ''
           self.isUserTouch = false
-          // self.showSendBtn = false
-          // self.showEmotBox = false
-          // self.msgTextarea.focus()
         }
       })
     },
-    // clickEmotionCallback () {
-    //   const self = this
-    //   self.message = self.msgTextarea.value
-    //   self.setSendStatus()
-    // },
     sendMessage () {
-      // this.message = this.msgTextarea.value
       let postData = {
         touid: this.query.uid,
         content: this.message,
@@ -578,80 +555,12 @@ export default {
       if (this.msgType === 'text' && this.$util.trim(postData.content) === '') {
         return false
       }
+      this.$refs.text.updateAutosize()
       this.sendData(postData)
     },
-    // wsConnect () {
-    //   const self = this
-    //   websocket = new WebSocket(ENV.SocketServer)
-    //   let smalluid = self.query.uid < self.loginUser.uid ? self.query.uid : self.loginUser.uid
-    //   let biguid = self.query.uid > self.loginUser.uid ? self.query.uid : self.loginUser.uid
-    //   self.roomid = `${ENV.SocketBokaApi}-message-${smalluid}-${biguid}`
-    //   websocket.onopen = function () {
-    //     let loginData = {
-    //       type: 'login',
-    //       uid: self.loginUser.uid,
-    //       client_name: self.loginUser.linkman.replace(/"/g, '\\"'),
-    //       room_id: self.roomid
-    //     }
-    //     if (self.query.frommodule) {
-    //       loginData.frommodule = self.query.frommodule
-    //       loginData.fromid = self.query.fromId
-    //     }
-    //     websocket.send(JSON.stringify(loginData))
-    //   }
-    //   websocket.onmessage = function (e) {
-    //     const data = JSON.parse(e.data)
-    //     if (data.type === 'login') {
-    //       console.log('in login')
-    //     } else if (data.type === 'logout') {
-    //       console.log('in logout')
-    //     } else if (data.type === 'say') {
-    //       console.log('say')
-    //       let edata = JSON.parse(e.data)
-    //       let saycontent = edata.content
-    //       if (!self.$util.isNull(saycontent)) {
-    //         saycontent = saycontent.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#039;/g, '\'')
-    //       }
-    //       let saydata = {
-    //         uid: edata.from_uid,
-    //         content: saycontent,
-    //         dateline: edata.time,
-    //         msgtype: edata.msgtype ? edata.msgtype : 'text',
-    //         picurl: edata.picurl ? edata.picurl : '',
-    //         thumb: edata.thumb ? edata.thumb : '',
-    //         username: edata.from_client_name,
-    //         id: edata.msgid,
-    //         roomid: edata.room_id,
-    //         avatar: edata.avatar,
-    //         newsdata: edata.newsdata,
-    //         isNew: edata.isNew
-    //       }
-    //       self.messages.push(saydata)
-    //       if (saydata.isNew) {
-    //         let scrollarea = self.$refs.scrollContainer
-    //         if (scrollarea.offsetHeight + scrollarea.scrollTop + 180 > scrollarea.scrollHeight) {
-    //           scrollarea.scrollTop = scrollarea.scrollHeight + 50
-    //         }
-    //       }
-    //     }
-    //   }
-    //   websocket.onclose = function () {
-    //     console.log('ws closed')
-    //     self.wsConnect()
-    //   }
-    //   websocket.onerror = function () {
-    //     console.log('ws error')
-    //   }
-    // },
-    // setSendStatus () {
-    //   const self = this
-    //   let val = self.msgTextarea.value.toString()
-    //   if (self.$util.trim(val) === '') {
-    //     self.showSendBtn = false
-    //   } else {
-    //     self.showSendBtn = true
-    //   }
-    // },
+    viewUserInfo () {
+      this.$router.push({path: 'membersView', query: {uid: this.query.uid}})
+    },
     showImgTxtPopup () {
       const self = this
       this.showImgTxt = true
@@ -865,11 +774,11 @@ export default {
       this.$http.post(`${ENV.BokaApi}/api/message/chatList`, params)
       .then(res => {
         if (res.data.flag) {
-          if (self.messages.length && !res.data.data.length) {
+          const data = res.data.data
+          if (self.messages.length && !data.length) {
             self.$vux.toast.text('没有更多记录', 'middle')
           }
           self.$vux.loading.hide()
-          const data = res.data.data
           self.messages = data.concat(self.messages)
           callback && callback()
         } else {
@@ -916,38 +825,33 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
+      const usergroup = this.loginUser.usergroup
+      if (usergroup && usergroup.length > 0) {
+        for (let i = 0; i < usergroup.length; i++) {
+          if (usergroup[i] === 3) {
+            this.showUserInfo = true
+            break
+          }
+        }
+      }
       this.setViewHeight()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
       this.createSocket()
-      // this.setContactUser()
-      // this.wsConnect()
     }
   },
   // created () {
   //   this.init()
   // },
   mounted () {
-    // const self = this
     // console.log('mounted')
     this.$util.wxPreviewImage('#chat-room')
-    // this.msgTextarea = document.querySelector('#chat-textarea textarea')
-    // this.msgTextarea.addEventListener('focus', function () {
-    //   self.setSendStatus()
-    // })
-    // this.msgTextarea.addEventListener('keyup', function () {
-    //   self.setSendStatus()
-    // })
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
     this.refresh()
   }
-  // beforeRouteLeave (to, from, next) {
-  //   Socket.destory(room)
-  //   next()
-  // }
 }
 </script>
 <style lang="less">
@@ -1090,7 +994,7 @@ export default {
   border-radius: 50%;
   background-color: red;
   position: absolute;
-  right: -18px;
+  right: -15px;
   top: 13px;
 }
 
@@ -1218,9 +1122,10 @@ export default {
 	position: absolute;
   top: 0;
   color: #cccccc;
+  text-align: center;
 }
-.chatlist .chatitem.left .msg .main .min {right: -36px; top: 3px;}
-.chatlist .chatitem.right .msg .main .min {left: -36px; top: 3px;}
+.chatlist .chatitem.left .msg .main .min {right: -40px; top: 3px;}
+.chatlist .chatitem.right .msg .main .min {left: -40px; top: 3px;}
 .audio_play_area {float:left;}
 .chatitem.right .audio_play_area{float:right;}
 .audio_play_area:after{content:"";clear:both;display:block;}

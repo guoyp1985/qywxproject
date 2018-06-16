@@ -53,7 +53,7 @@
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
-                      <div class="clamp1 color-gray">订单金额：{{ item.special }}</div>
+                      <div class="clamp1 color-gray">订单金额：{{$t('RMB')}}{{ item.special }}</div>
                       <div class="clamp1 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
                     </router-link>
                     <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>

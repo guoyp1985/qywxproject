@@ -9,6 +9,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 const env = process.env.NODE_ENV === 'testing'
   ? require('../config/test.env')
@@ -41,6 +42,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     //   sourceMap: config.build.productionSourceMap,
     //   parallel: true
     // }),
+    new UglifyJsPlugin({
+      sourceMap: config.build.productionSourceMap,
+      parallel: true,
+      uglifyOptions: {
+        ecma: 8,
+        warnings: false
+      }
+    }),
     // extract css into its own file
     new ExtractTextPlugin({
       filename: utils.assetsPath('css/[name].[contenthash].css'),

@@ -291,6 +291,11 @@ en:
   Delivery of goods: Delivery of goods
   Cancel the roof: Cancel the roof
   Customer Behavior: Customer Behavior
+  Fatory name: Fatory name
+  Fatory manager: Fatory manager
+  Product summary: Product summary
+  Add factory: Add factory
+  Apply join: Apply join
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -778,4 +783,30 @@ zh-CN:
   tMessageList: 消息列表
   No relevant data: 暂无相关数据
   Business tool: 微商创业工具
-  tRedirect:  授权中...
+  tRedirect: 授权中...
+  tAddFactory: 添加厂商
+  Fatory name: 厂商名称
+  Fatory manager: 管理员
+  Product summary: 厂商简介
+  tFactoryList: 厂商列表
+  tFactoryManage: 厂商管理
+  Add factory: 添加厂商
+  tFactory: 厂商
+  Time of admission: 入驻时间
+  Apply join: 申请加入
+  tCenterFactory: 厂商管理中心
+  Factory center: 厂商中心
+  tFactoryLevel: 厂商等级管理
+  tRetailerList: 卖家列表
+  Seller: 卖家
+  Level: 等级
+  Level manage: 等级管理
+  Join qrcode: 加盟二维码
+  Business school: 商学院
+  I want to distribute: 我要分销
+  tFactoryProductlist: 商品列表
+  tFactoryNews: 文章列表
+  tAddFactoryProduct: 添加商品
+  Channel price: 渠道价
+  tFactoryAgentFee: 设置佣金
+  tFactoryProduct: 商品详情

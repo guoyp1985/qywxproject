@@ -87,8 +87,8 @@
         :on-close="closeShareSuccess">
       </share-success>
       <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
-      <comment-popup class-name="commentPopup" :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
-      <comment-popup class-name="replyPopup" :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -303,6 +303,20 @@ export default {
         // self.disComments = true
       })
     },
+    clickProduct (event) {
+      const self = this
+      let node = event.target
+      while (node) {
+        if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
+          const linkurl = node.getAttribute('linkurl')
+          if (linkurl) {
+            self.$router.push(linkurl)
+          }
+          break
+        }
+        node = node.parentNode
+      }
+    },
     getData () {
       const self = this
       const id = this.query.id
@@ -348,6 +362,13 @@ export default {
       })
       .then(res => {
         if (res) {
+          if (self.reward.uid !== self.article.uploader) {
+            let items = document.querySelectorAll('.insertproduct')
+            for (let i = 0; i < items.length; i++) {
+              let cur = items[i]
+              cur.addEventListener('click', self.clickProduct)
+            }
+          }
           self.handleImg()
           const data = res.data
           if (data.flag === 1) {

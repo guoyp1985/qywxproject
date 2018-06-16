@@ -81,6 +81,7 @@
     "semver": "^5.5.0",
     "shelljs": "^0.7.6",
     "sort-object": "^3.0.2",
+    "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^0.5.8",
     "vue-jest": "^1.4.0",
     "vue-loader": "^13.7.2",
@@ -100,8 +101,7 @@
     "npm": ">= 3.0.0"
   },
   "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
+    "iOS >= 7",
+    "Android >= 4.1"
   ]
 }

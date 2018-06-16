@@ -31,13 +31,13 @@
         </div>
       </sticky>
       <group class="shipping-card">
-        <cell v-if="expressNumber" class="express-info font14 pb5" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/shippingDetails', query: {id: id}}"></cell>
+        <cell v-if="expressNumber" class="express-info font14 pb5" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/deliverinfo', query: {id: id}}"></cell>
         <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
         <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
         <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
       </group>
       <group>
-        <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}&wid=${order.wid}`">
+        <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}`">
           <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
           <div slot="title">
             {{order.name}}
