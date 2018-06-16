@@ -165,7 +165,9 @@ export default {
       } else {
         self.searchresult1 = false
       }
-      self.$http.post(`${ENV.BokaApi}/api/retailer/recommendNews`, params).then(function (res) {
+      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
+        params: params
+      }).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
