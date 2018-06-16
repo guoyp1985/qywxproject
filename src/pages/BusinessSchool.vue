@@ -27,7 +27,7 @@
             </div>
           </template>
         </div>
-        <router-link :to="{path: '/material', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+        <router-link :to="{path: '/material', query: {id: item.id, fid: item.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
           <div class="t-table">
             <div class="t-cell v_middle w70">
               <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
