@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14 rproductlist">
+  <div class="containerarea bg-page font14">
     <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
       <template v-if="disList">
         <template v-if="!Data || Data.length == 0">
