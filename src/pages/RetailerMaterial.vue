@@ -35,6 +35,7 @@ Newcomer Guide:
 <script>
 import { Popover, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 const limit = 10
 let pageStart = 0
@@ -46,6 +47,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       data: [],
       disData: false
     }
@@ -89,6 +91,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       if (this.data.length < limit) {
         this.initData()
