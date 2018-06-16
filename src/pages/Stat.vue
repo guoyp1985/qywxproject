@@ -199,6 +199,7 @@
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                      <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
                     </router-link>
                     <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
                   </div>
