@@ -89,6 +89,11 @@ export default {
     onHide () {
       console.log('on hide')
     },
+    init () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'material'
+      })
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
@@ -98,6 +103,9 @@ export default {
         this.getData()
       }
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

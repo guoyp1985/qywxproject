@@ -212,15 +212,9 @@ export default {
         self.disproductdata = true
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.loginUser = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'productlist'
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       if (this.productdata.length < limit) {
         this.disproductdata = false
@@ -230,9 +224,6 @@ export default {
         this.getData1()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

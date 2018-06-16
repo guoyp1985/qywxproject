@@ -50,29 +50,18 @@ export default {
           if (self.loginUser.subscribe !== 1) {
             self.$vux.loading.hide()
           } else {
-            self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-              module: 'factory', action: 'index'
-            }).then(function (res) {
-              if (res.status !== 200) {
-                self.$vux.loading.hide()
-              } else {
+            self.showCenter = true
+            self.$http.get(`${ENV.BokaApi}/api/factory/info`).then(function (res) {
+              if (res.status === 200) {
                 let data = res.data
-                if (data.flag === 1) {
-                  self.showCenter = true
-                  self.$http.get(`${ENV.BokaApi}/api/factory/info`).then(function (res) {
-                    if (res.status === 200) {
-                      let data = res.data
-                      self.factoryinfo = data.data ? data.data : data
-                      self.$vux.loading.hide()
-                      return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-                    }
-                  }).then(function (res) {
-                    if (res) {
-                      let data = res.data
-                      self.messages = data.data
-                    }
-                  })
-                }
+                self.factoryinfo = data.data ? data.data : data
+                self.$vux.loading.hide()
+                return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+              }
+            }).then(function (res) {
+              if (res) {
+                let data = res.data
+                self.messages = data.data
               }
             })
           }

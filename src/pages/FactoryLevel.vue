@@ -113,10 +113,8 @@ export default {
     },
     getData () {
       const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' }).then(function () {
-        return self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.query.id } }
-        )
+      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+        params: { fid: self.query.id }
       }).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data

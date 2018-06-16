@@ -15,7 +15,6 @@
               <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
-                <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" order-link="/factoryOrderDetail">
                 <span slot="orderno">{{ item.orderno }}</span>
@@ -51,7 +50,6 @@
               <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
-                <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
                 <span slot="orderno">{{ item.orderno }}</span>
@@ -79,7 +77,6 @@
               <div v-if="!tabdata3 || tabdata3.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
-                <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
                 <span slot="orderno">{{ item.orderno }}</span>
@@ -112,7 +109,6 @@
               <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">暂无相关订单！</div>
-                <div>积极分享商品或活动，客户才会购买哦~</div>
               </div>
               <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
                 <span slot="orderno">{{ item.orderno }}</span>
@@ -428,23 +424,12 @@ export default {
         }
       })
     },
-    getData () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'orders'
-      })
-    },
-    init () {
-      this.loginUser = User.get()
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       this.swiperChange()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

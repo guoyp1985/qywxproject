@@ -180,12 +180,6 @@ export default {
         self.disList = true
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'list'
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
@@ -197,9 +191,6 @@ export default {
         this.getData1()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

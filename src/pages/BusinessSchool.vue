@@ -22,7 +22,7 @@
               <div class="t-cell v_middle">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">空空如也~</div>
-                <div class="align_center mt5">赶快<router-link to="/addMaterial" class="color-blue">{{ $t('Create training materials') }}</router-link>为卖家提供素材可有效提高销量哦</div>
+                <div class="align_center mt5">赶快<router-link :to="{path: '/addMaterial', query: {fid: query.fid}}" class="color-blue">{{ $t('Create training materials') }}</router-link>为卖家提供素材可有效提高销量哦</div>
               </div>
             </div>
           </template>

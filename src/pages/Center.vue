@@ -198,13 +198,13 @@ export default {
       const user = User.get()
       // const self = this
       if (user && user.subscribe === 1) {
-        this.loginUser = user
-        this.setUserInfo()
+        self.loginUser = user
+        self.setUserInfo()
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          this.loginUser = res.data.data
+          self.loginUser = res.data.data
           User.set(this.loginUser)
-          this.setUserInfo()
+          self.setUserInfo()
         })
       }
     },

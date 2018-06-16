@@ -22,7 +22,7 @@
               <div class="t-cell v_middle">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">空空如也~</div>
-                <div class="align_left mt5">赶快<router-link to="/addFactoryNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/factoryGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布，为卖家提供素材可有效提高销量哦</div>
+                <div class="align_left mt5">赶快<router-link :to="{path: '/addFactoryNews', query: {fid: query.fid}}" class="color-blue">创建文章</router-link>，为卖家提供素材可有效提高销量哦</div>
               </div>
             </div>
           </template>
@@ -219,12 +219,6 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
-    init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'factorynews'
-      }).then(res => {
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
@@ -236,9 +230,6 @@ export default {
         this.getData1()
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
