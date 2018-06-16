@@ -189,6 +189,22 @@
                 </div>
               </template>
             </div>
+            <div v-if="tabitem.type == 'agentlist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </router-link>
+                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.linkman }}</div>
+                    </router-link>
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
           </div>
         </template>
       </div>
