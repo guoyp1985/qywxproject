@@ -256,7 +256,7 @@ export default {
             let data = res.data
             self.$vux.loading.hide()
             if (data.flag === 1) {
-              self.$router.push({ path: '/addOrder', query: { id: self.product.id } })
+              self.$router.push({ path: '/addOrder', query: { id: data.data } })
             } else if (data.error) {
               self.$vux.toast.show({
                 text: data.error,
