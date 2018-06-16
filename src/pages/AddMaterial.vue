@@ -3,7 +3,7 @@
     <div class="pagemiddle">
       <group label-width="5em">
         <group class="textarea-outer">
-          <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+          <x-textarea v-model="submitdata.title" :title="$t('Material title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
         </group>
         <cell :title="$t('Cover photo')" class="font14">
           {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
@@ -37,7 +37,7 @@
         </div>
       </div>
       <group class="option-area" label-width="6em">
-        <x-textarea class="font14" :title="$t('Share description')" :placeholder="$t('Share description placeholder')" v-model="submitdata.seodescription" :rows="1" autosize></x-textarea>
+        <x-textarea class="font14" :title="$t('Share description')" :placeholder="$t('Material share description placeholder')" v-model="submitdata.seodescription" :rows="1" autosize></x-textarea>
         <x-textarea class="font14" :title="$t('Summary')" :placeholder="$t('Summary')" v-model="submitdata.summary" :rows="1" autosize></x-textarea>
       </group>
     </div>
@@ -71,6 +71,15 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.cutImg = ''
+      this.popupShow = false
+      this.allowsubmit = true
+      this.photoarr = []
+      this.havenum = 0
+      this.submitdata = { title: '', photo: '', seodescription: '', summary: '', classid: 100 }
+      this.requireddata = { title: '', 'photo': '' }
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -152,6 +161,7 @@ export default {
       } else {
         delete self.submitdata['id']
       }
+      self.submitdata.fid = self.query.fid
       self.$http.post(`${ENV.BokaApi}/api/add/factorynews`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -161,7 +171,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              let params = { id: data.data }
+              let params = { id: data.data, fid: self.query.fid }
               self.$router.push({ path: '/material', query: params })
             }
           }
@@ -203,8 +213,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
+      if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
+        this.initData()
+        this.query = this.$route.query
+        this.getData()
+      }
     }
   },
   activated () {

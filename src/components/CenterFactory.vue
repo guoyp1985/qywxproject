@@ -76,7 +76,7 @@
         </div>
       -->
         <div class="gridlist">
-          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', id: factoryInfo.id}" style="position:relative;">
+          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', query: {fid: factoryInfo.id}}" style="position:relative;">
             <div slot="icon">
               <i class="al al-address"></i>
             </div>

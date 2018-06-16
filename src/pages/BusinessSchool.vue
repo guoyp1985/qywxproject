@@ -27,7 +27,7 @@
             </div>
           </template>
         </div>
-        <router-link :to="{path: '/material', query: {id: item.id}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+        <router-link :to="{path: '/material', query: {id: item.id, fid: item.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
           <div class="t-table">
             <div class="t-cell v_middle w70">
               <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
@@ -51,7 +51,7 @@
     </div>
     <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addMaterial" >{{ $t('Create training materials') }}</router-link>
+        <router-link class="collect bg-red flex_center h_100" style="width:85%;" :to="{path: '/addMaterial', query: {fid: query.fid}}" >{{ $t('Create training materials') }}</router-link>
       </div>
     </div>
     <div v-transfer-dom>
@@ -61,7 +61,6 @@
             <div class="item" v-for="(row,index1) in controldata" :key="index1">
               <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews'}}">{{ row.title }}</router-link>
               <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'createposter'" :to="{path:'/poster',query:{id:clickdata.id, module:'factorynews'}}">{{ row.title }}</router-link>
               <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
                 <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
               </div>
@@ -122,8 +121,7 @@ export default {
       tabdata2: [],
       controldata: [
         { key: 'set', title: '更多设置' },
-        { key: 'stat', title: '统计' },
-        { key: 'createposter', title: '生成海报' }
+        { key: 'stat', title: '统计' }
       ],
       showpopup: false,
       clickdata: {},

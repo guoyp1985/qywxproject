@@ -174,7 +174,7 @@ export default {
               module: self.module,
               moduleid: self.article.id,
               lastshareuid: self.query.share_uid,
-              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/material?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
@@ -227,7 +227,7 @@ export default {
       })
     },
     editSetting () {
-      this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
+      this.$router.push({name: 'tAddMaterial', params: {id: this.article.id, fid: this.article.fid}})
     },
     editDelete () {
       this.$vux.confirm.show({

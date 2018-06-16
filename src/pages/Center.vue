@@ -169,44 +169,42 @@ export default {
         btn.react.call(this)
       }
     },
+    setUserInfo () {
+      const user = User.get()
+      this.avatarHref = user.avatar
+      this.linkMan = user.linkman
+      this.userCredits = user.credit
+      this.userLevels = user.levels
+      this.profile = {
+        linkman: user.linkman,
+        avatar: user.avatar,
+        sex: user.sex,
+        mobile: user.mobile,
+        company: user.company
+      }
+      if (!this.showBtn1) {
+        if (this.loginUser.fid > 0) {
+          this.btns1 = factoryBtn.concat(this.btns1)
+        }
+        this.btns1 = manageBtn.concat(this.btns1)
+        this.showBtn1 = true
+      }
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
+    },
     getData () {
       const user = User.get()
       const self = this
-      this.loginUser = user
-      if (user) {
-        this.avatarHref = user.avatar
-        this.linkMan = user.linkman
-        this.userCredits = user.credit
-        this.userLevels = user.levels
-        this.profile = {
-          linkman: user.linkman,
-          avatar: user.avatar,
-          sex: user.sex,
-          mobile: user.mobile,
-          company: user.company
-        }
-        if (!this.showBtn1) {
-          if (this.loginUser.fid > 0) {
-            this.btns1 = factoryBtn.concat(this.btns1)
-          }
-          this.btns1 = manageBtn.concat(this.btns1)
-          this.showBtn1 = true
-        }
-        this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-          let data = res.data
-          self.messages = data.data
-        })
+      if (user && user.subscribe === 1) {
+        this.loginUser = user
+        this.setUserInfo()
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
           this.loginUser = res.data.data
           User.set(this.loginUser)
-          if (!this.showBtn1) {
-            if (this.loginUser.fid > 0) {
-              this.btns1 = factoryBtn.concat(this.btns1)
-            }
-            this.btns1 = manageBtn.concat(this.btns1)
-            this.showBtn1 = true
-          }
+          this.setUserInfo()
         })
       }
     },

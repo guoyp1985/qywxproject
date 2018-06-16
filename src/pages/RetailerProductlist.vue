@@ -39,9 +39,10 @@
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                      <div class="clamp1 mt5" v-if="item.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
                       <div class="clamp1 mt5">
-                          <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
-                          <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
+                          <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
+                          <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
                       </div>
                     </div>
                     <div class="align_right t-cell v_bottom w80">
@@ -156,9 +157,9 @@
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ feeData.price }}</span></div>
+                      <div class="clamp1 mt5" v-if="feeData.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ feeData.rebatein }}</span></div>
                       <div class="clamp1 mt5">
-                          <span class="v_middle db-in">库存: {{ feeData.storage }}{{feeData.unit}}</span>
-                          <span class="v_middle db-in ml5">已售: {{ feeData.saled }}{{feeData.unit}}</span>
+                          <span class="v_middle db-in">已售: {{ feeData.saled }}{{feeData.unit}}</span>
                       </div>
                     </div>
                   </div>
