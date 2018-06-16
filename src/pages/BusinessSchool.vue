@@ -51,7 +51,7 @@
     </div>
     <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addMaterial" >{{ $t('Create training materials') }}</router-link>
+        <router-link class="collect bg-red flex_center h_100" style="width:85%;" :to="{path: '/addMaterial', query: {fid: query.fid}}" >{{ $t('Create training materials') }}</router-link>
       </div>
     </div>
     <div v-transfer-dom>

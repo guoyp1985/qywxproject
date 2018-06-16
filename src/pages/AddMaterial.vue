@@ -161,6 +161,7 @@ export default {
       } else {
         delete self.submitdata['id']
       }
+      self.submitdata.fid = self.query.fid
       self.$http.post(`${ENV.BokaApi}/api/add/factorynews`, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -170,7 +171,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              let params = { id: data.data }
+              let params = { id: data.data, fid: self.query.fid }
               self.$router.push({ path: '/material', query: params })
             }
           }
@@ -212,7 +213,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.id !== this.$route.query.id) {
+      if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
         this.initData()
         this.query = this.$route.query
         this.getData()
