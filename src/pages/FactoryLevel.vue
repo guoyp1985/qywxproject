@@ -24,7 +24,7 @@
               </div>
             </div>
           </div>
-          <div class="flex_right padding10" v-if="index > 0">
+          <div class="flex_right padding10" v-if="index > 0 && item.isAdd">
             <div class="db-in color-red" @click="deleteItem(index)">删除</div>
           </div>
         </div>
@@ -60,7 +60,7 @@ export default {
     },
     addItem () {
       const self = this
-      self.levelData.push({levelname: '', money: ''})
+      self.levelData.push({levelname: '', money: '', isAdd: true})
     },
     deleteItem (index) {
       const self = this
@@ -94,16 +94,21 @@ export default {
         self.$vux.toast.text('必填项不能为空', 'middle')
         return false
       }
-      let postData = { fid: self.query.id, salesmoney: salesmoney, levelname: levelname }
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/factory/addPolicy`, postData).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag === 1 ? 'success' : 'warn',
-          time: self.$util.delay(data.error)
-        })
+      self.$vux.confirm.show({
+        content: '等级创建成功后，只能修改不能删除，确定提交吗？',
+        onConfirm () {
+          let postData = { fid: self.query.id, salesmoney: salesmoney, levelname: levelname }
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/addPolicy`, postData).then(function (res) {
+            self.$vux.loading.hide()
+            let data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              type: data.flag === 1 ? 'success' : 'warn',
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
       })
     },
     getData () {
