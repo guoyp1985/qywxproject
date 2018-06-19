@@ -7,6 +7,9 @@
       <form enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('contentphoto')" />
       </form>
+      <form enctype="multipart/form-data">
+        <input ref="videoInput" class="hide" type="file" name="files" @change="fileChange('video')" />
+      </form>
       <div class="list-shadow01">
         <div class="form-item no-after pt15 bg-gray10">
           <div class="cover_map" v-if="photoarr.length == 0" @click="uploadPhoto('fileInput','photo')">
@@ -109,9 +112,26 @@
                   <div class="flex_center h_100">
                     <div class="txt">
                       <i class="al al-zhaopian" style="color:#bbb;line-height:30px;"></i>
-                      <div><span class="havenum">{{ gethavenum1 }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
+                      <div><span class="havenum">{{ photoarr1.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-item bg-white">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">视频</div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <div class="cover_map flex_left" v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
+                <div class="button_photo">
+                  <i class="al al-zhaoxiangji color-white"></i>
+                </div>
+              </div>
+              <div v-else>
+                <div class="videoitem clamp1" v-for="(item,index) in videoarr" :key="index">
+                  {{ item }}
                 </div>
               </div>
             </div>
@@ -168,6 +188,9 @@ export default {
       photoarr1: [],
       maxnum1: 19,
       havenum1: 0,
+      videoarr: [],
+      maxnum2: 1,
+      havenum2: 0,
       showmore: false,
       submitdata: {
         title: '',
@@ -182,7 +205,7 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '', video: '' },
       showRebate: false
     }
   },
@@ -204,12 +227,6 @@ export default {
     }
   },
   computed: {
-    gethavenum: function () {
-      return this.photoarr.length
-    },
-    gethavenum1: function () {
-      return this.photoarr1.length
-    }
   },
   methods: {
     initSubmitData () {
@@ -223,7 +240,8 @@ export default {
         content: '',
         contentphoto: '',
         seotitle: '',
-        seodescription: ''
+        seodescription: '',
+        video: ''
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -237,6 +255,9 @@ export default {
         } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
           self.photoarr1.push(data.data)
           self.submitdata.contentphoto = self.photoarr1.join(',')
+        } else if (type === 'video') {
+          self.videoarr.push(data.data)
+          self.submitdata.video = self.videoarr.join(',')
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -252,8 +273,12 @@ export default {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
+          let curMaxnum = 9
+          if (type === 'video') {
+            curMaxnum = 1
+          }
           self.$util.wxUploadImage({
-            maxnum: 9,
+            maxnum: curMaxnum,
             handleCallback: function (data) {
               self.photoCallback(data, type)
             }
