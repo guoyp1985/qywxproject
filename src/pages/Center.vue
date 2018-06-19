@@ -196,7 +196,7 @@ export default {
     },
     getData () {
       const user = User.get()
-      // const self = this
+      const self = this
       if (user && user.subscribe === 1) {
         self.loginUser = user
         self.setUserInfo()
