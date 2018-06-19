@@ -64,7 +64,7 @@
             <div class="list">
               <div class="item" v-for="(row,index1) in controldata" :key="index1">
                 <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'academic'}}">{{ row.title }}</router-link>
-                <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id}}">{{ row.title }}</router-link>
+                <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id, fid: query.fid}}">{{ row.title }}</router-link>
                 <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
                   <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
                 </div>
