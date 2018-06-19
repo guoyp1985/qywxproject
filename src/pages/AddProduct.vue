@@ -333,10 +333,10 @@ export default {
       if (!iscontinue) {
         return false
       }
-      let price = postdata.price.replace(/,/g, '')
+      let price = postdata.price.toString().replace(/,/g, '')
       let rebate = postdata.rebate
       if (self.$util.trim(rebate) !== '') {
-        rebate = rebate.replace(/,/g, '')
+        rebate = rebate.toString().replace(/,/g, '')
       }
       if (isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
         self.$vux.alert.show({
