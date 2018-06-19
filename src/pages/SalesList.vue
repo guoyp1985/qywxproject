@@ -43,15 +43,6 @@
   </div>
 </template>
 
-<i18n>
-Goodeazy:
-  zh-CN: 易采集
-Create news:
-  zh-CN: 创建文章
-Control text:
-  zh-CN: 操作
-</i18n>
-
 <script>
 import { Search, XImg } from 'vux'
 import Time from '#/time'

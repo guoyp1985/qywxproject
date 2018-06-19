@@ -220,7 +220,20 @@ export default {
 </script>
 
 <style lang="less">
-/* weui css hack */
+/* css extension */
+.grid-center {
+  display: block;
+  text-align: center;
+  color: #666;
+}
+.grid-title {
+  background-color: #efeff4;
+  color: #716f76;
+  padding: 5px 15px;
+  font-size: 14px;
+}
+
+/* vux css hack */
 #personal-center .weui-grid__icon {
   height: auto;
   width: auto;
@@ -236,20 +249,6 @@ export default {
   background-color: #ffffff;
 }
 
-/* css extension */
-.grid-center {
-  display: block;
-  text-align: center;
-  color: #666;
-}
-.grid-title {
-  background-color: #efeff4;
-  color: #716f76;
-  padding: 5px 15px;
-  font-size: 14px;
-}
-
-/* vux css hack */
 #personal-center .weui-grid:after {
   height: 0px;
   border-bottom: none;
