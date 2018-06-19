@@ -120,23 +120,30 @@
             </div>
           </div>
         </div>
+        <!--
         <div class="form-item bg-white">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">视频</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <div class="cover_map flex_left" v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
-                <div class="button_photo">
-                  <i class="al al-zhaoxiangji color-white"></i>
+              <div class="q_photolist align_left">
+                <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
+                  <div class="button_video flex_center">
+                    <i class="al al-ai-video color-white"></i>
+                  </div>
                 </div>
-              </div>
-              <div v-else>
-                <div class="videoitem clamp1" v-for="(item,index) in videoarr" :key="index">
-                  {{ item }}
+                <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
+                  <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
+                    <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
+                      <i class="al al-ai-video"></i>
+                      <div class="close" @click="deletephoto(item,index,'video')">×</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      -->
         <div v-show="showmore">
           <div class="form-item bg-white">
             <div class="t-table">
@@ -205,7 +212,7 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '', video: '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
       showRebate: false
     }
   },
@@ -303,7 +310,10 @@ export default {
     },
     deletephoto (item, index, type) {
       const self = this
-      if (type === 'photo') {
+      if (type === 'video') {
+        self.videoarr.splice(index, 1)
+        self.submitdata.video = self.videoarr.join(',')
+      } else if (type === 'photo') {
         self.photoarr.splice(index, 1)
         self.submitdata.photo = self.photoarr.join(',')
       } else {
@@ -472,4 +482,11 @@ export default {
 .button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 .s-havebottom .s-container{bottom:50px;}
 .s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
+.button_video{
+  position:relative;
+  width:60px;
+  height:60px;
+  background-color:#ea3a3a;
+  border-radius:50%;
+}
 </style>

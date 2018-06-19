@@ -6,11 +6,14 @@
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div class="flex_left h_100 toprow color-white pl15 pr15">
-          <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }">
+          <router-link class="w70" :to="{ path: '/membersView', query: { uid: sellerUser.uid } }">
             <img class="avatarimg5 v_middle imgcover" :src="sellerUser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
           </router-link>
-          <router-link :to="{ path: '/membersView', query: { uid: sellerUser.uid } }" class="font16 clamp1 pl10 flex_cell">{{ sellerUser.username }}</router-link>
-          <div class="align_center">
+          <div class="clamp1 flex_cell">
+            <router-link class="db font16" :to="{ path: '/membersView', query: { uid: sellerUser.uid } }">{{ sellerUser.username }}</router-link>
+            <div class="align_left db-in" @click="createQrcode"><i class="al al-a166 font12" style="line-height: 12px;"></i> 返点客推荐码</div>
+          </div>
+          <div class="align_center w100">
             <router-link :to="{path: '/chat', query: {uid: query.uid}}" class=""><i class="al al-liaotian font16"><span class="ml5">联系</span></i></router-link>
             <a class="db mt5" v-if="sellerUser.mobile && sellerUser.mobile != ''" :href="`tel:${sellerUser.mobile}`"><i class="al al-fuwuzhongxin font16"><span class="ml5">电话</span></i></a>
           </div>
@@ -160,12 +163,23 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="qrcode-dialog">
+        <x-dialog v-model="storeCardShow">
+          <div class="img-box">
+            <img :src="storeQrcode" style="max-width:100%;max-height:100%;">
+          </div>
+          <div class="padding10 color-white">{{$t('Save Picture To Sharing')}}</div>
+          <div @click="storeCardShow=false">
+            <span class="vux-close color-white"></span>
+          </div>
+        </x-dialog>
+      </div>
     </template>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg, XDialog } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
@@ -175,7 +189,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg, Sos
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg, Sos, XDialog
   },
   filters: {
     dateformat: function (value) {
@@ -202,10 +216,56 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0
+      pagestart3: 0,
+      storeCardShow: false,
+      storeQrcode: null
     }
   },
   methods: {
+    initData: function () {
+      this.showSos = false
+      this.sosTitle = '该记录不存在'
+      this.showContainer = false
+      this.query = {}
+      this.loginUser = {}
+      this.sellerUser = { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 }
+      this.isshowpopup = false
+      this.selectedIndex = 0
+      this.distabdata1 = false
+      this.distabdata2 = false
+      this.distabdata3 = false
+      this.tabdata1 = []
+      this.tabdata2 = []
+      this.tabdata3 = []
+      this.pagestart1 = 0
+      this.pagestart2 = 0
+      this.pagestart3 = 0
+      this.storeCardShow = false
+      this.storeQrcode = null
+    },
+    createQrcode: function () {
+      const self = this
+      if (self.storeQrcode) {
+        self.storeCardShow = true
+      } else {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/seller/recommend_qrcode`, {wid: self.sellerUser.wid, uid: self.query.uid})
+        .then(res => {
+          self.$vux.loading.hide()
+          let data = res.data
+          if (data.flag === 1) {
+            self.storeQrcode = data.data
+            self.storeCardShow = true
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
+    },
     handleScroll: function (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -336,6 +396,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.uid !== this.$route.query.uid) {
+        this.initData()
         this.query = this.$route.query
         this.getData()
       }
@@ -353,4 +414,6 @@ export default {
 .rsaleview .v-tab .vux-tab .vux-tab-item{line-height: 30px;}
 .rsaleview .s-topbanner .row{height: 60px;}
 .rsaleview .vux-tab-wrap{padding-top: 0}
+
+.qrcode-dialog .weui-dialog{background-color:transparent}
 </style>
