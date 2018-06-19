@@ -295,7 +295,6 @@ export default {
       if (!iscontinue) {
         return false
       }
-      console.log(postdata)
       let price = postdata.price.toString().replace(/,/g, '')
       if (isNaN(price) || price <= 0) {
         self.$vux.alert.show({
