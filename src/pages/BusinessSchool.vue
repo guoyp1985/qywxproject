@@ -1,77 +1,82 @@
 <template>
   <div class="containerarea s-havebottom font14 rnews bg-page">
-    <div class="pagetop b_bottom_after flex_center" style="height:55px;">
-      <search
-        class="v-search"
-        v-model='searchword1'
-        :auto-fixed="autofixed"
-        @on-submit="onSubmit1"
-        @on-change="onChange1"
-        @on-cancel="onCancel1"
-        ref="search">
-      </search>
-    </div>
-    <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer','news')">
-      <div v-if="distabdata1" class="scroll_list ">
-        <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-          <template v-if="searchresult1">
-            <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-          </template>
-          <template v-else>
-            <div class="t-table">
-              <div class="t-cell v_middle">
-                <div><i class="al al-wushuju font60 pt20"></i></div>
-                <div class="mt5">空空如也~</div>
-                <div class="align_center mt5">赶快<router-link :to="{path: '/addMaterial', query: {fid: query.fid}}" class="color-blue">{{ $t('Create training materials') }}</router-link>为卖家提供素材可有效提高销量哦</div>
-              </div>
-            </div>
-          </template>
-        </div>
-        <router-link :to="{path: '/material', query: {id: item.id, fid: item.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
-          <div class="t-table">
-            <div class="t-cell v_middle w70">
-              <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="t-cell v_middle">
-              <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-              <div class="clamp1 font14 color-gray v_middle mt5">
-                  <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
-                  <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                  <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
-              </div>
-            </div>
-            <div class="align_right t-cell v_bottom w80 pb8">
-                <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
-                  <i class="al al-asmkticon0165 v_middle"></i>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagetop b_bottom_after flex_center" style="height:55px;">
+        <search
+          class="v-search"
+          v-model='searchword1'
+          :auto-fixed="autofixed"
+          @on-submit="onSubmit1"
+          @on-change="onChange1"
+          @on-cancel="onCancel1"
+          ref="search">
+        </search>
+      </div>
+      <div class="pagemiddle scroll-container" style="top:55px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer','news')">
+        <div v-if="distabdata1" class="scroll_list ">
+          <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+            <template v-if="searchresult1">
+              <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+            </template>
+            <template v-else>
+              <div class="t-table">
+                <div class="t-cell v_middle">
+                  <div><i class="al al-wushuju font60 pt20"></i></div>
+                  <div class="mt5">空空如也~</div>
+                  <div class="align_center mt5">赶快<router-link :to="{path: '/addMaterial', query: {fid: query.fid}}" class="color-blue">{{ $t('Create training materials') }}</router-link>为卖家提供素材可有效提高销量哦</div>
                 </div>
-            </div>
+              </div>
+            </template>
           </div>
-        </router-link>
-      </div>
-    </div>
-    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" :to="{path: '/addMaterial', query: {fid: query.fid}}" >{{ $t('Create training materials') }}</router-link>
-      </div>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup">
-        <div class="popup0">
-          <div class="list">
-            <div class="item" v-for="(row,index1) in controldata" :key="index1">
-              <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'factorynews'}}">{{ row.title }}</router-link>
-              <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id}}">{{ row.title }}</router-link>
-              <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
-                <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
+          <router-link :to="{path: '/material', query: {id: item.id, fid: item.fid}}" v-else v-for="(item,index1) in tabdata1" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+            <div class="t-table">
+              <div class="t-cell v_middle w70">
+                <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="t-cell v_middle">
+                <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                <div class="clamp1 font14 color-gray v_middle mt5">
+                    <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
+                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                    <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                </div>
+              </div>
+              <div class="align_right t-cell v_bottom w80 pb8">
+                  <div class="btnicon bg-red color-white font12" @click="controlpopup(item)">
+                    <i class="al al-asmkticon0165 v_middle"></i>
+                  </div>
               </div>
             </div>
-            <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
+          </router-link>
+        </div>
+      </div>
+      <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+        <div class="align_center flex_center flex_cell">
+          <router-link class="collect bg-red flex_center h_100" style="width:85%;" :to="{path: '/addMaterial', query: {fid: query.fid}}" >{{ $t('Create training materials') }}</router-link>
+        </div>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showpopup">
+          <div class="popup0">
+            <div class="list">
+              <div class="item" v-for="(row,index1) in controldata" :key="index1">
+                <router-link class="inner" v-if="row.key == 'stat'" :to="{path:'/stat',query:{id:clickdata.id,module:'academic'}}">{{ row.title }}</router-link>
+                <router-link class="inner" v-else-if="row.key == 'set'" :to="{path:'/addMaterial',query:{id:clickdata.id}}">{{ row.title }}</router-link>
+                <div class="inner" v-else @click="clickpopup(row.key,clickdata)">
+                  <div :class="`clamp1 ${row.key}`">{{ row.title }}</div>
+                </div>
+              </div>
+              <div class="item close mt10" @click="clickpopup('row.key,clickdata')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
             </div>
           </div>
-        </div>
-      </popup>
-    </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -89,13 +94,14 @@ import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
 import Time from '#/time'
 import { User } from '#/storage'
 import ENV from 'env'
+import Sos from '@/components/Sos'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, CheckIcon, XImg, Search
+    Popup, CheckIcon, XImg, Search, Sos
   },
   filters: {
     dateformat: function (value) {
@@ -110,6 +116,9 @@ export default {
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       query: {},
       loginUser: {},
       autofixed: false,
@@ -165,7 +174,7 @@ export default {
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
+      self.$http.get(`${ENV.BokaApi}/api/list/academic`, {
         params: params
       }).then(function (res) {
         self.$vux.loading.hide()
@@ -224,26 +233,37 @@ export default {
       ret = `${ret} mr5`
       return ret
     },
-    init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'news'
-      }).then(res => {
-      })
-    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
       this.loginUser = User.get()
-      if (this.tabdata1.length < this.limit) {
-        this.distabdata1 = false
-        this.tabdata1 = []
+      if (this.loginUser) {
         this.$vux.loading.show()
-        this.getData1()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.tabdata1.length < this.limit) {
+            this.distabdata1 = false
+            this.tabdata1 = []
+            this.$vux.loading.show()
+            this.getData1()
+          }
+        }
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

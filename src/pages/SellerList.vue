@@ -1,63 +1,68 @@
 <template>
   <div class="containerarea bg-page font14">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-      <template v-if="disList">
-        <template v-if="!Data || Data.length == 0">
-          <div class="scroll_list">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">还没有卖家帮你销售商品！</div>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+        <template v-if="disList">
+          <template v-if="!Data || Data.length == 0">
+            <div class="scroll_list">
+              <div class="emptyitem">
+                <div class="t-table" style="padding-top:20%;">
+                  <div class="t-cell padding10">还没有卖家帮你销售商品！</div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="scroll_list ">
+              <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
+                <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                  <div class="t-cell v_middle w70">
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10">{{item.title}}</div>
+                    <div class="clamp1 pr10 color-lightgray">{{item.level}}级代理</div>
+                    <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+            			</div>
+                  <!--
+                  <div class="align_right t-cell v_bottom w80">
+                    <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                      <i class="al al-asmkticon0165 v_middle"></i>
+                    </div>
+                  </div>
+                -->
+            		</div>
+              </div>
+            </div>
+          </template>
+        </template>
+      </div>
+      <!--
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickData">
+              <div class="item" v-if="clickData.activityid == 0">
+                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickData.id}}">编辑</router-link>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/stat', query: {id: clickData.id, module: 'factoryproduct'}}">统计</router-link>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('fee')">设置佣金</div>
+              </div>
+              <div class="item close mt10" @click="clickPopup('row.key')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
             </div>
           </div>
-        </template>
-        <template v-else>
-          <div class="scroll_list ">
-            <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
-              <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
-                <div class="t-cell v_middle w70">
-                  <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                </div>
-          			<div class="t-cell v_middle">
-                  <div class="clamp1 font16 pr10">{{item.title}}</div>
-                  <div class="clamp1 pr10 color-lightgray">{{item.level}}级代理</div>
-                  <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-          			</div>
-                <!--
-                <div class="align_right t-cell v_bottom w80">
-                  <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                    <i class="al al-asmkticon0165 v_middle"></i>
-                  </div>
-                </div>
-              -->
-          		</div>
-            </div>
-          </div>
-        </template>
-      </template>
-    </div>
-    <!--
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showPopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickData">
-            <div class="item" v-if="clickData.activityid == 0">
-              <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickData.id}}">编辑</router-link>
-            </div>
-            <div class="item">
-              <router-link class="inner" :to="{path: '/stat', query: {id: clickData.id, module: 'factoryproduct'}}">统计</router-link>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('fee')">设置佣金</div>
-            </div>
-            <div class="item close mt10" @click="clickPopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
-            </div>
-          </div>
-        </div>
-      </popup>
-    </div>
-  -->
+        </popup>
+      </div>
+    -->
+  </template>
   </div>
 </template>
 
@@ -69,6 +74,8 @@ Add factory:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
+import Sos from '@/components/Sos'
 
 let pageStart1 = 0
 const limit = 10
@@ -77,10 +84,13 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Sos
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       query: {},
       loginUser: {},
       Data: [],
@@ -168,14 +178,35 @@ export default {
       })
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.Data.length < limit) {
-        this.disList = false
-        this.Data = []
+      this.loginUser = User.get()
+      if (this.loginUser) {
         this.$vux.loading.show()
-        pageStart1 = 0
-        this.getData1()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.Data.length < limit) {
+            this.disList = false
+            this.Data = []
+            this.$vux.loading.show()
+            pageStart1 = 0
+            this.getData1()
+          }
+        }
       }
     }
   },

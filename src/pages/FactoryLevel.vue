@@ -1,41 +1,46 @@
 <template>
   <div class="containerarea font14 notop fsetting">
-    <div class="pagemiddle">
-      <div class="listarea">
-        <div v-for="(item,index) in levelData" :key="index" class="itemarea">
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle bold">{{ index + 1 }}级代理</div>
-            </div>
-          </div>
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">等级名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="item.levelname" type="text" class="input" placeholder="等级名称" />
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagemiddle">
+        <div class="listarea">
+          <div v-for="(item,index) in levelData" :key="index" class="itemarea">
+            <div class="form-item">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle bold">{{ index + 1 }}级代理</div>
               </div>
             </div>
-          </div>
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">销售额<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="item.money" type="text" class="input" placeholder="销售额" />
+            <div class="form-item">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">等级名称<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <input v-model="item.levelname" type="text" class="input" placeholder="等级名称" />
+                </div>
               </div>
             </div>
-          </div>
-          <div class="flex_right padding10" v-if="index > 0 && item.isAdd">
-            <div class="db-in color-red" @click="deleteItem(index)">删除</div>
+            <div class="form-item">
+              <div class="t-table">
+                <div class="t-cell title-cell w80 font14 v_middle">销售额<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <input v-model="item.money" type="text" class="input" placeholder="销售额" />
+                </div>
+              </div>
+            </div>
+            <div class="flex_right padding10" v-if="index > 0 && item.isAdd">
+              <div class="db-in color-red" @click="deleteItem(index)">删除</div>
+            </div>
           </div>
         </div>
+        <div class="padding10 flex_center">
+          <div class="qbtn bg-green color-white" @click="addItem">添加一项</div>
+        </div>
       </div>
-      <div class="padding10 flex_center">
-        <div class="qbtn bg-green color-white" @click="addItem">添加一项</div>
+      <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
+        <div class="flex_cell flex_center btn-bottom-red" @click="submitEvent">{{ $t('Save') }}</div>
       </div>
-    </div>
-    <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center btn-bottom-red" @click="submitEvent">{{ $t('Save') }}</div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -44,13 +49,20 @@
 
 <script>
 import ENV from 'env'
+import { User } from '#/storage'
+import Sos from '@/components/Sos'
 
 export default {
   components: {
+    Sos
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       query: {},
+      loginUser: {},
       levelData: []
     }
   },
@@ -127,11 +139,32 @@ export default {
       })
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.id !== this.$route.query.id) {
-        this.initData()
-        this.query = this.$route.query
-        this.getData()
+      this.loginUser = User.get()
+      if (this.loginUser) {
+        this.$vux.loading.show()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!self.loginUser.fid && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          if (this.query.id !== this.$route.query.id) {
+            this.initData()
+            this.query = this.$route.query
+            this.getData()
+          }
+        }
       }
     }
   },

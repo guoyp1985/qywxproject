@@ -120,6 +120,7 @@ import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -136,9 +137,10 @@ export default {
   data () {
     return {
       showSos: false,
-      sosTitle: '该订单不存在',
+      sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       query: {},
+      loginUser: {},
       data: {},
       totalPrice: '0.00',
       bottomcss: '',
@@ -275,6 +277,7 @@ export default {
           self.data = data.data
           if (self.data.length === 0) {
             self.showSos = true
+            self.sosTitle = '该订单不存在'
             self.showContainer = false
           } else {
             self.showSos = false
@@ -297,10 +300,29 @@ export default {
       })
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
+      this.loginUser = User.get()
+      if (this.loginUser) {
+        this.$vux.loading.show()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!self.loginUser.fid && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = false
+          this.query = this.$route.query
+          this.getData()
+        }
+      }
     }
   },
   activated () {

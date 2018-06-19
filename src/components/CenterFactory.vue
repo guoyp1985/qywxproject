@@ -95,6 +95,12 @@
           <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
         </div>
       </cell>
+      <cell :link="{path:'/addFactory', query:{id: factoryInfo.id}}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Setting')}}</span>
+        </div>
+      </cell>
     </group>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showQrcode" height="100%">
