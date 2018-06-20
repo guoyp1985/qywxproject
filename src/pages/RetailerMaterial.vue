@@ -73,7 +73,7 @@ export default {
     },
     getData () {
       const self = this
-      const params = { pagestart: pageStart, limit: limit, classid: 100 }
+      const params = { pagestart: pageStart, limit: limit, module: 'academic' }
       this.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/recommendNews`, params).then(function (res) {
         const data = res.data
