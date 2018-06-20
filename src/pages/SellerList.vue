@@ -10,7 +10,10 @@
             <div class="scroll_list">
               <div class="emptyitem">
                 <div class="t-table" style="padding-top:20%;">
-                  <div class="t-cell padding10">还没有卖家帮你销售商品！</div>
+                  <div class="t-cell padding10">
+                    <div>分享加盟二维码给卖家，卖家扫码即可帮你销售商品</div>
+                    <div class="color-blue"><span @click="disJoinQrcode">点击此处分享加盟二维码</span></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -62,6 +65,22 @@
         </popup>
       </div>
     -->
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showQrcode" height="100%">
+        <div class="popup1 font14">
+          <div class="popup-top flex_center">{{$t('Join qrcode')}}</div>
+          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+            <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+          </div>
+          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+            <div>保存图片发送给好友，邀请加盟</div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </template>
   </div>
 </template>
@@ -104,6 +123,29 @@ export default {
   methods: {
     getPhoto (src) {
       return this.$util.getPhoto(src)
+    },
+    disJoinQrcode () {
+      const self = this
+      self.showQrcode = true
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/factory/joinQRCode`, {
+        fid: self.loginUser.fid
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          let img = self.$refs.joinQrcode[0] ? self.$refs.joinQrcode[0] : self.$refs.joinQrcode
+          img.src = data.data
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    closeQrcode () {
+      this.showQrcode = false
     },
     handleScroll: function (refname, index) {
       const self = this
@@ -155,9 +197,6 @@ export default {
       } else {
         self.showPopup1 = false
       }
-    },
-    closeQrcode () {
-      this.showQrcode = false
     },
     getData1 () {
       const self = this
