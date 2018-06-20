@@ -58,7 +58,7 @@
           <div class="popup0">
             <div class="list" v-if="clickdata">
               <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id}}">编辑</router-link>
+                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
               </div>
               <div class="item" v-if="clickdata.moderate == 0">
                 <div class="inner" @click="clickpopup('up')">上架</div>
@@ -70,9 +70,9 @@
                 <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
               </div>
               <div class="item">
-                <div class="inner" @click="clickpopup('fee')">设置佣金</div>
+                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: query.fid } }">设置佣金</router-link>
               </div>
-              <div class="item close mt10" @click="clickpopup('row.key')">
+              <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
             </div>
@@ -197,12 +197,6 @@ export default {
             })
           }
         })
-      } else if (key === 'edit') {
-        self.showpopup1 = false
-        self.$router.push({ path: '/addFactoryProduct', query: { id: self.clickdata.id } })
-      } else if (key === 'fee') {
-        self.showpopup1 = false
-        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id, fid: self.query.fid } })
       } else {
         self.showpopup1 = false
       }
