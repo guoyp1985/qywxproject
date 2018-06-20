@@ -142,7 +142,7 @@ export default {
             break
           }
         }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin) {
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin) {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false
