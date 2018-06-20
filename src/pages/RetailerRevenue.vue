@@ -39,7 +39,7 @@
                     </check-icon>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.money }}</div>
+                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -133,7 +133,7 @@
                   </div>
                   <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                    <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.money }}</div>
+                    <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -217,7 +217,7 @@
                   </div>
                   <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                    <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.money }}</div>
+                    <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
