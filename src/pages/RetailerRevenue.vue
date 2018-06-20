@@ -23,7 +23,31 @@
                   <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
-                  <template v-if="item.content.indexOf('平台奖励基金') < 0">
+                  <template v-if="item.content.indexOf('厂商佣金') > -1">
+                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w45">
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font14 color-999">{{item.buyername}}</div>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                      <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
+                      <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.money }}</div>
+                      <div class="clamp1 font14 color-gray"><span class="db-in">返点佣金: -￥{{ item.income }}</span></div>
+                    </div>
+                    <div class="pl12 pr12 pt10 pb10 flex_right">
+                      <div class="font14 color-999">实际收入：</div>
+                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </template>
+                  <template v-else-if="item.content.indexOf('平台奖励基金') < 0">
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
