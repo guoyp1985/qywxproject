@@ -5,7 +5,7 @@
 */
 <template>
   <div class="order-info">
-    <router-link :to="{path:'/store',query:{id:item.wid}}">
+    <router-link :to="{path:'/store',query:{wid:item.wid}}">
       <div class="store-info">
         <div class="info-cell">
           <span :class="`al ${storeType} font22`"></span>
