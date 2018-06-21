@@ -454,6 +454,7 @@ export default {
         if (res) {
           const data = res.data
           const retdata = data.data ? data.data : data
+          alert(JSON.stringify(retdata))
           for (let i = 0; i < retdata.length; i++) {
             let p = retdata[i]
             p.img = p.photo

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14">
+  <div class="containerarea bg-page font14 rproductlist">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -27,61 +27,76 @@
                   </div>
             			<div class="t-cell v_middle">
                     <div class="clamp1 font16 pr10">{{item.title}}</div>
-                    <div class="clamp1 pr10 color-lightgray">{{item.level}}级代理</div>
+                    <div class="clamp1 pr10 color-lightgray">代理级别: {{ levelName[item.level]}}</div>
                     <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
             			</div>
-                  <!--
                   <div class="align_right t-cell v_bottom w80">
                     <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                       <i class="al al-asmkticon0165 v_middle"></i>
                     </div>
                   </div>
-                -->
             		</div>
               </div>
             </div>
           </template>
         </template>
       </div>
-      <!--
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item" v-if="clickData.activityid == 0">
-                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickData.id}}">编辑</router-link>
-              </div>
               <div class="item">
-                <router-link class="inner" :to="{path: '/stat', query: {id: clickData.id, module: 'factoryproduct'}}">统计</router-link>
+                <div class="inner" @click="clickPopup('level')">设置代理级别</div>
               </div>
-              <div class="item">
-                <div class="inner" @click="clickPopup('fee')">设置佣金</div>
-              </div>
-              <div class="item close mt10" @click="clickPopup('row.key')">
+              <div class="item close mt10" @click="clickPopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
             </div>
           </div>
         </popup>
       </div>
-    -->
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showQrcode" height="100%">
-        <div class="popup1 font14">
-          <div class="popup-top flex_center">{{$t('Join qrcode')}}</div>
-          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-            <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showQrcode" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">{{$t('Join qrcode')}}</div>
+            <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+              <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
+            </div>
+            <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+              <div>保存图片发送给好友，邀请加盟</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
+            </div>
           </div>
-          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div>保存图片发送给好友，邀请加盟</div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showLevelPopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">设置代理级别</div>
+            <div class="popup-middle font14">
+              <div class="pt10 pb10 scroll_list">
+                <div v-for="(item,index) in levelData" :key="index" class="scroll_item">
+                  <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                    <div class="t-table">
+                      <div class="t-cell v_middle" style="color:inherit;">
+                        <div class="clamp1 font14 color-999">等级名称: {{item.levelname}}</div>
+                        <div class="clamp1 font14 color-999">销售额: {{ $t('RMB') }}{{item.money}}</div>
+                      </div>
+                    </div>
+                  </check-icon>
+                </div>
+    					</div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeLevelPopup">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitLevel">提交</div>
+            </div>
           </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
-          </div>
-        </div>
-      </popup>
-    </div>
-  </template>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -117,7 +132,11 @@ export default {
       clickData: {},
       clickIndex: 0,
       showQrcode: false,
-      disList: false
+      disList: false,
+      showLevelPopup: false,
+      levelData: [],
+      levelName: {},
+      selectLevel: null
     }
   },
   methods: {
@@ -169,34 +188,47 @@ export default {
     },
     clickPopup (key) {
       const self = this
-      if (key === 'push') {
+      if (key === 'level') {
+        self.showLevelPopup = true
         self.showPopup1 = false
-        self.showQrcode = true
-        self.$vux.loading.show()
-        self.$http.get(`${ENV.BokaApi}/api/factory/adminQRCode`, {
-          params: {fid: self.clickData.id}
-        }).then(function (res) {
-          let data = res.data
-          self.$vux.loading.hide()
-          if (data.flag === 1) {
-            let img = self.$refs.adminQrcode[0] ? self.$refs.adminQrcode[0] : self.$refs.adminQrcode
-            img.src = data.data
-          } else {
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
-            })
-          }
-        })
-      } else if (key === 'edit') {
-        self.$router.push(`/addFactory?id=${self.clickData.id}`)
-      } else if (key === 'fee') {
-        self.$router.push(`/factorySetting?id=${self.clickData.id}`)
-      } else if (key === 'retailer') {
-        self.$router.push(`/retailerList?id=${self.clickData.id}`)
       } else {
         self.showPopup1 = false
       }
+    },
+    closeLevelPopup () {
+      this.showLevelPopup = false
+    },
+    radioclick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectLevel = data
+      } else {
+        self.selectLevel = null
+      }
+      for (let d of self.levelData) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
+    },
+    submitLevel () {
+      const self = this
+      if (!self.selectLevel) {
+        self.$vux.toast.show('请选择提现数据', 'middle')
+        return false
+      }
+      self.$vux.loading.show()
+      const params = { fid: self.query.id, wid: self.clickData.wid, level: self.selectLevel.id }
+      this.$http.get(`${ENV.BokaApi}/api/postfactory/changeRetailerLevel`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      })
     },
     getData1 () {
       const self = this
@@ -238,13 +270,25 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
-          if (this.Data.length < limit) {
-            this.disList = false
-            this.Data = []
-            this.$vux.loading.show()
-            pageStart1 = 0
-            this.getData1()
-          }
+          self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+            params: { fid: self.query.id }
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let data = res.data
+            let retdata = data.data ? data.data : data
+            let levelpolicy = retdata.levelpolicy
+            self.levelName = retdata.levelname
+            for (let key in levelpolicy) {
+              self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
+            }
+            if (self.Data.length < limit) {
+              self.disList = false
+              self.Data = []
+              self.$vux.loading.show()
+              pageStart1 = 0
+              self.getData1()
+            }
+          })
         }
       }
     }
@@ -260,15 +304,6 @@ export default {
 
 <style lang="less" scoped>
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .scroll_item .icon{display:none;}
-.rproductlist .scroll_item .down.icon{
-  display:block;
-  position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
-  background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
-  -webkit-transform: translate(30px,5px) rotate(45deg);
-  transform: translate(30px,5px) rotate(45deg);
-}
-.rproductlist .scroll_item .down.icon:after{content:"已下架";}
 .rproductlist .btnicon{
   display: inline-block;
   color: #ea3a3a;
@@ -285,16 +320,4 @@ export default {
   height:8px;
   background:#fff;
 }
-.rproductlist .s-container{bottom:50px;}
-.rproductlist .s-bottom{height: 50px;}
-.rproductlist .addproduct{border-radius: 50px;height: 36px;width: 100%;}
-.rproductlist .pro_list_top{
-  background: url(../assets/images/product_list_top.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-size: 100%;
-  height: 20px;
-}
-
 </style>
