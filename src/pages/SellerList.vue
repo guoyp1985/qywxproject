@@ -220,13 +220,19 @@ export default {
       }
       self.$vux.loading.show()
       const params = { fid: self.query.id, wid: self.clickData.wid, level: self.selectLevel.id }
-      this.$http.get(`${ENV.BokaApi}/api/postfactory/changeRetailerLevel`, params)
+      this.$http.post(`${ENV.BokaApi}/api/factory/changeRetailerLevel`, params)
       .then(res => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
-          time: self.$util.delay(data.error)
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              self.Data[self.clickIndex].level = self.selectLevel.id
+              self.showLevelPopup = false
+            }
+          }
         })
       })
     },
