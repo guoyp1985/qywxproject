@@ -1,33 +1,38 @@
 <template>
   <div class="containerarea font14 notop fsetting">
-    <div class="pagemiddle">
-      <div class="listarea" v-if="disFeeData">
-        <div v-if="!feeData || feeData.length == 0" class="emptyitem flex_center">
-          <div>
-            <div>您还未设置代理等级</div>
-            <div>点击此处<router-link class="color-blue" :to="{ path: '/factoryLevel', query: {id: query.fid} }">设置等级</router-link></div>
-          </div>
-        </div>
-        <div v-else v-for="(item,index) in feeData" :key="index" class="itemarea">
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell font14 v_middle bold">{{ item.levelname }}</div>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagemiddle">
+        <div class="listarea" v-if="disFeeData">
+          <div v-if="!feeData || feeData.length == 0" class="emptyitem flex_center">
+            <div>
+              <div>您还未设置代理等级</div>
+              <div>点击此处<router-link class="color-blue" :to="{ path: '/factoryLevel', query: {id: query.fid} }">设置等级</router-link></div>
             </div>
           </div>
-          <div class="form-item">
-            <div class="t-table">
-              <div class="t-cell title-cell w60 font14 v_middle">佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="item.agentfee" type="text" class="input" placeholder="佣金" />
+          <div v-else v-for="(item,index) in feeData" :key="index" class="itemarea">
+            <div class="form-item">
+              <div class="t-table">
+                <div class="t-cell title-cell font14 v_middle bold">{{ item.levelname }}</div>
+              </div>
+            </div>
+            <div class="form-item">
+              <div class="t-table">
+                <div class="t-cell title-cell w60 font14 v_middle">佣金<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+                <div class="t-cell input-cell v_middle" style="position:relative;">
+                  <input v-model="item.agentfee" type="text" class="input" placeholder="佣金" />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center btn-bottom-red" @click="submitEvent">{{ $t('Submit') }}</div>
-    </div>
+      <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
+        <div class="flex_cell flex_center btn-bottom-red" @click="submitEvent">{{ $t('Submit') }}</div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -37,12 +42,17 @@
 <script>
 import ENV from 'env'
 import { User } from '#/storage'
+import Sos from '@/components/Sos'
 
 export default {
   components: {
+    Sos
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       query: {},
       loginUser: {},
       feeData: [],
@@ -120,12 +130,32 @@ export default {
       })
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
-        this.feeData = []
-        this.query = this.$route.query
-        this.getData()
+      if (this.loginUser) {
+        this.$vux.loading.show()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
+            this.feeData = []
+            this.query = this.$route.query
+            this.getData()
+          }
+        }
       }
     }
   },

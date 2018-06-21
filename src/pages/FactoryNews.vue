@@ -93,7 +93,7 @@ export default {
       loginUser: {},
       WeixinName: ENV.WeixinName,
       showSos: false,
-      sosTitle: '',
+      sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       showShareSuccess: false,
       reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
@@ -104,7 +104,6 @@ export default {
       isdig: 0,
       photoarr: [],
       previewerPhotoarr: [],
-      // disComments: false,
       messages: 0,
       topcss: ''
     }
@@ -406,20 +405,32 @@ export default {
     refresh (query) {
       const self = this
       this.loginUser = User.get()
-      if (this.query.id !== query.id) {
-        room = ''
-        this.comments = []
-        this.pagestart = 0
-        this.query = query
-        this.getData()
-      }
-      this.loginUser = User.get()
-      this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
+      if (this.loginUser) {
+        this.createSocket()
+        this.$vux.loading.show()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!self.loginUser.fid && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          this.$vux.loading.hide()
+          if (this.query.id !== query.id) {
+            self.showSos = false
+            self.showContainer = false
+            room = ''
+            this.query = query
+            this.getData()
+          }
+        }
+      }
     }
   },
   created () {

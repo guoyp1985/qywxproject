@@ -441,7 +441,14 @@ export default {
           if (wid !== self.loginUser.uid) {
             self.getCollectStaus()
           }
-          return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, { wid: self.query.wid })
+          let topParams = { wid: self.query.wid }
+          if (self.query.share_uid) {
+            topParams.share_uid = self.query.share_uid
+          }
+          if (self.query.lastshareuid) {
+            topParams.lastshareuid = self.query.lastshareuid
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/common/topShow`, topParams)
         }
       }).then(res => {
         if (res) {

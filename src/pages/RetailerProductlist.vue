@@ -361,6 +361,12 @@ export default {
         })
         return false
       }
+      if (parseFloat(self.postFee) > parseFloat(self.clickdata.rebatein)) {
+        self.$vux.toast.show({
+          text: '返点佣金不能高于厂商佣金'
+        })
+        return false
+      }
       self.$http.post(`${ENV.BokaApi}/api/retailer/updateRebate`, {
         id: self.clickdata.id, rebate: self.postFee
       }).then(function (res) {
