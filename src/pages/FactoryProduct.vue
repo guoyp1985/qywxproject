@@ -14,6 +14,9 @@
             :aspect-ratio="1/1"
             auto
             loop>
+            <swiper-item v-if="productdata.video && productdata.video != ''">
+              <video :src="productdata.video"></video>
+            </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
             </swiper-item>
@@ -179,7 +182,7 @@ export default {
     },
     photoarr: function () {
       const self = this
-      if (self.photoarr.length > 0) {
+      if (self.photoarr.length > 0 || !self.$util.isNull(self.productdata.video)) {
         self.showFlash = true
       }
       return this.photoarr
@@ -190,7 +193,7 @@ export default {
   },
   computed: {
     isshowdot: function () {
-      if (this.photoarr.length > 1) {
+      if (this.photoarr.length > 1 || !this.$util.isNull(this.productdata.video)) {
         this.showdot = true
       } else {
         this.showdot = false
@@ -324,6 +327,9 @@ export default {
             if (self.photoarr.length > 0) {
               self.showFlash = true
               self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
+            }
+            if (!self.$util.isNull(self.productdata.video)) {
+              self.showFlash = true
             }
             const content = self.productdata.content
             const contetnphoto = self.productdata.contentphoto

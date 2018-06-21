@@ -11,6 +11,9 @@
         <form enctype="multipart/form-data">
           <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('contentphoto')" />
         </form>
+        <form enctype="multipart/form-data">
+          <input ref="videoInput" class="hide" type="file" name="files" @change="fileChange('video')" />
+        </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
             <div class="cover_map" v-if="photoarr.length == 0" @click="uploadPhoto('fileInput','photo')">
@@ -112,6 +115,28 @@
               </div>
             </div>
           </div>
+          <div class="form-item bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">视频</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div class="q_photolist align_left">
+                  <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
+                    <div class="button_video flex_center">
+                      <i class="al al-ai-video color-white"></i>
+                    </div>
+                  </div>
+                  <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
+                    <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
+                      <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
+                        <i class="al al-ai-video"></i>
+                        <div class="close" @click="deletephoto(item,index,'video')">×</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div v-show="showmore">
             <div class="form-item bg-white">
               <div class="t-table">
@@ -170,6 +195,9 @@ export default {
       photoarr1: [],
       maxnum1: 19,
       havenum1: 0,
+      videoarr: [],
+      maxnum2: 1,
+      havenum2: 0,
       showmore: false,
       submitdata: {
         title: '',
@@ -219,7 +247,8 @@ export default {
         content: '',
         contentphoto: '',
         seotitle: '',
-        seodescription: ''
+        seodescription: '',
+        video: ''
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -233,6 +262,9 @@ export default {
         } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
           self.photoarr1.push(data.data)
           self.submitdata.contentphoto = self.photoarr1.join(',')
+        } else if (type === 'video') {
+          self.videoarr.push(data.data)
+          self.submitdata.video = self.videoarr.join(',')
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -248,8 +280,12 @@ export default {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
+          let curMaxnum = 9
+          if (type === 'video') {
+            curMaxnum = 1
+          }
           self.$util.wxUploadImage({
-            maxnum: 9,
+            maxnum: curMaxnum,
             handleCallback: function (data) {
               self.photoCallback(data, type)
             }
@@ -455,4 +491,11 @@ export default {
 .button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 .s-havebottom .s-container{bottom:50px;}
 .s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
+.button_video{
+  position:relative;
+  width:60px;
+  height:60px;
+  background-color:#ea3a3a;
+  border-radius:50%;
+}
 </style>
