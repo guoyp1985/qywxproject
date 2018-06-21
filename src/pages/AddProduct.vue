@@ -120,7 +120,6 @@
             </div>
           </div>
         </div>
-        <!--
         <div class="form-item bg-white">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">视频</div>
@@ -143,7 +142,6 @@
             </div>
           </div>
         </div>
-      -->
         <div v-show="showmore">
           <div class="form-item bg-white">
             <div class="t-table">
@@ -209,7 +207,8 @@ export default {
         content: '',
         contentphoto: '',
         seotitle: '',
-        seodescription: ''
+        seodescription: '',
+        video: ''
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
