@@ -17,6 +17,7 @@
               <video
                 class="w_100 h_100"
                 style="max-width:100%;max-height:100%;"
+                controls
                 :src="productdata.video"
                 autoplay="true"
                 preload="auto"
