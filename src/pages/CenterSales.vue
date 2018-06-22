@@ -98,8 +98,7 @@ export default {
               if (res.status !== 200) {
                 self.$vux.loading.hide()
               } else {
-                let data = res.data
-                if (data.flag === 1) {
+                if (self.loginUser.isretailer) {
                   self.showCenter = true
                   self.showApply = false
                   self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {

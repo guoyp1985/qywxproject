@@ -3,6 +3,14 @@
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
+    <template v-if="showSos1">
+      <div class="scroll_item flex_center" style="padding-top:20%;">
+        <div>
+          <div class="align_center">抱歉，您还未入驻共销宝</div>
+          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
+        </div>
+      </div>
+    </template>
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div class="flex_left h_100 toprow color-white pl15 pr15">
@@ -183,6 +191,7 @@ import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg, XDia
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -199,6 +208,7 @@ export default {
   data () {
     return {
       showSos: false,
+      showSos1: false,
       sosTitle: '该记录不存在',
       showContainer: false,
       query: {},
@@ -375,30 +385,37 @@ export default {
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
+        self.sellerUser = (data.data ? data.data : data)
+        if (self.sellerUser.length === 0) {
           self.showSos = true
+          this.showSos1 = false
           self.showContainer = false
         } else {
-          self.sellerUser = (data.data ? data.data : data)
-          if (self.sellerUser.length === 0) {
-            self.showSos = true
-            self.showContainer = false
-          } else {
-            self.showSos = false
-            self.showContainer = true
-            document.title = self.sellerUser.username
-            self.swiperChange()
-          }
+          self.showSos = false
+          this.showSos1 = false
+          self.showContainer = true
+          document.title = self.sellerUser.username
+          self.swiperChange()
         }
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.uid !== this.$route.query.uid) {
-        this.initData()
-        this.query = this.$route.query
-        this.getData()
+      this.loginUser = User.get()
+      if (!this.loginUser.isretailer) {
+        this.$vux.loading.hide()
+        this.showSos = false
+        this.showSos1 = true
+        this.showContainer = false
+      } else {
+        this.showSos = false
+        this.showSos1 = false
+        this.showContainer = false
+        if (this.query.uid !== this.$route.query.uid) {
+          this.initData()
+          this.query = this.$route.query
+          this.getData()
+        }
       }
     }
   },

@@ -353,8 +353,8 @@ export default {
             if (self.productdata.identity !== 'retailer') {
               self.topcss = 'nobottom'
             }
-            self.feeData = self.productdata.agentfee
-            self.levelNameData = self.productdata.levelname
+            self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
+            self.levelNameData = self.productdata.levelname ? self.productdata.levelname : {}
           }
         }
       })

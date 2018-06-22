@@ -406,30 +406,12 @@ export default {
       const self = this
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.loginUser) {
-        this.createSocket()
-        this.$vux.loading.show()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!self.loginUser.fid && !isAdmin) {
-          this.$vux.loading.hide()
-          self.showSos = true
-          self.showContainer = false
-        } else {
-          this.$vux.loading.hide()
-          if (this.query.id !== query.id) {
-            self.showSos = false
-            self.showContainer = false
-            room = ''
-            this.query = query
-            this.getData()
-          }
-        }
+      if (this.query.id !== query.id) {
+        self.showSos = false
+        self.showContainer = false
+        room = ''
+        this.query = query
+        this.getData()
       }
     }
   },

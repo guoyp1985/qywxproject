@@ -195,7 +195,7 @@ export default {
         title: '您是否要申请退款？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: order.id})
+          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: order.id, from: order.from})
           .then(res => {
             self.$vux.loading.hide()
             self.$vux.toast.text(res.data.error)

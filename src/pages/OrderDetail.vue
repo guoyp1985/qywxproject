@@ -182,7 +182,7 @@ export default {
       this.$vux.confirm.show({
         title: '您是否要申请退款？',
         onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id})
+          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id, from: self.data.from})
           .then(res => {
             let data = res.data
             self.$vux.toast.show({
