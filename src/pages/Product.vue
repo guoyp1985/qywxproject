@@ -15,9 +15,6 @@
             :aspect-ratio="1/1"
             loop>
             <swiper-item v-if="productdata.video && productdata.video != ''">
-              <!--
-              <video :src="productdata.video" class="w_100 h_100" autoplay="true"></video>
-            -->
               <video
                 class="w_100 h_100"
                 style="max-width:100%;max-height:100%;"
