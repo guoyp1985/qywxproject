@@ -20,7 +20,7 @@
             -->
               <video
                 class="w_100 h_100"
-                controls
+                style="max-width:100%;max-height:100%;"
                 :src="productdata.video"
                 autoplay="true"
                 preload="auto"
