@@ -12,10 +12,22 @@
             :interval=6000
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
-            auto
             loop>
             <swiper-item v-if="productdata.video && productdata.video != ''">
+              <!--
               <video :src="productdata.video" class="w_100 h_100" autoplay="true"></video>
+            -->
+              <video
+                class="w_100 h_100"
+                controls
+                :src="productdata.video"
+                autoplay="true"
+                preload="auto"
+                x-webkit-airplay="true"
+                x5-playsinline="true"
+                webkit-playsinline="true"
+                playsinline="true">
+              </video>
             </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
