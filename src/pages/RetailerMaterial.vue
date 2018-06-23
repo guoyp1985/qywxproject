@@ -1,14 +1,14 @@
 /*
-* @description: 知识库列表页
+* @description: 商学院推荐素材页
 * @auther: gyp
 * @created_date: 2018-04-28
 */
 <template>
-  <div class="containerarea font14 bg-white knowledgeclass notop nobottom">
+  <div class="containerarea font14 knowledgeclass notop nobottom bg-page">
     <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <template v-if="disData">
         <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无素材</div>
-        <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/material', query: {id: item.id, fid: item.fid}}" class="scroll_item">
+        <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/material', query: {id: item.id, fid: item.fid}}" class="scroll_item db bg-white">
           <div class="pic">
             <div class="inner">
               <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
@@ -35,6 +35,7 @@ Newcomer Guide:
 <script>
 import { Popover, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 const limit = 10
 let pageStart = 0
@@ -46,6 +47,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       data: [],
       disData: false
     }
@@ -71,7 +73,7 @@ export default {
     },
     getData () {
       const self = this
-      const params = { pagestart: pageStart, limit: limit }
+      const params = { pagestart: pageStart, limit: limit, module: 'academic' }
       this.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/retailer/recommendNews`, params).then(function (res) {
         const data = res.data
@@ -87,14 +89,23 @@ export default {
     onHide () {
       console.log('on hide')
     },
+    init () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'material'
+      })
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       if (this.data.length < limit) {
         this.initData()
         this.getData()
       }
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

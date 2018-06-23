@@ -79,12 +79,12 @@ export default {
   },
   data () {
     return {
-      module: 'factorynews',
+      module: 'academic',
       query: {},
       loginUser: {},
       WeixinName: ENV.WeixinName,
       showSos: false,
-      sosTitle: '',
+      sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       showShareSuccess: false,
       reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
@@ -174,7 +174,7 @@ export default {
               module: self.module,
               moduleid: self.article.id,
               lastshareuid: self.query.share_uid,
-              link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/material?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
@@ -207,7 +207,7 @@ export default {
       const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/editContent/factorynews`, {
+      self.$http.post(`${ENV.BokaApi}/api/editContent/academic`, {
         id: self.query.id,
         content: editorContent.innerHTML
       }).then(function (res) {
@@ -227,7 +227,7 @@ export default {
       })
     },
     editSetting () {
-      this.$router.push({name: 'tAddNews', params: {id: this.article.id}})
+      this.$router.push({name: 'tAddMaterial', params: {id: this.article.id, fid: this.article.fid}})
     },
     editDelete () {
       this.$vux.confirm.show({
@@ -348,7 +348,28 @@ export default {
     this.init()
   },
   activated () {
-    this.refresh(this.$route.query)
+    const self = this
+    this.loginUser = User.get()
+    if (this.loginUser) {
+      this.$vux.loading.show()
+      let isAdmin = false
+      for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+        if (self.loginUser.usergroup[i] === 1) {
+          isAdmin = true
+          break
+        }
+      }
+      if (!self.loginUser.fid && !isAdmin) {
+        this.$vux.loading.hide()
+        self.showSos = true
+        self.showContainer = false
+      } else {
+        self.showSos = false
+        self.showContainer = false
+        this.$vux.loading.hide()
+        this.refresh(this.$route.query)
+      }
+    }
   }
   // beforeRouteLeave (to, from, next) {
   //   Socket.destory(room)

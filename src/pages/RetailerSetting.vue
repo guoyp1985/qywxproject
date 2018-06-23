@@ -21,6 +21,7 @@
 import RetailerSetting from '@/components/RetailerSetting'
 import RetailerApply from '@/components/RetailerApply'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -28,12 +29,12 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       showSetting: false,
       showApply: false,
       retailerInfo: {},
       submitdata: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
       photoarr: [],
-      loginUser: {},
       classData: []
     }
   },
@@ -46,10 +47,10 @@ export default {
     },
     getData () {
       const self = this
+      self.loginUser = User.get()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' })
       .then(res => {
-        let data = res.data
-        if (data.flag === 1) {
+        if (self.loginUser.isretailer) {
           self.showSetting = true
           self.showApply = false
           return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
@@ -72,24 +73,26 @@ export default {
         }
       })
       .then(res => {
-        let data = res.data
-        if (self.showSetting) {
-          self.$vux.loading.hide()
-          self.retailerInfo = data.data ? data.data : data
-          for (let key in self.submitdata) {
-            self.submitdata[key] = self.retailerInfo[key]
+        if (res) {
+          let data = res.data
+          if (self.showSetting) {
+            self.$vux.loading.hide()
+            self.retailerInfo = data.data ? data.data : data
+            for (let key in self.submitdata) {
+              self.submitdata[key] = self.retailerInfo[key]
+            }
+            let qrcode = self.submitdata.qrcode
+            if (qrcode && self.$util.trim(qrcode) !== '') {
+              self.photoarr = qrcode.split(',')
+            }
+          } else if (self.showApply) {
+            self.$vux.loading.hide()
+            data = data.data ? data.data : data
+            for (let i = 0; i < data.length; i++) {
+              data[i].checked = false
+            }
+            self.classData = data
           }
-          let qrcode = self.submitdata.qrcode
-          if (qrcode && self.$util.trim(qrcode) !== '') {
-            self.photoarr = qrcode.split(',')
-          }
-        } else if (self.showApply) {
-          self.$vux.loading.hide()
-          data = data.data ? data.data : data
-          for (let i = 0; i < data.length; i++) {
-            data[i].checked = false
-          }
-          self.classData = data
         }
       })
     },

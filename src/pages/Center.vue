@@ -169,44 +169,42 @@ export default {
         btn.react.call(this)
       }
     },
+    setUserInfo () {
+      const user = User.get()
+      this.avatarHref = user.avatar
+      this.linkMan = user.linkman
+      this.userCredits = user.credit
+      this.userLevels = user.levels
+      this.profile = {
+        linkman: user.linkman,
+        avatar: user.avatar,
+        sex: user.sex,
+        mobile: user.mobile,
+        company: user.company
+      }
+      if (!this.showBtn1) {
+        if (this.loginUser.fid > 0) {
+          this.btns1 = factoryBtn.concat(this.btns1)
+        }
+        this.btns1 = manageBtn.concat(this.btns1)
+        this.showBtn1 = true
+      }
+      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        let data = res.data
+        self.messages = data.data
+      })
+    },
     getData () {
       const user = User.get()
       const self = this
-      this.loginUser = user
-      if (user) {
-        this.avatarHref = user.avatar
-        this.linkMan = user.linkman
-        this.userCredits = user.credit
-        this.userLevels = user.levels
-        this.profile = {
-          linkman: user.linkman,
-          avatar: user.avatar,
-          sex: user.sex,
-          mobile: user.mobile,
-          company: user.company
-        }
-        if (!this.showBtn1) {
-          if (this.loginUser.fid > 0) {
-            this.btns1 = factoryBtn.concat(this.btns1)
-          }
-          this.btns1 = manageBtn.concat(this.btns1)
-          this.showBtn1 = true
-        }
-        this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-          let data = res.data
-          self.messages = data.data
-        })
+      if (user && user.subscribe === 1) {
+        self.loginUser = user
+        self.setUserInfo()
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          this.loginUser = res.data.data
+          self.loginUser = res.data.data
           User.set(this.loginUser)
-          if (!this.showBtn1) {
-            if (this.loginUser.fid > 0) {
-              this.btns1 = factoryBtn.concat(this.btns1)
-            }
-            this.btns1 = manageBtn.concat(this.btns1)
-            this.showBtn1 = true
-          }
+          self.setUserInfo()
         })
       }
     },
@@ -222,7 +220,20 @@ export default {
 </script>
 
 <style lang="less">
-/* weui css hack */
+/* css extension */
+.grid-center {
+  display: block;
+  text-align: center;
+  color: #666;
+}
+.grid-title {
+  background-color: #efeff4;
+  color: #716f76;
+  padding: 5px 15px;
+  font-size: 14px;
+}
+
+/* vux css hack */
 #personal-center .weui-grid__icon {
   height: auto;
   width: auto;
@@ -238,20 +249,6 @@ export default {
   background-color: #ffffff;
 }
 
-/* css extension */
-.grid-center {
-  display: block;
-  text-align: center;
-  color: #666;
-}
-.grid-title {
-  background-color: #efeff4;
-  color: #716f76;
-  padding: 5px 15px;
-  font-size: 14px;
-}
-
-/* vux css hack */
 #personal-center .weui-grid:after {
   height: 0px;
   border-bottom: none;

@@ -17,7 +17,7 @@
         <div class="q_photolist align_left">
           <template v-if="photoarr.length > 0">
             <div v-for="(item, index) in photoarr" :key="index" class="img-box">
-              <img class="img" :src="item"/>
+              <img class="img imgcover" :src="item"/>
               <a class="setting-btn" @click="clipPhoto(item)">
                 <i class="al al-set font16"></i>
               </a>
@@ -71,6 +71,15 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.cutImg = ''
+      this.popupShow = false
+      this.allowsubmit = true
+      this.photoarr = []
+      this.havenum = 0
+      this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
+      this.requireddata = { title: '', 'photo': '' }
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -206,8 +215,11 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
+      if (this.query.id !== this.$route.query.id) {
+        this.initData()
+        this.query = this.$route.query
+        this.getData()
+      }
     }
   },
   activated () {

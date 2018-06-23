@@ -1,82 +1,87 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-      <template v-if="disList">
-        <template v-if="!Data || Data.length == 0">
-          <div class="scroll_list">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">暂无厂商数据</div>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+        <template v-if="disList">
+          <template v-if="!Data || Data.length == 0">
+            <div class="scroll_list">
+              <div class="emptyitem">
+                <div class="t-table" style="padding-top:20%;">
+                  <div class="t-cell padding10">暂无厂商数据</div>
+                </div>
+              </div>
+            </div>
+          </template>
+          <template v-else>
+            <div class="scroll_list ">
+              <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
+                <div v-if="item.moderate == 0" class="icon down"></div>
+            		<div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell v_middle pl12">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                    <div class="t-table pr12 border-box mt15">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">{{ item.summary }}</span></div>
+                      </div>
+                      <div class="align_right t-cell v_bottom w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+              </router-link>
+            </div>
+          </template>
+        </template>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+        <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactory">{{ $t('Add factory') }}</router-link>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickData">
+              <div class="item">
+                <div class="inner" @click="clickPopup('push')">设置管理员</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('set')">设置佣金</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('edit')">编辑</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('retailer')">卖家</div>
+              </div>
+              <div class="item close mt10" @click="clickPopup('row.key')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
             </div>
           </div>
-        </template>
-        <template v-else>
-          <div class="scroll_list ">
-            <router-link :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="t-table bg-white pt10 pb10">
-          			<div class="t-cell v_middle pl12">
-                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="t-table pr12 border-box mt15">
-                    <div class="t-cell color-999 font14">
-                      <div class="clamp1">{{ item.summary }}</span></div>
-                    </div>
-                    <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                        <i class="al al-asmkticon0165 v_middle"></i>
-                      </div>
-                    </div>
-                  </div>
-          			</div>
-          		</div>
-            </router-link>
-          </div>
-        </template>
-      </template>
-    </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" to="/addFactory">{{ $t('Add factory') }}</router-link>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showPopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickData">
-            <div class="item">
-              <div class="inner" @click="clickPopup('push')">设置管理员</div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showQrcode" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">设置管理员</div>
+            <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
+              <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
             </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('set')">设置佣金</div>
+            <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
+              <div>扫描二维码设置管理员</div>
             </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('edit')">编辑</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('retailer')">卖家</div>
-            </div>
-            <div class="item close mt10" @click="clickPopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
             </div>
           </div>
-        </div>
-      </popup>
-    </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showQrcode" height="100%">
-        <div class="popup1 font14">
-          <div class="popup-top flex_center">设置管理员</div>
-          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-            <img ref="adminQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
-          </div>
-          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div>扫描二维码设置管理员</div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
-          </div>
-        </div>
-      </popup>
-    </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -88,6 +93,8 @@ Add factory:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
+import Sos from '@/components/Sos'
 
 let pageStart1 = 0
 const limit = 10
@@ -96,10 +103,13 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Sos
   },
   data () {
     return {
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       query: {},
       loginUser: {},
       Data: [],
@@ -160,7 +170,7 @@ export default {
       } else if (key === 'set') {
         self.$router.push(`/factoryAgentFee?id=${self.clickData.id}`)
       } else if (key === 'retailer') {
-        self.$router.push(`/retailerList?id=${self.clickData.id}`)
+        self.$router.push(`/sellerList?id=${self.clickData.id}`)
       } else {
         self.showPopup1 = false
       }
@@ -180,26 +190,38 @@ export default {
         self.disList = true
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'list'
-      })
-    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.Data.length < limit) {
-        this.disList = false
-        this.Data = []
+      this.loginUser = User.get()
+      if (this.loginUser) {
         this.$vux.loading.show()
-        pageStart1 = 0
-        this.getData1()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.Data.length < limit) {
+            this.disList = false
+            this.Data = []
+            this.$vux.loading.show()
+            pageStart1 = 0
+            this.getData1()
+          }
+        }
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

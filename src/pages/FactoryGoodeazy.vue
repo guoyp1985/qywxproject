@@ -304,22 +304,12 @@ export default {
         })
       })
     },
-    init () {
-      const self = this
-      this.loginUser = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'goodeazy'
-      }).then(function () {
-        self.swiperChange()
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
+      this.swiperChange()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

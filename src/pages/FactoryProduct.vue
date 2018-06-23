@@ -3,7 +3,7 @@
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
-    <template v-if="showcontainer">
+    <template v-if="showContainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
         <template v-if="showFlash">
           <swiper
@@ -12,8 +12,21 @@
             :interval=6000
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
-            auto
             loop>
+            <swiper-item v-if="productdata.video && productdata.video != ''">
+              <video
+                class="w_100 h_100"
+                style="max-width:100%;max-height:100%;"
+                controls
+                :src="productdata.video"
+                autoplay="true"
+                preload="auto"
+                x-webkit-airplay="true"
+                x5-playsinline="true"
+                webkit-playsinline="true"
+                playsinline="true">
+              </video>
+            </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
             </swiper-item>
@@ -65,7 +78,7 @@
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
       </div>
-      <div v-if="productdata.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
           <div class="flex_cell flex_center btn-bottom-red" @click="importProduct">我要代理</div>
         </div>
@@ -134,8 +147,8 @@ export default {
       query: {},
       disTimeout: true,
       showSos: false,
-      sosTitle: '',
-      showcontainer: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       showShareSuccess: false,
       productid: null,
       productdata: {},
@@ -179,7 +192,7 @@ export default {
     },
     photoarr: function () {
       const self = this
-      if (self.photoarr.length > 0) {
+      if (self.photoarr.length > 0 || !self.$util.isNull(self.productdata.video)) {
         self.showFlash = true
       }
       return this.photoarr
@@ -190,7 +203,7 @@ export default {
   },
   computed: {
     isshowdot: function () {
-      if (this.photoarr.length > 1) {
+      if (this.photoarr.length > 1 || !this.$util.isNull(this.productdata.video)) {
         this.showdot = true
       } else {
         this.showdot = false
@@ -202,8 +215,8 @@ export default {
     initData () {
       this.disTimeout = true
       this.showSos = false
-      this.sosTitle = ''
-      this.showcontainer = false
+      this.sosTitle = '抱歉，您暂无权限访问此页面！'
+      this.showContainer = false
       this.showShareSuccess = false
       this.productid = null
       this.productdata = {}
@@ -313,7 +326,7 @@ export default {
             self.sosTitle = data.error
             self.showSos = true
           } else {
-            self.showcontainer = true
+            self.showContainer = true
             self.productdata = data.data
             self.factoryinfo = self.productdata.factoryinfo
             document.title = self.productdata.title
@@ -324,6 +337,9 @@ export default {
             if (self.photoarr.length > 0) {
               self.showFlash = true
               self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
+            }
+            if (!self.$util.isNull(self.productdata.video)) {
+              self.showFlash = true
             }
             const content = self.productdata.content
             const contetnphoto = self.productdata.contentphoto
@@ -337,8 +353,8 @@ export default {
             if (self.productdata.identity !== 'retailer') {
               self.topcss = 'nobottom'
             }
-            self.feeData = self.productdata.agentfee
-            self.levelNameData = self.productdata.levelname
+            self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
+            self.levelNameData = self.productdata.levelname ? self.productdata.levelname : {}
           }
         }
       })
@@ -354,20 +370,14 @@ export default {
       this.$util.wxAccessListening()
     },
     refresh () {
-      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.initData()
       this.showShareSuccess = false
       this.previewerPhotoarr = []
       this.query = this.$route.query
-      this.$vux.loading.show()
       this.getData()
       this.createSocket()
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
     }
   },
   created () {

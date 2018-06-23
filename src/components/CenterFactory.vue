@@ -76,7 +76,7 @@
         </div>
       -->
         <div class="gridlist">
-          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', id: factoryInfo.id}" style="position:relative;">
+          <grid-item :label="$t('Business school')" :link="{path: '/businessSchool', query: {fid: factoryInfo.id}}" style="position:relative;">
             <div slot="icon">
               <i class="al al-address"></i>
             </div>
@@ -93,6 +93,12 @@
         <div slot="child">
           <div class="numicon" v-if="factoryInfo.neworders > 0 && factoryInfo.neworders < 100">{{ factoryInfo.neworders }}</div>
           <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
+        </div>
+      </cell>
+      <cell :link="{path:'/addFactory', query:{id: factoryInfo.id}}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Setting')}}</span>
         </div>
       </cell>
     </group>

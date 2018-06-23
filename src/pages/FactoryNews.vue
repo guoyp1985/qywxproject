@@ -93,7 +93,7 @@ export default {
       loginUser: {},
       WeixinName: ENV.WeixinName,
       showSos: false,
-      sosTitle: '',
+      sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       showShareSuccess: false,
       reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
@@ -104,7 +104,6 @@ export default {
       isdig: 0,
       photoarr: [],
       previewerPhotoarr: [],
-      // disComments: false,
       messages: 0,
       topcss: ''
     }
@@ -200,7 +199,7 @@ export default {
               module: self.module,
               moduleid: self.article.id,
               lastshareuid: self.query.share_uid,
-              link: `${ENV.Host}/#/factorynews?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/factorynews?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
@@ -305,7 +304,7 @@ export default {
       })
     },
     editSetting () {
-      this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id}})
+      this.$router.push({name: 'tAddFacotryNews', params: {id: this.article.id, fid: this.article.fid}})
     },
     editDelete () {
       this.$vux.confirm.show({
@@ -406,20 +405,14 @@ export default {
     refresh (query) {
       const self = this
       this.loginUser = User.get()
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== query.id) {
+        self.showSos = false
+        self.showContainer = false
         room = ''
-        this.comments = []
-        this.pagestart = 0
         this.query = query
         this.getData()
       }
-      this.loginUser = User.get()
-      this.createSocket()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
     }
   },
   created () {

@@ -1,49 +1,59 @@
 <template>
   <div class="containerarea bg-page font14 rproductlist nobottom notop">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
-      <template v-if="disTabData1">
-        <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
-          <div>暂无加盟厂商</div>
+    <template v-if="showSos">
+      <div class="scroll_item flex_center" style="padding-top:20%;">
+        <div>
+          <div class="align_center">抱歉，您还未入驻共销宝</div>
+          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
         </div>
-        <div v-else class="scroll_list ">
-          <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
-            <div v-if="item.moderate == 0" class="icon down"></div>
-        		<div class="t-table bg-white pt10 pb10">
-      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
-                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+      </div>
+    </template>
+    <template v-if="showContainer">
+      <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
+        <template v-if="disTabData1">
+          <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
+            <div>暂无加盟厂商</div>
+          </div>
+          <div v-else class="scroll_list ">
+            <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
+              <div v-if="item.moderate == 0" class="icon down"></div>
+          		<div class="t-table bg-white pt10 pb10">
+        				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                  <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                </div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                  <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
+          			</div>
+          		</div>
+            </router-link>
+          </div>
+        </template>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickData">
+              <div class="item">
+                <div class="inner" @click="clickPopup('push')">设置管理员</div>
               </div>
-        			<div class="t-cell v_middle">
-                <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
-        			</div>
-        		</div>
-          </router-link>
-        </div>
-      </template>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showPopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickData">
-            <div class="item">
-              <div class="inner" @click="clickPopup('push')">设置管理员</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('set')">设置</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('edit')">编辑</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('retailer')">卖家</div>
-            </div>
-            <div class="item close mt10" @click="clickPopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('set')">设置</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('edit')">编辑</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('retailer')">卖家</div>
+              </div>
+              <div class="item close mt10" @click="clickPopup('row.key')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
             </div>
           </div>
-        </div>
-      </popup>
-    </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -55,6 +65,7 @@ Add factory:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -69,8 +80,10 @@ export default {
   },
   data () {
     return {
-      query: {},
       loginUser: {},
+      query: {},
+      showSos: false,
+      showContainer: false,
       tabtxts: [ '已分销', '未分销' ],
       selectedIndex: 0,
       tabData1: [],
@@ -154,18 +167,26 @@ export default {
       })
     },
     init () {
-      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'list'
+        module: 'retailer', action: 'factorylist'
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.tabData1.length < limit) {
-        this.disTabData1 = false
-        this.tabData1 = []
-        this.getData1()
+      this.loginUser = User.get()
+      if (!this.loginUser.isretailer) {
+        this.$vux.loading.hide()
+        this.showSos = true
+        this.showContainer = false
+      } else {
+        this.showSos = false
+        this.showContainer = true
+        this.query = this.$route.query
+        if (this.tabData1.length < limit) {
+          this.disTabData1 = false
+          this.tabData1 = []
+          this.getData1()
+        }
       }
     }
   },

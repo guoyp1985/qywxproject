@@ -1,5 +1,13 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
+    <template v-if="showSos">
+      <div class="scroll_item flex_center" style="padding-top:20%;">
+        <div>
+          <div class="align_center">抱歉，您还未入驻共销宝</div>
+          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
+        </div>
+      </div>
+    </template>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
@@ -138,6 +146,7 @@ import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } f
 import CreateActivity from '@/components/CreateActivity'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 const limit = 10
 let pageStart1 = 0
@@ -156,7 +165,9 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       query: {},
+      showSos: false,
       showContainer: false,
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
@@ -233,10 +244,19 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.tabdata1.length < limit || this.query.from === 'add') {
-        this.tabdata1 = []
-        this.getData1()
+      this.loginUser = User.get()
+      if (!this.loginUser.isretailer) {
+        this.$vux.loading.hide()
+        this.showSos = true
+        this.showContainer = false
+      } else {
+        this.showSos = false
+        this.showContainer = false
+        this.query = this.$route.query
+        if (this.tabdata1.length < limit || this.query.from === 'add') {
+          this.tabdata1 = []
+          this.getData1()
+        }
       }
     }
   },

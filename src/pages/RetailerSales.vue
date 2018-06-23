@@ -1,115 +1,125 @@
 <template>
   <div class="containerarea  bg-page  fong14 rsales">
-    <div class="s-topbanner s-topbanner1">
-      <div class="row">
-        <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-        </tab>
+    <template v-if="showSos">
+      <div class="scroll_item flex_center" style="padding-top:20%;">
+        <div>
+          <div class="align_center">抱歉，您还未入驻共销宝</div>
+          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
+        </div>
       </div>
-    </div>
-    <div class="s-container s-container1">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <template v-if="(index == 0)">
-            <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
-              <search
-                class="v-search bg-white"
-                v-model="searchword1"
-                :auto-fixed="autofixed"
-                @on-submit="onSubmit1"
-                @on-change="onChange1"
-                @on-cancel="onCancel1"
-                ref="search">
-              </search>
-            </div>
-            <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-              <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
-                <template v-if="searchresult1">
-                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                </template>
-                <template v-else>
+    </template>
+    <template v-if="showContainer">
+      <div class="s-topbanner s-topbanner1">
+        <div class="row">
+          <tab v-model="selectedIndex" class="v-tab">
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          </tab>
+        </div>
+      </div>
+      <div class="s-container s-container1">
+        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+            <template v-if="(index == 0)">
+              <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+                <search
+                  class="v-search bg-white"
+                  v-model="searchword1"
+                  :auto-fixed="autofixed"
+                  @on-submit="onSubmit1"
+                  @on-change="onChange1"
+                  @on-cancel="onCancel1"
+                  ref="search">
+                </search>
+              </div>
+              <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
+                  <template v-if="searchresult1">
+                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                  </template>
+                  <template v-else>
+                    <div><i class="al al-qiangkehu font60 pt20"></i></div>
+                    <div class="mt5">竟然没有返点客，点击【邀请返点客】，选择客户并【邀请】，与返点客一起赚钱吧！</div>
+                  </template>
+                </div>
+                <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
+                  <div class="t-table">
+                    <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:70px;">
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </router-link>
+                    <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
+                      <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
+                      <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
+                    </router-link>
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w60 align_right v_middle">
+                      <div class="qbtn bg-red color-white">联系</div>
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template v-if="(index == 1)">
+              <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
+                <search
+                  class="v-search bg-white"
+                  v-model="searchword2"
+                  :auto-fixed="autofixed"
+                  @on-submit="onSubmit2"
+                  @on-change="onChange2"
+                  @on-cancel="onCancel2"
+                  ref="search">
+                </search>
+              </div>
+              <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+                <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
+                  <template v-if="searchresult2">
+                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                  </template>
+                  <template v-else>
                   <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                  <div class="mt5">竟然没有返点客，点击【邀请返点客】，选择客户并【邀请】，与返点客一起赚钱吧！</div>
-                </template>
-              </div>
-              <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
-                <div class="t-table">
-                  <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:70px;">
-                    <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                  </router-link>
-                  <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
-                    <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
-                    <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
-                  </router-link>
-                  <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w60 align_right v_middle">
-                    <div class="qbtn bg-red color-white">联系</div>
-                  </router-link>
+                  <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
+                  </template>
                 </div>
-              </div>
-            </div>
-          </template>
-          <template v-if="(index == 1)">
-            <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
-              <search
-                class="v-search bg-white"
-                v-model="searchword2"
-                :auto-fixed="autofixed"
-                @on-submit="onSubmit2"
-                @on-change="onChange2"
-                @on-cancel="onCancel2"
-                ref="search">
-              </search>
-            </div>
-            <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-              <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
-                <template v-if="searchresult2">
-                  <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                </template>
-                <template v-else>
-                <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                <div class="mt5">竟然没有客户！将商品、活动或文章分享给好友或朋友圈，获得客户后即可将客户邀请成返点客啦！</div>
-                </template>
-              </div>
-              <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
-                <div class="t-table">
-                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle " style="width: 70px;">
-                    <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                  </router-link>
-                  <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
-                    <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                    <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div>
-                  </router-link>
-                  <div class="t-cell v_middle align_right w60">
-                    <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
+                <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
+                  <div class="t-table">
+                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle " style="width: 70px;">
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </router-link>
+                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
+                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                      <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div>
+                    </router-link>
+                    <div class="t-cell v_middle align_right w60">
+                      <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </template>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
-            <div v-if="distabdata3" class="scroll_list cols-2">
-              <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
-                <div><i class="al al-wushuju font60 pt20"></i></div>
-                <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
-              </div>
-              <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
-                <div class="t-table">
-                  <div class="t-cell v_middle" style="width:70px;">
-                    <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                  </div>
-                  <div class="t-cell v_middle">
-                    <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                    <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
-                    <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
-                  </div>
+            </template>
+            <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
+              <div v-if="distabdata3" class="scroll_list cols-2">
+                <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
+                  <div><i class="al al-wushuju font60 pt20"></i></div>
+                  <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
                 </div>
-              </router-link>
+                <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
+                  <div class="t-table">
+                    <div class="t-cell v_middle" style="width:70px;">
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </div>
+                    <div class="t-cell v_middle">
+                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">返点金额: ￥{{item.money}}</div>
+                      <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
+                    </div>
+                  </div>
+                </router-link>
+              </div>
             </div>
-          </div>
-        </swiper-item>
-      </swiper>
-    </div>
+          </swiper-item>
+        </swiper>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -134,6 +144,9 @@ export default {
   data () {
     return {
       loginUser: {},
+      query: {},
+      showSos: false,
+      showContainer: false,
       autofixed: false,
       tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
       selectedIndex: 0,
@@ -335,7 +348,16 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.swiperChange()
+      this.loginUser = User.get()
+      if (!this.loginUser.isretailer) {
+        this.$vux.loading.hide()
+        this.showSos = true
+        this.showContainer = false
+      } else {
+        this.showSos = false
+        this.showContainer = true
+        this.swiperChange()
+      }
     }
   },
   created () {

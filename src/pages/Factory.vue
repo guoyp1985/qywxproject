@@ -62,12 +62,17 @@
         </div>
       </template>
     </div>
-    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+    <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
         <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
       </div>
       <div class="align_center flex_center flex_cell">
         <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
+      </div>
+    </div>
+    <div v-if="!loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+      <div class="align_center flex_center flex_cell">
+        <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻共销宝</router-link>
       </div>
     </div>
   </div>
@@ -82,6 +87,7 @@ Apply join:
 import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
+import { User } from '#/storage'
 
 const limit = 10
 let pageStart1 = 0
@@ -98,6 +104,7 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       query: {},
       viewData: {},
       selectedIndex: 0,
@@ -249,14 +256,11 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       this.query = this.$route.query
       self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'fatory', action: 'info'
-      }).then(function () {
-        return self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.query.id } }
-        )
+      self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+        params: { fid: self.query.id }
       }).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data

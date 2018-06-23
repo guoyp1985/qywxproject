@@ -1,80 +1,85 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-      <template v-if="disproductdata">
-        <template v-if="!productdata || productdata.length == 0">
-          <div class="scroll_list">
-            <div class="emptyitem">
-              <div class="t-table" style="padding-top:20%;">
-                <div class="t-cell padding10">
-                  <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
-                  <div class="align_center">竟然一个商品也没有！</div>
-                  <div class="align_center">及时添加商品卖家才可以帮你带来更多销量哦</div>
+    <template v-if="showSos">
+      <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showContainer">
+      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+        <template v-if="disproductdata">
+          <template v-if="!productdata || productdata.length == 0">
+            <div class="scroll_list">
+              <div class="emptyitem">
+                <div class="t-table" style="padding-top:20%;">
+                  <div class="t-cell padding10">
+                    <i class="al al-chuangjianxiangmu" style="font-size:60px;"></i>
+                    <div class="align_center">竟然一个商品也没有！</div>
+                    <div class="align_center">及时添加商品卖家才可以帮你带来更多销量哦</div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </template>
-        <template v-else>
-          <div class="scroll_list ">
-            <router-link :to="{path:'/factoryProduct',query:{id: item.id, fid: query.fid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
-          		<div class="t-table bg-white pt10 pb10">
-          			<div class="t-cell pl12 v_middle" style="width:110px;">
-                  <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
-                </div>
-          			<div class="t-cell v_middle">
-                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="t-table pr12 border-box mt15">
-                    <div class="t-cell color-999 font14">
-                      <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
-                      <div class="clamp1 mt5">
-                          <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
-                          <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
-                      </div>
-                    </div>
-                    <div class="align_right t-cell v_bottom w80">
-                      <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
-                        <i class="al al-asmkticon0165 v_middle"></i>
-                      </div>
-                    </div>
+          </template>
+          <template v-else>
+            <div class="scroll_list ">
+              <router-link :to="{path:'/factoryProduct',query:{id: item.id, fid: query.fid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
+                <div v-if="item.moderate == 0" class="icon down"></div>
+            		<div class="t-table bg-white pt10 pb10">
+            			<div class="t-cell pl12 v_middle" style="width:110px;">
+                    <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
                   </div>
-          			</div>
-          		</div>
-            </router-link>
-          </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                    <div class="t-table pr12 border-box mt15">
+                      <div class="t-cell color-999 font14">
+                        <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
+                        <div class="clamp1 mt5">
+                            <span class="v_middle db-in">库存: {{ item.storage }}{{item.unit}}</span>
+                            <span class="v_middle db-in ml5">已售: {{ item.saled }}{{item.unit}}</span>
+                        </div>
+                      </div>
+                      <div class="align_right t-cell v_bottom w80">
+                        <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
+                          <i class="al al-asmkticon0165 v_middle"></i>
+                        </div>
+                      </div>
+                    </div>
+            			</div>
+            		</div>
+              </router-link>
+            </div>
+          </template>
         </template>
-      </template>
-    </div>
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <router-link class="addproduct flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryProduct', query: {fid: query.fid}}">{{ $t('Add product') }}</router-link>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showpopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickdata">
-            <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
-              <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id}}">编辑</router-link>
-            </div>
-            <div class="item" v-if="clickdata.moderate == 0">
-              <div class="inner" @click="clickpopup('up')">上架</div>
-            </div>
-            <div class="item" v-else-if="clickdata.moderate == 1">
-              <div class="inner" @click="clickpopup('down')">下架</div>
-            </div>
-            <div class="item">
-              <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickpopup('fee')">设置佣金</div>
-            </div>
-            <div class="item close mt10" @click="clickpopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+        <router-link class="addproduct flex_cell flex_center btn-bottom-red" :to="{path: '/addFactoryProduct', query: {fid: query.fid}}">{{ $t('Add product') }}</router-link>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showpopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickdata">
+              <div class="item" v-if="!clickdata.activityid || clickdata.activityid == 0">
+                <router-link class="inner" :to="{path: '/addFactoryProduct', query: {id: clickdata.id, fid: query.fid}}">编辑</router-link>
+              </div>
+              <div class="item" v-if="clickdata.moderate == 0">
+                <div class="inner" @click="clickpopup('up')">上架</div>
+              </div>
+              <div class="item" v-else-if="clickdata.moderate == 1">
+                <div class="inner" @click="clickpopup('down')">下架</div>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
+              </div>
+              <div class="item">
+                <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: query.fid } }">设置佣金</router-link>
+              </div>
+              <div class="item close mt10" @click="clickpopup">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
             </div>
           </div>
-        </div>
-      </popup>
-    </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -85,6 +90,7 @@
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Sos from '@/components/Sos'
 
 let pageStart1 = 0
 const limit = 10
@@ -94,12 +100,15 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg
+    Popup, Confirm, CheckIcon, XImg, Sos
   },
   data () {
     return {
-      loginUser: {},
+      showSos: false,
+      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showContainer: false,
       query: {},
+      loginUser: {},
       productdata: [],
       showpopup1: false,
       clickdata: {},
@@ -188,12 +197,6 @@ export default {
             })
           }
         })
-      } else if (key === 'edit') {
-        self.showpopup1 = false
-        self.$router.push({ path: '/addFactoryProduct', query: { id: self.clickdata.id } })
-      } else if (key === 'fee') {
-        self.showpopup1 = false
-        self.$router.push({ path: '/factoryAgentFee', query: { id: self.clickdata.id, fid: self.query.fid } })
       } else {
         self.showpopup1 = false
       }
@@ -212,27 +215,38 @@ export default {
         self.disproductdata = true
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.loginUser = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'factory', action: 'productlist'
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.productdata.length < limit) {
-        this.disproductdata = false
-        this.productdata = []
+      const self = this
+      this.loginUser = User.get()
+      if (this.loginUser) {
         this.$vux.loading.show()
-        pageStart1 = 0
-        this.getData1()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.productdata.length < limit) {
+            this.disproductdata = false
+            this.productdata = []
+            this.$vux.loading.show()
+            pageStart1 = 0
+            this.getData1()
+          }
+        }
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

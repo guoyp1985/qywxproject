@@ -223,6 +223,7 @@ import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 const limit = 10
 export default {
@@ -257,6 +258,7 @@ export default {
       showSos: false,
       sosTitle: '该信息不存在',
       showContainer: false,
+      loginUser: {},
       query: {},
       module: '',
       data: {},
@@ -279,6 +281,7 @@ export default {
   },
   methods: {
     initData () {
+      this.sosTitle = '该信息不存在'
       this.query = this.$route.query
       this.module = this.query.module
       this.selectedIndex = 0
@@ -360,19 +363,38 @@ export default {
     },
     init () {
       this.$vux.loading.show()
-      this.query = this.$route.query
       this.module = this.query.module
       this.getData()
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
-        this.query = this.$route.query
-        this.module = this.query.module
-        this.initData()
-        this.getData()
-      } else if (this.showContainer) {
-        this.swiperChange()
+      this.loginUser = User.get()
+      if (this.loginUser) {
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
+          this.sosTitle = '抱歉，您暂无权限访问此页面！'
+          this.showSos = true
+          this.showContainer = false
+        } else {
+          this.sosTitle = '该信息不存在'
+          this.showSos = false
+          this.showContainer = false
+          if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+            this.query = this.$route.query
+            this.module = this.query.module
+            this.initData()
+            this.getData()
+          } else if (this.showContainer) {
+            this.swiperChange()
+          }
+        }
       }
     }
   },

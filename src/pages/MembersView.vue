@@ -3,6 +3,14 @@
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
+    <template v-if="showSos1">
+      <div class="scroll_item flex_center" style="padding-top:20%;">
+        <div>
+          <div class="align_center">抱歉，您还未入驻共销宝</div>
+          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
+        </div>
+      </div>
+    </template>
     <template v-if="showContainer">
       <div class="s-topbanner flex_left pl15 pr15 border-box">
         <div class="">
@@ -168,6 +176,7 @@ export default {
       query: {},
       loginUser: {},
       showSos: false,
+      showSos1: false,
       sosTitle: '',
       showContainer: false,
       viewuser: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
@@ -386,6 +395,8 @@ export default {
         if (data.flag !== 1) {
           self.sosTitle = data.error
           self.showSos = true
+          self.showSos1 = false
+          self.showContainer = false
           return false
         }
         if (data) {
@@ -396,6 +407,8 @@ export default {
           document.title = self.viewuser.linkman
           self.userIntention = self.viewuser.intention
         }
+        self.showSos = false
+        self.showSos1 = false
         self.showContainer = true
       })
     },
@@ -404,9 +417,20 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
+      this.loginUser = User.get()
+      if (!this.loginUser.isretailer) {
+        this.$vux.loading.hide()
+        this.showSos = false
+        this.showSos1 = true
+        this.showContainer = false
+      } else {
+        this.showSos = false
+        this.showSos1 = false
+        this.showContainer = false
+        this.query = this.$route.query
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   created () {
