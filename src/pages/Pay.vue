@@ -58,8 +58,13 @@ export default {
     initPay () {
       const self = this
       const orderId = this.$route.query.id
-      const paymodule = this.$route.query.module
-      this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}&module=${paymodule}`)
+      let params = { orderid: orderId }
+      if (this.$route.query.module) {
+        params.module = this.$route.query.module
+      }
+      this.$http.get(`${ENV.BokaApi}/api/order/unify`, {
+        params: params
+      })
       .then(res => {
         if (res.data.flag) {
           self.disabled = false
