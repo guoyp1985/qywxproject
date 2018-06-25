@@ -135,7 +135,7 @@
     <group class="list-shadow02 order_list_show posi_r">
       <template v-if="retailerInfo.products > 0">
         <cell :link="{path:'/retailerOrders'}" style="position:relative">
-          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+          <div slot="icon" class="pr10"><i class="al al-dingdan color-red4 db-in font16"></i></div>
           <div slot="inline-desc">
             <span class="font15">{{$t('Order list')}}</span>
           </div>
@@ -147,7 +147,7 @@
       </template>
       <template v-else >
         <cell class="listitem disabled" @click.native.stop="clickDisabled">
-          <div slot="icon" class="pr10"><i class="al al-dingdan color-blue11 db-in font18"></i></div>
+          <div slot="icon" class="pr10"><i class="al al-dingdan color-red4 db-in font16"></i></div>
           <div slot="inline-desc">
             <span class="font15">{{$t('Order list')}}</span>
           </div>
@@ -161,9 +161,15 @@
           </div>
         </cell>
         <cell :link="{path:'/factoryList'}" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0" style="position:relative">
-          <div slot="icon" class="pr10"><i class="al al-yaoqing1 color-red4 db-in font18"></i></div>
+          <div slot="icon" class="pr10"><i class="al al-yaoqing1 color-red4 db-in font20"></i></div>
           <div slot="inline-desc">
             <span class="font15">{{$t('I want to distribute')}}</span>
+          </div>
+        </cell>
+        <cell style="position:relative" @click.native.stop="inviteEvent">
+          <div slot="icon" class="pr10"><i class="al al-zan7 color-red4 db-in font14"></i></div>
+          <div slot="inline-desc">
+            <span class="font15">邀请入驻赚佣金</span>
           </div>
         </cell>
       </template>
@@ -281,6 +287,12 @@ export default {
         onConfirm () {
           self.$router.push('/addProduct')
         }
+      })
+    },
+    inviteEvent () {
+      this.$vux.alert.show({
+        title: '',
+        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销宝，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
       })
     }
   }
