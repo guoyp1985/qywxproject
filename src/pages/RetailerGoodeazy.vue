@@ -294,6 +294,16 @@ export default {
         })
         return false
       }
+      if (self.collecturl.indexOf('mp.weixin.qq.com') < 0) {
+        self.$vux.alert.show({
+          title: '',
+          content: '链接格式有误，请复制微信公众号文章链接再来采集哦！',
+          onHide: function () {
+            self.collecturl = ''
+          }
+        })
+        return false
+      }
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
         { do: 'download', url: self.collecturl }
