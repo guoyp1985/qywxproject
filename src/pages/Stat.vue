@@ -383,10 +383,10 @@ export default {
           this.showSos = true
           this.showContainer = false
         } else {
-          this.sosTitle = '该信息不存在'
-          this.showSos = false
-          this.showContainer = false
           if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+            this.sosTitle = '该信息不存在'
+            this.showSos = false
+            this.showContainer = false
             this.query = this.$route.query
             this.module = this.query.module
             this.initData()
