@@ -378,7 +378,9 @@ export default {
             type: applydata.flag === 1 ? 'success' : 'warn',
             time: self.$util.delay(applydata.error),
             onHide: function () {
-              if (applydata.flag === 1 || applydata.flag === 2) {
+              if (applydata.orderid > 0) {
+                this.$router.push({path: '/pay', query: {id: applydata.orderid, module: 'payorders'}})
+              } else if (applydata.flag === 1 || applydata.flag === 2) {
                 self.afterApply && self.afterApply()
               } else {
                 self.$vux.loading.hide()
