@@ -250,10 +250,10 @@ export default {
         this.showSos = true
         this.showContainer = false
       } else {
-        this.showSos = false
-        this.showContainer = false
         this.query = this.$route.query
         if (this.tabdata1.length < limit || this.query.from === 'add') {
+          this.showSos = false
+          this.showContainer = false
           this.tabdata1 = []
           this.getData1()
         }
