@@ -408,10 +408,10 @@ export default {
         this.showSos1 = true
         this.showContainer = false
       } else {
-        this.showSos = false
-        this.showSos1 = false
-        this.showContainer = false
         if (this.query.uid !== this.$route.query.uid) {
+          this.showSos = false
+          this.showSos1 = false
+          this.showContainer = false
           this.initData()
           this.query = this.$route.query
           this.getData()

@@ -355,10 +355,10 @@ export default {
         this.showSos1 = true
         this.showContainer = false
       } else {
-        this.showSos = false
-        this.showSos1 = false
-        this.showContainer = false
         if (this.query.id !== this.$route.query.id) {
+          this.showSos = false
+          this.showSos1 = false
+          this.showContainer = false
           this.query = this.$route.query
           this.$vux.loading.show()
           this.getData()
