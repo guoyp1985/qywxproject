@@ -193,6 +193,7 @@ export default {
         self.showPopup1 = false
         for (let i = 0; i < self.levelData.length; i++) {
           if (self.clickData.level.toString() === self.levelData[i].id.toString()) {
+            self.selectLevel = self.levelData[i]
             self.levelData[i].checked = true
           } else {
             delete self.levelData[i].checked
@@ -291,6 +292,7 @@ export default {
             let retdata = data.data ? data.data : data
             let levelpolicy = retdata.levelpolicy
             self.levelName = retdata.levelname
+            self.levelData = []
             for (let key in levelpolicy) {
               self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
             }
