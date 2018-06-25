@@ -191,6 +191,13 @@ export default {
       if (key === 'level') {
         self.showLevelPopup = true
         self.showPopup1 = false
+        for (let i = 0; i < self.levelData.length; i++) {
+          if (self.clickData.level.toString() === self.levelData[i].id.toString()) {
+            self.levelData[i].checked = true
+          } else {
+            delete self.levelData[i].checked
+          }
+        }
       } else {
         self.showPopup1 = false
       }
