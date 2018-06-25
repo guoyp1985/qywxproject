@@ -52,6 +52,7 @@ export default {
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: null,
+      query: {},
       marqueeData: [],
       classData: [],
       WeixinQrcode: ENV.WeixinQrcode,
@@ -84,11 +85,19 @@ export default {
     },
     getData () {
       const self = this
+      self.query = self.$route.query
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
         if (res.status === 200) {
           self.loginUser = res.data
           User.set(self.loginUser)
+          self.$util.handleWxShare({
+            title: `${self.loginUser.linkman}邀请你一起入驻共销宝`,
+            desc: '共销宝帮你解决微商创业难题',
+            photo: self.loginUser.avatar,
+            lastshareuid: self.query.share_uid,
+            link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
+          })
           if (self.loginUser.subscribe !== 1) {
             self.$vux.loading.hide()
           } else {
