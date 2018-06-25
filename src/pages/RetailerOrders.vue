@@ -44,6 +44,9 @@
                       </div>
                     </div>
                     <div class="t-table pt5 color-lightgray font13 deliverarea" >
+                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
+                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
+                      </div>
                       <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
                         <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                       </div>
@@ -77,6 +80,11 @@
                       <div class="font12 color-lightgray"><span class="middle-cell mr10 v_middle">{{ $t('Receiver') }}:</span><span class="v_middle">{{ item.linkman }}</span></div>
                       <div v-if="item.seller && item.seller.uid" class="t-cell v_middle align_right color-lightgray font12">
                         <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
+                      </div>
+                    </div>
+                    <div class="t-table pt5 color-lightgray font13 deliverarea" >
+                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
+                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
                       </div>
                     </div>
                   </div>
@@ -363,6 +371,40 @@ export default {
           }
           break
       }
+    },
+    changePrice (item, index) {
+      event.preventDefault()
+      const self = this
+      let showtitle = '修改价格'
+      let inputval = item.special
+      self.$vux.confirm.prompt(inputval, {
+        title: showtitle,
+        onShow () {
+          self.$vux.confirm.setInputValue(inputval)
+        },
+        onConfirm (val) {
+          if (val === undefined || self.$util.trim(val) === '' || isNaN(val) || parseFloat(val) < 0) {
+            self.$vux.toast.text('请输入正确的价格', 'middle')
+            return false
+          }
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/order/changePrice`,
+            { id: item.id, price: val }
+          ).then(res => {
+            const data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: () => {
+                if (data.flag === 1) {
+                  item.special = parseFloat(val).toFixed(2)
+                }
+              }
+            })
+          })
+        }
+      })
     },
     uploaddeliver (item, index) {
       event.preventDefault()

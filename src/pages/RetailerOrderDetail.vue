@@ -65,7 +65,7 @@
             </router-link>
           </div>
           <div class="align_right padding10 flex_right">
-            <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
+            <div>支付金额: {{ $t('RMB') }} <span class="font16">{{ data.special }}</span></div>
           </div>
         </div>
         <div class="align_right">
@@ -81,6 +81,7 @@
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
       </div>
+      <div v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0" class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
       <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
@@ -152,6 +153,7 @@ export default {
       query: {},
       data: {},
       totalPrice: '0.00',
+      payPrice: '0.00',
       bottomcss: '',
       showpopup: false,
       delivercompany: [],
@@ -188,6 +190,40 @@ export default {
               onHide: function () {
                 if (data.flag === 1) {
                   self.data.flag = 0
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    changePrice () {
+      event.preventDefault()
+      const self = this
+      let showtitle = '修改价格'
+      let inputval = self.data.special
+      self.$vux.confirm.prompt(inputval, {
+        title: showtitle,
+        onShow () {
+          self.$vux.confirm.setInputValue(inputval)
+        },
+        onConfirm (val) {
+          if (val === undefined || self.$util.trim(val) === '' || isNaN(val) || parseFloat(val) < 0) {
+            self.$vux.toast.text('请输入正确的价格', 'middle')
+            return false
+          }
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/order/changePrice`,
+            { id: self.data.id, price: val }
+          ).then(res => {
+            const data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: () => {
+                if (data.flag === 1) {
+                  self.data.special = parseFloat(val).toFixed(2)
                 }
               }
             })
