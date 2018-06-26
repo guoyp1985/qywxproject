@@ -14,7 +14,7 @@
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
             loop>
-            <swiper-item v-if="productdata.video && productdata.video != ''">
+            <swiper-item v-show="showVideo" v-if="productdata.video && productdata.video != ''">
               <video
                 class="w_100 h_100"
                 style="max-width:100%;max-height:100%;"
@@ -422,7 +422,8 @@ export default {
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
       replyData: null,
-      messages: 0
+      messages: 0,
+      showVideo: true
     }
   },
   watch: {
@@ -492,6 +493,7 @@ export default {
       this.sosTitle = ''
       this.showcontainer = false
       this.showShareSuccess = false
+      this.showVideo = true
       this.showsharetip = true
       this.productid = null
       this.productdata = {}
@@ -674,6 +676,7 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+      this.showVideo = true
     },
     handleNewAdd () {
       const self = this
@@ -691,6 +694,7 @@ export default {
         link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
         successCallback: function () {
           self.showShareSuccess = true
+          self.showVideo = false
         }
       }
       if (self.query.share_uid) {
@@ -913,8 +917,6 @@ export default {
       // alert('in product')
       // alert(JSON.stringify(this.loginUser))
       this.initData()
-      this.showShareSuccess = false
-      this.previewerPhotoarr = []
       this.query = this.$route.query
       this.$vux.loading.show()
       this.getData()
