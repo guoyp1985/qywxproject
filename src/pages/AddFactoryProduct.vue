@@ -11,9 +11,6 @@
         <form enctype="multipart/form-data">
           <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('contentphoto')" />
         </form>
-        <form enctype="multipart/form-data">
-          <input ref="videoInput" class="hide" type="file" name="files" @change="fileChange('video')" />
-        </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
             <div class="cover_map" v-if="photoarr.length == 0" @click="uploadPhoto('fileInput','photo')">
@@ -120,11 +117,19 @@
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left">
+                  <!--
                   <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
                     </div>
                   </div>
+                -->
+                  <form class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
+                    <div class="button_video flex_center">
+                      <i class="al al-ai-video color-white"></i>
+                      <input ref="videoInput" type="file" name="files" @change="fileChange('video')" />
+                    </div>
+                  </form>
                   <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
                     <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
                       <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
@@ -497,5 +502,10 @@ export default {
   height:60px;
   background-color:#ea3a3a;
   border-radius:50%;
+}
+.button_video input{
+  position:absolute;
+  left:0;top:0;right:0;bottom:0;
+  opacity:0;
 }
 </style>
