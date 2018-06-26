@@ -29,7 +29,6 @@
                 @on-cancel="onCancel1"
                 ref="search">
               </search>
-              <!--
               <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
                 <div class="t-table w_100">
                   <div class="t-cell align_center active cut-off">时间<span class="font12 ml5">▼</span></div>
@@ -37,7 +36,6 @@
                   <div class="t-cell align_center cut-off">性别<span class="font12 ml5">▼</span></div>
                 </div>
               </div>
-            -->
               <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
                 <div class="t-table w_100">
                   <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
