@@ -76,7 +76,7 @@ export default {
 </script>
 
 <style lang="less">
-.share_success{position: absolute;top:0;right: 0;left:0;bottom:0;color: #fff;background-color:#1B1B1F;z-index:100;opacity:1;}
+.share_success{position: absolute;top:0;right: 0;left:0;bottom:0;color: #fff;background-color:#1B1B1F;z-index:1000;opacity:1;}
 .animated{-webkit-animation: opacity 0.5s ease-in 1;animation: opacity 0.5s ease-in 1;}
 @-webkit-keyframes opacity {
 	0%{opacity:0;}
