@@ -44,13 +44,18 @@
                       </div>
                     </div>
                     <div class="t-table pt5 color-lightgray font13 deliverarea" >
-                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
-                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
-                      </div>
-                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
+                      <template v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
+                        <div class="t-cell v_middle align_left">
+                          <div>支付金额: {{ $t('RMB') }} <span class="font16">{{ item.special }}</span></div>
+                        </div>
+                        <div class="t-cell v_middle appendcontrol align_right w80">
+                          <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
+                        </div>
+                      </template>
+                      <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
                         <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
                       </div>
-                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 3">
+                      <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 3">
                         <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
                       </div>
                     </div>
@@ -82,8 +87,11 @@
                         <div class="clamp1">{{ $t('Rebate customer') }}: {{ item.seller.username }}</div>
                       </div>
                     </div>
-                    <div class="t-table pt5 color-lightgray font13 deliverarea" >
-                      <div class="t-cell middle-cell appendcontrol align_right w80" v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
+                    <div v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0" class="t-table pt5 color-lightgray font13 deliverarea" >
+                      <div class="t-cell v_middle align_left">
+                        <div>支付金额: {{ $t('RMB') }} <span class="font16">{{ item.special }}</span></div>
+                      </div>
+                      <div class="t-cell v_middle appendcontrol align_right w80">
                         <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
                       </div>
                     </div>
