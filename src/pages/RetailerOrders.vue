@@ -45,8 +45,8 @@
                     </div>
                     <div class="t-table pt5 color-lightgray font13 deliverarea" >
                       <template v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
-                        <div class="t-cell v_middle align_left">
-                          <div>支付金额: {{ $t('RMB') }} <span class="font16">{{ item.special }}</span></div>
+                        <div class="t-cell v_middle align_left color-orange">
+                          <div>支付金额: {{ $t('RMB') }} {{ item.special }}</div>
                         </div>
                         <div class="t-cell v_middle appendcontrol align_right w80">
                           <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
@@ -88,8 +88,8 @@
                       </div>
                     </div>
                     <div v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0" class="t-table pt5 color-lightgray font13 deliverarea" >
-                      <div class="t-cell v_middle align_left">
-                        <div>支付金额: {{ $t('RMB') }} <span class="font16">{{ item.special }}</span></div>
+                      <div class="t-cell v_middle align_left color-orange">
+                        <div>支付金额: {{ $t('RMB') }} {{ item.special }}</div>
                       </div>
                       <div class="t-cell v_middle appendcontrol align_right w80">
                         <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
