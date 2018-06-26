@@ -5,11 +5,11 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
-        <form enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('photo')" />
+        <form ref="fileForm" enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
         </form>
-        <form enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('contentphoto')" />
+        <form ref="fileForm1" enctype="multipart/form-data">
+          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -124,10 +124,10 @@
                     </div>
                   </div>
                 -->
-                  <form class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
+                  <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
-                      <input ref="videoInput" type="file" name="files" @change="fileChange('video')" />
+                      <input ref="videoInput" type="file" name="files" @change="fileChange('videoForm', 'video')" />
                     </div>
                   </form>
                   <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
@@ -298,12 +298,15 @@ export default {
         })
       }
     },
-    fileChange (type) {
+    fileChange (refname, type) {
       const self = this
       const target = event.target
       const files = target.files
       if (files.length > 0) {
-        const fileForm = target.parentNode
+        let fileForm = target.parentNode
+        if (type === 'video') {
+          fileForm = target.parentNode.parentNode
+        }
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
