@@ -827,6 +827,7 @@ export default {
             if (photo && self.$util.trim(photo) !== '') {
               self.photoarr = photo.split(',')
             }
+            alert(JSON.stringify(self.photoarr))
             if (self.photoarr.length > 0) {
               self.showFlash = true
               self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
