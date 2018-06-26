@@ -916,6 +916,8 @@ export default {
       // alert('in product')
       // alert(JSON.stringify(this.loginUser))
       this.initData()
+      this.showShareSuccess = false
+      this.showVideo = true
       this.query = this.$route.query
       this.$vux.loading.show()
       this.getData()
