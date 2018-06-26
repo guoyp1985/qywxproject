@@ -326,9 +326,8 @@
       <div v-transfer-dom>
         <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
       </div>
-      <template v-if="loginUser">
+      <template v-if="loginUser" v-show="showShareSuccess">
         <share-success
-          v-show="showShareSuccess"
           v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
