@@ -1,16 +1,9 @@
 <template>
   <div class="containerarea bg-page membersview font14 s-havebottom">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
-    <template v-if="showSos1">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner flex_left pl15 pr15 border-box">
         <div class="">
@@ -158,13 +151,16 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -173,12 +169,13 @@ export default {
   },
   data () {
     return {
-      query: {},
-      loginUser: {},
+      showPay: false,
+      showApply: false,
       showSos: false,
-      showSos1: false,
       sosTitle: '',
       showContainer: false,
+      query: {},
+      loginUser: {},
       viewuser: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
       imgarr: [{
         msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
@@ -393,10 +390,9 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         if (data.flag !== 1) {
+          self.initContainer()
           self.sosTitle = data.error
           self.showSos = true
-          self.showSos1 = false
-          self.showContainer = false
           return false
         }
         if (data) {
@@ -407,34 +403,41 @@ export default {
           document.title = self.viewuser.linkman
           self.userIntention = self.viewuser.intention
         }
-        self.showSos = false
-        self.showSos1 = false
+        self.initContainer()
         self.showContainer = true
       })
     },
-    init () {
-      this.loginUser = User.get()
+    initContainer () {
+      this.showPay = false
+      this.showApply = false
+      this.showSos = false
+      this.sosTitle = ''
+      this.showContainer = false
+    },
+    afterPay () {
+      this.refresh()
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = false
-        this.showSos1 = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showSos1 = false
-        this.showContainer = false
-        this.query = this.$route.query
-        this.$vux.loading.show()
-        this.getData()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          this.showApply = true
+        } else {
+          self.initContainer()
+          this.query = this.$route.query
+          this.getData()
+        }
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

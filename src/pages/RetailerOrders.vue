@@ -1,13 +1,8 @@
 <template>
   <div class="containerarea s-havebottom bg-page font14 retailerordes">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="row">
@@ -227,13 +222,16 @@ import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -242,10 +240,11 @@ export default {
   },
   data () {
     return {
-      loginUser: {},
-      query: {},
-      showSos: false,
+      showPay: false,
+      showApply: false,
       showContainer: false,
+      query: {},
+      loginUser: {},
       tabtxts: [ '全部', '待付款', '待发货', '已发货' ],
       selectedIndex: 0,
       distabdata1: false,
@@ -506,18 +505,38 @@ export default {
       this.loginUser = User.get()
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.query = this.$route.query
-        this.swiperChange()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showSos = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.query = this.$route.query
+            this.swiperChange()
+          }
+        }
       }
     }
   },

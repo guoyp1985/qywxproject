@@ -1,13 +1,8 @@
 <template>
   <div class="containerarea bg-page font14 rcustomerlist">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1 bg-white">
         <div class="row">
@@ -217,19 +212,23 @@ Percent:
 import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg
+    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Pay, Subscribe, ApplyTip
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      showSos: false,
+      showPay: false,
+      showApply: false,
       showContainer: false,
       autofixed: false,
       tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
@@ -457,17 +456,36 @@ export default {
       this.$vux.loading.show()
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.swiperChange()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.swiperChange()
+          }
+        }
       }
     }
   },

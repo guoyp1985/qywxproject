@@ -1,12 +1,7 @@
 <template>
   <div id="centersales" class="containerarea font14">
     <template v-if="loginUser">
-      <template v-if="loginUser.subscribe != 1">
-        <div class="pagemiddle flex_center" style="top:0;">
-          <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
-        </div>
-        <div class="pagebottom flex_center b_top_after font16">请先关注</div>
-      </template>
+      <subscribe v-if="loginUser.subscribe != 1"></subscribe>
       <template v-else>
         <template v-if="afterApply">
           <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
@@ -29,7 +24,7 @@
           <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
         </template>
         <template v-if="showPay">
-          <pay :login-user="loginUser" module="payorders" :order-id="loginUser.payorderid" :pay-callback="afterPay"></pay>
+          <pay :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
         </template>
       </template>
     </template>
@@ -61,15 +56,13 @@ export default {
       query: {},
       marqueeData: [],
       classData: [],
-      WeixinQrcode: ENV.WeixinQrcode,
       messages: 0
     }
   },
   methods: {
     applySuccess () {
       const self = this
-      self.showCenter = false
-      self.showApply = false
+      self.initContainer()
       self.afterApply = true
       self.$vux.loading.hide()
     },
@@ -86,9 +79,6 @@ export default {
         }
       })
     },
-    afterPay () {
-      this.refresh()
-    },
     getData () {
       const self = this
       self.query = self.$route.query
@@ -99,16 +89,13 @@ export default {
           User.set(self.loginUser)
           if (self.loginUser.subscribe !== 1) {
             self.$vux.loading.hide()
-            self.showCenter = false
-            self.showApply = false
-            self.showPay = false
+            self.initContainer()
           } else {
             if (self.loginUser.isretailer === 2) {
-              self.showCenter = false
-              self.showApply = false
+              self.initContainer()
               self.showPay = true
             } else if (self.loginUser.isretailer === 0) {
-              self.showCenter = false
+              self.initContainer()
               self.showApply = true
               self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
                 { params: { limit: 100 } }
@@ -128,8 +115,8 @@ export default {
                 module: 'retailer', action: 'index'
               }).then(function (res) {
                 if (self.loginUser.isretailer) {
+                  self.initContainer()
                   self.showCenter = true
-                  self.showApply = false
                   self.$util.handleWxShare({
                     module: 'retailer',
                     moduleid: self.loginUser.uid,
@@ -164,6 +151,15 @@ export default {
           }
         }
       })
+    },
+    initContainer () {
+      const self = this
+      self.showCenter = false
+      self.showApply = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

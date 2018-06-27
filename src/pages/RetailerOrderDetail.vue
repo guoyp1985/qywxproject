@@ -1,16 +1,9 @@
 <template>
   <div id="order-detail" :class="`containerarea notop rorderdetail bg-page color-gray5 font14 ${bottomcss}`">
-    <template v-if="showSos1">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
         <div v-if="data.seller && data.seller.username">
@@ -127,6 +120,9 @@
 import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -136,7 +132,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -145,10 +141,11 @@ export default {
   },
   data () {
     return {
-      showSos: false,
-      showSos1: false,
-      sosTitle: '该订单不存在',
+      showPay: false,
+      showApply: false,
       showContainer: false,
+      showSos: false,
+      sosTitle: '该订单不存在',
       loginUser: {},
       query: {},
       data: {},
@@ -346,22 +343,40 @@ export default {
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showPay = false
+      self.showSos = false
+      self.showContainer = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = false
-        this.showSos1 = true
-        this.showContainer = false
-      } else {
-        if (this.query.id !== this.$route.query.id) {
-          this.showSos = false
-          this.showSos1 = false
-          this.showContainer = false
-          this.query = this.$route.query
-          this.$vux.loading.show()
-          this.getData()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            if (this.query.id !== this.$route.query.id) {
+              self.initContainer()
+              this.query = this.$route.query
+              this.$vux.loading.show()
+              this.getData()
+            }
+          }
         }
       }
     }

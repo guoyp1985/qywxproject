@@ -1,5 +1,7 @@
 <template>
   <div class="containerarea font14">
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showSetting">
       <retailer-setting
         :retailer-info="retailerInfo"
@@ -20,16 +22,19 @@
 <script>
 import RetailerSetting from '@/components/RetailerSetting'
 import RetailerApply from '@/components/RetailerApply'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    RetailerSetting, RetailerApply
+    RetailerSetting, RetailerApply, Pay, Subscribe
   },
   data () {
     return {
       loginUser: {},
+      showPay: false,
       showSetting: false,
       showApply: false,
       retailerInfo: {},
@@ -41,66 +46,83 @@ export default {
   methods: {
     applySuccess () {
       const self = this
+      self.initContainer()
       self.showSetting = true
-      self.showApply = false
       self.$vux.loading.hide()
     },
     getData () {
       const self = this
       self.loginUser = User.get()
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'setting' })
+      self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
       .then(res => {
-        if (self.loginUser.isretailer) {
-          self.showSetting = true
-          self.showApply = false
-          return self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
-        } else {
-          self.showSetting = false
-          self.showApply = true
-          self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-            { params: { limit: 100 } }
-          ).then(function (res) {
-            self.$vux.loading.hide()
-            if (res.status === 200) {
-              let data = res.data
-              data = data.data ? data.data : data
-              for (let i = 0; i < data.length; i++) {
-                data[i].checked = false
-              }
-              self.classData = data
-            }
-          })
-        }
-      })
-      .then(res => {
+        self.$vux.loading.hide()
         if (res) {
           let data = res.data
-          if (self.showSetting) {
-            self.$vux.loading.hide()
-            self.retailerInfo = data.data ? data.data : data
-            for (let key in self.submitdata) {
-              self.submitdata[key] = self.retailerInfo[key]
-            }
-            let qrcode = self.submitdata.qrcode
-            if (qrcode && self.$util.trim(qrcode) !== '') {
-              self.photoarr = qrcode.split(',')
-            }
-          } else if (self.showApply) {
-            self.$vux.loading.hide()
-            data = data.data ? data.data : data
-            for (let i = 0; i < data.length; i++) {
-              data[i].checked = false
-            }
-            self.classData = data
+          self.$vux.loading.hide()
+          self.retailerInfo = data.data ? data.data : data
+          for (let key in self.submitdata) {
+            self.submitdata[key] = self.retailerInfo[key]
+          }
+          let qrcode = self.submitdata.qrcode
+          if (qrcode && self.$util.trim(qrcode) !== '') {
+            self.photoarr = qrcode.split(',')
           }
         }
       })
     },
+    init () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+        module: 'retailer', action: 'setting'
+      })
+    },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showSetting = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
-      this.getData()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            self.initContainer()
+            this.showApply = true
+            self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+              { params: { limit: 100 } }
+            ).then(function (res) {
+              self.$vux.loading.hide()
+              if (res.status === 200) {
+                let data = res.data
+                data = data.data ? data.data : data
+                for (let i = 0; i < data.length; i++) {
+                  data[i].checked = false
+                }
+                self.classData = data
+              }
+            })
+          } else {
+            self.initContainer()
+            self.showSetting = true
+            this.getData()
+          }
+        }
+      }
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()

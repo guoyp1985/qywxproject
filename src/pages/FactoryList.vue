@@ -1,6 +1,8 @@
 <template>
   <div class="containerarea bg-page font14 rproductlist nobottom notop">
-    <apply-tip v-if="showSos"></apply-tip>
+    <apply-tip v-if="showApply"></apply-tip>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
         <template v-if="disTabData1">
@@ -59,6 +61,9 @@ Add factory:
 import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -69,14 +74,15 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Pay, Subscribe, ApplyTip
   },
   data () {
     return {
-      loginUser: {},
-      query: {},
-      showSos: false,
+      showApply: false,
       showContainer: false,
+      showPay: false,
+      query: {},
+      loginUser: {},
       tabtxts: [ '已分销', '未分销' ],
       selectedIndex: 0,
       tabData1: [],
@@ -159,32 +165,40 @@ export default {
         self.disTabData2 = true
       })
     },
-    init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'factorylist'
-      })
+    initContainer () {
+      this.showApply = false
+      this.showContainer = false
+      this.showPay = false
+    },
+    afterPay () {
+      this.refresh()
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.query = this.$route.query
-        if (this.tabData1.length < limit) {
-          this.disTabData1 = false
-          this.tabData1 = []
-          this.getData1()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          this.showApply = true
+        } else {
+          self.initContainer()
+          this.showContainer = true
+          this.query = this.$route.query
+          if (this.tabData1.length < limit) {
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          }
         }
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

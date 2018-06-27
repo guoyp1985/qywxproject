@@ -26,7 +26,10 @@ export default {
       type: String,
       default: 'orders'
     },
-    orderId: Number,
+    loginUser: {
+      type: Object,
+      default: {}
+    },
     payCallback: Function
   },
   components: {
@@ -67,11 +70,9 @@ export default {
     },
     initPay () {
       const self = this
-      const orderId = self.orderId
       self.$vux.loading.show()
-      let params = { orderid: orderId, module: self.module }
       this.$http.get(`${ENV.BokaApi}/api/order/unify`, {
-        params: params
+        params: { orderid: self.loginUser.payorderid, module: self.module }
       })
       .then(res => {
         self.$vux.loading.hide()

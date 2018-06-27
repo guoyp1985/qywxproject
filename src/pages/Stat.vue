@@ -1,8 +1,9 @@
 <template>
   <div class="containerarea font14 notop nobottom">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <template v-if="module == 'activity' && data.type === 'groupbuy'">
@@ -221,6 +222,9 @@ Message:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Sos from '@/components/Sos'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -228,7 +232,7 @@ import { User } from '#/storage'
 const limit = 10
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XImg, Sos
+    Tab, TabItem, Swiper, SwiperItem, XImg, Sos, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -255,6 +259,8 @@ export default {
   },
   data () {
     return {
+      showPay: false,
+      showApply: false,
       showSos: false,
       sosTitle: '该信息不存在',
       showContainer: false,
@@ -366,33 +372,48 @@ export default {
       this.module = this.query.module
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+      self.showPay = false
+      self.showSos = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser) {
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
-          this.sosTitle = '抱歉，您暂无权限访问此页面！'
-          this.showSos = true
-          this.showContainer = false
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
         } else {
-          if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
-            this.sosTitle = '该信息不存在'
-            this.showSos = false
-            this.showContainer = false
-            this.query = this.$route.query
-            this.module = this.query.module
-            this.initData()
-            this.getData()
-          } else if (this.showContainer) {
-            this.swiperChange()
+          self.initContainer()
+          let isAdmin = false
+          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+            if (self.loginUser.usergroup[i] === 1) {
+              isAdmin = true
+              break
+            }
+          }
+          if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
+            this.sosTitle = '抱歉，您暂无权限访问此页面！'
+            this.showSos = true
+          } else {
+            if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+              this.sosTitle = '该信息不存在'
+              this.query = this.$route.query
+              this.module = this.query.module
+              this.initData()
+              this.getData()
+            } else if (this.showContainer) {
+              this.swiperChange()
+            }
           }
         }
       }

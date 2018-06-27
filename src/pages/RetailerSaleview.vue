@@ -1,16 +1,9 @@
 <template>
   <div class="containerarea bg-white font14 rsaleview s-havebottom">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
-    <template v-if="showSos1">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div class="flex_left h_100 toprow color-white pl15 pr15">
@@ -189,6 +182,9 @@
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg, XDialog } from 'vux'
 import Sos from '@/components/Sos'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -198,7 +194,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg, Sos, XDialog
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg, Sos, XDialog, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -207,8 +203,9 @@ export default {
   },
   data () {
     return {
+      showPay: false,
+      showApply: false,
       showSos: false,
-      showSos1: false,
       sosTitle: '该记录不存在',
       showContainer: false,
       query: {},
@@ -233,6 +230,8 @@ export default {
   },
   methods: {
     initData: function () {
+      this.showPay = false
+      this.showApply = false
       this.showSos = false
       this.sosTitle = '该记录不存在'
       this.showContainer = false
@@ -399,22 +398,40 @@ export default {
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showPay = false
+      self.showApply = false
+      self.showSos = false
+      self.showContainer = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = false
-        this.showSos1 = true
-        this.showContainer = false
-      } else {
-        if (this.query.uid !== this.$route.query.uid) {
-          this.showSos = false
-          this.showSos1 = false
-          this.showContainer = false
-          this.initData()
-          this.query = this.$route.query
-          this.getData()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            if (this.query.uid !== this.$route.query.uid) {
+              self.initContainer()
+              this.initData()
+              this.query = this.$route.query
+              this.getData()
+            }
+          }
         }
       }
     }

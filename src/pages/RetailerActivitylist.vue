@@ -1,13 +1,8 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
@@ -147,6 +142,9 @@ import CreateActivity from '@/components/CreateActivity'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 const limit = 10
 let pageStart1 = 0
@@ -156,7 +154,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -167,7 +165,8 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showSos: false,
+      showPay: false,
+      showApply: false,
       showContainer: false,
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
@@ -242,20 +241,39 @@ export default {
       this.$vux.loading.show()
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.query = this.$route.query
-        if (this.tabdata1.length < limit || this.query.from === 'add') {
-          this.showSos = false
-          this.showContainer = false
-          this.tabdata1 = []
-          this.getData1()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            this.query = this.$route.query
+            if (this.tabdata1.length < limit || this.query.from === 'add') {
+              self.initContainer()
+              this.tabdata1 = []
+              this.getData1()
+            }
+          }
         }
       }
     }

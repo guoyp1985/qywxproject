@@ -1,13 +1,8 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
@@ -106,10 +101,13 @@ import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from '
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem
+    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem, Pay, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (dt) {
@@ -145,7 +143,8 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showSos: false,
+      showPay: false,
+      showApply: false,
       showContainer: false,
       selectedIndex: 0,
       tabtxts: [ '分享', '浏览' ],
@@ -250,17 +249,37 @@ export default {
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.swiperChange()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showPay = true
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.swiperChange()
+          }
+        }
       }
     }
   },

@@ -1,8 +1,8 @@
 <template>
   <div class="containerarea s-havebottom font14 addproduct">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
-    <sos :title="sosTitle" v-if="showSos"></sos>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :order-id="loginUser.payorderid" :pay-callback="afterPay"></pay>
+    <apply-tip v-if="showApply"></apply-tip>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form ref="fileForm" enctype="multipart/form-data">
@@ -208,9 +208,7 @@ export default {
   },
   data () {
     return {
-      WeixinQrcode: ENV.WeixinQrcode,
-      showSos: false,
-      sosTitle: '抱歉，您暂无权限访问此页面！',
+      showApply: false,
       showContainer: false,
       showPay: false,
       query: {},
@@ -282,9 +280,6 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
-    },
-    afterPay () {
-      this.refresh()
     },
     photoCallback (data, type) {
       const self = this
@@ -479,18 +474,27 @@ export default {
         }
       })
     },
-    refreshFun () {
+    initContainer () {
       const self = this
-      if (self.loginUser.subscribe === 1) {
-        self.$vux.loading.hide()
+      self.showApply = false
+      self.showContainer = false
+      self.showPay = false
+    },
+    afterPay () {
+      this.refresh()
+    },
+    refresh () {
+      const self = this
+      self.$vux.loading.show()
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          self.showSos = false
-          self.showContainer = false
+          this.$vux.loading.hide()
+          self.initContainer()
           self.showPay = true
         } else {
-          self.showSos = false
-          self.showContainer = false
-          self.showPay = false
+          self.initContainer()
           let isAdmin = false
           for (let i = 0; i < self.loginUser.usergroup.length; i++) {
             if (self.loginUser.usergroup[i] === 1) {
@@ -500,10 +504,10 @@ export default {
           }
           if (!self.loginUser.isretailer && !isAdmin) {
             this.$vux.loading.hide()
-            self.showSos = true
-            self.showContainer = false
+            self.initContainer()
+            self.showApply = true
           } else {
-            self.showSos = false
+            self.initContainer()
             self.showContainer = true
             this.$vux.loading.hide()
             if (this.query.id !== this.$route.query.id) {
@@ -513,27 +517,6 @@ export default {
             this.getData()
           }
         }
-      } else {
-        self.$vux.loading.hide()
-      }
-    },
-    refresh () {
-      const self = this
-      self.$vux.loading.show()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
-      if (!this.loginUser || this.loginUser !== 1) {
-        self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          if (res.status === 200) {
-            self.loginUser = res.data
-            User.set(self.loginUser)
-            self.refreshFun()
-          } else {
-            self.$vux.loading.hide()
-          }
-        })
-      } else if (this.loginUser && this.loginUser === 1) {
-        self.refreshFun()
       }
     }
   },
