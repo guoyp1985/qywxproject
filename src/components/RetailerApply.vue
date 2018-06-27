@@ -403,7 +403,7 @@ export default {
     const self = this
     self.query = self.$route.query
     if (self.query.share_uid) {
-      self.$http.get(`${ENV.BokaApi}/api/user/show`, {
+      self.$http.get(`${ENV.BokaApi}/api/getUser`, {
         params: {uid: self.query.share_uid}
       }).then(function (res) {
         self.shareUser = res.data
