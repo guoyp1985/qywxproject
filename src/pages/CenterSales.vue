@@ -3,7 +3,7 @@
     <template v-if="loginUser">
       <template v-if="loginUser.subscribe != 1">
         <div class="pagemiddle flex_center" style="top:0;">
-          <img :src="ENV.WeixinQrcode" style="max-width:90%;max-height:90%;" />
+          <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
         </div>
         <div class="pagebottom flex_center b_top_after font16">请先关注</div>
       </template>
@@ -60,6 +60,7 @@ export default {
       query: {},
       marqueeData: [],
       classData: [],
+      WeixinQrcode: ENV.WeixinQrcode,
       messages: 0
     }
   },

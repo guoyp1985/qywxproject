@@ -2,7 +2,7 @@
   <div class="containerarea s-havebottom font14 addproduct">
     <template v-if="loginUser.subscribe != 1">
       <div class="pagemiddle flex_center" style="top:0;">
-        <img :src="ENV.WeixinQrcode" style="max-width:90%;max-height:90%;" />
+        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
       </div>
       <div class="pagebottom flex_center b_top_after font16">请先关注</div>
     </template>
@@ -215,6 +215,7 @@ export default {
   },
   data () {
     return {
+      WeixinQrcode: ENV.WeixinQrcode,
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
@@ -488,6 +489,7 @@ export default {
     refreshFun () {
       const self = this
       if (self.loginUser.subscribe === 1) {
+        self.$vux.loading.hide()
         if (self.loginUser.isretailer === 2) {
           self.showSos = false
           self.showContainer = false
@@ -518,10 +520,13 @@ export default {
             this.getData()
           }
         }
+      } else {
+        self.$vux.loading.hide()
       }
     },
     refresh () {
       const self = this
+      self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       if (!this.loginUser || this.loginUser !== 1) {
@@ -530,6 +535,8 @@ export default {
             self.loginUser = res.data
             User.set(self.loginUser)
             self.refreshFun()
+          } else {
+            self.$vux.loading.hide()
           }
         })
       } else if (this.loginUser && this.loginUser === 1) {
