@@ -456,6 +456,9 @@ export default {
           if (self.submitdata.contentphoto && self.$util.trim(self.submitdata.contentphoto) !== '') {
             self.photoarr1 = self.submitdata.contentphoto.split(',')
           }
+          if (self.data.video && self.$util.trim(self.data.video) !== '') {
+            self.videoarr = self.data.video.split(',')
+          }
           document.title = self.data.title
         })
       }
