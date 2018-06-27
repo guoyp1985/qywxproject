@@ -1,17 +1,8 @@
 <template>
   <div class="containerarea s-havebottom font14 addproduct">
-    <template v-if="loginUser.subscribe != 1">
-      <div class="pagemiddle flex_center" style="top:0;">
-        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
-      </div>
-      <div class="pagebottom flex_center b_top_after font16">请先关注</div>
-    </template>
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
-    <template v-if="showPay">
-      <pay :login-user="loginUser" module="payorders" :order-id="loginUser.payorderid" :pay-callback="afterPay"></pay>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <sos :title="sosTitle" v-if="showSos"></sos>
+    <pay v-if="showPay" :login-user="loginUser" module="payorders" :order-id="loginUser.payorderid" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form ref="fileForm" enctype="multipart/form-data">
@@ -208,10 +199,12 @@ import { Group, XInput, XTextarea } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
+import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Sos
+    Group, XInput, XTextarea, Sos, Pay, Subscribe
   },
   data () {
     return {

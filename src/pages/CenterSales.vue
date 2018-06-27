@@ -41,12 +41,13 @@ import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
 import Pay from '@/components/Pay'
+import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply, Pay
+    Swiper, SwiperItem, CenterSales, RetailerApply, Pay, Subscribe
   },
   data () {
     return {
