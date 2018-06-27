@@ -92,6 +92,7 @@ export default {
           self.loginUser = res.data
           User.set(self.loginUser)
           self.$util.handleWxShare({
+            module: 'retailer',
             title: `${self.loginUser.linkman}邀请你一起入驻共销宝`,
             desc: '共销宝帮你解决微商创业难题',
             photo: self.loginUser.avatar,
