@@ -62,7 +62,7 @@
         </div>
       </template>
     </div>
-    <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+    <div v-if="loginUser.isretailer == 1" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
       <div class="align_center flex_center flex_cell">
         <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
       </div>

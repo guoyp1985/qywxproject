@@ -28,6 +28,9 @@
         <template v-if="showApply">
           <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
         </template>
+        <template v-if="showPay">
+          <pay :login-user="loginUser" module="payorders" :order-id="loginUser.payorderid" :pay-callback="afterPay"></pay>
+        </template>
       </template>
     </template>
   </div>
@@ -37,18 +40,20 @@
 import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
+import Pay from '@/components/Pay'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply
+    Swiper, SwiperItem, CenterSales, RetailerApply, Pay
   },
   data () {
     return {
       showCenter: false,
       showApply: false,
       afterApply: false,
+      showPay: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: null,
@@ -69,9 +74,6 @@ export default {
     },
     inCenter () {
       const self = this
-      // self.$vux.loading.show()
-      // self.afterApply = false
-      // self.refresh()
       let text = '添加完商品后才可体验更多功能'
       self.$vux.toast.show({
         text: text,
@@ -82,6 +84,9 @@ export default {
           self.$router.push({path: '/addProduct', query: {from: 'apply'}})
         }
       })
+    },
+    afterPay () {
+      this.refresh()
     },
     getData () {
       const self = this
@@ -94,12 +99,28 @@ export default {
           if (self.loginUser.subscribe !== 1) {
             self.$vux.loading.hide()
           } else {
-            self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-              module: 'retailer', action: 'index'
-            }).then(function (res) {
-              if (res.status !== 200) {
+            if (self.loginUser.isretailer === 2) {
+              self.$router.push({path: '/pay', query: {id: self.loginUser.payorderid, module: 'payorders'}})
+            } else if (self.loginUser.isretailer === 0) {
+              self.showCenter = false
+              self.showApply = true
+              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+                { params: { limit: 100 } }
+              ).then(function (res) {
                 self.$vux.loading.hide()
-              } else {
+                if (res.status === 200) {
+                  let data = res.data
+                  data = data.data ? data.data : data
+                  for (let i = 0; i < data.length; i++) {
+                    data[i].checked = false
+                  }
+                  self.classData = data
+                }
+              })
+            } else if (self.loginUser.isretailer === 1) {
+              self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+                module: 'retailer', action: 'index'
+              }).then(function (res) {
                 if (self.loginUser.isretailer) {
                   self.showCenter = true
                   self.showApply = false
@@ -131,25 +152,9 @@ export default {
                       self.marqueeData = data.data ? data.data : data
                     }
                   })
-                } else {
-                  self.showCenter = false
-                  self.showApply = true
-                  self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                    { params: { limit: 100 } }
-                  ).then(function (res) {
-                    self.$vux.loading.hide()
-                    if (res.status === 200) {
-                      let data = res.data
-                      data = data.data ? data.data : data
-                      for (let i = 0; i < data.length; i++) {
-                        data[i].checked = false
-                      }
-                      self.classData = data
-                    }
-                  })
                 }
-              }
-            })
+              })
+            }
           }
         }
       })

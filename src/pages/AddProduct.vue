@@ -1,7 +1,16 @@
 <template>
   <div class="containerarea s-havebottom font14 addproduct">
+    <template v-if="loginUser.subscribe != 1">
+      <div class="pagemiddle flex_center" style="top:0;">
+        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+      </div>
+      <div class="pagebottom flex_center b_top_after font16">请先关注</div>
+    </template>
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
+    </template>
+    <template v-if="showPay">
+      <pay :login-user="loginUser" module="payorders" :order-id="loginUser.payorderid" :pay-callback="afterPay"></pay>
     </template>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
@@ -209,6 +218,7 @@ export default {
       showSos: false,
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
+      showPay: false,
       query: {},
       loginUser: {},
       data: {},
@@ -278,6 +288,9 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+    },
+    afterPay () {
+      this.refresh()
     },
     photoCallback (data, type) {
       const self = this
@@ -473,31 +486,37 @@ export default {
       })
     },
     refresh () {
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser) {
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!self.loginUser.isretailer && !isAdmin) {
-          this.$vux.loading.hide()
-          self.showSos = true
-          self.showContainer = false
-        } else {
+      if (this.loginUser && this.loginUser === 1) {
+        if (self.loginUser.isretailer === 2) {
           self.showSos = false
-          self.showContainer = true
-          this.$vux.loading.hide()
-          if (this.query.id !== this.$route.query.id) {
-            this.initSubmitData()
+          self.showContainer = false
+          self.showPay = true
+        } else {
+          let isAdmin = false
+          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+            if (self.loginUser.usergroup[i] === 1) {
+              isAdmin = true
+              break
+            }
           }
-          this.query = this.$route.query
-          this.getData()
+          if (!self.loginUser.isretailer && !isAdmin) {
+            this.$vux.loading.hide()
+            self.showSos = true
+            self.showContainer = false
+          } else {
+            self.showSos = false
+            self.showContainer = true
+            this.$vux.loading.hide()
+            if (this.query.id !== this.$route.query.id) {
+              this.initSubmitData()
+            }
+            this.query = this.$route.query
+            this.getData()
+          }
         }
       }
     }
