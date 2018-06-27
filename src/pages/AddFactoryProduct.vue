@@ -83,6 +83,15 @@
               </div>
             </div>
           </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" />
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
           <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
           <group class="textarea-outer textarea-text bg-white">
             <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
@@ -116,14 +125,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">视频</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <div class="q_photolist align_left">
-                  <!--
-                  <div v-if="videoarr.length == 0" @click="uploadPhoto('videoInput','video')">
-                    <div class="button_video flex_center">
-                      <i class="al al-ai-video color-white"></i>
-                    </div>
-                  </div>
-                -->
+                <div class="q_photolist align_left" style="overflow:hidden;">
                   <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
                     <div class="button_video flex_center">
                       <i class="al al-ai-video color-white"></i>
@@ -209,6 +211,7 @@ export default {
         price: '',
         storage: '',
         unit: '件',
+        postage: '0.00',
         photo: '',
         content: '',
         contentphoto: '',
@@ -216,7 +219,7 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       levels: []
     }
   },
@@ -248,6 +251,7 @@ export default {
         price: '',
         storage: '',
         unit: '件',
+        postage: '0.00',
         photo: '',
         content: '',
         contentphoto: '',
