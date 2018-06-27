@@ -523,7 +523,6 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
       if (!this.loginUser || this.loginUser !== 1) {
         self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
