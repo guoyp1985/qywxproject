@@ -5,7 +5,7 @@
 */
 <template>
   <div id="to-recommend" class="font14">
-    <tab v-model="selectedIndex" class="bg-white">
+    <tab v-model="selectedIndex" class="bg-white radius-tab">
       <tab-item class="font14" selected @on-item-click="clickTabItem">全部收入</tab-item>
       <tab-item class="font14" @on-item-click="clickTabItem">客户资源</tab-item>
     </tab>
@@ -54,25 +54,100 @@
         <x-button @click.native="withdrawClick" class="btn-show">{{$t('To Make Presentation')}}</x-button>
       </div>
     </div>
-    <div class="return-shop bg-white">
-      <h2 class="return-title b_bottom_after">{{$t('My Return Stores')}}</h2>
-      <template v-if="disList">
-        <group v-if="list.length">
-          <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
-            <div class="store-img">
-              <img class="imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+    <div class="mt10 bg-white">
+      <tab v-model="selectedIndex1" class="v-tab">
+        <tab-item selected @on-item-click="swiperChange">{{$t('Rebate store')}}</tab-item>
+        <tab-item @on-item-click="swiperChange">{{$t('Product')}}</tab-item>
+        <tab-item @on-item-click="swiperChange">{{$t('Activity')}}</tab-item>
+        <tab-item @on-item-click="swiperChange">{{$t('Article')}}</tab-item>
+      </tab>
+      <view-box v-show="selectedIndex1===0">
+        <template v-if="disTabData1">
+          <group v-if="tabData1.length">
+            <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
+              <div class="store-img">
+                <img class="imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="store-info font14">
+                <div class="store-name">
+                  {{item.title}}
+                </div>
+              </div>
+            </cell-box>
+          </group>
+          <template v-else>
+            <div class="no-related-x color-gray">
+              <span>{{$t('No relevant data')}}</span>
             </div>
-            <div class="store-info font14">
-              <div class="store-name">
-                {{item.title}}
+          </template>
+        </template>
+      </view-box>
+      <view-box v-show="selectedIndex1===1">
+        <div class="scroll_list" v-if="disTabData2">
+          <router-link v-if="tabData2.length" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData2" :key="index">
+            <div class="w80 align_center">
+              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+            </div>
+            <div class="pr10 flex_cell border-box">
+              <div class="clamp2">{{ item.title }}</div>
+              <div class="flex_left mt10 font12 color-gray">
+                <div class="flex_cell">零售价：{{$t('RMB')}}{{item.price}}</div>
+                <div class="flex_cell align_right color-red">佣金：{{$t('RMB')}}{{item.rebate}}</div>
               </div>
             </div>
-          </cell-box>
-        </group>
-        <div v-else class="no-related-x color-gray">
-          <span>{{$t('No Related Ruturn Stores')}}</span>
+          </router-link>
+          <div v-else class="scroll_item emptyitem flex_center">
+            <span>{{$t('No relevant data')}}</span>
+          </div>
         </div>
-      </template>
+      </view-box>
+      <view-box v-show="selectedIndex1===2">
+        <div v-if="disTabData3" class="scroll_list">
+          <template v-if="tabData3.length" v-for="(item, index) in tabData3">
+            <router-link v-if="item.type == 'groupbuy'" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}">
+              <div class="w80 align_center">
+                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+              </div>
+              <div class="pr10 flex_cell border-box">
+                  <div class="clamp2">{{ item.title }}</div>
+                  <div class="clamp1 mt10 font12 color-gray">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
+              </div>
+            </router-link>
+            <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/activity', query: {id: item.id}}">
+              <div class="w80 align_center">
+                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+              </div>
+              <div class="pr10 flex_cell border-box">
+                  <div class="clamp2">{{ item.title }}</div>
+                  <div class="clamp1 mt10 font12 color-gray">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
+              </div>
+            </router-link>
+          </template>
+          <div v-else class="scroll_item emptyitem flex_center">
+            <span>{{$t('No relevant data')}}</span>
+          </div>
+        </div>
+      </view-box>
+      <view-box v-show="selectedIndex1===3">
+        <div class="scroll_list" v-if="disTabData4">
+          <router-link v-if="tabData4.length" class="scroll_item flex_left pt10 pb10" :to="{path: '/news', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData4" :key="index">
+            <div class="w80 align_center">
+              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+            </div>
+            <div class="pr10 flex_cell border-box">
+              <div class="clamp2">{{ item.title }}</div>
+              <div class="mt5 font12 color-gray">
+                <span class="v_middle">{{ item.dateline | dateFormat }}</span>
+                <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.views}}</span>
+                <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
+              </div>
+            </div>
+          </router-link>
+          <div v-else class="scroll_item emptyitem flex_center">
+            <span>{{$t('No relevant data')}}</span>
+          </div>
+        </div>
+      </view-box>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="isshowpopup" height="100%">
@@ -130,24 +205,47 @@
   </div>
 </template>
 <script>
-import {Tab, TabItem, Group, CellBox, XImg, Sticky, XButton, Card, TransferDom, Popup} from 'vux'
+import {Tab, TabItem, ViewBox, Group, Cell, CellBox, XImg, Sticky, XButton, Card, TransferDom, Popup} from 'vux'
+import Time from '#/time'
 import ENV from 'env'
+
+let pageStart1 = 0
+let pageStart2 = 0
+let pageStart3 = 0
+let pageStart4 = 0
+const limit = 10
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Group, CellBox, XImg, Sticky, XButton, Card, Popup
+    Tab, TabItem, ViewBox, Group, Cell, CellBox, XImg, Sticky, XButton, Card, Popup
   },
   data () {
     return {
+      query: {},
+      loginUser: {},
       selectedIndex: 0,
       list: [],
       list1: [],
       isshowpopup: false,
       disList: false,
-      rebateInfo: Object
+      rebateInfo: Object,
+      selectedIndex1: 0,
+      disTabData1: false,
+      disTabData2: false,
+      disTabData3: false,
+      disTabData4: false,
+      tabData1: [],
+      tabData2: [],
+      tabData3: [],
+      tabData4: []
+    }
+  },
+  filters: {
+    dateFormat (date) {
+      return new Time(date * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
@@ -181,6 +279,127 @@ export default {
           break
       }
     },
+    handleScroll: function () {
+      const self = this
+      self.$util.scrollEvent({
+        element: self.$refs.scrollContainer,
+        callback: function () {
+          switch (self.selectedIndex) {
+            case 0:
+              if (self.tabdata1.length === (pageStart1 + 1) * self.limit) {
+                pageStart1++
+                self.$vux.loading.show()
+                self.getData1()
+              }
+              break
+            case 1:
+              if (self.tabdata2.length === (pageStart2 + 1) * self.limit) {
+                pageStart2++
+                self.$vux.loading.show()
+                self.getData2()
+              }
+              break
+            case 2:
+              if (self.tabdata3.length === (pageStart3 + 1) * self.limit) {
+                pageStart3++
+                self.$vux.loading.show()
+                self.getData3()
+              }
+              break
+          }
+        }
+      })
+    },
+    getData1 () {
+      const self = this
+      let params = { pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/seller/myRetailerList`, {
+        params: params
+      })
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabData1 = self.tabData1.concat(retdata)
+        self.disTabData1 = true
+      })
+    },
+    getData2 () {
+      const self = this
+      let params = { pagestart: pageStart2, limit: limit }
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/product`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabData2 = self.tabData2.concat(retdata)
+        self.disTabData2 = true
+      })
+    },
+    getData3 () {
+      const self = this
+      let params = { pagestart: pageStart3, limit: limit }
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/activity`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabData3 = self.tabData3.concat(retdata)
+        self.disTabData3 = true
+      })
+    },
+    getData4 () {
+      const self = this
+      let params = { pagestart: pageStart4, limit: limit }
+      this.$http.post(`${ENV.BokaApi}/api/seller/shareList/news`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        let retdata = data.data ? data.data : data
+        self.tabData4 = self.tabData4.concat(retdata)
+        self.disTabData4 = true
+      })
+    },
+    swiperChange () {
+      switch (this.selectedIndex1) {
+        case 0:
+          if (this.tabData1.length < limit) {
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < limit) {
+            this.disTabData2 = false
+            this.tabData2 = []
+            this.getData2()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+        case 2:
+          if (this.tabData3.length < limit) {
+            this.disTabData3 = false
+            this.tabData3 = []
+            this.getData3()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+        case 3:
+          if (this.tabData4.length < limit) {
+            this.disTabData4 = false
+            this.tabData4 = []
+            this.getData4()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+      }
+    },
     showpopup () {
       this.isshowpopup = true
     },
@@ -201,16 +420,13 @@ export default {
         self.clickTabItem()
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      this.$vux.loading.show()
+      this.getData()
+      this.swiperChange()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
@@ -265,40 +481,40 @@ export default {
   top: -37px;
   right: 10px;
 }
-#to-recommend .vux-tab-wrap{
+.radius-tab.vux-tab-wrap{
   z-index: 2;
   padding-top: 69px;
 }
 #to-recommend .weui-panel{margin-top: 0;}
 #to-recommend .weui-panel:before{display: none;}
 #to-recommend .vux-1px-r:after{top:10%;bottom:10%;}
-#to-recommend .vux-tab-container{
+.radius-tab .vux-tab-container{
   width: 60%;
   margin: 0 auto;
   height:35px;
 }
 @media only screen and (max-width:375px){
-  #to-recommend .vux-tab-container{width: 50%;}
+  .radius-tab .vux-tab-container{width: 50%;}
 }
-#to-recommend .vux-tab{
+.radius-tab .vux-tab{
   height:35px;
 }
-#to-recommend .vux-tab-ink-bar{
+.radius-tab .vux-tab-ink-bar{
   background-color: red;
   height: 35px !important;
 }
-#to-recommend .vux-tab .vux-tab-item{
+.radius-tab .vux-tab .vux-tab-item{
   background: transparent;
   line-height:35px;
   color:red
 }
-#to-recommend .vux-tab-container{
+.radius-tab .vux-tab-container{
   margin-top: 20px;
   border: 1px solid red;
   border-radius: 6px;
   box-sizing: border-box;
 }
-#to-recommend .vux-tab .vux-tab-item.vux-tab-selected{
+.radius-tab .vux-tab .vux-tab-item.vux-tab-selected{
   background-color: red;
   color: #fff;
   position: relative;
@@ -365,5 +581,15 @@ export default {
 #to-recommend .weui-panel:after {
   height: 0;
   border-bottom: none;
+}
+#to-recommend .vux-cell-primary {
+    padding-left: 10px;
+}
+#to-recommend .list-item .inline-desc {
+    margin-top: 8px;
+}
+#to-recommend .date-cell {
+    float: right;
+    margin-right: 10px;
 }
 </style>

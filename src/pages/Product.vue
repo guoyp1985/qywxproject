@@ -15,18 +15,20 @@
             :aspect-ratio="1/1"
             loop>
             <swiper-item v-show="showVideo" v-if="productdata.video && productdata.video != ''">
-              <video
-                class="w_100 h_100"
-                style="max-width:100%;max-height:100%;"
-                controls
-                :src="productdata.video"
-                autoplay="true"
-                preload="auto"
-                x-webkit-airplay="true"
-                x5-playsinline="true"
-                webkit-playsinline="true"
-                playsinline="true">
-              </video>
+              <div class="w_100 h_100" style="overflow:hidden;">
+                <video
+                  class="w_100 h_100"
+                  style="max-width:100%;max-height:100%;"
+                  controls
+                  :src="productdata.video"
+                  autoplay="true"
+                  preload="auto"
+                  x-webkit-airplay="true"
+                  x5-playsinline="true"
+                  webkit-playsinline="true"
+                  playsinline="true">
+                </video>
+              </div>
             </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
