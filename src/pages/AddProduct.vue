@@ -485,39 +485,54 @@ export default {
         }
       })
     },
+    refreshFun () {
+      const self = this
+      if (self.loginUser.isretailer === 2) {
+        self.showSos = false
+        self.showContainer = false
+        self.showPay = true
+      } else {
+        self.showSos = false
+        self.showContainer = false
+        self.showPay = false
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!self.loginUser.isretailer && !isAdmin) {
+          this.$vux.loading.hide()
+          self.showSos = true
+          self.showContainer = false
+        } else {
+          self.showSos = false
+          self.showContainer = true
+          this.$vux.loading.hide()
+          if (this.query.id !== this.$route.query.id) {
+            this.initSubmitData()
+          }
+          this.query = this.$route.query
+          this.getData()
+        }
+      }
+    },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && this.loginUser === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.showSos = false
-          self.showContainer = false
-          self.showPay = true
-        } else {
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
+      if (!this.loginUser || this.loginUser !== 1) {
+        self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+          if (res.status === 200) {
+            self.loginUser = res.data
+            User.set(self.loginUser)
+            self.refreshFun()
           }
-          if (!self.loginUser.isretailer && !isAdmin) {
-            this.$vux.loading.hide()
-            self.showSos = true
-            self.showContainer = false
-          } else {
-            self.showSos = false
-            self.showContainer = true
-            this.$vux.loading.hide()
-            if (this.query.id !== this.$route.query.id) {
-              this.initSubmitData()
-            }
-            this.query = this.$route.query
-            this.getData()
-          }
-        }
+        })
+      } else if (this.loginUser && this.loginUser === 1) {
+        self.refreshFun()
       }
     }
   },

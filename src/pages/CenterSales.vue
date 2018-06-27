@@ -98,9 +98,14 @@ export default {
           User.set(self.loginUser)
           if (self.loginUser.subscribe !== 1) {
             self.$vux.loading.hide()
+            self.showCenter = false
+            self.showApply = false
+            self.showPay = false
           } else {
             if (self.loginUser.isretailer === 2) {
-              self.$router.push({path: '/pay', query: {id: self.loginUser.payorderid, module: 'payorders'}})
+              self.showCenter = false
+              self.showApply = false
+              self.showPay = true
             } else if (self.loginUser.isretailer === 0) {
               self.showCenter = false
               self.showApply = true

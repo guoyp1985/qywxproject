@@ -12,6 +12,7 @@
     <box gap="10px">
       <x-button type="primary" :disabled="disabled" @click.native="pay">{{$t('Wechat Safe Payment')}}</x-button>
     </box>
+    <div class="color-red padding10 align_center">您已提交过入驻申请，请支付费用完成入驻！</div>
   </div>
 </template>
 
@@ -25,7 +26,7 @@ export default {
       type: String,
       default: 'orders'
     },
-    orderId: String,
+    orderId: Number,
     payCallback: Function
   },
   components: {
@@ -90,7 +91,7 @@ export default {
       this.initPay()
     }
   },
-  activated () {
+  created () {
     this.refresh()
   }
 }
