@@ -67,11 +67,13 @@ export default {
     initPay () {
       const self = this
       const orderId = self.orderId
+      self.$vux.loading.show()
       let params = { orderid: orderId, module: self.module }
       this.$http.get(`${ENV.BokaApi}/api/order/unify`, {
         params: params
       })
       .then(res => {
+        self.$vux.loading.hide()
         if (res.data.flag) {
           self.disabled = false
           self.payPrice = res.data.money

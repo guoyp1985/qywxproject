@@ -378,6 +378,7 @@ export default {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
         }).then(function (res) {
+          self.$vux.loading.hide()
           let data = res.data
           let curuser = data.data ? data.data : data
           User.set(curuser)
