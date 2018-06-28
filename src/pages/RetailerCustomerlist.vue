@@ -25,10 +25,10 @@
                 ref="search">
               </search>
               <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
-                <div class="t-table w_100">
-                  <div class="t-cell align_center active cut-off">时间<span class="font12 ml5">▼</span></div>
-                  <div class="t-cell align_center  cut-off">地域<span class="font12 ml5">▼</span></div>
-                  <div class="t-cell align_center cut-off">性别<span class="font12 ml5">▼</span></div>
+                <div class="t-table w_100 orderbyarea">
+                  <div :class="`t-cell orderbyitem ${dateClass}`" @click="clickOrder('dateline')">时间<span class="ico"></span></div>
+                  <div :class="`t-cell orderbyitem ${areaClass}`" @click="clickOrder('province')">地域<span class="ico"></span></div>
+                  <div :class="`t-cell orderbyitem ${sexClass}`" @click="clickOrder('sex')">性别<span class="ico"></span></div>
                 </div>
               </div>
               <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
@@ -252,7 +252,11 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0
+      pagestart3: 0,
+      dateClass: '',
+      areaClass: '',
+      sexClass: '',
+      orderby: ''
     }
   },
   methods: {
@@ -284,18 +288,58 @@ export default {
         }
       })
     },
+    removeOrderActive () {
+      const self = this
+      self.dateClass = self.dateClass.replace(' active', '').replace('active', '')
+      self.areaClass = self.areaClass.replace(' active', '').replace('active', '')
+      self.sexClass = self.sexClass.replace(' active', '').replace('active', '')
+    },
+    clickOrder (type) {
+      const self = this
+      let orderClass = ''
+      switch (type) {
+        case 'dateline':
+          orderClass = 'dateClass'
+          self.orderby = 'dateline'
+          break
+        case 'province':
+          orderClass = 'areaClass'
+          self.orderby = 'province'
+          break
+        case 'sex':
+          orderClass = 'sexClass'
+          self.orderby = 'sex'
+          break
+      }
+      if (self[orderClass].indexOf('active') < 0) {
+        self.removeOrderActive()
+        self[orderClass] = 'active'
+      } else {
+        self.removeOrderActive()
+        self.orderby = ''
+      }
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.getData1()
+    },
     getData1 () {
       const self = this
       this.$vux.loading.show()
-      let params = { params: { tolevel: -1, pagestart: self.pagestart1, limit: self.limit } }
+      let params = { tolevel: -1, pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
-        params.params.keyword = keyword
+        params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
+      if (typeof self.orderby !== 'undefined' && self.orderby && self.$util.trim(self.orderby) !== '') {
+        params.orderby = self.orderby
+      }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount1 = data.count
@@ -505,23 +549,25 @@ export default {
   line-height: 40px;
   border-bottom: 1px solid #eeeeee;
 }
-.rcustomerlist .condition .active{
-  color: #ea3a3a;
-}
 .rcustomerlist .h35{
   height: 35px;
   line-height: 35px;
 }
-.rcustomerlist .cut-off:after{
+.orderbyarea .orderbyitem{
+  position:relative;
+  text-align:center;
+}
+.orderbyarea .orderbyitem.active{color: #ea3a3a;}
+.orderbyarea .orderbyitem:not(:last-child):after{
   content: "";
   position: absolute;
-  top: 12px;
+  top:50%;
+  margin-top:-8px;
   height: 16px;
   width: 1px;
   background-color: #f5f5f5;
-  margin-left: 14px;
-  }
-.rcustomerlist .cut-off:nth-last-child(1):after {
-  display: none;
+}
+.orderbyarea .orderbyitem.active .ico:after{
+  content: '▼';font-size:12px;margin-left:5px;
 }
 </style>
