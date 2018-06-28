@@ -44,6 +44,17 @@
               <p class="font14 color-gray5">封面图像(最多9张) <span class="al al-xing color-red font12" style="vertical-align: 2px;"></span></p>
             </div>
           </div>
+          <div v-if="classData.length" class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <select v-model="submitdata.classid" class="w_100" style="height:35px;">
+                  <option value=''>请选择</option>
+                  <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
@@ -225,6 +236,7 @@ export default {
       havenum2: 0,
       showmore: false,
       submitdata: {
+        classid: '',
         title: '',
         price: '',
         storage: '',
@@ -240,7 +252,8 @@ export default {
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
-      showRebate: false
+      showRebate: false,
+      classData: []
     }
   },
   watch: {
@@ -265,6 +278,7 @@ export default {
   methods: {
     initSubmitData () {
       this.submitdata = {
+        classid: '',
         title: '',
         price: '',
         storage: '',
@@ -474,6 +488,13 @@ export default {
         }
       })
     },
+    init () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/classList/product`).then(res => {
+        const data = res.data
+        self.classData = data.data ? data.data : data
+      })
+    },
     initContainer () {
       const self = this
       self.showApply = false
@@ -519,6 +540,9 @@ export default {
         }
       }
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     this.refresh()
