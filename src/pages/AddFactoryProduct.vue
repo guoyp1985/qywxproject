@@ -336,7 +336,10 @@ export default {
     },
     deletephoto (item, index, type) {
       const self = this
-      if (type === 'photo') {
+      if (type === 'video') {
+        self.videoarr.splice(index, 1)
+        self.submitdata.video = self.videoarr.join(',')
+      } else if (type === 'photo') {
         self.photoarr.splice(index, 1)
         self.submitdata.photo = self.photoarr.join(',')
       } else {
