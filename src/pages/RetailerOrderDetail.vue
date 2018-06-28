@@ -57,7 +57,13 @@
             </router-link>
           </div>
           <div class="align_right padding10 flex_right">
-            <div>支付金额: {{ $t('RMB') }} <span class="font16">{{ data.special }}</span></div>
+            <div>
+              <span class="v_middle">{{$t('Order price')}}: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.special }}</span>
+              <template v-if="data.postage && data.postage != ''">
+                <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
+              </template>
+            </div>
           </div>
         </div>
         <div class="align_right">
