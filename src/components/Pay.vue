@@ -81,7 +81,7 @@ export default {
         params: { orderid: self.loginUser.payorderid, module: self.module }
       })
       .then(res => {
-        alert(JSON.stringify(res))
+        alert(JSON.stringify(res.data))
         self.$vux.loading.hide()
         if (res.data.flag) {
           self.disabled = false
