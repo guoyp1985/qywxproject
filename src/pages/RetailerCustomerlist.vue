@@ -24,11 +24,11 @@
                 @on-cancel="onCancel1"
                 ref="search">
               </search>
-              <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
+              <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
                 <div class="t-table w_100 orderbyarea">
-                  <div :class="`t-cell orderbyitem ${dateClass}`" @click="clickOrder('dateline')">时间<span class="ico"></span></div>
-                  <div :class="`t-cell orderbyitem ${areaClass}`" @click="clickOrder('province')">地域<span class="ico"></span></div>
-                  <div :class="`t-cell orderbyitem ${sexClass}`" @click="clickOrder('sex')">性别<span class="ico"></span></div>
+                  <div :class="`t-cell orderbyitem ${dateClass}`" @click="dateOrder">时间<span class="ico"></span></div>
+                  <div v-if="disAreaOrder" :class="`t-cell orderbyitem ${areaClass}`" @click="areaOrder">地域<span class="ico"></span></div>
+                  <div :class="`t-cell orderbyitem ${sexClass}`" @click="sexOrder">性别<span class="ico"></span></div>
                 </div>
               </div>
               <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
@@ -56,7 +56,9 @@
                     </router-link>
                     <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                      <div class="clamp1 mt5 font12 color-gray">性别: {{item.sexname}}</div>
+                      <div class="clamp1 mt5 font12 color-gray" v-if="item.province && item.province != ''">地域: {{item.province}}</div>
                     </router-link>
                     <div class="t-cell v_middle w60 h_100 align_right">
                         <div class="percentarea db-in v_middle" @click="percentclick">
@@ -195,6 +197,38 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="red-popup">
+        <popup v-model="showPopupSex">
+          <popup-header
+          :left-text="$t('Cancel')"
+          :right-text="$t('Confirm')"
+          :show-bottom-border="false"
+          @on-click-left="showPopupSex = false"
+          @on-click-right="listSex"></popup-header>
+          <group gutter="0" class="red-radio">
+            <radio
+              v-model="sexKey"
+              :options="sexArr"
+              :selected-label-style="{color: '#ea3a3a'}"></radio>
+          </group>
+        </popup>
+      </div>
+      <div v-transfer-dom class="red-popup">
+        <popup v-model="showPopupArea">
+          <popup-header
+          :left-text="$t('Cancel')"
+          :right-text="$t('Confirm')"
+          :show-bottom-border="false"
+          @on-click-left="showPopupArea = false"
+          @on-click-right="listArea"></popup-header>
+          <group gutter="0" class="red-radio">
+            <radio
+              v-model="areaKey"
+              :options="areaArr"
+              :selected-label-style="{color: '#ea3a3a'}"></radio>
+          </group>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -209,7 +243,7 @@ Percent:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg, PopupHeader, Radio } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Pay from '@/components/Pay'
@@ -221,7 +255,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Pay, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Pay, Subscribe, ApplyTip, PopupHeader, Radio
   },
   data () {
     return {
@@ -256,7 +290,20 @@ export default {
       dateClass: '',
       areaClass: '',
       sexClass: '',
-      orderby: ''
+      orderby: '',
+      orderbyParams: {},
+      showPopupSex: false,
+      sexKey: 0,
+      sexArr: [
+        { key: 0, value: '未知' },
+        { key: 1, value: '男' },
+        { key: 2, value: '女' }
+      ],
+      showPopupArea: false,
+      areaKey: 0,
+      areaArr: [],
+      disAreaOrder: false,
+      disOrderArea: false
     }
   },
   methods: {
@@ -294,33 +341,52 @@ export default {
       self.areaClass = self.areaClass.replace(' active', '').replace('active', '')
       self.sexClass = self.sexClass.replace(' active', '').replace('active', '')
     },
-    clickOrder (type) {
+    dateOrder () {
       const self = this
-      let orderClass = ''
-      switch (type) {
-        case 'dateline':
-          orderClass = 'dateClass'
-          self.orderby = 'dateline'
-          break
-        case 'province':
-          orderClass = 'areaClass'
-          self.orderby = 'province'
-          break
-        case 'sex':
-          orderClass = 'sexClass'
-          self.orderby = 'sex'
-          break
-      }
-      if (self[orderClass].indexOf('active') < 0) {
+      if (self.dateClass.indexOf('active') < 0) {
         self.removeOrderActive()
-        self[orderClass] = 'active'
+        self.dateClass = 'active'
+        self.orderbyParams = { orderby: 'dateline' }
       } else {
         self.removeOrderActive()
-        self.orderby = ''
+        self.dateClass = ''
+        self.orderbyParams = {}
       }
       self.pagestart1 = 0
       self.distabdata1 = false
       self.tabdata1 = []
+      self.getData1()
+    },
+    sexOrder () {
+      this.showPopupSex = true
+      this.removeOrderActive()
+      this.sexClass = 'active'
+    },
+    listSex () {
+      const self = this
+      self.showPopupSex = false
+      self.$vux.loading.show()
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.orderbyParams.orderby = 'sex'
+      self.orderbyParams.sex = self.sexKey
+      self.getData1()
+    },
+    areaOrder () {
+      this.showPopupArea = true
+      this.removeOrderActive()
+      this.areaClass = 'active'
+    },
+    listArea () {
+      const self = this
+      self.showPopupArea = false
+      self.$vux.loading.show()
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.orderbyParams = { orderby: 'province' }
+      self.orderbyParams.province = self.areaArr[self.areaKey].value
       self.getData1()
     },
     getData1 () {
@@ -337,15 +403,33 @@ export default {
       if (typeof self.orderby !== 'undefined' && self.orderby && self.$util.trim(self.orderby) !== '') {
         params.orderby = self.orderby
       }
+      for (let key in self.orderbyParams) {
+        params[key] = self.orderbyParams[key]
+      }
       self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, {
         params: params
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount1 = data.count
+        if (data.provinces.length === 0) {
+          self.disAreaOrder = false
+        } else {
+          if (self.areaArr.length === 0) {
+            for (let i = 0; i < data.provinces.length; i++) {
+              self.areaArr.push({key: i, value: data.provinces[i]})
+            }
+          }
+          self.disAreaOrder = true
+        }
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
+        if (self.tabdata1.length > 0) {
+          self.disOrderArea = true
+        } else if (!self.orderbyParams.orderby) {
+          self.disOrderArea = false
+        }
       })
     },
     getData2 () {
