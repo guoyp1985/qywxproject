@@ -92,7 +92,6 @@ export default {
             self.initContainer()
           } else {
             if (self.loginUser.isretailer === 2) {
-              self.$vux.loading.hide()
               self.initContainer()
               // self.showPay = true
               location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
