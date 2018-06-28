@@ -47,27 +47,21 @@ export default {
     pay () {
       const params = this.payParams
       if (typeof window.WeixinJSBridge === 'undefined') {
-        alert(1)
         if (document.addEventListener) {
-          alert(2)
           document.addEventListener('WeixinJSBridgeReady', this.wxPayApi.bind(params), false)
         } else if (document.attachEvent) {
-          alert(3)
           document.attachEvent('WeixinJSBridgeReady', this.wxPayApi.bind(params))
           document.attachEvent('onWeixinJSBridgeReady', this.wxPayApi.bind(params))
         }
       } else {
-        alert(4)
         this.wxPayApi(params)
       }
     },
     wxPayApi (params) {
-      alert(5)
       const self = this
       window.WeixinJSBridge.invoke(
         'getBrandWCPayRequest', params,
         function (res) {
-          alert(JSON.stringify(res))
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             self.payCallback()
           }
@@ -81,7 +75,6 @@ export default {
         params: { orderid: self.loginUser.payorderid, module: self.module }
       })
       .then(res => {
-        alert(JSON.stringify(res.data))
         self.$vux.loading.hide()
         if (res.data.flag) {
           self.disabled = false
