@@ -95,7 +95,8 @@ export default {
               self.initContainer()
               // self.showPay = true
               self.$vux.loading.hide()
-              location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+              let backUrl = encodeURIComponent(location.href)
+              location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
             } else if (self.loginUser.isretailer === 0) {
               self.initContainer()
               self.showApply = true

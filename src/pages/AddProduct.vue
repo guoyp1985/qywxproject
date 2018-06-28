@@ -514,7 +514,8 @@ export default {
           self.initContainer()
           // self.showPay = true
           self.$vux.loading.hide()
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           let isAdmin = false

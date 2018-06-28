@@ -50,7 +50,11 @@ export default {
         'getBrandWCPayRequest', params,
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-            self.$router.push({path: '/orderSearch'})
+            if (self.$route.query.lasturl) {
+              location.replace(self.$route.query.lasturl)
+            } else {
+              self.$router.push({path: '/orderSearch'})
+            }
           }
         }
       )
