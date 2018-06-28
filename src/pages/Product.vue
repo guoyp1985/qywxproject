@@ -51,8 +51,8 @@
           <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
-    					<div v-if="productdata.postage == 0" class="t-cell v_middle">包邮</div>
-    					<div v-else class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
+    					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>
+    					<div v-else class="t-cell v_middle">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>

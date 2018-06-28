@@ -50,7 +50,7 @@
             </div>
             <div class="b_bottom_after padding10" v-if="item.postage && item.postage != ''">
               <div class="t-table">
-                <div class="t-cell v_middle" style="width:40px;">运费</div>
+                <div class="t-cell v_middle" style="width:40px;">{{ $t('Postage') }}</div>
                 <div class="t-cell v_middle">
                   <span v-if="item.postage == 0">包邮</span>
                   <span>{{ $t('RMB') }}{{ item.postage }}</span>
