@@ -23,9 +23,6 @@
         <template v-if="showApply">
           <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
         </template>
-        <template v-if="showPay">
-          <pay :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
-        </template>
       </template>
     </template>
   </div>
@@ -35,21 +32,19 @@
 import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply, Pay, Subscribe
+    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe
   },
   data () {
     return {
       showCenter: false,
       showApply: false,
       afterApply: false,
-      showPay: false,
       selectedIndex: 0,
       retailerInfo: {},
       loginUser: null,
@@ -93,7 +88,6 @@ export default {
           } else {
             if (self.loginUser.isretailer === 2) {
               self.initContainer()
-              // self.showPay = true
               self.$vux.loading.hide()
               let backUrl = encodeURIComponent(location.href)
               location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
@@ -159,10 +153,6 @@ export default {
       const self = this
       self.showCenter = false
       self.showApply = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

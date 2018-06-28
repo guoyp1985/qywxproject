@@ -2,7 +2,6 @@
   <div class="containerarea s-havebottom bg-page font14 retailerordes">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="row">
@@ -222,7 +221,6 @@ import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
@@ -231,7 +229,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Pay, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -240,7 +238,6 @@ export default {
   },
   data () {
     return {
-      showPay: false,
       showApply: false,
       showContainer: false,
       query: {},
@@ -509,10 +506,6 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -521,9 +514,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

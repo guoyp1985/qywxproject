@@ -1,7 +1,6 @@
 <template>
   <div class="containerarea font14">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showSetting">
       <retailer-setting
         :retailer-info="retailerInfo"
@@ -22,19 +21,17 @@
 <script>
 import RetailerSetting from '@/components/RetailerSetting'
 import RetailerApply from '@/components/RetailerApply'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    RetailerSetting, RetailerApply, Pay, Subscribe
+    RetailerSetting, RetailerApply, Subscribe
   },
   data () {
     return {
       loginUser: {},
-      showPay: false,
       showSetting: false,
       showApply: false,
       retailerInfo: {},
@@ -79,10 +76,6 @@ export default {
       const self = this
       self.showApply = false
       self.showSetting = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -91,9 +84,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

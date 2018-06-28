@@ -2,7 +2,6 @@
   <div class="containerarea bg-page rsalechance nobottom font14">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
@@ -101,13 +100,12 @@ import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from '
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem, Pay, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (dt) {
@@ -143,7 +141,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showPay: false,
       showApply: false,
       showContainer: false,
       selectedIndex: 0,
@@ -253,10 +250,6 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -265,9 +258,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

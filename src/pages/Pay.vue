@@ -18,12 +18,15 @@
 <script>
 import { Box, XButton } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
+
 export default {
   components: {
     Box, XButton
   },
   data () {
     return {
+      query: {},
       payPrice: 0,
       receivables: '',
       payParams: null,
@@ -50,10 +53,18 @@ export default {
         'getBrandWCPayRequest', params,
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-            if (self.$route.query.lasturl) {
-              location.replace(self.$route.query.lasturl)
+            if (self.query.module === 'payorders') {
+              self.$http.get(`${ENV.BokaApi}/api/user/show`)
+              .then(res => {
+                User.set(res.data)
+                location.replace(self.$route.query.lasturl)
+              })
             } else {
-              self.$router.push({path: '/orderSearch'})
+              if (self.query.lasturl) {
+                location.replace(self.$route.query.lasturl)
+              } else {
+                self.$router.push({path: '/orderSearch'})
+              }
             }
           }
         }
@@ -61,10 +72,10 @@ export default {
     },
     initPay () {
       const self = this
-      const orderId = this.$route.query.id
+      const orderId = this.query.id
       let params = { orderid: orderId }
-      if (this.$route.query.module) {
-        params.module = this.$route.query.module
+      if (this.query.module) {
+        params.module = this.query.module
       }
       this.$http.get(`${ENV.BokaApi}/api/order/unify`, {
         params: params
@@ -83,6 +94,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.initPay()
     }
   },

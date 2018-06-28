@@ -2,7 +2,6 @@
   <div class="containerarea  bg-page  fong14 rsales">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="row">
@@ -126,13 +125,12 @@ import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg } from
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Pay, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -143,7 +141,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showPay: false,
       showApply: false,
       showContainer: false,
       autofixed: false,
@@ -349,10 +346,6 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -361,9 +354,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

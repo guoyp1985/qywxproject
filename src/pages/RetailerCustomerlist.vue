@@ -2,7 +2,6 @@
   <div class="containerarea bg-page font14 rcustomerlist">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1 bg-white">
         <div class="row">
@@ -246,7 +245,6 @@ Percent:
 import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg, PopupHeader, Radio } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
@@ -255,13 +253,12 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Pay, Subscribe, ApplyTip, PopupHeader, Radio
+    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Subscribe, ApplyTip, PopupHeader, Radio
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      showPay: false,
       showApply: false,
       showContainer: false,
       autofixed: false,
@@ -588,10 +585,6 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -599,9 +592,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

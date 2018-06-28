@@ -3,7 +3,6 @@
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <template v-if="module == 'activity' && data.type === 'groupbuy'">
@@ -259,7 +258,6 @@ export default {
   },
   data () {
     return {
-      showPay: false,
       showApply: false,
       showSos: false,
       sosTitle: '该信息不存在',
@@ -376,11 +374,7 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
       self.showSos = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -389,9 +383,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           let isAdmin = false

@@ -2,7 +2,6 @@
   <div class="containerarea s-havebottom font14 addproduct">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
         <form ref="fileForm" enctype="multipart/form-data">
@@ -210,18 +209,16 @@ import { Group, XInput, XTextarea } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Sos, Pay, Subscribe
+    Group, XInput, XTextarea, Sos, Subscribe
   },
   data () {
     return {
       showApply: false,
       showContainer: false,
-      showPay: false,
       query: {},
       loginUser: {},
       data: {},
@@ -499,10 +496,6 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -512,7 +505,6 @@ export default {
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
           self.initContainer()
-          // self.showPay = true
           self.$vux.loading.hide()
           let backUrl = encodeURIComponent(location.href)
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)

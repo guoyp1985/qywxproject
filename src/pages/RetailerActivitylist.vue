@@ -2,7 +2,6 @@
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
@@ -142,7 +141,6 @@ import CreateActivity from '@/components/CreateActivity'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
@@ -154,7 +152,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Pay, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -165,7 +163,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showPay: false,
       showApply: false,
       showContainer: false,
       retailerInfo: {},
@@ -245,10 +242,6 @@ export default {
       const self = this
       self.showApply = false
       self.showContainer = false
-      self.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -257,9 +250,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

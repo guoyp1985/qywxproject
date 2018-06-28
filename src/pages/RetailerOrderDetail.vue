@@ -3,7 +3,6 @@
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
         <div v-if="data.seller && data.seller.username">
@@ -120,7 +119,6 @@
 import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
@@ -132,7 +130,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Pay, Subscribe, ApplyTip
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -141,7 +139,6 @@ export default {
   },
   data () {
     return {
-      showPay: false,
       showApply: false,
       showContainer: false,
       showSos: false,
@@ -346,12 +343,8 @@ export default {
     initContainer () {
       const self = this
       self.showApply = false
-      self.showPay = false
       self.showSos = false
       self.showContainer = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -360,9 +353,10 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
           if (!this.loginUser.isretailer) {

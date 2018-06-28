@@ -2,7 +2,6 @@
   <div class="containerarea bg-page font14 rproductlist nobottom notop">
     <apply-tip v-if="showApply"></apply-tip>
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
-    <pay v-if="showPay" :login-user="loginUser" module="payorders" :pay-callback="afterPay"></pay>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
         <template v-if="disTabData1">
@@ -80,7 +79,6 @@ export default {
     return {
       showApply: false,
       showContainer: false,
-      showPay: false,
       query: {},
       loginUser: {},
       tabtxts: [ '已分销', '未分销' ],
@@ -168,10 +166,6 @@ export default {
     initContainer () {
       this.showApply = false
       this.showContainer = false
-      this.showPay = false
-    },
-    afterPay () {
-      this.refresh()
     },
     refresh () {
       const self = this
@@ -182,7 +176,9 @@ export default {
         if (self.loginUser.isretailer === 2) {
           this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
