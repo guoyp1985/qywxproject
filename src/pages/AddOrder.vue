@@ -21,32 +21,41 @@
           <div style="height:12px;"></div>
           <div v-for="(item,index) in orderdata" :key="item.id" class="orderitem bg-white">
             <div v-for="(product,index1) in item.info" :key="product.id" class="productitem">
-      					<div class="b_bottom_after padding10">
-      						<div class="t-table">
-      							<div class="t-cell v_middle" style="width:65px;">
-                      <img class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
-                    </div>
-      							<div class="t-cell v_middle">
-      								<div class="name color-black font15">{{ product.name }}</div>
-      							</div>
-      							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ submitdata.quantity }}</div>
-      						</div>
-      					</div>
-      					<div class="b_bottom_after padding10 form-item">
-      						<div class="t-table">
-      							<div class="t-cell v_middle" style="width:80px;">购买数量</div>
-      							<div class="t-cell v_middle align_right">
-                      <group class="x-number db-in">
-                        <template v-if="product.crowdtype == 'bargainbuy'">
-                          <x-number v-model="submitdata.quantity" :min="1" :max="1" @on-change="changenumber()"></x-number>
-                        </template>
-                        <template v-else>
-                          <x-number v-model="submitdata.quantity" :min="1" @on-change="changenumber()"></x-number>
-                        </template>
-                      </group>
-      							</div>
-      						</div>
-      					</div>
+    					<div class="b_bottom_after padding10">
+    						<div class="t-table">
+    							<div class="t-cell v_middle" style="width:65px;">
+                    <img class="v_middle imgcover" style="width:45px;height:45px;" :src="product.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                  </div>
+    							<div class="t-cell v_middle">
+    								<div class="name color-black font15">{{ product.name }}</div>
+    							</div>
+    							<div class="t-cell v_middle w100 align_right">¥{{ product.special }}×{{ submitdata.quantity }}</div>
+    						</div>
+    					</div>
+    					<div class="b_bottom_after padding10 form-item">
+    						<div class="t-table">
+    							<div class="t-cell v_middle" style="width:80px;">购买数量</div>
+    							<div class="t-cell v_middle align_right">
+                    <group class="x-number db-in">
+                      <template v-if="product.crowdtype == 'bargainbuy'">
+                        <x-number v-model="submitdata.quantity" :min="1" :max="1" @on-change="changenumber()"></x-number>
+                      </template>
+                      <template v-else>
+                        <x-number v-model="submitdata.quantity" :min="1" @on-change="changenumber()"></x-number>
+                      </template>
+                    </group>
+    							</div>
+    						</div>
+    					</div>
+            </div>
+            <div class="b_bottom_after padding10" v-if="item.postage && item.postage != ''">
+              <div class="t-table">
+                <div class="t-cell v_middle" style="width:40px;">运费</div>
+                <div class="t-cell v_middle">
+                  <span v-if="item.postage == 0">包邮</span>
+                  <span>{{ $t('RMB') }}{{ item.postage }}</span>
+                </div>
+              </div>
             </div>
             <div class="b_bottom_after padding10">
               <div class="t-table">
@@ -183,9 +192,6 @@ export default {
     query: function () {
       return this.query
     },
-    // payprice: function () {
-    //   return this.payprice
-    // },
     orderdata: function () {
       return this.orderdata
     },
@@ -210,7 +216,6 @@ export default {
       this.payPrice = '0.00'
       this.selectaddress = null
       this.orderdata = []
-      // this.payprice = '0.00'
       this.showpopup = false
       this.addressdata = []
       this.submitdata = {
@@ -231,6 +236,9 @@ export default {
           let pd = productinfos[j]
           total += parseFloat(pd.special) * self.submitdata.quantity
         }
+      }
+      if (self.orderdata[0].postage) {
+        total += parseFloat(self.orderdata[0].postage)
       }
       self.payPrice = total.toFixed(2)
     },
@@ -305,7 +313,9 @@ export default {
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
             }
-            // self.submitdata.postdata.push(postd)
+            if (order.postage) {
+              total += parseFloat(order.postage)
+            }
           }
           self.payPrice = total.toFixed(2)
           return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
