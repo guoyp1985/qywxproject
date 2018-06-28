@@ -86,7 +86,7 @@
           </div>
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
-              <div class="t-cell align_left w100">地区</div>
+              <div class="t-cell align_left w100">{{ $t('Region') }}</div>
               <div class="t-cell align_right color-gray">{{ viewuser.country }} {{ viewuser.province }} {{ viewuser.city }}</div>
               <div class="t-cell align_right w50">
                 <span class="qbtn8 bg-orange7 color-white" @click="updateArea">更新</span>

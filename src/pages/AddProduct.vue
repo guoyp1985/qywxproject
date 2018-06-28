@@ -511,9 +511,9 @@ export default {
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
-          this.$vux.loading.hide()
           self.initContainer()
-          self.showPay = true
+          // self.showPay = true
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
         } else {
           self.initContainer()
           let isAdmin = false

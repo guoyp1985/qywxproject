@@ -27,7 +27,7 @@
               <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
                 <div class="t-table w_100 orderbyarea">
                   <div :class="`t-cell orderbyitem ${dateClass}`" @click="dateOrder">时间<span class="ico"></span></div>
-                  <div v-if="disAreaOrder" :class="`t-cell orderbyitem ${areaClass}`" @click="areaOrder">地域<span class="ico"></span></div>
+                  <div v-if="disAreaOrder" :class="`t-cell orderbyitem ${areaClass}`" @click="areaOrder">{{ $t('Region') }}<span class="ico"></span></div>
                   <div :class="`t-cell orderbyitem ${sexClass}`" @click="sexOrder">性别<span class="ico"></span></div>
                 </div>
               </div>
@@ -58,7 +58,7 @@
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                       <div class="clamp1 mt5 font12 color-gray">性别: {{item.sexname}}</div>
-                      <div class="clamp1 mt5 font12 color-gray" v-if="item.province && item.province != ''">地域: {{item.province}}</div>
+                      <div class="clamp1 mt5 font12 color-gray" v-if="item.province && item.province != ''">{{ $t('Region') }}: {{item.province}}</div>
                     </router-link>
                     <div class="t-cell v_middle w60 h_100 align_right">
                         <div class="percentarea db-in v_middle" @click="percentclick">
