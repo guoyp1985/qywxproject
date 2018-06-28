@@ -93,7 +93,8 @@ export default {
           } else {
             if (self.loginUser.isretailer === 2) {
               self.initContainer()
-              self.showPay = true
+              // self.showPay = true
+              location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
             } else if (self.loginUser.isretailer === 0) {
               self.initContainer()
               self.showApply = true
