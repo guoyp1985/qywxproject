@@ -364,10 +364,12 @@ export default {
         self.showSos = true
         self.showContainer = false
       } else {
-        self.showSos = false
-        self.showContainer = false
         this.$vux.loading.hide()
-        this.refresh(this.$route.query)
+        if (this.query.id !== this.$route.query.id) {
+          self.showSos = false
+          self.showContainer = false
+          this.refresh(this.$route.query)
+        }
       }
     }
   }
