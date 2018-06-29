@@ -531,13 +531,13 @@ export default {
           let backUrl = encodeURIComponent(location.href)
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
-          self.initContainer()
           if (!this.loginUser.isretailer) {
             this.$vux.loading.hide()
             self.initContainer()
             this.showSos = true
           } else {
             self.initContainer()
+            this.$vux.loading.hide()
             this.showContainer = true
             this.query = this.$route.query
             this.swiperChange()
