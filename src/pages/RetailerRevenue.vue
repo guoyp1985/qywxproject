@@ -63,7 +63,13 @@
                     </check-icon>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                      <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
+                      <div class="clamp1 font14 color-gray">
+                        <span class="v_middle">订单金额: ￥{{ item.special }}</span>
+                        <template v-if="item.postage && item.postage != ''">
+                          <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                          <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
+                        </template>
+                      </div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -157,7 +163,13 @@
                   </div>
                   <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                    <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font14 color-gray">
+                      <span class="v_middle">订单金额: ￥{{ item.special }}</span>
+                      <template v-if="item.postage && item.postage != ''">
+                        <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                        <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
+                      </template>
+                    </div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -241,7 +253,13 @@
                   </div>
                   <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                     <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span></div>
-                    <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
+                    <div class="clamp1 font14 color-gray">
+                      <span class="v_middle">订单金额: ￥{{ item.special }}</span>
+                      <template v-if="item.postage && item.postage != ''">
+                        <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                        <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
+                      </template>
+                    </div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
