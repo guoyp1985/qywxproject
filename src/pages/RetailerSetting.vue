@@ -6,6 +6,7 @@
         :retailer-info="retailerInfo"
         :login-user="loginUser"
         :photoarr="photoarr"
+        :showphoto-arr="showphotoArr"
         :submitdata="submitdata">
       </retailer-setting>
     </template>
@@ -35,8 +36,9 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: { title: '', qrcode: '', buyonline: 1, showphoto: '', slogan: '', content: '', fastreply: '你好，请稍等，一会为你服务' },
       photoarr: [],
+      showphotoArr: [],
       classData: []
     }
   },
@@ -63,6 +65,10 @@ export default {
           let qrcode = self.submitdata.qrcode
           if (qrcode && self.$util.trim(qrcode) !== '') {
             self.photoarr = qrcode.split(',')
+          }
+          let showphoto = self.submitdata.showphoto
+          if (showphoto && self.$util.trim(showphoto) !== '') {
+            self.showphotoArr = showphoto.split(',')
           }
         }
       })

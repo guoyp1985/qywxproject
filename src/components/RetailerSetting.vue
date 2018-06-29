@@ -3,7 +3,10 @@
     <div class="s-container" style="top:0;">
       <div class="padding10 font16 bg-page">{{ $t('Seller info setting') }}</div>
       <form enctype="multipart/form-data">
-        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
+      </form>
+      <form enctype="multipart/form-data">
+        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo','fileInput1')" />
       </form>
       <form>
         <forminputplate class="required">
@@ -18,12 +21,12 @@
               <template v-if="photoarr.length > 0">
                 <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                   <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                    <div class="close" @click="deletephoto(item,index)">×</div>
+                    <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
                     <div class="clip"><i class="al al-set"></i></div>
                   </div>
                 </div>
               </template>
-              <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto">
+              <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','qrcode')">
                 <div class="inner">
                   <div class="innerlist">
                     <div class="flex_center h_100">
@@ -45,6 +48,39 @@
             <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
             <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
           </div>
+        </forminputplate>
+        <div class="form-item required">
+          <div class="pb5">{{ $t('Personal image') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+          <div>
+            <div class="q_photolist align_left">
+              <template v-if="showphotoArr.length > 0">
+                <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                    <div class="close" @click="deletephoto(item,index,'photo')">×</div>
+                    <div class="clip"><i class="al al-set"></i></div>
+                  </div>
+                </div>
+              </template>
+              <div v-if="showphotoArr.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','showphoto')">
+                <div class="inner">
+                  <div class="innerlist">
+                    <div class="flex_center h_100">
+                      <div class="txt">
+                        <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                        <div><span class="havenum">{{ showphotoArr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <forminputplate>
+          <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea v-model="submitdata.slogan" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Seller said')" :show-counter="false" :rows="1" autosize></x-textarea>
+          </group>
         </forminputplate>
         <div v-show="showmore">
           <forminputplate>
@@ -189,9 +225,13 @@ export default {
     },
     submitdata: {
       type: Object,
-      default: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' }
+      default: { title: '', qrcode: '', buyonline: 1, slogan: '', content: '', fastreply: '你好，请稍等，一会为你服务' }
     },
     photoarr: {
+      type: Array,
+      default: []
+    },
+    showphotoArr: {
       type: Array,
       default: []
     }
@@ -205,8 +245,9 @@ export default {
   data () {
     return {
       maxnum: 1,
+      maxnum1: 9,
       showmore: false,
-      requireddata: { title: '', 'qrcode': '' },
+      requireddata: { title: '', 'qrcode': '', showphoto: '', slogan: '' },
       showonline: false,
       showoffline: false,
       showqrcode: false
@@ -224,11 +265,18 @@ export default {
     expandevent () {
       this.showmore = !this.showmore
     },
-    photoCallback (data) {
+    photoCallback (data, type) {
+      console.log('photocallback')
+      console.log(type)
       const self = this
       if (data.flag === 1) {
-        self.photoarr.push(data.data)
-        self.submitdata.qrcode = self.photoarr.join(',')
+        if (type === 'qrcode') {
+          self.photoarr.push(data.data)
+          self.submitdata.qrcode = self.photoarr.join(',')
+        } else if (type === 'photo') {
+          self.showphotoArr.push(data.data)
+          self.submitdata.showphoto = self.showphotoArr.join(',')
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -236,9 +284,9 @@ export default {
         })
       }
     },
-    uploadPhoto () {
+    uploadPhoto (refname, type) {
       const self = this
-      const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
@@ -246,29 +294,36 @@ export default {
           self.$util.wxUploadImage({
             maxnum: 1,
             handleCallback: function (data) {
-              self.photoCallback(data)
+              self.photoCallback(data, type)
             }
           })
         })
       }
     },
-    fileChange (e) {
+    fileChange (type) {
+      console.log(type)
       const self = this
-      let files = e.target.files
+      const target = event.target
+      let files = target.files
       if (files.length > 0) {
-        const fileForm = e.target.parentNode
+        const fileForm = target.parentNode
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
-          self.photoCallback(data)
+          self.photoCallback(data, type)
         })
       }
     },
-    deletephoto (item, index) {
-      this.photoarr.splice(index, 1)
-      this.submitdata.qrcode = this.photoarr.join(',')
+    deletephoto (item, index, type) {
+      if (type === 'qrcode') {
+        this.photoarr.splice(index, 1)
+        this.submitdata.qrcode = this.photoarr.join(',')
+      } else if (type === 'photo') {
+        this.showphotoArr.splice(index, 1)
+        this.submitdata.showphoto = this.showphotoArr.join(',')
+      }
     },
     setbuyonline (val) {
       if (val === 1) {
