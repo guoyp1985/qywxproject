@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="to-recommend" class="font14">
+  <div id="to-recommend" class="font14 containerarea" ref="scrollContainer" @scroll="handleScroll">
     <tab v-model="selectedIndex" class="bg-white radius-tab">
       <tab-item class="font14" selected @on-item-click="clickTabItem">全部收入</tab-item>
       <tab-item class="font14" @on-item-click="clickTabItem">客户资源</tab-item>
@@ -284,31 +284,81 @@ export default {
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
-          switch (self.selectedIndex) {
+          switch (self.selectedIndex1) {
             case 0:
-              if (self.tabdata1.length === (pageStart1 + 1) * self.limit) {
+              if (self.tabData1.length === (pageStart1 + 1) * limit) {
                 pageStart1++
                 self.$vux.loading.show()
                 self.getData1()
+              } else {
+                self.$vux.loading.hide()
               }
               break
             case 1:
-              if (self.tabdata2.length === (pageStart2 + 1) * self.limit) {
+              if (self.tabData2.length === (pageStart2 + 1) * limit) {
                 pageStart2++
                 self.$vux.loading.show()
                 self.getData2()
+              } else {
+                self.$vux.loading.hide()
               }
               break
             case 2:
-              if (self.tabdata3.length === (pageStart3 + 1) * self.limit) {
+              if (self.tabData3.length === (pageStart3 + 1) * limit) {
                 pageStart3++
                 self.$vux.loading.show()
                 self.getData3()
+              } else {
+                self.$vux.loading.hide()
               }
               break
           }
         }
       })
+    },
+    swiperChange () {
+      switch (this.selectedIndex1) {
+        case 0:
+          if (this.tabData1.length < limit) {
+            pageStart1 = 0
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < limit) {
+            pageStart2 = 0
+            this.disTabData2 = false
+            this.tabData2 = []
+            this.getData2()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+        case 2:
+          if (this.tabData3.length < limit) {
+            pageStart3 = 0
+            this.disTabData3 = false
+            this.tabData3 = []
+            this.getData3()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+        case 3:
+          if (this.tabData4.length < limit) {
+            pageStart4 = 0
+            this.disTabData4 = false
+            this.tabData4 = []
+            this.getData4()
+          } else {
+            this.$vux.loading.hide()
+          }
+          break
+      }
     },
     getData1 () {
       const self = this
@@ -359,50 +409,6 @@ export default {
         self.tabData4 = self.tabData4.concat(retdata)
         self.disTabData4 = true
       })
-    },
-    swiperChange () {
-      switch (this.selectedIndex1) {
-        case 0:
-          if (this.tabData1.length < limit) {
-            pageStart1 = 0
-            this.disTabData1 = false
-            this.tabData1 = []
-            this.getData1()
-          } else {
-            this.$vux.loading.hide()
-          }
-          break
-        case 1:
-          if (this.tabData2.length < limit) {
-            pageStart2 = 0
-            this.disTabData2 = false
-            this.tabData2 = []
-            this.getData2()
-          } else {
-            this.$vux.loading.hide()
-          }
-          break
-        case 2:
-          if (this.tabData3.length < limit) {
-            pageStart3 = 0
-            this.disTabData3 = false
-            this.tabData3 = []
-            this.getData3()
-          } else {
-            this.$vux.loading.hide()
-          }
-          break
-        case 3:
-          if (this.tabData4.length < limit) {
-            pageStart4 = 0
-            this.disTabData4 = false
-            this.tabData4 = []
-            this.getData4()
-          } else {
-            this.$vux.loading.hide()
-          }
-          break
-      }
     },
     showpopup () {
       this.isshowpopup = true
