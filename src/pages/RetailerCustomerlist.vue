@@ -366,8 +366,7 @@ export default {
       self.pagestart1 = 0
       self.distabdata1 = false
       self.tabdata1 = []
-      self.orderbyParams.orderby = 'sex'
-      self.orderbyParams.sex = self.sexKey
+      self.orderbyParams = {orderby: 'sex', sex: self.sexKey}
       self.getData1()
     },
     areaOrder () {
