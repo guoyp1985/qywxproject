@@ -359,7 +359,7 @@ export default {
           break
         }
       }
-      if (!self.loginUser.fid && !isAdmin) {
+      if (!self.loginUser.isretailer && !self.loginUser.fid && !isAdmin) {
         this.$vux.loading.hide()
         self.showSos = true
         self.showContainer = false
