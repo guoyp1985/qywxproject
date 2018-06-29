@@ -27,7 +27,7 @@
               <template v-if="searchresult1">暂无搜索结果</template>
               <template v-else>暂无分享数据</template>
             </div>
-            <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
+            <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
               <div class="flex_left">
                 <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                 <div class="flex_cell pl10">
@@ -39,7 +39,7 @@
                   <div class="clamp1 color-gray font12">分享时间：{{ item.dateline | dateformat }}</div>
                 </div>
               </div>
-            </router-link>
+            </div>
           </div>
         </div>
       </div>
