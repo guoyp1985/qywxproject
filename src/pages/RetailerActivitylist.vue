@@ -255,12 +255,12 @@ export default {
           let backUrl = encodeURIComponent(location.href)
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
-          self.initContainer()
           if (!this.loginUser.isretailer) {
             this.$vux.loading.hide()
             self.initContainer()
             this.showApply = true
           } else {
+            this.$vux.loading.hide()
             this.query = this.$route.query
             if (this.tabdata1.length < limit || this.query.from === 'add') {
               self.initContainer()
