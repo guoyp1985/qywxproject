@@ -353,6 +353,8 @@ export default {
     },
     dateOrder () {
       const self = this
+      self.selectedArea = null
+      self.selectedSex = null
       if (self.dateClass.indexOf('active') < 0) {
         self.removeOrderActive()
         self.dateClass = 'active'
@@ -379,7 +381,7 @@ export default {
       self.pagestart1 = 0
       self.distabdata1 = false
       self.tabdata1 = []
-      self.selectedSex = null
+      self.selectedArea = null
       self.orderbyParams = {orderby: 'sex', sex: self.sexKey}
       self.selectedSex = self.sexParams[self.sexKey]
       self.getData1()
