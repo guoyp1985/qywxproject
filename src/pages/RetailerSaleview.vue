@@ -403,7 +403,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      console.log(this.loginUser)
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
           self.initContainer()
@@ -411,7 +410,6 @@ export default {
           let backUrl = encodeURIComponent(location.href)
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
-          self.initContainer()
           if (!this.loginUser.isretailer) {
             this.$vux.loading.hide()
             self.initContainer()
@@ -422,6 +420,8 @@ export default {
               this.initData()
               this.query = this.$route.query
               this.getData()
+            } else {
+              this.$vux.loading.hide()
             }
           }
         }

@@ -387,7 +387,6 @@ export default {
           let backUrl = encodeURIComponent(location.href)
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
-          self.initContainer()
           let isAdmin = false
           for (let i = 0; i < self.loginUser.usergroup.length; i++) {
             if (self.loginUser.usergroup[i] === 1) {
@@ -396,10 +395,12 @@ export default {
             }
           }
           if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
+            self.initContainer()
             this.sosTitle = '抱歉，您暂无权限访问此页面！'
             this.showSos = true
           } else {
             if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+              self.initContainer()
               this.sosTitle = '该信息不存在'
               this.query = this.$route.query
               this.module = this.query.module
