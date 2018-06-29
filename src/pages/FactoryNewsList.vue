@@ -254,6 +254,7 @@ export default {
             this.distabdata1 = false
             this.tabdata1 = []
             this.$vux.loading.show()
+            self.pagestart1 = 0
             this.getData1()
           }
         }

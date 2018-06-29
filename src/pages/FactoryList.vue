@@ -124,6 +124,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabData1.length < limit) {
+            pageStart1 = 0
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()
@@ -131,6 +132,7 @@ export default {
           break
         case 1:
           if (this.tabData2.length < limit) {
+            pageStart2 = 0
             this.disTabData2 = false
             this.tabData2 = []
             this.getData2()
@@ -187,6 +189,7 @@ export default {
           this.showContainer = true
           this.query = this.$route.query
           if (this.tabData1.length < limit) {
+            pageStart1 = 0
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()

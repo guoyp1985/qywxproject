@@ -208,6 +208,7 @@ export default {
       if (this.loginUser && this.productdata.length < limit) {
         this.$vux.loading.show()
         this.productdata = []
+        pageStart = 0
         this.getData1()
       }
     }

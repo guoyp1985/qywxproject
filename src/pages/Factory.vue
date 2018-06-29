@@ -214,6 +214,7 @@ export default {
         case 0:
           if (this.tabData1.length < limit) {
             self.$vux.loading.show()
+            pageStart1 = 0
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()
@@ -222,6 +223,7 @@ export default {
         case 1:
           if (this.tabData2.length < limit) {
             self.$vux.loading.show()
+            pageStart2 = 0
             this.disTabData2 = false
             this.tabData2 = []
             this.getData2()

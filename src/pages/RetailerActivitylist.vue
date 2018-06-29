@@ -264,6 +264,7 @@ export default {
             this.query = this.$route.query
             if (this.tabdata1.length < limit || this.query.from === 'add') {
               self.initContainer()
+              pageStart1 = 0
               this.tabdata1 = []
               this.getData1()
             }

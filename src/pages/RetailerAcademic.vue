@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     initData () {
+      pageStart = 0
       this.disData = false
       this.data = []
     },

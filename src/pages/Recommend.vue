@@ -364,6 +364,7 @@ export default {
       switch (this.selectedIndex1) {
         case 0:
           if (this.tabData1.length < limit) {
+            pageStart1 = 0
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()
@@ -373,6 +374,7 @@ export default {
           break
         case 1:
           if (this.tabData2.length < limit) {
+            pageStart2 = 0
             this.disTabData2 = false
             this.tabData2 = []
             this.getData2()
@@ -382,6 +384,7 @@ export default {
           break
         case 2:
           if (this.tabData3.length < limit) {
+            pageStart3 = 0
             this.disTabData3 = false
             this.tabData3 = []
             this.getData3()
@@ -391,6 +394,7 @@ export default {
           break
         case 3:
           if (this.tabData4.length < limit) {
+            pageStart4 = 0
             this.disTabData4 = false
             this.tabData4 = []
             this.getData4()

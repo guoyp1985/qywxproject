@@ -176,6 +176,7 @@ export default {
         this.query = this.$route.query
         this.disdata = false
         this.data = []
+        pageStart = 0
         this.$vux.loading.show()
         this.getData()
       }
