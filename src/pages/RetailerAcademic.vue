@@ -11,7 +11,7 @@
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <template v-if="disData">
           <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无素材</div>
-          <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/material', query: {id: item.id, fid: item.fid}}" class="scroll_item db bg-white">
+          <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/academic', query: {id: item.id, fid: item.fid}}" class="scroll_item db bg-white">
             <div class="pic">
               <div class="inner">
                 <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
@@ -99,7 +99,7 @@ export default {
     },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'material'
+        module: 'retailer', action: 'academic'
       })
     },
     initContainer () {

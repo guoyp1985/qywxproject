@@ -38,7 +38,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="material" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="academic" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -174,7 +174,7 @@ export default {
               module: self.module,
               moduleid: self.article.id,
               lastshareuid: self.query.share_uid,
-              link: `${ENV.Host}/#/material?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/academic?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
@@ -227,7 +227,7 @@ export default {
       })
     },
     editSetting () {
-      this.$router.push({name: 'tAddMaterial', params: {id: this.article.id, fid: this.article.fid}})
+      this.$router.push({name: 'tAddAcademic', params: {id: this.article.id, fid: this.article.fid}})
     },
     editDelete () {
       this.$vux.confirm.show({
