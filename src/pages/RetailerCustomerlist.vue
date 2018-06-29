@@ -25,9 +25,21 @@
               </search>
               <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
                 <div class="t-table w_100 orderbyarea">
-                  <div :class="`t-cell orderbyitem ${dateClass}`" @click="dateOrder">时间<span class="ico"></span></div>
-                  <div v-if="disAreaOrder" :class="`t-cell orderbyitem ${areaClass}`" @click="areaOrder">{{ $t('Region') }}<span class="ico"></span></div>
-                  <div :class="`t-cell orderbyitem ${sexClass}`" @click="sexOrder">性别<span class="ico"></span></div>
+                  <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">时间<span class="ico"></span></div>
+                  <div v-if="disAreaOrder" :class="`t-cell v_middle orderbyitem ${areaClass}`" @click="areaOrder">
+                    <div class="clamp1">
+                      <span class="v_middle">{{ $t('Region') }}</span>
+                      <span class="v_middle font12" v-if="selectedArea">( {{selectedArea}} )</span>
+                      <span class="ico"></span>
+                    </div>
+                  </div>
+                  <div :class="`t-cell v_middle orderbyitem ${sexClass}`" @click="sexOrder">
+                    <div class="clamp1">
+                      <span class="v_middle">性别</span>
+                      <span class="v_middle font12" v-if="selectedSex">( {{selectedSex}} )</span>
+                      <span class="ico"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
@@ -56,8 +68,6 @@
                     <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                      <div class="clamp1 mt5 font12 color-gray">性别: {{item.sexname}}</div>
-                      <div class="clamp1 mt5 font12 color-gray" v-if="item.province && item.province != ''">{{ $t('Region') }}: {{item.province}}</div>
                     </router-link>
                     <div class="t-cell v_middle w60 h_100 align_right">
                         <div class="percentarea db-in v_middle" @click="percentclick">
@@ -296,11 +306,14 @@ export default {
         { key: 1, value: '男' },
         { key: 2, value: '女' }
       ],
+      sexParams: {0: '未知', 1: '男', 2: '女'},
       showPopupArea: false,
       areaKey: 0,
       areaArr: [],
       disAreaOrder: false,
-      disOrderArea: false
+      disOrderArea: false,
+      selectedArea: null,
+      selectedSex: null
     }
   },
   methods: {
@@ -366,7 +379,9 @@ export default {
       self.pagestart1 = 0
       self.distabdata1 = false
       self.tabdata1 = []
+      self.selectedSex = null
       self.orderbyParams = {orderby: 'sex', sex: self.sexKey}
+      self.selectedSex = self.sexParams[self.sexKey]
       self.getData1()
     },
     areaOrder () {
@@ -381,8 +396,9 @@ export default {
       self.pagestart1 = 0
       self.distabdata1 = false
       self.tabdata1 = []
-      self.orderbyParams = { orderby: 'province' }
-      self.orderbyParams.province = self.areaArr[self.areaKey].value
+      self.selectedSex = null
+      self.orderbyParams = { orderby: 'province', province: self.areaArr[self.areaKey].value }
+      self.selectedArea = self.orderbyParams.province
       self.getData1()
     },
     getData1 () {
@@ -638,6 +654,7 @@ export default {
 .orderbyarea .orderbyitem:not(:last-child):after{
   content: "";
   position: absolute;
+  right:0;
   top:50%;
   margin-top:-8px;
   height: 16px;
