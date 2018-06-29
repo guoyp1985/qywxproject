@@ -221,7 +221,6 @@ Message:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Sos from '@/components/Sos'
-import Pay from '@/components/Pay'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
@@ -231,7 +230,7 @@ import { User } from '#/storage'
 const limit = 10
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XImg, Sos, Pay, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, XImg, Sos, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {

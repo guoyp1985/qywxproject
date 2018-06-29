@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea bg-white font14 rsaleview s-havebottom">
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="s-topbanner">
@@ -231,8 +231,6 @@ export default {
       this.showSos = false
       this.sosTitle = '该记录不存在'
       this.showContainer = false
-      this.query = {}
-      this.loginUser = {}
       this.sellerUser = { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 }
       this.isshowpopup = false
       this.selectedIndex = 0
@@ -405,6 +403,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      console.log(this.loginUser)
       if (this.loginUser && this.loginUser.subscribe === 1) {
         if (self.loginUser.isretailer === 2) {
           self.initContainer()
