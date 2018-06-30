@@ -69,46 +69,53 @@
       </div>
     </div>
     <div class="pagebottom flex_center">
-      <div class="flex_cell item flex_center">
+      <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
           <div class="icon"><i class="al al-sccollection"></i></div>
           <div class="txt">店主动态</div>
         </div>
-      </div>
-      <div class="flex_cell item flex_center">
+      </router-link>
+      <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
           <div class="icon"><i class="al al-zhaopian"></i></div>
           <div class="txt">图片视频</div>
         </div>
-      </div>
-      <div class="flex_cell item flex_center">
+      </router-link>
+      <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
           <div class="icon"><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
           <div class="txt">用户故事</div>
         </div>
-      </div>
-      <div class="flex_cell item flex_center">
+      </router-link>
+      <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
           <div class="icon"><i class="al al-goodsnewfill"></i></div>
           <div class="txt">店主促销</div>
         </div>
-      </div>
-      <div class="flex_cell item flex_center">
+      </router-link>
+      <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_cell item flex_center">
         <div>
           <div class="icon"><i class="al al-dianpufill"></i></div>
           <div class="txt">进入店铺</div>
         </div>
-      </div>
+      </router-link>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showTagPopup" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center"></div>
-          <div class="popup-middle">
-            <div class="padding10">
-            </div>
+        <div class="popup1 tagpopup">
+          <div class="popup-top flex_center">
+            <span @click="closeTagPopup">{{ $t('Close') }}</span>
           </div>
-          <div class="popup-bottom flex_center bg-orange color-white" @click="closeTagPopup">{{ $t('Close') }}</div>
+          <div class="popup-middle" style="top:0;bottom:0;">
+            <div @click="closeTagPopup" class="close-tag">{{ $t('Close') }}</div>
+            <tag-page
+              :user-info="userInfo"
+              :login-user="loginUser"
+              :timeline-data="timelineData"
+              :scroll-event="scrollEvent"
+              :page-start="pageStart"
+              :limit="limit"></tag-page>
+          </div>
         </div>
       </popup>
     </div>
@@ -122,13 +129,14 @@
 import { Swiper, SwiperItem, TransferDom, Popup } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import TagPage from '@/components/TagPage'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Swiper, SwiperItem, Popup
+    Swiper, SwiperItem, Popup, TagPage
   },
   data () {
     return {
@@ -143,15 +151,53 @@ export default {
         { uid: 25, linkman: '小小于', avatar: 'http://osslaravel.boka.cn/avatar/1/25.jpg' },
         { uid: 39, linkman: '大笨牛', avatar: 'http://osslaravel.boka.cn/avatar/1/39.jpg' }
       ],
-      showTagPopup: false
+      showTagPopup: false,
+      timelineData: [],
+      limit: 10,
+      pageStart: 0
     }
   },
   methods: {
     closeTagPopup () {
       this.showTagPopup = false
     },
+    getTimelineData () {
+      const self = this
+      let params = {pageStart: self.pageStart, limit: self.limit}
+      if (self.query.uid) {
+        params.wid = self.query.uid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let photoarr = []
+          let photo = retdata[i].photo
+          if (photo && self.$util.trim(photo) !== '') {
+            photoarr = photo.split(',')
+          }
+          retdata[i].photoarr = photoarr
+        }
+        self.timelineData = self.timelineData.concat(retdata)
+      })
+    },
+    scrollEvent () {
+      const self = this
+      if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
+        self.pageStart++
+        self.$vux.loading.show()
+        self.getTimelineData()
+      }
+    },
     clickTag (tagname) {
+      const self = this
       this.showTagPopup = true
+      if (self.timelineData.length < self.limit) {
+        self.timelineData = []
+        self.pageStart = 0
+        self.getTimelineData()
+      }
     },
     refresh () {
       const self = this
@@ -196,14 +242,14 @@ export default {
 .cseller .topcover .set-icon .al{font-size:22px;}
 .cseller .pic-swiper{width:100%;height:100%;}
 .cseller .topcover .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
-.cseller .boxouter{padding-left:5px;padding-right:5px;box-sizing: border-box;}
-.cseller .boxouter .boxinner{
+.boxouter{padding-left:5px;padding-right:5px;box-sizing: border-box;}
+.boxouter .boxinner{
   position:relative;z-index:1;background-color:#fff;
   border-radius:5px;
   border: rgb(244, 244, 244) 1px solid;
   box-shadow: rgb(204, 204, 204) 0px -9px 16px -3px;
 }
-.cseller .boxouter.box1 .boxinner{padding-bottom:15px;}
+.boxouter.box1 .boxinner{padding-bottom:15px;}
 .cseller .box1 .row1{height:35px;}
 .cseller .box1 .pic{
   padding-left:20px;
@@ -271,4 +317,10 @@ export default {
 .cseller .pagebottom .item{height:100%;}
 .cseller .pagebottom .al{color:rgb(229, 28, 35);font-size:18px;}
 .cseller .pagebottom .txt{color:rgb(229, 28, 35);font-size:12px;}
+.tagpopup .close-tag{
+  position:absolute;top:10px;right:10px;z-index:1;text-align:center;
+  width: 67px;height: 24px;line-height:24px;color: rgba(16, 16, 16, 0.88);
+  background-color:#fff;border: rgb(187, 187, 187) 1px solid;
+  border-radius: 4px;font-size: 12px;
+}
 </style>

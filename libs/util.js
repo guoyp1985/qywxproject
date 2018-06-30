@@ -606,7 +606,9 @@ Util.install = function (Vue, options) {
         let p = arr[i]
         ret.push({
           msrc: p,
-          src: p
+          src: p,
+          w: 300,
+          h: 300
         })
       }
       return ret

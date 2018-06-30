@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page tagpage notop">
+  <div class="containerarea font14 bg-page spromotion notop nobottom">
     <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="boxouter box1">
@@ -24,7 +24,7 @@
           <div class="row3">
             <div class="taglist">
               <div class="tagitem v_middle">{{tagName}}</div>
-              <span class="v_middle">共 {{timelineCount}} 条动态</span>
+              <span class="v_middle">共 {{timelineCount}} 条</span>
             </div>
           </div>
         </div>
@@ -32,53 +32,26 @@
       <div class="boxouter box2 mt12">
         <div class="boxinner tllist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
-            暂无相关动态
+            暂无促销商品
           </div>
-          <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
-            <div class="avatar">
-              <img :src="userInfo.avatar" />
-            </div>
-            <div class="con">
-              <div class="txt">{{userInfo.title}}</div>
-              <div>{{item.title}}</div>
-              <div class="piclist">
-                <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
-                  <div class="inner">
-                    <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
-                  </div>
-                </div>
-              </div>
-              <div class="db-flex mt5 color-gray">
-                <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                <div class="w30 align_center">
-                  <i class="al"></i>
-                </div>
-                <span class="flex_cell color-gray flex_right" @click="clickDig">
-                  <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                  <span class="v_middle ml3">{{item.digs}}</span>
-                </span>
-                <div class="w30 flex_right">
-                  <i class="al al-pinglun3 font14"></i>
-                </div>
-              </div>
-              <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                <div class="citem" v-for="(item,index) in item.comments" :key="index">
-                  <div class="txt1">
-                    <span class="v_middle name name1">小小于</span>
-                    <span class="v_middle">皮肤越来越水嫩啦，棒棒哒</span>
-                  </div>
-                  <div class="txt2">
-                    <span class="v_middle name name2">{{userInfo.title}}</span>
-                    <span class="v_middle">回复：谢谢，每天一贴多补水</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div v-else v-for="(item,index) in timelineData" :key="item.id" class="bg-page">
+            <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
+              <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <span slot="title">{{item.title}}</span>
+              <span slot="numbers">{{ item.numbers }}</span>
+              <span slot="havetuan">{{ item.havetuan }}</span>
+              <span slot="groupprice">{{item.groupprice}}</span>
+              <span slot="price">{{item.price}}</span>
+            </groupbuyitemplate>
+            <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#f6f6f6 !important;">
+              <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <span slot="title">{{item.title}}</span>
+              <span slot="saveprice">{{ item.saveprice }}</span>
+              <span slot="minprice">{{item.minprice}}</span>
+              <span slot="price">{{item.price}}</span>
+            </bargainbuyitemplate>
           </div>
         </div>
-      </div>
-      <div v-transfer-dom>
-        <previewer :list="previewArr" ref="previewer"></previewer>
       </div>
     </div>
   </div>
@@ -88,40 +61,22 @@
 </i18n>
 
 <script>
-import { TransferDom, Previewer } from 'vux'
+import { TransferDom } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
+import { User } from '#/storage'
+import Groupbuyitemplate from '@/components/Groupbuyitemplate'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+
+const limit = 10
+let pageStart = 0
 
 export default {
-  name: 'TagPage',
-  props: {
-    userInfo: {
-      type: Object,
-      default: {}
-    },
-    loginUser: {
-      type: Object,
-      default: {}
-    },
-    timelineData: {
-      type: Array,
-      default: []
-    },
-    scrollEvent: Function,
-    pageStart: {
-      type: Number,
-      default: 0
-    },
-    limit: {
-      type: Number,
-      default: 10
-    }
-  },
   directives: {
     TransferDom
   },
   components: {
-    Previewer
+    Groupbuyitemplate, Bargainbuyitemplate
   },
   filters: {
     dateFormat (date) {
@@ -130,81 +85,85 @@ export default {
   },
   data () {
     return {
-      tagName: '养生',
-      timelineCount: 0,
-      previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        w: 300,
-        h: 300
-      }]
+      userInfo: {},
+      loginUser: {},
+      timelineData: [],
+      tagName: '店主促销',
+      timelineCount: 0
     }
   },
   methods: {
+    initData () {
+      pageStart = 0
+      this.timelineData = []
+      this.timelineCount = 0
+    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          self.scrollEvent && self.scrollEvent()
+          if (self.timelineData.length === (pageStart + 1) * limit) {
+            pageStart++
+            self.$vux.loading.show()
+            self.getTimelineData()
+          }
         }
       })
     },
-    showBigimg (arr, index) {
+    getTimelineData () {
       const self = this
-      if (self.$util.isPC()) {
-        self.previewArr = self.$util.previewerImgdata(arr)
-        console.log(self.$refs.previewer)
-        self.$refs.previewer.show(index)
-      } else {
-        self.$vue.wechat.previewImage({
-          current: arr[index],
-          urls: arr
+      let params = {pagestart: pageStart, limit: limit}
+      if (self.query.uid) {
+        params.wid = self.query.uid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
+        params: params
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.timelineData = self.timelineData.concat(retdata)
+        self.timelineCount = self.timelineData.length
+      })
+    },
+    refresh () {
+      const self = this
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.loginUser = User.get()
+      if (!self.$route.query.uid || (self.$route.query.uid && self.query.uid !== self.$router.query.uid)) {
+        self.initData()
+        self.query = self.$route.query
+        let params = {}
+        if (self.query.uid) {
+          params.uid = self.query.uid
+        }
+        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+          params: params
+        }).then(function (res) {
+          if (res.status === 200) {
+            let data = res.data
+            self.userInfo = data.data ? data.data : data
+            self.getTimelineData()
+          }
         })
       }
-    },
-    clickDig (item) {
-      const self = this
-      let url = `${ENV.BokaApi}/api/user/digs/add`
-      if (self.isdig) {
-        url = `${ENV.BokaApi}/api/user/digs/delete`
-      }
-      self.$vux.loading.show()
-      self.$http.post(url, {
-        id: item.id,
-        module: 'timeline'
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          if (self.isdig) {
-            self.isdig = 0
-            item.dig = item.dig - 1
-          } else {
-            self.isdig = 1
-            item.dig = item.dig + 1
-          }
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warning',
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>
 
 <style lang="less" scoped>
-.tagpage .add-icon{
+.spromotion .add-icon{
   position:absolute;right:15px;bottom:15px;border-radius:50%;
   width: 44px;height: 44px;z-index: 10;overflow:hidden;
   color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
 }
-.tagpage .add-icon .txt{vertical-align:middle;margin-top:-2px;}
+.spromotion .add-icon .txt{vertical-align:middle;margin-top:-2px;}
 .boxouter{padding-left:5px;padding-right:5px;box-sizing: border-box;}
 .boxouter .boxinner{
   position:relative;z-index:1;background-color:#fff;
@@ -212,37 +171,37 @@ export default {
   border: rgb(244, 244, 244) 1px solid;
   box-shadow: rgb(204, 204, 204) 0px -9px 16px -3px;
 }
-.tagpage .boxouter.box1 .boxinner{padding-bottom:0;}
-.tagpage .box1 .row1{height:35px;}
-.tagpage .box1 .pic{
+.spromotion .boxouter.box1 .boxinner{padding-bottom:0;}
+.spromotion .box1 .row1{height:35px;}
+.spromotion .box1 .pic{
   padding-left:20px;
   width:77px;height:35px;
   position:relative;
 }
-.tagpage .box1 .pic img{
+.spromotion .box1 .pic img{
   width: 67px;height: 67px;
   box-shadow: rgb(170, 170, 170) 0px -3px 12px -3px;
   border-radius:50%;
   vertical-align:middle;
   position:absolute;top:-35px;
 }
-.tagpage .box1 .btn-cell{
+.spromotion .box1 .btn-cell{
   width:90px;text-align:center;
 }
-.tagpage .box1 .btn{
+.spromotion .box1 .btn{
   display:block;margin:0 auto;
   width: 70px;height: 26px;line-height:26px;color:#fff;
   background-color: rgb(229, 28, 35);
   border-radius: 27px;
   font-size: 12px;
 }
-.tagpage .taglist .tagitem{
+.spromotion .taglist .tagitem{
   display:inline-block;padding:0 5px;height: 24px;line-height:24px;
   border-width:1px;border-style:solid;
   border-radius: 5px;text-align: center;margin:0 5px 5px;
   border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
 }
-.tagpage .row3{padding:15px 20px;box-sizing: border-box;}
+.spromotion .row3{padding:15px 20px;box-sizing: border-box;}
 
 .tllist{
 
