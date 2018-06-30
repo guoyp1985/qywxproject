@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page tagpage notop">
+  <div class="containerarea font14 bg-page tagpage notop nobottom">
     <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="boxouter box1">
@@ -40,7 +40,7 @@
             </div>
             <div class="con">
               <div class="txt">{{userInfo.title}}</div>
-              <div>{{item.title}}</div>
+              <div v-html="filterEmot(item.title)"></div>
               <div class="piclist">
                 <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                   <div class="inner">
@@ -55,7 +55,7 @@
                 </div>
                 <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
                   <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                  <span class="v_middle ml3">{{item.digs}}</span>
+                  <span class="v_middle ml3">{{item.dig}}</span>
                 </span>
                 <div class="w30 flex_right">
                   <i class="al al-pinglun3 font14"></i>
@@ -151,6 +151,9 @@ export default {
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -189,10 +192,10 @@ export default {
         if (data.flag === 1) {
           if (self.isdig) {
             self.isdig = 0
-            item.dig = item.dig - 1
+            item.dig = item.digs - 1
           } else {
             self.isdig = 1
-            item.dig = item.dig + 1
+            item.dig = item.digs + 1
           }
         } else {
           self.$vux.toast.show({

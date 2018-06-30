@@ -40,7 +40,7 @@
             </div>
             <div class="con">
               <div class="txt">{{userInfo.title}}</div>
-              <div>{{item.title}}</div>
+              <div v-html="filterEmot(item.title)"></div>
               <div class="piclist">
                 <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                   <div class="inner">
@@ -55,7 +55,7 @@
                 </div>
                 <span class="flex_cell color-gray flex_right" @click="clickDig">
                   <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                  <span class="v_middle ml3">{{item.digs}}</span>
+                  <span class="v_middle ml3">{{item.dig}}</span>
                 </span>
                 <div class="w30 flex_right">
                   <i class="al al-pinglun3 font14"></i>
@@ -123,6 +123,9 @@ export default {
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     initData () {
       pageStart = 0
       this.disData = false
