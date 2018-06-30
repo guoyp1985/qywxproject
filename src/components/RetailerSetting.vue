@@ -281,8 +281,6 @@ export default {
       this.showmore = !this.showmore
     },
     photoCallback (data, type) {
-      console.log('photocallback')
-      console.log(type)
       const self = this
       if (data.flag === 1) {
         if (type === 'qrcode') {
@@ -313,7 +311,6 @@ export default {
           self.$util.wxUploadImage({
             maxnum: curmax,
             handleCallback: function (data) {
-              alert(JSON.stringify(data))
               self.photoCallback(data, type)
             }
           })
