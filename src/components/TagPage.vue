@@ -53,7 +53,7 @@
                 <div class="w30 align_center">
                   <i class="al"></i>
                 </div>
-                <span class="flex_cell color-gray flex_right" @click="clickDig">
+                <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
                   <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
                   <span class="v_middle ml3">{{item.digs}}</span>
                 </span>
