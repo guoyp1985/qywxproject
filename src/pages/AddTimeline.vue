@@ -86,7 +86,7 @@ export default {
       photoarr: [],
       maxnum: 9,
       havenum: 0,
-      submitdata: { title: '', photo: '', tagids: '' },
+      submitdata: { title: '', photo: '', tagids: [] },
       requireddata: { title: '', 'photo': '' },
       textarea: null,
       tagsData: []
@@ -101,7 +101,7 @@ export default {
       this.allowsubmit = true
       this.photoarr = []
       this.havenum = 0
-      this.submitdata = { title: '', photo: '', tagids: '' }
+      this.submitdata = { title: '', photo: '', tagids: [] }
       this.requireddata = { title: '', 'photo': '' }
     },
     valueChange (val) {
@@ -179,13 +179,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              /*
-              let params = { id: data.data }
-              if (self.query.id) {
-                params.newadd = 1
-              }
-              self.$router.push({ path: '/news', query: params })
-              */
+              self.$router.push({ path: '/centerSeller' })
             }
           }
         })
