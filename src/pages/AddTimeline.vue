@@ -129,7 +129,6 @@ export default {
           self.$util.wxUploadImage({
             maxnum: 9,
             handleCallback: function (data) {
-              alert(JSON.stringify(data))
               self.photoCallback(data)
             }
           })

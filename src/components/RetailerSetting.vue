@@ -288,7 +288,7 @@ export default {
         if (type === 'qrcode') {
           self.photoarr.push(data.data)
           self.submitdata.qrcode = self.photoarr.join(',')
-        } else if (type === 'photo') {
+        } else if (type === 'showphoto') {
           self.showphotoArr.push(data.data)
           self.submitdata.showphoto = self.showphotoArr.join(',')
         }
@@ -305,10 +305,15 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
+        let curmax = 1
+        if (type === 'showphoto') {
+          curmax = 9
+        }
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: curmax,
             handleCallback: function (data) {
+              alert(JSON.stringify(data))
               self.photoCallback(data, type)
             }
           })
