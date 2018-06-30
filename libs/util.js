@@ -494,6 +494,7 @@ Util.install = function (Vue, options) {
                     Vue.http.post(`${ENV.BokaApi}/api/weixinUpload`, {
                       imgid: res1.serverId
                     }).then(function (res) {
+                      alert(JSON.stringify(res))
                       let data = res.data
                       os.handleCallback && os.handleCallback(data)
                       done()
