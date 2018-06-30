@@ -7,7 +7,7 @@
       :timeline-data="timelineData"
       :scroll-event="scrollEvent"
       :show-list="showList"
-      timelineCount="timelineCount"></tag-page>
+      :timeline-count="timelineCount"></tag-page>
   </div>
 </template>
 

@@ -116,7 +116,7 @@
               :page-start="pageStart"
               :limit="limit"
               :show-list="showList"
-              :timelineCount="timelineCount"
+              :timeline-count="timelineCount"
               :tag-name="tagName"></tag-page>
           </div>
         </div>
