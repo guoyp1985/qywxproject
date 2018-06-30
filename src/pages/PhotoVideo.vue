@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="boxouter box2 mt12">
-        <div class="boxinner tllist">
+        <div v-if="disData" class="boxinner tllist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
             暂无相关数据
           </div>
@@ -86,17 +86,19 @@ export default {
       userInfo: {},
       loginUser: {},
       timelineData: [],
+      disData: false,
       tagName: '图片视频',
       timelineCount: 0,
       previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/user.jpg'
+        msrc: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
+        src: 'http://vuxlaravel.boka.cn/images/nopic.jpg'
       }]
     }
   },
   methods: {
     initData () {
       pageStart = 0
+      this.disData = false
       this.timelineData = []
       this.timelineCount = 0
     },
@@ -179,6 +181,7 @@ export default {
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
+        self.disData = true
       })
     },
     refresh () {

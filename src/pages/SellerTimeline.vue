@@ -5,7 +5,9 @@
       :user-info="userInfo"
       :login-user="loginUser"
       :timeline-data="timelineData"
-      :scroll-event="scrollEvent"></tag-page>
+      :scroll-event="scrollEvent"
+      :show-list="showList"
+      timelineCount="timelineCount"></tag-page>
   </div>
 </template>
 
@@ -35,13 +37,10 @@ export default {
     return {
       userInfo: {},
       loginUser: {},
+      showList: false,
       timelineData: [],
       tagName: '店主动态',
-      timelineCount: 0,
-      previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/user.jpg'
-      }]
+      timelineCount: 0
     }
   },
   methods: {
@@ -123,6 +122,7 @@ export default {
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
+        self.showList = true
       })
     },
     refresh () {

@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="boxouter box2 mt12">
-        <div class="boxinner tllist">
+        <div v-if="showList" class="boxinner tllist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
             暂无相关动态
           </div>
@@ -115,6 +115,18 @@ export default {
     limit: {
       type: Number,
       default: 10
+    },
+    showList: {
+      type: Boolean,
+      default: false
+    },
+    timelineCount: {
+      type: Number,
+      default: 0
+    },
+    tagName: {
+      type: String,
+      default: '卖家动态'
     }
   },
   directives: {
@@ -130,8 +142,6 @@ export default {
   },
   data () {
     return {
-      tagName: '养生',
-      timelineCount: 0,
       previewArr: [{
         msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
         src: 'http://vuxlaravel.boka.cn/images/user.jpg',
@@ -155,7 +165,6 @@ export default {
       const self = this
       if (self.$util.isPC()) {
         self.previewArr = self.$util.previewerImgdata(arr)
-        console.log(self.$refs.previewer)
         self.$refs.previewer.show(index)
       } else {
         self.$vue.wechat.previewImage({

@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="boxouter box2 mt12">
-        <div class="boxinner tllist">
+        <div v-if="disData" class="boxinner tllist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
             暂无促销商品
           </div>
@@ -89,12 +89,14 @@ export default {
       loginUser: {},
       timelineData: [],
       tagName: '店主促销',
-      timelineCount: 0
+      timelineCount: 0,
+      disData: false
     }
   },
   methods: {
     initData () {
       pageStart = 0
+      this.disData = false
       this.timelineData = []
       this.timelineCount = 0
     },
@@ -126,6 +128,7 @@ export default {
         let retdata = data.data ? data.data : data
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
+        self.disData = true
       })
     },
     refresh () {

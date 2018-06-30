@@ -114,7 +114,10 @@
               :timeline-data="timelineData"
               :scroll-event="scrollEvent"
               :page-start="pageStart"
-              :limit="limit"></tag-page>
+              :limit="limit"
+              :show-list="showList"
+              :timelineCount="timelineCount"
+              :tag-name="tagName"></tag-page>
           </div>
         </div>
       </popup>
@@ -154,7 +157,10 @@ export default {
       showTagPopup: false,
       timelineData: [],
       limit: 10,
-      pageStart: 0
+      pageStart: 0,
+      showList: false,
+      timelineCount: 0,
+      tagName: ''
     }
   },
   methods: {
@@ -180,6 +186,8 @@ export default {
           retdata[i].photoarr = photoarr
         }
         self.timelineData = self.timelineData.concat(retdata)
+        self.timelineCount = self.timelineData.length
+        self.showList = true
       })
     },
     scrollEvent () {
@@ -190,14 +198,14 @@ export default {
         self.getTimelineData()
       }
     },
-    clickTag (tagname) {
+    clickTag (tagitem) {
       const self = this
-      this.showTagPopup = true
-      if (self.timelineData.length < self.limit) {
-        self.timelineData = []
-        self.pageStart = 0
-        self.getTimelineData()
-      }
+      self.showTagPopup = true
+      self.tagName = tagitem.title
+      self.showList = false
+      self.timelineData = []
+      self.pageStart = 0
+      self.getTimelineData()
     },
     refresh () {
       const self = this
