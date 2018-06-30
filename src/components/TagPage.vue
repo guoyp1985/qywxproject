@@ -43,7 +43,7 @@
           <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
             <span class="v_middle color-red5">我的标签: </span>
             <div class="taglist">
-              <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
+              <div class="tagitem" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
             </div>
           </div>
         </div>
@@ -100,18 +100,6 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showTagPopup" height="100%">
-        <div class="popup1">
-          <div class="popup-top flex_center"></div>
-          <div class="popup-middle">
-            <div class="padding10">
-            </div>
-          </div>
-          <div class="popup-bottom flex_center bg-orange color-white" @click="closeTagPopup">{{ $t('Close') }}</div>
-        </div>
-      </popup>
-    </div>
   </div>
 </template>
 
@@ -119,16 +107,14 @@
 </i18n>
 
 <script>
-import { Swiper, SwiperItem, TransferDom, Popup } from 'vux'
+import { Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
-  directives: {
-    TransferDom
-  },
+  name: 'TagPage',
   components: {
-    Swiper, SwiperItem, Popup
+    Swiper, SwiperItem
   },
   data () {
     return {
@@ -142,17 +128,10 @@ export default {
         { uid: 7, linkman: 'gyp', avatar: 'http://osslaravel.boka.cn/avatar/1/7.jpg' },
         { uid: 25, linkman: '小小于', avatar: 'http://osslaravel.boka.cn/avatar/1/25.jpg' },
         { uid: 39, linkman: '大笨牛', avatar: 'http://osslaravel.boka.cn/avatar/1/39.jpg' }
-      ],
-      showTagPopup: false
+      ]
     }
   },
   methods: {
-    closeTagPopup () {
-      this.showTagPopup = false
-    },
-    clickTag (tagname) {
-      this.showTagPopup = true
-    },
     refresh () {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})

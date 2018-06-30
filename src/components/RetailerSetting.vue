@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea s-havebottom bg-white font14 retailersetting">
-    <div class="s-container" style="top:0;">
+    <div class="s-container" style="top:0;bottom:50px;">
       <div class="padding10 font16 bg-page">{{ $t('Seller info setting') }}</div>
       <form enctype="multipart/form-data">
         <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
@@ -82,6 +82,16 @@
             <x-textarea v-model="submitdata.slogan" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Seller said')" :show-counter="false" :rows="1" autosize></x-textarea>
           </group>
         </forminputplate>
+        <div class="form-item bg-white">
+          <div class="pt10 pb5">{{ $t('My tags') }}<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+          <div class="taglist">
+            <div class="tagitem" v-for="(item,index) in tagsData">
+              <span class="v_middle">{{item}}</span>
+              <div class="del" @click="deleteTag(item,index)">×</div>
+            </div>
+            <div class="tagitem add" @click="addTag">添加</div>
+          </div>
+        </div>
         <div v-show="showmore">
           <forminputplate>
             <span slot="title">{{ $t('Shop description') }}</span>
@@ -211,6 +221,7 @@ Confirm txt:
 import { Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
+import Reg from '#/reg'
 
 export default {
   name: 'RetailerSetting',
@@ -234,6 +245,10 @@ export default {
     showphotoArr: {
       type: Array,
       default: []
+    },
+    tagsData: {
+      type: Array,
+      default: []
     }
   },
   directives: {
@@ -247,7 +262,7 @@ export default {
       maxnum: 1,
       maxnum1: 9,
       showmore: false,
-      requireddata: { title: '', 'qrcode': '', showphoto: '', slogan: '' },
+      requireddata: { title: '', 'qrcode': '', showphoto: '', slogan: '', tags: '' },
       showonline: false,
       showoffline: false,
       showqrcode: false
@@ -373,11 +388,38 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push('/centerSales')
+              if (self.$route.query.from === 'seller') {
+                self.$router.push('/centerSeller')
+              } else {
+                self.$router.push('/centerSales')
+              }
             }
           }
         })
       })
+    },
+    addTag () {
+      const self = this
+      self.$vux.confirm.prompt('', {
+        title: '请输入标签名称',
+        onConfirm (val) {
+          if (self.$util.trim(val) === '') {
+            self.$vux.toast.text('请输入标签名称', 'middle')
+            return false
+          }
+          if (Reg.rTags.test(val)) {
+            self.$vux.toast.text('标签内不能包含特殊字符', 'middle')
+            return false
+          }
+          self.tagsData.push(val)
+          self.submitdata.tags = self.tagsData.join(',')
+        }
+      })
+    },
+    deleteTag (item, index) {
+      const self = this
+      self.tagsData.splice(index, 1)
+      self.submitdata.tags = self.tagsData.join(',')
     }
   }
 }
@@ -396,4 +438,24 @@ export default {
 }
 .retailersetting .s-havebottom .s-container{bottom:50px;}
 .retailersetting .s-bottom{height:50px;}
+
+.retailersetting .taglist{}
+.retailersetting .taglist .tagitem{
+  position:relative;
+  font-size:13px;display: inline-block;
+  padding: 0 15px;height: 30px;line-height: 30px;
+  text-align: center;
+  border-radius: 3px;background-color: #fff;
+  margin-right: 10px;margin-top: 5px;
+  margin-bottom: 5px;box-sizing: border-box;
+  border:1px solid #ddd;color:#999;
+}
+.retailersetting .taglist .tagitem.add{
+  border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
+}
+.retailersetting .taglist .tagitem .del{
+	position:absolute;top:-8px;right:-8px;
+	width:20px;height:20px;border-radius:50%;background-color:rgba(229, 28, 35,0.8);color:#fff;
+	display:flex;justify-content: center;align-items: center;
+}
 </style>
