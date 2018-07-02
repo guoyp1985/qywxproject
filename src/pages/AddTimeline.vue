@@ -47,7 +47,7 @@
           <checker
           class="x-checker"
           type="checkbox"
-          v-model="submitdata.tagids"
+          v-model="tagids"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
             <checker-item class="border1px color-gray" v-for="(item, index) in tagsData" :key="index" :value="item.id">{{ item.title }}</checker-item>
@@ -88,8 +88,8 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', tagids: [] },
       requireddata: { title: '', 'photo': '' },
-      textarea: null,
-      tagsData: []
+      tagsData: [],
+      tagids: []
     }
   },
   computed: {
@@ -164,12 +164,15 @@ export default {
     },
     save () {
       const self = this
-      if (self.$util.trim(self.submitdata.title) === '' && self.$util.trim(self.submitdata.photo) === '') {
+      const textarea = self.$refs.textarea.$refs.textarea[0] ? self.$refs.textarea.$refs.textarea[0] : self.$refs.textarea.$refs.textarea
+      let subTitle = textarea.value
+      if (self.$util.trim(subTitle) === '' && self.$util.trim(subTitle) === '') {
         self.$vux.toast.text('请添加内容或图片信息', 'middle')
         return false
       }
       self.$vux.loading.show()
-      self.submitdata.tagids = self.submitdata.tagids.join(',')
+      self.submitdata.title = subTitle
+      self.submitdata.tagids = self.tagids.join(',')
       self.$http.post(`${ENV.BokaApi}/api/timeline/add `, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()

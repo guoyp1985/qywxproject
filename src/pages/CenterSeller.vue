@@ -71,31 +71,31 @@
     <div class="pagebottom flex_center">
       <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
-          <div class="icon"><i class="al al-sccollection"></i></div>
+          <div><i class="al al-sccollection"></i></div>
           <div class="txt">店主动态</div>
         </div>
       </router-link>
       <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
-          <div class="icon"><i class="al al-zhaopian"></i></div>
+          <div><i class="al al-zhaopian"></i></div>
           <div class="txt">图片视频</div>
         </div>
       </router-link>
       <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
-          <div class="icon"><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
+          <div><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
           <div class="txt">用户故事</div>
         </div>
       </router-link>
       <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
         <div>
-          <div class="icon"><i class="al al-goodsnewfill"></i></div>
+          <div><i class="al al-goodsnewfill"></i></div>
           <div class="txt">店主促销</div>
         </div>
       </router-link>
       <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_cell item flex_center">
         <div>
-          <div class="icon"><i class="al al-dianpufill"></i></div>
+          <div><i class="al al-dianpufill"></i></div>
           <div class="txt">进入店铺</div>
         </div>
       </router-link>
