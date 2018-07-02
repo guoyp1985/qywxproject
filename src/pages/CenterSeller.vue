@@ -122,6 +122,9 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhotoarr" ref="previewerFlash"></previewer>
+    </div>
   </div>
 </template>
 
@@ -129,7 +132,7 @@
 </i18n>
 
 <script>
-import { Swiper, SwiperItem, TransferDom, Popup } from 'vux'
+import { Swiper, SwiperItem, TransferDom, Popup, Previewer } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import TagPage from '@/components/TagPage'
@@ -139,7 +142,7 @@ export default {
     TransferDom
   },
   components: {
-    Swiper, SwiperItem, Popup, TagPage
+    Swiper, SwiperItem, Popup, TagPage, Previewer
   },
   data () {
     return {
@@ -148,6 +151,7 @@ export default {
       userInfo: {},
       isShowDot: false,
       photoarr: [],
+      previewerPhotoarr: [],
       focusCount: 3,
       focusData: [
         { uid: 7, linkman: 'gyp', avatar: 'http://osslaravel.boka.cn/avatar/1/7.jpg' },
@@ -164,6 +168,19 @@ export default {
     }
   },
   methods: {
+    showBigimg1 (index) {
+      const self = this
+      if (self.$util.isPC()) {
+        self.$refs.previewerFlash.show(index)
+      } else {
+        if (window.WeixinJSBridge) {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: self.photoarr[index],
+            urls: self.photoarr
+          })
+        }
+      }
+    },
     closeTagPopup () {
       this.showTagPopup = false
     },
@@ -237,7 +254,19 @@ export default {
             } else {
               self.isShowDot = false
             }
+            if (self.photoarr.length > 0) {
+              self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+            }
           }
+          return self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
+            uid: moduleid
+          })
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.focusData = data.data ? data.data : data
+          self.focusCount = self.focusData.length
         }
       })
     }

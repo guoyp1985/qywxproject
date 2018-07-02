@@ -658,11 +658,13 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
-        window.WeixinJSBridge.invoke('imagePreview', {
-          current: viewarr[index],
-          urls: viewarr
-        })
+        if (window.WeixinJSBridge) {
+          let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: viewarr[index],
+            urls: viewarr
+          })
+        }
       }
     },
     showBigimg1 (index) {

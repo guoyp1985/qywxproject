@@ -191,11 +191,11 @@ export default {
         self.$vux.loading.hide()
         if (data.flag === 1) {
           if (self.isdig) {
-            self.isdig = 0
-            item.dig = item.digs - 1
+            item.isdig = 0
+            item.dig = item.dig - 1
           } else {
-            self.isdig = 1
-            item.dig = item.digs + 1
+            item.isdig = 1
+            item.dig = item.dig + 1
           }
         } else {
           self.$vux.toast.show({
