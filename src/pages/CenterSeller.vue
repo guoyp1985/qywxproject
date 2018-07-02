@@ -48,25 +48,27 @@
           </div>
         </div>
       </div>
-      <div class="linearea">
-        <div class="line line1"></div>
-        <div class="line line2"></div>
-      </div>
-      <div class="boxouter box2">
-        <div class="boxinner">
-          <div class="row1">{{focusCount}}位好友关注了TA</div>
-          <div class="focuslist">
-            <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
-              <div class="pic">
-                <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-              </div>
-              <div class="txt">
-                <div class="clamp1 font12 color-gray2 align_center">{{ item.linkman }}</div>
-              </div>
-            </router-link>
+      <template v-if="focusData.length > 0">
+        <div class="linearea">
+          <div class="line line1"></div>
+          <div class="line line2"></div>
+        </div>
+        <div class="boxouter box2">
+          <div class="boxinner">
+            <div class="row1">{{focusCount}}位好友关注了TA</div>
+            <div class="focuslist">
+              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
+                <div class="pic">
+                  <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="txt">
+                  <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                </div>
+              </router-link>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
     <div class="pagebottom flex_center">
       <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
@@ -153,18 +155,15 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       focusCount: 3,
-      focusData: [
-        { uid: 7, linkman: 'gyp', avatar: 'http://osslaravel.boka.cn/avatar/1/7.jpg' },
-        { uid: 25, linkman: '小小于', avatar: 'http://osslaravel.boka.cn/avatar/1/25.jpg' },
-        { uid: 39, linkman: '大笨牛', avatar: 'http://osslaravel.boka.cn/avatar/1/39.jpg' }
-      ],
+      focusData: [],
       showTagPopup: false,
       timelineData: [],
       limit: 10,
       pageStart: 0,
       showList: false,
       timelineCount: 0,
-      tagName: ''
+      tagName: '',
+      clickTagId: ''
     }
   },
   methods: {
@@ -184,11 +183,14 @@ export default {
     closeTagPopup () {
       this.showTagPopup = false
     },
-    getTimelineData () {
+    getTimelineData (tagid) {
       const self = this
       let params = {pageStart: self.pageStart, limit: self.limit}
       if (self.query.uid) {
         params.wid = self.query.uid
+      }
+      if (self.clickTagId && self.clickTagId !== '') {
+        params.tagid = self.clickTagId
       }
       self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
         self.$vux.loading.hide()
@@ -222,6 +224,7 @@ export default {
       self.showList = false
       self.timelineData = []
       self.pageStart = 0
+      self.clickTagId = tagitem.id
       self.getTimelineData()
     },
     refresh () {
@@ -259,7 +262,7 @@ export default {
             }
           }
           return self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
-            uid: moduleid
+            wid: moduleid
           })
         }
       }).then(function (res) {
@@ -335,14 +338,14 @@ export default {
 
 .cseller .boxouter.box2 .boxinner{box-shadow: rgb(204, 204, 204) 0px -2px 16px -3px;padding:15px 0px;}
 .cseller .box2 .row1{padding:0 20px;}
-.cseller .focuslist{padding-top:10px;padding-right:20px;}
+.cseller .focuslist{padding-right:20px;}
 .cseller .focuslist:after{
   content:'';
   display:block;
   clear:both;
 }
 .cseller .focuslist .item{
-  float: left;width: 58px;
+  float: left;width: 58px;padding-top:10px;
   text-align: center;display:block;color:inherit;
 }
 .cseller .focuslist .pic{padding-left:20px;width:38px;}
