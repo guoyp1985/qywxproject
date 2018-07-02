@@ -54,17 +54,9 @@ export default {
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             if (self.query.module === 'payorders') {
-              /*
-              self.$http.get(`${ENV.BokaApi}/api/user/show`)
-              .then(res => {
-                User.set(res.data)
-                location.replace(self.$route.query.lasturl)
-              })
-              */
-              self.$router.push({path: '/orderSearch'})
+              self.$router.push({path: '/'})
             } else {
               if (self.query.lasturl) {
-                //location.replace(self.$route.query.lasturl)
                 self.$router.push({path: '/orderSearch'})
               } else {
                 self.$router.push({path: '/'})
