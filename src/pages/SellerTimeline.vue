@@ -235,4 +235,5 @@ export default {
 }
 .tllist .commentarea .name{color:rgb(93, 102, 155);}
 .tllist .commentarea .txt2{position:relative;padding-left:20px;box-sizing: border-box;text-align:left;}
+.tllist .commentarea img{vertical-align: middle;}
 </style>

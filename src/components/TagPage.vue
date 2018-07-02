@@ -57,11 +57,23 @@
                   <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
                   <span class="v_middle ml3">{{item.dig}}</span>
                 </span>
-                <div class="w30 flex_right">
+                <div class="w30 flex_right" @click="onReplyShow(item,index)">
                   <i class="al al-pinglun3 font14"></i>
                 </div>
               </div>
               <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
+                <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                  <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                    <div class="v_middle db-in name name1">{{citem.username}}</div>
+                    <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                  </div>
+                  <div class="txt2" v-if="citem.comment && citem.comment.length > 0" v-for="(ritem,index2) in citem.comment">
+                    <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                    <div class="v_middle db-in">回复：</div>
+                    <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                  </div>
+                </div>
+                <!--
                 <div class="citem" v-for="(item,index) in item.comments" :key="index">
                   <div class="txt1">
                     <span class="v_middle name name1">小小于</span>
@@ -72,6 +84,7 @@
                     <span class="v_middle">回复：谢谢，每天一贴多补水</span>
                   </div>
                 </div>
+              -->
               </div>
             </div>
           </div>
@@ -80,6 +93,7 @@
       <div v-transfer-dom>
         <previewer :list="previewArr" ref="previewer"></previewer>
       </div>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </div>
   </div>
 </template>
@@ -89,6 +103,7 @@
 
 <script>
 import { TransferDom, Previewer } from 'vux'
+import CommentPopup from '@/components/CommentPopup'
 import ENV from 'env'
 import Time from '#/time'
 
@@ -133,7 +148,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer
+    Previewer, CommentPopup
   },
   filters: {
     dateFormat (date) {
@@ -147,7 +162,13 @@ export default {
         src: 'http://vuxlaravel.boka.cn/images/user.jpg',
         w: 300,
         h: 300
-      }]
+      }],
+      replyPopupShow: false,
+      commentData: null,
+      commentIndex: 0,
+      replyData: null,
+      replyIndex: 0,
+      commentModule: 'timeline'
     }
   },
   methods: {
@@ -201,6 +222,55 @@ export default {
           self.$vux.toast.show({
             text: data.error,
             type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    onReplyShow (item, index, citem, index1) {
+      this.commentData = item
+      this.commentIndex = index
+      this.replyPopupShow = true
+      if (citem) {
+        this.commentModule = 'comments'
+        this.replyData = citem
+      } else {
+        this.commentModule = 'timeline'
+        this.replyData = null
+        this.replyIndex = index1
+      }
+    },
+    replyPopupCancel () {
+      this.replyPopupShow = false
+    },
+    replySubmit (value) { // 回复提交
+      const self = this
+      this.replyPopupShow = false
+      let nid = 0
+      if (this.commentModule === 'comments') {
+        nid = self.replyData.id
+      } else {
+        nid = self.commentData.id
+      }
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: nid, module: self.commentModule, message: value})
+      .then(res => {
+        let data = res.data
+        if (data.flag) {
+          if (self.commentModule === 'timeline') {
+            if (!self.timelineData[self.replyIndex].comments) {
+              self.timelineData[self.replyIndex].comments = []
+            }
+            self.timelineData[self.replyIndex].comments = [data.data].concat(self.timelineData[self.replyIndex].comments)
+          } else {
+            if (!self.timelineData[self.commentIndex].comments[self.replyIndex].comment) {
+              self.timelineData[self.commentIndex].comments[self.replyIndex].comment = []
+            }
+            self.timelineData[self.commentIndex].comments[self.replyIndex].comment = [data.data].concat(self.timelineData[self.commentIndex].comments[self.replyIndex].comment)
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
             time: self.$util.delay(data.error)
           })
         }
@@ -284,9 +354,10 @@ export default {
 .tllist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
 .tllist .commentarea .txt1:before{
   content:"";
-  position:absolute;left:3px;top:4px;width:3px;height: 16px;
+  position:absolute;left:3px;top:7px;width:3px;height: 16px;
   background-color: rgb(229, 28, 35);
 }
 .tllist .commentarea .name{color:rgb(93, 102, 155);}
 .tllist .commentarea .txt2{position:relative;padding-left:20px;box-sizing: border-box;text-align:left;}
+.tllist .commentarea img{vertical-align: middle;}
 </style>
