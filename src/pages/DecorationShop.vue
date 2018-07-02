@@ -367,23 +367,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .scroll_item .icon{display:none;}
-.rproductlist .scroll_item .down.icon{
-        display:block;
-        position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
-        background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
-        -webkit-transform: translate(30px,5px) rotate(45deg);
-        transform: translate(30px,5px) rotate(45deg);
-}
-.rproductlist .scroll_item .down.icon:after{content:"已下架";}
-.rproductlist .btnicon{
-  display: inline-block;
-    color: #9c9c9c;
-    font-size: 14px;
-    border: 1px solid #9c9c9c;
-    text-align: center;
-    border-radius: 30px;
-    padding: 1px 8px;
-}
 </style>

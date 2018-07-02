@@ -10,7 +10,7 @@
           </div>
           <div v-else class="scroll_list ">
             <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
+              <div v-if="item.moderate == 0" class="ico down"></div>
           		<div class="t-table bg-white pt10 pb10">
         				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
                   <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
@@ -206,15 +206,15 @@ export default {
 
 <style lang="less" scoped>
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .scroll_item .icon{display:none;}
-.rproductlist .scroll_item .down.icon{
+.rproductlist .scroll_item .ico{display:none;}
+.rproductlist .scroll_item .down.ico{
   display:block;
   position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
   background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
   -webkit-transform: translate(30px,5px) rotate(45deg);
   transform: translate(30px,5px) rotate(45deg);
 }
-.rproductlist .scroll_item .down.icon:after{content:"已下架";}
+.rproductlist .scroll_item .down.ico:after{content:"已下架";}
 .rproductlist .btnicon{
   display: inline-block;
   color: #ea3a3a;

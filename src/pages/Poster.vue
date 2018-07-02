@@ -17,7 +17,7 @@
               <div class="flex_row flex_left">
                 <div v-for="(item,index) in coverphotoarr" :key="index" class="flex_table w_33 padding5 border-box" @click="selectcover(item,index)">
                   <div class="item pic-photo border01">
-                    <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
+                    <div class="ico" v-if="item.checked"><i class="al al-duihao"></i></div>
                     <div class="pic-layer">
                       <img :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                     </div>
@@ -323,8 +323,8 @@ export default {
 .poster .picarea .inner{margin:0 auto;width:60%;border:1px solid #f2f2f2;box-shadow:3px 3px 10px #dfdfdf}
 .poster .picarea img{max-width:100%}
 .poster .coverlist .item{width:100%;}
-.poster .coverlist .item .icon{position:absolute;top:0;right:0;bottom:0;left:0;background-color:rgba(0,0,0,.5);z-index:1;}
-.poster .coverlist .item .icon i{position:absolute;top:50%;left:50%;margin-top:-15px;margin-left:-15px;width:30px;height:30px;color:#fff;}
+.poster .coverlist .item .ico{position:absolute;top:0;right:0;bottom:0;left:0;background-color:rgba(0,0,0,.5);z-index:1;}
+.poster .coverlist .item .ico i{position:absolute;top:50%;left:50%;margin-top:-15px;margin-left:-15px;width:30px;height:30px;color:#fff;}
 .poster .btncreate:after{content:"生成海报"}
 .poster .btncreate.disabled:after{content:"正在生成海报 请稍等..."}
 .form-item{position:relative;padding:10px;}
