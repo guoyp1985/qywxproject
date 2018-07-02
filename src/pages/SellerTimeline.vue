@@ -74,36 +74,6 @@ export default {
         }
       })
     },
-    clickDig (item) {
-      const self = this
-      let url = `${ENV.BokaApi}/api/user/digs/add`
-      if (self.isdig) {
-        url = `${ENV.BokaApi}/api/user/digs/delete`
-      }
-      self.$vux.loading.show()
-      self.$http.post(url, {
-        id: item.id,
-        module: 'timeline'
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          if (self.isdig) {
-            self.isdig = 0
-            item.dig = item.dig - 1
-          } else {
-            self.isdig = 1
-            item.dig = item.dig + 1
-          }
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warning',
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
-    },
     getTimelineData () {
       const self = this
       let params = {pageStart: self.pageStart, limit: self.limit}
