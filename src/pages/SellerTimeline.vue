@@ -40,7 +40,9 @@ export default {
       showList: false,
       timelineData: [],
       tagName: '店主动态',
-      timelineCount: 0
+      timelineCount: 0,
+      limit: 10,
+      pageStart: 0
     }
   },
   methods: {

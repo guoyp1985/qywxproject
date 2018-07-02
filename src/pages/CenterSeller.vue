@@ -249,6 +249,7 @@ export default {
         if (res.status === 200) {
           let data = res.data
           self.userInfo = data.data ? data.data : data
+          document.title = self.userInfo.title
           const showphoto = self.userInfo.showphoto
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.photoarr = showphoto.split(',')
