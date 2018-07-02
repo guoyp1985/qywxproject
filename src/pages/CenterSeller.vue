@@ -37,11 +37,11 @@
             </div>
           </div>
           <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
-            <span class="v_middle color-red5">店主说: </span>
+            <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
             <span class="v_middle">{{userInfo.slogan}}</span>
           </div>
           <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
-            <span class="v_middle color-red5">我的标签: </span>
+            <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
             <div class="taglist">
               <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
             </div>
