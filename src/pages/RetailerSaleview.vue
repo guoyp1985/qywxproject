@@ -33,7 +33,7 @@
           </tab>
         </div>
       </div>
-      <div class="v-container s-container2" style="top:148px;">
+      <div class="s-container s-container2" style="top:148px;">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
             <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
