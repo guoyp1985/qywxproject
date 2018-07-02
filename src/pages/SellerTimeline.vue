@@ -36,6 +36,7 @@ export default {
   data () {
     return {
       userInfo: {},
+      query: {},
       loginUser: {},
       showList: false,
       timelineData: [],
@@ -101,7 +102,7 @@ export default {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
-      if (!self.$route.query.uid || (self.$route.query.uid && self.query.uid !== self.$router.query.uid)) {
+      if (!self.$route.query.uid || (self.$route.query.uid && self.query.uid !== self.$route.query.uid)) {
         self.initData()
         self.query = self.$route.query
         let params = {}
