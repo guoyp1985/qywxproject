@@ -6,7 +6,7 @@
         <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
       </form>
       <form enctype="multipart/form-data">
-        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo','fileInput1')" />
+        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('showphoto','fileInput1')" />
       </form>
       <form>
         <forminputplate class="required">
@@ -324,7 +324,6 @@ export default {
       }
     },
     fileChange (type) {
-      console.log(type)
       const self = this
       const target = event.target
       let files = target.files
@@ -343,7 +342,7 @@ export default {
       if (type === 'qrcode') {
         this.photoarr.splice(index, 1)
         this.submitdata.qrcode = this.photoarr.join(',')
-      } else if (type === 'photo') {
+      } else if (type === 'showphoto') {
         this.showphotoArr.splice(index, 1)
         this.submitdata.showphoto = this.showphotoArr.join(',')
       }

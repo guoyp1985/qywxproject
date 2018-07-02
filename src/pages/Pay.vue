@@ -18,7 +18,6 @@
 <script>
 import { Box, XButton } from 'vux'
 import ENV from 'env'
-import { User } from '#/storage'
 
 export default {
   components: {
