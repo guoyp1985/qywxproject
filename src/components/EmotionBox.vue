@@ -135,6 +135,7 @@ export default {
           text: emot
         }
         this.textarea.value = emot
+        console.log(this.textarea.value)
         // this.clickCallback && this.clickCallback()
       }
     },

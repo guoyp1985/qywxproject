@@ -83,13 +83,24 @@
           </group>
         </forminputplate>
         <div class="form-item bg-white">
-          <div class="pt10 pb5">{{ $t('My tags') }}<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
-          <div class="taglist">
-            <div class="tagitem" v-for="(item,index) in tagsData">
-              <span class="v_middle">{{item}}</span>
-              <div class="del" @click="deleteTag(item,index)">×</div>
+          <div class="pt10 pb5">
+            <div class="flex_left">
+              <span class="v_middle">{{ $t('My tags') }}</span>
+              <span class="al al-xing color-red font12" style="margin-top:-3px;"></span>
+              <span class="font12 color-gray v_middle">(一次可添加多个标签，用英文逗号隔开)</span>
             </div>
-            <div class="tagitem add" @click="addTag">添加</div>
+          </div>
+          <div class="taglist">
+            <div class="tagitem" v-for="(item,index) in retailerInfo.tags">
+              <div class="inner">
+                <span class="v_middle">{{item.title}}</span>
+                <div class="del" @click="deleteTag(item,index)">×</div>
+                <div class="edit" @click="addTag(item,index)"><i class="al al-bianji1 font14"></i></div>
+              </div>
+            </div>
+            <div class="tagitem add" @click="addTag">
+              <div class="inner">添加</div>
+            </div>
           </div>
         </div>
         <div v-show="showmore">
@@ -221,7 +232,6 @@ Confirm txt:
 import { Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
-import Reg from '#/reg'
 
 export default {
   name: 'RetailerSetting',
@@ -245,10 +255,6 @@ export default {
     showphotoArr: {
       type: Array,
       default: []
-    },
-    tagsData: {
-      type: Array,
-      default: []
     }
   },
   directives: {
@@ -262,7 +268,7 @@ export default {
       maxnum: 1,
       maxnum1: 9,
       showmore: false,
-      requireddata: { title: '', 'qrcode': '', showphoto: '', slogan: '', tags: '' },
+      requireddata: { title: '', 'qrcode': '', showphoto: '', slogan: '' },
       showonline: false,
       showoffline: false,
       showqrcode: false
@@ -400,28 +406,73 @@ export default {
         })
       })
     },
-    addTag () {
+    addTag (item, index) {
       const self = this
-      self.$vux.confirm.prompt('', {
+      let type = 'add'
+      let inputVal = ''
+      let postParams = { action: 'add' }
+      if (item && item.id) {
+        type = 'edit'
+        inputVal = item.title
+        postParams.action = 'edit'
+        postParams.id = item.id
+      }
+      self.$vux.confirm.prompt(inputVal, {
         title: '请输入标签名称',
+        onShow () {
+          self.$vux.confirm.setInputValue(inputVal)
+        },
         onConfirm (val) {
           if (self.$util.trim(val) === '') {
             self.$vux.toast.text('请输入标签名称', 'middle')
             return false
           }
-          if (Reg.rTags.test(val)) {
-            self.$vux.toast.text('标签内不能包含特殊字符', 'middle')
-            return false
-          }
-          self.tagsData.push(val)
-          self.submitdata.tags = self.tagsData.join(',')
+          postParams.tags = val
+          self.$http.post(`${ENV.BokaApi}/api/retailer/tags`, postParams).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  if (type === 'add') {
+                    self.retailerInfo.tags = data.data
+                  } else if (type === 'edit') {
+                    self.retailerInfo.tags[index].title = val
+                  }
+                }
+              }
+            })
+          })
         }
       })
     },
     deleteTag (item, index) {
       const self = this
-      self.tagsData.splice(index, 1)
-      self.submitdata.tags = self.tagsData.join(',')
+      self.$vux.confirm.show({
+        title: '确定要删除该标签吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/retailer/tags`, {
+            action: 'delete', id: item.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.retailerInfo.tags.splice(index, 1)
+                }
+              }
+            })
+          })
+        }
+      })
     }
   }
 }
@@ -443,20 +494,26 @@ export default {
 
 .retailersetting .taglist{}
 .retailersetting .taglist .tagitem{
+  padding:5px 10px;box-sizing: border-box;display: inline-block;
+}
+.retailersetting .taglist .tagitem.add .inner{
+  border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
+}
+.retailersetting .taglist .tagitem .inner{
   position:relative;
-  font-size:13px;display: inline-block;
+  font-size:13px;
   padding: 0 15px;height: 30px;line-height: 30px;
   text-align: center;
-  border-radius: 3px;background-color: #fff;
-  margin-right: 10px;margin-top: 5px;
-  margin-bottom: 5px;box-sizing: border-box;
+  border-radius: 3px;background-color: #fff;box-sizing: border-box;
   border:1px solid #ddd;color:#999;
-}
-.retailersetting .taglist .tagitem.add{
-  border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
 }
 .retailersetting .taglist .tagitem .del{
 	position:absolute;top:-8px;right:-8px;
+	width:20px;height:20px;border-radius:50%;background-color:rgba(229, 28, 35,0.8);color:#fff;
+	display:flex;justify-content: center;align-items: center;
+}
+.retailersetting .taglist .tagitem .edit{
+	position:absolute;top:-8px;left:-8px;
 	width:20px;height:20px;border-radius:50%;background-color:rgba(229, 28, 35,0.8);color:#fff;
 	display:flex;justify-content: center;align-items: center;
 }

@@ -211,30 +211,35 @@ export default {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
-      if (!self.$route.query.uid || (self.$route.query.uid && self.query.uid !== self.$router.query.uid)) {
-        self.query = self.$route.query
-        let params = {}
-        if (self.query.uid) {
-          params.uid = self.query.uid
-        }
-        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          params: params
-        }).then(function (res) {
-          if (res.status === 200) {
-            let data = res.data
-            self.userInfo = data.data ? data.data : data
-            const showphoto = self.userInfo.showphoto
-            if (showphoto && self.$util.trim(showphoto) !== '') {
-              self.photoarr = showphoto.split(',')
-              if (self.photoarr.length > 1) {
-                self.isShowDot = true
-              } else {
-                self.isShowDot = false
-              }
+      self.query = self.$route.query
+      let params = {}
+      if (self.query.uid) {
+        params.uid = self.query.uid
+      }
+      let moduleid = self.query.uid ? self.query.uid : self.loginUser.uid
+      self.$util.handleWxShare({
+        module: 'timeline',
+        moduleid: moduleid,
+        lastshareuid: self.query.share_uid,
+        link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}`
+      })
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: params
+      }).then(function (res) {
+        if (res.status === 200) {
+          let data = res.data
+          self.userInfo = data.data ? data.data : data
+          const showphoto = self.userInfo.showphoto
+          if (showphoto && self.$util.trim(showphoto) !== '') {
+            self.photoarr = showphoto.split(',')
+            if (self.photoarr.length > 1) {
+              self.isShowDot = true
+            } else {
+              self.isShowDot = false
             }
           }
-        })
-      }
+        }
+      })
     }
   },
   activated () {
