@@ -41,7 +41,7 @@
                   </div>
                 </div>
               </router-link>
-              <router-link v-else :to="{path: `/${item.module}`,query:{id: item.moduleid}}" class="scroll_item db padding10">
+              <router-link v-else :to="{path: `/${item.module}`,query:{id: item.moduleid,wid: item.wid}}" class="scroll_item db padding10">
                 <div class="flex_left">
                   <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                   <div class="flex_cell pl10">

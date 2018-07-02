@@ -1,6 +1,5 @@
 <template>
   <div class="containerarea font14 bg-page spromotion notop nobottom">
-    <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="boxouter box1">
         <div class="boxinner">
