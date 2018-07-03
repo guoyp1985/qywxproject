@@ -3,7 +3,9 @@
     <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
       <div class="topcover">
         <div class="inner">
-          <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller'}}"><i class="al al-guanlizhongxin color-red4 db-in"></i></router-link>
+          <template v-if="!query.uid || query.uid == loginUser.uid">
+            <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller'}}"><i class="al al-guanlizhongxin color-red4 db-in"></i></router-link>
+          </template>
           <swiper
             class="pic-swiper notitle"
             dots-position="center"
