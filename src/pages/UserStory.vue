@@ -53,7 +53,7 @@
                 <div class="w30 align_center">
                   <i class="al"></i>
                 </div>
-                <span class="flex_cell color-gray flex_right" @click="clickDig">
+                <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
                   <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
                   <span class="v_middle ml3">{{item.dig}}</span>
                 </span>
@@ -163,7 +163,7 @@ export default {
     clickDig (item) {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
-      if (self.isdig) {
+      if (item.isdig) {
         url = `${ENV.BokaApi}/api/user/digs/delete`
       }
       self.$vux.loading.show()
@@ -174,11 +174,11 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          if (self.isdig) {
-            self.isdig = 0
+          if (item.isdig) {
+            item.isdig = 0
             item.dig = item.dig - 1
           } else {
-            self.isdig = 1
+            item.isdig = 1
             item.dig = item.dig + 1
           }
         } else {
