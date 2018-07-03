@@ -122,6 +122,7 @@ export default {
             photoarr = photo.split(',')
           }
           retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length

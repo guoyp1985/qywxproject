@@ -15,10 +15,15 @@
             <div class="piclist">
               <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                 <div class="inner">
-                  <img :src="pic" @click="showBigimg(pic)" />
+                  <img :src="pic" @click="showBigimg(pic,item.photoarr,`previewer${index}`,index1)" />
                 </div>
               </div>
             </div>
+            <template v-if="item.photoarr.length > 0">
+              <div v-transfer-dom>
+                <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+              </div>
+            </template>
             <div class="db-flex mt5 color-gray">
               <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
               <div class="w30 align_center">
@@ -48,9 +53,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div v-transfer-dom>
-      <previewer :list="previewArr" ref="previewer"></previewer>
     </div>
     <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
@@ -115,12 +117,6 @@ export default {
   },
   data () {
     return {
-      previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        w: 300,
-        h: 300
-      }],
       replyPopupShow: false,
       commentData: null,
       commentIndex: 0,
@@ -143,18 +139,15 @@ export default {
         }
       })
     },
-    showBigimg (src) {
+    showBigimg (src, arr, refname, index) {
       const self = this
       if (self.$util.isPC()) {
-        self.previewArr = [{
-          msrc: src,
-          src: src
-        }]
-        self.$refs.previewer.show(0)
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: src,
-          urls: [src]
+          urls: arr
         })
       }
     },

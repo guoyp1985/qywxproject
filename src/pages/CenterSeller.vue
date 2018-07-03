@@ -16,7 +16,7 @@
               :aspect-ratio="1/1"
               loop>
               <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-                <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(item)" />
+                <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
               </swiper-item>
             </swiper>
           </div>
@@ -90,10 +90,15 @@
                   <div class="piclist">
                     <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                       <div class="inner">
-                        <img :src="pic" @click="showBigimg1(pic)" />
+                        <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
                       </div>
                     </div>
                   </div>
+                  <template v-if="item.photoarr.length > 0">
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                    </div>
+                  </template>
                   <div class="db-flex mt5 color-gray">
                     <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
                     <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
@@ -178,7 +183,7 @@
         </popup>
       </div>
       <div v-transfer-dom>
-        <previewer :list="previewArr" ref="previewer"></previewer>
+        <previewer :list="previewerPhotoarr" ref="previewerPhoto"></previewer>
       </div>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </template>
@@ -238,29 +243,33 @@ export default {
       commentIndex: 0,
       replyData: null,
       replyIndex: 0,
-      commentModule: 'timeline',
-      previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/nopic.jpg'
-      }]
+      commentModule: 'timeline'
     }
   },
   methods: {
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
-    showBigimg1 (src) {
+    showBigimg (src, arr, index) {
       const self = this
       if (self.$util.isPC()) {
-        self.previewArr = [{
-          msrc: src,
-          src: src
-        }]
-        self.$refs.previewer.show(0)
+        self.$refs.previewerPhoto.show(index)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: src,
-          urls: [src]
+          urls: arr
+        })
+      }
+    },
+    showBigimg1 (src, arr, refname, index) {
+      const self = this
+      if (self.$util.isPC()) {
+        let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        view.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: src,
+          urls: arr
         })
       }
     },
@@ -287,6 +296,7 @@ export default {
             photoarr = photo.split(',')
           }
           retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
@@ -410,6 +420,7 @@ export default {
             photoarr = photo.split(',')
           }
           retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
         }
         self.tlData = self.tlData.concat(retdata)
         self.disTimeline = true

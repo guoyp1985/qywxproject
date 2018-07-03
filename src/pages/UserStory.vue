@@ -36,60 +36,6 @@
         :scroll-event="scrollEvent"
         :show-list="showList"
         :timeline-count="timelineCount"></tag-page>
-      <!--
-      <div class="boxouter box2 mt12">
-        <div v-if="disData" class="boxinner tllist">
-          <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
-            暂无相关数据
-          </div>
-          <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
-            <div class="avatar">
-              <img :src="userInfo.avatar" />
-            </div>
-            <div class="con">
-              <div class="txt">{{userInfo.title}}</div>
-              <div v-html="filterEmot(item.title)"></div>
-              <div class="piclist">
-                <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
-                  <div class="inner">
-                    <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
-                  </div>
-                </div>
-              </div>
-              <div class="db-flex mt5 color-gray">
-                <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                <div class="w30 align_center">
-                  <i class="al"></i>
-                </div>
-                <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
-                  <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                  <span class="v_middle ml3">{{item.dig}}</span>
-                </span>
-                <div class="w30 flex_right">
-                  <i class="al al-pinglun3 font14"></i>
-                </div>
-              </div>
-              <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                  <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                    <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                    <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
-                  </div>
-                  <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                    <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                    <div class="v_middle db-in">回复: </div>
-                    <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    -->
-      <div v-transfer-dom>
-        <previewer :list="previewArr" ref="previewer"></previewer>
-      </div>
     </div>
   </div>
 </template>
@@ -130,10 +76,6 @@ export default {
       disData: false,
       tagName: '用户故事',
       timelineCount: 0,
-      previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/nopic.jpg'
-      }],
       replyPopupShow: false,
       commentData: null,
       commentIndex: 0,
@@ -203,6 +145,7 @@ export default {
             photoarr = photo.split(',')
           }
           retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length

@@ -36,7 +36,7 @@
           </div>
           <div v-else class="picitem" v-for="(item,index) in timelineData" :key="index">
             <div class="inner">
-              <img :src="item.photo" @click="showBigimg(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img :src="item.photo" @click="showBigimg(item.photo,index)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
             </div>
           </div>
         </div>
@@ -82,10 +82,7 @@ export default {
       disData: false,
       tagName: '图片视频',
       timelineCount: 0,
-      previewArr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/nopic.jpg'
-      }]
+      previewArr: []
     }
   },
   methods: {
@@ -95,14 +92,10 @@ export default {
       this.timelineData = []
       this.timelineCount = 0
     },
-    showBigimg (src) {
+    showBigimg (src, index) {
       const self = this
       if (self.$util.isPC()) {
-        self.previewArr = [{
-          msrc: src,
-          src: src
-        }]
-        self.$refs.previewer.show(0)
+        self.$refs.previewer.show(index)
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: src,
@@ -165,12 +158,8 @@ export default {
         let data = res.data
         let retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
-          let photoarr = []
           let photo = retdata[i].photo
-          if (photo && self.$util.trim(photo) !== '') {
-            photoarr = photo.split(',')
-          }
-          retdata[i].photoarr = photoarr
+          self.previewArr = self.previewArr.concat(self.$util.previewerImgdata([photo]))
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
