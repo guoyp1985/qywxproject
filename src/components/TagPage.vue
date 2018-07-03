@@ -67,24 +67,12 @@
                     <div class="v_middle db-in name name1">{{citem.username}}</div>
                     <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
                   </div>
-                  <div class="txt2" v-if="citem.comment && citem.comment.length > 0" v-for="(ritem,index2) in citem.comment">
+                  <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
                     <div class="v_middle name name2 db-in">{{ritem.username}}</div>
                     <div class="v_middle db-in">回复：</div>
                     <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
                   </div>
                 </div>
-                <!--
-                <div class="citem" v-for="(item,index) in item.comments" :key="index">
-                  <div class="txt1">
-                    <span class="v_middle name name1">小小于</span>
-                    <span class="v_middle">皮肤越来越水嫩啦，棒棒哒</span>
-                  </div>
-                  <div class="txt2">
-                    <span class="v_middle name name2">{{userInfo.title}}</span>
-                    <span class="v_middle">回复：谢谢，每天一贴多补水</span>
-                  </div>
-                </div>
-              -->
               </div>
             </div>
           </div>
@@ -168,7 +156,8 @@ export default {
       commentIndex: 0,
       replyData: null,
       replyIndex: 0,
-      commentModule: 'timeline'
+      commentModule: 'timeline',
+      commentList: []
     }
   },
   methods: {
@@ -234,10 +223,11 @@ export default {
       if (citem) {
         this.commentModule = 'comments'
         this.replyData = citem
+        this.replyIndex = index1
       } else {
         this.commentModule = 'timeline'
         this.replyData = null
-        this.replyIndex = index1
+        this.replyIndex = 0
       }
     },
     replyPopupCancel () {
@@ -258,14 +248,16 @@ export default {
         if (data.flag) {
           if (self.commentModule === 'timeline') {
             if (!self.timelineData[self.commentIndex].comments) {
-              self.timelineData[self.commentIndex].comments = []
+              self.timelineData[self.commentIndex].comments = [data.data]
+            } else {
+              self.timelineData[self.commentIndex].comments = [data.data].concat(self.timelineData[self.commentIndex].comments)
             }
-            self.timelineData[self.commentIndex].comments = [data.data].concat(self.timelineData[self.commentIndex].comments)
           } else {
             if (!self.timelineData[self.commentIndex].comments[self.replyIndex].comment) {
-              self.timelineData[self.commentIndex].comments[self.replyIndex].comment = []
+              self.timelineData[self.commentIndex].comments[self.replyIndex].comment = [data.data]
+            } else {
+              self.timelineData[self.commentIndex].comments[self.replyIndex].comment = [data.data].concat(self.timelineData[self.commentIndex].comments[self.replyIndex].comment)
             }
-            self.timelineData[self.commentIndex].comments[self.replyIndex].comment = [data.data].concat(self.timelineData[self.commentIndex].comments[self.replyIndex].comment)
           }
         } else {
           self.$vux.toast.show({
@@ -351,6 +343,7 @@ export default {
   border-radius: 4px;text-align: center;
   padding:10px 5px;box-sizing: border-box;line-height:24px;
 }
+.tllist .commentarea .citem:not(:last-child){position:relative;padding-bottom:10px;}
 .tllist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
 .tllist .commentarea .txt1:before{
   content:"";
@@ -358,5 +351,5 @@ export default {
   background-color: rgb(229, 28, 35);
 }
 .tllist .commentarea .name{color:rgb(93, 102, 155);}
-.tllist .commentarea .txt2{position:relative;padding-left:20px;box-sizing: border-box;text-align:left;}
+.tllist .commentarea .txt2{position:relative;box-sizing: border-box;text-align:left;padding-left:10px;}
 </style>
