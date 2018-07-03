@@ -436,12 +436,6 @@ export default {
         self.retailerUid = self.loginUser.uid
       }
       let moduleid = self.query.uid ? self.query.uid : self.loginUser.uid
-      self.$util.handleWxShare({
-        module: 'timeline',
-        moduleid: moduleid,
-        lastshareuid: self.query.share_uid,
-        link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}`
-      })
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
         params: params
       }).then(function (res) {
@@ -455,6 +449,15 @@ export default {
             self.showContainer = true
             self.userInfo = data.data ? data.data : data
             document.title = self.userInfo.title
+            self.$util.handleWxShare({
+              module: 'timeline',
+              moduleid: moduleid,
+              lastshareuid: self.query.share_uid,
+              title: self.userInfo.title,
+              desc: self.userInfo.slogan ? self.userInfo.slogan : self.userInfo.title,
+              photo: self.userInfo.avatar,
+              link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}&lastshareuid=${self.query.share_uid}`
+            })
             const showphoto = self.userInfo.showphoto
             if (showphoto && self.$util.trim(showphoto) !== '') {
               self.photoarr = showphoto.split(',')
