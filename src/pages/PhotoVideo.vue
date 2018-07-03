@@ -30,19 +30,13 @@
         </div>
       </div>
       <div class="boxouter box2 mt12">
-        <div v-if="disData" class="boxinner tllist">
+        <div v-if="disData" class="boxinner tllist piclist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
             暂无相关数据
           </div>
-          <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
-            <div class="con">
-              <div class="piclist">
-                <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
-                  <div class="inner">
-                    <img :src="pic" @click="showBigimg(pic)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-                  </div>
-                </div>
-              </div>
+          <div v-else class="picitem" v-for="(item,index) in timelineData" :key="index">
+            <div class="inner">
+              <img :src="item.photo" @click="showBigimg(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
             </div>
           </div>
         </div>
@@ -271,10 +265,10 @@ export default {
 .tllist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
 .tllist .con{flex:1;}
 .tllist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
-.tllist .piclist{display:flex;}
-.tllist .picitem{width:33.33333%;padding-bottom:33.33333%;position:relative;}
+.tllist .piclist:after{content:"";display:block;clear:both;}
+.tllist .picitem{float:left;width:33.33333%;padding-bottom:33.33333%;position:relative;}
 .tllist .picitem .inner{
-  position:absolute;top:0;bottom:0;box-sizing:border-box;
+  position:absolute;top:0;bottom:0;box-sizing:border-box;top:7px;bottom:7px;
 }
 .tllist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
 .tllist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
