@@ -957,3 +957,36 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .red-popup .vux-popup-header-right{color:#ea3a3a;}
 
 .news .article-content img{max-width:100%;}
+
+.timelinelist{}
+.timelinelist .tlitem{
+  display:flex;padding:10px;
+}
+.timelinelist .avatar{width:50px;text-align:left;}
+.timelinelist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
+.timelinelist .con{flex:1;}
+.timelinelist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
+.timelinelist .piclist{display:flex;}
+.timelinelist .picitem{width:33.33333%;padding-bottom:33.33333%;position:relative;}
+.timelinelist .picitem .inner{
+  position:absolute;top:0;bottom:0;box-sizing:border-box;
+}
+.timelinelist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
+.timelinelist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
+.timelinelist .picitem:nth-child(3n+3) .inner{left:14px;right:0;}
+.timelinelist .picitem img{width:100%;height:100%;object-fit: cover;}
+.timelinelist .commentarea{
+  background-color: rgb(244, 244, 244);
+  border-color: rgb(241, 244, 251) 1px solid;
+  border-radius: 4px;text-align: center;
+  padding:10px 5px;box-sizing: border-box;line-height:24px;
+}
+.timelinelist .commentarea .citem:not(:last-child){position:relative;padding-bottom:10px;}
+.timelinelist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
+.timelinelist .commentarea .txt1:before{
+  content:"";
+  position:absolute;left:3px;top:5px;width:3px;height: 16px;
+  background-color: rgb(229, 28, 35);
+}
+.timelinelist .commentarea .name{color:rgb(93, 102, 155);}
+.timelinelist .commentarea .txt2{position:relative;box-sizing: border-box;text-align:left;padding-left:10px;}

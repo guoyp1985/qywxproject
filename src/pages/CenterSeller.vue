@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 bg-page cseller">
-    <div class="pagemiddle">
+    <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
       <div class="topcover">
         <div class="inner">
           <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller'}}"><i class="al al-guanlizhongxin color-red4 db-in"></i></router-link>
@@ -69,6 +69,55 @@
           </div>
         </div>
       </template>
+      <div class="boxouter box3">
+        <div class="boxinner">
+          <div class="row1">最新动态</div>
+          <div v-if="disTimeline" class="timelinelist">
+            <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
+              暂无相关动态
+            </div>
+            <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
+              <div class="avatar">
+                <img :src="userInfo.avatar" />
+              </div>
+              <div class="con">
+                <div class="txt">{{userInfo.title}}</div>
+                <div v-html="filterEmot(item.title)"></div>
+                <div class="piclist">
+                  <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+                    <div class="inner">
+                      <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
+                    </div>
+                  </div>
+                </div>
+                <div class="db-flex mt5 color-gray">
+                  <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
+                  <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
+                    <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
+                    <span class="v_middle ml3">{{item.dig}}</span>
+                  </span>
+                  <div class="w30 flex_right" @click="onReplyShow(item,index)">
+                    <i class="al al-pinglun3 font14"></i>
+                  </div>
+                </div>
+                <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
+                  <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                    <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                      <div class="v_middle db-in name name1">{{citem.username}}</div>
+                      <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                    </div>
+                    <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                      <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                      <div class="v_middle db-in">回复：</div>
+                      <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="pagebottom flex_center">
       <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
@@ -127,6 +176,7 @@
     <div v-transfer-dom>
       <previewer :list="previewerPhotoarr" ref="previewerFlash"></previewer>
     </div>
+    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
   </div>
 </template>
 
@@ -136,15 +186,22 @@
 <script>
 import { Swiper, SwiperItem, TransferDom, Popup, Previewer } from 'vux'
 import ENV from 'env'
+import Time from '#/time'
 import { User } from '#/storage'
 import TagPage from '@/components/TagPage'
+import CommentPopup from '@/components/CommentPopup'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Swiper, SwiperItem, Popup, TagPage, Previewer
+    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup
+  },
+  filters: {
+    dateFormat (date) {
+      return new Time(date * 1000).format()
+    }
   },
   data () {
     return {
@@ -163,10 +220,22 @@ export default {
       showList: false,
       timelineCount: 0,
       tagName: '',
-      clickTagId: ''
+      clickTagId: '',
+      disTimeline: false,
+      tlData: [],
+      pageStart1: 0,
+      replyPopupShow: false,
+      commentData: null,
+      commentIndex: 0,
+      replyData: null,
+      replyIndex: 0,
+      commentModule: 'timeline'
     }
   },
   methods: {
+    filterEmot (text) {
+      return this.$util.emotPrase(text)
+    },
     showBigimg1 (index) {
       const self = this
       if (self.$util.isPC()) {
@@ -185,7 +254,7 @@ export default {
     },
     getTimelineData (tagid) {
       const self = this
-      let params = {pageStart: self.pageStart, limit: self.limit}
+      let params = {pagestart: self.pageStart, limit: self.limit}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
@@ -227,6 +296,124 @@ export default {
       self.clickTagId = tagitem.id
       self.getTimelineData()
     },
+    clickDig (item) {
+      const self = this
+      let url = `${ENV.BokaApi}/api/user/digs/add`
+      if (item.isdig) {
+        url = `${ENV.BokaApi}/api/user/digs/delete`
+      }
+      self.$vux.loading.show()
+      self.$http.post(url, {
+        id: item.id,
+        module: 'timeline'
+      }).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          if (item.isdig) {
+            item.isdig = 0
+            item.dig = item.dig - 1
+          } else {
+            item.isdig = 1
+            item.dig = item.dig + 1
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warning',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    onReplyShow (item, index, citem, index1) {
+      this.commentData = item
+      this.commentIndex = index
+      this.replyPopupShow = true
+      if (citem) {
+        this.commentModule = 'comments'
+        this.replyData = citem
+        this.replyIndex = index1
+      } else {
+        this.commentModule = 'timeline'
+        this.replyData = null
+        this.replyIndex = 0
+      }
+    },
+    replyPopupCancel () {
+      this.replyPopupShow = false
+    },
+    replySubmit (value) { // 回复提交
+      const self = this
+      this.replyPopupShow = false
+      let nid = 0
+      if (this.commentModule === 'comments') {
+        nid = self.replyData.id
+      } else {
+        nid = self.commentData.id
+      }
+      this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: nid, module: self.commentModule, message: value})
+      .then(res => {
+        let data = res.data
+        if (data.flag) {
+          if (self.commentModule === 'timeline') {
+            if (!self.tlData[self.commentIndex].comments) {
+              self.tlData[self.commentIndex].comments = [data.data]
+            } else {
+              self.tlData[self.commentIndex].comments = [data.data].concat(self.tlData[self.commentIndex].comments)
+            }
+          } else {
+            if (!self.tlData[self.commentIndex].comments[self.replyIndex].comment) {
+              self.tlData[self.commentIndex].comments[self.replyIndex].comment = [data.data]
+            } else {
+              self.tlData[self.commentIndex].comments[self.replyIndex].comment = [data.data].concat(self.tlData[self.commentIndex].comments[self.replyIndex].comment)
+            }
+          }
+        } else {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    getTlData () {
+      const self = this
+      let params = {pagestart: self.pageStart1, limit: self.limit}
+      if (self.query.uid) {
+        params.wid = self.query.uid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let photoarr = []
+          let photo = retdata[i].photo
+          if (photo && self.$util.trim(photo) !== '') {
+            photoarr = photo.split(',')
+          }
+          retdata[i].photoarr = photoarr
+        }
+        self.tlData = self.tlData.concat(retdata)
+        self.disTimeline = true
+      })
+    },
+    handleScroll1 (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.tlData.length === (self.pageStart1 + 1) * self.limit) {
+            self.pageStart1++
+            self.$vux.loading.show()
+            self.getTlData()
+          }
+        }
+      })
+    },
     refresh () {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -262,6 +449,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
             }
           }
+          self.getTlData()
           return self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
             wid: moduleid
           })
@@ -350,7 +538,7 @@ export default {
   text-align: center;display:block;color:inherit;
 }
 .cseller .focuslist .pic{padding-left:20px;width:38px;}
-.cseller .focuslist img{width:38px;height:38px;border-radius:50%;vertical-algin:middle;object-fit: cover;}
+.cseller .focuslist img{width:38px;height:38px;border-radius:50%;vertical-align:middle;object-fit: cover;}
 .cseller .focuslist .txt{padding-left:20px;width:38px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:20px;}
@@ -369,4 +557,7 @@ export default {
   background-color:#fff;border: rgb(187, 187, 187) 1px solid;
   border-radius: 4px;font-size: 12px;
 }
+.cseller .boxouter.box3{margin-top:8px;}
+.cseller .boxouter.box3 .boxinner{box-shadow: rgb(204, 204, 204) 0px -2px 16px -3px;padding:15px 20px;}
+.cseller .box3 .timelinelist .tlitem{padding:10px 0;}
 </style>
