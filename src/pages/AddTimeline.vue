@@ -184,7 +184,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: '/centerSeller' })
+              self.$router.push({ path: '/centerSeller', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid} })
             }
           }
         })
