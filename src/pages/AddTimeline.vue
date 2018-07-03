@@ -250,7 +250,8 @@ export default {
   position: relative;
   display: flex;
   float: left;
-  margin-right: 10px;
+  margin-right: 15px;
+  margin-bottom:15px;
   text-align: center;
 }
 .img-box.upload-box {
