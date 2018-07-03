@@ -250,7 +250,6 @@ export default {
       return this.$util.emotPrase(text)
     },
     showBigimg1 (src) {
-      alert(src)
       const self = this
       if (self.$util.isPC()) {
         self.previewArr = [{
@@ -259,7 +258,6 @@ export default {
         }]
         self.$refs.previewer.show(0)
       } else {
-        alert(2)
         self.$vue.wechat.previewImage({
           current: src,
           urls: [src]
