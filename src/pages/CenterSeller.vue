@@ -171,8 +171,8 @@
                 :timeline-count="timelineCount"
                 :tag-name="tagName"></tag-page>
             </div>
-            <div class="popup-bottom flex_center bg-orange color-white">
-              <span @click="closeTagPopup">{{ $t('Close') }}</span>
+            <div class="popup-bottom flex_center bg-orange color-white" @click="closeTagPopup">
+              <span>{{ $t('Close') }}</span>
             </div>
           </div>
         </popup>
@@ -581,6 +581,7 @@ export default {
   width: 44px;height: 44px;z-index: 10;overflow:hidden;
   color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
 }
+.tagpopup .add-icon .txt{vertical-align:middle;margin-top:-2px;}
 .cseller .boxouter.box3{margin-top:8px;}
 .cseller .boxouter.box3 .boxinner{box-shadow: rgb(204, 204, 204) 0px -2px 16px -3px;padding:15px 20px;}
 .cseller .box3 .timelinelist .tlitem{padding:10px 0;}

@@ -242,12 +242,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.tagpage .add-icon{
-  position:absolute;right:15px;bottom:15px;border-radius:50%;
-  width: 44px;height: 44px;z-index: 10;overflow:hidden;
-  color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
-}
-.tagpage .add-icon .txt{vertical-align:middle;margin-top:-2px;}
 .boxouter{padding-left:5px;padding-right:5px;box-sizing: border-box;}
 .boxouter .boxinner{
   position:relative;z-index:1;background-color:#fff;
