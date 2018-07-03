@@ -82,10 +82,10 @@
               </div>
               <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
                 <div class="avatar">
-                  <img :src="userInfo.avatar" />
+                  <img :src="item.avatar" />
                 </div>
                 <div class="con">
-                  <div class="txt">{{userInfo.title}}</div>
+                  <div class="txt">{{item.username}}</div>
                   <div v-html="filterEmot(item.title)"></div>
                   <div class="piclist">
                     <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
