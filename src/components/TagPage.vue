@@ -15,7 +15,7 @@
             <div class="piclist">
               <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                 <div class="inner">
-                  <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
+                  <img :src="pic" @click="showBigimg(pic)" />
                 </div>
               </div>
             </div>
@@ -143,15 +143,18 @@ export default {
         }
       })
     },
-    showBigimg (arr, index) {
+    showBigimg (src) {
       const self = this
       if (self.$util.isPC()) {
-        self.previewArr = self.$util.previewerImgdata(arr)
-        self.$refs.previewer.show(index)
+        self.previewArr = [{
+          msrc: src,
+          src: src
+        }]
+        self.$refs.previewer.show(0)
       } else {
         self.$vue.wechat.previewImage({
-          current: arr[index],
-          urls: arr
+          current: src,
+          urls: [src]
         })
       }
     },

@@ -16,7 +16,7 @@
               :aspect-ratio="1/1"
               loop>
               <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-                <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+                <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(item)" />
               </swiper-item>
             </swiper>
           </div>
@@ -90,7 +90,7 @@
                   <div class="piclist">
                     <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                       <div class="inner">
-                        <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
+                        <img :src="pic" @click="showBigimg1(pic)" />
                       </div>
                     </div>
                   </div>
@@ -178,7 +178,7 @@
         </popup>
       </div>
       <div v-transfer-dom>
-        <previewer :list="previewerPhotoarr" ref="previewerFlash"></previewer>
+        <previewer :list="previewArr" ref="previewer"></previewer>
       </div>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
     </template>
@@ -238,24 +238,30 @@ export default {
       commentIndex: 0,
       replyData: null,
       replyIndex: 0,
-      commentModule: 'timeline'
+      commentModule: 'timeline',
+      previewArr: [{
+        msrc: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
+        src: 'http://vuxlaravel.boka.cn/images/nopic.jpg'
+      }]
     }
   },
   methods: {
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
-    showBigimg1 (index) {
+    showBigimg1 (src) {
       const self = this
       if (self.$util.isPC()) {
-        self.$refs.previewerFlash.show(index)
+        self.previewArr = [{
+          msrc: src,
+          src: src
+        }]
+        self.$refs.previewer.show(0)
       } else {
-        if (window.WeixinJSBridge) {
-          window.WeixinJSBridge.invoke('imagePreview', {
-            current: self.photoarr[index],
-            urls: self.photoarr
-          })
-        }
+        self.$vue.wechat.previewImage({
+          current: src,
+          urls: [src]
+        })
       }
     },
     closeTagPopup () {
