@@ -154,11 +154,8 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showTagPopup" height="100%">
         <div class="popup1 tagpopup">
-          <div class="popup-top flex_center">
-            <span @click="closeTagPopup">{{ $t('Close') }}</span>
-          </div>
-          <div class="popup-middle" style="top:0;bottom:0;">
-            <div @click="closeTagPopup" class="close-tag">{{ $t('Close') }}</div>
+          <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
+          <div class="popup-middle" style="top:0;">
             <tag-page
               :user-info="userInfo"
               :login-user="loginUser"
@@ -169,6 +166,9 @@
               :show-list="showList"
               :timeline-count="timelineCount"
               :tag-name="tagName"></tag-page>
+          </div>
+          <div class="popup-bottom flex_center bg-orange color-white">
+            <span @click="closeTagPopup">{{ $t('Close') }}</span>
           </div>
         </div>
       </popup>
@@ -556,6 +556,11 @@ export default {
   width: 67px;height: 24px;line-height:24px;color: rgba(16, 16, 16, 0.88);
   background-color:#fff;border: rgb(187, 187, 187) 1px solid;
   border-radius: 4px;font-size: 12px;
+}
+.tagpopup .add-icon{
+  position:absolute;right:15px;bottom:15px;border-radius:50%;
+  width: 44px;height: 44px;z-index: 10;overflow:hidden;
+  color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
 }
 .cseller .boxouter.box3{margin-top:8px;}
 .cseller .boxouter.box3 .boxinner{box-shadow: rgb(204, 204, 204) 0px -2px 16px -3px;padding:15px 20px;}

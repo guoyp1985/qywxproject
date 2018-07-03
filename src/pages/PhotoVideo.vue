@@ -36,9 +36,6 @@
           </div>
           <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
             <div class="con">
-              <div class="flex_left color-gray font12">
-                <div>{{ item.dateline | dateFormat }}</div>
-              </div>
               <div class="piclist">
                 <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
                   <div class="inner">

@@ -1,34 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page tagpage notop nobottom">
-    <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
-    <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div class="boxouter box1">
-        <div class="boxinner">
-          <div class="flex_left row1">
-            <div class="pic">
-              <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="flex_cell flex_left">
-              <div class="clamp1">
-                <span class="v_middle">{{userInfo.title}}</span>
-                <span class="v_middle font12 color-gray">
-                  <span class="v_middle">{{userInfo.province}}</span>
-                  <span class="v_middle" v-if="userInfo.city && userInfo.city != ''">· {{userInfo.city}}</span>
-                </span>
-              </div>
-            </div>
-            <div class="btn-cell">
-              <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
-            </div>
-          </div>
-          <div class="row3">
-            <div class="taglist">
-              <div class="tagitem v_middle">{{tagName}}</div>
-              <span class="v_middle">共 {{timelineCount}} 条动态</span>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div >
       <div class="boxouter box2 mt12">
         <div v-if="showList" class="boxinner timelinelist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
@@ -82,7 +53,7 @@
         <previewer :list="previewArr" ref="previewer"></previewer>
       </div>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
-    </div>
+
   </div>
 </template>
 
