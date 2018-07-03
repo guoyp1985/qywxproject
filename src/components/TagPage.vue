@@ -144,6 +144,7 @@ export default {
       })
     },
     showBigimg (src) {
+      alert(src)
       const self = this
       if (self.$util.isPC()) {
         self.previewArr = [{
