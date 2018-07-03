@@ -176,7 +176,7 @@ export default {
       self.$vux.loading.show()
       self.submitdata.title = subTitle
       self.submitdata.tagids = self.tagids.join(',')
-      self.submitdata.uid = self.query.uid ? self.query.uid : self.loginUser.uid
+      self.submitdata.wid = self.query.uid ? self.query.uid : self.loginUser.uid
       self.$http.post(`${ENV.BokaApi}/api/timeline/add `, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
