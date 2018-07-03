@@ -82,7 +82,8 @@ export default {
       disData: false,
       tagName: '图片视频',
       timelineCount: 0,
-      previewArr: []
+      previewArr: [],
+      photoArr: []
     }
   },
   methods: {
@@ -99,7 +100,7 @@ export default {
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: src,
-          urls: [src]
+          urls: photoArr
         })
       }
     },
@@ -159,6 +160,7 @@ export default {
         let retdata = data.data ? data.data : data
         for (let i = 0; i < retdata.length; i++) {
           let photo = retdata[i].photo
+          self.photoArr.push(photo)
           self.previewArr = self.previewArr.concat(self.$util.previewerImgdata([photo]))
         }
         self.timelineData = self.timelineData.concat(retdata)
