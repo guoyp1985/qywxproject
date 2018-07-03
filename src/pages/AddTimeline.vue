@@ -1,7 +1,6 @@
 <template>
   <div class="font14 containerarea notop addtimeline">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
-    <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagemiddle">
         <group>
@@ -42,17 +41,19 @@
             </div>
           </div>
         </div>
-        <div class="form-item border-box padding10" v-if="tagsData.length > 0">
-          <div class="pb10">选择标签</div>
-          <checker
-          class="x-checker"
-          type="checkbox"
-          v-model="tagids"
-          default-item-class="ck-item"
-          selected-item-class="ck-item-selected">
-            <checker-item class="border1px color-gray" v-for="(item, index) in tagsData" :key="index" :value="item.id">{{ item.title }}</checker-item>
-          </checker>
-        </div>
+        <template v-if="showTags">
+          <div class="form-item border-box padding10" v-if="tagsData.length > 0">
+            <div class="pb10">选择标签</div>
+            <checker
+            class="x-checker"
+            type="checkbox"
+            v-model="tagids"
+            default-item-class="ck-item"
+            selected-item-class="ck-item-selected">
+              <checker-item class="border1px color-gray" v-for="(item, index) in tagsData" :key="index" :value="item.id">{{ item.title }}</checker-item>
+            </checker>
+          </div>
+        </template>
       </div>
       <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
         <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Release') }}</div>
@@ -89,7 +90,8 @@ export default {
       submitdata: { title: '', photo: '', tagids: [] },
       requireddata: { title: '', 'photo': '' },
       tagsData: [],
-      tagids: []
+      tagids: [],
+      showTags: false
     }
   },
   computed: {
@@ -215,32 +217,20 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.query = this.$route.query
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        } else {
-          self.initContainer()
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
-          }
-          if (!self.loginUser.isretailer && !isAdmin) {
-            self.$vux.loading.hide()
-            self.initContainer()
-            self.showApply = true
+        self.showContainer = true
+        if (this.query.uid) {
+          if (self.query.uid.toString() === self.loginUser.uid.toString()) {
+            self.showTags = true
           } else {
-            self.initContainer()
-            self.showContainer = true
-            self.$vux.loading.hide()
-            self.getData()
+            self.showTags = false
           }
+        } else {
+          self.showTags = true
         }
+        self.$vux.loading.hide()
+        self.getData()
       }
     }
   },

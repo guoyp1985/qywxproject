@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 bg-page stimeline notop nobottom">
-    <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
+    <router-link :to="{path:'/addTimeline',query:{uid:retailerUid}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="boxouter box1">
         <div class="boxinner">
@@ -67,6 +67,7 @@ export default {
       userInfo: {},
       query: {},
       loginUser: {},
+      retailerUid: 0,
       showList: false,
       timelineData: [],
       tagName: '店主动态',
@@ -106,7 +107,7 @@ export default {
     },
     getTimelineData () {
       const self = this
-      let params = {pagestart: self.pageStart, limit: self.limit}
+      let params = {pagestart: self.pageStart, limit: self.limit, type: 'retailer'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
@@ -137,6 +138,9 @@ export default {
         let params = {}
         if (self.query.uid) {
           params.uid = self.query.uid
+          self.retailerUid = self.query.uid
+        } else {
+          self.retailerUid = self.loginUser.uid
         }
         self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
           params: params

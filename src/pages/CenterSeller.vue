@@ -1,117 +1,120 @@
 <template>
   <div class="containerarea font14 bg-page cseller">
-    <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-      <div class="topcover">
-        <div class="inner">
-          <template v-if="!query.uid || query.uid == loginUser.uid">
-            <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller'}}"><i class="al al-guanlizhongxin color-red4 db-in"></i></router-link>
-          </template>
-          <swiper
-            class="pic-swiper notitle"
-            dots-position="center"
-            :interval=6000
-            :show-dots="isShowDot"
-            :aspect-ratio="1/1"
-            loop>
-            <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
-            </swiper-item>
-          </swiper>
-        </div>
-      </div>
-      <div class="boxouter box1">
-        <div class="boxinner">
-          <div class="flex_left row1">
-            <div class="pic">
-              <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="flex_cell flex_left">
-              <div class="clamp1">
-                <span class="v_middle">{{userInfo.title}}</span>
-                <span class="v_middle font12 color-gray">
-                  <span class="v_middle">{{userInfo.province}}</span>
-                  <span class="v_middle" v-if="userInfo.city && userInfo.city != ''">· {{userInfo.city}}</span>
-                </span>
-              </div>
-            </div>
-            <div class="btn-cell">
-              <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
-            </div>
-          </div>
-          <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
-            <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
-            <span class="v_middle">{{userInfo.slogan}}</span>
-          </div>
-          <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
-            <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
-            <div class="taglist">
-              <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
-            </div>
+    <apply-tip v-if="showApply"></apply-tip>
+    <template v-if="showContainer">
+      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
+        <div class="topcover">
+          <div class="inner">
+            <template v-if="!query.uid || query.uid == loginUser.uid">
+              <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller'}}"><i class="al al-guanlizhongxin color-red4 db-in"></i></router-link>
+            </template>
+            <swiper
+              class="pic-swiper notitle"
+              dots-position="center"
+              :interval=6000
+              :show-dots="isShowDot"
+              :aspect-ratio="1/1"
+              loop>
+              <swiper-item v-for="(item,index) in photoarr" :key="item.id">
+                <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+              </swiper-item>
+            </swiper>
           </div>
         </div>
-      </div>
-      <template v-if="focusData.length > 0">
-        <div class="linearea">
-          <div class="line line1"></div>
-          <div class="line line2"></div>
-        </div>
-        <div class="boxouter box2">
+        <div class="boxouter box1">
           <div class="boxinner">
-            <div class="row1">{{focusCount}}位好友关注了TA</div>
-            <div class="focuslist">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
-                <div class="pic">
-                  <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            <div class="flex_left row1">
+              <div class="pic">
+                <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              </div>
+              <div class="flex_cell flex_left">
+                <div class="clamp1">
+                  <span class="v_middle">{{userInfo.title}}</span>
+                  <span class="v_middle font12 color-gray">
+                    <span class="v_middle">{{userInfo.province}}</span>
+                    <span class="v_middle" v-if="userInfo.city && userInfo.city != ''">· {{userInfo.city}}</span>
+                  </span>
                 </div>
-                <div class="txt">
-                  <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
-                </div>
-              </router-link>
+              </div>
+              <div class="btn-cell">
+                <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
+              </div>
+            </div>
+            <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
+              <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
+              <span class="v_middle">{{userInfo.slogan}}</span>
+            </div>
+            <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
+              <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
+              <div class="taglist">
+                <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
+              </div>
             </div>
           </div>
         </div>
-      </template>
-      <div class="boxouter box3">
-        <div class="boxinner">
-          <div class="row1">最新动态</div>
-          <div v-if="disTimeline" class="timelinelist">
-            <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
-              暂无相关动态
-            </div>
-            <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
-              <div class="avatar">
-                <img :src="userInfo.avatar" />
+        <template v-if="focusData.length > 0">
+          <div class="linearea">
+            <div class="line line1"></div>
+            <div class="line line2"></div>
+          </div>
+          <div class="boxouter box2">
+            <div class="boxinner">
+              <div class="row1">{{focusCount}}位好友关注了TA</div>
+              <div class="focuslist">
+                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
+                  <div class="pic">
+                    <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div class="txt">
+                    <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                  </div>
+                </router-link>
               </div>
-              <div class="con">
-                <div class="txt">{{userInfo.title}}</div>
-                <div v-html="filterEmot(item.title)"></div>
-                <div class="piclist">
-                  <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
-                    <div class="inner">
-                      <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
+            </div>
+          </div>
+        </template>
+        <div class="boxouter box3">
+          <div class="boxinner">
+            <div class="row1">最新动态</div>
+            <div v-if="disTimeline" class="timelinelist">
+              <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
+                暂无相关动态
+              </div>
+              <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
+                <div class="avatar">
+                  <img :src="userInfo.avatar" />
+                </div>
+                <div class="con">
+                  <div class="txt">{{userInfo.title}}</div>
+                  <div v-html="filterEmot(item.title)"></div>
+                  <div class="piclist">
+                    <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+                      <div class="inner">
+                        <img :src="pic" @click="showBigimg(item.photoarr,index1)" />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="db-flex mt5 color-gray">
-                  <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                  <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
-                    <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                    <span class="v_middle ml3">{{item.dig}}</span>
-                  </span>
-                  <div class="w30 flex_right" @click="onReplyShow(item,index)">
-                    <i class="al al-pinglun3 font14"></i>
-                  </div>
-                </div>
-                <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                  <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                    <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                      <div class="v_middle db-in name name1">{{citem.username}}</div>
-                      <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                  <div class="db-flex mt5 color-gray">
+                    <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
+                    <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
+                      <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
+                      <span class="v_middle ml3">{{item.dig}}</span>
+                    </span>
+                    <div class="w30 flex_right" @click="onReplyShow(item,index)">
+                      <i class="al al-pinglun3 font14"></i>
                     </div>
-                    <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                      <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                      <div class="v_middle db-in">回复：</div>
-                      <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                  </div>
+                  <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
+                    <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                      <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                        <div class="v_middle db-in name name1">{{citem.username}}</div>
+                        <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                      </div>
+                      <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                        <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                        <div class="v_middle db-in">回复：</div>
+                        <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -120,65 +123,65 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="pagebottom flex_center">
-      <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
-        <div>
-          <div><i class="al al-sccollection"></i></div>
-          <div class="txt">店主动态</div>
-        </div>
-      </router-link>
-      <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
-        <div>
-          <div><i class="al al-zhaopian"></i></div>
-          <div class="txt">图片视频</div>
-        </div>
-      </router-link>
-      <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
-        <div>
-          <div><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
-          <div class="txt">用户故事</div>
-        </div>
-      </router-link>
-      <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
-        <div>
-          <div><i class="al al-goodsnewfill"></i></div>
-          <div class="txt">店主促销</div>
-        </div>
-      </router-link>
-      <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_cell item flex_center">
-        <div>
-          <div><i class="al al-dianpufill"></i></div>
-          <div class="txt">进入店铺</div>
-        </div>
-      </router-link>
-    </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showTagPopup" height="100%">
-        <div class="popup1 tagpopup">
-          <router-link to="/addTimeline" class="add-icon flex_center"><span class="txt">+</span></router-link>
-          <div class="popup-middle" style="top:0;">
-            <tag-page
-              :user-info="userInfo"
-              :login-user="loginUser"
-              :timeline-data="timelineData"
-              :scroll-event="scrollEvent"
-              :page-start="pageStart"
-              :limit="limit"
-              :show-list="showList"
-              :timeline-count="timelineCount"
-              :tag-name="tagName"></tag-page>
+      <div class="pagebottom flex_center">
+        <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
+          <div>
+            <div><i class="al al-sccollection"></i></div>
+            <div class="txt">店主动态</div>
           </div>
-          <div class="popup-bottom flex_center bg-orange color-white">
-            <span @click="closeTagPopup">{{ $t('Close') }}</span>
+        </router-link>
+        <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
+          <div>
+            <div><i class="al al-zhaopian"></i></div>
+            <div class="txt">图片视频</div>
           </div>
-        </div>
-      </popup>
-    </div>
-    <div v-transfer-dom>
-      <previewer :list="previewerPhotoarr" ref="previewerFlash"></previewer>
-    </div>
-    <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+        </router-link>
+        <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
+          <div>
+            <div><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
+            <div class="txt">用户故事</div>
+          </div>
+        </router-link>
+        <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
+          <div>
+            <div><i class="al al-goodsnewfill"></i></div>
+            <div class="txt">店主促销</div>
+          </div>
+        </router-link>
+        <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_cell item flex_center">
+          <div>
+            <div><i class="al al-dianpufill"></i></div>
+            <div class="txt">进入店铺</div>
+          </div>
+        </router-link>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showTagPopup" height="100%">
+          <div class="popup1 tagpopup">
+            <router-link :to="{path:'/addTimeline',query:{uid:retailerUid}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
+            <div class="popup-middle" style="top:0;">
+              <tag-page
+                :user-info="userInfo"
+                :login-user="loginUser"
+                :timeline-data="timelineData"
+                :scroll-event="scrollEvent"
+                :page-start="pageStart"
+                :limit="limit"
+                :show-list="showList"
+                :timeline-count="timelineCount"
+                :tag-name="tagName"></tag-page>
+            </div>
+            <div class="popup-bottom flex_center bg-orange color-white">
+              <span @click="closeTagPopup">{{ $t('Close') }}</span>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom>
+        <previewer :list="previewerPhotoarr" ref="previewerFlash"></previewer>
+      </div>
+      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+    </template>
   </div>
 </template>
 
@@ -192,13 +195,14 @@ import Time from '#/time'
 import { User } from '#/storage'
 import TagPage from '@/components/TagPage'
 import CommentPopup from '@/components/CommentPopup'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup
+    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup, ApplyTip
   },
   filters: {
     dateFormat (date) {
@@ -207,8 +211,11 @@ export default {
   },
   data () {
     return {
+      showApply: false,
+      showContainer: false,
       query: {},
       loginUser: {},
+      retailerUid: 0,
       userInfo: {},
       isShowDot: false,
       photoarr: [],
@@ -424,6 +431,9 @@ export default {
       let params = {}
       if (self.query.uid) {
         params.uid = self.query.uid
+        self.retailerUid = self.query.uid
+      } else {
+        self.retailerUid = self.loginUser.uid
       }
       let moduleid = self.query.uid ? self.query.uid : self.loginUser.uid
       self.$util.handleWxShare({
@@ -437,24 +447,31 @@ export default {
       }).then(function (res) {
         if (res.status === 200) {
           let data = res.data
-          self.userInfo = data.data ? data.data : data
-          document.title = self.userInfo.title
-          const showphoto = self.userInfo.showphoto
-          if (showphoto && self.$util.trim(showphoto) !== '') {
-            self.photoarr = showphoto.split(',')
-            if (self.photoarr.length > 1) {
-              self.isShowDot = true
-            } else {
-              self.isShowDot = false
+          if (!data.flag) {
+            self.showApply = true
+            self.showContainer = false
+          } else {
+            self.showApply = false
+            self.showContainer = true
+            self.userInfo = data.data ? data.data : data
+            document.title = self.userInfo.title
+            const showphoto = self.userInfo.showphoto
+            if (showphoto && self.$util.trim(showphoto) !== '') {
+              self.photoarr = showphoto.split(',')
+              if (self.photoarr.length > 1) {
+                self.isShowDot = true
+              } else {
+                self.isShowDot = false
+              }
+              if (self.photoarr.length > 0) {
+                self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
+              }
             }
-            if (self.photoarr.length > 0) {
-              self.previewerPhotoarr = self.$util.previewerImgdata(self.photoarr)
-            }
+            self.getTlData()
+            return self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
+              wid: moduleid
+            })
           }
-          self.getTlData()
-          return self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
-            wid: moduleid
-          })
         }
       }).then(function (res) {
         if (res && res.status === 200) {
