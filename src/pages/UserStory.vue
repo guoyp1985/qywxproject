@@ -29,6 +29,14 @@
           </div>
         </div>
       </div>
+      <tag-page
+        :user-info="userInfo"
+        :login-user="loginUser"
+        :timeline-data="timelineData"
+        :scroll-event="scrollEvent"
+        :show-list="showList"
+        :timeline-count="timelineCount"></tag-page>
+      <!--
       <div class="boxouter box2 mt12">
         <div v-if="disData" class="boxinner tllist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
@@ -62,14 +70,15 @@
                 </div>
               </div>
               <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                <div class="citem" v-for="(item,index) in item.comments" :key="index">
-                  <div class="txt1">
-                    <span class="v_middle name name1">小小于</span>
-                    <span class="v_middle">皮肤越来越水嫩啦，棒棒哒</span>
+                <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                  <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                    <div class="v_middle db-in name name1">{{citem.username}}: </div>
+                    <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
                   </div>
-                  <div class="txt2">
-                    <span class="v_middle name name2">{{userInfo.title}}</span>
-                    <span class="v_middle">回复：谢谢，每天一贴多补水</span>
+                  <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                    <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                    <div class="v_middle db-in">回复: </div>
+                    <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
                   </div>
                 </div>
               </div>
@@ -77,6 +86,7 @@
           </div>
         </div>
       </div>
+    -->
       <div v-transfer-dom>
         <previewer :list="previewArr" ref="previewer"></previewer>
       </div>
@@ -92,6 +102,7 @@ import { TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
+import TagPage from '@/components/TagPage'
 
 const limit = 10
 let pageStart = 0
@@ -101,7 +112,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer
+    Previewer, TagPage
   },
   filters: {
     dateFormat (date) {
@@ -114,6 +125,7 @@ export default {
       query: {},
       loginUser: {},
       retailerUid: 0,
+      showList: false,
       timelineData: [],
       disData: false,
       tagName: '用户故事',
@@ -121,7 +133,13 @@ export default {
       previewArr: [{
         msrc: 'http://vuxlaravel.boka.cn/images/nopic.jpg',
         src: 'http://vuxlaravel.boka.cn/images/nopic.jpg'
-      }]
+      }],
+      replyPopupShow: false,
+      commentData: null,
+      commentIndex: 0,
+      replyData: null,
+      replyIndex: 0,
+      commentModule: 'timeline'
     }
   },
   methods: {
@@ -146,47 +164,25 @@ export default {
         })
       }
     },
+    scrollEvent () {
+      const self = this
+      if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
+        self.pageStart++
+        self.$vux.loading.show()
+        self.getTimelineData()
+      }
+    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.timelineData.length === (pageStart + 1) * limit) {
-            pageStart++
+          if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
+            self.pageStart++
             self.$vux.loading.show()
             self.getTimelineData()
           }
-        }
-      })
-    },
-    clickDig (item) {
-      const self = this
-      let url = `${ENV.BokaApi}/api/user/digs/add`
-      if (item.isdig) {
-        url = `${ENV.BokaApi}/api/user/digs/delete`
-      }
-      self.$vux.loading.show()
-      self.$http.post(url, {
-        id: item.id,
-        module: 'timeline'
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          if (item.isdig) {
-            item.isdig = 0
-            item.dig = item.dig - 1
-          } else {
-            item.isdig = 1
-            item.dig = item.dig + 1
-          }
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warning',
-            time: self.$util.delay(data.error)
-          })
         }
       })
     },
@@ -211,6 +207,7 @@ export default {
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
         self.disData = true
+        self.showList = true
       })
     },
     refresh () {
