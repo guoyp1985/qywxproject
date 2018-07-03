@@ -100,7 +100,7 @@ export default {
       } else {
         window.WeixinJSBridge.invoke('imagePreview', {
           current: src,
-          urls: photoArr
+          urls: self.photoArr
         })
       }
     },
