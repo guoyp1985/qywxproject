@@ -56,7 +56,7 @@
               <template v-if="showphotoArr.length > 0">
                 <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
                   <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                    <div class="close" @click="deletephoto(item,index,'photo')">×</div>
+                    <div class="close" @click="deletephoto(item,index,'showphoto')">×</div>
                     <div class="clip"><i class="al al-set"></i></div>
                   </div>
                 </div>
