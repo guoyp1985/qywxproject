@@ -104,7 +104,7 @@ export default {
         }]
         self.$refs.previewer.show(0)
       } else {
-        self.$vue.wechat.previewImage({
+        window.WeixinJSBridge.invoke('imagePreview', {
           current: src,
           urls: [src]
         })

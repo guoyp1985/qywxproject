@@ -322,7 +322,7 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        self.$vue.wechat.previewImage({
+        window.WeixinJSBridge.invoke('imagePreview', {
           current: self.wximgarr[index],
           urls: self.wximgarr
         })

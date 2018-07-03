@@ -158,7 +158,7 @@ export default {
         self.previewArr = self.$util.previewerImgdata(arr)
         self.$refs.previewer.show(index)
       } else {
-        self.$vue.wechat.previewImage({
+        window.WeixinJSBridge.invoke('imagePreview', {
           current: arr[index],
           urls: arr
         })
