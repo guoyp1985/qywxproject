@@ -99,7 +99,7 @@ Util.install = function (Vue, options) {
             break
           }
         }
-        return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${eIndex}.gif"/>`
+        return `<img style="vertical-align:middle;" src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${eIndex}.gif"/>`
       })
       return this.emotPrase(text)
     },

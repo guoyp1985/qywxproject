@@ -257,10 +257,10 @@ export default {
         let data = res.data
         if (data.flag) {
           if (self.commentModule === 'timeline') {
-            if (!self.timelineData[self.replyIndex].comments) {
-              self.timelineData[self.replyIndex].comments = []
+            if (!self.timelineData[self.commentIndex].comments) {
+              self.timelineData[self.commentIndex].comments = []
             }
-            self.timelineData[self.replyIndex].comments = [data.data].concat(self.timelineData[self.replyIndex].comments)
+            self.timelineData[self.commentIndex].comments = [data.data].concat(self.timelineData[self.commentIndex].comments)
           } else {
             if (!self.timelineData[self.commentIndex].comments[self.replyIndex].comment) {
               self.timelineData[self.commentIndex].comments[self.replyIndex].comment = []
@@ -349,15 +349,14 @@ export default {
   background-color: rgb(244, 244, 244);
   border-color: rgb(241, 244, 251) 1px solid;
   border-radius: 4px;text-align: center;
-  padding:10px 5px;box-sizing: border-box;
+  padding:10px 5px;box-sizing: border-box;line-height:24px;
 }
 .tllist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
 .tllist .commentarea .txt1:before{
   content:"";
-  position:absolute;left:3px;top:7px;width:3px;height: 16px;
+  position:absolute;left:3px;top:5px;width:3px;height: 16px;
   background-color: rgb(229, 28, 35);
 }
 .tllist .commentarea .name{color:rgb(93, 102, 155);}
 .tllist .commentarea .txt2{position:relative;padding-left:20px;box-sizing: border-box;text-align:left;}
-.tllist .commentarea img{vertical-align: middle;}
 </style>
