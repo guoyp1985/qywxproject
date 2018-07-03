@@ -169,7 +169,7 @@ export default {
       const self = this
       const textarea = self.$refs.textarea.$refs.textarea[0] ? self.$refs.textarea.$refs.textarea[0] : self.$refs.textarea.$refs.textarea
       let subTitle = textarea.value
-      if (self.$util.trim(subTitle) === '' && self.$util.trim(subTitle) === '') {
+      if (self.$util.trim(subTitle) === '' && self.$util.trim(self.submitdata.photo) === '') {
         self.$vux.toast.text('请添加内容或图片信息', 'middle')
         return false
       }

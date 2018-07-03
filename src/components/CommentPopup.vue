@@ -120,6 +120,8 @@ export default {
     onTextFocus () {
       this.$emit('on-text-focus')
     }
+  },
+  created () {
   }
 }
 </script>

@@ -966,10 +966,10 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .timelinelist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
 .timelinelist .con{flex:1;}
 .timelinelist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
-.timelinelist .piclist{display:flex;}
-.timelinelist .picitem{width:33.33333%;padding-bottom:33.33333%;position:relative;}
+.timelinelist .piclist:after{content:"";display:block;clear:both;}
+.timelinelist .picitem{float:left;width:33.33333%;padding-bottom:33.33333%;position:relative;}
 .timelinelist .picitem .inner{
-  position:absolute;top:0;bottom:0;box-sizing:border-box;
+  position:absolute;top:0;bottom:0;box-sizing:border-box;top:7px;bottom:7px;
 }
 .timelinelist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
 .timelinelist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
