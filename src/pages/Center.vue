@@ -170,6 +170,7 @@ export default {
       }
     },
     setUserInfo () {
+      const self = this
       const user = User.get()
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
