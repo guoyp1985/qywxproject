@@ -938,6 +938,7 @@ export default {
     this.init()
   },
   activated () {
+    alert('in product')
     this.refresh()
   }
   // beforeRouteLeave (to, from, next) {
