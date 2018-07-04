@@ -385,13 +385,13 @@ export default {
             if (!self.tlData[self.commentIndex].comments) {
               self.tlData[self.commentIndex].comments = [data.data]
             } else {
-              self.tlData[self.commentIndex].comments = [data.data].concat(self.tlData[self.commentIndex].comments)
+              self.tlData[self.commentIndex].comments.push(data.data)
             }
           } else {
             if (!self.tlData[self.commentIndex].comments[self.replyIndex].comment) {
               self.tlData[self.commentIndex].comments[self.replyIndex].comment = [data.data]
             } else {
-              self.tlData[self.commentIndex].comments[self.replyIndex].comment = [data.data].concat(self.tlData[self.commentIndex].comments[self.replyIndex].comment)
+              self.tlData[self.commentIndex].comments[self.replyIndex].comment.push(data.data)
             }
           }
         } else {

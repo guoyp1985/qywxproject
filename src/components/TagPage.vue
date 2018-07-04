@@ -215,13 +215,13 @@ export default {
             if (!self.timelineData[self.commentIndex].comments) {
               self.timelineData[self.commentIndex].comments = [data.data]
             } else {
-              self.timelineData[self.commentIndex].comments = [data.data].concat(self.timelineData[self.commentIndex].comments)
+              self.timelineData[self.commentIndex].comments.push(data.data)
             }
           } else {
             if (!self.timelineData[self.commentIndex].comments[self.replyIndex].comment) {
               self.timelineData[self.commentIndex].comments[self.replyIndex].comment = [data.data]
             } else {
-              self.timelineData[self.commentIndex].comments[self.replyIndex].comment = [data.data].concat(self.timelineData[self.commentIndex].comments[self.replyIndex].comment)
+              self.timelineData[self.commentIndex].comments[self.replyIndex].comment.push(data.data)
             }
           }
         } else {
