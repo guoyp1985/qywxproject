@@ -291,6 +291,7 @@ const handleUserInfo = (response) => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
+    alert('in defaultAccess && code')
     // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -310,6 +311,7 @@ const handleUserInfo = (response) => {
       }
     )
   } else {
+    alert('in !(defaultAccess && code)')
     $vue.$util.access(response, isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
