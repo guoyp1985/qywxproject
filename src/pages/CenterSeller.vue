@@ -163,7 +163,7 @@
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
           <div class="popup1 tagpopup">
-            <router-link :to="{path:'/addTimeline',query:{uid:retailerUid}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
+            <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
             <div class="popup-middle" style="top:0;">
               <tag-page
                 :user-info="userInfo"

@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 bg-page photovideo notop nobottom">
-    <router-link :to="{path:'/addTimeline',query:{uid:retailerUid}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
+    <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="boxouter box1">
         <div class="boxinner">

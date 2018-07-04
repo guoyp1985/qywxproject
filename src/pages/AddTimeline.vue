@@ -220,6 +220,9 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      if (this.query.type) {
+        self.submitdata.type = this.query.type
+      }
       if (this.loginUser && this.loginUser.subscribe === 1) {
         self.showContainer = true
         if (this.query.uid) {
@@ -227,7 +230,6 @@ export default {
             self.showTags = true
           } else {
             self.showTags = false
-            self.submitdata.type = 'customer'
           }
         } else {
           self.showTags = true
