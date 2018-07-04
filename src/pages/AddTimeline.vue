@@ -186,7 +186,11 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: '/centerSeller', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid} })
+              if (self.submitdata.type === 'customer') {
+                self.$router.push({ path: '/userStory', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid} })
+              } else {
+                self.$router.push({ path: '/centerSeller', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid} })
+              }
             }
           }
         })
