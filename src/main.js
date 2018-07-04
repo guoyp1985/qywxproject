@@ -303,7 +303,7 @@ const handleUserInfo = (response) => {
     )
     .then(
       res => {
-        if (res.status === 200) {
+        if (res && res.status === 200) {
           User.set(res.data)
           // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
           location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
