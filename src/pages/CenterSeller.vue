@@ -560,9 +560,7 @@ export default {
   },
   activated () {
     const self = this
-    if (this.$route.query.from === 'add') {
-      self.initData()
-    }
+    self.initData()
     this.refresh()
     window.onresize = function () {
       self.getMoreStatus()
