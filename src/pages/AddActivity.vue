@@ -177,6 +177,25 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.allowsubmit = true
+      this.showselectproduct = true
+      this.showproductitem = false
+      this.selectproduct = {}
+      this.selectpopupdata = null
+      this.showpopup = false
+      this.productdata = []
+      this.radiodata = []
+      this.visibility1 = false
+      this.visibility2 = false
+      this.selectdatetxt1 = '选择开始时间'
+      this.selectdatetxt2 = '选择结束时间'
+      this.submitdata = {}
+      this.requireddata = {}
+      this.searchword = ''
+      this.searchresult = false
+      this.pagestart1 = 0
+    },
     dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     },
@@ -463,6 +482,7 @@ export default {
     }
   },
   activated () {
+    this.initData()
     this.refresh()
   }
 }
