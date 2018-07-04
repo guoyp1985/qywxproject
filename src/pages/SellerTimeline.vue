@@ -35,7 +35,9 @@
         :timeline-data="timelineData"
         :scroll-event="scrollEvent"
         :show-list="showList"
-        :timeline-count="timelineCount"></tag-page>
+        :timeline-count="timelineCount"
+        :after-delete="afterDelete">
+      </tag-page>
     </div>
   </div>
 </template>
@@ -82,6 +84,9 @@ export default {
       self.pageStart = 0
       this.timelineData = []
       this.timelineCount = 0
+    },
+    afterDelete (item, index) {
+      this.timelineData.splice(index, 1)
     },
     scrollEvent () {
       const self = this

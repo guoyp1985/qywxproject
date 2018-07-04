@@ -29,12 +29,15 @@
               <div class="w30 align_center">
                 <i class="al"></i>
               </div>
-              <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
+              <span class="w60 color-gray flex_right" @click="clickDig(item)">
                 <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
                 <span class="v_middle ml3">{{item.dig}}</span>
               </span>
               <div class="w30 flex_right" @click="onReplyShow(item,index)">
                 <i class="al al-pinglun3 font14"></i>
+              </div>
+              <div v-if="item.uid === loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
+                <i class="al al-shanchu font14"></i>
               </div>
             </div>
             <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
@@ -102,7 +105,8 @@ export default {
     tagName: {
       type: String,
       default: '卖家动态'
-    }
+    },
+    afterDelete: Function
   },
   directives: {
     TransferDom
@@ -126,6 +130,21 @@ export default {
     }
   },
   methods: {
+    deleteTimeline (item, index) {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/timeline/delete`, {
+            id: item.id
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            self.afterDelete(item, index)
+          })
+        }
+      })
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },

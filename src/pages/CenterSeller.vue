@@ -106,12 +106,15 @@
                   </template>
                   <div class="db-flex mt5 color-gray">
                     <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                    <span class="flex_cell color-gray flex_right" @click="clickDig(item)">
+                    <span class="w60 color-gray flex_right" @click="clickDig(item)">
                       <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
                       <span class="v_middle ml3">{{item.dig}}</span>
                     </span>
                     <div class="w30 flex_right" @click="onReplyShow(item,index)">
                       <i class="al al-pinglun3 font14"></i>
+                    </div>
+                    <div v-if="item.uid === loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
+                      <i class="al al-shanchu font14"></i>
                     </div>
                   </div>
                   <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
@@ -179,7 +182,9 @@
                 :limit="limit"
                 :show-list="showList"
                 :timeline-count="timelineCount"
-                :tag-name="tagName"></tag-page>
+                :tag-name="tagName"
+                :after-delete="afterDelete">
+              </tag-page>
             </div>
             <div class="popup-bottom flex_center bg-orange color-white" @click="closeTagPopup">
               <span>{{ $t('Close') }}</span>
@@ -296,6 +301,24 @@ export default {
     },
     closeTagPopup () {
       this.showTagPopup = false
+    },
+    deleteTimeline (item, index) {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/timeline/delete`, {
+            id: item.id
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            self.tlData.splice(index, 1)
+          })
+        }
+      })
+    },
+    afterDelete (item, index) {
+      this.timelineData.splice(index, 1)
     },
     getTimelineData (tagid) {
       const self = this
@@ -591,7 +614,7 @@ export default {
 .cseller .taglist{display:inline-block;}
 .cseller .taglist .tagitem{
   display:inline-block;padding:0 5px;height: 24px;line-height:24px;
-  border-width:1px;border-style:solid;
+  border-width:1px;border-style:solid;font-size:13px;
   border-radius: 5px;text-align: center;margin:0 5px 5px;
 }
 .cseller .taglist .tagitem:nth-child(odd){border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);}
