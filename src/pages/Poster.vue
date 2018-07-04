@@ -326,6 +326,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.submitdata.title = self.data.title
+          self.coverphotoarr = []
           if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
             let arr = self.data.photo.split(',')
             for (let i = 0; i < arr.length; i++) {
@@ -337,11 +338,13 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.submitdata.type = this.query.module
-      this.submitdata.id = this.query.id
-      this.$vux.loading.show()
-      this.getData()
+      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+        this.query = this.$route.query
+        this.submitdata.type = this.query.module
+        this.submitdata.id = this.query.id
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   activated () {
