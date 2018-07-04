@@ -848,10 +848,16 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-              params: { wid: self.retailerInfo.uid, productid: self.productid }
-            })
+            return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
           }
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.messages = data.data
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+            params: { wid: self.retailerInfo.uid, productid: self.productid }
+          })
         }
       }).then(function (res) {
         if (res && res.status === 200) {
@@ -917,9 +923,8 @@ export default {
     },
     refresh () {
       const self = this
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      // alert('in product')
-      // alert(JSON.stringify(this.loginUser))
       this.initData()
       this.showShareSuccess = false
       this.showVideo = true
@@ -927,11 +932,6 @@ export default {
       this.$vux.loading.show()
       this.getData()
       this.createSocket()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
     }
   },
   created () {
