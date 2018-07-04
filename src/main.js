@@ -291,19 +291,19 @@ const handleUserInfo = (response) => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
-    // Access.set(true)
+    // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         Token.set(res.data.data.token)
-        // getAddress(res.data.data.weixin_token)
+        // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
     .then(
       res => {
         User.set(res.data)
-        // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
@@ -313,6 +313,7 @@ const handleUserInfo = (response) => {
         router.push({name: 'tLogin'})
       } else {
         const originHref = encodeURIComponent(location.href)
+        // 微信授权
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
       }
     })
