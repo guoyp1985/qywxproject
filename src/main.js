@@ -327,6 +327,7 @@ const handleUserInfo = (response) => {
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
+  alert('in response')
   if (response.status === 200) {
     const user = User.get()
     if (!user || !user.uid) {
@@ -335,6 +336,7 @@ Vue.http.interceptors.response.use(response => {
   }
   return response
 }, error => {
+  alert('in error')
   handleUserInfo(error.response)
 })
 
