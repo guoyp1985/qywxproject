@@ -1,6 +1,8 @@
 <template>
   <div class="containerarea font14 bg-page photovideo notop nobottom">
-    <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
+    <template v-if="!query.uid || query.uid == loginUser.uid">
+      <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
+    </template>
     <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <div class="boxouter box1">
         <div class="boxinner">
