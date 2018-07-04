@@ -925,13 +925,15 @@ export default {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      this.initData()
-      this.showShareSuccess = false
-      this.showVideo = true
-      this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
-      this.createSocket()
+      if (this.loginUser) {
+        this.initData()
+        this.showShareSuccess = false
+        this.showVideo = true
+        this.query = this.$route.query
+        this.$vux.loading.show()
+        this.getData()
+        this.createSocket()
+      }
     }
   },
   created () {
