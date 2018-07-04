@@ -923,7 +923,7 @@ export default {
     },
     refresh () {
       const self = this
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.initData()
       this.showShareSuccess = false
