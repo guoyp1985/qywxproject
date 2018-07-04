@@ -99,13 +99,14 @@ export default {
   },
   methods: {
     initData () {
-      this.cutImg = ''
-      this.popupShow = false
       this.allowsubmit = true
       this.photoarr = []
       this.havenum = 0
-      this.submitdata = { title: '', photo: '', tagids: [] }
+      this.submitdata = { title: '', photo: '', tagids: [], type: 'retailer' }
       this.requireddata = { title: '', 'photo': '' }
+      this.tagsData = []
+      this.tagids = []
+      this.showTags = false
     },
     valueChange (val) {
       this.submitdata.title = val
@@ -187,9 +188,9 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.submitdata.type === 'customer') {
-                self.$router.push({ path: '/userStory', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid} })
+                self.$router.push({ path: '/userStory', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid, from: 'add'} })
               } else {
-                self.$router.push({ path: '/centerSeller', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid} })
+                self.$router.push({ path: '/centerSeller', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid, from: 'add'} })
               }
             }
           }
@@ -223,9 +224,13 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.initData()
       this.query = this.$route.query
       if (this.query.type) {
         self.submitdata.type = this.query.type
+      }
+      if (this.query.tagid) {
+        self.tagids = [this.query.tagid]
       }
       if (this.loginUser && this.loginUser.subscribe === 1) {
         self.showContainer = true

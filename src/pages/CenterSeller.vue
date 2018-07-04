@@ -168,7 +168,7 @@
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
           <div class="popup1 tagpopup">
-            <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
+            <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer',tagid:clickTagId}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
             <div class="popup-middle" style="top:0;">
               <tag-page
                 :user-info="userInfo"
@@ -254,6 +254,20 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.timelineData = []
+      this.pageStart = 0
+      this.showList = false
+      this.disTimeline = false
+      this.tlData = []
+      this.pageStart1 = 0
+      this.replyPopupShow = false
+      this.commentData = null
+      this.commentIndex = 0
+      this.replyData = null
+      this.replyIndex = 0
+      this.commentModule = 'timeline'
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -523,6 +537,9 @@ export default {
   },
   activated () {
     const self = this
+    if (this.$route.query.from === 'add') {
+      self.initData()
+    }
     this.refresh()
     window.onresize = function () {
       self.getMoreStatus()
