@@ -278,7 +278,7 @@ export default {
     },
     getTimelineData (tagid) {
       const self = this
-      let params = {pagestart: self.pageStart, limit: self.limit}
+      let params = {pagestart: self.pageStart, limit: self.limit, type: 'retailer'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
@@ -405,7 +405,7 @@ export default {
     },
     getTlData () {
       const self = this
-      let params = {pagestart: self.pageStart1, limit: self.limit}
+      let params = {pagestart: self.pageStart1, limit: self.limit, type: 'retailer'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }

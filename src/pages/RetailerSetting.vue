@@ -3,6 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <template v-if="showSetting">
       <retailer-setting
+        ref="retailerSetting"
         :retailer-info="retailerInfo"
         :login-user="loginUser"
         :photoarr="photoarr"
@@ -70,6 +71,8 @@ export default {
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
           }
+          console.log(self.$refs.retailerSetting.$refs.sloganTextarea)
+          self.$refs.retailerSetting.$refs.sloganTextarea.updateAutosize()
         }
       })
     },

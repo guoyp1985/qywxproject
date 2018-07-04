@@ -87,7 +87,7 @@ export default {
       photoarr: [],
       maxnum: 9,
       havenum: 0,
-      submitdata: { title: '', photo: '', tagids: [] },
+      submitdata: { title: '', photo: '', tagids: [], type: 'retailer' },
       requireddata: { title: '', 'photo': '' },
       tagsData: [],
       tagids: [],
@@ -227,6 +227,7 @@ export default {
             self.showTags = true
           } else {
             self.showTags = false
+            self.submitdata.type = 'customer'
           }
         } else {
           self.showTags = true

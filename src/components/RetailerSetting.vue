@@ -79,7 +79,14 @@
         <forminputplate>
           <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
           <group class="textarea-outer" style="padding:0;">
-            <x-textarea v-model="submitdata.slogan" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Seller said')" :show-counter="false" :rows="1" autosize></x-textarea>
+            <x-textarea
+              ref="sloganTextarea"
+              v-model="submitdata.slogan"
+              style="padding:5px;"
+              class="x-textarea noborder"
+              :placeholder="$t('Seller said')"
+              :show-counter="false"
+              :autosize="true"></x-textarea>
           </group>
         </forminputplate>
         <div class="form-item bg-white">
@@ -473,6 +480,9 @@ export default {
         }
       })
     }
+  },
+  mounted () {
+    this.$refs.sloganTextarea.updateAutosize()
   }
 }
 </script>

@@ -57,7 +57,7 @@ import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 
-const limit = 10
+const limit = 20
 let pageStart = 0
 
 export default {
@@ -164,7 +164,7 @@ export default {
           self.previewArr = self.previewArr.concat(self.$util.previewerImgdata([photo]))
         }
         self.timelineData = self.timelineData.concat(retdata)
-        self.timelineCount = self.timelineData.length
+        self.timelineCount = data.count
         self.disData = true
       })
     },

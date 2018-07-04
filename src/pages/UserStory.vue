@@ -148,7 +148,7 @@ export default {
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
         }
         self.timelineData = self.timelineData.concat(retdata)
-        self.timelineCount = self.timelineData.length
+        self.timelineCount = data.count
         self.disData = true
         self.showList = true
       })
