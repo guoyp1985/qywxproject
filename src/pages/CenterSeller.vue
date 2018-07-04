@@ -52,7 +52,7 @@
             </div>
           </div>
         </div>
-        <template v-if="focusData.length > 0">
+        <template v-if="focusData.length > 0 && disFocus">
           <div class="linearea">
             <div class="line line1"></div>
             <div class="line line2"></div>
@@ -60,15 +60,20 @@
           <div class="boxouter box2">
             <div class="boxinner">
               <div class="row1">{{focusCount}}位好友关注了TA</div>
-              <div class="focuslist">
-                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
-                  <div class="pic">
-                    <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                  </div>
-                  <div class="txt">
-                    <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
-                  </div>
-                </router-link>
+              <div class="flex_left">
+                <div class="focuslist">
+                  <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
+                    <div class="pic">
+                      <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </div>
+                    <div class="txt">
+                      <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                    </div>
+                  </router-link>
+                </div>
+                <div v-if="disMore" class="moreicon flex_center color-red">
+                  <i class="al al-asmkticon0165 v_middle"></i>
+                </div>
               </div>
             </div>
           </div>
@@ -225,7 +230,7 @@ export default {
       isShowDot: false,
       photoarr: [],
       previewerPhotoarr: [],
-      focusCount: 3,
+      focusCount: 0,
       focusData: [],
       showTagPopup: false,
       timelineData: [],
@@ -243,7 +248,9 @@ export default {
       commentIndex: 0,
       replyData: null,
       replyIndex: 0,
-      commentModule: 'timeline'
+      commentModule: 'timeline',
+      disFocus: false,
+      disMore: false
     }
   },
   methods: {
@@ -489,7 +496,7 @@ export default {
             }
             self.getTlData()
             return self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
-              wid: moduleid
+              wid: moduleid, pagestart: 0, limit: 15
             })
           }
         }
@@ -497,13 +504,29 @@ export default {
         if (res && res.status === 200) {
           let data = res.data
           self.focusData = data.data ? data.data : data
-          self.focusCount = self.focusData.length
+          self.focusCount = data.count
+          self.getMoreStatus()
+          self.disFocus = true
         }
       })
+    },
+    getMoreStatus () {
+      const self = this
+      const wW = window.innerWidth
+      const disCols = Math.floor(wW / 58)
+      if (self.focusData.length > disCols - 1) {
+        self.disMore = true
+      } else {
+        self.disMore = false
+      }
     }
   },
   activated () {
+    const self = this
     this.refresh()
+    window.onresize = function () {
+      self.getMoreStatus()
+    }
   }
 }
 </script>
@@ -566,19 +589,20 @@ export default {
 
 .cseller .boxouter.box2 .boxinner{box-shadow: rgb(204, 204, 204) 0px -2px 16px -3px;padding:15px 0px;}
 .cseller .box2 .row1{padding:0 20px;}
-.cseller .focuslist{padding-right:20px;}
+.cseller .focuslist{flex:1;display:flex;overflow:hidden;}
 .cseller .focuslist:after{
   content:'';
   display:block;
   clear:both;
 }
 .cseller .focuslist .item{
-  float: left;width: 58px;padding-top:10px;
+  width: 58px;padding-top:10px;
   text-align: center;display:block;color:inherit;
 }
 .cseller .focuslist .pic{padding-left:20px;width:38px;}
 .cseller .focuslist img{width:38px;height:38px;border-radius:50%;vertical-align:middle;object-fit: cover;}
 .cseller .focuslist .txt{padding-left:20px;width:38px;}
+.cseller .moreicon{width:58px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:20px;}
 .cseller .pagebottom{
