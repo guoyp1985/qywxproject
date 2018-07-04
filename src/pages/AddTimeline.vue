@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <template v-if="query.type != 'customer'">
+        <template v-if="showTags">
           <div class="form-item border-box padding10" v-if="tagsData.length > 0">
             <div class="pb10">选择标签</div>
             <checker
@@ -236,12 +236,17 @@ export default {
         self.showContainer = true
         if (this.query.uid) {
           if (self.query.uid.toString() === self.loginUser.uid.toString()) {
-            self.showTags = true
+            self.submitdata.type = 'retailer'
           } else {
-            self.showTags = false
+            self.submitdata.type = 'customer'
           }
         } else {
+          self.submitdata.type = 'retailer'
+        }
+        if (self.submitdata.type === 'retailer') {
           self.showTags = true
+        } else {
+          self.showTags = false
         }
         self.$vux.loading.hide()
         self.getData()
