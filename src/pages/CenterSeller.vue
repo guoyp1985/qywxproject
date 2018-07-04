@@ -113,7 +113,7 @@
                     <div class="w30 flex_right" @click="onReplyShow(item,index)">
                       <i class="al al-pinglun3 font14"></i>
                     </div>
-                    <div v-if="item.uid === loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
+                    <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
                       <i class="al al-shanchu font14"></i>
                     </div>
                   </div>
@@ -174,6 +174,7 @@
             <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer',tagid:clickTagId}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
             <div class="popup-middle" style="top:0;">
               <tag-page
+                :query="query"
                 :user-info="userInfo"
                 :login-user="loginUser"
                 :timeline-data="timelineData"

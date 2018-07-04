@@ -36,7 +36,7 @@
               <div class="w30 flex_right" @click="onReplyShow(item,index)">
                 <i class="al al-pinglun3 font14"></i>
               </div>
-              <div v-if="item.uid === loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
+              <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
                 <i class="al al-shanchu font14"></i>
               </div>
             </div>
@@ -73,6 +73,10 @@ import Time from '#/time'
 export default {
   name: 'TagPage',
   props: {
+    query: {
+      type: Object,
+      default: {}
+    },
     userInfo: {
       type: Object,
       default: {}

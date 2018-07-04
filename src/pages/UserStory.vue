@@ -30,6 +30,7 @@
         </div>
       </div>
       <tag-page
+        :query="query"
         :user-info="userInfo"
         :login-user="loginUser"
         :timeline-data="timelineData"
