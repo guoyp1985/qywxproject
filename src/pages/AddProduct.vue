@@ -59,7 +59,18 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:0;">
-                  <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Product name')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+                  <x-textarea
+                    ref="titleTextarea"
+                    v-model="submitdata.title"
+                    name="title" class="x-textarea noborder"
+                    :placeholder="$t('Product name')"
+                    :show-counter="false"
+                    :rows="1"
+                    :max="30"
+                    @on-change="textareaChange('titleTextarea')"
+                    @on-focus="textareaFocus('titleTextarea')"
+                    autosize>
+                  </x-textarea>
                 </group>
               </div>
             </div>
@@ -113,7 +124,18 @@
           </div>
           <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
           <group class="textarea-outer textarea-text bg-white">
-            <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
+            <x-textarea
+              ref="contentTextarea"
+              v-model="submitdata.content"
+              name="content"
+              class="x-textarea"
+              :placeholder="$t('Product description')"
+              :show-counter="false"
+              :rows="1"
+              @on-change="textareaChange('contentTextarea')"
+              @on-focus="textareaFocus('contentTextarea')"
+              autosize>
+            </x-textarea>
           </group>
           <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>
           <div class="b_bottom_after bg-white pl12 pr12 pb5">
@@ -184,7 +206,18 @@
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share description') }}</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <group class="textarea-outer" style="padding:0;">
-                    <x-textarea v-model="submitdata.seodescription" name="seodescription" class="x-textarea noborder" :placeholder="$t('Product share description placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
+                    <x-textarea
+                      ref="descTextarea"
+                      v-model="submitdata.seodescription"
+                      name="seodescription"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Product share description placeholder')"
+                      :show-counter="false"
+                      :rows="1"
+                      @on-change="textareaChange('descTextarea')"
+                      @on-focus="textareaFocus('descTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -291,6 +324,14 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+    },
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
     },
     photoCallback (data, type) {
       const self = this

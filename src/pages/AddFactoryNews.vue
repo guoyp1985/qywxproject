@@ -7,7 +7,19 @@
       <div class="pagemiddle">
         <group label-width="5em">
           <group class="textarea-outer">
-            <x-textarea v-model="submitdata.title" :title="$t('News title')" class="x-textarea noborder" :placeholder="`${$t('Necessary')}${$t('Title')}`" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+            <x-textarea
+              ref="titleTextarea"
+              v-model="submitdata.title"
+              :title="$t('News title')"
+              class="x-textarea noborder"
+              :placeholder="`${$t('Necessary')}${$t('Title')}`"
+              :show-counter="false"
+              :rows="1"
+              :max="30"
+              @on-change="textareaChange('titleTextarea')"
+              @on-focus="textareaFocus('titleTextarea')"
+              autosize>
+            </x-textarea>
           </group>
           <cell :title="$t('Cover photo')" class="font14">
             {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
@@ -41,8 +53,28 @@
           </div>
         </div>
         <group class="option-area" label-width="6em">
-          <x-textarea class="font14" :title="$t('Share description')" :placeholder="$t('Share description placeholder')" v-model="submitdata.seodescription" :rows="1" autosize></x-textarea>
-          <x-textarea class="font14" :title="$t('Summary')" :placeholder="$t('Summary')" v-model="submitdata.summary" :rows="1" autosize></x-textarea>
+          <x-textarea
+            ref="descTextarea"
+            class="font14"
+            :title="$t('Share description')"
+            :placeholder="$t('Share description placeholder')"
+            v-model="submitdata.seodescription"
+            :rows="1"
+            @on-change="textareaChange('descTextarea')"
+            @on-focus="textareaFocus('descTextarea')"
+            autosize>
+          </x-textarea>
+          <x-textarea
+            ref="summaryTextarea"
+            class="font14"
+            :title="$t('Summary')"
+            :placeholder="$t('Summary')"
+            v-model="submitdata.summary"
+            @on-change="textareaChange('summaryTextarea')"
+            @on-focus="textareaFocus('summaryTextarea')"
+            :rows="1"
+            autosize>
+          </x-textarea>
         </group>
       </div>
       <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
@@ -91,6 +123,14 @@ export default {
       this.havenum = 0
       this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
       this.requireddata = { title: '', 'photo': '' }
+    },
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
     },
     photoCallback (data) {
       const self = this

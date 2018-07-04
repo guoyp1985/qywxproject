@@ -61,7 +61,18 @@
                 <div class="flex_left mt12 border1px">
                   <div class="flex_cell" style="height:100%;">
                     <group class="textarea-outer">
-                      <x-textarea v-model="collecturl" class="x-textarea noborder" name="url" :placeholder="$t('Url paster here')" :show-counter="false" :rows="1" autosize></x-textarea>
+                      <x-textarea
+                        ref="urlTextarea"
+                        v-model="collecturl"
+                        class="x-textarea noborder"
+                        name="url"
+                        :placeholder="$t('Url paster here')"
+                        :show-counter="false"
+                        :rows="1"
+                        @on-change="textareaChange('urlTextarea')"
+                        @on-focus="textareaFocus('urlTextarea')"
+                        autosize>
+                      </x-textarea>
                     </group>
                   </div>
                   <div class="align_center bg-red color-white font15 w80" style="height:45px;line-height:45px;border-radius:5px;" @click="collect1">{{ $t('Collect') }}</div>
@@ -137,6 +148,14 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     handleScroll2 () {
       const self = this
       self.$util.scrollEvent({

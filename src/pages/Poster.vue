@@ -67,7 +67,19 @@
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Main title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <group class="textarea-outer">
-                    <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Input main title')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                    <x-textarea
+                      ref="titleTextarea"
+                      v-model="submitdata.title"
+                      name="title"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Input main title')"
+                      :show-counter="false"
+                      :rows="1"
+                      :max="30"
+                      @on-change="textareaChange('titleTextarea')"
+                      @on-focus="textareaFocus('titleTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -77,7 +89,19 @@
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Subtitle') }}</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <group class="textarea-outer">
-                    <x-textarea v-model="submitdata.subtitle" name="subtitle" class="x-textarea noborder" :placeholder="$t('Input subtitle')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                    <x-textarea
+                      ref="subtitleTextarea"
+                      v-model="submitdata.subtitle"
+                      name="subtitle"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Input subtitle')"
+                      :show-counter="false"
+                      :rows="1"
+                      :max="30"
+                      @on-change="textareaChange('subtitleTextarea')"
+                      @on-focus="textareaFocus('subtitleTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -149,6 +173,14 @@ export default {
   computed: {
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {

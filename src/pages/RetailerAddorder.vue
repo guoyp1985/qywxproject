@@ -91,7 +91,17 @@
           <forminputplate>
             <span slot="title">{{ $t('Detail address') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea style="padding:5px;" class="x-textarea" :placeholder="$t('Detail address placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea
+                ref="txtTextarea"
+                style="padding:5px;"
+                class="x-textarea"
+                :placeholder="$t('Detail address placeholder')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('txtTextarea')"
+                @on-focus="textareaFocus('txtTextarea')"
+                autosize>
+              </x-textarea>
             </group>
           </forminputplate>
           <div class="padding10 font16 bg-gray4">{{ $t('Deliver info') }}</div>
@@ -242,6 +252,14 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     onSubmit () {
     },
     onFocus () {

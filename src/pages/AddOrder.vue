@@ -62,7 +62,18 @@
                 <div class="t-cell v_middle" style="width:40px;">留言</div>
                 <div class="t-cell v_middle">
                   <group class="textarea-outer" style="padding:0;">
-                    <x-textarea v-model="submitdata.content" style="padding:5px;" class="x-textarea" :placeholder="$t('To seller message')" :show-counter="false" :rows="1" autosize></x-textarea>
+                    <x-textarea
+                      ref="contentTextarea"
+                      v-model="submitdata.content"
+                      style="padding:5px;"
+                      class="x-textarea"
+                      :placeholder="$t('To seller message')"
+                      :show-counter="false"
+                      :rows="1"
+                      @on-change="textareaChange('contentTextarea')"
+                      @on-focus="textareaFocus('contentTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -225,6 +236,14 @@ export default {
         content: ''
       }
       this.submiting = false
+    },
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
     },
     changenumber () {
       const self = this

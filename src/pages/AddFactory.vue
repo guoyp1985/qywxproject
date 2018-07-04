@@ -22,7 +22,18 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:0;">
-                  <x-textarea v-model="submitData.summary" class="x-textarea noborder" :placeholder="$t('Product summary')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+                  <x-textarea
+                    ref="summaryTextarea"
+                    v-model="submitData.summary"
+                    class="x-textarea noborder"
+                    :placeholder="$t('Product summary')"
+                    :show-counter="false"
+                    :rows="1"
+                    :max="30"
+                    @on-change="textareaChange('summaryTextarea')"
+                    @on-focus="textareaFocus('summaryTextarea')"
+                    autosize>
+                  </x-textarea>
                 </group>
               </div>
             </div>
@@ -127,6 +138,14 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     deletephoto (item, index) {
       const self = this
       self.photoarr.splice(index, 1)
