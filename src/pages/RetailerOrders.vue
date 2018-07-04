@@ -446,7 +446,7 @@ export default {
     },
     confirmpopup () {
       const self = this
-      if (self.deliverdata.delivercompany !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
+      if (self.deliverdata.delivercompany.toString() !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
         self.$vux.alert.show({
           title: '',
           content: '请输入物流单号'
