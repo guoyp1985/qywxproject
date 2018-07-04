@@ -41,7 +41,7 @@
           <form-groupbuy :submitdata="submitdata"></form-groupbuy>
         </template>
         <template v-if="activityType == 'bargainbuy'">
-          <form-bargainbuy :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
+          <form-bargainbuy ref="formBargainbuy" :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
         </template>
         <template v-if="activityType == 'discount'">
           <form-discount :submitdata="submitdata"></form-discount>
@@ -425,6 +425,11 @@ export default {
               onHide: function () {
                 if (data.flag === 1) {
                   self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
+                  if (self.query.type === 'bargainbuy') {
+                    self.$refs.formBargainbuy.minprice = ''
+                    self.$refs.formBargainbuy.everymin = ''
+                    self.$refs.formBargainbuy.everymax = ''
+                  }
                 }
               }
             })
@@ -434,6 +439,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.query = this.$route.query
       this.activityType = this.query.type
       const nowdate = new Date().getTime()
@@ -482,7 +488,6 @@ export default {
     }
   },
   activated () {
-    this.initData()
     this.refresh()
   }
 }

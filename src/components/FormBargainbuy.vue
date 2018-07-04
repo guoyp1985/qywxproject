@@ -82,13 +82,9 @@ export default {
       price: '0.00'
     }
   },
-  coputed: {
-
-  },
   watch: {
     minprice: function () {
       const self = this
-      // self.minprice = self.submitdata.param_minprice
       if (self.data && self.data.price) {
         self.price = self.data.price.replace(/,/g, '')
       }
@@ -98,7 +94,6 @@ export default {
     },
     everymin: function () {
       const self = this
-      // self.everymin = self.submitdata.param_everymin
       if (self.data && self.data.price) {
         self.price = self.data.price.replace(/,/g, '')
       }
@@ -108,7 +103,6 @@ export default {
     },
     everymax: function () {
       const self = this
-      // self.everymax = self.submitdata.param_everymax
       if (self.data && self.data.price) {
         self.price = self.data.price.replace(/,/g, '')
       }
