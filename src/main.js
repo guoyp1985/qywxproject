@@ -291,7 +291,7 @@ const handleUserInfo = (response) => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
-    console.log('main.js defaultAccess && code')
+    alert('main.js defaultAccess && code')
     // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -309,13 +309,13 @@ const handleUserInfo = (response) => {
       }
     )
   } else {
-    console.log('main.js !(defaultAccess && code)')
+    alert('main.js !(defaultAccess && code)')
     $vue.$util.access(response, isPC => {
       if (isPC) {
-        console.log('main.js PC')
+        alert('main.js PC')
         router.push({name: 'tLogin'})
       } else {
-        console.log('main.js !PC')
+        alert('main.js !PC')
         const originHref = encodeURIComponent(location.href)
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
       }
