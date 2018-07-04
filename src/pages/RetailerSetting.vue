@@ -71,8 +71,6 @@ export default {
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
           }
-          console.log(self.$refs.retailerSetting.$refs.sloganTextarea)
-          self.$refs.retailerSetting.$refs.sloganTextarea.updateAutosize()
         }
       })
     },

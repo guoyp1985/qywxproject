@@ -86,7 +86,11 @@
               class="x-textarea noborder"
               :placeholder="$t('Seller said')"
               :show-counter="false"
-              :autosize="true"></x-textarea>
+              :rows="1"
+              @on-change="textareaChange('sloganTextarea')"
+              @on-focus="textareaFocus('sloganTextarea')"
+              :autosize="true">
+            </x-textarea>
           </group>
         </forminputplate>
         <div class="form-item bg-white">
@@ -114,13 +118,35 @@
           <forminputplate>
             <span slot="title">{{ $t('Shop description') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea v-model="submitdata.content" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Shop description')" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea
+                ref="contentTextarea"
+                v-model="submitdata.content"
+                style="padding:5px;"
+                class="x-textarea noborder"
+                :placeholder="$t('Shop description')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('contentTextarea')"
+                @on-focus="textareaFocus('contentTextarea')"
+                autosize>
+              </x-textarea>
             </group>
           </forminputplate>
           <forminputplate>
             <span slot="title">{{ $t('Auto reply') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea v-model="submitdata.fastreply" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Auto reply')" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea
+                ref="fastreplyTextarea"
+                v-model="submitdata.fastreply"
+                style="padding:5px;"
+                class="x-textarea noborder"
+                :placeholder="$t('Auto reply')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('fastreplyTextarea')"
+                @on-focus="textareaFocus('fastreplyTextarea')" 
+                autosize>
+              </x-textarea>
             </group>
           </forminputplate>
         </div>
@@ -290,6 +316,14 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     expandevent () {
       this.showmore = !this.showmore
     },
@@ -480,9 +514,6 @@ export default {
         }
       })
     }
-  },
-  mounted () {
-    this.$refs.sloganTextarea.updateAutosize()
   }
 }
 </script>
