@@ -348,7 +348,7 @@ Vue.http.interceptors.request.use(config => {
 
     const token = Token.get()
     if (!token) {
-      console.log(config.url)
+      // console.log(config.url)
       cancelAllPendings(config)
       handleUserInfo()
     } else {
