@@ -48,6 +48,9 @@
               <div class="item">
                 <div class="inner" @click="clickPopup('level')">设置代理级别</div>
               </div>
+              <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
+                <div class="inner">进入店铺</div>
+              </router-link>
               <div class="item close mt10" @click="clickPopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>

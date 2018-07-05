@@ -139,8 +139,8 @@
       <div class="pagebottom">
         <router-link :to="{path: '/store', query: {wid: query.uid}}" class="radius-icon flex_center">
           <div>
-            <div><i class="al al-dianpufill"></i></div>
-            <div class="txt">进入店铺</div>
+            <div><i class="al al-dianpufill font24"></i></div>
+            <div class="txt">店铺</div>
           </div>
         </router-link>
         <div class="w_100 h_100 flex_center">
@@ -650,7 +650,7 @@ export default {
 .cseller .focuslist .txt{padding-left:20px;width:38px;}
 .cseller .moreicon{width:58px;}
 
-.cseller .pagemiddle{top:0;bottom:50px;padding-bottom:20px;}
+.cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
 .cseller .pagebottom{
   height: 50px;border-top:rgb(249, 249, 249) 1px solid;background-color:#fff;
   box-shadow: rgb(170, 170, 170) 0px -1px 8px -4px;text-align: center;
