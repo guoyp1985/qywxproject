@@ -49,6 +49,7 @@ export default {
             Token.set(token)
             self.$http.get(`${ENV.BokaApi}/api/user/show`)
             .then(res => {
+              console.log(res.data)
               User.set(res.data)
               self.$router.go(-1)
               self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
