@@ -60,7 +60,7 @@ import { Grid, GridItem, Group, GroupTitle, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import Reg from '#/reg'
-import { Token, User, WxAccess } from '#/storage'
+import { Token, User } from '#/storage'
 
 let manageBtn = [
   {
@@ -99,23 +99,22 @@ let featureBtns = [
   }
 ]
 
-// if (!Reg.rPlatfrom.test(navigator.userAgent)) {
-featureBtns.push({
-  name: 'Exit',
-  icon: 'al-tuichu3',
-  color: 'rgba05',
-  react: function () {
-    Token.remove()
-    User.remove()
-    WxAccess.remove()
-    // if (this.$util.isPC()) {
-    // this.$router.push({name: 'tLogin'})
-    // } else {
-    //   this.$router.push({name: 'tUserproducts'})
-    // }
-  }
-})
-// }
+if (!Reg.rPlatfrom.test(navigator.userAgent)) {
+  featureBtns.push({
+    name: 'Exit',
+    icon: 'al-tuichu3',
+    color: 'rgba05',
+    react: function () {
+      Token.remove()
+      User.remove()
+      // if (this.$util.isPC()) {
+      // this.$router.push({name: 'tLogin'})
+      // } else {
+      //   this.$router.push({name: 'tUserproducts'})
+      // }
+    }
+  })
+}
 
 export default {
   components: {
