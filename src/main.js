@@ -290,7 +290,7 @@ const handleUserInfo = () => {
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else if (!wxAccess) {
+  } else {
     console.log('WX REDIRECT')
     WxAccess.get(true)
     $vue.$util.access(isPC => {
