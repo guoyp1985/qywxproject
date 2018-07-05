@@ -263,13 +263,15 @@ router.afterEach(function (to) {
 // })
 
 // Token.remove()
-let accessFlag = true
+let bkAccessFlag = true
+let wxAccessFlag = true
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
-  if (state === 'defaultAccess' && code) {
+  if (bkAccessFlag && state === 'defaultAccess' && code) {
     // 401授权，取得token
+    bkAccessFlag = false
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -285,8 +287,8 @@ const handleUserInfo = () => {
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else if (accessFlag) {
-    accessFlag = false
+  } else if (wxAccessFlag) {
+    wxAccessFlag = false
     $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
