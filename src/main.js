@@ -262,7 +262,7 @@ router.afterEach(function (to) {
 //   return Promise.reject(error)
 // })
 
-Token.remove()
+// Token.remove()
 let accessFlag = true
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
@@ -282,6 +282,7 @@ const handleUserInfo = () => {
       res => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        console.log(res.data)
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
