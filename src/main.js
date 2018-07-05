@@ -270,6 +270,7 @@ const handleUserInfo = () => {
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
     // 401授权，取得token
+    console.log(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -282,7 +283,6 @@ const handleUserInfo = () => {
       res => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        console.log(res.data)
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
