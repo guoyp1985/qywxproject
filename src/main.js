@@ -278,6 +278,7 @@ const handleUserInfo = () => {
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
+        if (!res) return
         Token.set(res.data.data.token)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -285,6 +286,7 @@ const handleUserInfo = () => {
     )
     .then(
       res => {
+        if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
