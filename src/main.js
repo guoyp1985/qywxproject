@@ -270,8 +270,6 @@ const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
-  const wxAccess = WxAccess.get()
-  console.log(wxAccess)
   if (state === 'defaultAccess' && code) {
     console.log('CODE')
     // 401授权，取得token
@@ -295,7 +293,6 @@ const handleUserInfo = () => {
     )
   } else {
     console.log('WX REDIRECT')
-    WxAccess.get(true)
     $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
