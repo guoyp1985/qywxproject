@@ -312,15 +312,15 @@ let cancelAllPendings = () => {
   }
   pendings = []
 }
-let cancelSpecPending = (config) => {
-  for (let p = 0; p < pendings.length; p++) {
-    if (pendings[p].u === `${config.url}&${config.method}`) {
-      console.info(`canceled request: ${config.url}`)
-      pendings[p].f()
-      pendings.splice(p, 1)
-    }
-  }
-}
+// let cancelSpecPending = (config) => {
+//   for (let p = 0; p < pendings.length; p++) {
+//     if (pendings[p].u === `${config.url}&${config.method}`) {
+//       console.info(`canceled request: ${config.url}`)
+//       pendings[p].f()
+//       pendings.splice(p, 1)
+//     }
+//   }
+// }
 
 const excludeUrls = [
   `${ENV.BokaApi}/api/authLogin/*`,
