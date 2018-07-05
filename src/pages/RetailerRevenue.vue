@@ -47,7 +47,7 @@
                       <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                     </div>
                   </template>
-                  <template v-else-if="item.content.indexOf('平台奖励基金') < 0">
+                  <template v-else-if="item.isaward">
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">

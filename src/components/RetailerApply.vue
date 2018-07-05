@@ -391,7 +391,7 @@ export default {
             time: self.$util.delay(applydata.error),
             onHide: function () {
               if (applydata.orderid > 0) {
-                self.$router.push({path: '/pay', query: {id: applydata.orderid, module: 'payorders'}})
+                location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=payorders`)
               } else if (applydata.flag === 1 || applydata.flag === 2) {
                 self.afterApply && self.afterApply()
               } else {
