@@ -304,13 +304,20 @@ const handleUserInfo = () => {
   return { data: { } }
 }
 
-let pending = []
-let removePending = (config) => {
-  for (let p in pending) {
-    if (pending[p].u === `${config.url}&${config.method}`) {
+let pendings = []
+let cancelAllPendings = () => {
+  for (let p of pendings) {
+    console.info(`canceled request: ${p.u}`)
+    p.f()
+  }
+  pendings = []
+}
+let cancelSpecPending = (config) => {
+  for (let p = 0; p < pendings.length; p++) {
+    if (pendings[p].u === `${config.url}&${config.method}`) {
       console.info(`canceled request: ${config.url}`)
-      pending[p].f()
-      pending.splice(p, 1)
+      pendings[p].f()
+      pendings.splice(p, 1)
     }
   }
 }
@@ -336,13 +343,13 @@ const matchExclude = url => {
 Vue.http.interceptors.request.use(config => {
   if (!matchExclude(config.url)) {
     config.cancelToken = new CancelToken(c => {
-      pending.push({ u: config.url + '&' + config.method, f: c })
+      pendings.push({ u: config.url + '&' + config.method, f: c })
     })
 
     const token = Token.get()
     if (!token) {
-      // console.log(config)
-      removePending(config)
+      console.log(config.url)
+      cancelAllPendings(config)
       handleUserInfo()
     } else {
       config.headers['Authorization'] = `Bearer ${token}`
