@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { Token, User } from '#/storage'
+import { Token, User, WxAccess } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -264,15 +264,15 @@ router.afterEach(function (to) {
 
 // Token.remove()
 let bkAccessFlag = true
-let wxAccessFlag = true
+// let wxAccessFlag = true
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
-  if (bkAccessFlag && state === 'defaultAccess' && code) {
+  const wxAccess = WxAccess.get()
+  if (state === 'defaultAccess' && code) {
     console.log('CODE')
     // 401授权，取得token
-    bkAccessFlag = false
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -288,9 +288,9 @@ const handleUserInfo = () => {
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else if (wxAccessFlag) {
+  } else if (!wxAccess) {
     console.log('WX REDIRECT')
-    wxAccessFlag = false
+    WxAccess.get(true)
     $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})

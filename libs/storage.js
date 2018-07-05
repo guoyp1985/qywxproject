@@ -64,5 +64,17 @@ const Roomid = {
     return localStorage.getItem('roomid')
   }
 }
+const WxAccess = {
+  set (access) {
+    localStorage.setItem('wxAccess', access)
+  },
+  get () {
+    const res = localStorage.getItem('wxAccess')
+    return (res === undefined || res === 'false') ? false : true
+  },
+  remove () {
+    localStorage.removeItem('wxAccess')
+  }
+}
 
-export { Token, OpenId, WxQrCode, User, Access, Roomid }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid }
