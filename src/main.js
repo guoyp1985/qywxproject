@@ -29,7 +29,7 @@ Vue.use(ConfirmPlugin)
 
 require('es6-promise').polyfill()
 
-// const CancelToken = AjaxPlugin.$http.CancelToken
+const CancelToken = AjaxPlugin.$http.CancelToken
 
 // const headers = new Headers();
 // headers.set('Origin', 'https://vux.boka.cn')
@@ -262,31 +262,9 @@ router.afterEach(function (to) {
 //   return Promise.reject(error)
 // })
 
-// let pending = []
-// let removePending = (config) => {
-//   for (let p in pending) {
-//     if (pending[p].u === config.url + '&' + config.method) {
-//       pending[p].f()
-//       pending.splice(p, 1)
-//     }
-//   }
-// }
-
 // Token.remove()
-// 请求拦截器
-Vue.http.interceptors.request.use(config => {
-  // removePending(config)
-  // config.cancelToken = new CancelToken(c => {
-  //   pending.push({ u: config.url + '&' + config.method, f: c })
-  // })
-  const token = Token.get()
-  config.headers['Authorization'] = `Bearer ${token}`
-  return config
-}, error => {
-  return Promise.reject(error)
-})
-
-const handleUserInfo = (response) => {
+let accessFlag = true
+const handleUserInfo = (success) => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
@@ -303,12 +281,14 @@ const handleUserInfo = (response) => {
     .then(
       res => {
         User.set(res.data)
+        success && success()
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else {
-    $vue.$util.access(response, isPC => {
+  } else if (accessFlag) {
+    accessFlag = false
+    $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
@@ -321,18 +301,49 @@ const handleUserInfo = (response) => {
   return { data: { } }
 }
 
+let pending = []
+let removePending = (config) => {
+  for (let p in pending) {
+    if (pending[p].u === `${config.url}&${config.method}`) {
+      pending[p].f()
+      pending.splice(p, 1)
+    }
+  }
+}
+
+// 请求拦截器
+Vue.http.interceptors.request.use(config => {
+  config.cancelToken = new CancelToken(c => {
+    pending.push({ u: config.url + '&' + config.method, f: c })
+  })
+  const token = Token.get()
+  if (!token) {
+    // console.log(config)
+    removePending(config)
+    handleUserInfo()
+  } else {
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
+})
+
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
-  if (response.status === 200) {
-    const user = User.get()
-    if (!user || !user.uid) {
-      handleUserInfo(response)
-    }
-  }
+  // if (response.status === 200) {
+  //   const user = User.get()
+  //   if (!user || !user.uid) {
+  //     handleUserInfo(response)
+  //   }
+  // }
   return response
 }, error => {
-  handleUserInfo(error.response)
+  // handleUserInfo(error.response)
+  if (error.response && error.response.status === 401) {
+    console.error('未授权请求')
+  }
 })
 
 // const getAddress = (wxToken) => {

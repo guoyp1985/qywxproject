@@ -19,12 +19,12 @@
         <template v-if="retailerInfo.uid">
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
         		<div class="t-table">
-        			<div class="t-cell v_middle w50">
+        			<router-link class="t-cell v_middle w50" :to="{path: '/centerSeller',query:{uid:query.wid}}">
                 <img class="avatarimg1 imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-              </div>
-        			<div class="t-cell v_middle shopkeeper_txt">
+              </router-link>
+        			<router-link class="t-cell v_middle shopkeeper_txt" :to="{path: '/centerSeller',query:{uid:query.wid}}">
         				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
-        			</div>
+        			</router-link>
       				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
                 <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
                 <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>

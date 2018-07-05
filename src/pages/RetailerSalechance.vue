@@ -1,84 +1,88 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
-    <div class="s-topbanner">
-      <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
-        <div class="vux-1px-r">
-          <div class="color-white font14">访问量</div>
-          <div class="color-white font21 mt10 clamp1">{{ viewdata.views }}</div>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <template v-if="showContainer">
+      <div class="s-topbanner">
+        <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
+          <div class="vux-1px-r">
+            <div class="color-white font14">访问量</div>
+            <div class="color-white font21 mt10 clamp1">{{ viewdata.views }}</div>
+          </div>
+          <div class="vux-1px-r">
+            <div class="color-white font14">分享数</div>
+            <div class="color-white font21 mt10 clamp1">{{ viewdata.share }}</div>
+          </div>
+          <div class="vux-1px-r">
+            <div class="color-white font14">销售额</div>
+            <div class="color-white font21 mt10 clamp1">{{$t('RMB')}}{{ viewdata.orders }}</div>
+          </div>
         </div>
-        <div class="vux-1px-r">
-          <div class="color-white font14">分享数</div>
-          <div class="color-white font21 mt10 clamp1">{{ viewdata.share }}</div>
-        </div>
-        <div class="vux-1px-r">
-          <div class="color-white font14">销售额</div>
-          <div class="color-white font21 mt10 clamp1">{{$t('RMB')}}{{ viewdata.orders }}</div>
-        </div>
+        <tab v-model="selectedIndex" class="v-tab">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        </tab>
       </div>
-      <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-      </tab>
-    </div>
-    <div class="pagemiddle bg-white pl12 pr12">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
-            <template v-if="disdatalist1">
-              <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
-                <div class="t-table ml10">
-                  <div class="t-cell">
-                    <div><i class="al al-yulan3 font70 pt20"></i></div>
-                    <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+      <div class="pagemiddle bg-white pl12 pr12">
+        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+          <swiper-item class="swiperitem" v-for="(tabitem, index) in tabtxts" :key="index">
+            <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+              <template v-if="disdatalist1">
+                <div v-if="tabdata1.length == 0" class="scroll_item padding10 color-gray align_center">
+                  <div class="t-table ml10">
+                    <div class="t-cell">
+                      <div><i class="al al-yulan3 font70 pt20"></i></div>
+                      <div class="mt5">暂无分享数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <timeline v-else class="x-timeline">
-                <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
-                  <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
-                  <div class="color-999 font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                <timeline v-else class="x-timeline">
+                  <timeline-item v-for="(item, index) in tabdata1" :key="item.id">
+                    <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
+                    <div class="color-999 font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                    <div class="t-table ml10">
+                      <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                        <div class="color-orange7 font14">{{ item.linkman }}</div>
+                        <div class="color-gray font12 pr10">{{ item.content }}</div>
+                      </router-link>
+                      <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
+                        <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
+                      </router-link>
+                    </div>
+                  </timeline-item>
+                </timeline>
+              </template>
+            </div>
+            <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+              <template v-if="disdatalist2">
+                <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
                   <div class="t-table ml10">
-                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
-                      <div class="color-orange7 font14">{{ item.linkman }}</div>
-                      <div class="color-gray font12 pr10">{{ item.content }}</div>
-                    </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
-                      <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
-                    </router-link>
-                  </div>
-                </timeline-item>
-              </timeline>
-            </template>
-          </div>
-          <div v-else-if="index === 1" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
-            <template v-if="disdatalist2">
-              <div v-if="tabdata2.length == 0" class="scroll_item padding10 color-gray align_center">
-                <div class="t-table ml10">
-                  <div class="t-cell">
-                    <div><i class="al al-yulan3 font70 pt20"></i></div>
-                    <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                    <div class="t-cell">
+                      <div><i class="al al-yulan3 font70 pt20"></i></div>
+                      <div class="mt5">暂无浏览数据，将商品、活动或文章分享给好友或朋友圈，即可获得更多销售机会！</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <timeline v-else class="x-timeline vux-tab">
-                <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
-                  <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
-                  <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
-                  <div class="t-table ml10">
-                    <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
-                      <div class="color-orange7 font14">{{ item.linkman }}</div>
-                      <div class="color-gray font12 pr10">{{ item.content }}</div>
-                    </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
-                      <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
-                    </router-link>
-                  </div>
-                </timeline-item>
-              </timeline>
-            </template>
-          </div>
-        </swiper-item>
-      </swiper>
-    </div>
+                <timeline v-else class="x-timeline vux-tab">
+                  <timeline-item v-for="(item, index) in tabdata2" :key="item.id">
+                    <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
+                    <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
+                    <div class="t-table ml10">
+                      <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                        <div class="color-orange7 font14">{{ item.linkman }}</div>
+                        <div class="color-gray font12 pr10">{{ item.content }}</div>
+                      </router-link>
+                      <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
+                        <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
+                      </router-link>
+                    </div>
+                  </timeline-item>
+                </timeline>
+              </template>
+            </div>
+          </swiper-item>
+        </swiper>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -95,10 +99,13 @@ Contact:
 import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem
+    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (dt) {
@@ -132,6 +139,10 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
+      query: {},
+      showApply: false,
+      showContainer: false,
       selectedIndex: 0,
       tabtxts: [ '分享', '浏览' ],
       viewdata: { orders: '0.00', share: 0, views: 0 },
@@ -206,6 +217,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
@@ -213,6 +225,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
@@ -235,9 +248,34 @@ export default {
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.swiperChange()
+      this.$vux.loading.show()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          this.$vux.loading.hide()
+          if (!this.loginUser.isretailer) {
+            self.initContainer()
+            this.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.swiperChange()
+          }
+        }
+      }
     }
   },
   created () {

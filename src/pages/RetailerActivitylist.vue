@@ -1,5 +1,7 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
@@ -25,7 +27,7 @@
               <div class="scroll_list">
                 <div v-for="(item,index1) in tabdata1" :key="item.id" :class="`scroll_item ${item.type}item bg-white mb5 pl12 pr12 db`">
                   <router-link :to="{path:'/product',query:{wid:item.wid,id:item.id}}" v-if="item.type == 'spring'" :key="item.id" class="db" style="position:relative;">
-                    <div v-if="item.isfinished === 1" class="icon finished"></div>
+                    <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
                         <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -46,7 +48,7 @@
                     <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
                   </router-link>
                   <router-link :to="{path:'/product',query:{wid:item.wid,id:item.productid}}" v-if="item.type == 'groupbuy'" :key="item.id" class="db" style="position:relative;">
-                    <div v-if="item.isfinished === 1" class="icon finished"></div>
+                    <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
                         <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -64,7 +66,7 @@
                     <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
                   </router-link>
                   <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'bargainbuy'" :key="item.id" class="db" style="position:relative;">
-                    <div v-if="item.isfinished === 1" class="icon finished"></div>
+                    <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
                         <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -138,6 +140,9 @@ import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } f
 import CreateActivity from '@/components/CreateActivity'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 const limit = 10
 let pageStart1 = 0
@@ -147,7 +152,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -156,7 +161,9 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       query: {},
+      showApply: false,
       showContainer: false,
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
@@ -231,12 +238,38 @@ export default {
       this.$vux.loading.show()
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.tabdata1.length < limit || this.query.from === 'add') {
-        this.tabdata1 = []
-        this.getData1()
+      this.$vux.loading.show()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            this.$vux.loading.hide()
+            this.query = this.$route.query
+            if (this.tabdata1.length < limit || this.query.from === 'add') {
+              self.initContainer()
+              pageStart1 = 0
+              this.tabdata1 = []
+              this.getData1()
+            }
+          }
+        }
       }
     }
   },
@@ -250,14 +283,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.ractivitylist .icon{
+.ractivitylist .ico{
   position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
   background-color:#ff9f9f;color:#fff;text-align:center;font-size: 12px;
   -webkit-transform: translate(-40px,-2px) rotate(-45deg);
   transform: translate(-40px,-2px) rotate(-45deg);
 }
-.ractivitylist .finished.icon{background-color:#8a8a8a;}
-.ractivitylist .finished.icon:after{content:"已结束";}
+.ractivitylist .finished.ico{background-color:#8a8a8a;}
+.ractivitylist .finished.ico:after{content:"已结束";}
 .ractivitylist .scroll_item{
   padding-top:10px;
   padding-bottom:10px;

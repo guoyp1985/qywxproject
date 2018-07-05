@@ -1,8 +1,8 @@
 <template>
   <div class="containerarea font14 notop nobottom">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <template v-if="module == 'activity' && data.type === 'groupbuy'">
@@ -221,13 +221,16 @@ Message:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, XImg } from 'vux'
 import Sos from '@/components/Sos'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 const limit = 10
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XImg, Sos
+    Tab, TabItem, Swiper, SwiperItem, XImg, Sos, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -254,9 +257,11 @@ export default {
   },
   data () {
     return {
+      showApply: false,
       showSos: false,
       sosTitle: '该信息不存在',
       showContainer: false,
+      loginUser: {},
       query: {},
       module: '',
       data: {},
@@ -279,6 +284,7 @@ export default {
   },
   methods: {
     initData () {
+      this.sosTitle = '该信息不存在'
       this.query = this.$route.query
       this.module = this.query.module
       this.selectedIndex = 0
@@ -360,19 +366,51 @@ export default {
     },
     init () {
       this.$vux.loading.show()
-      this.query = this.$route.query
       this.module = this.query.module
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+      self.showSos = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
-        this.query = this.$route.query
-        this.module = this.query.module
-        this.initData()
-        this.getData()
-      } else if (this.showContainer) {
-        this.swiperChange()
+      this.$vux.loading.show()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          let isAdmin = false
+          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+            if (self.loginUser.usergroup[i] === 1) {
+              isAdmin = true
+              break
+            }
+          }
+          if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
+            self.initContainer()
+            this.sosTitle = '抱歉，您暂无权限访问此页面！'
+            this.showSos = true
+          } else {
+            if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+              self.initContainer()
+              this.sosTitle = '该信息不存在'
+              this.query = this.$route.query
+              this.module = this.query.module
+              this.initData()
+              this.getData()
+            } else if (this.showContainer) {
+              this.swiperChange()
+            }
+          }
+        }
       }
     }
   },

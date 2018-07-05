@@ -52,7 +52,15 @@
       </group>
       <group>
         <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
-        <cell class="font14" :value="`${$t('Actual Payment')}: ¥${special}`"></cell>
+        <cell>
+          <div class="color-orange">
+            <span class="v_middle font12">{{$t('Order price')}}: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
+            <template v-if="data.postage && data.postage != ''">
+              <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+              <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
+            </template>
+          </div>
+        </cell>
       </group>
       <group>
         <div class="padding10 font12 color-gray">创建时间: {{ data.dateline | dateformat }}</div>
@@ -182,7 +190,7 @@ export default {
       this.$vux.confirm.show({
         title: '您是否要申请退款？',
         onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id})
+          self.$http.post(`${ENV.BokaApi}/api/order/refund`, {id: self.data.id, from: self.data.from})
           .then(res => {
             let data = res.data
             self.$vux.toast.show({

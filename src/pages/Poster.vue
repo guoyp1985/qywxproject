@@ -17,7 +17,7 @@
               <div class="flex_row flex_left">
                 <div v-for="(item,index) in coverphotoarr" :key="index" class="flex_table w_33 padding5 border-box" @click="selectcover(item,index)">
                   <div class="item pic-photo border01">
-                    <div class="icon" v-if="item.checked"><i class="al al-duihao"></i></div>
+                    <div class="ico" v-if="item.checked"><i class="al al-duihao"></i></div>
                     <div class="pic-layer">
                       <img :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                     </div>
@@ -67,7 +67,19 @@
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Main title') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <group class="textarea-outer">
-                    <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Input main title')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                    <x-textarea
+                      ref="titleTextarea"
+                      v-model="submitdata.title"
+                      name="title"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Input main title')"
+                      :show-counter="false"
+                      :rows="1"
+                      :max="30"
+                      @on-change="textareaChange('titleTextarea')"
+                      @on-focus="textareaFocus('titleTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -77,7 +89,19 @@
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Subtitle') }}</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <group class="textarea-outer">
-                    <x-textarea v-model="submitdata.subtitle" name="subtitle" class="x-textarea noborder" :placeholder="$t('Input subtitle')" :show-counter="false" :rows="1" :max=30 autosize></x-textarea>
+                    <x-textarea
+                      ref="subtitleTextarea"
+                      v-model="submitdata.subtitle"
+                      name="subtitle"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Input subtitle')"
+                      :show-counter="false"
+                      :rows="1"
+                      :max="30"
+                      @on-change="textareaChange('subtitleTextarea')"
+                      @on-focus="textareaFocus('subtitleTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -149,6 +173,14 @@ export default {
   computed: {
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -294,6 +326,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.submitdata.title = self.data.title
+          self.coverphotoarr = []
           if (self.data.photo && self.$util.trim(self.data.photo) !== '') {
             let arr = self.data.photo.split(',')
             for (let i = 0; i < arr.length; i++) {
@@ -305,11 +338,13 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.submitdata.type = this.query.module
-      this.submitdata.id = this.query.id
-      this.$vux.loading.show()
-      this.getData()
+      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+        this.query = this.$route.query
+        this.submitdata.type = this.query.module
+        this.submitdata.id = this.query.id
+        this.$vux.loading.show()
+        this.getData()
+      }
     }
   },
   activated () {
@@ -323,8 +358,8 @@ export default {
 .poster .picarea .inner{margin:0 auto;width:60%;border:1px solid #f2f2f2;box-shadow:3px 3px 10px #dfdfdf}
 .poster .picarea img{max-width:100%}
 .poster .coverlist .item{width:100%;}
-.poster .coverlist .item .icon{position:absolute;top:0;right:0;bottom:0;left:0;background-color:rgba(0,0,0,.5);z-index:1;}
-.poster .coverlist .item .icon i{position:absolute;top:50%;left:50%;margin-top:-15px;margin-left:-15px;width:30px;height:30px;color:#fff;}
+.poster .coverlist .item .ico{position:absolute;top:0;right:0;bottom:0;left:0;background-color:rgba(0,0,0,.5);z-index:1;}
+.poster .coverlist .item .ico i{position:absolute;top:50%;left:50%;margin-top:-15px;margin-left:-15px;width:30px;height:30px;color:#fff;}
 .poster .btncreate:after{content:"生成海报"}
 .poster .btncreate.disabled:after{content:"正在生成海报 请稍等..."}
 .form-item{position:relative;padding:10px;}

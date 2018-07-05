@@ -1,29 +1,19 @@
 <template>
-  <div id="article-info-edit" class="font14 containerarea notop">
+  <div class="font14 containerarea notop addtimeline">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
-    <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagemiddle">
-        <group label-width="5em">
-          <group class="textarea-outer">
-            <x-textarea
-              ref="titleTextarea"
-              v-model="submitdata.title"
-              :title="$t('News title')"
-              class="x-textarea noborder"
-              :placeholder="`${$t('Necessary')}${$t('Title')}`"
-              :show-counter="false"
-              :rows="1"
-              :max="30"
-              @on-change="textareaChange('titleTextarea')"
-              @on-focus="textareaFocus('titleTextarea')"
-              autosize>
-            </x-textarea>
-          </group>
-          <cell :title="$t('Cover photo')" class="font14">
-            {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
-          </cell>
+        <group>
+          <x-textarea
+            ref="textarea"
+            v-model="submitdata.title"
+            @on-change="valueChange"
+            class="font14 pop-textarea"
+            :max="200"
+            :placeholder="$t('Say something')">
+          </x-textarea>
         </group>
+        <emotion-box bind-textarea=".pop-textarea"></emotion-box>
         <div class="img-operate-area">
           <input v-model="submitdata.photo" type="hidden" name="photo" />
           <form enctype="multipart/form-data">
@@ -45,55 +35,45 @@
               <div class="img">
                 <div class="img-info-box">
                   <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                  <div class="font12 color-gray"><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                  <div class="font12 color-gray"><span class="havenum">{{ photoarr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <group class="option-area" label-width="6em">
-          <x-textarea
-            ref="descTextarea"
-            class="font14"
-            :title="$t('Share description')"
-            :placeholder="$t('Share description placeholder')"
-            v-model="submitdata.seodescription"
-            :rows="1"
-            @on-change="textareaChange('descTextarea')"
-            @on-focus="textareaFocus('descTextarea')"
-            autosize>
-          </x-textarea>
-          <x-textarea
-            ref="summaryTextarea"
-            class="font14"
-            :title="$t('Summary')"
-            :placeholder="$t('Summary')"
-            v-model="submitdata.summary"
-            :rows="1"
-            @on-change="textareaChange('summaryTextarea')"
-            @on-focus="textareaFocus('summaryTextarea')"
-            autosize>
-          </x-textarea>
-        </group>
+        <template v-if="showTags">
+          <div class="form-item border-box padding10" v-if="tagsData.length > 0">
+            <div class="pb10">选择标签</div>
+            <checker
+            class="x-checker"
+            type="checkbox"
+            v-model="tagids"
+            default-item-class="ck-item"
+            selected-item-class="ck-item-selected">
+              <checker-item class="border1px color-gray" v-for="(item, index) in tagsData" :key="index" :value="item.id">{{ item.title }}</checker-item>
+            </checker>
+          </div>
+        </template>
       </div>
       <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
+        <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Release') }}</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
     </template>
   </div>
 </template>
 <script>
-import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
+import { Group, XInput, XTextarea, Cell, XButton, Checker, CheckerItem } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import EmotionBox from '@/components/EmotionBox'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, EmotionBox, Checker, CheckerItem
   },
   data () {
     return {
@@ -105,31 +85,31 @@ export default {
       popupShow: false,
       allowsubmit: true,
       photoarr: [],
-      maxnum: 1,
+      maxnum: 9,
       havenum: 0,
-      submitdata: { title: '', photo: '', seodescription: '', summary: '' },
-      requireddata: { title: '', 'photo': '' }
+      submitdata: { title: '', photo: '', tagids: [], type: 'retailer' },
+      requireddata: { title: '', 'photo': '' },
+      tagsData: [],
+      tagids: [],
+      showTags: false,
+      uid: 0
     }
   },
   computed: {
   },
   methods: {
     initData () {
-      this.cutImg = ''
-      this.popupShow = false
       this.allowsubmit = true
       this.photoarr = []
       this.havenum = 0
-      this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
+      this.submitdata = { title: '', photo: '', tagids: [], type: 'retailer' }
       this.requireddata = { title: '', 'photo': '' }
+      this.tagsData = []
+      this.tagids = []
+      this.showTags = false
     },
-    textareaChange (refname) {
-      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
-      curArea.updateAutosize()
-    },
-    textareaFocus (refname) {
-      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
-      curArea.updateAutosize()
+    valueChange (val) {
+      this.submitdata.title = val
     },
     photoCallback (data) {
       const self = this
@@ -188,31 +168,17 @@ export default {
     },
     save () {
       const self = this
-      const query = self.$route.query
-      let validateData = []
-      for (let key in self.requireddata) {
-        let v = {}
-        v[key] = self.submitdata[key]
-        validateData.push(v)
-      }
-      let iscontinue = self.$util.validateQueue(validateData,
-        model => {
-          switch (model.key) {
-            default:
-              self.$vux.toast.text('必填项不能为空', 'middle')
-          }
-        }
-      )
-      if (!iscontinue) {
+      const textarea = self.$refs.textarea.$refs.textarea[0] ? self.$refs.textarea.$refs.textarea[0] : self.$refs.textarea.$refs.textarea
+      let subTitle = textarea.value
+      if (self.$util.trim(subTitle) === '' && self.$util.trim(self.submitdata.photo) === '') {
+        self.$vux.toast.text('请添加内容或图片信息', 'middle')
         return false
       }
       self.$vux.loading.show()
-      if (query.id) {
-        self.submitdata['id'] = query.id
-      } else {
-        delete self.submitdata['id']
-      }
-      self.$http.post(`${ENV.BokaApi}/api/add/news`, self.submitdata).then(function (res) {
+      self.submitdata.title = subTitle
+      self.submitdata.tagids = self.tagids.join(',')
+      self.submitdata.wid = self.query.uid ? self.query.uid : self.loginUser.uid
+      self.$http.post(`${ENV.BokaApi}/api/timeline/add `, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
@@ -221,11 +187,11 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              let params = { id: data.data }
-              if (self.query.id) {
-                params.newadd = 1
+              if (self.submitdata.type === 'customer') {
+                self.$router.push({ path: '/userStory', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid, from: 'add'} })
+              } else {
+                self.$router.push({ path: '/centerSeller', query: {uid: self.query.uid ? self.query.uid : self.loginUser.uid, from: 'add'} })
               }
-              self.$router.push({ path: '/news', query: params })
             }
           }
         })
@@ -239,30 +205,14 @@ export default {
       this.popupShow = false
     },
     getData () {
-      if (this.query.id) {
-        const self = this
-        document.title = '更多设置'
-        this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
-          params: { id: this.query.id, module: 'news' }
-        })
-        .then(function (res) {
-          const data = res.data
-          const retdata = data.data ? data.data : data
-          if (retdata) {
-            for (let key in self.submitdata) {
-              self.submitdata[key] = retdata[key]
-            }
-            if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
-              const parr = self.submitdata.photo.split(',')
-              for (let i = 0; i < parr.length; i++) {
-                self.photoarr.push(self.$util.getPhoto(parr[i]))
-              }
-            }
-          }
-        })
-      } else if (this.photoarr.length > 0) {
-        this.submitdata.photo = this.$util.setPhoto(this.photoarr[0])
-      }
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(function (res) {
+        if (res.status === 200) {
+          let data = res.data
+          self.userInfo = data.data ? data.data : data
+          self.tagsData = self.userInfo.tags
+        }
+      })
     },
     initContainer () {
       const self = this
@@ -274,36 +224,32 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.initData()
+      this.query = this.$route.query
+      if (this.query.type) {
+        self.submitdata.type = this.query.type
+      }
+      if (this.query.tagid) {
+        self.tagids = [this.query.tagid]
+      }
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        } else {
-          self.initContainer()
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
-          }
-          if (!self.loginUser.isretailer && !isAdmin) {
-            this.$vux.loading.hide()
-            self.initContainer()
-            self.showApply = true
+        self.showContainer = true
+        if (this.query.uid) {
+          if (self.query.uid.toString() === self.loginUser.uid.toString()) {
+            self.submitdata.type = 'retailer'
           } else {
-            self.initContainer()
-            self.showContainer = true
-            this.$vux.loading.hide()
-            if (this.query.id !== this.$route.query.id) {
-              this.initData()
-              this.query = this.$route.query
-              this.getData()
-            }
+            self.submitdata.type = 'customer'
           }
+        } else {
+          self.submitdata.type = 'retailer'
         }
+        if (self.submitdata.type === 'retailer') {
+          self.showTags = true
+        } else {
+          self.showTags = false
+        }
+        self.$vux.loading.hide()
+        self.getData()
       }
     }
   },
@@ -321,7 +267,8 @@ export default {
   position: relative;
   display: flex;
   float: left;
-  margin-right: 10px;
+  margin-right: 15px;
+  margin-bottom:15px;
   text-align: center;
 }
 .img-box.upload-box {
@@ -371,4 +318,22 @@ export default {
   padding: 10px;
 }
 .x-textarea .weui-label{font-size:14px;}
+
+
+.addtimeline .x-checker .ck-item{
+  font-size:13px;
+  display: inline-block;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  border:0px;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #fff;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+.x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 </style>

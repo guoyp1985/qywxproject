@@ -1,49 +1,53 @@
 <template>
   <div class="containerarea bg-page font14 rproductlist nobottom notop">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
-      <template v-if="disTabData1">
-        <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
-          <div>暂无加盟厂商</div>
-        </div>
-        <div v-else class="scroll_list ">
-          <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
-            <div v-if="item.moderate == 0" class="icon down"></div>
-        		<div class="t-table bg-white pt10 pb10">
-      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
-                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+    <apply-tip v-if="showApply"></apply-tip>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <template v-if="showContainer">
+      <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
+        <template v-if="disTabData1">
+          <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
+            <div>暂无加盟厂商</div>
+          </div>
+          <div v-else class="scroll_list ">
+            <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
+              <div v-if="item.moderate == 0" class="ico down"></div>
+          		<div class="t-table bg-white pt10 pb10">
+        				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                  <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                </div>
+          			<div class="t-cell v_middle">
+                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                  <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
+          			</div>
+          		</div>
+            </router-link>
+          </div>
+        </template>
+      </div>
+      <div v-transfer-dom>
+        <popup class="menuwrap" v-model="showPopup1">
+          <div class="popup0">
+            <div class="list" v-if="clickData">
+              <div class="item">
+                <div class="inner" @click="clickPopup('push')">设置管理员</div>
               </div>
-        			<div class="t-cell v_middle">
-                <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
-        			</div>
-        		</div>
-          </router-link>
-        </div>
-      </template>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showPopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickData">
-            <div class="item">
-              <div class="inner" @click="clickPopup('push')">设置管理员</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('set')">设置</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('edit')">编辑</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('retailer')">卖家</div>
-            </div>
-            <div class="item close mt10" @click="clickPopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('set')">设置</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('edit')">编辑</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('retailer')">卖家</div>
+              </div>
+              <div class="item close mt10" @click="clickPopup('row.key')">
+                <div class="inner">{{ $t('Cancel txt') }}</div>
+              </div>
             </div>
           </div>
-        </div>
-      </popup>
-    </div>
+        </popup>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -55,6 +59,9 @@ Add factory:
 <script>
 import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
 import ENV from 'env'
+import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -65,10 +72,12 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem
+    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Subscribe, ApplyTip
   },
   data () {
     return {
+      showApply: false,
+      showContainer: false,
       query: {},
       loginUser: {},
       tabtxts: [ '已分销', '未分销' ],
@@ -115,6 +124,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabData1.length < limit) {
+            pageStart1 = 0
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()
@@ -122,6 +132,7 @@ export default {
           break
         case 1:
           if (this.tabData2.length < limit) {
+            pageStart2 = 0
             this.disTabData2 = false
             this.tabData2 = []
             this.getData2()
@@ -153,23 +164,39 @@ export default {
         self.disTabData2 = true
       })
     },
-    init () {
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'factorylist'
-      })
+    initContainer () {
+      this.showApply = false
+      this.showContainer = false
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (this.tabData1.length < limit) {
-        this.disTabData1 = false
-        this.tabData1 = []
-        this.getData1()
+      this.$vux.loading.show()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          this.showApply = true
+        } else {
+          self.initContainer()
+          this.showContainer = true
+          this.query = this.$route.query
+          if (this.tabData1.length < limit) {
+            pageStart1 = 0
+            this.disTabData1 = false
+            this.tabData1 = []
+            this.getData1()
+          }
+        }
       }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
@@ -179,15 +206,15 @@ export default {
 
 <style lang="less" scoped>
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .scroll_item .icon{display:none;}
-.rproductlist .scroll_item .down.icon{
+.rproductlist .scroll_item .ico{display:none;}
+.rproductlist .scroll_item .down.ico{
   display:block;
   position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
   background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
   -webkit-transform: translate(30px,5px) rotate(45deg);
   transform: translate(30px,5px) rotate(45deg);
 }
-.rproductlist .scroll_item .down.icon:after{content:"已下架";}
+.rproductlist .scroll_item .down.ico:after{content:"已下架";}
 .rproductlist .btnicon{
   display: inline-block;
   color: #ea3a3a;

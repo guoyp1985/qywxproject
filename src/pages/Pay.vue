@@ -18,12 +18,14 @@
 <script>
 import { Box, XButton } from 'vux'
 import ENV from 'env'
+
 export default {
   components: {
     Box, XButton
   },
   data () {
     return {
+      query: {},
       payPrice: 0,
       receivables: '',
       payParams: null,
@@ -50,15 +52,29 @@ export default {
         'getBrandWCPayRequest', params,
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
-            self.$router.push({path: '/orderSearch'})
+            if (self.query.module === 'payorders') {
+              self.$router.push({path: '/'})
+            } else {
+              if (self.query.lasturl) {
+                self.$router.push({path: '/orderSearch'})
+              } else {
+                self.$router.push({path: '/'})
+              }
+            }
           }
         }
       )
     },
     initPay () {
       const self = this
-      const orderId = this.$route.query.id
-      this.$http.get(`${ENV.BokaApi}/api/order/unify?orderid=${orderId}`)
+      const orderId = this.query.id
+      let params = { orderid: orderId }
+      if (this.query.module) {
+        params.module = this.query.module
+      }
+      this.$http.get(`${ENV.BokaApi}/api/order/unify`, {
+        params: params
+      })
       .then(res => {
         if (res.data.flag) {
           self.disabled = false
@@ -73,6 +89,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.initPay()
     }
   },

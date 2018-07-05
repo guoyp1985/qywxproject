@@ -71,7 +71,7 @@ en:
   Month Sharing Goal: Month Sharing Goal
   Had Shared: Had Shared
   Had Contacted: Had Contacted
-  Sharing Material: Sharing Material
+  Sharing Academic: Sharing Academic
   Sharing Qrcode: Sharing Qrcode
   Gain Consumers: Gain Consumers
   Grab Consumers: Grab Consumers
@@ -370,7 +370,7 @@ zh-CN:
   Had Shared: 已分享
   Had Contacted: 已联系
   Contacted: 联系
-  Sharing Material: 分享素材
+  Sharing Academic: 分享素材
   Sharing Qrcode: 分享二维码
   Gain Consumers: 获取客户
   Grab Consumers: 抢客户
@@ -816,13 +816,30 @@ zh-CN:
   tAddFactoryNews: 添加文章
   tFactoryGoodeazy: 易采集
   tBusinessSchool: 商学院
-  Create training materials: 创建培训素材
-  tAddMaterial: 创建素材
-  tMaterial: 素材
+  Create training academics: 创建培训素材
+  tAddAcademic: 创建素材
+  tAcademic: 素材
   Contact factory: 联系厂商
   Source of goods: 货源
   tRecommendProducts: 货源
   tFactoryOrderDetail: 订单详情
-  tRetailerMaterial: 共销宝商学院
-  Material title: 素材标题
-  Material share description placeholder: 如不填写自动截取素材内容
+  tRetailerAcademic: 共销宝商学院
+  Academic title: 素材标题
+  Academic share description placeholder: 如不填写自动截取素材内容
+  Change price: 修改价格
+  Rebate store: 返点店铺
+  Postage: 运费
+  Product class: 商品类别
+  Region: 地区
+  tCenterSeller: 卖家主页
+  Personal image: 个人形象
+  Seller said: 卖家说
+  My tags: 标签
+  tAddTimeline: 我要发布
+  Release: 发布
+  Say something: 说点什么吧...
+  tPhotoVideo: 图片视频
+  tUserStory: 用户故事
+  tSellerPromotion: 卖家促销
+  tSellerTimeline: 店主动态
+  Seller tags: 卖家标签

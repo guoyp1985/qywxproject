@@ -5,21 +5,25 @@
 */
 <template>
   <div class="containerarea font14 knowledgeclass notop nobottom bg-page">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <template v-if="disData">
-        <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无素材</div>
-        <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/material', query: {id: item.id, fid: item.fid}}" class="scroll_item db bg-white">
-          <div class="pic">
-            <div class="inner">
-              <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+    <apply-tip v-if="showApply"></apply-tip>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <template v-if="showContainer">
+      <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+        <template v-if="disData">
+          <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无素材</div>
+          <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/academic', query: {id: item.id, fid: item.fid}}" class="scroll_item db bg-white">
+            <div class="pic">
+              <div class="inner">
+                <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              </div>
             </div>
-          </div>
-          <div class="padding15 border-box">
-            <div class="font16">{{ item.title }}</div>
-          </div>
-        </router-link>
-      </template>
-    </div>
+            <div class="padding15 border-box">
+              <div class="font16">{{ item.title }}</div>
+            </div>
+          </router-link>
+        </template>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -36,16 +40,20 @@ Newcomer Guide:
 import { Popover, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 const limit = 10
 let pageStart = 0
 
 export default {
   components: {
-    Popover, XImg
+    Popover, XImg, Subscribe, ApplyTip
   },
   data () {
     return {
+      showApply: false,
+      showContainer: false,
       query: {},
       loginUser: {},
       data: [],
@@ -54,6 +62,7 @@ export default {
   },
   methods: {
     initData () {
+      pageStart = 0
       this.disData = false
       this.data = []
     },
@@ -91,16 +100,38 @@ export default {
     },
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'material'
+        module: 'retailer', action: 'academic'
       })
     },
+    initContainer () {
+      this.showApply = false
+      this.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      this.query = this.$route.query
-      if (this.data.length < limit) {
-        this.initData()
-        this.getData()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          this.showApply = true
+        } else {
+          self.initContainer()
+          this.showContainer = true
+          this.query = this.$route.query
+          if (this.data.length < limit) {
+            this.initData()
+            this.getData()
+          }
+        }
       }
     }
   },

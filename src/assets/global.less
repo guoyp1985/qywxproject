@@ -131,6 +131,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .color-red3{color:#E02D24 !important;}
 .color-red4{color:#ea3a3a !important;}
 .color-red5{color:#fc002f !important;}
+.color-red5{color:#e51c23 !important;}
 
 .color-white{color:#fff !important;}
 .color-gold{color:#ffc430 !important;}
@@ -714,7 +715,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .q_photolist .photoitem .inner .innerlist{position: absolute;left: 0;right: 0;top: 0;bottom: 0;margin: auto auto;}
 /* .q_photolist .photoitem .inner .t-cell{width:100%;height:100%;vertical-align:middle;position:relative;text-align:center;} */
 .q_photolist .photoitem .photo{background-size:cover;background-repeat:no-repeat;background-position:center;}
-.q_photolist .photoitem .icon {position:absolute;left:0;right:0;top:0;bottom:0;}
 .q_photolist .photoitem .close{
 	position:absolute;top:-8px;right:-8px;
 	width:20px;height:20px;border-radius:50%;background-color:rgba(0,0,0,0.8);color:#fff;
@@ -957,3 +957,36 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .red-popup .vux-popup-header-right{color:#ea3a3a;}
 
 .news .article-content img{max-width:100%;}
+
+.timelinelist{}
+.timelinelist .tlitem{
+  display:flex;padding:10px;
+}
+.timelinelist .avatar{width:50px;text-align:left;}
+.timelinelist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
+.timelinelist .con{flex:1;}
+.timelinelist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
+.timelinelist .piclist:after{content:"";display:block;clear:both;}
+.timelinelist .picitem{float:left;width:33.33333%;padding-bottom:33.33333%;position:relative;}
+.timelinelist .picitem .inner{
+  position:absolute;top:0;bottom:0;box-sizing:border-box;top:7px;bottom:7px;
+}
+.timelinelist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
+.timelinelist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
+.timelinelist .picitem:nth-child(3n+3) .inner{left:14px;right:0;}
+.timelinelist .picitem img{width:100%;height:100%;object-fit: cover;}
+.timelinelist .commentarea{
+  background-color: rgb(244, 244, 244);
+  border-color: rgb(241, 244, 251) 1px solid;
+  border-radius: 4px;text-align: center;
+  padding:10px 5px;box-sizing: border-box;line-height:24px;
+}
+.timelinelist .commentarea .citem:not(:last-child){position:relative;padding-bottom:10px;}
+.timelinelist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
+.timelinelist .commentarea .txt1:before{
+  content:"";
+  position:absolute;left:3px;top:5px;width:3px;height: 16px;
+  background-color: rgb(229, 28, 35);
+}
+.timelinelist .commentarea .name{color:rgb(93, 102, 155);}
+.timelinelist .commentarea .txt2{position:relative;box-sizing: border-box;text-align:left;padding-left:10px;}

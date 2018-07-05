@@ -113,6 +113,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (this.data.length < this.limit) {
+        this.pagestart1 = 0
         this.getData()
       }
     }

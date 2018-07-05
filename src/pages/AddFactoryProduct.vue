@@ -5,11 +5,11 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container" style="top:0;">
-        <form enctype="multipart/form-data">
-          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('photo')" />
+        <form ref="fileForm" enctype="multipart/form-data">
+          <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
         </form>
-        <form enctype="multipart/form-data">
-          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('contentphoto')" />
+        <form ref="fileForm1" enctype="multipart/form-data">
+          <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('fileForm1', 'contentphoto')" />
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
@@ -44,12 +44,35 @@
               <p class="font14 color-gray5">封面图像(最多9张) <span class="al al-xing color-red font12" style="vertical-align: 2px;"></span></p>
             </div>
           </div>
+          <div v-if="classData.length" class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <select v-model="submitdata.classid" class="w_100" style="height:35px;">
+                  <option value=''>请选择</option>
+                  <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
           <div class="form-item required bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:0;">
-                  <x-textarea v-model="submitdata.title" name="title" class="x-textarea noborder" :placeholder="$t('Product name')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+                  <x-textarea
+                    ref="titleTextarea"
+                    v-model="submitdata.title"
+                    name="title"
+                    class="x-textarea noborder"
+                    :placeholder="$t('Product name')"
+                    :show-counter="false"
+                    :rows="1"
+                    :max="30"
+                    @on-change="textareaChange('titleTextarea')"
+                    @on-focus="textareaFocus('titleTextarea')"
+                    autosize>
+                  </x-textarea>
                 </group>
               </div>
             </div>
@@ -83,9 +106,29 @@
               </div>
             </div>
           </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" />
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
           <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
           <group class="textarea-outer textarea-text bg-white">
-            <x-textarea v-model="submitdata.content" name="content" class="x-textarea" :placeholder="$t('Product description')" :show-counter="false" :rows="1" autosize></x-textarea>
+            <x-textarea
+              ref="contentTextarea"
+              v-model="submitdata.content"
+              name="content"
+              class="x-textarea"
+              :placeholder="$t('Product description')"
+              :show-counter="false"
+              :rows="1"
+              @on-change="textareaChange('contentTextarea')"
+              @on-focus="textareaFocus('contentTextarea')"
+              autosize>
+            </x-textarea>
           </group>
           <div class="pl12 pr12 pt10 b_top_after bg-white">详情图像<span class="color-gray">（图像宽高不受限制）</span></div>
           <div class="b_bottom_after bg-white pl12 pr12 pb5">
@@ -112,6 +155,29 @@
               </div>
             </div>
           </div>
+          <div class="form-item bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">视频</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <div class="q_photolist align_left" style="overflow:hidden;">
+                  <form ref="videoForm" class="db" enctype="multipart/form-data" v-if="videoarr.length == 0">
+                    <div class="button_video flex_center">
+                      <i class="al al-ai-video color-white"></i>
+                      <input ref="videoInput" type="file" name="files" @change="fileChange('videoForm', 'video')" />
+                    </div>
+                  </form>
+                  <div v-else v-for="(item,index) in videoarr" :key="index" class="videoitem photoitem">
+                    <div class="inner photo imgcover" :photo="item" style="border:#ccc 1px solid;">
+                      <div class="flex_center" style="position:absolute;left:0;top:0;bottom:0;right:0;">
+                        <i class="al al-ai-video"></i>
+                        <div class="close" @click="deletephoto(item,index,'video')">×</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div v-show="showmore">
             <div class="form-item bg-white">
               <div class="t-table">
@@ -126,7 +192,18 @@
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share description') }}</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
                   <group class="textarea-outer" style="padding:0;">
-                    <x-textarea v-model="submitdata.seodescription" name="seodescription" class="x-textarea noborder" :placeholder="$t('Product share description placeholder')" :show-counter="false" :rows="1" autosize></x-textarea>
+                    <x-textarea
+                      ref="descTextarea"
+                      v-model="submitdata.seodescription"
+                      name="seodescription"
+                      class="x-textarea noborder"
+                      :placeholder="$t('Product share description placeholder')"
+                      :show-counter="false"
+                      :rows="1"
+                      @on-change="textareaChange('descTextarea')"
+                      @on-focus="textareaFocus('descTextarea')"
+                      autosize>
+                    </x-textarea>
                   </group>
                 </div>
               </div>
@@ -170,12 +247,17 @@ export default {
       photoarr1: [],
       maxnum1: 19,
       havenum1: 0,
+      videoarr: [],
+      maxnum2: 1,
+      havenum2: 0,
       showmore: false,
       submitdata: {
+        classid: '',
         title: '',
         price: '',
         storage: '',
         unit: '件',
+        postage: '0.00',
         photo: '',
         content: '',
         contentphoto: '',
@@ -183,8 +265,9 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'photo': '' },
-      levels: []
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      levels: [],
+      classData: []
     }
   },
   watch: {
@@ -211,18 +294,29 @@ export default {
   methods: {
     initSubmitData () {
       this.submitdata = {
+        classid: '',
         title: '',
         price: '',
         storage: '',
         unit: '件',
+        postage: '0.00',
         photo: '',
         content: '',
         contentphoto: '',
         seotitle: '',
-        seodescription: ''
+        seodescription: '',
+        video: ''
       }
       this.photoarr = []
       this.photoarr1 = []
+    },
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
     },
     photoCallback (data, type) {
       const self = this
@@ -233,6 +327,9 @@ export default {
         } else if (type === 'contentphoto' && self.photoarr1.length < self.maxnum1) {
           self.photoarr1.push(data.data)
           self.submitdata.contentphoto = self.photoarr1.join(',')
+        } else if (type === 'video') {
+          self.videoarr.push(data.data)
+          self.submitdata.video = self.videoarr.join(',')
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -244,12 +341,16 @@ export default {
     uploadPhoto (refname, type) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      if (self.$util.isPC()) {
+      if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
+          let curMaxnum = 9
+          if (type === 'video') {
+            curMaxnum = 1
+          }
           self.$util.wxUploadImage({
-            maxnum: 9,
+            maxnum: curMaxnum,
             handleCallback: function (data) {
               self.photoCallback(data, type)
             }
@@ -257,12 +358,15 @@ export default {
         })
       }
     },
-    fileChange (type) {
+    fileChange (refname, type) {
       const self = this
       const target = event.target
       const files = target.files
       if (files.length > 0) {
-        const fileForm = target.parentNode
+        let fileForm = target.parentNode
+        if (type === 'video') {
+          fileForm = target.parentNode.parentNode
+        }
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
@@ -274,7 +378,10 @@ export default {
     },
     deletephoto (item, index, type) {
       const self = this
-      if (type === 'photo') {
+      if (type === 'video') {
+        self.videoarr.splice(index, 1)
+        self.submitdata.video = self.videoarr.join(',')
+      } else if (type === 'photo') {
         self.photoarr.splice(index, 1)
         self.submitdata.photo = self.photoarr.join(',')
       } else {
@@ -379,6 +486,9 @@ export default {
           if (self.submitdata.contentphoto && self.$util.trim(self.submitdata.contentphoto) !== '') {
             self.photoarr1 = self.submitdata.contentphoto.split(',')
           }
+          if (self.data.video && self.$util.trim(self.data.video) !== '') {
+            self.videoarr = self.data.video.split(',')
+          }
           document.title = self.data.title
         })
       }
@@ -387,6 +497,13 @@ export default {
       }).then(res => {
         const data = res.data
         self.retailerInfo = data.data ? data.data : data
+      })
+    },
+    init () {
+      const self = this
+      this.$http.get(`${ENV.BokaApi}/api/classList/product`).then(res => {
+        const data = res.data
+        self.classData = data.data ? data.data : data
       })
     },
     refresh () {
@@ -418,6 +535,9 @@ export default {
         }
       }
     }
+  },
+  created () {
+    this.init()
   },
   activated () {
     if (this.query.id !== this.$route.query.id) {
@@ -455,4 +575,16 @@ export default {
 .button_photo .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 .s-havebottom .s-container{bottom:50px;}
 .s-bottom{height:50px;padding-left:12px;padding-right:12px;background-color:#fff;}
+.button_video{
+  position:relative;
+  width:60px;
+  height:60px;
+  background-color:#ea3a3a;
+  border-radius:50%;
+}
+.button_video input{
+  position:absolute;
+  left:0;top:0;right:0;bottom:0;
+  opacity:0;
+}
 </style>

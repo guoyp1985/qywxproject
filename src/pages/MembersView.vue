@@ -1,12 +1,12 @@
 <template>
   <div class="containerarea bg-page membersview font14 s-havebottom">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="s-topbanner flex_left pl15 pr15 border-box">
         <div class="">
-          <img class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" @click="showBigimg(0)" />
+          <img @click="showBigimg(0)" class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
@@ -85,7 +85,7 @@
           </div>
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
-              <div class="t-cell align_left w100">地区</div>
+              <div class="t-cell align_left w100">{{ $t('Region') }}</div>
               <div class="t-cell align_right color-gray">{{ viewuser.country }} {{ viewuser.province }} {{ viewuser.city }}</div>
               <div class="t-cell align_right w50">
                 <span class="qbtn8 bg-orange7 color-white" @click="updateArea">更新</span>
@@ -150,13 +150,15 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -165,11 +167,12 @@ export default {
   },
   data () {
     return {
-      query: {},
-      loginUser: {},
+      showApply: false,
       showSos: false,
       sosTitle: '',
       showContainer: false,
+      query: {},
+      loginUser: {},
       viewuser: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
       imgarr: [{
         msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
@@ -319,7 +322,7 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        self.$vue.wechat.previewImage({
+        window.WeixinJSBridge.invoke('imagePreview', {
           current: self.wximgarr[index],
           urls: self.wximgarr
         })
@@ -384,6 +387,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         if (data.flag !== 1) {
+          self.initContainer()
           self.sosTitle = data.error
           self.showSos = true
           return false
@@ -396,21 +400,39 @@ export default {
           document.title = self.viewuser.linkman
           self.userIntention = self.viewuser.intention
         }
+        self.initContainer()
         self.showContainer = true
       })
     },
-    init () {
-      this.loginUser = User.get()
+    initContainer () {
+      this.showApply = false
+      this.showSos = false
+      this.sosTitle = ''
+      this.showContainer = false
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
       this.$vux.loading.show()
-      this.getData()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          this.showApply = true
+        } else {
+          self.initContainer()
+          this.query = this.$route.query
+          this.getData()
+        }
+      }
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()

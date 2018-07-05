@@ -92,6 +92,7 @@ export default {
     refresh () {
       this.query = this.$route.query
       if (this.list.length < limit) {
+        pageStart = 0
         this.disList = false
         this.list = []
         this.getData()

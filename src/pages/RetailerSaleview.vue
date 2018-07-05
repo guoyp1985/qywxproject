@@ -1,8 +1,8 @@
 <template>
   <div class="containerarea bg-white font14 rsaleview s-havebottom">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
+    <apply-tip v-if="showApply"></apply-tip>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div class="flex_left h_100 toprow color-white pl15 pr15">
@@ -33,7 +33,7 @@
           </tab>
         </div>
       </div>
-      <div class="v-container s-container2" style="top:148px;">
+      <div class="s-container s-container2" style="top:148px;">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
             <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
@@ -181,15 +181,18 @@
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Group, Popup, TransferDom, XImg, XDialog } from 'vux'
 import Sos from '@/components/Sos'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg, Sos, XDialog
+    Tab, TabItem, Swiper, SwiperItem, Group, Popup, XImg, Sos, XDialog, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -198,6 +201,7 @@ export default {
   },
   data () {
     return {
+      showApply: false,
       showSos: false,
       sosTitle: '该记录不存在',
       showContainer: false,
@@ -223,11 +227,10 @@ export default {
   },
   methods: {
     initData: function () {
+      this.showApply = false
       this.showSos = false
       this.sosTitle = '该记录不存在'
       this.showContainer = false
-      this.query = {}
-      this.loginUser = {}
       this.sellerUser = { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 }
       this.isshowpopup = false
       this.selectedIndex = 0
@@ -375,30 +378,53 @@ export default {
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
-        if (data.flag !== 1) {
-          self.sosTitle = data.error
+        self.sellerUser = (data.data ? data.data : data)
+        if (self.sellerUser.length === 0) {
           self.showSos = true
+          this.showSos1 = false
           self.showContainer = false
         } else {
-          self.sellerUser = (data.data ? data.data : data)
-          if (self.sellerUser.length === 0) {
-            self.showSos = true
-            self.showContainer = false
-          } else {
-            self.showSos = false
-            self.showContainer = true
-            document.title = self.sellerUser.username
-            self.swiperChange()
-          }
+          self.showSos = false
+          this.showSos1 = false
+          self.showContainer = true
+          document.title = self.sellerUser.username
+          self.swiperChange()
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showSos = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.uid !== this.$route.query.uid) {
-        this.initData()
-        this.query = this.$route.query
-        this.getData()
+      this.$vux.loading.show()
+      this.loginUser = User.get()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            if (this.query.uid !== this.$route.query.uid) {
+              self.initContainer()
+              this.initData()
+              this.query = this.$route.query
+              this.getData()
+            } else {
+              this.$vux.loading.hide()
+            }
+          }
+        }
       }
     }
   },

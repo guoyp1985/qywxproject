@@ -340,6 +340,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.tabdata1.length < this.limit) {
+        self.pagestart1 = 0
         this.distabdata1 = false
         this.tabdata1 = []
         this.$vux.loading.show()

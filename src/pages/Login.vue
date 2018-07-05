@@ -63,6 +63,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/qrcode/login`)
       .then(
         res => {
+          if (!res) return
           self.qrCode = res.data
           self.polling()
         }

@@ -170,6 +170,7 @@ export default {
       }
     },
     setUserInfo () {
+      const self = this
       const user = User.get()
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
@@ -190,6 +191,7 @@ export default {
         this.showBtn1 = true
       }
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        if (!res) return
         let data = res.data
         self.messages = data.data
       })
@@ -202,6 +204,7 @@ export default {
         self.setUserInfo()
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+          if (!res) return
           self.loginUser = res.data.data
           User.set(this.loginUser)
           self.setUserInfo()

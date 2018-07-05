@@ -13,8 +13,23 @@
             :interval=6000
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
-            auto
             loop>
+            <swiper-item v-show="showVideo" v-if="productdata.video && productdata.video != ''">
+              <div class="w_100 h_100" style="overflow:hidden;">
+                <video
+                  class="w_100 h_100"
+                  style="max-width:100%;max-height:100%;"
+                  controls
+                  :src="productdata.video"
+                  autoplay="true"
+                  preload="auto"
+                  x-webkit-airplay="true"
+                  x5-playsinline="true"
+                  webkit-playsinline="true"
+                  playsinline="true">
+                </video>
+              </div>
+            </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
             </swiper-item>
@@ -36,7 +51,8 @@
           <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
-    					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
+    					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>
+    					<div v-else class="t-cell v_middle">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
@@ -313,9 +329,8 @@
       <div v-transfer-dom>
         <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
       </div>
-      <template v-if="loginUser">
+      <template v-if="loginUser && showShareSuccess">
         <share-success
-          v-show="showShareSuccess"
           v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
@@ -409,7 +424,8 @@ export default {
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
       replyData: null,
-      messages: 0
+      messages: 0,
+      showVideo: true
     }
   },
   watch: {
@@ -450,7 +466,7 @@ export default {
     },
     photoarr: function () {
       const self = this
-      if (self.photoarr.length > 0) {
+      if (self.photoarr.length > 0 || !self.$util.isNull(self.productdata.video)) {
         self.showFlash = true
       }
       return this.photoarr
@@ -464,7 +480,7 @@ export default {
   },
   computed: {
     isshowdot: function () {
-      if (this.photoarr.length > 1) {
+      if (this.photoarr.length > 1 || !this.$util.isNull(this.productdata.video)) {
         this.showdot = true
       } else {
         this.showdot = false
@@ -479,6 +495,7 @@ export default {
       this.sosTitle = ''
       this.showcontainer = false
       this.showShareSuccess = false
+      this.showVideo = true
       this.showsharetip = true
       this.productid = null
       this.productdata = {}
@@ -641,11 +658,13 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
-        window.WeixinJSBridge.invoke('imagePreview', {
-          current: viewarr[index],
-          urls: viewarr
-        })
+        if (window.WeixinJSBridge) {
+          let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: viewarr[index],
+            urls: viewarr
+          })
+        }
       }
     },
     showBigimg1 (index) {
@@ -661,6 +680,7 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+      this.showVideo = true
     },
     handleNewAdd () {
       const self = this
@@ -678,6 +698,7 @@ export default {
         link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
         successCallback: function () {
           self.showShareSuccess = true
+          self.showVideo = false
         }
       }
       if (self.query.share_uid) {
@@ -815,6 +836,9 @@ export default {
               self.showFlash = true
               self.previewerFlasharr = self.$util.previewerImgdata(self.photoarr)
             }
+            if (!self.$util.isNull(self.productdata.video)) {
+              self.showFlash = true
+            }
             const content = self.productdata.content
             const contetnphoto = self.productdata.contentphoto
             if ((!content || self.$util.trim(content) === '') && (!contetnphoto || self.$util.trim(contetnphoto) === '')) {
@@ -824,10 +848,16 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-              params: { wid: self.retailerInfo.uid, productid: self.productid }
-            })
+            return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
           }
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.messages = data.data
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+            params: { wid: self.retailerInfo.uid, productid: self.productid }
+          })
         }
       }).then(function (res) {
         if (res && res.status === 200) {
@@ -893,27 +923,24 @@ export default {
     },
     refresh () {
       const self = this
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      // alert('in product')
-      // alert(JSON.stringify(this.loginUser))
-      this.initData()
-      this.showShareSuccess = false
-      this.previewerPhotoarr = []
-      this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
-      this.createSocket()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
+      if (this.loginUser) {
+        this.initData()
+        this.showShareSuccess = false
+        this.showVideo = true
+        this.query = this.$route.query
+        this.$vux.loading.show()
+        this.getData()
+        this.createSocket()
+      }
     }
   },
   created () {
     this.init()
   },
   activated () {
+    alert('in product')
     this.refresh()
   }
   // beforeRouteLeave (to, from, next) {
