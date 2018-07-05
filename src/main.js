@@ -270,7 +270,6 @@ const handleUserInfo = () => {
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
     // 401授权，取得token
-    console.log(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -340,6 +339,7 @@ Vue.http.interceptors.request.use(config => {
   if (!token) {
     // console.log(config)
     removePending(config)
+    console.log(config.url)
     handleUserInfo()
   } else {
     config.headers['Authorization'] = `Bearer ${token}`
