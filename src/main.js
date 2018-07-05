@@ -306,17 +306,13 @@ const handleUserInfo = () => {
 
 let pending = []
 let removePending = (config) => {
-  let canceled = false
   for (let p in pending) {
     if (pending[p].u === `${config.url}&${config.method}`) {
       console.info(`canceled request: ${config.url}`)
       pending[p].f()
       pending.splice(p, 1)
-      canceled = true
-      break
     }
   }
-  return canceled
 }
 
 const excludeUrls = [
@@ -342,16 +338,15 @@ Vue.http.interceptors.request.use(config => {
     config.cancelToken = new CancelToken(c => {
       pending.push({ u: config.url + '&' + config.method, f: c })
     })
-  }
-  const token = Token.get()
-  if (!token) {
-    // console.log(config)
-    if (!removePending(config)) {
-      console.log(config.url)
+
+    const token = Token.get()
+    if (!token) {
+      // console.log(config)
+      removePending(config)
       handleUserInfo()
+    } else {
+      config.headers['Authorization'] = `Bearer ${token}`
     }
-  } else {
-    config.headers['Authorization'] = `Bearer ${token}`
   }
   return config
 }, error => {
