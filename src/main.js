@@ -279,6 +279,7 @@ const handleUserInfo = () => {
     .then(
       res => {
         if (!res) return
+        console.log(res.data)
         Token.set(res.data.data.token)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
