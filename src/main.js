@@ -264,7 +264,7 @@ router.afterEach(function (to) {
 
 // Token.remove()
 let accessFlag = true
-const handleUserInfo = (success) => {
+const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
@@ -281,7 +281,6 @@ const handleUserInfo = (success) => {
     .then(
       res => {
         User.set(res.data)
-        success && success()
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
@@ -305,17 +304,37 @@ let pending = []
 let removePending = (config) => {
   for (let p in pending) {
     if (pending[p].u === `${config.url}&${config.method}`) {
+      console.info(`canceled request: ${config.url}`)
       pending[p].f()
       pending.splice(p, 1)
     }
   }
 }
 
+const excludeUrls = [
+  `${ENV.BokaApi}/api/authLogin/*`,
+  `${ENV.BokaApi}/api/qrcode/login*`,
+  `${ENV.BokaApi}/api/scanlogin`
+]
+
+// 排除全局请求过滤器中的请求url
+const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const matchExclude = url => {
+  for (let i = 0; i < rExcludeUrls.length; i++) {
+    if (rExcludeUrls[i].test(url)) {
+      return true
+    }
+  }
+  return false
+}
+
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
-  config.cancelToken = new CancelToken(c => {
-    pending.push({ u: config.url + '&' + config.method, f: c })
-  })
+  if (!matchExclude(config.url)) {
+    config.cancelToken = new CancelToken(c => {
+      pending.push({ u: config.url + '&' + config.method, f: c })
+    })
+  }
   const token = Token.get()
   if (!token) {
     // console.log(config)
@@ -341,8 +360,10 @@ Vue.http.interceptors.response.use(response => {
   return response
 }, error => {
   // handleUserInfo(error.response)
-  if (error.response && error.response.status === 401) {
-    console.error('未授权请求')
+  if (error.response) {
+    if (error.response.status === 401) {
+      console.error('未授权请求')
+    }
   }
 })
 
