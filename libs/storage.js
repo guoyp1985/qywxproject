@@ -70,8 +70,7 @@ const WxAccess = {
   },
   get () {
     const res = localStorage.getItem('wxAccess')
-    console.log(res)
-    return (res === undefined || res === 'false') ? false : true
+    return (res === null || res === 'false') ? false : true
   },
   remove () {
     localStorage.removeItem('wxAccess')
