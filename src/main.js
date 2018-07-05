@@ -270,6 +270,7 @@ const handleUserInfo = () => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (bkAccessFlag && state === 'defaultAccess' && code) {
+    console.log('CODE')
     // 401授权，取得token
     bkAccessFlag = false
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
@@ -284,11 +285,11 @@ const handleUserInfo = () => {
       res => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        console.log('AAAAAAA')
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else if (wxAccessFlag) {
+    console.log('WX REDIRECT')
     wxAccessFlag = false
     $vue.$util.access(isPC => {
       if (isPC) {
