@@ -200,7 +200,6 @@ export default {
       const user = User.get()
       const self = this
       if (user && user.subscribe === 1) {
-        console.log(user)
         self.loginUser = user
         self.setUserInfo()
       } else {

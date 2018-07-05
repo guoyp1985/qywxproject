@@ -271,14 +271,13 @@ const handleUserInfo = () => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
-    console.log('CODE')
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         if (!res || !res.data) return
         console.log(res.data)
-        Token.set(res.data.data.token)
+        Token.set(res.data.data)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
@@ -292,7 +291,6 @@ const handleUserInfo = () => {
       }
     )
   } else {
-    console.log('WX REDIRECT')
     $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
@@ -324,14 +322,14 @@ let cancelAllPendings = () => {
 //   }
 // }
 
-const excludeUrls = [
-  `${ENV.BokaApi}/api/authLogin/*`,
-  `${ENV.BokaApi}/api/qrcode/login*`,
-  `${ENV.BokaApi}/api/scanlogin`
-]
+// const excludeUrls = [
+//   `${ENV.BokaApi}/api/authLogin/*`,
+//   `${ENV.BokaApi}/api/qrcode/login*`,
+//   `${ENV.BokaApi}/api/scanlogin`
+// ]
 
 // 排除全局请求过滤器中的请求url
-const rExcludeUrls = excludeUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const rExcludeUrls = ENV.NoAccessUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
 const matchExclude = url => {
   for (let i = 0; i < rExcludeUrls.length; i++) {
     if (rExcludeUrls[i].test(url)) {
@@ -349,12 +347,12 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
-    if (!token) {
+    if (!token || Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
       handleUserInfo()
     } else {
-      config.headers['Authorization'] = `Bearer ${token}`
+      config.headers['Authorization'] = `Bearer ${token.token}`
     }
   }
   return config
