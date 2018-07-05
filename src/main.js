@@ -288,9 +288,9 @@ const handleUserInfo = () => {
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
-  } else if (wxAccessFlag) {
+  } else {
     console.log('WX REDIRECT')
-    wxAccessFlag = false
+    // wxAccessFlag = false
     $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
