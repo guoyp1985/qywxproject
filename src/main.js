@@ -262,7 +262,7 @@ router.afterEach(function (to) {
 //   return Promise.reject(error)
 // })
 
-// Token.remove()
+Token.remove()
 let accessFlag = true
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
