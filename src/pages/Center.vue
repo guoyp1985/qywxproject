@@ -108,7 +108,7 @@ if (!Reg.rPlatfrom.test(navigator.userAgent)) {
       Token.remove()
       User.remove()
       // if (this.$util.isPC()) {
-      // this.$router.push({name: 'tLogin'})
+      this.$router.push({name: 'tLogin'})
       // } else {
       //   this.$router.push({name: 'tUserproducts'})
       // }
