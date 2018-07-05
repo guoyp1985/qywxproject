@@ -144,7 +144,16 @@ export default {
             id: item.id
           }).then(function (res) {
             self.$vux.loading.hide()
-            self.afterDelete(item, index)
+            let data = res.data
+            if (data.flag) {
+              self.afterDelete(item, index)
+            } else {
+              self.$vux.toast.show({
+                text: data.error,
+                type: 'warning',
+                time: self.$util.delay(data.error)
+              })
+            }
           })
         }
       })

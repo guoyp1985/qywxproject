@@ -374,6 +374,9 @@ export default {
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         let applydata = Object
         self.submitdata.fid = self.$route.query.fid
+        if (self.query.share_uid) {
+          self.submitdata.share_uid = self.query.share_uid
+        }
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
