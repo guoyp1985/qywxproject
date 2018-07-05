@@ -265,7 +265,6 @@ router.afterEach(function (to) {
 // Token.remove()
 // let bkAccessFlag = true
 // let wxAccessFlag = true
-WxAccess.remove()
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
