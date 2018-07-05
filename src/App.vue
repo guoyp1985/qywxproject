@@ -129,7 +129,6 @@ export default {
     },
     getData () {
       const user = User.get()
-      alert('in app')
       if (!user || user.subscribe !== 1) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {

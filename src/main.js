@@ -291,7 +291,6 @@ const handleUserInfo = (response) => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
-    alert('in defaultAccess && code')
     // Access.set(true)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -311,7 +310,6 @@ const handleUserInfo = (response) => {
       }
     )
   } else {
-    alert('in !(defaultAccess && code)')
     $vue.$util.access(response, isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
@@ -327,7 +325,6 @@ const handleUserInfo = (response) => {
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
-  alert('in response')
   if (response.status === 200) {
     const user = User.get()
     if (!user || !user.uid) {
@@ -336,7 +333,6 @@ Vue.http.interceptors.response.use(response => {
   }
   return response
 }, error => {
-  alert('in error')
   handleUserInfo(error.response)
 })
 
