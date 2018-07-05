@@ -47,7 +47,32 @@
                       <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                     </div>
                   </template>
-                  <template v-else-if="item.isaward">
+                  <template v-else-if="item.isaward == 1">
+                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w45">
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 color-999">{{item.linkman}}</div>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                      <div class="clamp1 font14 color-999">
+                        <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                        <span class="v_middle">{{ item.products }}</span>
+                      </div>
+                    </div>
+                    <div class="pl12 pr12 pt10 pb10 flex_right">
+                      <div class="font14 color-999">实际收入：</div>
+                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                    </div>
+                  </template>
+                  <template v-else>
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -71,31 +96,6 @@
                         </template>
                       </div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                    </div>
-                    <div class="pl12 pr12 pt10 pb10 flex_right">
-                      <div class="font14 color-999">实际收入：</div>
-                      <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                    </div>
-                  </template>
-                  <template v-else>
-                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </check-icon>
-                    <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                      <div class="clamp1 font14 color-999">
-                        <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                        <span class="v_middle">{{ item.products }}</span>
-                      </div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
                       <div class="font14 color-999">实际收入：</div>
@@ -147,7 +147,32 @@
                     <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
-                <template v-else-if="item.content.indexOf('平台奖励基金') < 0">
+                <template v-else-if="item.isaward == 1">
+                  <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.linkman}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                    <div class="clamp1 font14 color-999">
+                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                      <span class="v_middle">{{ item.products }}</span>
+                    </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入：</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                  </div>
+                </template>
+                <template v-else>
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
@@ -171,31 +196,6 @@
                       </template>
                     </div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                  </div>
-                  <div class="pl12 pr12 pt10 pb10 flex_right">
-                    <div class="font14 color-999">实际收入：</div>
-                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="pl12 pr12 pt10 pb10">
-                  <div class="t-table">
-                    <div class="t-cell pic v_middle w45 pr10 border-box">
-                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 color-999">{{item.buyername}}</div>
-                    </div>
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                    </div>
-                  </div>
-                  </div>
-                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                    <div class="clamp1 font14 color-999">
-                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                      <span class="v_middle">{{ item.products }}</span>
-                    </div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
                     <div class="font14 color-999">实际收入：</div>
@@ -237,7 +237,32 @@
                     <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
                   </div>
                 </template>
-                <template v-else-if="item.content.indexOf('平台奖励基金') < 0">
+                <template v-else-if="item.isaward == 1">
+                  <div class="pl12 pr12 pt10 pb10">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w45 pr10 border-box">
+                      <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 color-999">{{item.linkman}}</div>
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
+                    <div class="clamp1 font14 color-999">
+                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
+                      <span class="v_middle">{{ item.products }}</span>
+                    </div>
+                  </div>
+                  <div class="pl12 pr12 pt10 pb10 flex_right">
+                    <div class="font14 color-999">实际收入：</div>
+                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
+                  </div>
+                </template>
+                <template v-else>
                   <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
@@ -261,31 +286,6 @@
                       </template>
                     </div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                  </div>
-                  <div class="pl12 pr12 pt10 pb10 flex_right">
-                    <div class="font14 color-999">实际收入：</div>
-                    <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="pl12 pr12 pt10 pb10">
-                    <div class="t-table">
-                      <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1 color-999">{{item.buyername}}</div>
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                    <div class="clamp1 font14 color-999">
-                      <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                      <span class="v_middle">{{ item.products }}</span>
-                    </div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
                     <div class="font14 color-999">实际收入：</div>
