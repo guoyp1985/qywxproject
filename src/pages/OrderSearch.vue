@@ -210,7 +210,7 @@ export default {
     afterSale (order) {
     },
     payment (order) {
-      this.$router.push({path: '/pay', query: {id: order.id}})
+      location.replace(`${ENV.Host}/#/pay?id=${order.id}`)
     },
     orderProcess (type, order) {
       switch (type) {

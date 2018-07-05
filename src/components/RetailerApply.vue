@@ -374,6 +374,9 @@ export default {
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         let applydata = Object
         self.submitdata.fid = self.$route.query.fid
+        if (self.query.share_uid) {
+          self.submitdata.share_uid = self.query.share_uid
+        }
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
@@ -388,7 +391,7 @@ export default {
             time: self.$util.delay(applydata.error),
             onHide: function () {
               if (applydata.orderid > 0) {
-                self.$router.push({path: '/pay', query: {id: applydata.orderid, module: 'payorders'}})
+                location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=payorders`)
               } else if (applydata.flag === 1 || applydata.flag === 2) {
                 self.afterApply && self.afterApply()
               } else {

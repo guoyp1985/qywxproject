@@ -136,37 +136,42 @@
           </div>
         </div>
       </div>
-      <div class="pagebottom flex_center">
-        <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
+      <div class="pagebottom">
+        <router-link :to="{path: '/store', query: {wid: query.uid}}" class="radius-icon flex_center">
           <div>
-            <div><i class="al al-sccollection"></i></div>
-            <div class="txt">店主动态</div>
+            <div><i class="al al-dianpufill font24"></i></div>
+            <div class="txt">店铺</div>
           </div>
         </router-link>
-        <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
-          <div>
-            <div><i class="al al-zhaopian"></i></div>
-            <div class="txt">图片视频</div>
+        <div class="w_100 h_100 flex_center">
+          <router-link :to="{path: '/sellerTimeline', query: {uid: query.uid}}" class="flex_cell item flex_center">
+            <div>
+              <div><i class="al al-sccollection"></i></div>
+              <div class="txt">{{$t('Seller timeline')}}</div>
+            </div>
+          </router-link>
+          <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
+            <div>
+              <div><i class="al al-zhaopian"></i></div>
+              <div class="txt">图片视频</div>
+            </div>
+          </router-link>
+          <div class="flex_cell item flex_center">
+            <div></div>
           </div>
-        </router-link>
-        <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
-          <div>
-            <div><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
-            <div class="txt">用户故事</div>
-          </div>
-        </router-link>
-        <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
-          <div>
-            <div><i class="al al-goodsnewfill"></i></div>
-            <div class="txt">店主促销</div>
-          </div>
-        </router-link>
-        <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_cell item flex_center">
-          <div>
-            <div><i class="al al-dianpufill"></i></div>
-            <div class="txt">进入店铺</div>
-          </div>
-        </router-link>
+          <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
+            <div>
+              <div><i class="al al-yonghuxinxi" style="font-size:19px;"></i></div>
+              <div class="txt">用户故事</div>
+            </div>
+          </router-link>
+          <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
+            <div>
+              <div><i class="al al-goodsnewfill"></i></div>
+              <div class="txt">店主促销</div>
+            </div>
+          </router-link>
+        </div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
@@ -645,16 +650,20 @@ export default {
 .cseller .focuslist .txt{padding-left:20px;width:38px;}
 .cseller .moreicon{width:58px;}
 
-.cseller .pagemiddle{top:0;bottom:50px;padding-bottom:20px;}
+.cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
 .cseller .pagebottom{
   height: 50px;border-top:rgb(249, 249, 249) 1px solid;background-color:#fff;
   box-shadow: rgb(170, 170, 170) 0px -1px 8px -4px;text-align: center;
-  border-top:rgb(249, 249, 249) 1px solid;z-index:1;
+  border-top:rgb(249, 249, 249) 1px solid;z-index:1;overflow-x: initial;
 }
 .cseller .pagebottom *{line-height:1.4 !important;}
-.cseller .pagebottom .item{height:100%;}
-.cseller .pagebottom .al{color:rgb(229, 28, 35);font-size:18px;}
-.cseller .pagebottom .txt{color:rgb(229, 28, 35);font-size:12px;}
+.cseller .pagebottom .item{height:100%;position:relative;color:rgb(229, 28, 35);}
+.cseller .pagebottom .al{font-size:18px;}
+.cseller .pagebottom .txt{font-size:12px;}
+.cseller .pagebottom .radius-icon{
+  width:66px;height:66px;position:absolute;left:50%;margin-left:-33px;top:-28px;z-index:1;
+  border-radius:50%;background-color:#e51c23;color:#fff;
+}
 .tagpopup .close-tag{
   position:absolute;top:10px;right:10px;z-index:1;text-align:center;
   width: 67px;height: 24px;line-height:24px;color: rgba(16, 16, 16, 0.88);
