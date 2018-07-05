@@ -60,7 +60,7 @@ import { Grid, GridItem, Group, GroupTitle, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import Reg from '#/reg'
-import { Token, User } from '#/storage'
+import { Token, User, WxAccess } from '#/storage'
 
 let manageBtn = [
   {
