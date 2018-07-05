@@ -263,13 +263,14 @@ router.afterEach(function (to) {
 // })
 
 // Token.remove()
-let bkAccessFlag = true
+// let bkAccessFlag = true
 // let wxAccessFlag = true
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
   const wxAccess = WxAccess.get()
+  console.log(wxAccess)
   if (state === 'defaultAccess' && code) {
     console.log('CODE')
     // 401授权，取得token
