@@ -79,7 +79,7 @@ export default {
       self.query = self.$route.query
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-        alert(res.data.isretailer)
+        alert(JSON.stringify(res.data))
         if (res.status === 200) {
           self.loginUser = res.data
           User.set(self.loginUser)
