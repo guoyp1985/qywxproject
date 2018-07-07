@@ -270,14 +270,13 @@ const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
-  alert(code)
   if (state === 'defaultAccess' && code) {
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
-        alert(JSON.stringify(res.data.data))
         if (!res || !res.data) return
+        alert(JSON.stringify(res.data.data))
         Token.set(res.data.data)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -285,7 +284,6 @@ const handleUserInfo = () => {
     )
     .then(
       res => {
-        alert(JSON.stringify(res.data))
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确

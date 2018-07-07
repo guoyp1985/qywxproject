@@ -5,7 +5,7 @@ const Token = {
     localStorage.setItem('token', JSON.stringify(token))
   },
   get () {
-    alert(localStorage.getItem('token'))
+    alert('get:'+localStorage.getItem('token'))
     return JSON.parse(localStorage.getItem('token'))
   },
   remove () {
