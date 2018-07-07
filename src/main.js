@@ -285,6 +285,7 @@ const handleUserInfo = () => {
     .then(
       res => {
         if (!res) return
+        alert(res.data)
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
