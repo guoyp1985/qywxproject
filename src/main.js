@@ -270,9 +270,9 @@ const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
+  alert(code)
   if (state === 'defaultAccess' && code) {
     // 401授权，取得token
-    alert(code)
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
