@@ -264,13 +264,14 @@ router.afterEach(function (to) {
 
 // Token.remove()
 // let bkAccessFlag = true
-// let wxAccessFlag = true
+let wxAccessFlag = true
 // WxAccess.remove()
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
-  if (state === 'defaultAccess' && code) {
+  if (wxAccessFlag && state === 'defaultAccess' && code) {
+    wxAccessFlag = false
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
