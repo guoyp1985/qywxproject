@@ -276,7 +276,7 @@ const handleUserInfo = () => {
     .then(
       res => {
         if (!res || !res.data) return
-        alert('bk:'+res.data.data)
+        alert('bk:'+JSON.stringify(res.data))
         Token.set(res.data.data)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
