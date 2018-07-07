@@ -276,7 +276,6 @@ const handleUserInfo = () => {
     .then(
       res => {
         if (!res || !res.data || res.data.errcode) return
-        alert('bk:'+JSON.stringify(res.data))
         Token.set(res.data.data)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -347,7 +346,6 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
-    alert('TOKEN:'+token)
     if (!token || Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)

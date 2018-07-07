@@ -1,11 +1,10 @@
 const hourMills = 3600000
 const Token = {
   set (token) {
-    alert('set:'+JSON.stringify(token))
+    if (!token) return
     localStorage.setItem('token', JSON.stringify(token))
   },
   get () {
-    alert('get:'+localStorage.getItem('token'))
     return JSON.parse(localStorage.getItem('token'))
   },
   remove () {
