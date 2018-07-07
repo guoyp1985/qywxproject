@@ -345,7 +345,7 @@ const matchExclude = url => {
 Vue.http.interceptors.request.use(config => {
   if (!matchExclude(config.url)) {
     config.cancelToken = new CancelToken(c => {
-      alert(c)
+      alert(config.method)
       pendings.push({ u: config.url + '&' + config.method, f: c })
     })
     alert('TOKEN:'+token.token)
