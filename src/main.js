@@ -354,6 +354,7 @@ Vue.http.interceptors.request.use(config => {
       cancelAllPendings(config)
       handleUserInfo()
     } else {
+      alert('TOKEN:'+token.token)
       config.headers['Authorization'] = `Bearer ${token.token}`
     }
   }
