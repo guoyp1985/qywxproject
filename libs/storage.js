@@ -1,4 +1,3 @@
-const hourMills = 3600000
 const Token = {
   set (token) {
     if (!token) return
