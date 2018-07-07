@@ -349,12 +349,12 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
+    alert('TOKEN:'+token.token)
     if (!token || Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
       handleUserInfo()
     } else {
-      alert('TOKEN:'+token.token)
       config.headers['Authorization'] = `Bearer ${token.token}`
     }
   }
