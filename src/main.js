@@ -263,20 +263,20 @@ router.afterEach(function (to) {
 // })
 
 // Token.remove()
-// let bkAccessFlag = true
-let wxAccessFlag = true
+let bkAccessFlag = true
+// let wxAccessFlag = true
 // WxAccess.remove()
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
-  if (wxAccessFlag && state === 'defaultAccess' && code) {
-    wxAccessFlag = false
+  if (bkAccessFlag && state === 'defaultAccess' && code) {
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
         if (!res || !res.data) return
+        bkAccessFlag = false
         alert(JSON.stringify(res.data.data))
         Token.set(res.data.data)
         // 取用户信息
