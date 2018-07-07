@@ -349,7 +349,7 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
-    alert('TOKEN:'+token.token)
+    alert('TOKEN:'+token)
     if (!token || Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
