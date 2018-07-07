@@ -343,6 +343,7 @@ const matchExclude = url => {
 
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
+  alert(config.url)
   if (!matchExclude(config.url)) {
     config.cancelToken = new CancelToken(c => {
       pendings.push({ u: config.url + '&' + config.method, f: c })
