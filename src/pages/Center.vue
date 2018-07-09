@@ -196,18 +196,12 @@ export default {
       })
     },
     getData () {
-      const user = User.get()
       const self = this
-      if (user && user.subscribe === 1) {
-        self.loginUser = user
+      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+        self.loginUser = res.data
+        User.set(self.loginUser)
         self.setUserInfo()
-      } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          self.loginUser = res.data.data
-          User.set(this.loginUser)
-          self.setUserInfo()
-        })
-      }
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

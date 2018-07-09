@@ -17,6 +17,17 @@
           <div style="height:10px;"></div>
         </div>
         <div class="bg-white b_bottom_after padding10">
+          <div class="flex_left">
+            <router-link class="flex_cell" :to="{path:'/store',query:{wid:data.retailer.uid}}">
+              <i class="al al-dianpufill v_middle color-red font20"></i>
+              <span class="v_middle">{{data.retailer.title}}</span>
+            </router-link>
+            <div class="w80 align_right">
+              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:data.retailer.uid}}">联系卖家</router-link>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white b_bottom_after padding10">
           <div class="flex_left">买家：{{ data.username }}  累计消费：<span class="color-red">{{ $t('RMB') }}{{ data.summoney }}</span></div>
         </div>
         <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">

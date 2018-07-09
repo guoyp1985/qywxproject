@@ -206,6 +206,72 @@
                 </div>
               </template>
             </div>
+            <div v-if="tabitem.type == 'retailerShare'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </router-link>
+                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.username }}</div>
+                      <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </router-link>
+                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-if="tabitem.type == 'productlist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <router-link :to="{path: '/factoryproduct', query: {id:item.id,fid: item.uploader}}">
+                      <img class="imgcover" :src="item.photo" style="width:50px;height:50px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </router-link>
+                    <router-link :to="{path: '/factoryproduct', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-if="tabitem.type == 'newslist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <router-link :to="{path: '/factorynews', query: {id:item.id,fid: item.uploader}}">
+                      <img class="imgcover" :src="item.photo" style="width:50px;height:50px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </router-link>
+                    <router-link :to="{path: '/factorynews', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
+            <div v-if="tabitem.type == 'academiclist'" class="scroll_list border-box">
+              <template>
+                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+                  <div class="flex_left">
+                    <router-link :to="{path: '/academic', query: {id:item.id,fid: item.uploader}}">
+                      <img class="imgcover" :src="item.photo" style="width:50px;height:50px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </router-link>
+                    <router-link :to="{path: '/academic', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </router-link>
+                  </div>
+                </div>
+              </template>
+            </div>
           </div>
         </template>
       </div>
@@ -343,8 +409,12 @@ export default {
     },
     getData () {
       const self = this
+      let statParams = { id: self.query.id }
+      if (self.query.wid) {
+        statParams.wid = self.query.wid
+      }
       self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: this.module, action: 'stat', id: this.query.id })
-      .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: { id: self.query.id } }))
+      .then(res => self.$http.get(`${ENV.BokaApi}/api/statData/${self.module}`, { params: statParams }))
       .then(res => {
         self.$vux.loading.hide()
         self.showcontainer = true
@@ -399,7 +469,7 @@ export default {
             this.sosTitle = '抱歉，您暂无权限访问此页面！'
             this.showSos = true
           } else {
-            if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+            if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
               self.initContainer()
               this.sosTitle = '该信息不存在'
               this.query = this.$route.query

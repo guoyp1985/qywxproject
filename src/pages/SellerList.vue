@@ -51,6 +51,12 @@
               <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
                 <div class="inner">进入店铺</div>
               </router-link>
+              <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
+                <div class="inner">相关订单</div>
+              </router-link>
+              <router-link class="item" :to="{path:'/stat',query:{module:'factoryretailer',id:query.id,wid:clickData.wid}}">
+                <div class="inner">统计</div>
+              </router-link>
               <div class="item close mt10" @click="clickPopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
