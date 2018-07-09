@@ -378,7 +378,7 @@ export default {
     getFriends () {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
-        wid: self.query.uid ? self.query.uid : self.loginUser.uid
+        wid: self.query.uid ? self.query.uid : self.loginUser.uid, limit: 5000
       }).then(function (res) {
         if (res && res.status === 200) {
           let data = res.data
