@@ -71,7 +71,7 @@
                     </div>
                   </router-link>
                 </div>
-                <div v-if="disMore" class="moreicon flex_center color-red">
+                <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
                   <i class="al al-asmkticon0165 v_middle"></i>
                 </div>
               </div>
@@ -203,7 +203,34 @@
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewerPhoto"></previewer>
       </div>
-      <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
+      <comment-popup
+        :show="replyPopupShow"
+        :title="$t('Reply Discussion')"
+        @on-submit="replySubmit"
+        @on-cancel="replyPopupCancel">
+      </comment-popup>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showMoreFriends" height="100%">
+          <div class="popup1 tagpopup">
+            <div class="popup-top flex_center">关注好友</div>
+            <div class="popup-middle">
+              <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div class="t-table">
+                  <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14 color-lightgray">{{item.username}}</div>
+                  </div>
+                </div>
+              </router-link>
+            </div>
+            <div class="popup-bottom flex_center bg-orange color-white" @click="closeFriendsPopup">
+              <span>{{ $t('Close') }}</span>
+            </div>
+          </div>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -256,6 +283,7 @@ export default {
       disTimeline: false,
       tlData: [],
       pageStart1: 0,
+      pageStart2: 0,
       replyPopupShow: false,
       commentData: null,
       commentIndex: 0,
@@ -263,7 +291,9 @@ export default {
       replyIndex: 0,
       commentModule: 'timeline',
       disFocus: false,
-      disMore: false
+      disMore: false,
+      showMoreFriends: false,
+      friendsData: []
     }
   },
   methods: {
@@ -327,6 +357,40 @@ export default {
     },
     afterDelete (item, index) {
       this.timelineData.splice(index, 1)
+    },
+    closeFriendsPopup () {
+      this.showMoreFriends = false
+    },
+    handleScroll2 (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.friendsData.length === (self.pageStart2 + 1) * self.limit) {
+            self.pageStart2++
+            self.$vux.loading.show()
+            self.getFriends()
+          }
+        }
+      })
+    },
+    getFriends () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
+        wid: self.query.uid ? self.query.uid : self.loginUser.uid
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          self.friendsData = retdata
+        }
+      })
+    },
+    moreFriends () {
+      const self = this
+      this.showMoreFriends = true
+      self.getFriends()
     },
     getTimelineData (tagid) {
       const self = this
