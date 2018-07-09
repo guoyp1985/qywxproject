@@ -29,7 +29,7 @@ Vue.use(ConfirmPlugin)
 
 require('es6-promise').polyfill()
 
-// const CancelToken = AjaxPlugin.$http.CancelToken
+const CancelToken = AjaxPlugin.$http.CancelToken
 
 // const headers = new Headers();
 // headers.set('Origin', 'https://vux.boka.cn')
@@ -262,59 +262,40 @@ router.afterEach(function (to) {
 //   return Promise.reject(error)
 // })
 
-// let pending = []
-// let removePending = (config) => {
-//   for (let p in pending) {
-//     if (pending[p].u === config.url + '&' + config.method) {
-//       pending[p].f()
-//       pending.splice(p, 1)
-//     }
-//   }
-// }
-
 // Token.remove()
-// 请求拦截器
-Vue.http.interceptors.request.use(config => {
-  // removePending(config)
-  // config.cancelToken = new CancelToken(c => {
-  //   pending.push({ u: config.url + '&' + config.method, f: c })
-  // })
-  const token = Token.get()
-  config.headers['Authorization'] = `Bearer ${token}`
-  return config
-}, error => {
-  return Promise.reject(error)
-})
-
-const handleUserInfo = (response) => {
+// let bkAccessFlag = true
+// let wxAccessFlag = true
+// WxAccess.remove()
+const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const code = lUrl.query.code
   const state = lUrl.query.state
   if (state === 'defaultAccess' && code) {
-    // Access.set(true)
+    // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
-        Token.set(res.data.data.token)
-        // getAddress(res.data.data.weixin_token)
+        if (!res || !res.data || res.data.errcode) return
+        Token.set(res.data.data)
+        // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
     .then(
       res => {
-        if (res && res.status === 200) {
-          User.set(res.data)
-          // location.href = `http://${lUrl.hostname}/${lUrl.hash}`
-          location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
-        }
+        if (!res) return
+        User.set(res.data)
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
-    $vue.$util.access(response, isPC => {
+    $vue.$util.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
         const originHref = encodeURIComponent(location.href)
+        // 微信授权
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
       }
     })
@@ -322,18 +303,79 @@ const handleUserInfo = (response) => {
   return { data: { } }
 }
 
+let pendings = []
+let cancelAllPendings = () => {
+  for (let p of pendings) {
+    console.info(`canceled request: ${p.u}`)
+    p.f()
+  }
+  pendings = []
+}
+// let cancelSpecPending = (config) => {
+//   for (let p = 0; p < pendings.length; p++) {
+//     if (pendings[p].u === `${config.url}&${config.method}`) {
+//       console.info(`canceled request: ${config.url}`)
+//       pendings[p].f()
+//       pendings.splice(p, 1)
+//     }
+//   }
+// }
+
+// const excludeUrls = [
+//   `${ENV.BokaApi}/api/authLogin/*`,
+//   `${ENV.BokaApi}/api/qrcode/login*`,
+//   `${ENV.BokaApi}/api/scanlogin`
+// ]
+
+// 排除全局请求过滤器中的请求url
+const rExcludeUrls = ENV.NoAccessUrls.map(url => RegExp(url.replace(/\*/g, '.*').replace(/\?/g, '\\?')))
+const matchExclude = url => {
+  for (let i = 0; i < rExcludeUrls.length; i++) {
+    if (rExcludeUrls[i].test(url)) {
+      return true
+    }
+  }
+  return false
+}
+
+// 请求拦截器
+Vue.http.interceptors.request.use(config => {
+  if (!matchExclude(config.url)) {
+    config.cancelToken = new CancelToken(c => {
+      pendings.push({ u: config.url + '&' + config.method, f: c })
+    })
+
+    const token = Token.get()
+    if (!token || Token.isExpired()) {
+      // console.log(config.url)
+      cancelAllPendings(config)
+      handleUserInfo()
+    } else {
+      config.headers['Authorization'] = `Bearer ${token.token}`
+    }
+  }
+  return config
+}, error => {
+  return Promise.reject(error)
+})
+
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
   // removePending(response.config)
-  if (response.status === 200) {
-    const user = User.get()
-    if (!user || !user.uid) {
-      handleUserInfo(response)
-    }
-  }
+  // if (response.status === 200) {
+  //   const user = User.get()
+  //   if (!user || !user.uid) {
+  //     handleUserInfo(response)
+  //   }
+  // }
   return response
 }, error => {
-  handleUserInfo(error.response)
+  // handleUserInfo(error.response)
+  if (error.response) {
+    if (error.response.status === 401) {
+      console.error('未授权请求')
+    }
+  }
 })
 
 // const getAddress = (wxToken) => {

@@ -27,11 +27,11 @@ Util.install = function (Vue, options) {
       return Reg.rAndroid.test(userAgentInfo)
     },
     // 判授权
-    access: function (response, authorization) {
+    access: function (/*response, */authorization) {
       const isPC = this.isPC()
-      if (response.status === 401) {
-        authorization(isPC)
-      }
+      // if (response && response.status === 401) {
+      authorization(isPC)
+      // }
     },
     validate: (model, reg, failHandle) => {
       let re = null
@@ -216,6 +216,7 @@ Util.install = function (Vue, options) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
         { params: { url: encodeURIComponent(location.href) } }
       ).then(res => {
+        if (!res) return
         Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
           // alert("微信还没有准备好，请刷新页面");

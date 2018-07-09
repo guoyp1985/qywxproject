@@ -191,6 +191,7 @@ export default {
         this.showBtn1 = true
       }
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        if (!res) return
         let data = res.data
         self.messages = data.data
       })
@@ -198,6 +199,7 @@ export default {
     getData () {
       const self = this
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+        if (!res) return
         self.loginUser = res.data
         User.set(self.loginUser)
         self.setUserInfo()

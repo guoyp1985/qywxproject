@@ -83,6 +83,31 @@ class Time {
 			return hour + ":" + minute
 		}
 	}
+	formatSimple () {
+		const time = this.time()
+		let minute = this.minute()
+		const hour = this.hour()
+		const date = this.date()
+		const day = this.day()
+		const month = this.month()
+		const year = this.year()
+		const yesterdayTimeBegin = this.yesterdayTimeBegin()
+		const sevenDaysTimeBegin = this.sevenDaysTimeBegin()
+		const todayTimeBegin = this.todayTimeBegin()
+		// const deltaTime = this.deltaTime()
+		minute = minute < 10 ? "0" + minute : minute
+		if (time > todayTimeBegin) {
+			return "今天"
+		} else if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
+			return "昨天"
+		} else if ( time > sevenDaysTimeBegin && time < yesterdayTimeBegin ) {
+			return "星期" + weekDays[ this.day() ]
+		} else if( time < sevenDaysTimeBegin ) {
+			return month + "月" + date + "日 "
+		} else {
+			return year + "-" + month + "-" + date
+		}
+	}
 	dateFormat (format) {
 		if( this._date == "Invalid Date") return "--"
 		let o = {

@@ -35,3 +35,9 @@ var ENV = {
     '激动', '街舞', '献吻', '左太极', '右太极'
   ]
 }
+
+ENV.NoAccessUrls = [
+  ENV.BokaApi + '/api/authLogin/*',
+  ENV.BokaApi + '/api/qrcode/login*',
+  ENV.BokaApi + '/api/scanlogin'
+]
