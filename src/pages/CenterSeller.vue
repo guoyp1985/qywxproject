@@ -661,7 +661,7 @@ export default {
 .cseller .pagebottom .al{font-size:18px;}
 .cseller .pagebottom .txt{font-size:12px;}
 .cseller .pagebottom .radius-icon{
-  width:66px;height:66px;position:absolute;left:50%;margin-left:-33px;top:-28px;z-index:1;
+  width:66px;height:66px;position:absolute;left:50%;margin-left:-33px;top:-20px;z-index:1;
   border-radius:50%;background-color:#e51c23;color:#fff;
 }
 .tagpopup .close-tag{
