@@ -304,7 +304,7 @@ const handleUserInfo = () => {
       }
     )
   } else {
-    $vue.$util.access(isPC => {
+    Vue.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
@@ -463,7 +463,7 @@ const access = success => {
       }
     )
   } else {
-    Util.access(isPC => {
+    Vue.access(isPC => {
       if (isPC) {
         success()
         router.push({name: 'tLogin'})
