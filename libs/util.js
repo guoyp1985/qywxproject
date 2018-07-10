@@ -7,6 +7,18 @@ import urlParse from 'url-parse'
 import { User, Roomid } from './storage'
 const Util = {}
 Util.install = function (Vue, options) {
+  Vue = {
+    isPC: function () {
+      const userAgentInfo = navigator.userAgent
+      return !Reg.rPlatfrom.test(userAgentInfo)
+    },
+    access: function (/*response, */authorization) {
+      const isPC = Vue.isPC()
+      // if (response && response.status === 401) {
+      authorization(isPC)
+      // }
+    }
+  }
   Vue.prototype.$util = {
     // 去空格
     trim: (str) => str ? str.toString().replace(Reg.rSpace, '') : '',
