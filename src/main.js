@@ -488,7 +488,7 @@ const render = () => {
 }
 
 const gToken = Token.get()
-if (!gToken || gToken.isExpired()) {
+if (!gToken || (gToken && gToken.isExpired())) {
   access(() => {
     render()
   })
