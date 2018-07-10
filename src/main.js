@@ -281,7 +281,7 @@ const handleUserInfo = () => {
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+        location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else if (state === 'defaultAccess' && code) {
@@ -300,7 +300,7 @@ const handleUserInfo = () => {
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+        location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
