@@ -207,21 +207,30 @@
               </template>
             </div>
             <div v-if="tabitem.type == 'retailerShare'" class="scroll_list border-box">
-              <template>
-                <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
-                <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
+              <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
+              <template v-else v-for="(item,index1) in arrData">
+                <router-link v-if="item.module === 'retailer'" to="/centerSales" class="scroll_item db padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
-                      <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
-                      <div class="clamp1 color-gray2">{{ item.username }}</div>
-                      <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
+                    <div>
+                      <img class="imgcover" style="width:50px;height:50px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                    </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    </div>
                   </div>
-                </div>
+                </router-link>
+                <router-link v-else :to="{path: `/${item.module}`,query:{id: item.moduleid,wid: item.wid}}" class="scroll_item db padding10">
+                  <div class="flex_left">
+                    <div>
+                      <img class="imgcover" style="width:50px;height:50px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    </div>
+                    <div class="flex_cell pl10 pr20">
+                      <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                    </div>
+                  </div>
+                </router-link>
               </template>
             </div>
             <div v-if="tabitem.type == 'productlist'" class="scroll_list border-box">
