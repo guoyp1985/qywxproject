@@ -268,9 +268,23 @@ router.afterEach(function (to) {
 // WxAccess.remove()
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
+  const token = lUrl.query.token
+  const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
   const state = lUrl.query.state
-  if (state === 'defaultAccess' && code) {
+  if (token && token !== '') {
+    Token.set({token: token, expired_at: expiredAt})
+    console.log(Token.get())
+    Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+    .then(
+      res => {
+        if (!res) return
+        User.set(res.data)
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+      }
+    )
+  } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
@@ -286,7 +300,7 @@ const handleUserInfo = () => {
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`http://${lUrl.hostname}/${lUrl.hash}`)
+        location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {

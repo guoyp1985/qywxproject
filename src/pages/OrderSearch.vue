@@ -112,7 +112,7 @@ export default {
     }
   },
   filters: {
-    addressFormat: function (address) {
+    addressFormat (address) {
       return `${address.area.join('')}${address.details}`
     }
   },
