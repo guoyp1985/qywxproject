@@ -379,8 +379,13 @@ export default {
       const self = this
       const item = self.clickTabitem
       const index = this.selectedIndex
-      let params = { params: { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: limit } }
-      self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, params).then(function (res) {
+      let params = { type: item.type, id: self.query.id, pagestart: self.scrollData[index].pagestart, limit: limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/statDetail/${self.module}`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         let retdata = data.data ? data.data : data
