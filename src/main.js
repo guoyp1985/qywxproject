@@ -281,7 +281,7 @@ const handleUserInfo = () => {
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else if (state === 'defaultAccess' && code) {
@@ -300,11 +300,11 @@ const handleUserInfo = () => {
         if (!res) return
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-        location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
       }
     )
   } else {
-    $vue.$util.access(isPC => {
+    Vue.access(isPC => {
       if (isPC) {
         router.push({name: 'tLogin'})
       } else {
@@ -360,7 +360,7 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
-    if (!token || Token.isExpired()) {
+    if (token && Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
       handleUserInfo()
@@ -424,8 +424,62 @@ Vue.http.interceptors.response.use(response => {
 //   })
 // }
 
-const $vue = new Vue({
-  store,
-  router,
-  render: h => h(App)
-}).$mount('#app-box')
+const access = success => {
+  const lUrl = urlParse(location.href, true)
+  const token = lUrl.query.token
+  const expiredAt = lUrl.query.expired_at
+  const code = lUrl.query.code
+  const state = lUrl.query.state
+  if (token && token !== '') {
+    Token.set({token: token, expired_at: expiredAt})
+    Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+    .then(
+      res => {
+        if (!res) return
+        User.set(res.data)
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        success()
+      }
+    )
+  } else if (state === 'defaultAccess' && code) {
+    // 401授权，取得token
+    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+    .then(
+      res => {
+        if (!res || !res.data || res.data.errcode) return
+        Token.set(res.data.data)
+        // 取用户信息
+        return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      }
+    )
+    .then(
+      res => {
+        if (!res) return
+        User.set(res.data)
+        // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+        // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        success()
+      }
+    )
+  } else {
+    Vue.access(isPC => {
+      if (isPC) {
+        success()
+        router.push({name: 'tLogin'})
+      } else {
+        const originHref = encodeURIComponent(location.href)
+        // 微信授权
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
+      }
+    })
+  }
+}
+
+access(() => {
+  new Vue({
+    store,
+    router,
+    render: h => h(App)
+  }).$mount('#app-box')
+})
