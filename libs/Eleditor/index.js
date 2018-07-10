@@ -196,7 +196,7 @@ var _buildEditorModule = function(_toolbars, _uid){
 						<div placeholder="点击输入内容" class="textarea" contenteditable="true"></div>\
 					</div>\
 					<div class="Eleditor-method">\
-						<button class="Eleditor-cancel bg-red color-white">取消</button>\
+						<button class="Eleditor-cancel color-white" style="background-color:#c5c5c5;">取消</button>\
 						<button class="Eleditor-commit bg-green color-white">提交</button>\
 					</div>\
 				</div>\
