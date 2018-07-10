@@ -355,6 +355,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < limit) {
+            pageStart1 = 0
             this.distabdata1 = false
             this.totalPrice = '0.00'
             this.tabdata1 = []
@@ -363,6 +364,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < limit) {
+            pageStart2 = 0
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
@@ -370,6 +372,7 @@ export default {
           break
         case 2:
           if (this.tabdata3.length < limit) {
+            pageStart3 = 0
             this.distabdata3 = false
             this.tabdata3 = []
             this.getData3()

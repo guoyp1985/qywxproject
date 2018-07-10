@@ -334,12 +334,14 @@ export default {
       })
     },
     swiperChange (index) {
+      const self = this
       if (index !== undefined) {
         this.selectedIndex = index
       }
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
@@ -347,6 +349,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
@@ -354,6 +357,7 @@ export default {
           break
         case 2:
           if (this.tabdata3.length < this.limit) {
+            self.pagestart3 = 0
             this.distabdata3 = false
             this.tabdata3 = []
             this.getData3()

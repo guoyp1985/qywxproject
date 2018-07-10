@@ -440,7 +440,7 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({ path: '/factoryProduct', query: { id: data.data } })
+              self.$router.push({ path: '/factoryAgentFee', query: { id: data.data, fid: self.query.fid, from: 'add' } })
             }
           }
         })

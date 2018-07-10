@@ -47,7 +47,10 @@
           <div class="popup0">
             <div class="list" v-if="clickData">
               <div class="item">
-                <div class="inner" @click="clickPopup('push')">设置管理员</div>
+                <div class="inner" @click="clickPopup('push')">添加管理员</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('manager')">管理员列表</div>
               </div>
               <div class="item">
                 <div class="inner" @click="clickPopup('set')">设置佣金</div>
@@ -57,6 +60,9 @@
               </div>
               <div class="item">
                 <div class="inner" @click="clickPopup('retailer')">卖家</div>
+              </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('stat')">统计</div>
               </div>
               <div class="item close mt10" @click="clickPopup('row.key')">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
@@ -77,6 +83,34 @@
             </div>
             <div class="popup-bottom flex_center">
               <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showManager" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-top flex_center">管理员</div>
+            <div class="popup-middle padding10 border-box">
+              <div class="scroll_list" v-if="disManagerList">
+                <div v-if="!managerData || managerData.length == 0" class="scroll_item emptyitem flex_center">暂无管理员</div>
+                <div v-else v-for="(item,index) in managerData" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                  <div class="t-table">
+                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </router-link>
+                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                    </router-link>
+                    <div :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                      <div class="qbtn bg-red color-white" @click="deleteManager(item,index)">删除</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeManager">{{ $t('Close') }}</div>
             </div>
           </div>
         </popup>
@@ -117,7 +151,10 @@ export default {
       clickData: {},
       clickIndex: 0,
       showQrcode: false,
-      disList: false
+      disList: false,
+      showManager: false,
+      managerData: [],
+      disManagerList: false
     }
   },
   methods: {
@@ -165,18 +202,61 @@ export default {
             })
           }
         })
+      } else if (key === 'manager') {
+        self.showPopup1 = false
+        self.showManager = true
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/factory/adminList`, {
+          fid: self.clickData.id
+        }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.managerData = data.data ? data.data : data
+          self.disManagerList = true
+        })
       } else if (key === 'edit') {
         self.$router.push(`/addFactory?id=${self.clickData.id}`)
       } else if (key === 'set') {
         self.$router.push(`/factoryAgentFee?id=${self.clickData.id}`)
       } else if (key === 'retailer') {
         self.$router.push(`/sellerList?id=${self.clickData.id}`)
+      } else if (key === 'stat') {
+        self.$router.push(`/stat?id=${self.clickData.id}&module=factory`)
       } else {
         self.showPopup1 = false
       }
     },
     closeQrcode () {
       this.showQrcode = false
+    },
+    closeManager () {
+      this.showManager = false
+      this.disManagerList = false
+      this.managerData = []
+    },
+    deleteManager (item, index) {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/factory/delAdmin`, {
+            fid: self.clickData.id, uid: item.uid
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let data = res.data
+            if (data.flag) {
+              self.managerData.splice(index, 1)
+            } else {
+              self.$vux.toast.show({
+                text: data.error,
+                type: 'warning',
+                time: self.$util.delay(data.error)
+              })
+            }
+          })
+        }
+      })
     },
     getData1 () {
       const self = this

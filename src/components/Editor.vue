@@ -37,10 +37,10 @@
   -->
     <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
       <flexbox-item>
-        <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
+        <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
       </flexbox-item>
       <flexbox-item>
-        <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
+        <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
       </flexbox-item>
     </flexbox>
     <div v-transfer-dom class="x-popup">

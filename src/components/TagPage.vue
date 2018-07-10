@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div class="font14">
     <div class="boxouter box2 mt12">
       <div v-if="showList" class="boxinner timelinelist">
         <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">

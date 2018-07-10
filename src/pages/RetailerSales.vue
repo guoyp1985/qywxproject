@@ -282,6 +282,7 @@ export default {
       self.getData2()
     },
     swiperChange (index) {
+      const self = this
       if (index !== undefined) {
         this.selectedIndex = index
       }
@@ -304,6 +305,7 @@ export default {
           break
         case 2:
           if (this.tabdata3.length < this.limit) {
+            self.pagestart3 = 0
             this.distabdata3 = false
             this.tabdata3 = []
             this.getData3()

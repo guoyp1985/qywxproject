@@ -281,6 +281,7 @@ export default {
           break
         case 1:
           if (this.newsdata.length < this.limit) {
+            this.pagestart = 0
             this.disNewslist = false
             this.newsdata = []
             this.getnewsdata()

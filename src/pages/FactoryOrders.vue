@@ -269,8 +269,13 @@ export default {
     getData1 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { pagestart: self.pagestart1, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
+      const params = { pagestart: self.pagestart1, limit: self.limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -281,8 +286,13 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { flag: 1, pagestart: self.pagestart2, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
+      const params = { flag: 1, pagestart: self.pagestart2, limit: self.limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -293,8 +303,13 @@ export default {
     getData3 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { flag: 2, pagestart: self.pagestart3, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
+      const params = { flag: 2, pagestart: self.pagestart3, limit: self.limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -305,8 +320,13 @@ export default {
     getData4 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { flag: 3, pagestart: self.pagestart4, limit: self.limit } }
-      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, params).then(function (res) {
+      const params = { flag: 3, pagestart: self.pagestart4, limit: self.limit }
+      if (self.query.wid) {
+        params.wid = self.query.wid
+      }
+      self.$http.get(`${ENV.BokaApi}/api/order/orderList/factory`, {
+        params: params
+      }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
         const retdata = data.data ? data.data : data
@@ -322,6 +342,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
             self.distabdata1 = false
             this.tabdata1 = []
             self.getData1()
@@ -329,6 +350,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
             self.distabdata2 = false
             this.tabdata2 = []
             self.getData2()
@@ -336,6 +358,7 @@ export default {
           break
         case 2:
           if (this.tabdata3.length < this.limit) {
+            self.pagestart3 = 0
             self.distabdata3 = false
             this.tabdata3 = []
             self.getData3()
@@ -343,6 +366,7 @@ export default {
           break
         case 3:
           if (this.tabdata4.length < this.limit) {
+            self.pagestart4 = 0
             self.distabdata4 = false
             this.tabdata4 = []
             self.getData4()
