@@ -363,7 +363,10 @@ Vue.http.interceptors.request.use(config => {
     if (token && Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
-      handleUserInfo()
+      // handleUserInfo()
+      access((path) => {
+        router.push({path: path})
+      })
     } else {
       config.headers['Authorization'] = `Bearer ${token.token}`
     }
@@ -439,7 +442,7 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        success()
+        router.push(lUrl.hash.replace(/#/, ''))
       }
     )
   } else if (state === 'defaultAccess' && code) {
@@ -459,13 +462,13 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        success()
+        success && success(lUrl.hash.replace(/#/, ''))
       }
     )
   } else {
     Vue.access(isPC => {
       if (isPC) {
-        success()
+        success && success()
         router.push({name: 'tLogin'})
       } else {
         const originHref = encodeURIComponent(location.href)
@@ -476,10 +479,19 @@ const access = success => {
   }
 }
 
-access(() => {
+const render = () => {
   new Vue({
     store,
     router,
     render: h => h(App)
   }).$mount('#app-box')
-})
+}
+
+const gToken = Token.get()
+if (!gToken || gToken.isExpired()) {
+  access(() => {
+    render()
+  })
+} else {
+  render()
+}
