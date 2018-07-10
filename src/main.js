@@ -274,6 +274,7 @@ const handleUserInfo = () => {
   const state = lUrl.query.state
   if (token && token !== '') {
     Token.set({token: token, expired_at: expiredAt})
+    console.log(Token.get())
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     .then(
       res => {
