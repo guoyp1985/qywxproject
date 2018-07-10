@@ -266,6 +266,7 @@ router.afterEach(function (to) {
 // let bkAccessFlag = true
 // let wxAccessFlag = true
 // WxAccess.remove()
+/*
 const handleUserInfo = () => {
   const lUrl = urlParse(location.href, true)
   const token = lUrl.query.token
@@ -316,6 +317,7 @@ const handleUserInfo = () => {
   }
   return { data: { } }
 }
+*/
 
 let pendings = []
 let cancelAllPendings = () => {
@@ -487,8 +489,7 @@ const render = () => {
   }).$mount('#app-box')
 }
 
-const gToken = Token.get()
-if (!gToken || Token.isExpired()) {
+if (!Token.get() || Token.isExpired()) {
   access(() => {
     render()
   })
