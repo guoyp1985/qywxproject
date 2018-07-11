@@ -3,4 +3,5 @@ vux.boka.cn
 root:PD6FESy7a2aQVCbd
 
 vue.boka.cn
-root:36gFfAgsNSYh6
+root:YwS3MNPN77x2rnKU
+git pwd: 140707Boka
