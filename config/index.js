@@ -20,10 +20,10 @@ module.exports = {
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-    https: {
-      key: fs.readFileSync('cert/boka.key', 'utf8'),
-      cert: fs.readFileSync('cert/boka.crt', 'utf8'),
-    },
+    // https: {
+    //   key: fs.readFileSync('cert/boka.key', 'utf8'),
+    //   cert: fs.readFileSync('cert/boka.crt', 'utf8'),
+    // },
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
