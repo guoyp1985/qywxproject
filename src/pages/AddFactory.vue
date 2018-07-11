@@ -317,6 +317,7 @@ export default {
     this.init()
   },
   activated () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.refresh()
   }
 }
