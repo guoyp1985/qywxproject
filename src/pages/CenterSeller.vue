@@ -728,7 +728,7 @@ export default {
 .cseller .focuslist .pic{padding-left:10px;width:38px;}
 .cseller .focuslist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
 .cseller .focuslist .txt{padding-left:10px;width:38px;}
-.cseller .moreicon{width:58px;}
+.cseller .moreicon{width:48px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
 .cseller .pagebottom{
