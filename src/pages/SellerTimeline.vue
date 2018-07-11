@@ -141,26 +141,24 @@ export default {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
-      if (!self.$route.query.uid || self.query.uid !== self.$route.query.uid) {
-        self.initData()
-        self.query = self.$route.query
-        let params = {}
-        if (self.query.uid) {
-          params.uid = self.query.uid
-          self.retailerUid = self.query.uid
-        } else {
-          self.retailerUid = self.loginUser.uid
-        }
-        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          params: params
-        }).then(function (res) {
-          if (res.status === 200) {
-            let data = res.data
-            self.userInfo = data.data ? data.data : data
-            self.getTimelineData()
-          }
-        })
+      self.initData()
+      self.query = self.$route.query
+      let params = {}
+      if (self.query.uid) {
+        params.uid = self.query.uid
+        self.retailerUid = self.query.uid
+      } else {
+        self.retailerUid = self.loginUser.uid
       }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: params
+      }).then(function (res) {
+        if (res.status === 200) {
+          let data = res.data
+          self.userInfo = data.data ? data.data : data
+          self.getTimelineData()
+        }
+      })
     }
   },
   activated () {
