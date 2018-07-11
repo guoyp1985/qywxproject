@@ -637,6 +637,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.cseller .vux-slider{overflow: initial;}
 .cseller{position:relative;}
 .cseller .topcover{position:relative;padding-bottom:65%;}
 .cseller .topcover .inner{position:absolute;;left:0;top:0;right:0;height:100%;}
@@ -721,12 +722,12 @@ export default {
   clear:both;
 }
 .cseller .focuslist .item{
-  width: 40px;padding-top:10px;
+  width: 48px;padding-top:10px;
   text-align: center;display:block;color:inherit;
 }
-.cseller .focuslist .pic{padding-left:10px;width:30px;}
-.cseller .focuslist img{width:30px;height:30px;vertical-align:middle;object-fit: cover;}
-.cseller .focuslist .txt{padding-left:10px;width:30px;}
+.cseller .focuslist .pic{padding-left:10px;width:38px;}
+.cseller .focuslist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
+.cseller .focuslist .txt{padding-left:10px;width:38px;}
 .cseller .moreicon{width:58px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
@@ -765,7 +766,7 @@ export default {
 .cseller .add-icon{
   position:absolute;right:15px;bottom:65px;border-radius:50%;
   width: 44px;height: 44px;z-index: 10;overflow:hidden;
-  color:#fff;background-color:#d9d9d9;font-size: 28px;
+  color:#fff;background-color:#e19194;font-size: 28px;
 }
 .cseller .add-icon .txt{vertical-align:middle;margin-top:-2px;}
 </style>
