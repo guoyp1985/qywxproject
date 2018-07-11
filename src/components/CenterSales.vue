@@ -21,7 +21,7 @@
         </router-link>
       </div>
       <div class="header-nav flex_table list-shadow02">
-        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/centerSeller', query: {uid:retailerInfo.uid}}">
+        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/store', query: {wid:retailerInfo.uid}}">
           <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
           <span class="ml10 font15">{{$t('My shop')}}</span>
         </router-link>
@@ -166,12 +166,14 @@
             <span class="font15">{{$t('I want to distribute')}}</span>
           </div>
         </cell>
+        <!--
         <cell style="position:relative" @click.native.stop="inviteEvent">
           <div slot="icon" class="pr10"><i class="al al-zan7 color-red4 db-in font14"></i></div>
           <div slot="inline-desc">
             <span class="font15">邀请入驻赚奖励</span>
           </div>
         </cell>
+      -->
       </template>
     </group>
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">

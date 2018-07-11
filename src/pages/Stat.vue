@@ -216,6 +216,7 @@
                     </div>
                     <div class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">分享次数: {{ item.shares }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                   </div>
@@ -227,6 +228,7 @@
                     </div>
                     <div class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
+                      <div class="clamp1 color-gray">分享次数: {{ item.shares }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </div>
                   </div>
