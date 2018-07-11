@@ -23,6 +23,7 @@ if (ENV.Version !== Version.get()) {
   User.remove()
   Access.remove()
   Version.remove()
+  Version.set(ENV.Version)
 }
 
 Vue.use(VueRouter)

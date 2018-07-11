@@ -82,7 +82,7 @@ const WxAccess = {
 }
 const Version = {
   set (version) {
-    localStorage.setItem('roomid', version)
+    localStorage.setItem('version', version)
   },
   get () {
     return localStorage.getItem('version')
