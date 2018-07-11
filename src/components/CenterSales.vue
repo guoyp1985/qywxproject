@@ -21,7 +21,7 @@
         </router-link>
       </div>
       <div class="header-nav flex_table list-shadow02">
-        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/centerSeller', query: {uid:retailerInfo.uid}}">
+        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/store', query: {wid:retailerInfo.uid}}">
           <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
           <span class="ml10 font15">{{$t('My shop')}}</span>
         </router-link>

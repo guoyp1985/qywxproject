@@ -100,7 +100,14 @@
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
+        <div @click="toCenterSales" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
+          <i class="al al-maijiaxiu2 color-black font18 v_middle" style="margin-top:-1px;"></i>
+          <span class="v_middle" style="color:#323232;margin-left:-4px;">卖家秀</span>
+        </div>
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
+          <i class="al al-zixun color-red font18 v_middle" style="padding-right:3px;"></i>
+          <span class="v_middle" style="color:#323232">{{ $t('Online consulting') }}</span>
+        </router-link>
         <div class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9" @click="clickWetchat"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
       </div>
       <div v-transfer-dom class="x-popup">
@@ -258,6 +265,14 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+    },
+    toCenterSales () {
+      const self = this
+      let params = { uid: self.query.wid }
+      if (!self.query.wid) {
+        params.wid = self.loginUser.uid
+      }
+      self.$router.push({path: '/centerSeller', query: params})
     },
     handleScroll () {
       const self = this
