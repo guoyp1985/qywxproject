@@ -19,7 +19,7 @@
 
 <script>
 import ENV from 'env'
-import { Token, User, Access } from '#/storage'
+import { User, Version, Token, Access } from '#/storage'
 
 export default {
   data () {
@@ -28,6 +28,12 @@ export default {
     }
   },
   methods: {
+    clearObject () {
+      Token.remove()
+      User.remove()
+      Access.remove()
+      Version.remove()
+    },
     deleteEvent () {
       const self = this
       self.$vux.confirm.show({
@@ -47,9 +53,7 @@ export default {
               onHide: function () {
                 if (data.flag === 1) {
                   self.uids = ''
-                  Token.remove()
-                  User.remove()
-                  Access.remove()
+                  self.clearObject()
                 }
               }
             })
@@ -63,9 +67,7 @@ export default {
         content: '确定要清除缓存吗？',
         onConfirm () {
           self.$vux.loading.show()
-          Token.remove()
-          User.remove()
-          Access.remove()
+          self.clearObject()
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: '成功'

@@ -92,7 +92,8 @@ export default {
       tagsData: [],
       tagids: [],
       showTags: false,
-      uid: 0
+      uid: 0,
+      addType: 'retailer'
     }
   },
   computed: {
@@ -178,6 +179,7 @@ export default {
       self.submitdata.title = subTitle
       self.submitdata.tagids = self.tagids.join(',')
       self.submitdata.wid = self.query.uid ? self.query.uid : self.loginUser.uid
+      self.submitdata.type = self.addType
       self.$http.post(`${ENV.BokaApi}/api/timeline/add `, self.submitdata).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
@@ -222,28 +224,22 @@ export default {
     refresh () {
       const self = this
       self.$vux.loading.show()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
-      this.initData()
-      this.query = this.$route.query
-      if (this.query.type) {
-        self.submitdata.type = this.query.type
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.loginUser = User.get()
+      self.initData()
+      self.query = self.$route.query
+      if (self.query.type) {
+        self.addType = self.query.type
       }
-      if (this.query.tagid) {
-        self.tagids = [this.query.tagid]
+      if (self.query.tagid) {
+        self.tagids = [self.query.tagid]
       }
-      if (this.loginUser && this.loginUser.subscribe === 1) {
+      if (self.loginUser && self.loginUser.subscribe === 1) {
         self.showContainer = true
-        if (this.query.uid) {
-          if (self.query.uid.toString() === self.loginUser.uid.toString()) {
-            self.submitdata.type = 'retailer'
-          } else {
-            self.submitdata.type = 'customer'
-          }
-        } else {
-          self.submitdata.type = 'retailer'
+        if (self.query.uid && self.query.uid.toString() !== self.loginUser.uid.toString()) {
+          self.addType = 'customer'
         }
-        if (self.submitdata.type === 'retailer') {
+        if (self.addType === 'retailer') {
           self.showTags = true
         } else {
           self.showTags = false

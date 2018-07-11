@@ -80,5 +80,16 @@ const WxAccess = {
     localStorage.removeItem('wxAccess')
   }
 }
+const Version = {
+  set (version) {
+    localStorage.setItem('version', version)
+  },
+  get () {
+    return localStorage.getItem('version')
+  },
+  remove () {
+    localStorage.removeItem('version')
+  }
+}
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version }

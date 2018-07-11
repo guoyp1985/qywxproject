@@ -36,7 +36,6 @@
         :user-info="userInfo"
         :login-user="loginUser"
         :timeline-data="timelineData"
-        :scroll-event="scrollEvent"
         :show-list="showList"
         :timeline-count="timelineCount"
         :after-delete="afterDelete">
@@ -91,14 +90,6 @@ export default {
     afterDelete (item, index) {
       this.timelineData.splice(index, 1)
     },
-    scrollEvent () {
-      const self = this
-      if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
-        self.pageStart++
-        self.$vux.loading.show()
-        self.getTimelineData()
-      }
-    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -141,26 +132,24 @@ export default {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
-      if (!self.$route.query.uid || self.query.uid !== self.$route.query.uid) {
-        self.initData()
-        self.query = self.$route.query
-        let params = {}
-        if (self.query.uid) {
-          params.uid = self.query.uid
-          self.retailerUid = self.query.uid
-        } else {
-          self.retailerUid = self.loginUser.uid
-        }
-        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-          params: params
-        }).then(function (res) {
-          if (res.status === 200) {
-            let data = res.data
-            self.userInfo = data.data ? data.data : data
-            self.getTimelineData()
-          }
-        })
+      self.initData()
+      self.query = self.$route.query
+      let params = {}
+      if (self.query.uid) {
+        params.uid = self.query.uid
+        self.retailerUid = self.query.uid
+      } else {
+        self.retailerUid = self.loginUser.uid
       }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: params
+      }).then(function (res) {
+        if (res.status === 200) {
+          let data = res.data
+          self.userInfo = data.data ? data.data : data
+          self.getTimelineData()
+        }
+      })
     }
   },
   activated () {
