@@ -116,7 +116,7 @@ export default {
     },
     getTimelineData () {
       const self = this
-      let params = {pagestart: pageStart, limit: limit}
+      let params = {pagestart: pageStart, limit: limit, do: 'store'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
