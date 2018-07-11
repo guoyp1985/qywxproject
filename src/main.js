@@ -10,13 +10,21 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { Token, User } from '#/storage'
+import { User, Version, Token, Access } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
 // import VueScroller from 'vue-scroller'
 //
 // Vue.use(VueScroller)
+
+if (ENV.Version !== Version.get()) {
+  Token.remove()
+  User.remove()
+  Access.remove()
+  Version.remove()
+}
+
 Vue.use(VueRouter)
 Vue.use(Util)
 Vue.use(AjaxPlugin)
