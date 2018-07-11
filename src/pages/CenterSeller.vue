@@ -185,7 +185,6 @@
                 :user-info="userInfo"
                 :login-user="loginUser"
                 :timeline-data="timelineData"
-                :scroll-event="scrollEvent"
                 :page-start="pageStart"
                 :limit="limit"
                 :show-list="showList"
@@ -418,14 +417,6 @@ export default {
         self.timelineCount = self.timelineData.length
         self.showList = true
       })
-    },
-    scrollEvent () {
-      const self = this
-      if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
-        self.pageStart++
-        self.$vux.loading.show()
-        self.getTimelineData()
-      }
     },
     clickTag (tagitem) {
       const self = this

@@ -89,7 +89,6 @@ export default {
       type: Array,
       default: []
     },
-    scrollEvent: Function,
     pageStart: {
       type: Number,
       default: 0
@@ -160,16 +159,6 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
-    },
-    handleScroll (refname) {
-      const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: function () {
-          self.scrollEvent && self.scrollEvent()
-        }
-      })
     },
     showBigimg (src, arr, refname, index) {
       const self = this

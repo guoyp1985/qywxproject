@@ -36,7 +36,6 @@
         :user-info="userInfo"
         :login-user="loginUser"
         :timeline-data="timelineData"
-        :scroll-event="scrollEvent"
         :show-list="showList"
         :timeline-count="timelineCount"
         :after-delete="afterDelete">
@@ -90,14 +89,6 @@ export default {
     },
     afterDelete (item, index) {
       this.timelineData.splice(index, 1)
-    },
-    scrollEvent () {
-      const self = this
-      if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
-        self.pageStart++
-        self.$vux.loading.show()
-        self.getTimelineData()
-      }
     },
     handleScroll (refname) {
       const self = this
