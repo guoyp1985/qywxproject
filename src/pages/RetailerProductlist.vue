@@ -40,12 +40,12 @@
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
                       <div class="clamp1 mt5" v-if="item.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
-                      <div class="clamp1 mt5">
+                      <div class="clamp1 mt5 font12">
                           <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
                       </div>
                     </div>
-                    <div class="align_right t-cell v_bottom w80">
+                    <div class="align_right t-cell v_bottom w50">
                       <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
                         <i class="al al-asmkticon0165 v_middle"></i>
                       </div>
