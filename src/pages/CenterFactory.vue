@@ -55,6 +55,8 @@ export default {
               if (res.status === 200) {
                 let data = res.data
                 self.factoryinfo = data.data ? data.data : data
+                let photoArr = [self.factoryinfo.photo]
+                self.factoryinfo.photoArr = self.$util.previewerImgdata(photoArr)
                 self.$vux.loading.hide()
                 return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
               }
