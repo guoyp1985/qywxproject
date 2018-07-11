@@ -273,8 +273,8 @@ export default {
       })
     },
     init () {
-      const self = this
       /*
+      const self = this
       self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
         { params: { limit: 100 } }
       ).then(function (res) {
