@@ -617,7 +617,7 @@ export default {
     getMoreStatus () {
       const self = this
       const wW = window.innerWidth
-      const disCols = Math.floor(wW / 58)
+      const disCols = Math.floor(wW / 48)
       if (self.focusData.length > disCols - 1) {
         self.disMore = true
       } else {
