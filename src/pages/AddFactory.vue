@@ -66,6 +66,7 @@
               </div>
             </div>
           </div>
+          <!--
           <template v-if="disClassData">
             <div class="form-item required border-box padding10" v-if="classData.length > 0">
               <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
@@ -80,6 +81,7 @@
               </checker>
             </div>
           </template>
+        -->
         </form>
       </div>
       <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div>
@@ -115,7 +117,7 @@ export default {
       loginUser: {},
       allowsubmit: true,
       submitData: { title: '', summary: '', photo: '' },
-      requireddata: { title: '', productclass: '' },
+      requireddata: { title: '' },
       classData: [],
       productClass: [],
       disClassData: false,
@@ -272,6 +274,7 @@ export default {
     },
     init () {
       const self = this
+      /*
       self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
         { params: { limit: 100 } }
       ).then(function (res) {
@@ -280,6 +283,7 @@ export default {
         self.classData = data
         self.disClassData = true
       })
+      */
     },
     refresh () {
       const self = this
@@ -313,6 +317,7 @@ export default {
     this.init()
   },
   activated () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.refresh()
   }
 }
