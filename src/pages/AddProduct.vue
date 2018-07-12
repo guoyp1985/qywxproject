@@ -307,6 +307,7 @@ export default {
   },
   methods: {
     initSubmitData () {
+      this.videoarr = []
       this.submitdata = {
         classid: '',
         title: '',
