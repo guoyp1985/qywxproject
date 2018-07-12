@@ -64,7 +64,7 @@
               </div>
             </div>
           </div>
-          <template v-if="focusData.length > 0 && disFocus">
+          <template v-show="focusData.length > 0 && disFocus">
             <div class="linearea">
               <div class="line line1"></div>
               <div class="line line2"></div>
@@ -73,7 +73,7 @@
               <div class="boxinner b_top_after">
                 <div class="row1">{{focusCount}}位好友关注了TA</div>
                 <div class="flex_left">
-                  <div class="focuslist">
+                  <div class="focuslist" ref="focusList">
                     <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
                       <div class="pic">
                         <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
@@ -609,18 +609,23 @@ export default {
           let data = res.data
           self.focusData = data.data ? data.data : data
           self.focusCount = data.count
-          self.getMoreStatus()
+          self.getMoreStatus(self)
           self.disFocus = true
         }
       })
     },
-    getMoreStatus () {
-      const self = this
+    getMoreStatus (self) {
       const wW = window.innerWidth
-      const disCols = Math.floor(wW / 58)
+      const disCols = Math.floor(wW / 48)
+      let focusList = self.$refs.focusList[0] ? self.$refs.focusList[0] : self.$refs.focusList
       if (self.focusData.length > disCols - 1) {
+        const listW = (disCols - 1) * 48
+        focusList.style.flex = ''
+        focusList.style.width = `${listW}px`
         self.disMore = true
       } else {
+        focusList.style.width = ''
+        focusList.style.flex = '1'
         self.disMore = false
       }
     }
@@ -630,7 +635,7 @@ export default {
     self.initData()
     this.refresh()
     window.onresize = function () {
-      self.getMoreStatus()
+      self.getMoreStatus(self)
     }
   }
 }
@@ -715,7 +720,7 @@ export default {
 
 .cseller .boxouter.box2 .boxinner{box-shadow:rgba(204, 204, 204, 0.2) 0px -2px 5px 0px;padding:15px 0px;}
 .cseller .box2 .row1{padding:0 10px;}
-.cseller .focuslist{flex:1;display:flex;overflow:hidden;}
+.cseller .focuslist{display:flex;overflow:hidden;}
 .cseller .focuslist:after{
   content:'';
   display:block;
@@ -728,7 +733,7 @@ export default {
 .cseller .focuslist .pic{padding-left:10px;width:38px;}
 .cseller .focuslist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
 .cseller .focuslist .txt{padding-left:10px;width:38px;}
-.cseller .moreicon{width:58px;}
+.cseller .moreicon{width:48px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
 .cseller .pagebottom{
