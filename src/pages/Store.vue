@@ -4,101 +4,100 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" style="top:0px;overflow-y: initial;" ref="scrollContainer" @scroll="handleScroll">
-        <div style="height:100%;overflow-y:auto;">
-          <swiper
-            class="pic-swiper notitle"
-            v-if="addata && addata.length > 0"
-            :list="addata"
-            dots-position="center"
-            :interval="6000"
-            :show-dots="isshowdot"
-            :aspect-ratio="500/900"
-            auto
-            loop>
-          </swiper>
-          <template v-if="retailerInfo.uid">
-            <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
-          		<div class="t-table">
-          			<router-link class="t-cell v_middle w50" :to="{path: '/centerSeller',query:{uid:query.wid}}">
-                  <img class="avatarimg1 imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                </router-link>
-          			<router-link class="t-cell v_middle shopkeeper_txt" :to="{path: '/centerSeller',query:{uid:query.wid}}">
-          				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
-          			</router-link>
-        				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
-                  <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
-                  <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
-        				</div>
-                <div v-else class="t-cell v_middle align_right w100">
-                  <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
-                </div>
-        			</div>
-        		</div>
-          </template>
-          <template v-if="activitydata && activitydata.length > 0">
-            <div class="bg-white mt5 padding10 b_top_after">
-        			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
-        		</div>
-            <div class="b_top_after"></div>
-            <div class="activitylist">
-              <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
-                <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
-                  <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-                  <span slot="title">{{ item.title }}</span>
-                  <span slot="numbers">{{ item.numbers }}</span>
-                  <span slot="havetuan">{{ item.havetuan }}</span>
-                  <span slot="groupprice">{{ item.groupprice }}</span>
-                  <span slot="price">{{ item.price }}</span>
-                </groupbuyitemplate>
-                <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
-                  <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-                  <span slot="title">{{ item.title }}</span>
-                  <span slot="saveprice">{{ item.saveprice }}</span>
-                  <span slot="minprice">{{ item.minprice }}</span>
-                  <span slot="price">{{ item.price }}</span>
-                </bargainbuyitemplate>
+      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
+        <!-- <swiper
+          class="pic-swiper notitle"
+          v-if="addata && addata.length > 0"
+          :list="addata"
+          dots-position="center"
+          :interval="6000"
+          :show-dots="isshowdot"
+          :aspect-ratio="500/900"
+          auto
+          loop>
+        </swiper> -->
+        <div style="height:178px;background-image: url('http://osslaravel.boka.cn/month_201807/15313641414617.jpg');"></div>
+        <template v-if="retailerInfo.uid">
+          <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
+        		<div class="t-table">
+        			<router-link class="t-cell v_middle w50" :to="{path: '/centerSeller',query:{uid:query.wid}}">
+                <img class="avatarimg1 imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              </router-link>
+        			<router-link class="t-cell v_middle shopkeeper_txt" :to="{path: '/centerSeller',query:{uid:query.wid}}">
+        				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
+        			</router-link>
+      				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
+                <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
+                <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
+      				</div>
+              <div v-else class="t-cell v_middle align_right w100">
+                <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
               </div>
-            </div>
-          </template>
+      			</div>
+      		</div>
+        </template>
+        <template v-if="activitydata && activitydata.length > 0">
           <div class="bg-white mt5 padding10 b_top_after">
-      			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
+      			<span class="db-in pl5 font16 vline">{{ $t('Selection promotion') }}</span>
       		</div>
           <div class="b_top_after"></div>
-          <div v-if="disproductdata" class="productlist squarepic">
-            <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
-            <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
-              <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-              <span slot="title">{{ item.title }}</span>
-              <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
-              <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
-            </productitemplate>
-          </div>
-          <template v-if="toplinedata.length > 0">
-            <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
-              <div class="t-table">
-                <div class="t-cell v_middle align_left">
-          			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
-                </div>
-                <div class="t-cell v_middle align_right">
-                  <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
-        						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
-        					</div>
-                </div>
-              </div>
-        		</div>
-            <div class="b_top_after"></div>
-            <div class="productlist">
-              <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
-                <img slot="photo" class="v_middle imgcover" style="width: 70px; height: 50px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+          <div class="activitylist">
+            <div v-for="(item,index) in activitydata" :key="item.id" class="bg-page">
+              <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
+                <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                 <span slot="title">{{ item.title }}</span>
-                <span slot="date">{{ item.dateline | dateformat }}</span>
-              </newsitemplate>
+                <span slot="numbers">{{ item.numbers }}</span>
+                <span slot="havetuan">{{ item.havetuan }}</span>
+                <span slot="groupprice">{{ item.groupprice }}</span>
+                <span slot="price">{{ item.price }}</span>
+              </groupbuyitemplate>
+              <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
+                <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                <span slot="title">{{ item.title }}</span>
+                <span slot="saveprice">{{ item.saveprice }}</span>
+                <span slot="minprice">{{ item.minprice }}</span>
+                <span slot="price">{{ item.price }}</span>
+              </bargainbuyitemplate>
             </div>
-          </template>
-          <div v-if="query.wid && query.wid != loginUser.uid" class="pb10">
-            <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
           </div>
+        </template>
+        <div class="bg-white mt5 padding10 b_top_after">
+    			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
+    		</div>
+        <div class="b_top_after"></div>
+        <div v-if="disproductdata" class="productlist squarepic">
+          <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
+          <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
+            <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+            <span slot="title">{{ item.title }}</span>
+            <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
+            <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
+          </productitemplate>
+        </div>
+        <template v-if="toplinedata.length > 0">
+          <div class="bg-white mt5 pl12 pr12 pt10 pb10 b_top_after">
+            <div class="t-table">
+              <div class="t-cell v_middle align_left">
+        			     <span class="db-in pl5 font16 vline">{{ $t('Shop topline') }}</span>
+              </div>
+              <div class="t-cell v_middle align_right">
+                <div class="qbtn4" style="padding: 3px 8px;line-height: 1;" @click="changeNews">
+      						<i class="al al-shuaxin4 font12 mr3"></i><span>{{ $t('Another batch') }}</span>
+      					</div>
+              </div>
+            </div>
+      		</div>
+          <div class="b_top_after"></div>
+          <div class="productlist">
+            <newsitemplate :data="item" v-for="(item,index) in toplinedata" :key="item.id">
+              <img slot="photo" class="v_middle imgcover" style="width: 70px; height: 50px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <span slot="title">{{ item.title }}</span>
+              <span slot="date">{{ item.dateline | dateformat }}</span>
+            </newsitemplate>
+          </div>
+        </template>
+        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10">
+          <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
