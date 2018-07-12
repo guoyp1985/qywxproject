@@ -1,40 +1,40 @@
 <template>
-  <div class="containerarea font14 bg-page spromotion notop nobottom">
-    <div class="pagemiddle" style="padding-top:45px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-      <div class="boxouter box1">
-        <div class="boxinner">
-          <div class="flex_left row1">
-            <div class="pic">
-              <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="flex_cell flex_left">
-              <div class="clamp1">
-                <span class="v_middle">{{userInfo.title}}</span>
-                <span class="v_middle font12 color-gray">
-                  <span class="v_middle">{{userInfo.province}}</span>
-                  <span class="v_middle" v-if="userInfo.city && userInfo.city != ''">· {{userInfo.city}}</span>
-                </span>
-              </div>
-            </div>
-            <div class="btn-cell">
-              <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
+  <div class="containerarea font14 bg-page spromotion nobottom">
+    <div class="pagetop b_bottom_after bg-page">
+      <div class="boxinner box1">
+        <div class="flex_left row1 pt15">
+          <div class="pic">
+            <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+          </div>
+          <div class="flex_cell flex_left">
+            <div class="clamp1">
+              <span class="v_middle db">{{userInfo.title}}</span>
+              <span class="v_middle font12 color-gray">
+                <span class="v_middle">{{userInfo.province}}</span>
+                <span class="v_middle" v-if="userInfo.city && userInfo.city != ''">· {{userInfo.city}}</span>
+              </span>
             </div>
           </div>
-          <div class="row3">
+          <div class="btn-cell">
+            <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
+          </div>
+        </div>
+        <div class="row3">
             <div class="taglist">
               <div class="tagitem v_middle">{{tagName}}</div>
               <span class="v_middle">共 {{timelineCount}} 条</span>
             </div>
           </div>
-        </div>
       </div>
+    </div>
+    <div class="pagemiddle bg-page" ref="scrollContainer" @scroll="handleScroll('scrollContainer')" style="top:110px;">
       <div class="boxouter box2 mt12">
         <div v-if="disData" class="boxinner tllist">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
             暂无促销商品
           </div>
-          <div v-else v-for="(item,index) in timelineData" :key="item.id" class="bg-page">
-            <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
+          <div v-else v-for="(item,index) in timelineData" :key="item.id">
+            <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
               <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               <span slot="title">{{item.title}}</span>
               <span slot="numbers">{{ item.numbers }}</span>
@@ -42,7 +42,7 @@
               <span slot="groupprice">{{item.groupprice}}</span>
               <span slot="price">{{item.price}}</span>
             </groupbuyitemplate>
-            <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#f6f6f6 !important;">
+            <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
               <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
               <span slot="title">{{item.title}}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
@@ -161,26 +161,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.boxouter{padding-left:5px;padding-right:5px;box-sizing: border-box;}
-.boxouter .boxinner{
-  position:relative;z-index:1;background-color:#fff;
-  border-radius:5px;
-  border: rgb(244, 244, 244) 1px solid;
-  box-shadow: rgb(204, 204, 204) 0px -9px 16px -3px;
-}
-.spromotion .boxouter.box1 .boxinner{padding-bottom:0;}
-.spromotion .box1 .row1{height:35px;}
+.spromotion .pagetop{z-index: 2;height:110px;box-shadow: rgba(0, 0, 0, 0.1) 0px 9px 36px -3px;}
+.boxouter .boxinner{position:relative;z-index:1;}
 .spromotion .box1 .pic{
-  padding-left:20px;
-  width:77px;height:35px;
+  padding-left:10px;
+  width:77px;
   position:relative;
 }
 .spromotion .box1 .pic img{
   width: 67px;height: 67px;
-  box-shadow: rgb(170, 170, 170) 0px -3px 12px -3px;
   border-radius:50%;
   vertical-align:middle;
-  position:absolute;top:-35px;
 }
 .spromotion .box1 .btn-cell{
   width:90px;text-align:center;
@@ -192,17 +183,10 @@ export default {
   border-radius: 27px;
   font-size: 12px;
 }
-.spromotion .taglist .tagitem{
-  display:inline-block;padding:0 5px;height: 24px;line-height:24px;
-  border-width:1px;border-style:solid;
-  border-radius: 5px;text-align: center;margin:0 5px 5px;
-  border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
-}
-.spromotion .row3{padding:15px 20px;box-sizing: border-box;}
+.spromotion .taglist{height: 18px;line-height:18px;font-size:13px;}
+.spromotion .taglist .tagitem{display:inline-block;padding:0 3px;color:rgb(229, 28, 35);}
+.spromotion .row3{padding:0px 10px 0px 10px;text-align:right;box-sizing: border-box;}
 
-.tllist{
-
-}
 .tllist .tlitem{
   display:flex;padding:10px;
 }

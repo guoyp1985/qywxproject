@@ -96,12 +96,12 @@
                 <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
                   暂无相关动态
                 </div>
-                <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
+                <div v-else class="tlitem b_bottom_after" v-for="(item,index) in tlData" :key="index">
                   <div class="avatar">
                     <img :src="item.avatar" />
                   </div>
                   <div class="con">
-                    <div class="txt">{{item.username}}</div>
+                    <div class="txt no_bold">{{item.username}}</div>
                     <div v-html="filterEmot(item.title)"></div>
                     <div class="piclist">
                       <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
@@ -197,7 +197,7 @@
                 :after-delete="afterDelete">
               </tag-page>
             </div>
-            <div class="popup-bottom flex_center bg-orange color-white" @click="closeTagPopup">
+            <div class="popup-bottom flex_center color-white" @click="closeTagPopup" style="background-color:#e51c23;">
               <span>{{ $t('Close') }}</span>
             </div>
           </div>
@@ -767,13 +767,12 @@ export default {
   border-radius: 4px;font-size: 12px;
 }
 .tagpopup .add-icon{
-  position:absolute;right:15px;bottom:15px;border-radius:50%;
+  position:absolute;right:15px;bottom:65px;border-radius:50%;
   width: 44px;height: 44px;z-index: 10;overflow:hidden;
-  color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
+  color:#fff;background-color:#e19194;font-size: 28px;
 }
 .tagpopup .add-icon .txt{vertical-align:middle;margin-top:-2px;}
-.cseller .boxouter.box3 .boxinner{padding:15px 10px;}
-.cseller .box3 .timelinelist .tlitem{padding:10px 0;}
+.cseller .boxouter.box3 .boxinner{padding:0px 0px;}
 .cseller .b_bottom_after:after{background-color: #eaeaea;}
 .cseller .add-icon{
   position:absolute;right:15px;bottom:65px;border-radius:50%;
@@ -781,4 +780,8 @@ export default {
   color:#fff;background-color:#e19194;font-size: 28px;
 }
 .cseller .add-icon .txt{vertical-align:middle;margin-top:-2px;}
+.timelinelist .con .txt{font-weight:normal;}
+.timelinelist .tlitem{padding:15px 10px;}
+.timelinelist .commentarea .txt1:before{display: none;}
+.timelinelist .commentarea .txt1{padding-left:0px;}
 </style>
