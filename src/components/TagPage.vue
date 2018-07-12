@@ -293,5 +293,8 @@ export default {
   border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
 }
 .tagpage .row3{padding:15px 20px;box-sizing: border-box;}
-
+.timelinelist .con .txt{font-weight:normal;}
+.timelinelist .tlitem{padding:15px 10px;}
+.timelinelist .commentarea .txt1:before{display: none;}
+.timelinelist .commentarea .txt1{padding-left:0px;}
 </style>

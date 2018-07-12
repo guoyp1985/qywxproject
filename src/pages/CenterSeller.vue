@@ -101,7 +101,7 @@
                     <img :src="item.avatar" />
                   </div>
                   <div class="con">
-                    <div class="txt">{{item.username}}</div>
+                    <div class="txt no_bold">{{item.username}}</div>
                     <div v-html="filterEmot(item.title)"></div>
                     <div class="piclist">
                       <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
@@ -766,7 +766,6 @@ export default {
 }
 .tagpopup .add-icon .txt{vertical-align:middle;margin-top:-2px;}
 .cseller .boxouter.box3 .boxinner{padding:0px 0px;}
-.cseller .box3 .timelinelist .tlitem{padding:15px 10px;}
 .cseller .b_bottom_after:after{background-color: #eaeaea;}
 .cseller .add-icon{
   position:absolute;right:15px;bottom:65px;border-radius:50%;
@@ -774,4 +773,8 @@ export default {
   color:#fff;background-color:#e19194;font-size: 28px;
 }
 .cseller .add-icon .txt{vertical-align:middle;margin-top:-2px;}
+.timelinelist .con .txt{font-weight:normal;}
+.timelinelist .tlitem{padding:15px 10px;}
+.timelinelist .commentarea .txt1:before{display: none;}
+.timelinelist .commentarea .txt1{padding-left:0px;}
 </style>

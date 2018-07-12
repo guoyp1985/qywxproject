@@ -3,8 +3,8 @@
     <template v-if="!query.uid || query.uid == loginUser.uid">
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
-    <div class="pagetop b_bottom_after bg-white">
-      <div class="boxinner box1 ">
+    <div class="pagetop b_bottom_after bg-page">
+      <div class="boxinner box1">
         <div class="flex_left row1 pt15">
           <div class="pic">
             <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')" style="top:110px;">
+    <div class="pagemiddle bg-white" ref="scrollContainer" @scroll="handleScroll('scrollContainer')" style="top:110px;">
       <div class="boxouter box2 mt12">
         <div v-if="disData" class="boxinner tllist piclist pr10 pl10">
           <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
@@ -203,9 +203,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.photovideo .pagetop{z-index: 2;height:110px;box-shadow: rgba(0, 0, 0, 0.15) 0px 9px 36px -3px;}
+.photovideo .pagetop{z-index: 2;height:110px;box-shadow: rgba(0, 0, 0, 0.1) 0px 9px 36px -3px;}
 .photovideo .add-icon{
-  position:absolute;right:15px;bottom:15px;border-radius:50%;
+  position:absolute;right:20px;bottom:20px;border-radius:50%;
   width: 44px;height: 44px;z-index: 10;overflow:hidden;
   color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
 }
@@ -233,9 +233,9 @@ export default {
   border-radius: 27px;
   font-size: 12px;
 }
-.photovideo .taglist .tagitem{
-  display:inline-block;padding:0 5px;height: 24px;line-height:24px;color:rgb(229, 28, 35);}
-.photovideo .row3{padding:0px 10px 5px 10px;text-align:right;box-sizing: border-box;}
+.photovideo .taglist{height: 18px;line-height:18px;font-size:13px;}
+.photovideo .taglist .tagitem{display:inline-block;padding:0 3px;color:rgb(229, 28, 35);}
+.photovideo .row3{padding:0px 10px 0px 10px;text-align:right;box-sizing: border-box;}
 
 .tllist .tlitem{
   display:flex;padding:10px;
@@ -245,13 +245,14 @@ export default {
 .tllist .con{flex:1;}
 .tllist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
 .tllist .piclist:after{content:"";display:block;clear:both;}
-.tllist .picitem{float:left;width:33.33333%;padding-bottom:33.33333%;position:relative;}
+.tllist .picitem{float:left;width:25%;padding-bottom:25%;position:relative;}
 .tllist .picitem .inner{
-  position:absolute;top:0;bottom:0;box-sizing:border-box;top:7px;bottom:7px;
+  position:absolute;top:0;bottom:0;box-sizing:border-box;top:3px;bottom:3px;
 }
-.tllist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
-.tllist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
-.tllist .picitem:nth-child(3n+3) .inner{left:14px;right:0;}
+.tllist .picitem:nth-child(4n+1) .inner{left:0;right:6px;}
+.tllist .picitem:nth-child(4n+2) .inner{left:3px;right:3px;}
+.tllist .picitem:nth-child(4n+3) .inner{left:6px;right:3px;}
+.tllist .picitem:nth-child(4n+4) .inner{left:6px;right:0;}
 .tllist .picitem img{width:100%;height:100%;object-fit: cover;}
 .tllist .commentarea{
   background-color: rgb(244, 244, 244);
