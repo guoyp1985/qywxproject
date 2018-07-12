@@ -24,6 +24,7 @@ module.exports = {
     //   key: fs.readFileSync('cert/boka.key', 'utf8'),
     //   cert: fs.readFileSync('cert/boka.crt', 'utf8'),
     // },
+    https: true,
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
