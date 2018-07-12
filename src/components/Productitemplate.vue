@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{path: '/product', query: {id: data.id, wid: data.uploader}}" class="bk-productitem scroll_item font14 db ">
+  <router-link :to="{path: '/product', query: {id: data.id, wid: data.uploader}}" class="bk-productitem scroll_item font14">
 		<div class="inner list-shadow">
 			<div class="picarea">
 				<div class="pic">
