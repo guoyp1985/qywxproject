@@ -144,7 +144,7 @@
                 :show-counter="false"
                 :rows="1"
                 @on-change="textareaChange('fastreplyTextarea')"
-                @on-focus="textareaFocus('fastreplyTextarea')" 
+                @on-focus="textareaFocus('fastreplyTextarea')"
                 autosize>
               </x-textarea>
             </group>
@@ -437,7 +437,11 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.$route.query.from === 'seller') {
-                self.$router.push('/centerSeller')
+                let params = {uid: self.$route.query.uid}
+                if (!self.$route.query.uid) {
+                  params.uid = self.loginUser.uid
+                }
+                self.$router.push({path: '/centerSeller', query: params})
               } else {
                 self.$router.push('/centerSales')
               }
