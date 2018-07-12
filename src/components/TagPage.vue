@@ -1,11 +1,11 @@
 <template>
-  <div class="font14">
-    <div class="boxouter box2 mt12">
+  <div class="font14 mt12">
+    <div class="boxouter box2">
       <div v-if="showList" class="boxinner timelinelist">
         <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
           暂无相关动态
         </div>
-        <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
+        <div v-else class="tlitem b_bottom_after" v-for="(item,index) in timelineData" :key="index">
           <div class="avatar">
             <img :src="item.avatar" />
           </div>
@@ -259,12 +259,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.boxouter{padding-left:5px;padding-right:5px;box-sizing: border-box;}
 .boxouter .boxinner{
   position:relative;z-index:1;background-color:#fff;
-  border-radius:5px;
-  border: rgb(244, 244, 244) 1px solid;
-  box-shadow: rgb(204, 204, 204) 0px -9px 16px -3px;
 }
 .tagpage .boxouter.box1 .boxinner{padding-bottom:0;}
 .tagpage .box1 .row1{height:35px;}
