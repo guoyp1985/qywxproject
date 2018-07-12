@@ -532,11 +532,13 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .bottomnaviarea .bottomnavi .ico{height:20px;vertical-align:middle;}
 
 .squarepic *{box-sizing:border-box;}
-.squarepic{padding-top:10px;box-sizing:border-box;display:flex;flex-flow:row wrap;justify-content:flex-start}
+.squarepic:after{display:block;clear:both;content:'';visibility:hidden;height:0;}
+.squarepic{zoom:1;}
+.squarepic{padding-top:10px;box-sizing:border-box;display:flex;flex-flow:row wrap;justify-content:flex-start;}
 .squarepic .scroll_item{display: flex;width: 50%;padding-bottom:10px;}
 .squarepic .scroll_item:nth-child(odd){padding-left:10px;padding-right:5px;}
 .squarepic .scroll_item:nth-child(even){padding-left:5px;padding-right:10px;}
-.squarepic .inner{width:100%;border-radius: 5px;overflow: hidden;}
+.squarepic .inner{width:100%;border-radius: 5px;}
 .squarepic .picarea{width: 100%;padding-bottom: 100%;position: relative;height: 0;}
 .squarepic .pic{position: absolute;width: 100%; height:100%;}
 .squarepic .pic img{width: 100%; height:100%;vertical-align:middle;object-fit: cover;}
