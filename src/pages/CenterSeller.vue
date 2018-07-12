@@ -5,8 +5,7 @@
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
     <template v-if="showContainer">
-      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div style="position:fixed;top:0;left:0;right:0;bottom:0;">
+      <div style="position:fixed;top:0;left:0;right:0;bottom:0;">
         <div class="topcover">
           <div class="inner">
             <swiper
@@ -22,7 +21,8 @@
             </swiper>
           </div>
         </div>
-        </div>
+      </div>
+      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
         <div class="topcover" style="pointer-events: none;">
           <div class="inner">
           </div>
