@@ -563,6 +563,13 @@ export default {
       } else {
         self.retailerUid = self.loginUser.uid
       }
+      if (self.query.share_uid) {
+        params.share_uid = self.query.share_uid
+        params.share_module = 'centerseller'
+      }
+      if (self.query.lastshareuid) {
+        params.lastshareuid = self.query.lastshareuid
+      }
       let moduleid = self.query.uid ? self.query.uid : self.loginUser.uid
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
         params: params
@@ -578,7 +585,7 @@ export default {
             self.userInfo = data.data ? data.data : data
             document.title = self.userInfo.title
             self.$util.handleWxShare({
-              module: 'timeline',
+              module: 'centerseller',
               moduleid: moduleid,
               lastshareuid: self.query.share_uid,
               title: self.userInfo.title,

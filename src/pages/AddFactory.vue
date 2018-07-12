@@ -66,7 +66,6 @@
               </div>
             </div>
           </div>
-          <!--
           <template v-if="disClassData">
             <div class="form-item required border-box padding10" v-if="classData.length > 0">
               <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
@@ -81,7 +80,6 @@
               </checker>
             </div>
           </template>
-        -->
         </form>
       </div>
       <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div>
@@ -115,6 +113,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
+      infoData: {},
       allowsubmit: true,
       submitData: { title: '', summary: '', photo: '' },
       requireddata: { title: '' },
@@ -201,7 +200,11 @@ export default {
     saveEvent () {
       const self = this
       let postData = self.submitData
-      postData.productclass = self.productClass
+      if (self.productClass) {
+        postData.productclass = self.productClass
+      } else {
+        postData.productclass = self.infoData.productclass
+      }
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
@@ -264,36 +267,50 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         let retdata = data.data ? data.data : data
+        self.infoData = retdata
         if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
           self.photoarr.push(retdata.photo)
         }
         for (let key in self.submitData) {
           self.submitData[key] = retdata[key]
         }
+        if (self.disClassData) {
+          return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+            { params: { limit: 100 } }
+          )
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.classData = data
+          let idarr = self.infoData.productclass.split(',')
+          for (let i = 0; i < idarr.length; i++) {
+            self.productClass.push(parseInt(idarr[i]))
+          }
+        }
       })
     },
     init () {
-      /*
+    },
+    initData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-        { params: { limit: 100 } }
-      ).then(function (res) {
-        let data = res.data
-        data = data.data ? data.data : data
-        self.classData = data
-        self.disClassData = true
-      })
-      */
+      self.submitData = { title: '', summary: '', photo: '' }
+      self.requireddata = { title: '' }
+      self.disClassData = false
     },
     refresh () {
       const self = this
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser) {
+        self.initData()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
             isAdmin = true
+            self.disClassData = true
+            self.requireddata.productclass = ''
             break
           }
         }
