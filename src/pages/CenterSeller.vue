@@ -24,8 +24,7 @@
       </div>
       <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
         <div class="topcover" style="pointer-events: none;">
-          <div class="inner">
-          </div>
+          <div class="inner"></div>
         </div>
         <template v-if="!query.uid || query.uid == loginUser.uid">
           <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller', uid: query.uid}}"><i class="al al-guanlizhongxin color-white db-in text_shadow"></i></router-link>
@@ -674,8 +673,9 @@ export default {
   position:absolute;top:-40px;
 }
 .cseller .box1 .pic img{
-  display: block;width:100%;height:100%;
+  display: block;width:100%;height:100%;border-radius:50%;
 }
+.cseller .box1 .pic .pic_top:after{border-radius:50%;}
 .cseller .box1 .pic .pic_top:after,.cseller .taglist .tagitem:after,.cseller .linearea .line:after{
   content: " ";
   width: 200%;
