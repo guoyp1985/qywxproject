@@ -28,7 +28,7 @@
           </div>
         </div>
         <template v-if="!query.uid || query.uid == loginUser.uid">
-          <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller'}}"><i class="al al-guanlizhongxin color-white db-in text_shadow"></i></router-link>
+          <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller', uid: query.uid}}"><i class="al al-guanlizhongxin color-white db-in text_shadow"></i></router-link>
         </template>
         <div class="bg-white" style="position: relative;z-index: 2;">
           <div class="boxouter box1">
