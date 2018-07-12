@@ -232,7 +232,7 @@ export default {
     submitLevel () {
       const self = this
       if (!self.selectLevel) {
-        self.$vux.toast.show('请选择提现数据', 'middle')
+        self.$vux.toast.show('请选择代理级别', 'middle')
         return false
       }
       self.$vux.loading.show()

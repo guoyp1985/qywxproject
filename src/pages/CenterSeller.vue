@@ -131,12 +131,12 @@
                     <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
                       <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
                         <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                          <div class="v_middle db-in name name1">{{citem.username}}</div>
+                          <div class="v_middle db-in name name1">{{citem.username}}: </div>
                           <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
                         </div>
                         <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
                           <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                          <div class="v_middle db-in">回复：</div>
+                          <div class="v_middle db-in">回复: </div>
                           <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
                         </div>
                       </div>
@@ -563,6 +563,13 @@ export default {
       } else {
         self.retailerUid = self.loginUser.uid
       }
+      if (self.query.share_uid) {
+        params.share_uid = self.query.share_uid
+        params.share_module = 'centerseller'
+      }
+      if (self.query.lastshareuid) {
+        params.lastshareuid = self.query.lastshareuid
+      }
       let moduleid = self.query.uid ? self.query.uid : self.loginUser.uid
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
         params: params
@@ -578,7 +585,7 @@ export default {
             self.userInfo = data.data ? data.data : data
             document.title = self.userInfo.title
             self.$util.handleWxShare({
-              module: 'timeline',
+              module: 'centerseller',
               moduleid: moduleid,
               lastshareuid: self.query.share_uid,
               title: self.userInfo.title,
