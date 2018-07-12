@@ -5,7 +5,7 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
-        <!-- <swiper
+        <swiper
           class="pic-swiper notitle"
           v-if="addata && addata.length > 0"
           :list="addata"
@@ -15,8 +15,7 @@
           :aspect-ratio="500/900"
           auto
           loop>
-        </swiper> -->
-        <div style="height:178px;background-image: url('http://osslaravel.boka.cn/month_201807/15313641414617.jpg');"></div>
+        </swiper>
         <template v-if="retailerInfo.uid">
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
         		<div class="t-table">
