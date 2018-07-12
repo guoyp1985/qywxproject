@@ -34,7 +34,6 @@
         :user-info="userInfo"
         :login-user="loginUser"
         :timeline-data="timelineData"
-        :scroll-event="scrollEvent"
         :show-list="showList"
         :timeline-count="timelineCount"
         :after-delete="afterDelete">
@@ -77,7 +76,7 @@ export default {
       showList: false,
       timelineData: [],
       disData: false,
-      tagName: '用户故事',
+      tagName: '用户反馈',
       timelineCount: 0,
       replyPopupShow: false,
       commentData: null,
@@ -112,22 +111,14 @@ export default {
         })
       }
     },
-    scrollEvent () {
-      const self = this
-      if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
-        self.pageStart++
-        self.$vux.loading.show()
-        self.getTimelineData()
-      }
-    },
     handleScroll (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
-            self.pageStart++
+          if (self.timelineData.length === (pageStart + 1) * limit) {
+            pageStart++
             self.$vux.loading.show()
             self.getTimelineData()
           }
