@@ -24,7 +24,7 @@
                 <div class="align_right" style="padding:40px 40px 0px;">
                   <i class="al al-feiji" style="font-size:40px;"></i>
                 </div>
-                <div class="align_center padding10">你还没有上传个人形象照，快去设置上传个人形象照吧</div>
+                <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
             </div>
           </div>
         </div>
