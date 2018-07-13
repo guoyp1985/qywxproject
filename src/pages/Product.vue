@@ -702,6 +702,7 @@ export default {
         }
       }
       if (self.query.share_uid) {
+        shareData.link = `${shareData.link}&lastshareuid=${self.query.share_uid}`
         shareData.lastshareuid = self.query.share_uid
       }
       if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {

@@ -201,10 +201,9 @@ export default {
                 sharephoto = self.$util.getPhoto(self.data.photo)
               }
             }
-            self.$util.handleWxShare({
+            let shareParams = {
               module: self.module,
               moduleid: self.data.id,
-              lastshareuid: self.query.share_uid,
               title: sharetitle,
               desc: sharedesc,
               photo: sharephoto,
@@ -212,7 +211,12 @@ export default {
               successCallback: function () {
                 self.showShareSuccess = true
               }
-            })
+            }
+            if (self.query.share_uid) {
+              shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+              shareParams.lastshareuid = self.query.share_uid
+            }
+            self.$util.handleWxShare(shareParams)
           }
         }
       })

@@ -588,15 +588,19 @@ export default {
             self.showContainer = true
             self.userInfo = data.data ? data.data : data
             document.title = self.userInfo.title
-            self.$util.handleWxShare({
+            let shareParams = {
               module: 'centerseller',
               moduleid: moduleid,
-              lastshareuid: self.query.share_uid,
               title: self.userInfo.title,
               desc: self.userInfo.slogan ? self.userInfo.slogan : self.userInfo.title,
               photo: self.userInfo.avatar,
-              link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}&lastshareuid=${self.query.share_uid}`
-            })
+              link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}`
+            }
+            if (self.query.share_uid) {
+              shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+              shareParams.lastshareuid = self.query.share_uid
+            }
+            self.$util.handleWxShare(shareParams)
             const showphoto = self.userInfo.showphoto
             if (showphoto && self.$util.trim(showphoto) !== '') {
               self.photoarr = showphoto.split(',')
