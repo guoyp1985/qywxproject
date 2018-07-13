@@ -16,7 +16,7 @@
           @on-change="valueChange"
           class="font14 pop-textarea"
           :max="200"
-          :placeholder="title">
+          placeholder="说两句吧...">
         </x-textarea>
       </group>
       <emotion-box bind-textarea=".pop-textarea">
