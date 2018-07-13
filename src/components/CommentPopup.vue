@@ -10,7 +10,14 @@
         <h4>{{title}}</h4>
       </div>
       <group>
-        <x-textarea ref="textarea" v-model="value" @on-change="valueChange" class="font14 pop-textarea" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
+        <x-textarea
+          ref="textarea"
+          v-model="value"
+          @on-change="valueChange"
+          class="font14 pop-textarea"
+          :max="200"
+          :placeholder="title">
+        </x-textarea>
       </group>
       <emotion-box bind-textarea=".pop-textarea">
       </emotion-box>

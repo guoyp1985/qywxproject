@@ -207,7 +207,7 @@
       </div>
       <comment-popup
         :show="replyPopupShow"
-        :title="$t('Reply Discussion')"
+        :title="disCommentTitle"
         @on-submit="replySubmit"
         @on-cancel="replyPopupCancel">
       </comment-popup>
@@ -295,7 +295,10 @@ export default {
       disFocus: false,
       disMore: false,
       showMoreFriends: false,
-      friendsData: []
+      friendsData: [],
+      commentTitle: '评论',
+      replyTitle: '回复',
+      disCommentTitle: '评论'
     }
   },
   methods: {
@@ -466,10 +469,12 @@ export default {
       this.commentIndex = index
       this.replyPopupShow = true
       if (citem) {
+        this.disCommentTitle = this.replyTitle
         this.commentModule = 'comments'
         this.replyData = citem
         this.replyIndex = index1
       } else {
+        this.disCommentTitle = this.commentTitle
         this.commentModule = 'timeline'
         this.replyData = null
         this.replyIndex = 0
