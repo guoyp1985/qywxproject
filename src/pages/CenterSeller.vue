@@ -5,10 +5,11 @@
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
     <template v-if="showContainer">
-      <div style="position:fixed;top:0;left:0;right:0;bottom:0;">
+      <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="position:fixed;top:0;left:0;right:0;bottom:0;">
         <div class="topcover">
           <div class="inner">
             <swiper
+              v-if="photoarr.length > 0"
               class="pic-swiper notitle"
               dots-position="center"
               :interval=6000
@@ -19,13 +20,20 @@
                 <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
               </swiper-item>
             </swiper>
+            <div v-else class="color-black">
+                <div class="align_right" style="padding:40px 40px 0px;">
+                  <i class="al al-feiji" style="font-size:40px;"></i>
+                </div>
+                <div class="align_center padding10">你还没有上传个人形象照，快去设置上传个人形象照吧</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div class="topcover" style="pointer-events: none;">
+        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover" style="pointer-events: none;">
           <div class="inner"></div>
         </div>
+        <div v-else style="height:50px;"></div>
         <template v-if="!query.uid || query.uid == loginUser.uid">
           <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller', uid: query.uid}}"><i class="al al-guanlizhongxin color-white db-in text_shadow"></i></router-link>
         </template>
@@ -558,6 +566,7 @@ export default {
     refresh () {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.replyPopupShow = false
       self.loginUser = User.get()
       self.query = self.$route.query
       let params = {}

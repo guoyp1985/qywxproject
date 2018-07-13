@@ -153,6 +153,7 @@ export default {
     refresh () {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.replyPopupShow = false
       self.loginUser = User.get()
       if (!self.$route.query.uid || self.query.uid !== self.$route.query.uid || self.$route.query.from === 'add') {
         self.initData()
