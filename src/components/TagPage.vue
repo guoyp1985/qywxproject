@@ -5,7 +5,7 @@
         <div v-if="!timelineData || timelineData.length == 0" class="scroll_item emptyitem flex_center">
           暂无相关动态
         </div>
-        <div v-else class="tlitem b_bottom_after" v-for="(item,index) in timelineData" :key="index">
+        <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
           <div class="avatar">
             <img :src="item.avatar" />
           </div>

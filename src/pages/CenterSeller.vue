@@ -71,81 +71,75 @@
               </div>
             </div>
           </div>
-          <template v-show="focusData.length > 0 && disFocus">
-            <div class="linearea">
-              <div class="line line1"></div>
-              <div class="line line2"></div>
-            </div>
-            <div class="boxouter box2">
-              <div class="boxinner b_top_after">
-                <div class="row1">{{focusCount}}位好友关注了TA</div>
-                <div class="flex_left">
-                  <div class="focuslist" ref="focusList">
-                    <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
-                      <div class="pic">
-                        <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                      </div>
-                      <div class="txt">
-                        <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
-                      </div>
-                    </router-link>
-                  </div>
-                  <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
-                    <i class="al al-asmkticon0165 v_middle"></i>
-                  </div>
+          <div class="linearea">
+            <div class="line line1"></div>
+            <div class="line line2"></div>
+          </div>
+          <div class="boxouter box2">
+            <div class="boxinner b_top_after">
+              <div v-if="focusCount > 0" class="row1 pt15">{{focusCount}}位好友关注了TA</div>
+              <div v-show="disFocus" class="flex_left b_bottom_after pb15">
+                <div class="focuslist" ref="focusList">
+                  <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
+                    <div class="pic">
+                      <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </div>
+                    <div class="txt">
+                      <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                    </div>
+                  </router-link>
+                </div>
+                <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
+                  <i class="al al-asmkticon0165 v_middle"></i>
                 </div>
               </div>
             </div>
-          </template>
-          <div class="boxouter box3">
-            <div class="boxinner b_top_after">
-              <div v-if="disTimeline" class="timelinelist">
-                <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
-                  暂无相关动态
+            <div v-if="disTimeline" class="timelinelist">
+              <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
+                暂无相关动态
+              </div>
+              <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
+                <div class="avatar">
+                  <img :src="item.avatar" />
                 </div>
-                <div v-else class="tlitem b_bottom_after" v-for="(item,index) in tlData" :key="index">
-                  <div class="avatar">
-                    <img :src="item.avatar" />
+                <div class="con">
+                  <div class="txt no_bold">{{item.username}}</div>
+                  <div v-html="filterEmot(item.title)"></div>
+                  <div class="piclist">
+                    <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+                      <div class="inner">
+                        <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
+                      </div>
+                    </div>
                   </div>
-                  <div class="con">
-                    <div class="txt no_bold">{{item.username}}</div>
-                    <div v-html="filterEmot(item.title)"></div>
-                    <div class="piclist">
-                      <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
-                        <div class="inner">
-                          <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
-                        </div>
-                      </div>
+                  <template v-if="item.photoarr.length > 0">
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
                     </div>
-                    <template v-if="item.photoarr.length > 0">
-                      <div v-transfer-dom>
-                        <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
-                      </div>
-                    </template>
-                    <div class="db-flex mt5 color-gray">
-                      <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                      <span class="w60 color-gray flex_right" @click="clickDig(item)">
-                        <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                        <span class="v_middle ml3">{{item.dig}}</span>
-                      </span>
-                      <div class="w30 flex_right" @click="onReplyShow(item,index)">
-                        <i class="al al-pinglun3 font14"></i>
-                      </div>
-                      <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
-                        <i class="al al-shanchu font14"></i>
-                      </div>
+                  </template>
+                  <div class="db-flex mt5 color-gray">
+                    <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
+                    <span class="w60 color-gray flex_right" @click="clickDig(item)">
+                      <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
+                      <span class="v_middle ml3">{{item.dig}}</span>
+                    </span>
+                    <div class="w30 flex_right" @click="onReplyShow(item,index)">
+                      <i class="al al-pinglun3 font14"></i>
                     </div>
-                    <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                      <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                        <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                          <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                          <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
-                        </div>
-                        <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                          <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                          <div class="v_middle db-in">回复: </div>
-                          <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
-                        </div>
+                    <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
+                      <i class="al al-shanchu font14"></i>
+                    </div>
+                  </div>
+                  <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
+                    <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                      <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                        <div class="v_middle db-in name name1">{{citem.username}}: </div>
+                        <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                      </div>
+                      <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                        <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                        <div class="v_middle db-in">回复: </div>
+                        <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
                       </div>
                     </div>
                   </div>
@@ -633,8 +627,10 @@ export default {
           let data = res.data
           self.focusData = data.data ? data.data : data
           self.focusCount = data.count
-          self.getMoreStatus(self)
-          self.disFocus = true
+          if (self.focusData.length > 0) {
+            self.disFocus = true
+            self.getMoreStatus(self)
+          }
         }
       })
     },
@@ -659,7 +655,9 @@ export default {
     self.initData()
     this.refresh()
     window.onresize = function () {
-      self.getMoreStatus(self)
+      if (self.focusData.length > 0) {
+        self.getMoreStatus(self)
+      }
     }
   }
 }
@@ -743,7 +741,7 @@ export default {
 .cseller .linearea .line1{left:79px;}
 .cseller .linearea .line2{right:79px;}
 
-.cseller .boxouter.box2 .boxinner{box-shadow:rgba(204, 204, 204, 0.2) 0px -2px 5px 0px;padding:15px 0px;}
+.cseller .boxouter.box2 .boxinner{box-shadow:rgba(204, 204, 204, 0.2) 0px -2px 5px 0px;padding:0px;}
 .cseller .box2 .row1{padding:0 10px;}
 .cseller .focuslist{display:flex;overflow:hidden;}
 .cseller .focuslist:after{
@@ -790,7 +788,6 @@ export default {
   color:#fff;background-color:#e19194;font-size: 28px;
 }
 .tagpopup .add-icon .txt{vertical-align:middle;margin-top:-2px;}
-.cseller .boxouter.box3 .boxinner{padding:0px 0px;}
 .cseller .b_bottom_after:after{background-color: #eaeaea;}
 .cseller .add-icon{
   position:absolute;right:15px;bottom:65px;border-radius:50%;
@@ -798,8 +795,4 @@ export default {
   color:#fff;background-color:#e19194;font-size: 28px;
 }
 .cseller .add-icon .txt{vertical-align:middle;margin-top:-2px;}
-.timelinelist .con .txt{font-weight:normal;}
-.timelinelist .tlitem{padding:15px 10px;}
-.timelinelist .commentarea .txt1:before{display: none;}
-.timelinelist .commentarea .txt1{padding-left:0px;}
 </style>
