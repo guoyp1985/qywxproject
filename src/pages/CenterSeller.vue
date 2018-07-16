@@ -5,10 +5,11 @@
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
     <template v-if="showContainer">
-      <div style="position:fixed;top:0;left:0;right:0;bottom:0;">
+      <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="position:fixed;top:0;left:0;right:0;bottom:0;">
         <div class="topcover">
           <div class="inner">
             <swiper
+              v-if="photoarr.length > 0"
               class="pic-swiper notitle"
               dots-position="center"
               :interval=6000
@@ -19,13 +20,20 @@
                 <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
               </swiper-item>
             </swiper>
+            <div v-else class="color-black">
+                <div class="align_right" style="padding:40px 40px 0px;">
+                  <i class="al al-feiji" style="font-size:40px;"></i>
+                </div>
+                <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div class="topcover" style="pointer-events: none;">
+        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover" style="pointer-events: none;">
           <div class="inner"></div>
         </div>
+        <div v-else style="height:50px;"></div>
         <template v-if="!query.uid || query.uid == loginUser.uid">
           <router-link class="set-icon" :to="{path: '/retailerSetting', query: {from: 'seller', uid: query.uid}}"><i class="al al-guanlizhongxin color-white db-in text_shadow"></i></router-link>
         </template>
@@ -63,81 +71,75 @@
               </div>
             </div>
           </div>
-          <template v-show="focusData.length > 0 && disFocus">
-            <div class="linearea">
-              <div class="line line1"></div>
-              <div class="line line2"></div>
-            </div>
-            <div class="boxouter box2">
-              <div class="boxinner b_top_after">
-                <div class="row1">{{focusCount}}位好友关注了TA</div>
-                <div class="flex_left">
-                  <div class="focuslist" ref="focusList">
-                    <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
-                      <div class="pic">
-                        <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                      </div>
-                      <div class="txt">
-                        <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
-                      </div>
-                    </router-link>
-                  </div>
-                  <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
-                    <i class="al al-asmkticon0165 v_middle"></i>
-                  </div>
+          <div class="linearea">
+            <div class="line line1"></div>
+            <div class="line line2"></div>
+          </div>
+          <div class="boxouter box2">
+            <div class="boxinner b_top_after">
+              <div v-if="focusCount > 0" class="row1 pt15">{{focusCount}}位好友关注了TA</div>
+              <div v-show="disFocus" class="flex_left b_bottom_after pb15">
+                <div class="focuslist" ref="focusList">
+                  <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
+                    <div class="pic">
+                      <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    </div>
+                    <div class="txt">
+                      <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                    </div>
+                  </router-link>
+                </div>
+                <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
+                  <i class="al al-asmkticon0165 v_middle"></i>
                 </div>
               </div>
             </div>
-          </template>
-          <div class="boxouter box3">
-            <div class="boxinner b_top_after">
-              <div v-if="disTimeline" class="timelinelist">
-                <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
-                  暂无相关动态
+            <div v-if="disTimeline" class="timelinelist">
+              <div v-if="!tlData || tlData.length == 0" class="scroll_item emptyitem flex_center">
+                暂无相关动态
+              </div>
+              <div v-else class="tlitem" v-for="(item,index) in tlData" :key="index">
+                <div class="avatar">
+                  <img :src="item.avatar" />
                 </div>
-                <div v-else class="tlitem b_bottom_after" v-for="(item,index) in tlData" :key="index">
-                  <div class="avatar">
-                    <img :src="item.avatar" />
+                <div class="con">
+                  <div class="txt no_bold">{{item.username}}</div>
+                  <div v-html="filterEmot(item.title)"></div>
+                  <div class="piclist">
+                    <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+                      <div class="inner">
+                        <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
+                      </div>
+                    </div>
                   </div>
-                  <div class="con">
-                    <div class="txt no_bold">{{item.username}}</div>
-                    <div v-html="filterEmot(item.title)"></div>
-                    <div class="piclist">
-                      <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
-                        <div class="inner">
-                          <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
-                        </div>
-                      </div>
+                  <template v-if="item.photoarr.length > 0">
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
                     </div>
-                    <template v-if="item.photoarr.length > 0">
-                      <div v-transfer-dom>
-                        <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
-                      </div>
-                    </template>
-                    <div class="db-flex mt5 color-gray">
-                      <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                      <span class="w60 color-gray flex_right" @click="clickDig(item)">
-                        <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                        <span class="v_middle ml3">{{item.dig}}</span>
-                      </span>
-                      <div class="w30 flex_right" @click="onReplyShow(item,index)">
-                        <i class="al al-pinglun3 font14"></i>
-                      </div>
-                      <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
-                        <i class="al al-shanchu font14"></i>
-                      </div>
+                  </template>
+                  <div class="db-flex mt5 color-gray">
+                    <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
+                    <span class="w60 color-gray flex_right" @click="clickDig(item)">
+                      <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
+                      <span class="v_middle ml3">{{item.dig}}</span>
+                    </span>
+                    <div class="w30 flex_right" @click="onReplyShow(item,index)">
+                      <i class="al al-pinglun3 font14"></i>
                     </div>
-                    <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                      <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                        <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                          <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                          <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
-                        </div>
-                        <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                          <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                          <div class="v_middle db-in">回复: </div>
-                          <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
-                        </div>
+                    <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
+                      <i class="al al-shanchu font14"></i>
+                    </div>
+                  </div>
+                  <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
+                    <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                      <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                        <div class="v_middle db-in name name1">{{citem.username}}: </div>
+                        <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                      </div>
+                      <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                        <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                        <div class="v_middle db-in">回复: </div>
+                        <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
                       </div>
                     </div>
                   </div>
@@ -207,7 +209,7 @@
       </div>
       <comment-popup
         :show="replyPopupShow"
-        :title="$t('Reply Discussion')"
+        :title="disCommentTitle"
         @on-submit="replySubmit"
         @on-cancel="replyPopupCancel">
       </comment-popup>
@@ -295,7 +297,10 @@ export default {
       disFocus: false,
       disMore: false,
       showMoreFriends: false,
-      friendsData: []
+      friendsData: [],
+      commentTitle: '评论',
+      replyTitle: '回复',
+      disCommentTitle: '评论'
     }
   },
   methods: {
@@ -466,10 +471,12 @@ export default {
       this.commentIndex = index
       this.replyPopupShow = true
       if (citem) {
+        this.disCommentTitle = this.replyTitle
         this.commentModule = 'comments'
         this.replyData = citem
         this.replyIndex = index1
       } else {
+        this.disCommentTitle = this.commentTitle
         this.commentModule = 'timeline'
         this.replyData = null
         this.replyIndex = 0
@@ -553,6 +560,7 @@ export default {
     refresh () {
       const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.replyPopupShow = false
       self.loginUser = User.get()
       self.query = self.$route.query
       let params = {}
@@ -583,15 +591,19 @@ export default {
             self.showContainer = true
             self.userInfo = data.data ? data.data : data
             document.title = self.userInfo.title
-            self.$util.handleWxShare({
+            let shareParams = {
               module: 'centerseller',
               moduleid: moduleid,
-              lastshareuid: self.query.share_uid,
               title: self.userInfo.title,
               desc: self.userInfo.slogan ? self.userInfo.slogan : self.userInfo.title,
               photo: self.userInfo.avatar,
-              link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}&lastshareuid=${self.query.share_uid}`
-            })
+              link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}`
+            }
+            if (self.query.share_uid) {
+              shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+              shareParams.lastshareuid = self.query.share_uid
+            }
+            self.$util.handleWxShare(shareParams)
             const showphoto = self.userInfo.showphoto
             if (showphoto && self.$util.trim(showphoto) !== '') {
               self.photoarr = showphoto.split(',')
@@ -615,8 +627,10 @@ export default {
           let data = res.data
           self.focusData = data.data ? data.data : data
           self.focusCount = data.count
-          self.getMoreStatus(self)
-          self.disFocus = true
+          if (self.focusData.length > 0) {
+            self.disFocus = true
+            self.getMoreStatus(self)
+          }
         }
       })
     },
@@ -641,7 +655,9 @@ export default {
     self.initData()
     this.refresh()
     window.onresize = function () {
-      self.getMoreStatus(self)
+      if (self.focusData.length > 0) {
+        self.getMoreStatus(self)
+      }
     }
   }
 }
@@ -725,7 +741,7 @@ export default {
 .cseller .linearea .line1{left:79px;}
 .cseller .linearea .line2{right:79px;}
 
-.cseller .boxouter.box2 .boxinner{box-shadow:rgba(204, 204, 204, 0.2) 0px -2px 5px 0px;padding:15px 0px;}
+.cseller .boxouter.box2 .boxinner{box-shadow:rgba(204, 204, 204, 0.2) 0px -2px 5px 0px;padding:0px;}
 .cseller .box2 .row1{padding:0 10px;}
 .cseller .focuslist{display:flex;overflow:hidden;}
 .cseller .focuslist:after{
@@ -772,7 +788,6 @@ export default {
   color:#fff;background-color:#e19194;font-size: 28px;
 }
 .tagpopup .add-icon .txt{vertical-align:middle;margin-top:-2px;}
-.cseller .boxouter.box3 .boxinner{padding:0px 0px;}
 .cseller .b_bottom_after:after{background-color: #eaeaea;}
 .cseller .add-icon{
   position:absolute;right:15px;bottom:65px;border-radius:50%;
@@ -780,8 +795,4 @@ export default {
   color:#fff;background-color:#e19194;font-size: 28px;
 }
 .cseller .add-icon .txt{vertical-align:middle;margin-top:-2px;}
-.timelinelist .con .txt{font-weight:normal;}
-.timelinelist .tlitem{padding:15px 10px;}
-.timelinelist .commentarea .txt1:before{display: none;}
-.timelinelist .commentarea .txt1{padding-left:0px;}
 </style>

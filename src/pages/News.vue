@@ -343,16 +343,20 @@ export default {
             document.title = self.article.title
             self.reward = User.get()
             self.retailerInfo = self.article.retailerinfo
-            self.$util.handleWxShare({
+            let shareParams = {
               data: self.article,
               module: self.module,
               moduleid: self.article.id,
-              lastshareuid: self.query.share_uid,
               link: `${ENV.Host}/#/news?id=${self.article.id}&wid=${self.article.uploader}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
-            })
+            }
+            if (self.query.share_uid) {
+              shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+              shareParams.lastshareuid = self.query.share_uid
+            }
+            self.$util.handleWxShare(shareParams)
             self.showContainer = true
             return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
               params: {id: id, module: self.module}
