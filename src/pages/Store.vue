@@ -5,9 +5,14 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
+        <div class="adbg" v-if="addata && addata.length == 1">
+          <router-link class="inner" :to="addata[0].url">
+            <img :src="addata[0].photo" />
+          </router-link>
+        </div>
         <swiper
           class="pic-swiper notitle"
-          v-if="addata && addata.length > 0"
+          v-if="addata && addata.length > 1"
           :list="addata"
           dots-position="center"
           :interval="6000"
@@ -514,6 +519,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.store .adbg{position:relative;padding-bottom: 55.555%;}
+.store .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
+.store .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
 .vline{position:relative;}
 .vline:after {
   content: " ";
