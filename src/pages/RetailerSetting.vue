@@ -116,6 +116,7 @@ export default {
           } else {
             self.initContainer()
             self.showSetting = true
+            console.log(11)
             this.getData()
           }
         }
