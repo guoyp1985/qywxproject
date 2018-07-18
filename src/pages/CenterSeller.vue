@@ -5,7 +5,7 @@
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
     <template v-if="showContainer">
-      <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="position:fixed;z-index: 1;top:0;left:0;right:0;bottom:0;">
+      <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="position:fixed;top:0;left:0;right:0;bottom:0;">
         <div class="topcover">
           <div class="inner">
             <swiper
@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover">
+        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover" style="pointer-events: none;">
           <div class="inner"></div>
         </div>
         <div v-else style="height:50px;"></div>
