@@ -589,8 +589,8 @@ zh-CN:
   Deliver goods: 发货
   View deliver: 查看物流
   Add order: 新增订单
-  Myrevenue: 我的收入
-  My shop: 我的店铺
+  Myrevenue: 收入
+  My shop: 店铺
   Please select address: 请选择地址
   Orders: 订单
   Userinfo: 用户信息
@@ -782,7 +782,7 @@ zh-CN:
   tShareList: 分享列表
   tMessageList: 消息列表
   No relevant data: 暂无相关数据
-  Business tool: 微商创业工具
+  Business tool: 社交销售工具
   tRedirect: 授权中...
   tAddFactory: 添加厂商
   Fatory name: 厂商名称
@@ -812,7 +812,7 @@ zh-CN:
   tFactoryAgentFee: 设置佣金
   tFactoryProduct: 商品详情
   tFactoryOrders: 订单列表
-  tFactoryRevenue: 我的收入
+  tFactoryRevenue: 收入
   tAddFactoryNews: 添加文章
   tFactoryGoodeazy: 易采集
   tBusinessSchool: 商学院
@@ -834,6 +834,7 @@ zh-CN:
   tCenterSeller: 共销宝
   Personal image: 个人形象
   Seller said: 卖家说
+  Seller show: 卖家秀
   My tags: 标签
   tAddTimeline: 我要发布
   Release: 发布
