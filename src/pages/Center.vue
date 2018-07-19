@@ -56,7 +56,7 @@
 </i18n>
 
 <script>
-import { Grid, GridItem, Group, GroupTitle, Cell } from 'vux'
+import { Grid, GridItem, Group, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import Reg from '#/reg'
@@ -118,7 +118,7 @@ if (!Reg.rPlatfrom.test(navigator.userAgent)) {
 
 export default {
   components: {
-    Grid, GridItem, CTitle, Group, GroupTitle, Cell
+    Grid, GridItem, CTitle, Group, Cell
   },
   data () {
     // const self = this

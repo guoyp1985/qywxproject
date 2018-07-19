@@ -7,7 +7,10 @@ const Token = {
     return JSON.parse(localStorage.getItem('token'))
   },
   remove () {
-    localStorage.removeItem('token')
+    const token = Token.get()
+    if (token) {
+      localStorage.removeItem('token')
+    }
   },
   isExpired () {
     const token = Token.get()
@@ -46,7 +49,10 @@ const User = {
     return JSON.parse(localStorage.getItem('user'))
   },
   remove () {
-    localStorage.removeItem('user')
+    const user = User.get()
+    if (user) {
+      localStorage.removeItem('user')
+    }
   }
 }
 const Access = {
@@ -57,7 +63,10 @@ const Access = {
     return localStorage.getItem('access')
   },
   remove () {
-    localStorage.removeItem('access')
+    const access = Access.get()
+    if (access) {
+      localStorage.removeItem('access')
+    }
   }
 }
 const Roomid = {
@@ -77,7 +86,10 @@ const WxAccess = {
     return (res === null || res === 'false') ? false : true
   },
   remove () {
-    localStorage.removeItem('wxAccess')
+    const access = WxAccess.get()
+    if (access) {
+      localStorage.removeItem('wxAccess')
+    }
   }
 }
 const Version = {
@@ -88,7 +100,10 @@ const Version = {
     return localStorage.getItem('version')
   },
   remove () {
-    localStorage.removeItem('version')
+    const version = Version.get()
+    if (version) {
+      localStorage.removeItem('version')
+    }
   }
 }
 
