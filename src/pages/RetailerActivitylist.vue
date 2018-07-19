@@ -83,6 +83,34 @@
                     </div>
                     <div class="mt5 font12 color-gray">活动时间：{{ item.starttime | dateformat}} 至 {{ item.endtime | dateformat}}</div>
                   </router-link>
+                  <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'sharehongbao'" :key="item.id" class="db" style="position:relative;">
+                    <div class="t-table">
+                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                      </div>
+                      <div class="t-cell align_left v_middle">
+                        <div class="clamp1 font16 color-lightgray">分享红包: {{item.title}}</div>
+                        <div class="clamp1 font14 color-gray mt5">充值金额 <span class="color-red"> {{ $t('RMB') }} {{ item.budget }} </span></div>
+                        <div class="clamp1 font14 color-gray mt5">已发金额 <span class="color-red"> {{ $t('RMB') }} {{ item.leftstorage }} </span> </div>
+                      </div>
+                      <div class="t-cell align_right v_middle font0" style="width:60px;">
+                        <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                      </div>
+                    </div>
+                  </router-link>
+                  <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'answer'" :key="item.id" class="db" style="position:relative;">
+                    <div class="t-table">
+                      <div class="t-cell align_left pr10 v_middle" style="width:100px;">
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                      </div>
+                      <div class="t-cell align_left v_middle">
+                        <div class="clamp1 font16 color-lightgray">答题: {{item.title}}</div>
+                      </div>
+                      <div class="t-cell align_right v_middle font0" style="width:60px;">
+                        <router-link class="qbtn bg-red color-white" :to="{path: '/stat', query:{id: item.id, module: 'activity'}}">{{ $t('Stat') }}</router-link>
+                      </div>
+                    </div>
+                  </router-link>
                 </div>
               </div>
             </div>

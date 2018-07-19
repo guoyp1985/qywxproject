@@ -114,15 +114,19 @@ export default {
                 if (self.loginUser.isretailer) {
                   self.initContainer()
                   self.showCenter = true
-                  self.$util.handleWxShare({
+                  let shareParams = {
                     module: 'retailer',
                     moduleid: self.loginUser.uid,
                     title: `${self.loginUser.linkman}邀请你一起入驻共销宝`,
                     desc: '共销宝帮你解决微商创业难题',
                     photo: self.loginUser.avatar,
-                    lastshareuid: self.query.share_uid,
                     link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
-                  })
+                  }
+                  if (self.query.share_uid) {
+                    shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+                    shareParams.lastshareuid = self.query.share_uid
+                  }
+                  self.$util.handleWxShare(shareParams)
                   self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
                     if (res.status === 200) {
                       let data = res.data

@@ -16,7 +16,7 @@
         <div class="b_top_after padding10 flex_center bg-white list-shadow01">
           <div class="t-table align_center font15 itemtab">
             <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Share') }}</router-link>
-            <router-link :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>
+            <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle b_right_after">{{ $t('Orders') }}</router-link>
             <router-link :to="{path: '/membersView', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">{{ $t('Userinfo') }}</router-link>
           </div>
         </div>

@@ -382,8 +382,24 @@ export default {
     },
     createEditor () {
       const self = this
+      let toolbars = [
+        'insertProduct',
+        'insertText',
+        'editText',
+        'insertImage',
+        'insertLink',
+        'insertHr',
+        'deleteThis',
+        'undo',
+        'cancel'
+      ]
+      if (self.module === 'factorynews') {
+        toolbars.splice(0, 1)
+      }
+      console.log(self.module)
       editor = new Eleditor({
         el: this.elem,
+        toolbars: toolbars,
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')

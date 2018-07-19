@@ -4,6 +4,38 @@
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
+      <div v-if="playVideo" class="videoarea">
+        <video
+          ref="productVideo"
+          :src="productdata.video"
+          controls
+          autoplay="true"
+          webkit-playsinline=""
+          playsinline="true"
+          x-webkit-airplay="true"
+          raw-controls=""
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portrait">
+        </video>
+        <!--
+        <video
+          class="w_100 h_100"
+          style="max-width:100%;max-height:100%;object-fit:fill;"
+          controls
+          :src="productdata.video"
+          autoplay="true"
+          preload="auto"
+          x-webkit-airplay="true"
+          x5-playsinline="true"
+          webkit-playsinline="true"
+          playsinline="true">
+        </video>
+      -->
+        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
+          <i class="al al-guanbi"></i>
+        </div>
+      </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
@@ -14,24 +46,13 @@
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
             loop>
-            <swiper-item v-show="showVideo" v-if="productdata.video && productdata.video != ''">
-              <div class="w_100 h_100" style="overflow:hidden;">
-                <video
-                  class="w_100 h_100"
-                  style="max-width:100%;max-height:100%;object-fit:fill;"
-                  controls
-                  :src="productdata.video"
-                  autoplay="true"
-                  preload="auto"
-                  x-webkit-airplay="true"
-                  x5-playsinline="true"
-                  webkit-playsinline="true"
-                  playsinline="true">
-                </video>
-              </div>
-            </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+              <template v-if="index == 0 && productdata.video && productdata.video != ''">
+                <div class="play-icon flex_center" @click="clickPlay('productVideo')">
+                  <i class="al al-bofang"></i>
+                </div>
+              </template>
             </swiper-item>
           </swiper>
         </template>
@@ -425,7 +446,8 @@ export default {
       submitdata: { flag: 1, quantity: 1 },
       replyData: null,
       messages: 0,
-      showVideo: true
+      showVideo: true,
+      playVideo: false
     }
   },
   watch: {
@@ -480,7 +502,7 @@ export default {
   },
   computed: {
     isshowdot: function () {
-      if (this.photoarr.length > 1 || !this.$util.isNull(this.productdata.video)) {
+      if (this.photoarr.length > 1) {
         this.showdot = true
       } else {
         this.showdot = false
@@ -525,6 +547,12 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    clickPlay (refname) {
+      this.playVideo = true
+    },
+    stopPlay (refname) {
+      this.playVideo = false
     },
     toChat () {
       if (this.loginUser.subscribe === 0) {
@@ -702,6 +730,7 @@ export default {
         }
       }
       if (self.query.share_uid) {
+        shareData.link = `${shareData.link}&lastshareuid=${self.query.share_uid}`
         shareData.lastshareuid = self.query.share_uid
       }
       if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
@@ -951,6 +980,14 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
+.product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+.product .play-icon{
+  width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+  position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
+}
+.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
+.product .videoarea video{position: absolute;width: 100%;height: 100%;}
+.product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
 .vline{position:relative;}
 .vline:after {
   content: " ";

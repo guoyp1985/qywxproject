@@ -247,17 +247,6 @@ export default {
         }
       })
     },
-    setProductClass () {
-      const self = this
-      for (let i = 0; i < self.classData.length; i++) {
-        for (let j = 0; j < self.productClass.length; j++) {
-          if (parseInt(self.productClass[j]) === self.classData[i].id) {
-            self.classData[i].checked = true
-            break
-          }
-        }
-      }
-    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -268,6 +257,7 @@ export default {
         let data = res.data
         let retdata = data.data ? data.data : data
         self.infoData = retdata
+        self.photoarr = []
         if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
           self.photoarr.push(retdata.photo)
         }
@@ -284,9 +274,12 @@ export default {
           let data = res.data
           data = data.data ? data.data : data
           self.classData = data
-          let idarr = self.infoData.productclass.split(',')
-          for (let i = 0; i < idarr.length; i++) {
-            self.productClass.push(parseInt(idarr[i]))
+          self.productClass = []
+          if (self.infoData.productclass && self.$util.trim(self.infoData.productclass) !== '') {
+            let idarr = self.infoData.productclass.split(',')
+            for (let i = 0; i < idarr.length; i++) {
+              self.productClass.push(parseInt(idarr[i]))
+            }
           }
         }
       })
@@ -322,10 +315,8 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          if (self.$route.query.id && self.query.id !== self.$route.query.id) {
-            self.query = self.$route.query
-            self.getData()
-          }
+          self.query = self.$route.query
+          self.getData()
         }
       }
     }

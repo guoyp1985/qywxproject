@@ -75,6 +75,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .bg-gray9{background-color:#f7f7f7 !important;}
 .bg-gray10{background-color:#f5f9fa !important;}
 .bg-green{background-color:#4cd964 !important;}
+.bg-green1{background-color:#36ad70 !important;}
 .bg-orange{background-color:orange !important;}
 .bg-orange1{background-color:#ff9500 !important;}
 .bg-orange5{background-color:#ff4400 !important;}
@@ -961,13 +962,26 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .news .article-content img{max-width:100%;}
 
 .timelinelist{}
-.timelinelist .tlitem{
-  display:flex;padding:10px;
+.timelinelist .tlitem{display:flex;padding:15px 10px;position:relative;box-sizing: border-box;}
+.timelinelist .tlitem:not(:last-child):after{
+	content: "";
+	display: block;
+	background-color: #eaeaea;
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0px;
+	-webkit-transform: scaleY(0.5) translateY(0.5px);
+	transform: scaleY(0.5) translateY(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
 }
 .timelinelist .avatar{width:50px;text-align:left;}
 .timelinelist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
 .timelinelist .con{flex:1;}
-.timelinelist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
+.timelinelist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);}
 .timelinelist .piclist:after{content:"";display:block;clear:both;}
 .timelinelist .picitem{float:left;width:33.33333%;padding-bottom:33.33333%;position:relative;}
 .timelinelist .picitem .inner{
@@ -984,11 +998,6 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
   padding:10px 5px;box-sizing: border-box;line-height:24px;
 }
 .timelinelist .commentarea .citem:not(:last-child){position:relative;padding-bottom:10px;}
-.timelinelist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
-.timelinelist .commentarea .txt1:before{
-  content:"";
-  position:absolute;left:3px;top:5px;width:3px;height: 16px;
-  background-color: rgb(229, 28, 35);
-}
+.timelinelist .commentarea .txt1{position:relative;box-sizing: border-box;text-align:left;}
 .timelinelist .commentarea .name{color:rgb(93, 102, 155);}
 .timelinelist .commentarea .txt2{position:relative;box-sizing: border-box;text-align:left;padding-left:10px;}

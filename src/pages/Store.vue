@@ -446,10 +446,9 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           document.title = self.retailerInfo.title
           const wid = self.retailerInfo.uid
-          self.$util.handleWxShare({
+          let shareParams = {
             module: 'store',
             moduleid: wid,
-            lastshareuid: self.query.share_uid,
             title: self.retailerInfo.title,
             desc: self.retailerInfo.title,
             photo: self.retailerInfo.avatar,
@@ -457,7 +456,12 @@ export default {
             successCallback: function () {
               self.showShareSuccess = true
             }
-          })
+          }
+          if (self.query.share_uid) {
+            shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+            shareParams.lastshareuid = self.query.share_uid
+          }
+          self.$util.handleWxShare(shareParams)
           if (wid !== self.loginUser.uid) {
             self.getCollectStaus()
           }
