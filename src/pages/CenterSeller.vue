@@ -5,8 +5,8 @@
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
     <template v-if="showContainer">
-      <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="position:fixed;top:0;left:0;right:0;bottom:0;">
-        <div class="topcover">
+      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
+        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover">
           <div class="inner">
             <swiper
               v-if="photoarr.length > 0"
@@ -22,17 +22,12 @@
               </swiper-item>
             </swiper>
             <div v-else class="color-black">
-                <div class="align_right" style="padding:40px 40px 0px;">
-                  <i class="al al-feiji" style="font-size:40px;"></i>
-                </div>
-                <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
+              <div class="align_right" style="padding:40px 40px 0px;">
+                <i class="al al-feiji" style="font-size:40px;"></i>
+              </div>
+              <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
             </div>
-          </div>
         </div>
-      </div>
-      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="height:50px;">
-          <div class="inner"></div>
         </div>
         <div v-else style="height:50px;"></div>
         <template v-if="!query.uid || query.uid == loginUser.uid">
@@ -633,7 +628,6 @@ export default {
             self.getMoreStatus(self)
           }
         }
-        self.resizeWindow(self)
       })
     },
     getMoreStatus (self) {
@@ -650,14 +644,6 @@ export default {
         focusList.style.flex = '1'
         self.disMore = false
       }
-    },
-    resizeWindow (self) {
-      if (self.photoarr.length > 0) {
-        const wW = window.innerWidth
-        const wH = wW * 0.65 - 50
-        let pm = self.$refs.scrollContainer1[0] ? self.$refs.scrollContainer1[0] : self.$refs.scrollContainer1
-        pm.style.top = `${wH}px`
-      }
     }
   },
   activated () {
@@ -665,7 +651,6 @@ export default {
     self.initData()
     this.refresh()
     window.onresize = function () {
-      self.resizeWindow(self)
       if (self.focusData.length > 0) {
         self.getMoreStatus(self)
       }
