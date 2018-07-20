@@ -69,7 +69,7 @@
         <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
           <div class="flex_left font12">
             <div class="w100">买家留言: </div>
-            <div class="flex_cell"></div>
+            <div class="flex_cell">{{data.content}}</div>
           </div>
         </div>
         <div class="align_right">
