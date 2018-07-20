@@ -86,6 +86,9 @@
           </div>
         </x-dialog>
       </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" style="height:50px;">
+        <router-link class="flex_cell flex_center color-white btn-bottom-red" to="/center">进入个人中心</router-link>
+      </div>
     </template>
   </div>
 </template>

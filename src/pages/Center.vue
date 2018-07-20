@@ -96,6 +96,12 @@ let featureBtns = [
     icon: 'al-qietu19',
     color: 'rgba04',
     link: '/favorite'
+  },
+  {
+    name: 'Management center',
+    icon: 'al-guanlizhongxin1',
+    color: 'rgba06',
+    link: '/factoryManage'
   }
 ]
 
