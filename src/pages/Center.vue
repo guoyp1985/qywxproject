@@ -62,9 +62,9 @@ import ENV from 'env'
 import Reg from '#/reg'
 import { Token, User } from '#/storage'
 
-let manageBtn = [
+let sellerBtn = [
   {
-    name: 'Manage center',
+    name: 'Seller center',
     icon: 'al-fuwu',
     color: 'rgba01',
     link: '/centerSales'
@@ -76,6 +76,14 @@ let factoryBtn = [
     icon: 'al-kehu1',
     color: 'rgba05',
     link: '/centerFactory'
+  }
+]
+let manageBtn = [
+  {
+    name: 'Manage center',
+    icon: 'al-guanlizhongxin1',
+    color: 'rgba06',
+    link: '/factoryManage'
   }
 ]
 let featureBtns = [
@@ -96,15 +104,8 @@ let featureBtns = [
     icon: 'al-qietu19',
     color: 'rgba04',
     link: '/favorite'
-  },
-  {
-    name: 'Management center',
-    icon: 'al-guanlizhongxin1',
-    color: 'rgba06',
-    link: '/factoryManage'
   }
 ]
-
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {
   featureBtns.push({
     name: 'Exit',
@@ -190,10 +191,20 @@ export default {
         company: user.company
       }
       if (!this.showBtn1) {
+        let isAdmin = false
+        for (let i = 0; i < user.usergroup.length; i++) {
+          if (user.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (!isAdmin) {
+          this.btns1 = manageBtn.concat(this.btns1)
+        }
         if (this.loginUser.fid > 0) {
           this.btns1 = factoryBtn.concat(this.btns1)
         }
-        this.btns1 = manageBtn.concat(this.btns1)
+        this.btns1 = sellerBtn.concat(this.btns1)
         this.showBtn1 = true
       }
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
