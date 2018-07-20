@@ -66,6 +66,12 @@
             </div>
           </div>
         </div>
+        <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
+          <div class="flex_left font12">
+            <div class="w100">买家留言: </div>
+            <div class="flex_cell"></div>
+          </div>
+        </div>
         <div class="align_right">
           <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
             <div class="t-table">
