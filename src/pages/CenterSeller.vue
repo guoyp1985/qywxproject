@@ -15,6 +15,7 @@
               :interval=6000
               :show-dots="isShowDot"
               :aspect-ratio="1/1"
+              auto
               loop>
               <swiper-item v-for="(item,index) in photoarr" :key="item.id">
                 <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
@@ -30,7 +31,7 @@
         </div>
       </div>
       <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover" style="pointer-events: none;">
+        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="height:50px;">
           <div class="inner"></div>
         </div>
         <div v-else style="height:50px;"></div>
@@ -632,6 +633,7 @@ export default {
             self.getMoreStatus(self)
           }
         }
+        self.resizeWindow(self)
       })
     },
     getMoreStatus (self) {
@@ -648,6 +650,14 @@ export default {
         focusList.style.flex = '1'
         self.disMore = false
       }
+    },
+    resizeWindow (self) {
+      if (self.photoarr.length > 0) {
+        const wW = window.innerWidth
+        const wH = wW * 0.65 - 50
+        let pm = self.$refs.scrollContainer1[0] ? self.$refs.scrollContainer1[0] : self.$refs.scrollContainer1
+        pm.style.top = `${wH}px`
+      }
     }
   },
   activated () {
@@ -655,6 +665,7 @@ export default {
     self.initData()
     this.refresh()
     window.onresize = function () {
+      self.resizeWindow(self)
       if (self.focusData.length > 0) {
         self.getMoreStatus(self)
       }
