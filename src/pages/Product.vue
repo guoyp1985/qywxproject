@@ -194,18 +194,20 @@
           <div class="bg-page" style="height:10px;"></div>
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
-            <div class="buylist" ref="buyList">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id}}" v-for="(item,index) in buyuserdata" :key="index">
-                <div class="pic">
-                  <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                </div>
-                <div class="txt">
-                  <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
-                </div>
-              </router-link>
-            </div>
-            <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
-              <i class="al al-asmkticon0165 v_middle"></i>
+            <div class="flex_left pb10">
+              <div class="buylist" ref="buyList">
+                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id}}" v-for="(item,index) in buyuserdata" :key="index">
+                  <div class="pic">
+                    <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div class="txt">
+                    <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                  </div>
+                </router-link>
+              </div>
+              <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
+                <i class="al al-asmkticon0165 v_middle"></i>
+              </div>
             </div>
           </div>
         </div>
