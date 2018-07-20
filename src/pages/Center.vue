@@ -198,7 +198,7 @@ export default {
             break
           }
         }
-        if (!isAdmin) {
+        if (isAdmin) {
           this.btns1 = manageBtn.concat(this.btns1)
         }
         if (this.loginUser.fid > 0) {
