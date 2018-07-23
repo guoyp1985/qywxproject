@@ -101,6 +101,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       loginUser: {},
       retailerInfo: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
       showShareSuccess: false,
@@ -151,14 +152,14 @@ export default {
       this.showShareSuccess = false
     },
     getData () {
+      const self = this
       const user = User.get()
-      const query = this.$route.query
+      this.query = this.$route.query
       this.loginUser = user
       if (user) {
         let retailerInfo = null
         let addata = null
         let activitydata = null
-        const self = this
         this.$http.get(`${ENV.BokaApi}/api/retailer/info`, { params: { uid: user.uid } })
         .then(res => {
           const data = res.data
@@ -183,10 +184,9 @@ export default {
           self.addata = addata
           self.activitydata = activitydata
           self.loginUser = user
-          self.$util.handleWxShare({
+          let shareParams = {
             module: 'shop',
             moduleid: 0,
-            lastshareuid: query.share_uid,
             title: '共销宝商城',
             desc: '一款能买能卖的销售平台，你要的都在这里！',
             photo: user.avatar,
@@ -194,7 +194,12 @@ export default {
             successCallback: function () {
               self.showShareSuccess = true
             }
-          })
+          }
+          if (self.query.share_uid) {
+            shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+            shareParams.lastshareuid = self.query.share_uid
+          }
+          self.$util.handleWxShare(shareParams)
         })
       } else {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
@@ -208,6 +213,7 @@ export default {
       if (this.loginUser && this.productdata.length < limit) {
         this.$vux.loading.show()
         this.productdata = []
+        pageStart = 0
         this.getData1()
       }
     }

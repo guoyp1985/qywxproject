@@ -156,6 +156,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < limit) {
+            pageStart1 = 0
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
@@ -165,6 +166,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < limit) {
+            pageStart2 = 0
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()

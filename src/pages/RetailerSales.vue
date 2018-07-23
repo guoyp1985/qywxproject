@@ -1,13 +1,7 @@
 <template>
   <div class="containerarea  bg-page  fong14 rsales">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="row">
@@ -131,10 +125,12 @@ import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg } from
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -145,7 +141,7 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showSos: false,
+      showApply: false,
       showContainer: false,
       autofixed: false,
       tabtxts: [ '返点客', '邀请返点客', '返点记录' ],
@@ -286,12 +282,14 @@ export default {
       self.getData2()
     },
     swiperChange (index) {
+      const self = this
       if (index !== undefined) {
         this.selectedIndex = index
       }
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
@@ -299,6 +297,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
@@ -306,6 +305,7 @@ export default {
           break
         case 2:
           if (this.tabdata3.length < this.limit) {
+            self.pagestart3 = 0
             this.distabdata3 = false
             this.tabdata3 = []
             this.getData3()
@@ -346,17 +346,34 @@ export default {
         module: 'retailer', action: 'sales'
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.swiperChange()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          self.initContainer()
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.swiperChange()
+          }
+        }
       }
     }
   },

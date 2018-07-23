@@ -20,8 +20,14 @@
             <img src="http://vuxlaravel.boka.cn/images/logo_red.png"/>
           </div>
       </div>
-      <form class="applyform pr12 pl12">
-        <div class="form-item required border1px border-box mt15 mb10">
+      <form class="applyform pr12 pl12 pt15">
+        <div v-if="shareUser.uid" class="form-item required border1px border-box mb10">
+          <div class="t-table">
+            <div class="t-cell title-cell w80 font14 v_middle">推荐人</div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">{{ shareUser.linkman }}</div>
+          </div>
+        </div>
+        <div class="form-item required border1px border-box mb10">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -252,6 +258,8 @@ export default {
   },
   data () {
     return {
+      query: {},
+      shareUser: {},
       showGetcode: true,
       timer: null,
       timenum: 60,
@@ -366,10 +374,14 @@ export default {
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
         let applydata = Object
         self.submitdata.fid = self.$route.query.fid
+        if (self.query.share_uid) {
+          self.submitdata.share_uid = self.query.share_uid
+        }
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
         }).then(function (res) {
+          self.$vux.loading.hide()
           let data = res.data
           let curuser = data.data ? data.data : data
           User.set(curuser)
@@ -378,7 +390,9 @@ export default {
             type: applydata.flag === 1 ? 'success' : 'warn',
             time: self.$util.delay(applydata.error),
             onHide: function () {
-              if (applydata.flag === 1 || applydata.flag === 2) {
+              if (applydata.orderid > 0) {
+                location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=payorders`)
+              } else if (applydata.flag === 1 || applydata.flag === 2) {
                 self.afterApply && self.afterApply()
               } else {
                 self.$vux.loading.hide()
@@ -387,6 +401,15 @@ export default {
           })
         })
       }
+    }
+  },
+  created () {
+    const self = this
+    self.query = self.$route.query
+    if (self.query.share_uid) {
+      self.$http.get(`${ENV.BokaApi}/api/getUser/${self.query.share_uid}`).then(function (res) {
+        self.shareUser = res.data
+      })
     }
   }
 }

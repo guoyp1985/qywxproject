@@ -52,11 +52,25 @@
       </group>
       <group>
         <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
-        <cell class="font14" :value="`${$t('Actual Payment')}: ¥${special}`"></cell>
+        <cell>
+          <div class="color-orange">
+            <span class="v_middle font12">{{$t('Order price')}}: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
+            <template v-if="data.postage && data.postage != ''">
+              <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+              <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
+            </template>
+          </div>
+        </cell>
       </group>
       <group>
         <div class="padding10 font12 color-gray">创建时间: {{ data.dateline | dateformat }}</div>
         <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>
+        <div v-if="data && data.content != ''"  class="pl10 pr10 pb10 color-gray">
+          <div class="flex_left font12">
+            <div class="w40">留言: </div>
+            <div class="flex_cell">{{data.content}}</div>
+          </div>
+        </div>
       </group>
       <div class="padding10 align_right">
         <x-button v-if="data.flag == 1" mini @click.native="cancel" class="font12">取消订单</x-button>
@@ -77,6 +91,9 @@
             <span class="vux-close"></span>
           </div>
         </x-dialog>
+      </div>
+      <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white" style="height:50px;">
+        <router-link class="flex_cell flex_center color-white btn-bottom-red" to="/center">进入个人中心</router-link>
       </div>
     </template>
   </div>

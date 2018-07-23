@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import Reg from './reg'
 import ENV from 'env'
 import SHA1 from 'js-sha1'
@@ -7,6 +7,18 @@ import urlParse from 'url-parse'
 import { User, Roomid } from './storage'
 const Util = {}
 Util.install = function (Vue, options) {
+  Vue.isPC = function () {
+    const userAgentInfo = navigator.userAgent
+    return !Reg.rPlatfrom.test(userAgentInfo)
+  }
+
+  Vue.access = function (/*response, */authorization) {
+    const isPC = Vue.isPC()
+    // if (response && response.status === 401) {
+    authorization(isPC)
+    // }
+  }
+
   Vue.prototype.$util = {
     // 去空格
     trim: (str) => str ? str.toString().replace(Reg.rSpace, '') : '',
@@ -27,11 +39,11 @@ Util.install = function (Vue, options) {
       return Reg.rAndroid.test(userAgentInfo)
     },
     // 判授权
-    access: function (response, authorization) {
+    access: function (/*response, */authorization) {
       const isPC = this.isPC()
-      if (response.status === 401) {
-        authorization(isPC)
-      }
+      // if (response && response.status === 401) {
+      authorization(isPC)
+      // }
     },
     validate: (model, reg, failHandle) => {
       let re = null
@@ -99,7 +111,7 @@ Util.install = function (Vue, options) {
             break
           }
         }
-        return `<img src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${eIndex}.gif"/>`
+        return `<img style="vertical-align:middle;" src="https://res.wx.qq.com/mpres/htmledition/images/icon/emotion/${eIndex}.gif"/>`
       })
       return this.emotPrase(text)
     },
@@ -204,8 +216,10 @@ Util.install = function (Vue, options) {
       let wxData = params.data
       let postparams = {
         id: wxData.moduleid,
-        lastshareuid: wxData.lastshareuid,
         type: params.type
+      }
+      if (wxData.lastshareuid) {
+        postparams.lastshareuid = wxData.lastshareuid
       }
       Vue.http.post(`${ENV.BokaApi}/api/share/${wxData.module}`, postparams).then(function (res) {
         let data = res.data
@@ -216,6 +230,7 @@ Util.install = function (Vue, options) {
       Vue.http.get(`${ENV.BokaApi}/api/jsconfig`,
         { params: { url: encodeURIComponent(location.href) } }
       ).then(res => {
+        if (!res) return
         Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
           // alert("微信还没有准备好，请刷新页面");
@@ -606,7 +621,9 @@ Util.install = function (Vue, options) {
         let p = arr[i]
         ret.push({
           msrc: p,
-          src: p
+          src: p,
+          w: 300,
+          h: 300
         })
       }
       return ret

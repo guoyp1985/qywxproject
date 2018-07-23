@@ -29,7 +29,7 @@
           </div>
           <div class="scroll_list ">
             <router-link :to="{path:'/product',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in productdata" :key="item.id" style="color:inherit;">
-              <div v-if="item.moderate == 0" class="icon down"></div>
+              <div v-if="item.moderate == 0" class="ico down"></div>
           		<div class="t-table bg-white pt10 pb10">
           			<div class="t-cell pl12 v_middle" style="width:110px;">
                   <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -40,12 +40,12 @@
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
                       <div class="clamp1 mt5" v-if="item.fpid > 0">厂商佣金:<span class="color-red"> {{ $t('RMB') }}{{ item.rebatein }}</span></div>
-                      <div class="clamp1 mt5">
+                      <div class="clamp1 mt5 font12">
                           <span class="v_middle db-in mr5" v-if="item.fpid == 0">库存: {{ item.storage }}{{item.unit}}</span>
                           <span class="v_middle db-in">已售: {{ item.saled }}{{item.unit}}</span>
                       </div>
                     </div>
-                    <div class="align_right t-cell v_bottom w80">
+                    <div class="align_right t-cell v_bottom w50">
                       <div class="btnicon bg-red color-white font12" @click="controlpopup1(item,index)">
                         <i class="al al-asmkticon0165 v_middle"></i>
                       </div>
@@ -486,15 +486,15 @@ export default {
 
 <style lang="less" scoped>
 .rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .scroll_item .icon{display:none;}
-.rproductlist .scroll_item .down.icon{
+.rproductlist .scroll_item .ico{display:none;}
+.rproductlist .scroll_item .down.ico{
   display:block;
   position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
   background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
   -webkit-transform: translate(30px,5px) rotate(45deg);
   transform: translate(30px,5px) rotate(45deg);
 }
-.rproductlist .scroll_item .down.icon:after{content:"已下架";}
+.rproductlist .scroll_item .down.ico:after{content:"已下架";}
 .rproductlist .btnicon{
   display: inline-block;
   color: #ea3a3a;

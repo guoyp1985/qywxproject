@@ -1,13 +1,7 @@
 <template>
   <div class="containerarea bg-page rsalechance nobottom font14">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner">
         <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
@@ -106,10 +100,12 @@ import { Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem } from '
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem
+    Tab, TabItem, Swiper, SwiperItem, Card, Timeline, TimelineItem, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (dt) {
@@ -145,7 +141,7 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showSos: false,
+      showApply: false,
       showContainer: false,
       selectedIndex: 0,
       tabtxts: [ '分享', '浏览' ],
@@ -221,6 +217,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
             this.distabdata1 = false
             this.tabdata1 = []
             this.getData1()
@@ -228,6 +225,7 @@ export default {
           break
         case 1:
           if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
             this.distabdata2 = false
             this.tabdata2 = []
             this.getData2()
@@ -250,17 +248,33 @@ export default {
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.swiperChange()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          this.$vux.loading.hide()
+          if (!this.loginUser.isretailer) {
+            self.initContainer()
+            this.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.swiperChange()
+          }
+        }
       }
     }
   },

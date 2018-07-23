@@ -20,7 +20,12 @@
             </cell>
           </group>
           <group>
-            <x-textarea v-model="item.comment" class="font14" :max="500" :placeholder="`${$t('Necessary')}${$t('Writing Evaluation')}`"></x-textarea>
+            <x-textarea
+              v-model="item.comment"
+              class="font14"
+              :max="500"
+              :placeholder="`${$t('Necessary')}${$t('Writing Evaluation')}`">
+            </x-textarea>
           </group>
           <group>
             <group-title slot="title">{{$t('Evaluation Of Logistics')}}<span style="float:right;">{{$t('To Give Five Stars')}}</span></group-title>

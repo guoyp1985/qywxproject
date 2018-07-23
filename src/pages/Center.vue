@@ -62,9 +62,9 @@ import ENV from 'env'
 import Reg from '#/reg'
 import { Token, User } from '#/storage'
 
-let manageBtn = [
+let sellerBtn = [
   {
-    name: 'Manage center',
+    name: 'Seller center',
     icon: 'al-fuwu',
     color: 'rgba01',
     link: '/centerSales'
@@ -76,6 +76,14 @@ let factoryBtn = [
     icon: 'al-kehu1',
     color: 'rgba05',
     link: '/centerFactory'
+  }
+]
+let manageBtn = [
+  {
+    name: 'Manage center',
+    icon: 'al-guanlizhongxin1',
+    color: 'rgba06',
+    link: '/factoryManage'
   }
 ]
 let featureBtns = [
@@ -98,7 +106,6 @@ let featureBtns = [
     link: '/favorite'
   }
 ]
-
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {
   featureBtns.push({
     name: 'Exit',
@@ -170,6 +177,7 @@ export default {
       }
     },
     setUserInfo () {
+      const self = this
       const user = User.get()
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
@@ -183,30 +191,36 @@ export default {
         company: user.company
       }
       if (!this.showBtn1) {
+        let isAdmin = false
+        for (let i = 0; i < user.usergroup.length; i++) {
+          if (user.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (isAdmin) {
+          this.btns1 = manageBtn.concat(this.btns1)
+        }
         if (this.loginUser.fid > 0) {
           this.btns1 = factoryBtn.concat(this.btns1)
         }
-        this.btns1 = manageBtn.concat(this.btns1)
+        this.btns1 = sellerBtn.concat(this.btns1)
         this.showBtn1 = true
       }
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
+        if (!res) return
         let data = res.data
         self.messages = data.data
       })
     },
     getData () {
-      const user = User.get()
       const self = this
-      if (user && user.subscribe === 1) {
-        self.loginUser = user
+      self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+        if (!res) return
+        self.loginUser = res.data
+        User.set(self.loginUser)
         self.setUserInfo()
-      } else {
-        this.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-          self.loginUser = res.data.data
-          User.set(this.loginUser)
-          self.setUserInfo()
-        })
-      }
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})

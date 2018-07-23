@@ -176,6 +176,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.articles.length < limit) {
+            pageStart1 = 0
             this.disData1 = false
             this.articles = []
             this.$vux.loading.show()
@@ -184,6 +185,7 @@ export default {
           break
         case 1:
           if (this.commodities.length < limit) {
+            pageStart2 = 0
             this.disData2 = false
             this.commodities = []
             this.$vux.loading.show()
@@ -192,6 +194,7 @@ export default {
           break
         case 2:
           if (this.stores.length < limit) {
+            pageStart3 = 0
             this.disData3 = false
             this.stores = []
             this.$vux.loading.show()

@@ -186,6 +186,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.uid !== this.$route.query.uid) {
         this.query = this.$route.query
+        pageStart1 = 0
         this.disdata = false
         this.data = []
         this.$vux.loading.show()

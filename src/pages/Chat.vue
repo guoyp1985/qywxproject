@@ -5,6 +5,16 @@
 */
 <template>
   <div id="chat-room" class="font14">
+    <template v-if="query.fromModule == 'product' && query.fromId && showTip">
+      <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
+        <div class="db-flex">
+          <div class="w50 flex_left">
+            <img :src="fromProduct.photo" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+          </div>
+          <div class="flex_cell flex_left" to="/center">{{fromProduct.title}} </div>
+        </div>
+      </router-link>
+    </template>
     <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
     <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
@@ -251,7 +261,9 @@ export default {
       limit1: 10,
       selectNewsData: null,
       selectProductsData: null,
-      showUserInfo: false
+      showUserInfo: false,
+      fromProduct: {},
+      showTip: true
     }
   },
   filters: {
@@ -806,6 +818,21 @@ export default {
         })
       })
     },
+    getProduct () {
+      const self = this
+      if (self.query.fromModule === 'product' && self.query.fromId) {
+        self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+          params: { id: self.query.fromId, module: self.query.fromModule }
+        }).then(function (res) {
+          if (res && res.status === 200) {
+            self.fromProduct = res.data.data
+            setTimeout(function () {
+              self.showTip = false
+            }, 10000)
+          }
+        })
+      }
+    },
     setContactUser () {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
@@ -838,6 +865,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.getData()
+      this.getProduct()
       this.createSocket()
     }
   },
@@ -1188,4 +1216,5 @@ export default {
 .message-text .scroll_item .con1 .img_background{width: 100%;height: 44px;}
 .message-text .scroll_item .img_background{display: block;background: top center no-repeat;background-size: cover;}
 .message-text video{max-width:100%;}
+
 </style>

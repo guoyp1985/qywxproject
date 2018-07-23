@@ -71,7 +71,7 @@ en:
   Month Sharing Goal: Month Sharing Goal
   Had Shared: Had Shared
   Had Contacted: Had Contacted
-  Sharing Material: Sharing Material
+  Sharing Academic: Sharing Academic
   Sharing Qrcode: Sharing Qrcode
   Gain Consumers: Gain Consumers
   Grab Consumers: Grab Consumers
@@ -370,7 +370,7 @@ zh-CN:
   Had Shared: 已分享
   Had Contacted: 已联系
   Contacted: 联系
-  Sharing Material: 分享素材
+  Sharing Academic: 分享素材
   Sharing Qrcode: 分享二维码
   Gain Consumers: 获取客户
   Grab Consumers: 抢客户
@@ -589,8 +589,8 @@ zh-CN:
   Deliver goods: 发货
   View deliver: 查看物流
   Add order: 新增订单
-  Myrevenue: 我的收入
-  My shop: 我的店铺
+  Myrevenue: 收入
+  My shop: 店铺
   Please select address: 请选择地址
   Orders: 订单
   Userinfo: 用户信息
@@ -758,6 +758,8 @@ zh-CN:
   tSubscribeInfo: 我
   Shelf sale: 上架出售
   Manage center: 管理中心
+  Seller center: 卖家中心
+  Management center: 管理中心
   Rolling display: 滚动展示
   Order Number: 订单编号
   Pre Sale: 售前
@@ -782,7 +784,7 @@ zh-CN:
   tShareList: 分享列表
   tMessageList: 消息列表
   No relevant data: 暂无相关数据
-  Business tool: 微商创业工具
+  Business tool: 社交销售工具
   tRedirect: 授权中...
   tAddFactory: 添加厂商
   Fatory name: 厂商名称
@@ -812,17 +814,36 @@ zh-CN:
   tFactoryAgentFee: 设置佣金
   tFactoryProduct: 商品详情
   tFactoryOrders: 订单列表
-  tFactoryRevenue: 我的收入
+  tFactoryRevenue: 收入
   tAddFactoryNews: 添加文章
   tFactoryGoodeazy: 易采集
   tBusinessSchool: 商学院
-  Create training materials: 创建培训素材
-  tAddMaterial: 创建素材
-  tMaterial: 素材
+  Create training academics: 创建培训素材
+  tAddAcademic: 创建素材
+  tAcademic: 素材
   Contact factory: 联系厂商
   Source of goods: 货源
   tRecommendProducts: 货源
   tFactoryOrderDetail: 订单详情
-  tRetailerMaterial: 共销宝商学院
-  Material title: 素材标题
-  Material share description placeholder: 如不填写自动截取素材内容
+  tRetailerAcademic: 共销宝商学院
+  Academic title: 素材标题
+  Academic share description placeholder: 如不填写自动截取素材内容
+  Change price: 修改价格
+  Rebate store: 返点店铺
+  Postage: 运费
+  Product class: 商品类别
+  Region: 地区
+  tCenterSeller: 共销宝
+  Personal image: 个人形象
+  Seller said: 卖家说
+  Seller show: 卖家秀
+  My tags: 标签
+  tAddTimeline: 我要发布
+  Release: 发布
+  Say something: 说点什么吧...
+  tPhotoVideo: 图片视频
+  tUserStory: 用户反馈
+  tSellerPromotion: 卖家促销
+  tSellerTimeline: 卖家动态
+  Seller tags: 卖家标签
+  Seller timeline: 卖家动态

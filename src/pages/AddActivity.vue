@@ -41,7 +41,7 @@
           <form-groupbuy :submitdata="submitdata"></form-groupbuy>
         </template>
         <template v-if="activityType == 'bargainbuy'">
-          <form-bargainbuy :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
+          <form-bargainbuy ref="formBargainbuy" :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
         </template>
         <template v-if="activityType == 'discount'">
           <form-discount :submitdata="submitdata"></form-discount>
@@ -177,6 +177,25 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.allowsubmit = true
+      this.showselectproduct = true
+      this.showproductitem = false
+      this.selectproduct = {}
+      this.selectpopupdata = null
+      this.showpopup = false
+      this.productdata = []
+      this.radiodata = []
+      this.visibility1 = false
+      this.visibility2 = false
+      this.selectdatetxt1 = '选择开始时间'
+      this.selectdatetxt2 = '选择结束时间'
+      this.submitdata = {}
+      this.requireddata = {}
+      this.searchword = ''
+      this.searchresult = false
+      this.pagestart1 = 0
+    },
     dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     },
@@ -406,6 +425,11 @@ export default {
               onHide: function () {
                 if (data.flag === 1) {
                   self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
+                  if (self.query.type === 'bargainbuy') {
+                    self.$refs.formBargainbuy.minprice = ''
+                    self.$refs.formBargainbuy.everymin = ''
+                    self.$refs.formBargainbuy.everymax = ''
+                  }
                 }
               }
             })
@@ -415,6 +439,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.query = this.$route.query
       this.activityType = this.query.type
       const nowdate = new Date().getTime()

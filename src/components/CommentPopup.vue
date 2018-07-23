@@ -10,7 +10,14 @@
         <h4>{{title}}</h4>
       </div>
       <group>
-        <x-textarea ref="textarea" v-model="value" @on-change="valueChange" class="font14 pop-textarea" :max="200" :placeholder="$t('Writing Discussion')"></x-textarea>
+        <x-textarea
+          ref="textarea"
+          v-model="value"
+          @on-change="valueChange"
+          class="font14 pop-textarea"
+          :max="200"
+          placeholder="说两句吧...">
+        </x-textarea>
       </group>
       <emotion-box bind-textarea=".pop-textarea">
       </emotion-box>
@@ -94,27 +101,16 @@ export default {
       this.value = val
     },
     onSubmit () {
-      // const self = this
       const textarea = this.$refs.textarea.$refs.textarea
-      // if (!this.textarea) {
-        // this.textarea = self.className ?
-        //                 document.querySelector(`.${self.className} #comment-textarea textarea`) :
-        //                 document.querySelector('#comment-textarea textarea')
-      // }
       let val = textarea.value
       textarea.value = ''
+      this.value = ''
       this.$emit('on-submit', val)
     },
     onCancel () {
-      // const self = this
-      // console.log(this.$refs)
       const textarea = this.$refs.textarea.$refs.textarea
-      // if (!this.textarea) {
-        // this.textarea = self.className ?
-        //                 document.querySelector(`.${self.className} #comment-textarea textarea`) :
-        //                 document.querySelector('#comment-textarea textarea')
-      // }
       textarea.value = ''
+      this.value = ''
       this.$emit('on-cancel', textarea)
     },
     onTextFocus () {

@@ -41,7 +41,7 @@ export default {
       intervalId = setInterval(() => {
         self.$http.get(`${ENV.BokaApi}/api/scanlogin/${this.qrCode.verifycode}`)
         .then(res => {
-          const token = res.data.data ? res.data.data.token : null
+          const token = res.data.data ? res.data.data : null
           const error = res.data.data ? res.data.data.error : null
           if (error) {
             console.error(error)
@@ -63,6 +63,7 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/qrcode/login`)
       .then(
         res => {
+          if (!res) return
           self.qrCode = res.data
           self.polling()
         }

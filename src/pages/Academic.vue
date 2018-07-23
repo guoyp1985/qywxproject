@@ -38,7 +38,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="material" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="academic" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -169,16 +169,20 @@ export default {
             document.title = self.article.title
             self.reward = User.get()
             self.factoryinfo = self.article.factoryinfo
-            self.$util.handleWxShare({
+            let shareParams = {
               data: self.article,
               module: self.module,
               moduleid: self.article.id,
-              lastshareuid: self.query.share_uid,
-              link: `${ENV.Host}/#/material?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
+              link: `${ENV.Host}/#/academic?id=${self.article.id}&fid=${self.article.fid}&share_uid=${self.reward.uid}`,
               successCallback: function () {
                 self.showShareSuccess = true
               }
-            })
+            }
+            if (self.query.share_uid) {
+              shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+              shareParams.lastshareuid = self.query.share_uid
+            }
+            self.$util.handleWxShare(shareParams)
             self.showContainer = true
             return self.$http.get(`${ENV.BokaApi}/api/user/digs/show`, {
               params: {id: id, module: self.module}
@@ -227,7 +231,7 @@ export default {
       })
     },
     editSetting () {
-      this.$router.push({name: 'tAddMaterial', params: {id: this.article.id, fid: this.article.fid}})
+      this.$router.push({name: 'tAddAcademic', params: {id: this.article.id, fid: this.article.fid}})
     },
     editDelete () {
       this.$vux.confirm.show({
@@ -359,15 +363,17 @@ export default {
           break
         }
       }
-      if (!self.loginUser.fid && !isAdmin) {
+      if (!self.loginUser.isretailer && !self.loginUser.fid && !isAdmin) {
         this.$vux.loading.hide()
         self.showSos = true
         self.showContainer = false
       } else {
-        self.showSos = false
-        self.showContainer = false
         this.$vux.loading.hide()
-        this.refresh(this.$route.query)
+        if (this.query.id !== this.$route.query.id) {
+          self.showSos = false
+          self.showContainer = false
+          this.refresh(this.$route.query)
+        }
       }
     }
   }

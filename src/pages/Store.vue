@@ -5,9 +5,14 @@
     </template>
     <template v-if="showContainer">
       <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
+        <div class="adbg" v-if="addata && addata.length == 1">
+          <router-link class="inner" :to="addata[0].url">
+            <img :src="addata[0].photo" />
+          </router-link>
+        </div>
         <swiper
           class="pic-swiper notitle"
-          v-if="addata && addata.length > 0"
+          v-if="addata && addata.length > 1"
           :list="addata"
           dots-position="center"
           :interval="6000"
@@ -19,19 +24,19 @@
         <template v-if="retailerInfo.uid">
           <div class="pt12 pb12 bg-white pl10 pr10 b_bottom_after">
         		<div class="t-table">
-        			<div class="t-cell v_middle w50">
+        			<router-link class="t-cell v_middle w50" :to="{path: '/centerSeller',query:{uid:query.wid}}">
                 <img class="avatarimg1 imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-              </div>
-        			<div class="t-cell v_middle shopkeeper_txt">
+              </router-link>
+        			<router-link class="t-cell v_middle shopkeeper_txt" :to="{path: '/centerSeller',query:{uid:query.wid}}">
         				<div class="clamp1 font16">{{ retailerInfo.title }}</div>
-        			</div>
-        				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
-                  <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
-                  <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
-        				</div>
-                <div v-else class="t-cell v_middle align_right w100">
-                  <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
-                </div>
+        			</router-link>
+      				<div v-if="retailerInfo.uid == loginUser.uid" class="t-cell v_middle align_right" style="width:160px;">
+                <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
+                <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
+      				</div>
+              <div v-else class="t-cell v_middle align_right w100">
+                <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
+              </div>
       			</div>
       		</div>
         </template>
@@ -95,12 +100,19 @@
             </newsitemplate>
           </div>
         </template>
-        <div v-if="query.wid && query.wid != loginUser.uid" class="padding10">
+        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10">
           <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
-        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;"><i class="al al-zixun color-red font18" style="padding-right:3px;"></i><span style="color:#323232">{{ $t('Online consulting') }}</span></router-link>
+        <div @click="toCenterSales" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
+          <i class="al al-maijiaxiu2 color-orange font18 v_middle" style="margin-top:-1px;"></i>
+          <span class="v_middle" style="color:#323232;margin-left:-4px;">卖家秀</span>
+        </div>
+        <router-link :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
+          <i class="al al-zixun color-red font18 v_middle" style="padding-right:3px;"></i>
+          <span class="v_middle" style="color:#323232">{{ $t('Online consulting') }}</span>
+        </router-link>
         <div class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9" @click="clickWetchat"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
       </div>
       <div v-transfer-dom class="x-popup">
@@ -258,6 +270,14 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+    },
+    toCenterSales () {
+      const self = this
+      let params = { uid: self.query.wid }
+      if (!self.query.wid) {
+        params.wid = self.loginUser.uid
+      }
+      self.$router.push({path: '/centerSeller', query: params})
     },
     handleScroll () {
       const self = this
@@ -426,10 +446,9 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           document.title = self.retailerInfo.title
           const wid = self.retailerInfo.uid
-          self.$util.handleWxShare({
+          let shareParams = {
             module: 'store',
             moduleid: wid,
-            lastshareuid: self.query.share_uid,
             title: self.retailerInfo.title,
             desc: self.retailerInfo.title,
             photo: self.retailerInfo.avatar,
@@ -437,7 +456,12 @@ export default {
             successCallback: function () {
               self.showShareSuccess = true
             }
-          })
+          }
+          if (self.query.share_uid) {
+            shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+            shareParams.lastshareuid = self.query.share_uid
+          }
+          self.$util.handleWxShare(shareParams)
           if (wid !== self.loginUser.uid) {
             self.getCollectStaus()
           }
@@ -499,6 +523,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.store .adbg{position:relative;padding-bottom: 55.555%;}
+.store .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
+.store .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
 .vline{position:relative;}
 .vline:after {
   content: " ";

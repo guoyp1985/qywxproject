@@ -22,7 +22,18 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <group class="textarea-outer" style="padding:0;">
-                  <x-textarea v-model="submitData.summary" class="x-textarea noborder" :placeholder="$t('Product summary')" :show-counter="false" :rows="1" :max="30" autosize></x-textarea>
+                  <x-textarea
+                    ref="summaryTextarea"
+                    v-model="submitData.summary"
+                    class="x-textarea noborder"
+                    :placeholder="$t('Product summary')"
+                    :show-counter="false"
+                    :rows="1"
+                    :max="30"
+                    @on-change="textareaChange('summaryTextarea')"
+                    @on-focus="textareaFocus('summaryTextarea')"
+                    autosize>
+                  </x-textarea>
                 </group>
               </div>
             </div>
@@ -102,9 +113,10 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
+      infoData: {},
       allowsubmit: true,
       submitData: { title: '', summary: '', photo: '' },
-      requireddata: { title: '', productclass: '' },
+      requireddata: { title: '' },
       classData: [],
       productClass: [],
       disClassData: false,
@@ -127,6 +139,14 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     deletephoto (item, index) {
       const self = this
       self.photoarr.splice(index, 1)
@@ -180,7 +200,11 @@ export default {
     saveEvent () {
       const self = this
       let postData = self.submitData
-      postData.productclass = self.productClass
+      if (self.productClass) {
+        postData.productclass = self.productClass
+      } else {
+        postData.productclass = self.infoData.productclass
+      }
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
@@ -223,17 +247,6 @@ export default {
         }
       })
     },
-    setProductClass () {
-      const self = this
-      for (let i = 0; i < self.classData.length; i++) {
-        for (let j = 0; j < self.productClass.length; j++) {
-          if (parseInt(self.productClass[j]) === self.classData[i].id) {
-            self.classData[i].checked = true
-            break
-          }
-        }
-      }
-    },
     getData () {
       const self = this
       self.$vux.loading.show()
@@ -243,34 +256,54 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         let retdata = data.data ? data.data : data
+        self.infoData = retdata
+        self.photoarr = []
         if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
           self.photoarr.push(retdata.photo)
         }
         for (let key in self.submitData) {
           self.submitData[key] = retdata[key]
         }
+        if (self.disClassData) {
+          return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+            { params: { limit: 100 } }
+          )
+        }
+      }).then(function (res) {
+        if (res) {
+          let data = res.data
+          data = data.data ? data.data : data
+          self.classData = data
+          self.productClass = []
+          if (self.infoData.productclass && self.$util.trim(self.infoData.productclass) !== '') {
+            let idarr = self.infoData.productclass.split(',')
+            for (let i = 0; i < idarr.length; i++) {
+              self.productClass.push(parseInt(idarr[i]))
+            }
+          }
+        }
       })
     },
     init () {
+    },
+    initData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-        { params: { limit: 100 } }
-      ).then(function (res) {
-        let data = res.data
-        data = data.data ? data.data : data
-        self.classData = data
-        self.disClassData = true
-      })
+      self.submitData = { title: '', summary: '', photo: '' }
+      self.requireddata = { title: '' }
+      self.disClassData = false
     },
     refresh () {
       const self = this
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser) {
+        self.initData()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
             isAdmin = true
+            self.disClassData = true
+            self.requireddata.productclass = ''
             break
           }
         }
@@ -282,10 +315,8 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          if (self.$route.query.id && self.query.id !== self.$route.query.id) {
-            self.query = self.$route.query
-            self.getData()
-          }
+          self.query = self.$route.query
+          self.getData()
         }
       }
     }
@@ -294,6 +325,7 @@ export default {
     this.init()
   },
   activated () {
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.refresh()
   }
 }

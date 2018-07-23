@@ -4,6 +4,38 @@
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showcontainer">
+      <div v-if="playVideo" class="videoarea">
+        <video
+          ref="productVideo"
+          :src="productdata.video"
+          controls
+          autoplay="true"
+          webkit-playsinline=""
+          playsinline="true"
+          x-webkit-airplay="true"
+          raw-controls=""
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portrait">
+        </video>
+        <!--
+        <video
+          class="w_100 h_100"
+          style="max-width:100%;max-height:100%;object-fit:fill;"
+          controls
+          :src="productdata.video"
+          autoplay="true"
+          preload="auto"
+          x-webkit-airplay="true"
+          x5-playsinline="true"
+          webkit-playsinline="true"
+          playsinline="true">
+        </video>
+      -->
+        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
+          <i class="al al-guanbi"></i>
+        </div>
+      </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
@@ -14,22 +46,13 @@
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
             loop>
-            <swiper-item v-if="productdata.video && productdata.video != ''">
-              <video
-                class="w_100 h_100"
-                style="max-width:100%;max-height:100%;"
-                controls
-                :src="productdata.video"
-                autoplay="true"
-                preload="auto"
-                x-webkit-airplay="true"
-                x5-playsinline="true"
-                webkit-playsinline="true"
-                playsinline="true">
-              </video>
-            </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+              <template v-if="index == 0 && productdata.video && productdata.video != ''">
+                <div class="play-icon flex_center" @click="clickPlay('productVideo')">
+                  <i class="al al-bofang"></i>
+                </div>
+              </template>
             </swiper-item>
           </swiper>
         </template>
@@ -49,7 +72,8 @@
           <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
-    					<div class="t-cell v_middle">快递: {{ productdata.postage }}元</div>
+    					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>
+    					<div v-else class="t-cell v_middle">{{ $t('Postage') }}: {{ $t('RMB') }}{{ productdata.postage }}</div>
     					<div class="t-cell v_middle pl10 align_right">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
             </template>
             <div v-else class="t-cell v_middle align_left">销量: {{ productdata.saled }}{{ productdata.unit }}</div>
@@ -166,20 +190,27 @@
             </div>
   				</div>
   			</div>
-        <template v-if="buyuserdata.length > 0">
+        <div v-show="disBuyFriends">
           <div class="bg-page" style="height:10px;"></div>
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
-            <div class="buylist pt10 pb15 pl10 pr10">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid, fromModule: 'product', fromId: query.id}}" v-for="(item,index) in buyuserdata" :key="index">
-                <div class="align_center">
-                  <img class="avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                </div>
-      					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
-              </router-link>
+            <div class="flex_left pb10">
+              <div class="buylist" ref="buyList">
+                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id}}" v-for="(item,index) in buyuserdata" :key="index">
+                  <div class="pic">
+                    <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div class="txt">
+                    <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                  </div>
+                </router-link>
+              </div>
+              <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
+                <i class="al al-asmkticon0165 v_middle"></i>
+              </div>
             </div>
           </div>
-        </template>
+        </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after">
@@ -320,15 +351,36 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showMoreFriends" height="100%">
+          <div class="popup1 tagpopup">
+            <div class="popup-top flex_center">购买过的好友</div>
+            <div class="popup-middle">
+              <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div class="t-table">
+                  <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14 color-lightgray">{{item.username}}</div>
+                  </div>
+                </div>
+              </router-link>
+            </div>
+            <div class="popup-bottom flex_center bg-orange color-white" @click="closeFriendsPopup">
+              <span>{{ $t('Close') }}</span>
+            </div>
+          </div>
+        </popup>
+      </div>
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
       <div v-transfer-dom>
         <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
       </div>
-      <template v-if="loginUser">
+      <template v-if="loginUser && showShareSuccess">
         <share-success
-          v-show="showShareSuccess"
           v-if="productdata.uploader === loginUser.uid || query.wid === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
@@ -422,7 +474,14 @@ export default {
       activitydata: [],
       submitdata: { flag: 1, quantity: 1 },
       replyData: null,
-      messages: 0
+      messages: 0,
+      showVideo: true,
+      playVideo: false,
+      disBuyFriends: false,
+      disMore: false,
+      friendsData: [],
+      pageStart2: 0,
+      showMoreFriends: false
     }
   },
   watch: {
@@ -477,7 +536,7 @@ export default {
   },
   computed: {
     isshowdot: function () {
-      if (this.photoarr.length > 1 || !this.$util.isNull(this.productdata.video)) {
+      if (this.photoarr.length > 1) {
         this.showdot = true
       } else {
         this.showdot = false
@@ -492,6 +551,7 @@ export default {
       this.sosTitle = ''
       this.showcontainer = false
       this.showShareSuccess = false
+      this.showVideo = true
       this.showsharetip = true
       this.productid = null
       this.productdata = {}
@@ -518,9 +578,17 @@ export default {
       this.submitdata = { flag: 1, quantity: 1 }
       this.replyData = null
       this.messages = 0
+      this.disBuyFriends = false
+      this.disMore = false
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    clickPlay (refname) {
+      this.playVideo = true
+    },
+    stopPlay (refname) {
+      this.playVideo = false
     },
     toChat () {
       if (this.loginUser.subscribe === 0) {
@@ -654,11 +722,13 @@ export default {
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
-        window.WeixinJSBridge.invoke('imagePreview', {
-          current: viewarr[index],
-          urls: viewarr
-        })
+        if (window.WeixinJSBridge) {
+          let viewarr = self.contentphotoarr.length > 0 ? self.contentphotoarr : self.photoarr
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: viewarr[index],
+            urls: viewarr
+          })
+        }
       }
     },
     showBigimg1 (index) {
@@ -674,6 +744,7 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+      this.showVideo = true
     },
     handleNewAdd () {
       const self = this
@@ -691,9 +762,11 @@ export default {
         link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
         successCallback: function () {
           self.showShareSuccess = true
+          self.showVideo = false
         }
       }
       if (self.query.share_uid) {
+        shareData.link = `${shareData.link}&lastshareuid=${self.query.share_uid}`
         shareData.lastshareuid = self.query.share_uid
       }
       if (self.activityInfo && self.activityInfo.id && self.activityInfo.type === 'groupbuy') {
@@ -840,16 +913,26 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
-              params: { wid: self.retailerInfo.uid, productid: self.productid }
-            })
+            return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
           }
+        }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          self.messages = data.data
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+            params: { wid: self.retailerInfo.uid, productid: self.productid }
+          })
         }
       }).then(function (res) {
         if (res && res.status === 200) {
           let data = res.data
           if (data.flag === 1) {
             self.buyuserdata = data.data
+            if (self.buyuserdata.length > 0) {
+              self.disBuyFriends = true
+              self.getMoreStatus(self)
+            }
           }
           return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
             { params: { module: self.module, id: self.productid } }
@@ -903,27 +986,78 @@ export default {
       room = `${this.module}-${this.query.id}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
+    handleScroll2 (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.friendsData.length === (self.pageStart2 + 1) * self.limit) {
+            self.pageStart2++
+            self.$vux.loading.show()
+            self.getFriends()
+          }
+        }
+      })
+    },
+    getFriends () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+        params: { wid: self.retailerInfo.uid, productid: self.productid }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          self.friendsData = retdata
+        }
+      })
+    },
+    moreFriends () {
+      const self = this
+      this.showMoreFriends = true
+      self.getFriends()
+    },
+    closeFriendsPopup () {
+      this.showMoreFriends = false
+    },
+    getMoreStatus (self) {
+      const wW = window.innerWidth
+      const disCols = Math.floor(wW / 48)
+      let buyList = self.$refs.buyList[0] ? self.$refs.buyList[0] : self.$refs.buyList
+      if (self.buyuserdata.length > disCols - 1) {
+        const listW = (disCols - 1) * 48
+        buyList.style.flex = ''
+        buyList.style.width = `${listW}px`
+        self.disMore = true
+      } else {
+        buyList.style.width = ''
+        buyList.style.flex = '1'
+        self.disMore = false
+      }
+    },
     init () {
       // this.$util.wxAccess()
       this.$util.wxAccessListening()
     },
     refresh () {
       const self = this
+      self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      // alert('in product')
-      // alert(JSON.stringify(this.loginUser))
-      this.initData()
-      this.showShareSuccess = false
-      this.previewerPhotoarr = []
-      this.query = this.$route.query
-      this.$vux.loading.show()
-      this.getData()
-      this.createSocket()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
-        let data = res.data
-        self.messages = data.data
-      })
+      if (this.loginUser) {
+        this.initData()
+        this.showShareSuccess = false
+        this.showVideo = true
+        this.query = this.$route.query
+        this.$vux.loading.show()
+        this.getData()
+        this.createSocket()
+      }
+      window.onresize = function () {
+        if (self.buyuserdata.length > 0) {
+          console.log('in')
+          self.getMoreStatus(self)
+        }
+      }
     }
   },
   created () {
@@ -941,6 +1075,14 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
+.product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+.product .play-icon{
+  width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+  position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
+}
+.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
+.product .videoarea video{position: absolute;width: 100%;height: 100%;}
+.product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
 .vline{position:relative;}
 .vline:after {
   content: " ";
@@ -1039,4 +1181,19 @@ export default {
 
 .product .pagemiddle{bottom:50px;}
 .product .pagebottom{height:50px;}
+
+.product .buylist{display:flex;overflow:hidden;}
+.product .buylist:after{
+  content:'';
+  display:block;
+  clear:both;
+}
+.product .buylist .item{
+  width: 48px;padding-top:10px;
+  text-align: center;display:block;color:inherit;
+}
+.product .buylist .pic{padding-left:10px;width:38px;}
+.product .buylist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
+.product .buylist .txt{padding-left:10px;width:38px;}
+.product .moreicon{width:48px;}
 </style>

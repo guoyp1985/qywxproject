@@ -70,7 +70,7 @@ export default {
   },
   data () {
     return {
-      query: Object,
+      query: {},
       data: {},
       orders: [],
       showOrders: false,

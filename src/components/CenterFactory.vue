@@ -3,9 +3,13 @@
     <div class="bk-salestop">
       <div class="flex_left" style="height:108px;">
         <div class="img-cell" v-if="factoryInfo.photo && factoryInfo.photo != ''">
-          <img class="imgcover" :src="factoryInfo.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" @click="showBigimg(0)" />
+          <img
+            class="imgcover"
+            :src="factoryInfo.photo"
+            onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"
+            @click="showBigimg(0)" />
           <div v-transfer-dom>
-            <previewer :list="imgarr" ref="previewer"></previewer>
+            <previewer :list="factoryInfo.photoArr" ref="previewer"></previewer>
           </div>
         </div>
         <div class="txt-cell pl10">
@@ -186,8 +190,6 @@ export default {
   },
   data () {
     return {
-      imgarr: [],
-      wximgarr: [],
       showQrcode: false
     }
   },
@@ -219,19 +221,12 @@ export default {
     },
     showBigimg (index) {
       const self = this
-      if (self.imgarr.length === 0) {
-        self.imgarr.push({
-          msrc: self.factoryInfo.avatar,
-          src: self.factoryInfo.avatar
-        })
-        self.wximgarr.push(self.factoryInfo.avatar)
-      }
       if (self.$util.isPC()) {
         self.$refs.previewer.show(index)
       } else {
-        self.$vue.wechat.previewImage({
-          current: self.wximgarr[index],
-          urls: self.wximgarr
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.factoryInfo.photo,
+          urls: [self.factoryInfo.photo]
         })
       }
     }

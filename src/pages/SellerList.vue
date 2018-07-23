@@ -48,6 +48,15 @@
               <div class="item">
                 <div class="inner" @click="clickPopup('level')">设置代理级别</div>
               </div>
+              <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
+                <div class="inner">进入店铺</div>
+              </router-link>
+              <router-link class="item" :to="{path:'/factoryOrders',query:{wid:clickData.wid}}">
+                <div class="inner">相关订单</div>
+              </router-link>
+              <router-link class="item" :to="{path:'/stat',query:{module:'factoryretailer',id:query.id,wid:clickData.wid}}">
+                <div class="inner">统计</div>
+              </router-link>
               <div class="item close mt10" @click="clickPopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
@@ -191,6 +200,14 @@ export default {
       if (key === 'level') {
         self.showLevelPopup = true
         self.showPopup1 = false
+        for (let i = 0; i < self.levelData.length; i++) {
+          if (self.clickData.level.toString() === self.levelData[i].id.toString()) {
+            self.selectLevel = self.levelData[i]
+            self.levelData[i].checked = true
+          } else {
+            delete self.levelData[i].checked
+          }
+        }
       } else {
         self.showPopup1 = false
       }
@@ -215,7 +232,7 @@ export default {
     submitLevel () {
       const self = this
       if (!self.selectLevel) {
-        self.$vux.toast.show('请选择提现数据', 'middle')
+        self.$vux.toast.show('请选择代理级别', 'middle')
         return false
       }
       self.$vux.loading.show()
@@ -284,6 +301,7 @@ export default {
             let retdata = data.data ? data.data : data
             let levelpolicy = retdata.levelpolicy
             self.levelName = retdata.levelname
+            self.levelData = []
             for (let key in levelpolicy) {
               self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
             }

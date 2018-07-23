@@ -1,13 +1,7 @@
 <template>
   <div class="containerarea bg-page font14 rcustomerlist">
-    <template v-if="showSos">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1 bg-white">
         <div class="row">
@@ -29,15 +23,25 @@
                 @on-cancel="onCancel1"
                 ref="search">
               </search>
-              <!--
-              <div class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
-                <div class="t-table w_100">
-                  <div class="t-cell align_center active cut-off">时间<span class="font12 ml5">▼</span></div>
-                  <div class="t-cell align_center  cut-off">地域<span class="font12 ml5">▼</span></div>
-                  <div class="t-cell align_center cut-off">性别<span class="font12 ml5">▼</span></div>
+              <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
+                <div class="t-table w_100 orderbyarea">
+                  <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">时间<span class="ico"></span></div>
+                  <div v-if="disAreaOrder" :class="`t-cell v_middle orderbyitem ${areaClass}`" @click="areaOrder">
+                    <div class="clamp1">
+                      <span class="v_middle">{{ $t('Region') }}</span>
+                      <span class="v_middle font12" v-if="selectedArea">( {{selectedArea}} )</span>
+                      <span class="ico"></span>
+                    </div>
+                  </div>
+                  <div :class="`t-cell v_middle orderbyitem ${sexClass}`" @click="sexOrder">
+                    <div class="clamp1">
+                      <span class="v_middle">性别</span>
+                      <span class="v_middle font12" v-if="selectedSex">( {{selectedSex}} )</span>
+                      <span class="ico"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            -->
               <div class="font12 pl12 pr12 b_bottom h35 list-shadow color-lightgray">
                 <div class="t-table w_100">
                   <div class="t-cell align_left ">{{ $t('Customer text') }}(共{{ tabcount1 }}人)</div>
@@ -63,7 +67,7 @@
                     </router-link>
                     <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
+                      <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                     </router-link>
                     <div class="t-cell v_middle w60 h_100 align_right">
                         <div class="percentarea db-in v_middle" @click="percentclick">
@@ -202,6 +206,38 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="red-popup">
+        <popup v-model="showPopupSex">
+          <popup-header
+          :left-text="$t('Cancel')"
+          :right-text="$t('Confirm')"
+          :show-bottom-border="false"
+          @on-click-left="showPopupSex = false"
+          @on-click-right="listSex"></popup-header>
+          <group gutter="0" class="red-radio">
+            <radio
+              v-model="sexKey"
+              :options="sexArr"
+              :selected-label-style="{color: '#ea3a3a'}"></radio>
+          </group>
+        </popup>
+      </div>
+      <div v-transfer-dom class="red-popup">
+        <popup v-model="showPopupArea">
+          <popup-header
+          :left-text="$t('Cancel')"
+          :right-text="$t('Confirm')"
+          :show-bottom-border="false"
+          @on-click-left="showPopupArea = false"
+          @on-click-right="listArea"></popup-header>
+          <group gutter="0" class="red-radio">
+            <radio
+              v-model="areaKey"
+              :options="areaArr"
+              :selected-label-style="{color: '#ea3a3a'}"></radio>
+          </group>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -216,22 +252,24 @@ Percent:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg, PopupHeader, Radio } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg
+    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Subscribe, ApplyTip, PopupHeader, Radio
   },
   data () {
     return {
       loginUser: {},
       query: {},
-      showSos: false,
+      showApply: false,
       showContainer: false,
       autofixed: false,
       tabtxts: [ '潜在客户', '意向客户', '成交客户' ],
@@ -255,7 +293,27 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0
+      pagestart3: 0,
+      dateClass: '',
+      areaClass: '',
+      sexClass: '',
+      orderby: '',
+      orderbyParams: {},
+      showPopupSex: false,
+      sexKey: 0,
+      sexArr: [
+        { key: 0, value: '未知' },
+        { key: 1, value: '男' },
+        { key: 2, value: '女' }
+      ],
+      sexParams: {0: '未知', 1: '男', 2: '女'},
+      showPopupArea: false,
+      areaKey: 0,
+      areaArr: [],
+      disAreaOrder: false,
+      disOrderArea: false,
+      selectedArea: null,
+      selectedSex: null
     }
   },
   methods: {
@@ -287,24 +345,105 @@ export default {
         }
       })
     },
+    removeOrderActive () {
+      const self = this
+      self.dateClass = self.dateClass.replace(' active', '').replace('active', '')
+      self.areaClass = self.areaClass.replace(' active', '').replace('active', '')
+      self.sexClass = self.sexClass.replace(' active', '').replace('active', '')
+    },
+    dateOrder () {
+      const self = this
+      self.selectedArea = null
+      self.selectedSex = null
+      if (self.dateClass.indexOf('active') < 0) {
+        self.removeOrderActive()
+        self.dateClass = 'active'
+        self.orderbyParams = { orderby: 'dateline' }
+      } else {
+        self.removeOrderActive()
+        self.dateClass = ''
+        self.orderbyParams = {}
+      }
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.getData1()
+    },
+    sexOrder () {
+      this.showPopupSex = true
+      this.removeOrderActive()
+      this.sexClass = 'active'
+    },
+    listSex () {
+      const self = this
+      self.showPopupSex = false
+      self.$vux.loading.show()
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.selectedArea = null
+      self.orderbyParams = {orderby: 'sex', sex: self.sexKey}
+      self.selectedSex = self.sexParams[self.sexKey]
+      self.getData1()
+    },
+    areaOrder () {
+      this.showPopupArea = true
+      this.removeOrderActive()
+      this.areaClass = 'active'
+    },
+    listArea () {
+      const self = this
+      self.showPopupArea = false
+      self.$vux.loading.show()
+      self.pagestart1 = 0
+      self.distabdata1 = false
+      self.tabdata1 = []
+      self.selectedSex = null
+      self.orderbyParams = { orderby: 'province', province: self.areaArr[self.areaKey].value }
+      self.selectedArea = self.orderbyParams.province
+      self.getData1()
+    },
     getData1 () {
       const self = this
       this.$vux.loading.show()
-      let params = { params: { tolevel: -1, pagestart: self.pagestart1, limit: self.limit } }
+      let params = { tolevel: -1, pagestart: self.pagestart1, limit: self.limit }
       let keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
-        params.params.keyword = keyword
+        params.keyword = keyword
       } else {
         self.searchresult1 = false
       }
-      self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, params).then(function (res) {
+      if (typeof self.orderby !== 'undefined' && self.orderby && self.$util.trim(self.orderby) !== '') {
+        params.orderby = self.orderby
+      }
+      for (let key in self.orderbyParams) {
+        params[key] = self.orderbyParams[key]
+      }
+      self.$http.get(`${ENV.BokaApi}/api/retailer/customerList`, {
+        params: params
+      }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.tabcount1 = data.count
+        if (data.provinces.length === 0) {
+          self.disAreaOrder = false
+        } else {
+          if (self.areaArr.length === 0) {
+            for (let i = 0; i < data.provinces.length; i++) {
+              self.areaArr.push({key: i, value: data.provinces[i]})
+            }
+          }
+          self.disAreaOrder = true
+        }
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
+        if (self.tabdata1.length > 0) {
+          self.disOrderArea = true
+        } else if (!self.orderbyParams.orderby) {
+          self.disOrderArea = false
+        }
       })
     },
     getData2 () {
@@ -415,6 +554,7 @@ export default {
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < this.limit) {
+            self.pagestart1 = 0
             self.distabdata1 = false
             this.tabdata1 = []
             self.getData1()
@@ -422,6 +562,7 @@ export default {
           break
         case 1:
           if (this.tabdata3.length < this.limit) {
+            self.pagestart3 = 0
             self.distabdata3 = false
             this.tabdata3 = []
             self.getData3()
@@ -429,6 +570,7 @@ export default {
           break
         case 2:
           if (this.tabdata2.length < this.limit) {
+            self.pagestart2 = 0
             self.distabdata2 = false
             this.tabdata2 = []
             self.getData2()
@@ -459,17 +601,32 @@ export default {
       this.$vux.loading.show()
       this.getData()
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showContainer = true
-        this.swiperChange()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            self.initContainer()
+            this.showContainer = true
+            this.swiperChange()
+          }
+        }
       }
     }
   },
@@ -489,23 +646,26 @@ export default {
   line-height: 40px;
   border-bottom: 1px solid #eeeeee;
 }
-.rcustomerlist .condition .active{
-  color: #ea3a3a;
-}
 .rcustomerlist .h35{
   height: 35px;
   line-height: 35px;
 }
-.rcustomerlist .cut-off:after{
+.orderbyarea .orderbyitem{
+  position:relative;
+  text-align:center;
+}
+.orderbyarea .orderbyitem.active{color: #ea3a3a;}
+.orderbyarea .orderbyitem:not(:last-child):after{
   content: "";
   position: absolute;
-  top: 12px;
+  right:0;
+  top:50%;
+  margin-top:-8px;
   height: 16px;
   width: 1px;
   background-color: #f5f5f5;
-  margin-left: 14px;
-  }
-.rcustomerlist .cut-off:nth-last-child(1):after {
-  display: none;
+}
+.orderbyarea .orderbyitem.active .ico:after{
+  content: '▼';font-size:12px;margin-left:5px;
 }
 </style>

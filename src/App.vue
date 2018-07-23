@@ -132,7 +132,9 @@ export default {
       if (!user || user.subscribe !== 1) {
         this.$http.get(`${ENV.BokaApi}/api/user/show`)
         .then(res => {
-          User.set(res.data)
+          if (res && res.status === 200) {
+            User.set(res.data)
+          }
         })
       }
     },
@@ -143,8 +145,8 @@ export default {
   created () {
     console.info('App Start Up')
     document.title = this.$t('tIndex')
-    this.$util.wxConfig()
     this.getData()
+    this.$util.wxConfig()
   }
 }
 </script>

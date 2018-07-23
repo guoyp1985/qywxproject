@@ -97,6 +97,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (self.productData.length < limit) {
+        pageStart = 0
         self.$vux.loading.show()
         self.disProductData = false
         self.productData = []

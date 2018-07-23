@@ -92,9 +92,15 @@ export default {
       let iscontinue = true
       let salesmoney = {}
       let levelname = {}
+      let tipTxt = ''
       for (let i = 0; i < self.levelData.length; i++) {
         if (self.$util.trim(self.levelData[i].money) === '' || self.$util.trim(self.levelData[i].levelname) === '') {
           iscontinue = false
+          tipTxt = '必填项不能为空'
+          break
+        } else if (self.levelData[i].money < 0) {
+          iscontinue = false
+          tipTxt = '销售额不能小于0'
           break
         } else {
           let level = i + 1
@@ -103,7 +109,7 @@ export default {
         }
       }
       if (!iscontinue) {
-        self.$vux.toast.text('必填项不能为空', 'middle')
+        self.$vux.toast.text(tipTxt, 'middle')
         return false
       }
       self.$vux.confirm.show({

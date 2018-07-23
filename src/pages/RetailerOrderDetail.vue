@@ -1,16 +1,8 @@
 <template>
   <div id="order-detail" :class="`containerarea notop rorderdetail bg-page color-gray5 font14 ${bottomcss}`">
-    <template v-if="showSos1">
-      <div class="scroll_item flex_center" style="padding-top:20%;">
-        <div>
-          <div class="align_center">抱歉，您还未入驻共销宝</div>
-          <div class="db align_center mt10"><router-link to="/centerSales" class="qbtn bg-red color-white">申请入驻</router-link></div>
-        </div>
-      </div>
-    </template>
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
+    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <apply-tip v-if="showApply"></apply-tip>
+    <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="pagemiddle scroll-container">
         <div v-if="data.seller && data.seller.username">
@@ -65,7 +57,19 @@
             </router-link>
           </div>
           <div class="align_right padding10 flex_right">
-            <div>合计:{{ $t('RMB') }} <span class="font16">{{ totalPrice }}</span></div>
+            <div>
+              <span class="v_middle">{{$t('Order price')}}: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.special }}</span>
+              <template v-if="data.postage && data.postage != ''">
+                <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
+                <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
+              </template>
+            </div>
+          </div>
+        </div>
+        <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
+          <div class="flex_left font12">
+            <div class="w40">留言: </div>
+            <div class="flex_cell">{{data.content}}</div>
           </div>
         </div>
         <div class="align_right">
@@ -81,6 +85,7 @@
           <div v-if="data.nexttime" class="align_left padding10 color-gray2 font12">回访时间：{{ data.nexttime | dateformat }}</div>
         </div>
       </div>
+      <div v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0" class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
       <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
@@ -126,6 +131,8 @@
 import { Group, Cell, Sticky, XDialog, TransferDom, Popup, XImg } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
+import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -135,7 +142,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos
+    Group, Cell, Sticky, XDialog, Popup, OrderInfo, XImg, Sos, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -144,14 +151,15 @@ export default {
   },
   data () {
     return {
-      showSos: false,
-      showSos1: false,
-      sosTitle: '该订单不存在',
+      showApply: false,
       showContainer: false,
+      showSos: false,
+      sosTitle: '该订单不存在',
       loginUser: {},
       query: {},
       data: {},
       totalPrice: '0.00',
+      payPrice: '0.00',
       bottomcss: '',
       showpopup: false,
       delivercompany: [],
@@ -195,6 +203,40 @@ export default {
         }
       })
     },
+    changePrice () {
+      event.preventDefault()
+      const self = this
+      let showtitle = '修改价格'
+      let inputval = self.data.special
+      self.$vux.confirm.prompt(inputval, {
+        title: showtitle,
+        onShow () {
+          self.$vux.confirm.setInputValue(inputval)
+        },
+        onConfirm (val) {
+          if (val === undefined || self.$util.trim(val) === '' || isNaN(val) || parseFloat(val) < 0) {
+            self.$vux.toast.text('请输入正确的价格', 'middle')
+            return false
+          }
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/order/changePrice`,
+            { id: self.data.id, price: val }
+          ).then(res => {
+            const data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error),
+              onHide: () => {
+                if (data.flag === 1) {
+                  self.data.special = parseFloat(val).toFixed(2)
+                }
+              }
+            })
+          })
+        }
+      })
+    },
     uploaddeliver () {
       const self = this
       if (!self.delivercompany.length) {
@@ -207,7 +249,7 @@ export default {
     },
     confirmpopup () {
       const self = this
-      if (self.deliverdata.delivercompany !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
+      if (self.deliverdata.delivercompany.toString() !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
         self.$vux.alert.show({
           title: '',
           content: '请输入物流单号'
@@ -310,22 +352,37 @@ export default {
         }
       })
     },
+    initContainer () {
+      const self = this
+      self.showApply = false
+      self.showSos = false
+      self.showContainer = false
+    },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (!this.loginUser.isretailer) {
-        this.$vux.loading.hide()
-        this.showSos = false
-        this.showSos1 = true
-        this.showContainer = false
-      } else {
-        this.showSos = false
-        this.showSos1 = false
-        this.showContainer = false
-        if (this.query.id !== this.$route.query.id) {
-          this.query = this.$route.query
-          this.$vux.loading.show()
-          this.getData()
+      if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.initContainer()
+          self.$vux.loading.hide()
+          let backUrl = encodeURIComponent(location.href)
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        } else {
+          if (!this.loginUser.isretailer) {
+            this.$vux.loading.hide()
+            self.initContainer()
+            this.showApply = true
+          } else {
+            this.$vux.loading.hide()
+            if (this.query.id !== this.$route.query.id) {
+              self.initContainer()
+              this.query = this.$route.query
+              this.$vux.loading.show()
+              this.getData()
+            }
+          }
         }
       }
     }

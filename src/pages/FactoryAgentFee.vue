@@ -98,7 +98,11 @@ export default {
         self.$vux.loading.hide()
         let data = res.data
         if (data.flag === 1) {
-          self.$router.go(-1)
+          if (self.query.from === 'add') {
+            self.$router.push({ path: '/factoryProduct', query: { id: self.query.id, fid: self.query.fid } })
+          } else {
+            self.$router.go(-1)
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,

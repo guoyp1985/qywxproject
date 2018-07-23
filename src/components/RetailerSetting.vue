@@ -1,9 +1,12 @@
 <template>
   <div class="containerarea s-havebottom bg-white font14 retailersetting">
-    <div class="s-container" style="top:0;">
+    <div class="s-container" style="top:0;bottom:50px;">
       <div class="padding10 font16 bg-page">{{ $t('Seller info setting') }}</div>
       <form enctype="multipart/form-data">
-        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('qrcode','fileInput')" />
+      </form>
+      <form enctype="multipart/form-data">
+        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('showphoto','fileInput1')" />
       </form>
       <form>
         <forminputplate class="required">
@@ -18,12 +21,12 @@
               <template v-if="photoarr.length > 0">
                 <div v-for="(item,index) in photoarr" :key="index" class="photoitem">
                   <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
-                    <div class="close" @click="deletephoto(item,index)">×</div>
+                    <div class="close" @click="deletephoto(item,index,'qrcode')">×</div>
                     <div class="clip"><i class="al al-set"></i></div>
                   </div>
                 </div>
               </template>
-              <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto">
+              <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','qrcode')">
                 <div class="inner">
                   <div class="innerlist">
                     <div class="flex_center h_100">
@@ -46,17 +49,104 @@
             <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
           </div>
         </forminputplate>
+        <div class="form-item required">
+          <div class="pb5">{{ $t('Personal image') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
+          <div>
+            <div class="q_photolist align_left">
+              <template v-if="showphotoArr.length > 0">
+                <div v-for="(item,index) in showphotoArr" :key="index" class="photoitem">
+                  <div class="inner photo imgcover" :photo="item" :style="`background-image: url('${item}');`">
+                    <div class="close" @click="deletephoto(item,index,'showphoto')">×</div>
+                    <div class="clip"><i class="al al-set"></i></div>
+                  </div>
+                </div>
+              </template>
+              <div v-if="showphotoArr.length < maxnum1" class="photoitem add" @click="uploadPhoto('fileInput1','showphoto')">
+                <div class="inner">
+                  <div class="innerlist">
+                    <div class="flex_center h_100">
+                      <div class="txt">
+                        <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                        <div><span class="havenum">{{ showphotoArr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum1 }}</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <forminputplate>
+          <span slot="title">{{ $t('Seller said') }} <span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></span>
+          <group class="textarea-outer" style="padding:0;">
+            <x-textarea
+              ref="sloganTextarea"
+              v-model="submitdata.slogan"
+              style="padding:5px;"
+              class="x-textarea noborder"
+              :placeholder="$t('Seller said')"
+              :show-counter="false"
+              :rows="1"
+              @on-change="textareaChange('sloganTextarea')"
+              @on-focus="textareaFocus('sloganTextarea')"
+              :autosize="true">
+            </x-textarea>
+          </group>
+        </forminputplate>
+        <div class="form-item bg-white">
+          <div class="pt10 pb5">
+            <div class="flex_left">
+              <span class="v_middle">{{ $t('My tags') }}</span>
+              <span class="al al-xing color-red font12" style="margin-top:-3px;"></span>
+              <span class="font12 color-gray v_middle">(一次可添加多个标签，用英文逗号隔开)</span>
+            </div>
+          </div>
+          <div class="taglist">
+            <div class="tagitem" v-for="(item,index) in retailerInfo.tags">
+              <div class="inner">
+                <span class="v_middle">{{item.title}}</span>
+                <div class="del" @click="deleteTag(item,index)">×</div>
+                <div class="edit" @click="addTag(item,index)"><i class="al al-bianji1 font14"></i></div>
+              </div>
+            </div>
+            <div class="tagitem add" @click="addTag">
+              <div class="inner">添加</div>
+            </div>
+          </div>
+        </div>
         <div v-show="showmore">
           <forminputplate>
             <span slot="title">{{ $t('Shop description') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea v-model="submitdata.content" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Shop description')" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea
+                ref="contentTextarea"
+                v-model="submitdata.content"
+                style="padding:5px;"
+                class="x-textarea noborder"
+                :placeholder="$t('Shop description')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('contentTextarea')"
+                @on-focus="textareaFocus('contentTextarea')"
+                autosize>
+              </x-textarea>
             </group>
           </forminputplate>
           <forminputplate>
             <span slot="title">{{ $t('Auto reply') }}</span>
             <group class="textarea-outer" style="padding:0;">
-              <x-textarea v-model="submitdata.fastreply" style="padding:5px;" class="x-textarea noborder" :placeholder="$t('Auto reply')" :show-counter="false" :rows="1" autosize></x-textarea>
+              <x-textarea
+                ref="fastreplyTextarea"
+                v-model="submitdata.fastreply"
+                style="padding:5px;"
+                class="x-textarea noborder"
+                :placeholder="$t('Auto reply')"
+                :show-counter="false"
+                :rows="1"
+                @on-change="textareaChange('fastreplyTextarea')"
+                @on-focus="textareaFocus('fastreplyTextarea')"
+                autosize>
+              </x-textarea>
             </group>
           </forminputplate>
         </div>
@@ -189,9 +279,13 @@ export default {
     },
     submitdata: {
       type: Object,
-      default: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' }
+      default: { title: '', qrcode: '', buyonline: 1, slogan: '', content: '', fastreply: '你好，请稍等，一会为你服务' }
     },
     photoarr: {
+      type: Array,
+      default: []
+    },
+    showphotoArr: {
       type: Array,
       default: []
     }
@@ -205,8 +299,9 @@ export default {
   data () {
     return {
       maxnum: 1,
+      maxnum1: 9,
       showmore: false,
-      requireddata: { title: '', 'qrcode': '' },
+      requireddata: { title: '', 'qrcode': '', showphoto: '', slogan: '' },
       showonline: false,
       showoffline: false,
       showqrcode: false
@@ -221,14 +316,27 @@ export default {
     }
   },
   methods: {
+    textareaChange (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
+    textareaFocus (refname) {
+      let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
+      curArea.updateAutosize()
+    },
     expandevent () {
       this.showmore = !this.showmore
     },
-    photoCallback (data) {
+    photoCallback (data, type) {
       const self = this
       if (data.flag === 1) {
-        self.photoarr.push(data.data)
-        self.submitdata.qrcode = self.photoarr.join(',')
+        if (type === 'qrcode') {
+          self.photoarr.push(data.data)
+          self.submitdata.qrcode = self.photoarr.join(',')
+        } else if (type === 'showphoto') {
+          self.showphotoArr.push(data.data)
+          self.submitdata.showphoto = self.showphotoArr.join(',')
+        }
       } else if (data.error) {
         self.$vux.toast.show({
           text: data.error,
@@ -236,39 +344,49 @@ export default {
         })
       }
     },
-    uploadPhoto () {
+    uploadPhoto (refname, type) {
       const self = this
-      const fileInput = self.$refs.fileInput[0] ? self.$refs.fileInput[0] : self.$refs.fileInput
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
+        let curmax = 1
+        if (type === 'showphoto') {
+          curmax = 9
+        }
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 1,
+            maxnum: curmax,
             handleCallback: function (data) {
-              self.photoCallback(data)
+              self.photoCallback(data, type)
             }
           })
         })
       }
     },
-    fileChange (e) {
+    fileChange (type) {
       const self = this
-      let files = e.target.files
+      const target = event.target
+      let files = target.files
       if (files.length > 0) {
-        const fileForm = e.target.parentNode
+        const fileForm = target.parentNode
         const filedata = new FormData(fileForm)
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
           let data = res.data
           self.$vux.loading.hide()
-          self.photoCallback(data)
+          self.photoCallback(data, type)
         })
       }
     },
-    deletephoto (item, index) {
-      this.photoarr.splice(index, 1)
-      this.submitdata.qrcode = this.photoarr.join(',')
+    deletephoto (item, index, type) {
+      if (type === 'qrcode') {
+        this.photoarr.splice(index, 1)
+        this.submitdata.qrcode = this.photoarr.join(',')
+      } else if (type === 'showphoto') {
+        this.showphotoArr.splice(index, 1)
+        this.submitdata.showphoto = this.showphotoArr.join(',')
+      }
     },
     setbuyonline (val) {
       if (val === 1) {
@@ -318,10 +436,86 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push('/centerSales')
+              if (self.$route.query.from === 'seller') {
+                let params = {uid: self.$route.query.uid}
+                if (!self.$route.query.uid) {
+                  params.uid = self.loginUser.uid
+                }
+                self.$router.push({path: '/centerSeller', query: params})
+              } else {
+                self.$router.push('/centerSales')
+              }
             }
           }
         })
+      })
+    },
+    addTag (item, index) {
+      const self = this
+      let type = 'add'
+      let inputVal = ''
+      let postParams = { action: 'add' }
+      if (item && item.id) {
+        type = 'edit'
+        inputVal = item.title
+        postParams.action = 'edit'
+        postParams.id = item.id
+      }
+      self.$vux.confirm.prompt(inputVal, {
+        title: '请输入标签名称',
+        onShow () {
+          self.$vux.confirm.setInputValue(inputVal)
+        },
+        onConfirm (val) {
+          if (self.$util.trim(val) === '') {
+            self.$vux.toast.text('请输入标签名称', 'middle')
+            return false
+          }
+          postParams.tags = val
+          self.$http.post(`${ENV.BokaApi}/api/retailer/tags`, postParams).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  if (type === 'add') {
+                    self.retailerInfo.tags = data.data
+                  } else if (type === 'edit') {
+                    self.retailerInfo.tags[index].title = val
+                  }
+                }
+              }
+            })
+          })
+        }
+      })
+    },
+    deleteTag (item, index) {
+      const self = this
+      self.$vux.confirm.show({
+        title: '确定要删除该标签吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/retailer/tags`, {
+            action: 'delete', id: item.id
+          }).then(function (res) {
+            let data = res.data
+            self.$vux.loading.hide()
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag === 1) {
+                  self.retailerInfo.tags.splice(index, 1)
+                }
+              }
+            })
+          })
+        }
       })
     }
   }
@@ -341,4 +535,30 @@ export default {
 }
 .retailersetting .s-havebottom .s-container{bottom:50px;}
 .retailersetting .s-bottom{height:50px;}
+
+.retailersetting .taglist{}
+.retailersetting .taglist .tagitem{
+  padding:5px 10px;box-sizing: border-box;display: inline-block;
+}
+.retailersetting .taglist .tagitem.add .inner{
+  border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
+}
+.retailersetting .taglist .tagitem .inner{
+  position:relative;
+  font-size:13px;
+  padding: 0 15px;height: 30px;line-height: 30px;
+  text-align: center;
+  border-radius: 3px;background-color: #fff;box-sizing: border-box;
+  border:1px solid #ddd;color:#999;
+}
+.retailersetting .taglist .tagitem .del{
+	position:absolute;top:-8px;right:-8px;
+	width:20px;height:20px;border-radius:50%;background-color:rgba(229, 28, 35,0.8);color:#fff;
+	display:flex;justify-content: center;align-items: center;
+}
+.retailersetting .taglist .tagitem .edit{
+	position:absolute;top:-8px;left:-8px;
+	width:20px;height:20px;border-radius:50%;background-color:rgba(229, 28, 35,0.8);color:#fff;
+	display:flex;justify-content: center;align-items: center;
+}
 </style>

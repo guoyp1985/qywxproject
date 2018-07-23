@@ -27,19 +27,34 @@
               <template v-if="searchresult1">暂无搜索结果</template>
               <template v-else>暂无分享数据</template>
             </div>
-            <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
-              <div class="flex_left">
-                <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-                <div class="flex_cell pl10">
-                  <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
-                  <div class="clamp1 color-gray font12">
-                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.visitor}}次</span>
-                    <span class="v_middle"><i class="al al-fenxiang font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}次</span>
+            <template v-else v-for="(item,index) in data">
+              <router-link v-if="item.module === 'retailer'" to="/centerSales" class="scroll_item db padding10">
+                <div class="flex_left">
+                  <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <div class="flex_cell pl10">
+                    <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
+                    <div class="clamp1 color-gray font12">
+                      <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.visitor}}次</span>
+                      <span class="v_middle"><i class="al al-fenxiang font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}次</span>
+                    </div>
+                    <div class="clamp1 color-gray font12">分享时间：{{ item.dateline | dateformat }}</div>
                   </div>
-                  <div class="clamp1 color-gray font12">分享时间：{{ item.dateline | dateformat }}</div>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+              <router-link v-else :to="{path: `/${item.module}`,query:{id: item.moduleid,wid: item.wid}}" class="scroll_item db padding10">
+                <div class="flex_left">
+                  <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <div class="flex_cell pl10">
+                    <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
+                    <div class="clamp1 color-gray font12">
+                      <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.visitor}}次</span>
+                      <span class="v_middle"><i class="al al-fenxiang font18 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}次</span>
+                    </div>
+                    <div class="clamp1 color-gray font12">分享时间：{{ item.dateline | dateformat }}</div>
+                  </div>
+                </div>
+              </router-link>
+            </template>
           </div>
         </div>
       </div>
@@ -176,6 +191,7 @@ export default {
         this.query = this.$route.query
         this.disdata = false
         this.data = []
+        pageStart = 0
         this.$vux.loading.show()
         this.getData()
       }

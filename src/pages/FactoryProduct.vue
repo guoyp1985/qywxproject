@@ -13,7 +13,7 @@
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
             loop>
-            <swiper-item v-if="productdata.video && productdata.video != ''">
+            <swiper-item v-show="showVideo" v-if="productdata.video && productdata.video != ''">
               <video
                 class="w_100 h_100"
                 style="max-width:100%;max-height:100%;"
@@ -89,9 +89,8 @@
       <div v-transfer-dom>
         <previewer :list="previewerFlasharr" ref="previewerFlash"></previewer>
       </div>
-      <template v-if="loginUser">
+      <template v-if="loginUser && showShareSuccess">
         <share-success
-          v-show="showShareSuccess"
           v-if="productdata.uploader === loginUser.uid || productdata.identity !== 'user'"
           :data="productdata"
           :loginUser="loginUser"
@@ -171,7 +170,8 @@ export default {
       feeData: {},
       levelpolicy: [],
       levelNameData: {},
-      topcss: ''
+      topcss: '',
+      showVideo: true
     }
   },
   watch: {
@@ -218,6 +218,7 @@ export default {
       this.sosTitle = '抱歉，您暂无权限访问此页面！'
       this.showContainer = false
       this.showShareSuccess = false
+      this.showVideo = true
       this.productid = null
       this.productdata = {}
       this.factoryinfo = {}
@@ -266,6 +267,7 @@ export default {
     },
     closeShareSuccess () {
       this.showShareSuccess = false
+      this.showVideo = true
     },
     handelShare () {
       const self = this
@@ -275,9 +277,11 @@ export default {
         link: `${ENV.Host}/#/factoryProduct?id=${self.productid}&share_uid=${self.loginUser.uid}`,
         successCallback: function () {
           self.showShareSuccess = true
+          self.showVideo = false
         }
       }
       if (self.query.share_uid) {
+        shareData.link = `${shareData.link}&lastshareuid=${self.query.share_uid}`
         shareData.lastshareuid = self.query.share_uid
       }
       shareData.data = self.productdata
@@ -373,8 +377,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.initData()
-      this.showShareSuccess = false
-      this.previewerPhotoarr = []
       this.query = this.$route.query
       this.getData()
       this.createSocket()

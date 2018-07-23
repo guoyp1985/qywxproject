@@ -62,19 +62,21 @@
         </div>
       </template>
     </div>
-    <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-      <div class="align_center flex_center flex_cell">
-        <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+    <template v-if="showBottom">
+      <div v-if="loginUser.isretailer == 1" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+        <div v-if="tabData1 && tabData1.length > 0" class="align_center flex_center flex_cell">
+          <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+        </div>
+        <div v-if="tabData2 && tabData2.length > 0" class="align_center flex_center flex_cell">
+          <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
+        </div>
       </div>
-      <div class="align_center flex_center flex_cell">
-        <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
+      <div v-if="!loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+        <div class="align_center flex_center flex_cell">
+          <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻共销宝</router-link>
+        </div>
       </div>
-    </div>
-    <div v-if="!loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-      <div class="align_center flex_center flex_cell">
-        <router-link class="flex_center btn-bottom-red" style="width:85%;" to="/centerSales">入驻共销宝</router-link>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -114,7 +116,8 @@ export default {
       tabData1: [],
       tabData2: [],
       disTabData1: false,
-      disTabData2: false
+      disTabData2: false,
+      showBottom: false
     }
   },
   watch: {
@@ -214,6 +217,7 @@ export default {
         case 0:
           if (this.tabData1.length < limit) {
             self.$vux.loading.show()
+            pageStart1 = 0
             this.disTabData1 = false
             this.tabData1 = []
             this.getData1()
@@ -222,6 +226,7 @@ export default {
         case 1:
           if (this.tabData2.length < limit) {
             self.$vux.loading.show()
+            pageStart2 = 0
             this.disTabData2 = false
             this.tabData2 = []
             this.getData2()
@@ -239,6 +244,9 @@ export default {
         const retdata = data.data ? data.data : data
         self.tabData1 = self.tabData1.concat(retdata)
         self.disTabData1 = true
+        if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
+          self.showBottom = true
+        }
       })
     },
     getData2 () {
@@ -251,12 +259,20 @@ export default {
         const retdata = data.data ? data.data : data
         self.tabData2 = self.tabData2.concat(retdata)
         self.disTabData2 = true
+        if (self.loginUser.isretailer && (self.tabData1.length > 0 || self.tabData2.length > 0)) {
+          self.showBottom = true
+        }
       })
     },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      if (!self.loginUser.isretailer) {
+        self.showBottom = true
+      } else {
+        self.showBottom = false
+      }
       this.query = this.$route.query
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/factory/info`, {

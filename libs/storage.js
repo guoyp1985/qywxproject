@@ -1,18 +1,22 @@
-const hourMills = 3600000
 const Token = {
   set (token) {
-    localStorage.setItem('token', token)
-    localStorage.setItem('tokenExpried', new Date().getTime() + hourMills)
+    if (!token) return
+    localStorage.setItem('token', JSON.stringify(token))
   },
   get () {
-    return localStorage.getItem('token')
+    return JSON.parse(localStorage.getItem('token'))
   },
   remove () {
     localStorage.removeItem('token')
   },
-  isExpried (time) {
-    const tokenExpried = localStorage.getItem('tokenExpried')
-    return Number(tokenExpried) > new Date().getTime() ? false : true
+  isExpired () {
+    const token = Token.get()
+    if (token) {
+      const expired = new Date(token.expired_at).getTime()
+      const now = new Date().getTime()
+      return now > expired
+    }
+    return false
   }
 }
 const OpenId = {
@@ -64,5 +68,28 @@ const Roomid = {
     return localStorage.getItem('roomid')
   }
 }
+const WxAccess = {
+  set (access) {
+    localStorage.setItem('wxAccess', access)
+  },
+  get () {
+    const res = localStorage.getItem('wxAccess')
+    return (res === null || res === 'false') ? false : true
+  },
+  remove () {
+    localStorage.removeItem('wxAccess')
+  }
+}
+const Version = {
+  set (version) {
+    localStorage.setItem('version', version)
+  },
+  get () {
+    return localStorage.getItem('version')
+  },
+  remove () {
+    localStorage.removeItem('version')
+  }
+}
 
-export { Token, OpenId, WxQrCode, User, Access, Roomid }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version }

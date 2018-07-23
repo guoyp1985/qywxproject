@@ -37,10 +37,10 @@
   -->
     <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
       <flexbox-item>
-        <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
+        <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
       </flexbox-item>
       <flexbox-item>
-        <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
+        <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
       </flexbox-item>
     </flexbox>
     <div v-transfer-dom class="x-popup">
@@ -382,8 +382,24 @@ export default {
     },
     createEditor () {
       const self = this
+      let toolbars = [
+        'insertProduct',
+        'insertText',
+        'editText',
+        'insertImage',
+        'insertLink',
+        'insertHr',
+        'deleteThis',
+        'undo',
+        'cancel'
+      ]
+      if (self.module === 'factorynews') {
+        toolbars.splice(0, 1)
+      }
+      console.log(self.module)
       editor = new Eleditor({
         el: this.elem,
+        toolbars: toolbars,
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')

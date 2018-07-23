@@ -1,3 +1,7 @@
 vux.boka.cn
 140.143.141.160
 root:PD6FESy7a2aQVCbd
+
+vue.boka.cn
+root:YwS3MNPN77x2rnKU
+git pwd: 140707Boka
