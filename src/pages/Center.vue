@@ -21,8 +21,12 @@
         </group>
         <grid class="pt10 pb10" :cols="4" :show-lr-borders="false" :show-vertical-dividers="false">
           <grid-item :label="$t(btn.name)" v-for="(btn, index) in btns" :key="index" @click.native="buttonClick(btn)">
-            <div slot="icon" :class="`color-blue12`">
+            <div slot="icon" class="color-blue12 align_center" style="width:50px;position:relative;margin:0 auto;">
               <span :class="`al ${btn.icon} btn_icon`"></span>
+              <template v-if="btn.count && btn.count > 0">
+                <span class="icon_num" v-if="btn.count < 100">{{btn.count}}</span>
+                <span class="icon_num" v-else>..</span>
+              </template>
             </div>
           </grid-item>
         </grid>
@@ -138,16 +142,20 @@ export default {
           link: '/orderSearch'
         },
         {
+          type: 'deliver',
           name: 'To Be Delivered',
           icon: 'al-wodedaifahuo3dtouchshangpinxiangqing',
           // color: 'rgba02',
-          link: '/orderSearch?flag=2'
+          link: '/orderSearch?flag=2',
+          count: 0
         },
         {
+          type: 'receive',
           name: 'Shipped',
           icon: 'al-buoumaotubiao39',
           // color: 'rgba05',
-          link: '/orderSearch?flag=3'
+          link: '/orderSearch?flag=3',
+          count: 0
         },
         {
           name: 'Completed',
@@ -211,6 +219,12 @@ export default {
         if (!res) return
         let data = res.data
         self.messages = data.data
+        for (let i = 0; i < self.btns.length; i++) {
+          const keyValue = data[`count_${self.btns[i].type}`]
+          if (keyValue) {
+            self.btns[i].count = keyValue
+          }
+        }
       })
     },
     getData () {
@@ -289,4 +303,11 @@ export default {
 #personal-center .weui-grid__icon + .weui-grid__label{margin-top:0;}
 #personal-center .weui-grid__label{color:#333;}
 #personal-center .btn_icon{line-height:32px;display: block;height:32px;margin-bottom: 3px;}
+
+#personal-center .icon_num{
+  position: absolute;top: -2px;right:0px;z-index:1;
+  text-align:center;background-color: #ea3a3a;color:#fff;font-size:8pt;
+  width: 20px;height: 20px;line-height:20px;border-radius: 50%;
+  display: block;padding: 0px;
+}
 </style>
