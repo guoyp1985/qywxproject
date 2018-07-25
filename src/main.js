@@ -177,7 +177,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const user = User.get()
-  if (token && token !== '') { //小程序 web-view 授权
+  if (token && token !== '') { // 小程序 web-view 授权
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     .then(
