@@ -383,8 +383,8 @@ export default {
               break
             }
           }
+          this.$vux.loading.hide()
           if (!self.loginUser.isretailer && !isAdmin) {
-            this.$vux.loading.hide()
             self.initContainer()
             self.showApply = true
           } else {
