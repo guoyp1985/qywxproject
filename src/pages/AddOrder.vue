@@ -48,6 +48,17 @@
     						</div>
     					</div>
             </div>
+            <div class="b_bottom_after padding10" v-if="cardList.length">
+              <div class="t-table">
+                <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
+                <div class="t-cell v_middle align_right" @click="checkCard">
+                  <template v-if="!selectedCard">
+                    <span class="v_middle">请选择</span><i class="al al-mjiantou-copy2 v_middle"></i>
+                  </template>
+                  <span v-else>满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span>
+                </div>
+              </div>
+            </div>
             <div class="b_bottom_after padding10" v-if="item.postage && item.postage != ''">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:40px;">{{ $t('Postage') }}</div>
@@ -117,6 +128,27 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showCard" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">选择{{$t('Card')}}</div>
+            <div class="popup-middle font14">
+              <div class="scroll_list">
+                <check-icon class="x-check-icon scroll_item padding10" v-for="(item,index) in cardList" :key="item.id" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                    </div>
+                  </div>
+                </check-icon>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeCard">{{$t('Close')}}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -170,6 +202,7 @@ Please select address:
 import { Group, XNumber, XTextarea, TransferDom, Popup, CheckIcon, XImg } from 'vux'
 import Sos from '@/components/Sos'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -180,11 +213,13 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       showSos: false,
       sosTitle: '无效订单',
       showContainer: false,
       query: {},
       payPrice: '0.00',
+      orderPrice: '0.00',
       selectaddress: null,
       orderdata: [],
       // payprice: '0.00',
@@ -196,7 +231,10 @@ export default {
         shopid: 0,
         content: ''
       },
-      submiting: false
+      submiting: false,
+      showCard: false,
+      cardList: [],
+      selectedCard: null
     }
   },
   watch: {
@@ -236,6 +274,9 @@ export default {
         content: ''
       }
       this.submiting = false
+      this.showCard = false
+      this.cardList = []
+      this.selectedCard = null
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -260,6 +301,7 @@ export default {
         total += parseFloat(self.orderdata[0].postage)
       }
       self.payPrice = total.toFixed(2)
+      self.orderPrice = self.payPrice
     },
     showaddress () {
       this.showpopup = true
@@ -282,6 +324,26 @@ export default {
       }
       self.showpopup = false
     },
+    cardClick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectedCard = data
+        self.payPrice = (parseFloat(self.orderPrice) - parseFloat(data.money)).toFixed(2)
+      } else {
+        self.selectedCard = null
+        self.payPrice = self.orderPrice
+      }
+      for (let d of self.cardList) {
+        if (d.id !== data.id && d.checked) {
+          delete d.checked
+          break
+        }
+      }
+      self.showCard = false
+    },
+    closeCard () {
+      this.showCard = false
+    },
     submitOrder () {
       const self = this
       if (!self.submiting) {
@@ -293,6 +355,9 @@ export default {
         }
         self.isShowLoading = true
         self.submiting = true
+        if (self.selectedCard) {
+          self.submitdata.cardid = self.selectedCard.id
+        }
         self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
           let data = res.data
           self.isShowLoading = false
@@ -337,6 +402,7 @@ export default {
             }
           }
           self.payPrice = total.toFixed(2)
+          self.orderPrice = self.payPrice
           return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
         }
       }).then(function (res) {
@@ -359,11 +425,22 @@ export default {
               self.submitdata.addressid = self.selectaddress.id
             }
           }
+          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
+            wid: self.loginUser.uid, ordermoney: self.payPrice
+          })
+        }
+      }).then(res => {
+        if (res) {
+          self.cardList = res.data.data
         }
       })
     },
+    checkCard () {
+      this.showCard = true
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       if (this.query.id !== this.$route.query.id) {
         this.initData()
         this.query = this.$route.query

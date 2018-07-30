@@ -176,8 +176,7 @@ const access = success => {
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
   const state = lUrl.query.state
-  const user = User.get()
-  if (token && token !== '') { // 小程序 web-view 授权
+  if (token && token !== '') {
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     .then(
@@ -189,13 +188,6 @@ const access = success => {
         router.push(lUrl.hash.replace(/#/, ''))
       }
     )
-  } else if (user) {
-    Vue.http.get(`${ENV.BokaApi}/api/login/${user.openid}`)
-    .then(res => {
-      const token = res.data
-      Token.set(token)
-      success && success(lUrl.hash.replace(/#/, ''))
-    })
   } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
