@@ -115,10 +115,8 @@ export default {
       default: '卖家动态'
     },
     afterDelete: Function,
-    showTop: {
-      type: Boolean,
-      default: true
-    }
+    clickComment: Function,
+    cancelComment: Function
   },
   directives: {
     TransferDom
@@ -217,7 +215,7 @@ export default {
     onReplyShow (item, index, citem, index1) {
       this.commentData = item
       this.commentIndex = index
-      this.showTop = false
+      this.cancelComment && this.cancelComment()
       this.replyPopupShow = true
       if (citem) {
         this.disCommentTitle = this.replyTitle
@@ -232,12 +230,12 @@ export default {
       }
     },
     replyPopupCancel () {
-      this.showTop = true
+      this.clickComment && this.clickComment()
       this.replyPopupShow = false
     },
     replySubmit (value) { // 回复提交
       const self = this
-      this.showTop = true
+      this.clickComment && this.clickComment()
       this.replyPopupShow = false
       let nid = 0
       if (this.commentModule === 'comments') {

@@ -37,7 +37,8 @@
         :show-list="showList"
         :timeline-count="timelineCount"
         :after-delete="afterDelete"
-        :show-top="showTop">
+        :click-comment="clickComment"
+        :cancel-comment="cancelComment">
       </tag-page>
     </div>
   </div>
@@ -91,6 +92,12 @@ export default {
   methods: {
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    cancelComment () {
+      this.showTop = true
+    },
+    clickComment () {
+      this.showTop = false
     },
     initData () {
       pageStart = 0
