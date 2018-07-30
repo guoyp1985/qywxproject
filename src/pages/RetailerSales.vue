@@ -364,10 +364,10 @@ export default {
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         } else {
           self.initContainer()
-          if (!this.loginUser.isretailer) {
-            this.$vux.loading.hide()
+          self.$vux.loading.hide()
+          if (!self.loginUser.isretailer) {
             self.initContainer()
-            this.showApply = true
+            self.showApply = true
           } else {
             self.initContainer()
             this.showContainer = true
