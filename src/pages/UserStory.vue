@@ -1,7 +1,7 @@
 <template>
-  <div class="containerarea font14 bg-page userstory nobottom">
+  <div :class="`containerarea font14 bg-page userstory nobottom ${topcss}`">
     <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'customer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
-    <div v-if="showTop" class="pagetop b_bottom_after bg-page">
+    <div class="pagetop b_bottom_after bg-page">
       <div class="boxinner box1">
         <div class="flex_left row1 pt15">
           <div class="pic">
@@ -86,7 +86,7 @@ export default {
       replyData: null,
       replyIndex: 0,
       commentModule: 'timeline',
-      showTop: true
+      topcss: ''
     }
   },
   methods: {
@@ -94,10 +94,10 @@ export default {
       return this.$util.emotPrase(text)
     },
     cancelComment () {
-      this.showTop = true
+      this.topcss = ''
     },
     clickComment () {
-      this.showTop = false
+      this.topcss = 'notop'
     },
     initData () {
       pageStart = 0
@@ -193,6 +193,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.userstory.notop .pagetop{display:none;}
+.userstory.notop .pagemiddle{top:0 !important;}
 .userstory .pagetop{z-index: 2;height:110px;box-shadow: rgba(0, 0, 0, 0.1) 0px 9px 36px -3px;}
 .userstory .add-icon{
   position:absolute;right:20px;bottom:20px;border-radius:50%;
