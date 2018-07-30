@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea font14 bg-page userstory nobottom">
     <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'customer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
-    <div class="pagetop b_bottom_after bg-page">
+    <div v-if="showTop" class="pagetop b_bottom_after bg-page">
       <div class="boxinner box1">
         <div class="flex_left row1 pt15">
           <div class="pic">
@@ -36,7 +36,8 @@
         :timeline-data="timelineData"
         :show-list="showList"
         :timeline-count="timelineCount"
-        :after-delete="afterDelete">
+        :after-delete="afterDelete"
+        :show-top="showTop">
       </tag-page>
     </div>
   </div>
@@ -83,7 +84,8 @@ export default {
       commentIndex: 0,
       replyData: null,
       replyIndex: 0,
-      commentModule: 'timeline'
+      commentModule: 'timeline',
+      showTop: true
     }
   },
   methods: {
