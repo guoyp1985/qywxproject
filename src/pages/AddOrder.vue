@@ -426,7 +426,7 @@ export default {
             }
           }
           return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-            wid: self.loginUser.uid, ordermoney: self.payPrice
+            wid: self.orderdata.wid, ordermoney: self.payPrice
           })
         }
       }).then(res => {
