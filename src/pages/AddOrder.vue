@@ -48,7 +48,7 @@
     						</div>
     					</div>
             </div>
-            <div class="b_bottom_after padding10 color-orange" v-if="cardList.length">
+            <div class="b_bottom_after padding10 color-orange" v-if="cardList.length && allowCard">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
                 <div class="t-cell v_middle align_right" @click="checkCard">
@@ -234,7 +234,8 @@ export default {
       submiting: false,
       showCard: false,
       cardList: [],
-      selectedCard: null
+      selectedCard: null,
+      allowCard: false
     }
   },
   watch: {
@@ -396,6 +397,11 @@ export default {
               let p = { shopid: info.id, quantity: info.quantity }
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
+              if (info.fid > 0) {
+                self.allowCard = false
+              } else {
+                self.allowCard = true
+              }
             }
             if (order.postage) {
               total += parseFloat(order.postage)
