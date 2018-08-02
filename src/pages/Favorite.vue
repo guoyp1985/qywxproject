@@ -117,7 +117,7 @@ import { User } from '#/storage'
 let pageStart1 = 0
 let pageStart2 = 0
 let pageStart3 = 0
-const limit = 5
+const limit = 20
 export default {
   components: {
     Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg
