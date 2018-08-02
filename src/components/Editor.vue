@@ -661,7 +661,6 @@ export default {
     }
   },
   mounted () {
-    console.log('in mounted')
     const self = this
     let start = !self.$util.isPC() ? 'touchstart' : 'mousedown'
     let move = !self.$util.isPC() ? 'touchmove' : 'mousemove'

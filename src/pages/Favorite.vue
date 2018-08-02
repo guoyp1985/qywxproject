@@ -12,7 +12,7 @@
         <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
       </tab>
     </div>
-    <div class="s-container s-container1" style="bottom:53px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+    <div class="s-container s-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <swipeout v-show="selectedIndex===0">
         <template v-if="disData1">
           <template v-if="articles.length">
