@@ -86,7 +86,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
@@ -158,7 +158,8 @@ export default {
       pagestart: 0,
       limit: 20,
       replyData: null,
-      messages: 0
+      messages: 0,
+      showEditor: false
     }
   },
   filters: {
@@ -340,6 +341,7 @@ export default {
           }
           if (res.data.flag) {
             self.article = res.data.data
+            self.showEditor = true
             document.title = self.article.title
             self.reward = User.get()
             self.retailerInfo = self.article.retailerinfo
@@ -560,6 +562,7 @@ export default {
         this.comments = []
         this.pagestart = 0
         this.query = query
+        this.showEditor = false
         this.showsharetip = false
         this.getData()
       }

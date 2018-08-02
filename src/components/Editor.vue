@@ -396,7 +396,6 @@ export default {
       if (self.module === 'factorynews') {
         toolbars.splice(0, 1)
       }
-      console.log(self.module)
       editor = new Eleditor({
         el: this.elem,
         toolbars: toolbars,
@@ -662,6 +661,7 @@ export default {
     }
   },
   mounted () {
+    console.log('in mounted')
     const self = this
     let start = !self.$util.isPC() ? 'touchstart' : 'mousedown'
     let move = !self.$util.isPC() ? 'touchmove' : 'mousemove'
