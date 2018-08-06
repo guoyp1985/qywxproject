@@ -36,6 +36,7 @@
   "FactoryOrderDetail",
   "FactoryProduct",
   "FactoryProductlist",
+  "FactoryReport",
   "FactoryRevenue",
   "Favorite",
   "KnowledgeClass",
