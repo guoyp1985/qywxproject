@@ -86,12 +86,13 @@ export default {
             self.$vux.loading.hide()
             self.initContainer()
           } else {
-            if (self.loginUser.isretailer === 2) {
-              self.initContainer()
-              self.$vux.loading.hide()
-              let backUrl = encodeURIComponent(location.href)
-              location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-            } else if (self.loginUser.isretailer === 0) {
+            // if (self.loginUser.isretailer === 2) {
+            //   self.initContainer()
+            //   self.$vux.loading.hide()
+            //   let backUrl = encodeURIComponent(location.href)
+            //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+            // }
+            if (self.loginUser.isretailer === 0) {
               self.initContainer()
               self.showApply = true
               self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
@@ -107,7 +108,7 @@ export default {
                   self.classData = data
                 }
               })
-            } else if (self.loginUser.isretailer === 1) {
+            } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
               self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
                 module: 'retailer', action: 'index'
               }).then(function (res) {

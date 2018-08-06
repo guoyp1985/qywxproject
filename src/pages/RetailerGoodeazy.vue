@@ -369,30 +369,30 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        } else {
-          self.initContainer()
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
-          }
-          this.$vux.loading.hide()
-          if (!self.loginUser.isretailer && !isAdmin) {
-            self.initContainer()
-            self.showApply = true
-          } else {
-            self.initContainer()
-            self.showContainer = true
-            this.query = this.$route.query
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        self.initContainer()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
           }
         }
+        this.$vux.loading.hide()
+        if (!self.loginUser.isretailer && !isAdmin) {
+          self.initContainer()
+          self.showApply = true
+        } else {
+          self.initContainer()
+          self.showContainer = true
+          this.query = this.$route.query
+        }
+        // }
       }
     }
   },

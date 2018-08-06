@@ -277,27 +277,27 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
           self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+          this.showApply = true
         } else {
-          if (!this.loginUser.isretailer) {
-            this.$vux.loading.hide()
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.tabdata1.length < limit || this.query.from === 'add') {
             self.initContainer()
-            this.showApply = true
-          } else {
-            this.$vux.loading.hide()
-            this.query = this.$route.query
-            if (this.tabdata1.length < limit || this.query.from === 'add') {
-              self.initContainer()
-              pageStart1 = 0
-              this.tabdata1 = []
-              this.getData1()
-            }
+            pageStart1 = 0
+            this.tabdata1 = []
+            this.getData1()
           }
         }
+        // }
       }
     }
   },

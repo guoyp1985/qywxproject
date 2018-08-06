@@ -90,36 +90,36 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        self.initContainer()
+        if (!this.loginUser.isretailer) {
           self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+          this.showApply = true
+          self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+            { params: { limit: 100 } }
+          ).then(function (res) {
+            self.$vux.loading.hide()
+            if (res.status === 200) {
+              let data = res.data
+              data = data.data ? data.data : data
+              for (let i = 0; i < data.length; i++) {
+                data[i].checked = false
+              }
+              self.classData = data
+            }
+          })
         } else {
           self.initContainer()
-          if (!this.loginUser.isretailer) {
-            self.initContainer()
-            this.showApply = true
-            self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-              { params: { limit: 100 } }
-            ).then(function (res) {
-              self.$vux.loading.hide()
-              if (res.status === 200) {
-                let data = res.data
-                data = data.data ? data.data : data
-                for (let i = 0; i < data.length; i++) {
-                  data[i].checked = false
-                }
-                self.classData = data
-              }
-            })
-          } else {
-            self.initContainer()
-            self.showSetting = true
-            console.log(11)
-            this.getData()
-          }
+          self.showSetting = true
+          console.log(11)
+          this.getData()
         }
+        // }
       }
     }
   },

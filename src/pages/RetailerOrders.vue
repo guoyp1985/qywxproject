@@ -529,24 +529,24 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
           self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+          this.showSos = true
         } else {
-          if (!this.loginUser.isretailer) {
-            this.$vux.loading.hide()
-            self.initContainer()
-            this.showSos = true
-          } else {
-            self.initContainer()
-            this.$vux.loading.hide()
-            this.showContainer = true
-            this.query = this.$route.query
-            this.swiperChange()
-          }
+          self.initContainer()
+          this.$vux.loading.hide()
+          this.showContainer = true
+          this.query = this.$route.query
+          this.swiperChange()
         }
+        // }
       }
     }
   },
