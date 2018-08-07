@@ -157,6 +157,12 @@
           </div>
         </cell>
       </template>
+      <cell :link="{path:'/retailerReport', query:{wid: retailerInfo.uid}}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-zongshuju db-in font18" style="color:#efa42e;"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Business report')}}</span>
+        </div>
+      </cell>
       <template>
         <cell :link="{path:'/retailerSetting'}" style="position:relative">
           <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
