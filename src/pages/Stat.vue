@@ -467,36 +467,36 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        } else {
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
-          }
-          if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
-            self.initContainer()
-            this.sosTitle = '抱歉，您暂无权限访问此页面！'
-            this.showSos = true
-          } else {
-            if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
-              self.initContainer()
-              this.sosTitle = '该信息不存在'
-              this.query = this.$route.query
-              this.module = this.query.module
-              this.initData()
-              this.getData()
-            } else if (this.showContainer) {
-              this.swiperChange()
-            }
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
           }
         }
+        if (!this.loginUser.isretailer && !this.loginUser.fid && !isAdmin) {
+          self.initContainer()
+          this.sosTitle = '抱歉，您暂无权限访问此页面！'
+          this.showSos = true
+        } else {
+          if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id || this.query.wid !== this.$route.query.wid) {
+            self.initContainer()
+            this.sosTitle = '该信息不存在'
+            this.query = this.$route.query
+            this.module = this.query.module
+            this.initData()
+            this.getData()
+          } else if (this.showContainer) {
+            this.swiperChange()
+          }
+        }
+        // }
       }
     }
   },

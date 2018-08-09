@@ -18,7 +18,7 @@
         </div>
       -->
         <card>
-          <router-link :to="{path: '/factoryOrders', query: {fid: fid}}" slot="content" class="card-demo-flex card-demo-content01">
+          <router-link :to="{path: '/retailerOrders', query: {wid: wid}}" slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
               <div class="color-red font18">{{ viewData.orderuids }}</div>
               <div class="color-gray font14 mt5">成交客户</div>
@@ -119,7 +119,7 @@ export default {
       isshowpopup: false,
       disList: false,
       selectedIndex1: 0,
-      fid: null,
+      wid: null,
       viewData: {}
     }
   },
@@ -140,7 +140,7 @@ export default {
     },
     getData () {
       const self = this
-      let params = {type: 'factory', days: 7, id: self.fid}
+      let params = {type: 'retailer', days: 7, id: self.wid}
       if (self.selectedIndex === 1) {
         params.days = 30
       }
@@ -153,7 +153,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      this.fid = this.query.fid ? this.query.fid : this.loginUser.fid
+      this.wid = this.query.wid ? this.query.wid : this.loginUser.wid
       this.getData()
     }
   },
