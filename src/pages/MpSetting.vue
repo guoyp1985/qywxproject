@@ -35,7 +35,6 @@
           <div class="btn">详情</div>
         </div>
         <div class="col4">
-          <div class="btn"><i class="al al-jiantou_down"></i></div>
           <div class="btn" @click="clickBtn1"><i class="al al-jiantou_down"></i></div>
           <div v-if="showBtn1" class="btnlayer">
             <div class="item">版本退回</div>
@@ -74,7 +73,6 @@
           <div class="btn">详情</div>
         </div>
         <div class="col4">
-          <div class="btn"><i class="al al-jiantou_down"></i></div>
           <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
           <div v-if="showBtn2" class="btnlayer">
             <div class="item">撤回审核</div>
@@ -110,7 +108,6 @@
           <div class="btn">提交审核</div>
         </div>
         <div class="col4">
-          <div class="btn"><i class="al al-jiantou_down"></i></div>
           <div class="btn" @click="clickBtn3"><i class="al al-jiantou_down"></i></div>
           <div v-if="showBtn3" class="btnlayer">
             <div class="item">选为体验版本</div>
@@ -144,7 +141,6 @@
           <div class="btn">提交审核</div>
         </div>
         <div class="col4">
-          <div class="btn"><i class="al al-jiantou_down"></i></div>
           <div class="btn" @click="clickBtn4"><i class="al al-jiantou_down"></i></div>
           <div v-if="showBtn4" class="btnlayer">
             <div class="item">取消体验</div>
@@ -159,61 +155,60 @@
 </template>
 
 <script>
-import ENV from 'env'
- export default {
-   data () {
-     return {
-       showBtn1: false,
-       showBtn2: false,
-       showBtn3: false,
-       showBtn4: false
-     }
-   },
-   methods: {
-     initBtn () {
-       this.showBtn1 = false
-       this.showBtn2 = false
-       this.showBtn3 = false
-       this.showBtn4 = false
-     },
-     clickBtn1 () {
-       if (this.showBtn1) {
-         this.initBtn()
-       } else {
-         this.initBtn()
-         this.showBtn1 = true
-       }
-     },
-     clickBtn2 () {
-       if (this.showBtn2) {
-         this.initBtn()
-       } else {
-         this.initBtn()
-         this.showBtn2 = true
-       }
-     },
-     clickBtn3 () {
-       if (this.showBtn3) {
-         this.initBtn()
-       } else {
-         this.initBtn()
-         this.showBtn3 = true
-       }
-     },
-     clickBtn4 () {
-       if (this.showBtn4) {
-         this.initBtn()
-       } else {
-         this.initBtn()
-         this.showBtn4 = true
-       }
-     },
-     refresh () {
-     }
-   },
-   activated () {
-     this.refresh()
-   }
+export default {
+  data () {
+    return {
+      showBtn1: false,
+      showBtn2: false,
+      showBtn3: false,
+      showBtn4: false
+    }
+  },
+  methods: {
+    initBtn () {
+      this.showBtn1 = false
+      this.showBtn2 = false
+      this.showBtn3 = false
+      this.showBtn4 = false
+    },
+    clickBtn1 () {
+      if (this.showBtn1) {
+        this.initBtn()
+      } else {
+        this.initBtn()
+        this.showBtn1 = true
+      }
+    },
+    clickBtn2 () {
+      if (this.showBtn2) {
+        this.initBtn()
+      } else {
+        this.initBtn()
+        this.showBtn2 = true
+      }
+    },
+    clickBtn3 () {
+      if (this.showBtn3) {
+        this.initBtn()
+      } else {
+        this.initBtn()
+        this.showBtn3 = true
+      }
+    },
+    clickBtn4 () {
+      if (this.showBtn4) {
+        this.initBtn()
+      } else {
+        this.initBtn()
+        this.showBtn4 = true
+      }
+    },
+    refresh () {
+    }
+  },
+  activated () {
+    this.refresh()
+  }
 }
 </script>
 <style lang="less">
