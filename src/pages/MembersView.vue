@@ -4,137 +4,140 @@
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
-      <div class="s-topbanner flex_left pl15 pr15 border-box">
-        <div class="">
-          <img @click="showBigimg(0)" class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-          <div v-transfer-dom>
-            <previewer :list="imgarr" ref="previewer"></previewer>
-          </div>
-        </div>
-        <div class="flex_cell pl10 pr20 color-white">
-          <div class="font16 clamp1">{{ viewuser.linkman }}</div>
-          <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
-        </div>
-        <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
-      </div>
-      <div class="s-container">
-        <div class="list-shadow">
-          <div class="b_top_after flex_center bg-white h50">
-            <div class="t-table align_center color-red4">
-              <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
-                <div>{{ $t('Views') }}</div>
-                <div>{{viewuser.viewNumber}}</div>
-              </router-link>
-              <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
-                <div>{{ $t('Share') }}</div>
-                <div>{{viewuser.shareNumber}}</div>
-              </router-link>
-              <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">
-                <div>{{ $t('Orders') }}</div>
-                <div>{{viewuser.orderNumber}}</div>
-              </router-link>
+      <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
+      <template v-else>
+        <div class="s-topbanner flex_left pl15 pr15 border-box">
+          <div class="">
+            <img @click="showBigimg(0)" class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            <div v-transfer-dom>
+              <previewer :list="imgarr" ref="previewer"></previewer>
             </div>
           </div>
-          <div class="b_top_after flex_center bg-white h45">
-            <div class="t-table align_center color-gray2">
-              <template v-if="viewuser.subscribe != 0">
-                <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
-                  <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
-                </div>
-                <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
-                  <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
+          <div class="flex_cell pl10 pr20 color-white">
+            <div class="font16 clamp1">{{ viewuser.linkman }}</div>
+            <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
+          </div>
+          <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
+        </div>
+        <div class="s-container">
+          <div class="list-shadow">
+            <div class="b_top_after flex_center bg-white h50">
+              <div class="t-table align_center color-red4">
+                <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
+                  <div>{{ $t('Views') }}</div>
+                  <div>{{viewuser.viewNumber}}</div>
                 </router-link>
-              </template>
-              <div @click="priorityevent" :class="`t-cell v_middle b_right_after priority ${getprioritycss}`">
-                <i class="al al-zhidinge79b font16 mr5"></i><span class="txt" style="vertical-align: 1px;"></span>
+                <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
+                  <div>{{ $t('Share') }}</div>
+                  <div>{{viewuser.shareNumber}}</div>
+                </router-link>
+                <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">
+                  <div>{{ $t('Orders') }}</div>
+                  <div>{{viewuser.orderNumber}}</div>
+                </router-link>
               </div>
-              <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell v_middle">
-                <i class="al al-calendar font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Customer Behavior') }}</span>
-              </router-link>
+            </div>
+            <div class="b_top_after flex_center bg-white h45">
+              <div class="t-table align_center color-gray2">
+                <template v-if="viewuser.subscribe != 0">
+                  <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
+                    <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
+                  </div>
+                  <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
+                    <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
+                  </router-link>
+                </template>
+                <div @click="priorityevent" :class="`t-cell v_middle b_right_after priority ${getprioritycss}`">
+                  <i class="al al-zhidinge79b font16 mr5"></i><span class="txt" style="vertical-align: 1px;"></span>
+                </div>
+                <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}" class="t-cell v_middle">
+                  <i class="al al-calendar font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Customer Behavior') }}</span>
+                </router-link>
+              </div>
+            </div>
+          </div>
+          <div class="b_bottom_after"></div>
+          <div class="mt12 bg-white itemlist list-shadow font14">
+            <div class="item padding10 b_bottom_after">
+              <div class="t-table">
+                <div class="t-cell align_left w100">真实姓名</div>
+                <div class="t-cell align_right color-gray">{{ viewuser.position }}</div>
+                <div class="t-cell align_right w50">
+                  <span class="qbtn8 bg-orange7 color-white" @click="updatechar('position')">更新</span>
+                </div>
+              </div>
+            </div>
+            <div class="item padding10 b_bottom_after">
+              <div class="t-table">
+                <div class="t-cell align_left w100">手机号</div>
+                <div class="t-cell align_right color-gray">{{ viewuser.mobile }}</div>
+                <div class="t-cell align_right w50">
+                  <span class="qbtn8 bg-orange7 color-white" @click="updatechar('mobile')">更新</span>
+                </div>
+              </div>
+            </div>
+            <div class="item padding10 b_bottom_after">
+              <div class="t-table">
+                <div class="t-cell align_left w100">意向程度</div>
+                <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
+                <div class="t-cell align_right w50">
+                  <span class="qbtn8 bg-orange7 color-white" @click="showLevel">更新</span>
+                </div>
+              </div>
+            </div>
+            <div class="item padding10 b_bottom_after">
+              <div class="t-table">
+                <div class="t-cell align_left w100">{{ $t('Region') }}</div>
+                <div class="t-cell align_right color-gray">{{ viewuser.country }} {{ viewuser.province }} {{ viewuser.city }}</div>
+                <div class="t-cell align_right w50">
+                  <span class="qbtn8 bg-orange7 color-white" @click="updateArea">更新</span>
+                </div>
+              </div>
+            </div>
+            <div class="item padding10 b_bottom_after">
+              <div class="t-table">
+                <div class="t-cell align_left w100">性别</div>
+                <div class="t-cell align_right color-gray">{{ getsex }}</div>
+              </div>
+            </div>
+            <div class="item padding10 b_bottom_after" v-if="viewuser.uploadname && viewuser.uploadname != ''">
+              <div class="t-table">
+                <div class="t-cell align_left w100">返点客</div>
+                <div class="t-cell align_right color-gray">{{ viewuser.uploadname }}</div>
+              </div>
+            </div>
+            <div class="item padding10 b_bottom_after">
+              <div class="t-table">
+                <div class="t-cell align_left w100">成为客户时间</div>
+                <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="b_bottom_after"></div>
-        <div class="mt12 bg-white itemlist list-shadow font14">
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">真实姓名</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.position }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn8 bg-orange7 color-white" @click="updatechar('position')">更新</span>
-              </div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">手机号</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.mobile }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn8 bg-orange7 color-white" @click="updatechar('mobile')">更新</span>
-              </div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">意向程度</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.intentiondesc }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn8 bg-orange7 color-white" @click="showLevel">更新</span>
-              </div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">{{ $t('Region') }}</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.country }} {{ viewuser.province }} {{ viewuser.city }}</div>
-              <div class="t-cell align_right w50">
-                <span class="qbtn8 bg-orange7 color-white" @click="updateArea">更新</span>
-              </div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">性别</div>
-              <div class="t-cell align_right color-gray">{{ getsex }}</div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after" v-if="viewuser.uploadname && viewuser.uploadname != ''">
-            <div class="t-table">
-              <div class="t-cell align_left w100">返点客</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.uploadname }}</div>
-            </div>
-          </div>
-          <div class="item padding10 b_bottom_after">
-            <div class="t-table">
-              <div class="t-cell align_left w100">成为客户时间</div>
-              <div class="t-cell align_right color-gray">{{ viewuser.dateline | dateformat }}</div>
-            </div>
+        <div class="s-bottom bottomnaviarea b_top_after">
+          <div class="t-table bottomnavi">
+            <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
+            <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
+            <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
           </div>
         </div>
-      </div>
-      <div class="s-bottom bottomnaviarea b_top_after">
-        <div class="t-table bottomnavi">
-          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
-          <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
-          <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
+        <div v-transfer-dom class="red-popup">
+          <popup v-model="showPopupLevel">
+            <popup-header
+            :left-text="$t('Cancel')"
+            :right-text="$t('Submit')"
+            :show-bottom-border="false"
+            @on-click-left="showPopupLevel = false"
+            @on-click-right="updateIntention"></popup-header>
+            <group gutter="0" class="red-radio">
+              <radio
+                v-model="userIntention"
+                :options="intentionArr"
+                :selected-label-style="{color: '#ea3a3a'}"></radio>
+            </group>
+          </popup>
         </div>
-      </div>
-      <div v-transfer-dom class="red-popup">
-        <popup v-model="showPopupLevel">
-          <popup-header
-          :left-text="$t('Cancel')"
-          :right-text="$t('Submit')"
-          :show-bottom-border="false"
-          @on-click-left="showPopupLevel = false"
-          @on-click-right="updateIntention"></popup-header>
-          <group gutter="0" class="red-radio">
-            <radio
-              v-model="userIntention"
-              :options="intentionArr"
-              :selected-label-style="{color: '#ea3a3a'}"></radio>
-          </group>
-        </popup>
-      </div>
+      </template>
     </template>
   </div>
 </template>
@@ -152,13 +155,14 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import OpenVip from '@/components/OpenVip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, OpenVip
   },
   filters: {
     dateformat: function (value) {
@@ -193,7 +197,8 @@ export default {
         { key: 1, value: '低' },
         { key: 2, value: '中' },
         { key: 3, value: '高' }
-      ]
+      ],
+      showVip: false
     }
   },
   watch: {
@@ -222,6 +227,12 @@ export default {
     }
   },
   methods: {
+    hideVip () {
+      this.$router.go(-1)
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
+    },
     priorityevent () {
       const self = this
       self.$vux.loading.show()
@@ -423,6 +434,11 @@ export default {
         //   let backUrl = encodeURIComponent(location.href)
         //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         // }
+        if (this.loginUser.isretailer === 2) {
+          this.showVip = true
+        } else if (this.loginUser.isretailer === 1) {
+          this.showVip = false
+        }
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()

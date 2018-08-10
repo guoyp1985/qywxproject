@@ -2,6 +2,7 @@
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
+    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
@@ -11,7 +12,7 @@
       </div>
       <div class="s-container" style="top:44px">
         <template v-if="!tabdata1 || tabdata1.length == 0">
-          <create-activity :retailer-info="retailerInfo"></create-activity>
+          <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
         </template>
         <swiper v-else v-model="tabmodel" class="x-swiper no-indicator">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
@@ -115,7 +116,7 @@
               </div>
             </div>
             <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo"></create-activity>
+              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
             </template>
           </swiper-item>
         </swiper>
@@ -171,6 +172,7 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
+import OpenVip from '@/components/OpenVip'
 
 const limit = 10
 let pageStart1 = 0
@@ -180,7 +182,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip, OpenVip
   },
   filters: {
     dateformat: function (value) {
@@ -196,7 +198,8 @@ export default {
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
-      tabdata1: []
+      tabdata1: [],
+      showVip: false
     }
   },
   watch: {
@@ -205,6 +208,20 @@ export default {
     }
   },
   methods: {
+    clickAdd (type) {
+      console.log(type)
+      if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 2) {
+        this.showVip = true
+      } else {
+        this.$router.push({path: '/addActivity', query: {type: type}})
+      }
+    },
+    hideVip () {
+      this.showVip = false
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}`)
+    },
     handleScroll () {
       const self = this
       self.$util.scrollEvent({

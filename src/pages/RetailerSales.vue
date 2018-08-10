@@ -165,31 +165,33 @@ export default {
   methods: {
     handleScroll: function (refname, index) {
       const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: function () {
-          if (index === 0) {
-            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
-              self.$vux.loading.show()
-              self.getData1()
-            }
-          } else if (index === 1) {
-            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-              self.pagestart2++
-              self.$vux.loading.show()
-              self.getData2()
-            }
-          } else if (index === 2) {
-            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-              self.pagestart3++
-              self.$vux.loading.show()
-              self.getData3()
+      if (self.loginUser.isretailer === 1) {
+        const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        self.$util.scrollEvent({
+          element: scrollarea,
+          callback: function () {
+            if (index === 0) {
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.$vux.loading.show()
+                self.getData1()
+              }
+            } else if (index === 1) {
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.$vux.loading.show()
+                self.getData2()
+              }
+            } else if (index === 2) {
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.$vux.loading.show()
+                self.getData3()
+              }
             }
           }
-        }
-      })
+        })
+      }
     },
     getData1 () {
       this.$vux.loading.show()
@@ -357,6 +359,11 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
+        if (self.loginUser.isretailer === 2) {
+          self.limit = 2
+        } else if (self.loginUser.isretailer === 1) {
+          self.limit = 10
+        }
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
         //   self.$vux.loading.hide()

@@ -49,14 +49,15 @@
         </router-link>
       </div>
     </div>
-    <div class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div class="align_center flex_center flex_cell">
-        <router-link class="collect flex_center h_100 mauto" style="width:85%;" to="/retailerGoodeazy">{{ $t('Goodeazy') }}</router-link>
+        <div class="collect flex_center h_100 mauto" style="width:85%;" @click="toGoodeazy">{{ $t('Goodeazy') }}</div>
       </div>
-      <div class="align_center flex_center flex_cell">
-        <router-link class="collect bg-red flex_center h_100" style="width:85%;" to="/addNews" >{{ $t('Create news') }}</router-link>
+      <div class="flex_cell flex_center">
+        <div class="collect bg-red flex_center h_100" style="width:85%;" @click="toAdd">{{ $t('Create news') }}</div>
       </div>
     </div>
+    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
         <div class="popup0">
@@ -138,13 +139,15 @@ Control text:
 import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
+import OpenVip from '@/components/OpenVip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, CheckIcon, XImg, Search
+    Popup, CheckIcon, XImg, Search, OpenVip
   },
   filters: {
     dateformat: function (value) {
@@ -159,6 +162,7 @@ export default {
   },
   data () {
     return {
+      loginUser: {},
       autofixed: false,
       tabtxts: [ '我的文章', '采集记录' ],
       tabmodel: 0,
@@ -183,10 +187,31 @@ export default {
       checkAll: false,
       customerPagestart: 0,
       searchword1: '',
-      searchresult1: false
+      searchresult1: false,
+      showVip: false
     }
   },
   methods: {
+    toGoodeazy () {
+      if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 5) {
+        this.showVip = true
+      } else {
+        this.$router.push('/retailerGoodeazy')
+      }
+    },
+    toAdd () {
+      if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 5) {
+        this.showVip = true
+      } else {
+        this.$router.push('/addNews')
+      }
+    },
+    hideVip () {
+      this.showVip = false
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
+    },
     handleScroll (refname, type) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -339,6 +364,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.loginUser = User.get()
       if (this.tabdata1.length < this.limit) {
         self.pagestart1 = 0
         this.distabdata1 = false

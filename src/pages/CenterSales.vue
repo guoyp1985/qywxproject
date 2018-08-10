@@ -18,13 +18,21 @@
           </swiper>
         </template>
         <template v-if="showCenter">
-          <center-sales :retailer-info="retailerInfo" :messages="messages" :login-user="loginUser" :marquee-data="marqueeData"></center-sales>
+          <center-sales
+            :retailer-info="retailerInfo"
+            :messages="messages"
+            :login-user="loginUser"
+            :marquee-data="marqueeData"
+            @vip-event="vipEvent">
+          </center-sales>
         </template>
         <template v-if="showApply">
           <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
         </template>
       </template>
     </template>
+    <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
+    <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></vip>
   </div>
 </template>
 
@@ -33,12 +41,14 @@ import { Swiper, SwiperItem } from 'vux'
 import CenterSales from '@/components/CenterSales'
 import RetailerApply from '@/components/RetailerApply'
 import Subscribe from '@/components/Subscribe'
+import OpenVip from '@/components/OpenVip'
+import Vip from '@/components/Vip'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
   components: {
-    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe
+    Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip
   },
   data () {
     return {
@@ -51,10 +61,20 @@ export default {
       query: {},
       marqueeData: [],
       classData: [],
-      messages: 0
+      messages: 0,
+      showVip: false
     }
   },
   methods: {
+    vipEvent () {
+      this.showVip = true
+    },
+    hideVip () {
+      this.showVip = false
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}`)
+    },
     applySuccess () {
       const self = this
       self.initContainer()

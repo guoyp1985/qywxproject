@@ -9,7 +9,11 @@
           </div>
         </div>
         <div class="txt-cell">
-          <div class="font17 color-white">{{ retailerInfo.linkman }}</div>
+          <div class="font17 color-white">
+            <span class="v_middle">{{ retailerInfo.linkman }}</span>
+            <span class="vip-icon bg-gray color-white" v-if="retailerInfo.isretailer == 2" @click="onVip">VIP</span>
+            <span class="vip-icon bg-orange color-white" v-if="retailerInfo.isretailer == 1" @click="onVip">VIP</span>
+          </div>
           <div class="font13 color-white mt5">{{ $t('Business tool') }}</div>
         </div>
       </div>
@@ -273,6 +277,9 @@ export default {
     }
   },
   methods: {
+    onVip () {
+      this.$emit('vip-event')
+    },
     showBigimg (index) {
       const self = this
       if (self.imgarr.length === 0) {
@@ -508,4 +515,5 @@ export default {
   border:1px solid #fff;
   text-align: center;
 }
+.vip-icon{display:inline-block;border-radius:5px;width:28px;height:20px;line-height:20px;text-align:center;font-size:13px !important;vertical-align:middle;}
 </style>

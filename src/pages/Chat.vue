@@ -5,211 +5,215 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <template v-if="query.fromModule == 'product' && query.fromId && showTip">
-      <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
-        <div class="db-flex">
-          <div class="w50 flex_left">
-            <img :src="fromProduct.photo" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
+    <template v-else>
+      <template v-if="query.fromModule == 'product' && query.fromId && showTip">
+        <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
+          <div class="db-flex">
+            <div class="w50 flex_left">
+              <img :src="fromProduct.photo" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+            </div>
+            <div class="flex_cell flex_left" to="/center">{{fromProduct.title}} </div>
           </div>
-          <div class="flex_cell flex_left" to="/center">{{fromProduct.title}} </div>
+        </router-link>
+      </template>
+      <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+      <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
+        <div class="chatlist" ref="scrollContent">
+          <template v-for="(item,index) in messages">
+            <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
+            <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
+            <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
+            <div :class="`chatitem ${getItemClass(item)}`">
+              <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
+                <img :src="item.avatar">
+              </router-link>
+              <div class="name disusername">{{item.username}}</div>
+              <div class="msg">
+                <template v-if="item.msgtype == 'image'">
+                  <div class="main message-text">
+                    <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
+                  </div>
+                </template>
+                <template v-else-if="item.msgtype == 'news'">
+                  <div class="main message-text">
+                    <div class="scroll_item">
+            					<div class="con">
+            						<router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
+            							<div class="pic">
+            								<div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
+            								<span class="title">{{news.title}}</span>
+            							</div>
+            						</router-link>
+            					</div>
+            				</div>
+                  </div>
+                </template>
+                <template v-else-if="item.msgtype == 'voice'">
+                  <div :style="`width: ${40 + Math.round(5 * parseInt(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
+                    <div class="audio_play_area">
+            					<i class="icon_audio_default"></i>
+            					<i class="icon_audio_playing"></i>
+                    </div>
+                    <div v-if="item.unread" class="new-voice-tips"></div>
+                    <div class="min">
+                      <span class="discontent">{{item.content | secondsFormat}}</span>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="main message-text">
+                    <div v-html="filterEmot(item.content)"></div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
         </div>
-      </router-link>
-    </template>
-    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
-    <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
-      <div class="chatlist" ref="scrollContent">
-        <template v-for="(item,index) in messages">
-          <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
-          <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
-          <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
-          <div :class="`chatitem ${getItemClass(item)}`">
-            <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
-              <img :src="item.avatar">
-            </router-link>
-            <div class="name disusername">{{item.username}}</div>
-            <div class="msg">
-              <template v-if="item.msgtype == 'image'">
-                <div class="main message-text">
-                  <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
-                </div>
-              </template>
-              <template v-else-if="item.msgtype == 'news'">
-                <div class="main message-text">
-                  <div class="scroll_item">
-          					<div class="con">
-          						<router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
-          							<div class="pic">
-          								<div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
-          								<span class="title">{{news.title}}</span>
-          							</div>
-          						</router-link>
-          					</div>
-          				</div>
-                </div>
-              </template>
-              <template v-else-if="item.msgtype == 'voice'">
-                <div :style="`width: ${40 + Math.round(5 * parseInt(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
-                  <div class="audio_play_area">
-          					<i class="icon_audio_default"></i>
-          					<i class="icon_audio_playing"></i>
+      </scroller>
+      <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
+      <div class="bottom-area" ref="bottomArea" v-if="!(showVip && loginUser.isretailer == 2)">
+        <div class="input-box">
+          <div class="voice-cell">
+            <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
+              <img src="http://vuxlaravel.boka.cn/images/icon-voice.png"/>
+            </a>
+            <a v-else class="emotion-btn" @click="toggleKeyboard">
+              <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
+            </a>
+          </div>
+          <div class="input-cell">
+            <group class="textarea-box">
+              <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+            </group>
+            <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
+          </div>
+          <div class="emotion-cell">
+            <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
+              <img src="http://vuxlaravel.boka.cn/images/icon-face.png"/>
+            </a>
+            <a v-else class="emotion-btn" @click="toggleKeyboard">
+              <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
+            </a>
+          </div>
+          <div v-if="showSendBtn" class="send-cell flex_center">
+            <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
+          </div>
+          <div v-else class="feature-cell">
+            <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
+              <img src="http://vuxlaravel.boka.cn/images/icon-add.png"/>
+            </a>
+          </div>
+        </div>
+        <emotion-box v-show="showEmotBox" bind-textarea="#chat-textarea" @input="inputEmot">
+        </emotion-box>
+        <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
+          <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
+        </form>
+        <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
+          <grid-item @click.native="sendPhoto">
+            <span slot="icon" class="feature-icon al al-zhaopian color-gray"></span>
+            <span slot="label" class="color-gray">{{$t('Photo')}}</span>
+          </grid-item>
+          <grid-item @click.native="showImgTxtPopup">
+            <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
+            <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
+          </grid-item>
+          <template v-if="showUserInfo">
+            <grid-item @click.native="viewUserInfo">
+              <span slot="icon" class="feature-icon al al-yonghuxinxi color-gray"></span>
+              <span slot="label" class="color-gray">{{$t('User Info')}}</span>
+            </grid-item>
+          </template>
+        </grid>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showImgTxt" height="100%">
+          <div class="popup1 popup-imgTxt">
+            <div class="popup-top flex_center">图文</div>
+            <div class="flex_center" style="position:absolute;left:0;top:45px;right:0;height:50px;">
+              <search
+                class="v-search"
+                v-model="searchword"
+                :auto-fixed="autofixed"
+                @on-submit="onSearchSubmit"
+                @on-change="onSearchChange"
+                @on-cancel="onSearchCancel"
+                ref="search">
+              </search>
+            </div>
+            <div class="b_top_after" style="position:absolute;left:0;top:95px;right:0;height:54px;">
+              <tab v-model="tabmodel" class="v-tab">
+                <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+              </tab>
+            </div>
+            <div class="popup-middle font14" style="top:149px;">
+              <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
+                <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+                  <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
+                    <div v-if="disNewsData" class="scroll_list">
+                      <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
+                        <template v-if="searchresult1">
+                          <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                        </template>
+                        <template v-else>
+                          <div class="flex_center" style="height:80px;">暂无文章</div>
+                        </template>
+                      </div>
+                      <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
+                        <div class="t-table">
+                          <div class="t-cell pic v_middle w50">
+                            <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
+                          </div>
+                          <div class="t-cell v_middle" style="color:inherit;">
+                            <div class="clamp1">{{item.title}}</div>
+                          </div>
+                        </div>
+                      </check-icon>
+                    </div>
                   </div>
-                  <div v-if="item.unread" class="new-voice-tips"></div>
-                  <div class="min">
-                    <span class="discontent">{{item.content | secondsFormat}}</span>
+                  <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+                    <div v-if="disProductsData" class="scroll_list">
+                      <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
+                        <template v-if="searchresult2">
+                          <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                        </template>
+                        <template v-else>
+                          <div class="flex_center" style="height:80px;">暂无商品</div>
+                        </template>
+                      </div>
+                      <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
+                        <div class="t-table">
+                          <div class="t-cell pic v_middle w50">
+                            <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
+                          </div>
+                          <div class="t-cell v_middle" style="color:inherit;">
+                            <div class="clamp1">{{item.title}}</div>
+                            <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                          </div>
+                        </div>
+                      </check-icon>
+                    </div>
                   </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="main message-text">
-                  <div v-html="filterEmot(item.content)"></div>
-                </div>
-              </template>
+                  <div v-if="(index == 2)" class="pl10 pr10">
+                  </div>
+                </swiper-item>
+              </swiper>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closeImgTxtPopup">{{ $t('Close') }}</div>
+              <div class="flex_cell flex_center h_100 bg-green color-white" @click="sendImgTxt">{{ $t('Confirm txt') }}</div>
             </div>
           </div>
-        </template>
+        </popup>
       </div>
-    </scroller>
-    <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-    <div class="bottom-area" ref="bottomArea">
-      <div class="input-box">
-        <div class="voice-cell">
-          <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
-            <img src="http://vuxlaravel.boka.cn/images/icon-voice.png"/>
-          </a>
-          <a v-else class="emotion-btn" @click="toggleKeyboard">
-            <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
-          </a>
-        </div>
-        <div class="input-cell">
-          <group class="textarea-box">
-            <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
-          </group>
-          <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
-        </div>
-        <div class="emotion-cell">
-          <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
-            <img src="http://vuxlaravel.boka.cn/images/icon-face.png"/>
-          </a>
-          <a v-else class="emotion-btn" @click="toggleKeyboard">
-            <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
-          </a>
-        </div>
-        <div v-if="showSendBtn" class="send-cell flex_center">
-          <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
-        </div>
-        <div v-else class="feature-cell">
-          <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
-            <img src="http://vuxlaravel.boka.cn/images/icon-add.png"/>
-          </a>
-        </div>
-      </div>
-      <emotion-box v-show="showEmotBox" bind-textarea="#chat-textarea" @input="inputEmot">
-      </emotion-box>
-      <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
-        <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
-      </form>
-      <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
-        <grid-item @click.native="sendPhoto">
-          <span slot="icon" class="feature-icon al al-zhaopian color-gray"></span>
-          <span slot="label" class="color-gray">{{$t('Photo')}}</span>
-        </grid-item>
-        <grid-item @click.native="showImgTxtPopup">
-          <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
-          <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
-        </grid-item>
-        <template v-if="showUserInfo">
-          <grid-item @click.native="viewUserInfo">
-            <span slot="icon" class="feature-icon al al-yonghuxinxi color-gray"></span>
-            <span slot="label" class="color-gray">{{$t('User Info')}}</span>
-          </grid-item>
-        </template>
-      </grid>
-    </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showImgTxt" height="100%">
-        <div class="popup1 popup-imgTxt">
-          <div class="popup-top flex_center">图文</div>
-          <div class="flex_center" style="position:absolute;left:0;top:45px;right:0;height:50px;">
-            <search
-              class="v-search"
-              v-model="searchword"
-              :auto-fixed="autofixed"
-              @on-submit="onSearchSubmit"
-              @on-change="onSearchChange"
-              @on-cancel="onSearchCancel"
-              ref="search">
-            </search>
-          </div>
-          <div class="b_top_after" style="position:absolute;left:0;top:95px;right:0;height:54px;">
-            <tab v-model="tabmodel" class="v-tab">
-              <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-            </tab>
-          </div>
-          <div class="popup-middle font14" style="top:149px;">
-            <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-              <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-                <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
-                  <div v-if="disNewsData" class="scroll_list">
-                    <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
-                      <template v-if="searchresult1">
-                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                      </template>
-                      <template v-else>
-                        <div class="flex_center" style="height:80px;">暂无文章</div>
-                      </template>
-                    </div>
-                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1">{{item.title}}</div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  </div>
-                </div>
-                <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
-                  <div v-if="disProductsData" class="scroll_list">
-                    <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
-                      <template v-if="searchresult2">
-                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                      </template>
-                      <template v-else>
-                        <div class="flex_center" style="height:80px;">暂无商品</div>
-                      </template>
-                    </div>
-                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1">{{item.title}}</div>
-                          <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  </div>
-                </div>
-                <div v-if="(index == 2)" class="pl10 pr10">
-                </div>
-              </swiper-item>
-            </swiper>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closeImgTxtPopup">{{ $t('Close') }}</div>
-            <div class="flex_cell flex_center h_100 bg-green color-white" @click="sendImgTxt">{{ $t('Confirm txt') }}</div>
-          </div>
-        </div>
-      </popup>
-    </div>
+    </template>
   </div>
 </template>
 <script>
 import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
+import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
 import { User } from '#/storage'
 import Time from '#/time'
@@ -226,7 +230,7 @@ export default {
     TransferDom
   },
   components: {
-    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon
+    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, OpenVip
   },
   data () {
     return {
@@ -263,7 +267,8 @@ export default {
       selectProductsData: null,
       showUserInfo: false,
       fromProduct: {},
-      showTip: true
+      showTip: true,
+      showVip: false
     }
   },
   filters: {
@@ -283,6 +288,12 @@ export default {
     }
   },
   methods: {
+    hideVip () {
+      this.$router.go(-1)
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -677,12 +688,14 @@ export default {
       if (this.isUserTouch) return
       this.$nextTick(() => {
         const self = this
-        if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
-        setTimeout(() => {
-          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
-          self.$refs.scrollContainer.reset({ top: top })
-          // this.$refs.scrollContainer.scrollTo(0, top, false)
-        }, 100)
+        if (this.$refs.scrollContent) {
+          if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
+          setTimeout(() => {
+            const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+            self.$refs.scrollContainer.reset({ top: top })
+            // this.$refs.scrollContainer.scrollTo(0, top, false)
+          }, 100)
+        }
       })
     },
     getNewsData () {
@@ -852,21 +865,26 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
-      const usergroup = this.loginUser.usergroup
-      if (usergroup && usergroup.length > 0) {
-        for (let i = 0; i < usergroup.length; i++) {
-          if (usergroup[i] === 3) {
-            this.showUserInfo = true
-            break
+      if (this.loginUser.isretailer === 2) {
+        this.showVip = true
+      } else if (this.loginUser.isretailer === 1) {
+        this.showVip = false
+        const usergroup = this.loginUser.usergroup
+        if (usergroup && usergroup.length > 0) {
+          for (let i = 0; i < usergroup.length; i++) {
+            if (usergroup[i] === 3) {
+              this.showUserInfo = true
+              break
+            }
           }
         }
+        this.setViewHeight()
+        this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+        this.query = this.$route.query
+        this.getData()
+        this.getProduct()
+        this.createSocket()
       }
-      this.setViewHeight()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      this.getData()
-      this.getProduct()
-      this.createSocket()
     }
   },
   // created () {
