@@ -231,7 +231,7 @@ export default {
       this.$router.go(-1)
     },
     openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     priorityevent () {
       const self = this

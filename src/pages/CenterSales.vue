@@ -73,7 +73,7 @@ export default {
       this.showVip = false
     },
     openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}`)
+      location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}&module=payorders`)
     },
     applySuccess () {
       const self = this

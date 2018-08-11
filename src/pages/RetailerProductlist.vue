@@ -266,7 +266,7 @@ export default {
       this.showVip = false
     },
     openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)

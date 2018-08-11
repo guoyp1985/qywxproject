@@ -292,7 +292,7 @@ export default {
       this.$router.go(-1)
     },
     openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
