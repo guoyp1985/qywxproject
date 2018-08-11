@@ -3,83 +3,86 @@
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="pagemiddle">
-        <group label-width="5em">
-          <group class="textarea-outer">
-            <x-textarea
-              ref="titleTextarea"
-              v-model="submitdata.title"
-              :title="$t('News title')"
-              class="x-textarea noborder"
-              :placeholder="`${$t('Necessary')}${$t('Title')}`"
-              :show-counter="false"
-              :rows="1"
-              :max="30"
-              @on-change="textareaChange('titleTextarea')"
-              @on-focus="textareaFocus('titleTextarea')"
-              autosize>
-            </x-textarea>
+      <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
+      <template v-else>
+        <div class="pagemiddle">
+          <group label-width="5em">
+            <group class="textarea-outer">
+              <x-textarea
+                ref="titleTextarea"
+                v-model="submitdata.title"
+                :title="$t('News title')"
+                class="x-textarea noborder"
+                :placeholder="`${$t('Necessary')}${$t('Title')}`"
+                :show-counter="false"
+                :rows="1"
+                :max="30"
+                @on-change="textareaChange('titleTextarea')"
+                @on-focus="textareaFocus('titleTextarea')"
+                autosize>
+              </x-textarea>
+            </group>
+            <cell :title="$t('Cover photo')" class="font14">
+              {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
+            </cell>
           </group>
-          <cell :title="$t('Cover photo')" class="font14">
-            {{$t('Necessary')}}<!--上传图像后可点击<i class="al al-set font14"></i>进行剪裁-->
-          </cell>
-        </group>
-        <div class="img-operate-area">
-          <input v-model="submitdata.photo" type="hidden" name="photo" />
-          <form enctype="multipart/form-data">
-            <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
-          </form>
-          <div class="q_photolist align_left">
-            <template v-if="photoarr.length > 0">
-              <div v-for="(item, index) in photoarr" :key="index" class="img-box">
-                <img class="img imgcover" :src="item"/>
-                <a class="setting-btn" @click="clipPhoto(item)">
-                  <i class="al al-set font16"></i>
-                </a>
-                <a class="delete-btn" @click="deletePhoto(item, index)">
-                  <i class="al al-guanbi font16"></i>
-                </a>
-              </div>
-            </template>
-            <div v-if="photoarr.length < maxnum" class="img-box upload-box" @click="uploadPhoto">
-              <div class="img">
-                <div class="img-info-box">
-                  <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                  <div class="font12 color-gray"><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+          <div class="img-operate-area">
+            <input v-model="submitdata.photo" type="hidden" name="photo" />
+            <form enctype="multipart/form-data">
+              <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+            </form>
+            <div class="q_photolist align_left">
+              <template v-if="photoarr.length > 0">
+                <div v-for="(item, index) in photoarr" :key="index" class="img-box">
+                  <img class="img imgcover" :src="item"/>
+                  <a class="setting-btn" @click="clipPhoto(item)">
+                    <i class="al al-set font16"></i>
+                  </a>
+                  <a class="delete-btn" @click="deletePhoto(item, index)">
+                    <i class="al al-guanbi font16"></i>
+                  </a>
+                </div>
+              </template>
+              <div v-if="photoarr.length < maxnum" class="img-box upload-box" @click="uploadPhoto">
+                <div class="img">
+                  <div class="img-info-box">
+                    <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                    <div class="font12 color-gray"><span class="havenum">{{ havenum }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          <group class="option-area" label-width="6em">
+            <x-textarea
+              ref="descTextarea"
+              class="font14"
+              :title="$t('Share description')"
+              :placeholder="$t('Share description placeholder')"
+              v-model="submitdata.seodescription"
+              :rows="1"
+              @on-change="textareaChange('descTextarea')"
+              @on-focus="textareaFocus('descTextarea')"
+              autosize>
+            </x-textarea>
+            <x-textarea
+              ref="summaryTextarea"
+              class="font14"
+              :title="$t('Summary')"
+              :placeholder="$t('Summary')"
+              v-model="submitdata.summary"
+              :rows="1"
+              @on-change="textareaChange('summaryTextarea')"
+              @on-focus="textareaFocus('summaryTextarea')"
+              autosize>
+            </x-textarea>
+          </group>
         </div>
-        <group class="option-area" label-width="6em">
-          <x-textarea
-            ref="descTextarea"
-            class="font14"
-            :title="$t('Share description')"
-            :placeholder="$t('Share description placeholder')"
-            v-model="submitdata.seodescription"
-            :rows="1"
-            @on-change="textareaChange('descTextarea')"
-            @on-focus="textareaFocus('descTextarea')"
-            autosize>
-          </x-textarea>
-          <x-textarea
-            ref="summaryTextarea"
-            class="font14"
-            :title="$t('Summary')"
-            :placeholder="$t('Summary')"
-            v-model="submitdata.summary"
-            :rows="1"
-            @on-change="textareaChange('summaryTextarea')"
-            @on-focus="textareaFocus('summaryTextarea')"
-            autosize>
-          </x-textarea>
-        </group>
-      </div>
-      <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
-        <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
-      </div>
-      <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+        <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
+          <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
+        </div>
+        <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
+      </template>
     </template>
   </div>
 </template>
@@ -90,10 +93,11 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import OpenVip from '@/components/OpenVip'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, OpenVip
   },
   data () {
     return {
@@ -108,7 +112,8 @@ export default {
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
-      requireddata: { title: '', 'photo': '' }
+      requireddata: { title: '', 'photo': '' },
+      showVip: false
     }
   },
   computed: {
@@ -122,6 +127,13 @@ export default {
       this.havenum = 0
       this.submitdata = { title: '', photo: '', seodescription: '', summary: '' }
       this.requireddata = { title: '', 'photo': '' }
+      this.showVip = false
+    },
+    hideVip () {
+      this.$router.go(-1)
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -186,7 +198,7 @@ export default {
       this.photoarr.splice(index, 1)
       this.submitdata.photo = this.photoarr.join(',')
     },
-    save () {
+    saveData () {
       const self = this
       const query = self.$route.query
       let validateData = []
@@ -230,6 +242,26 @@ export default {
           }
         })
       })
+    },
+    save () {
+      const self = this
+      if (self.loginUser.isretailer === 1) {
+        self.showVip = false
+        self.saveData()
+      } else if (self.loginUser.isretailer === 2) {
+        self.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer`, {
+          params: {pagestart: 0, limit: 6}
+        })
+        .then(res => {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length >= 5 && !self.query.id) {
+            self.showVip = true
+          } else {
+            self.saveData()
+          }
+        })
+      }
     },
     popupSubmit (cutimg) {
       this.photoarr = [ cutimg ]
@@ -297,7 +329,7 @@ export default {
           self.initContainer()
           self.showContainer = true
           this.$vux.loading.hide()
-          if (this.query.id !== this.$route.query.id) {
+          if (this.query.id === undefined || this.query.id !== this.$route.query.id) {
             this.initData()
             this.query = this.$route.query
             this.getData()
