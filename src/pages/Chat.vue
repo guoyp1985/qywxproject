@@ -195,8 +195,6 @@
                       </check-icon>
                     </div>
                   </div>
-                  <div v-if="(index == 2)" class="pl10 pr10">
-                  </div>
                 </swiper-item>
               </swiper>
             </div>
@@ -250,7 +248,7 @@ export default {
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
-      tabtxts: [ '文章', '产品', '外链' ],
+      tabtxts: [ '文章', '产品' ],
       autofixed: false,
       searchword: '',
       showSearchEmpty: false,
