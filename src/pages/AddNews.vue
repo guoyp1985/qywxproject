@@ -93,11 +93,12 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 import OpenVip from '@/components/OpenVip'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, OpenVip
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip, OpenVip
   },
   data () {
     return {

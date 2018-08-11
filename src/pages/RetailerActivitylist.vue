@@ -209,7 +209,6 @@ export default {
   },
   methods: {
     clickAdd (type) {
-      console.log(type)
       if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 2) {
         this.showVip = true
       } else {
