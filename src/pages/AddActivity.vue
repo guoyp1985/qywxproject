@@ -474,7 +474,7 @@ export default {
         .then(res => {
           const data = res.data
           const retdata = data.data ? data.data : data
-          if (retdata.length >= 0 && !self.query.id) {
+          if (retdata.length >= 5 && !self.query.id) {
             self.showVip = true
           } else {
             self.saveData()
