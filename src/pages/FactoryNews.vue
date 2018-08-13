@@ -8,6 +8,7 @@
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
+    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div id="article-content" class="pagemiddle">
         <div class="article-view">
@@ -32,7 +33,7 @@
       </div>
       <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importNews">引入到我的文章</div>
+          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">引入到我的文章</div>
         </div>
       </div>
       <share-success
@@ -77,6 +78,7 @@ import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
 import Socket from '#/socket'
+import OpenVip from '@/components/OpenVip'
 
 let room = ''
 export default {
@@ -84,7 +86,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos, OpenVip
   },
   data () {
     return {
@@ -105,7 +107,8 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       messages: 0,
-      topcss: ''
+      topcss: '',
+      showVip: false
     }
   },
   filters: {
@@ -122,6 +125,12 @@ export default {
     }
   },
   methods: {
+    hideVip () {
+      this.showVip = false
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
+    },
     access () {
       this.$util.wxAccess()
     },
@@ -167,6 +176,26 @@ export default {
           })
         }
       })
+    },
+    importEvent () {
+      const self = this
+      if (self.loginUser.isretailer === 2) {
+        self.$vux.loading.show()
+        this.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer`, {
+          params: { pagestart: 0, limit: 5 }
+        }).then(res => {
+          self.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length < 5) {
+            self.importNews()
+          } else {
+            self.showVip = true
+          }
+        })
+      } else if (self.loginUser.isretailer === 1) {
+        self.importNews()
+      }
     },
     getData () {
       const self = this
@@ -410,6 +439,7 @@ export default {
       const self = this
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.showVip = false
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false

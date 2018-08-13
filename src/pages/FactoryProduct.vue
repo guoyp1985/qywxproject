@@ -3,6 +3,7 @@
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
+    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
         <template v-if="showFlash">
@@ -80,7 +81,7 @@
       </div>
       <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importProduct">我要代理</div>
+          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">我要代理</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -126,6 +127,7 @@ import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 import Socket from '#/socket'
+import OpenVip from '@/components/OpenVip'
 
 let room = ''
 export default {
@@ -133,7 +135,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip
+    Previewer, Swiper, SwiperItem, Popup, ShareSuccess, Sos, XImg, TitleTip, OpenVip
   },
   filters: {
     dateformat: function (value) {
@@ -171,7 +173,8 @@ export default {
       levelpolicy: [],
       levelNameData: {},
       topcss: '',
-      showVideo: true
+      showVideo: true,
+      showVip: false
     }
   },
   watch: {
@@ -231,6 +234,13 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
+      this.showVip = false
+    },
+    hideVip () {
+      this.showVip = false
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -306,6 +316,26 @@ export default {
           })
         }
       })
+    },
+    importEvent () {
+      const self = this
+      if (self.loginUser.isretailer === 2) {
+        self.$vux.loading.show()
+        this.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
+          params: { pagestart: 0, limit: 5 }
+        }).then(res => {
+          self.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length < 5) {
+            self.importProduct()
+          } else {
+            self.showVip = true
+          }
+        })
+      } else if (self.loginUser.isretailer === 1) {
+        self.importProduct()
+      }
     },
     getData () {
       const self = this
