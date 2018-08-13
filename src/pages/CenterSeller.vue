@@ -103,7 +103,7 @@
                   <div v-html="filterEmot(item.title)"></div>
                   <div class="piclist" v-if="item.photoarr.length > 0">
                     <div
-                      :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length == 2 ? 'two' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
+                      :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length >= 2 ? 'more' : ''}`"
                       v-for="(pic,index1) in item.photoarr">
                       <div class="inner">
                         <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
@@ -136,16 +136,25 @@
                       </div>
                     </div>
                   </div>
-                  <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                    <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                      <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                        <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                        <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                  <div class="mt5 commentarea" v-if="(item.comments && item.comments.length > 0) || item.digman && item.digman.length > 0">
+                    <template v-if="item.digman && item.digman.length > 0">
+                      <div class="digarea flex_left">
+                        <span class="al al-zan8 mr5 font12"></span>
+                        <span class="v_middle">{{item.digmanstr}}</span>
                       </div>
-                      <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                        <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                        <div class="v_middle db-in">回复: </div>
-                        <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                    </template>
+                    <div class="commlist" v-if="item.comments && item.comments.length > 0">
+                      <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                        <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                          <div class="v_middle db-in name name1">{{citem.username}}: </div>
+                          <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                        </div>
+                        <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                          <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                          <div class="v_middle db-in">回复</div>
+                          <div class="v_middle name name2 db-in">{{citem.username}}: </div>
+                          <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -431,6 +440,7 @@ export default {
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
           retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
@@ -464,11 +474,20 @@ export default {
           if (item.isdig) {
             item.isdig = 0
             item.dig = item.dig - 1
+            for (let i = 0; i < item.digman.length; i++) {
+              if (self.loginUser.linkman === item.digman[i]) {
+                item.digman.splice(i, 1)
+                break
+              }
+            }
           } else {
             item.isdig = 1
             item.dig = item.dig + 1
+            item.digman.push(self.loginUser.linkman)
           }
           self.tlData[index].clicked = false
+          self.tlData[index].digman = item.digman
+          self.tlData[index].digmanstr = item.digman.join(',')
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -552,6 +571,7 @@ export default {
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
           retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.tlData = self.tlData.concat(retdata)
         self.disTimeline = true

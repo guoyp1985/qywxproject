@@ -13,8 +13,8 @@
             <div class="txt">{{item.username}}</div>
             <div v-html="filterEmot(item.title)"></div>
             <div class="piclist" v-if="item.photoarr.length > 0">
-              <div 
-                :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length == 2 ? 'two' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
+              <div
+                :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
                   v-for="(pic,index1) in item.photoarr">
                 <div class="inner">
                   <img :src="pic" @click="showBigimg(pic,item.photoarr,`previewer${index}`,index1)" />
@@ -47,16 +47,25 @@
                 </div>
               </div>
             </div>
-            <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-              <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                  <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                  <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+            <div class="mt5 commentarea" v-if="(item.comments && item.comments.length > 0) || item.digman && item.digman.length > 0">
+              <template v-if="item.digman && item.digman.length > 0">
+                <div class="digarea flex_left">
+                  <span class="al al-zan8 mr5 font12"></span>
+                  <span class="v_middle">{{item.digmanstr}}</span>
                 </div>
-                <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                  <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                  <div class="v_middle db-in">回复: </div>
-                  <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+              </template>
+              <div class="commlist" v-if="item.comments && item.comments.length > 0">
+                <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                  <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                    <div class="v_middle db-in name name1">{{citem.username}}: </div>
+                    <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                  </div>
+                  <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
+                    <div class="v_middle name name2 db-in">{{ritem.username}}</div>
+                    <div class="v_middle db-in">回复</div>
+                    <div class="v_middle name name2 db-in">{{citem.username}}: </div>
+                    <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                  </div>
                 </div>
               </div>
             </div>
