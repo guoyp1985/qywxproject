@@ -164,7 +164,8 @@ export default {
       limit1: 10,
       clickSearchword: '',
       historyLimit: 15,
-      showVip: false
+      showVip: false,
+      newsCount: 0
     }
   },
   methods: {
@@ -215,11 +216,6 @@ export default {
         self.$vux.loading.hide()
         self.newsdata = self.newsdata.concat(retdata)
         self.disNewslist = true
-        if (self.loginUser.isretailer === 2) {
-          if (self.newsdata.length >= 5) {
-            self.showVip = true
-          }
-        }
       })
     },
     getHistoryData () {
@@ -316,7 +312,7 @@ export default {
     },
     collect (item, index) {
       const self = this
-      if (self.newsdata.length >= 5 && self.loginUser.isretailer === 2) {
+      if (self.newsCount.length >= 5 && self.loginUser.isretailer === 2) {
         self.showVip = true
       } else if (self.loginUser.isretailer === 1 || self.newsdata.length < 5) {
         self.showVip = false
@@ -334,6 +330,7 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: function () {
                   if (data.flag === 1) {
+                    self.newsCount++
                     self.$router.push({path: '/news', query: {id: data.data.id}})
                   }
                 }
@@ -345,39 +342,44 @@ export default {
     },
     collect1 () {
       const self = this
-      if (!self.collecturl || self.$util.trim(self.collecturl) === '') {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入采集链接'
-        })
-        return false
-      }
-      if (self.collecturl.indexOf('mp.weixin.qq.com') < 0) {
-        self.$vux.alert.show({
-          title: '',
-          content: '链接格式有误，请复制微信公众号文章链接再来采集哦！',
-          onHide: function () {
-            self.collecturl = ''
-          }
-        })
-        return false
-      }
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
-        { do: 'download', url: self.collecturl }
-      ).then(function (res) {
-        const data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push({path: '/news', query: {id: data.data.id}})
+      if (self.newsCount.length >= 5 && self.loginUser.isretailer === 2) {
+        self.showVip = true
+      } else if (self.loginUser.isretailer === 1 || self.newsdata.length < 5) {
+        self.showVip = false
+        if (!self.collecturl || self.$util.trim(self.collecturl) === '') {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入采集链接'
+          })
+          return false
+        }
+        if (self.collecturl.indexOf('mp.weixin.qq.com') < 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '链接格式有误，请复制微信公众号文章链接再来采集哦！',
+            onHide: function () {
+              self.collecturl = ''
             }
-          }
+          })
+          return false
+        }
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/news/goodeazy`,
+          { do: 'download', url: self.collecturl }
+        ).then(function (res) {
+          const data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.$router.push({path: '/news', query: {id: data.data.id}})
+              }
+            }
+          })
         })
-      })
+      }
     },
     init () {
       const self = this
@@ -398,6 +400,7 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      self.showVip = false
       if (this.loginUser && this.loginUser.subscribe === 1) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
@@ -421,7 +424,20 @@ export default {
           self.initContainer()
           self.showContainer = true
           this.query = this.$route.query
-          this.getnewsdata()
+          if (self.loginUser.isretailer === 2) {
+            self.$http.get(`${ENV.BokaApi}/api/list/news`, {
+              params: { from: 'retailer', pagestart: 0, limit: 5 }
+            }).then(function (res) {
+              const data = res.data
+              const retdata = data.data ? data.data : data
+              self.newsCount = retdata.length
+              if (self.loginUser.isretailer === 2 && retdata.length >= 5) {
+                self.showVip = true
+              } else {
+                self.showVip = false
+              }
+            })
+          }
         }
         // }
       }
