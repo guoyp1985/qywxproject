@@ -312,9 +312,9 @@ export default {
     },
     collect (item, index) {
       const self = this
-      if (self.newsCount.length >= 5 && self.loginUser.isretailer === 2) {
+      if (self.newsCount >= 5 && self.loginUser.isretailer === 2) {
         self.showVip = true
-      } else if (self.loginUser.isretailer === 1 || self.newsdata.length < 5) {
+      } else if (self.loginUser.isretailer === 1 || self.newsCount < 5) {
         self.showVip = false
         self.$vux.confirm.show({
           content: '确定要采集该文章吗？',
@@ -342,9 +342,9 @@ export default {
     },
     collect1 () {
       const self = this
-      if (self.newsCount.length >= 5 && self.loginUser.isretailer === 2) {
+      if (self.newsCount >= 5 && self.loginUser.isretailer === 2) {
         self.showVip = true
-      } else if (self.loginUser.isretailer === 1 || self.newsdata.length < 5) {
+      } else if (self.loginUser.isretailer === 1 || self.newsCount < 5) {
         self.showVip = false
         if (!self.collecturl || self.$util.trim(self.collecturl) === '') {
           self.$vux.alert.show({

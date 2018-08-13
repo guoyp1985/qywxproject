@@ -162,7 +162,9 @@ export default {
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
-      showVip: false
+      showVip: false,
+      salesCount: 0,
+      isFirst: false
     }
   },
   methods: {
@@ -219,6 +221,10 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
+        if (self.isFirst) {
+          self.salesCount = self.tabdata1.length
+          self.isFirst = false
+        }
       })
     },
     getData2 () {
@@ -326,9 +332,9 @@ export default {
     },
     inviteevent (item, index) {
       const self = this
-      if (self.loginUser.isretailer === 2 && self.tabdata1.length >= 2) {
+      if (self.loginUser.isretailer === 2 && self.salesCount >= 2) {
         self.showVip = true
-      } else if (self.loginUser.isretailer === 1 || self.tabdata1.length <= 2) {
+      } else if (self.loginUser.isretailer === 1 || self.salesCount <= 2) {
         self.showVip = false
         let content = `<div class="font14 v_middle">该客户是 <span class="color-orange v_middle">${item.uploadname}</span> 带来的，邀请成返点客后， <span class="color-orange v_middle">${item.uploadname}</span> 的收入可能受到影响，邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？</div>`
         if (item.uploader === self.loginUser.uid) {

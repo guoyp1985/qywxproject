@@ -199,7 +199,9 @@ export default {
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
       tabdata1: [],
-      showVip: false
+      showVip: false,
+      isFirst: false,
+      activityCount: 0
     }
   },
   watch: {
@@ -209,7 +211,7 @@ export default {
   },
   methods: {
     clickAdd (type) {
-      if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 2) {
+      if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.showVip = true
       } else {
         this.$router.push({path: '/addActivity', query: {type: type}})
@@ -243,6 +245,10 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.showContainer = true
+        if (self.isFirst) {
+          self.activityCount = self.tabdata1.length
+          self.isFirst = false
+        }
       })
     },
     stopevent (item, index) {
