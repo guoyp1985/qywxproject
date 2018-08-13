@@ -564,8 +564,8 @@ export default {
         this.query = query
         this.showEditor = false
         this.showsharetip = false
-        this.getData()
       }
+      this.getData()
       this.loginUser = User.get()
       this.createSocket()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
