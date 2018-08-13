@@ -353,7 +353,7 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: function () {
                   if (data.flag === 1) {
-                    self.tabdata1 = [item].concat(self.tabdata1)
+                    self.salesCount++
                     self.tabdata2.splice(index, 1)
                   }
                 }
