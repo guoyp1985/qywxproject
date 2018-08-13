@@ -198,10 +198,19 @@ export default {
           self.$vux.loading.hide()
           const data = res.data
           const retdata = data.data ? data.data : data
-          if (retdata.length < 5) {
-            self.upAllData(type)
-          } else {
-            self.showVip = true
+          const retlen = retdata.length
+          if (type === 'product') {
+            if (retlen + self.tabData1.length <= 5) {
+              self.upAllData(type)
+            } else {
+              self.showVip = true
+            }
+          } else if (type === 'factorynews') {
+            if (retlen + self.tabData2.length <= 5) {
+              self.upAllData(type)
+            } else {
+              self.showVip = true
+            }
           }
         })
       } else if (self.loginUser.isretailer === 1) {
