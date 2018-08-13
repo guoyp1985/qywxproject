@@ -979,10 +979,10 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	-webkit-transform-origin: 0% 0%;
 	transform-origin: 0% 0%;
 }
-.timelinelist .avatar{width:50px;text-align:left;}
-.timelinelist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
+.timelinelist .avatar{width:45px;text-align:left;}
+.timelinelist .avatar img{width:35px;height:35px;vertical-align:middle;}
 .timelinelist .con{flex:1;}
-.timelinelist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);}
+.timelinelist .con .txt{height: 23px;line-height:23px;color:#5b6a92;font-weight:bold;}
 .timelinelist .piclist:after{content:"";display:block;clear:both;}
 .timelinelist .picitem.one{width:100%;}
 .timelinelist .picitem.one .inner{width:100%;}
@@ -995,7 +995,8 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .timelinelist .picitem.more:nth-child(3n+2) .inner{left:7px;right:7px;}
 .timelinelist .picitem.more:nth-child(3n+3) .inner{left:14px;right:0;}
 .timelinelist .picitem.more img{width:100%;height:100%;object-fit: cover;}
-.timelinelist .ricon{color:rgb(87, 107, 149);position:relative;width:30px;}
+.timelinelist .deletetxt{color:#5b6a92;width:50px;text-align:center;display:inline-block;vertical-align:middle;}
+.timelinelist .ricon{color:#9ba9cd;position:relative;width:30px;}
 .timelinelist .iconlayer{
 	position:absolute;right:17px;width:0px;top:-10px;height:40px;background-color:#4d5154;overflow:hidden;
 	color:#fff;transition:all 0.5s ease;
@@ -1015,8 +1016,9 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	transform-origin: 0% 0%;
 }
 .timelinelist .commentarea{background-color: #f3f3f5;border-radius:5px;text-align: center;}
-.timelinelist .digarea{position:relative;padding:5px 10px;box-sizing: border-box;color:#7380a2;}
-.timelinelist .digarea:after{
+.timelinelist .digarea{position:relative;padding:5px 10px;box-sizing: border-box;color:#5b6a92;font-weight:bold;}
+.timelinelist .line{position:relative;}
+.timelinelist .line:after{
   content:"";display:block;
 	background-color:#dddedf;height:1px;overflow:hidden;
 	position: absolute;left: 0;right: 0;bottom:0px;
@@ -1028,5 +1030,5 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .timelinelist .commlist{padding:5px 10px;box-sizing: border-box;}
 .timelinelist .commlist .citem:not(:last-child){position:relative;padding-bottom:5px;}
 .timelinelist .commentarea .txt1{position:relative;box-sizing: border-box;text-align:left;}
-.timelinelist .commentarea .name{color:#7380a2;}
+.timelinelist .commentarea .name{color:#5b6a92;font-weight:bold;}
 .timelinelist .commentarea .txt2{position:relative;box-sizing: border-box;text-align:left;}

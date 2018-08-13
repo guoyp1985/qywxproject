@@ -116,7 +116,10 @@
                     </div>
                   </template>
                   <div class="db-flex mt5 color-gray">
-                    <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
+                    <div class="flex_cell font12 flex_left">
+                      <span class="db-in v_middle">{{ item.dateline | dateFormat }}</span>
+                      <div class="deletetxt" v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" @click="deleteTimeline(item,index)">删除</div>
+                    </div>
                     <div class="flex_right ricon">
                       <i class="al al-pl font12" @click="clickIcon(item, index)"></i>
                       <div :class="`iconlayer flex_center ${item.clicked ? 'active' : ''}`">
@@ -129,10 +132,6 @@
                           <i class="al al-pinglun1 font14 mr5"></i>
                           <span class="v_middle">评论</span>
                         </div>
-                        <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="iconitem" @click="deleteTimeline(item,index)">
-                          <i class="al al-shanchu font14 mr5"></i>
-                          <span class="v_middle">删除</span>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -143,6 +142,7 @@
                         <span class="v_middle">{{item.digmanstr}}</span>
                       </div>
                     </template>
+                    <div class="line" v-if="(item.comments && item.comments.length > 0) && item.digman && item.digman.length > 0"></div>
                     <div class="commlist" v-if="item.comments && item.comments.length > 0">
                       <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
                         <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
