@@ -992,6 +992,25 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .timelinelist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
 .timelinelist .picitem:nth-child(3n+3) .inner{left:14px;right:0;}
 .timelinelist .picitem img{width:100%;height:100%;object-fit: cover;}
+.timelinelist .ricon{color:rgb(87, 107, 149);position:relative;width:30px;}
+.timelinelist .iconlayer{
+	position:absolute;right:17px;width:0px;top:-10px;height:40px;background-color:#4d5154;overflow:hidden;
+	color:#fff;transition:all 0.5s ease;
+}
+.timelinelist .iconlayer.active{width:180px;border-radius:5px;}
+.timelinelist .iconlayer .iconitem{
+	flex:1;display:flex;justify-content: center; align-items: center;position:relative;
+	font-size:12px;overflow:hidden;white-space:nowrap;
+}
+.timelinelist .iconlayer .iconitem:not(:last-child):after{
+	content:"";display:block;
+	background-color:#383d40;width:1px;overflow:hidden;
+	position: absolute;right: 0;top: 0;bottom:0px;
+	-webkit-transform: scaleX(0.5) translateX(0.5px);
+	transform: scaleX(0.5) translateX(0.5px);
+	-webkit-transform-origin: 0% 0%;
+	transform-origin: 0% 0%;
+}
 .timelinelist .commentarea{
   background-color: rgb(244, 244, 244);
   border-color: rgb(241, 244, 251) 1px solid;

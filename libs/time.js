@@ -60,6 +60,32 @@ class Time {
 			return parseInt( deltaTime / TIME_UNIT.HOUR ) + "小时" + parseInt( deltaTime % TIME_UNIT.HOUR / TIME_UNIT.MINUTE ) + "分钟前"
 		}
 	}
+	format1() {
+		const time = this.time()
+		let minute = this.minute()
+		const hour = this.hour()
+		const date = this.date()
+		const month = this.month()
+		const year = this.year()
+		const yesterdayTimeBegin = this.yesterdayTimeBegin()
+		const todayTimeBegin = this.todayTimeBegin()
+		const deltaTime = this.deltaTime()
+		minute = minute < 10 ? "0" + minute : minute
+		if( time > yesterdayTimeBegin && time < todayTimeBegin ) {
+			return "昨天" + hour + ":" + minute
+		} else if( time < yesterdayTimeBegin ) {
+			return year + "-" + month + "-" + date + " "
+		}
+		if( deltaTime < TIME_UNIT.MINUTE ) {
+			return "刚刚"
+		}
+		if( deltaTime > TIME_UNIT.MINUTE && deltaTime < TIME_UNIT.HOUR ) {
+			return parseInt( deltaTime / TIME_UNIT.MINUTE ) + "分钟前"
+		}
+		if( deltaTime > TIME_UNIT.HOUR && deltaTime < TIME_UNIT.DAY ) {
+			return parseInt( deltaTime / TIME_UNIT.HOUR ) + "小时前"
+		}
+	}
 	format2 () {
 		const time = this.time()
 		let minute = this.minute()

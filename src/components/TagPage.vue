@@ -12,8 +12,10 @@
           <div class="con">
             <div class="txt">{{item.username}}</div>
             <div v-html="filterEmot(item.title)"></div>
-            <div class="piclist">
-              <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+            <div class="piclist" v-if="item.photoarr.length > 0">
+              <div 
+                :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length == 2 ? 'two' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
+                  v-for="(pic,index1) in item.photoarr">
                 <div class="inner">
                   <img :src="pic" @click="showBigimg(pic,item.photoarr,`previewer${index}`,index1)" />
                 </div>
@@ -26,18 +28,23 @@
             </template>
             <div class="db-flex mt5 color-gray">
               <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-              <div class="w30 align_center">
-                <i class="al"></i>
-              </div>
-              <span class="w60 color-gray flex_right" @click="clickDig(item)">
-                <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                <span class="v_middle ml3">{{item.dig}}</span>
-              </span>
-              <div class="w30 flex_right" @click="onReplyShow(item,index)">
-                <i class="al al-pinglun3 font14"></i>
-              </div>
-              <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
-                <i class="al al-shanchu font14"></i>
+              <div class="flex_right ricon">
+                <i class="al al-pl font12" @click="clickIcon(item, index)"></i>
+                <div :class="`iconlayer flex_center ${item.clicked ? 'active' : ''}`">
+                  <span class="iconitem" @click="clickDig(item,index)">
+                    <i class="al al-zan8 mr5 font12"></i>
+                    <span class="v_middle" v-if="item.isdig">取消</span>
+                    <span class="v_middle" v-else>赞</span>
+                  </span>
+                  <div class="iconitem" @click="onReplyShow(item,index)">
+                    <i class="al al-pinglun1 font14 mr5"></i>
+                    <span class="v_middle">评论</span>
+                  </div>
+                  <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="iconitem" @click="deleteTimeline(item,index)">
+                    <i class="al al-shanchu font14 mr5"></i>
+                    <span class="v_middle">删除</span>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
@@ -126,7 +133,7 @@ export default {
   },
   filters: {
     dateFormat (date) {
-      return new Time(date * 1000).format()
+      return new Time(date * 1000).format1()
     }
   },
   data () {
@@ -145,6 +152,7 @@ export default {
   methods: {
     deleteTimeline (item, index) {
       const self = this
+      self.timelineData[index].clicked = false
       self.$vux.confirm.show({
         title: '确定要删除吗？',
         onConfirm () {
@@ -170,6 +178,9 @@ export default {
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
+    clickIcon (item, index) {
+      this.timelineData[index].clicked = !this.timelineData[index].clicked
+    },
     showBigimg (src, arr, refname, index) {
       const self = this
       if (self.$util.isPC()) {
@@ -182,7 +193,7 @@ export default {
         })
       }
     },
-    clickDig (item) {
+    clickDig (item, index) {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
       if (item.isdig) {
@@ -203,6 +214,7 @@ export default {
             item.isdig = 1
             item.dig = item.dig + 1
           }
+          this.timelineData[index].clicked = false
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -228,6 +240,7 @@ export default {
         this.replyData = null
         this.replyIndex = 0
       }
+      this.timelineData[index].clicked = false
     },
     replyPopupCancel () {
       this.cancelComment && this.cancelComment()
