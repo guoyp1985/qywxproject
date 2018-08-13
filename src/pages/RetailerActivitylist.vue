@@ -200,7 +200,7 @@ export default {
       tabmodel: 0,
       tabdata1: [],
       showVip: false,
-      isFirst: false,
+      isFirst: true,
       activityCount: 0
     }
   },
