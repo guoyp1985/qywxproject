@@ -287,7 +287,7 @@ export default {
   },
   methods: {
     hideVip () {
-      this.$router.go(-1)
+      this.$router.push('/centerSales')
     },
     openVip () {
       location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
