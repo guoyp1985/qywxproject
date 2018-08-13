@@ -1,5 +1,6 @@
 <template>
   <div class="containerarea bg-white font14 notop">
+    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
@@ -63,11 +64,11 @@
       </template>
     </div>
     <template v-if="showBottom">
-      <div v-if="loginUser.isretailer == 1" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-        <div v-if="tabData1 && tabData1.length > 0" class="align_center flex_center flex_cell">
+      <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
+        <div v-if="tabData1 && tabData1.length > 0 && selectedIndex == 0" class="align_center flex_center flex_cell">
           <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
         </div>
-        <div v-if="tabData2 && tabData2.length > 0" class="align_center flex_center flex_cell">
+        <div v-if="tabData2 && tabData2.length > 0 && selectedIndex == 1" class="align_center flex_center flex_cell">
           <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
         </div>
       </div>
@@ -90,6 +91,7 @@ import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
+import OpenVip from '@/components/OpenVip'
 
 const limit = 10
 let pageStart1 = 0
@@ -97,7 +99,7 @@ let pageStart2 = 0
 
 export default {
   components: {
-    Tab, TabItem
+    Tab, TabItem, OpenVip
   },
   filters: {
     dateformat: function (value) {
@@ -117,7 +119,8 @@ export default {
       tabData2: [],
       disTabData1: false,
       disTabData2: false,
-      showBottom: false
+      showBottom: false,
+      showVip: false
     }
   },
   watch: {
@@ -126,6 +129,12 @@ export default {
     }
   },
   methods: {
+    hideVip () {
+      this.showVip = false
+    },
+    openVip () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
+    },
     joinEvent () {
       const self = this
       self.$vux.confirm.show({
@@ -146,7 +155,7 @@ export default {
         }
       })
     },
-    upAll (type) {
+    upAllData (type) {
       const self = this
       let con = ''
       let ajaxUrl = ''
@@ -174,6 +183,30 @@ export default {
           })
         }
       })
+    },
+    upAll (type) {
+      const self = this
+      if (self.loginUser.isretailer === 2) {
+        self.$vux.loading.show()
+        let ajaxurl = `${ENV.BokaApi}/api/list/product?from=retailer`
+        if (type === 'factorynews') {
+          ajaxurl = `${ENV.BokaApi}/api/list/news?from=retailer`
+        }
+        this.$http.get(ajaxurl, {
+          params: { pagestart: 0, limit: 5 }
+        }).then(res => {
+          self.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length < 5) {
+            self.upAllData(type)
+          } else {
+            self.showVip = true
+          }
+        })
+      } else if (self.loginUser.isretailer === 1) {
+        self.upAllData(type)
+      }
     },
     getDateState (dt) {
       return this.$util.getDateState(dt)
