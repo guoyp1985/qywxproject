@@ -57,14 +57,14 @@
               <div class="commlist" v-if="item.comments && item.comments.length > 0">
                 <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
                   <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                    <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                    <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                    <span class="v_middle name name1">{{citem.username}}: </span>
+                    <span class="v_middle" v-html="filterEmot(citem.message)"></span>
                   </div>
                   <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                    <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                    <div class="v_middle db-in">回复</div>
-                    <div class="v_middle name name2 db-in">{{citem.username}}: </div>
-                    <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                    <span class="v_middle name name2">{{ritem.username}}</span>
+                    <span class="v_middle">回复</span>
+                    <span class="v_middle name name2">{{citem.username}}: </span>
+                    <span class="v_middle" v-html="filterEmot(ritem.message)"></span>
                   </div>
                 </div>
               </div>
