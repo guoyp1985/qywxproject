@@ -332,9 +332,9 @@ export default {
           this.$vux.loading.hide()
           if (this.query.id === undefined || this.query.id !== this.$route.query.id) {
             this.initData()
-            this.query = this.$route.query
-            this.getData()
           }
+          this.query = this.$route.query
+          this.getData()
         }
         // }
       }
