@@ -318,7 +318,7 @@ export default {
       const self = this
       if (self.newsdata.length >= 5 && self.loginUser.isretailer === 2) {
         self.showVip = true
-      } else if (self.loginUser.isretailer === 1) {
+      } else if (self.loginUser.isretailer === 1 || self.newsdata.length < 5) {
         self.showVip = false
         self.$vux.confirm.show({
           content: '确定要采集该文章吗？',
