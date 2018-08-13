@@ -188,19 +188,21 @@ export default {
       customerPagestart: 0,
       searchword1: '',
       searchresult1: false,
-      showVip: false
+      showVip: false,
+      newsCount: 0,
+      isFirst: true
     }
   },
   methods: {
     toGoodeazy () {
-      if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 5) {
+      if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
         this.showVip = true
       } else {
         this.$router.push('/retailerGoodeazy')
       }
     },
     toAdd () {
-      if (this.loginUser.isretailer === 2 && this.tabdata1.length >= 5) {
+      if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
         this.showVip = true
       } else {
         this.$router.push('/addNews')
@@ -251,6 +253,10 @@ export default {
         const data = res.data
         const retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
+        if (self.isFirst) {
+          self.newsCount = self.tabdata1.length
+          self.isFirst = false
+        }
         self.distabdata1 = true
       })
     },
