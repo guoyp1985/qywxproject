@@ -381,11 +381,6 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.limit = 2
-        } else if (self.loginUser.isretailer === 1) {
-          self.limit = 10
-        }
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
         //   self.$vux.loading.hide()
