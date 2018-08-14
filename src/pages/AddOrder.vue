@@ -431,8 +431,9 @@ export default {
               self.submitdata.addressid = self.selectaddress.id
             }
           }
+          console.log('in card/canUse')
           return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-            wid: self.orderdata[0].wid, ordermoney: self.payPrice
+            wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
           })
         }
       }).then(res => {

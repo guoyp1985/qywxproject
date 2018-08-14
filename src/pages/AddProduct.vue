@@ -122,6 +122,16 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+          <div class="form-item bg-white" v-if="showRebate">
+            <div class="t-table">
+              <!--
+              <div class="t-cell title-cell font14 v_middle" style="width:120px;">是否允许使用卡券</div>
+            -->
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-switch title='是否允许使用卡券' v-model="submitdata.allowcard"></x-switch>
+              </div>
+            </div>
+          </div>
           <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
           <group class="textarea-outer textarea-text bg-white">
             <x-textarea
@@ -238,7 +248,7 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea } from 'vux'
+import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
@@ -248,7 +258,7 @@ import OpenVip from '@/components/OpenVip'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip
+    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch
   },
   data () {
     return {
@@ -280,7 +290,8 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        video: ''
+        video: '',
+        allowcard: false
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
@@ -323,7 +334,8 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        video: ''
+        video: '',
+        allowcard: false
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -531,7 +543,15 @@ export default {
           self.data = data.data ? data.data : data
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
-            self.submitdata[key] = self.data[key]
+            if (key === 'allowcard') {
+              if (self.data[key]) {
+                self.submitdata[key] = true
+              } else {
+                self.submitdata[key] = false
+              }
+            } else {
+              self.submitdata[key] = self.data[key]
+            }
           }
           if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
