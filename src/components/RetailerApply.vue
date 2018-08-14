@@ -45,7 +45,7 @@
             </div>
             <div class="t-cell align_center" style="width:70px;">
               <div v-if="showGetcode" class="qbtn bg-red color-white font12" style="width:70px;box-sizing:border-box;" @click="getcode">获取验证码</div>
-              <div v-else class="qbtn bg-gray8 color-white" style="width:85px;box-sizing:border-box;">{{ timenum }} 秒</div>
+              <div v-else class="qbtn bg-gray8 color-white" style="width:70px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
           </div>
         </div>
