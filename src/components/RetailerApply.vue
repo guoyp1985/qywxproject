@@ -23,28 +23,28 @@
       <form class="applyform pr12 pl12 pt15">
         <div v-if="shareUser.uid" class="form-item required border1px border-box mb10">
           <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">推荐人</div>
+            <div class="t-cell title-cell font14 v_middle">推荐人</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">{{ shareUser.linkman }}</div>
           </div>
         </div>
         <div class="form-item required border1px border-box mb10">
           <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell title-cell font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
               <input v-model="submitdata.truename" required type="text" class="input" name="truename" placeholder="真实姓名" />
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box mb10" style="padding: 0px 0px 0 10px">
+        <div class="form-item required border1px border-box mb10" style="padding: 0px 0px 0 5px">
           <div class="t-table">
-            <div class="t-cell title-cell w80 font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+            <div class="t-cell title-cell font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
               <group>
                 <x-input type="tel" v-model="submitdata.mobile" required class="font14 x-input" name="mobile" placeholder="手机号" mask="999 9999 9999" :max="13" is-type="china-mobile"></x-input>
               </group>
             </div>
-            <div class="t-cell align_center" style="width:85px;">
-              <div v-if="showGetcode" class="qbtn bg-red color-white font13" style="width:85px;box-sizing:border-box;" @click="getcode">获取验证码</div>
+            <div class="t-cell align_center" style="width:70px;">
+              <div v-if="showGetcode" class="qbtn bg-red color-white font12" style="width:70px;box-sizing:border-box;" @click="getcode">获取验证码</div>
               <div v-else class="qbtn bg-gray8 color-white" style="width:85px;box-sizing:border-box;">{{ timenum }} 秒</div>
             </div>
           </div>
@@ -439,8 +439,13 @@ export default {
 }
 .retailerapply .logo img{width:50%;display: block;}
 .retailerapply .x-input .weui-input{padding: 5px;font-size: 14px;}
-.retailerapply .form-item{padding:7px 10px;}
+.retailerapply .form-item{padding:7px 5px;}
 .retailerapply .form-item:after{background-color:transparent;}
+.retailerapply .title-cell{width:70px;}
+.retailerapply .vux-x-input .weui-icon {padding-left: 0px;vertical-align: 3px;}
+.retailerapply .vux-input-icon.weui-icon-warn:before, .retailerapply .vux-input-icon.weui-icon-success:before {
+    font-size: 14px;
+}
 .retailerapply .qbtn{
   line-height: 40px;
   box-sizing: border-box;
