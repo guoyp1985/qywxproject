@@ -1,6 +1,5 @@
 <template>
   <div class="containerarea bg-white font14 notop">
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
@@ -91,7 +90,6 @@ import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
-import OpenVip from '@/components/OpenVip'
 
 const limit = 10
 let pageStart1 = 0
@@ -99,7 +97,7 @@ let pageStart2 = 0
 
 export default {
   components: {
-    Tab, TabItem, OpenVip
+    Tab, TabItem
   },
   filters: {
     dateformat: function (value) {
@@ -119,8 +117,7 @@ export default {
       tabData2: [],
       disTabData1: false,
       disTabData2: false,
-      showBottom: false,
-      showVip: false
+      showBottom: false
     }
   },
   watch: {
@@ -129,12 +126,6 @@ export default {
     }
   },
   methods: {
-    hideVip () {
-      this.showVip = false
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
-    },
     joinEvent () {
       const self = this
       self.$vux.confirm.show({
@@ -203,19 +194,34 @@ export default {
             if (retlen + self.tabData1.length <= 5) {
               self.upAllData(type)
             } else {
-              self.showVip = true
+              self.openVip(type)
             }
           } else if (type === 'factorynews') {
             if (retlen + self.tabData2.length <= 5) {
               self.upAllData(type)
             } else {
-              self.showVip = true
+              self.openVip(type)
             }
           }
         })
       } else if (self.loginUser.isretailer === 1) {
         self.upAllData(type)
       }
+    },
+    openVip (type) {
+      const self = this
+      let con = ENV.vipProduct
+      if (type === 'factorynews') {
+        con = ENV.vipNews
+      }
+      self.$vux.confirm.show({
+        content: con,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     getDateState (dt) {
       return this.$util.getDateState(dt)

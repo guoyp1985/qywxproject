@@ -3,7 +3,6 @@
     <template v-if="showSos">
       <sos :title="sosTitle"></sos>
     </template>
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div id="scroll-container" class="pagemiddle scroll-container">
         <template v-if="showFlash">
@@ -173,8 +172,7 @@ export default {
       levelpolicy: [],
       levelNameData: {},
       topcss: '',
-      showVideo: true,
-      showVip: false
+      showVideo: true
     }
   },
   watch: {
@@ -234,13 +232,6 @@ export default {
       this.previewerFlasharr = []
       this.ingdata = []
       this.messages = 0
-      this.showVip = false
-    },
-    hideVip () {
-      this.showVip = false
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -330,12 +321,23 @@ export default {
           if (retdata.length < 5) {
             self.importProduct()
           } else {
-            self.showVip = true
+            self.openVip()
           }
         })
       } else if (self.loginUser.isretailer === 1) {
         self.importProduct()
       }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipProduct,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     getData () {
       const self = this

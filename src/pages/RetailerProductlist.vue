@@ -66,7 +66,6 @@
         <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
       </div>
     </div>
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
         <div class="popup0">
@@ -197,7 +196,6 @@ Back go shop:
 import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
-import OpenVip from '@/components/OpenVip'
 
 let pageStart1 = 0
 let pageStart2 = 0
@@ -207,7 +205,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, OpenVip
+    Popup, Confirm, CheckIcon, XImg
   },
   data () {
     return {
@@ -233,8 +231,7 @@ export default {
       discustomerdata: false,
       showFeePopup: false,
       feeData: {},
-      postFee: '0.00',
-      showVip: false
+      postFee: '0.00'
     }
   },
   watch: {
@@ -248,25 +245,30 @@ export default {
     }
   },
   methods: {
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipProduct,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
+    },
     toRecommend () {
       if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
-        this.showVip = true
+        this.openVip()
       } else {
         this.$router.push('/recommendProducts')
       }
     },
     toAdd () {
       if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
-        this.showVip = true
+        this.openVip()
       } else {
         this.$router.push('/addProduct')
       }
-    },
-    hideVip () {
-      this.showVip = false
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)

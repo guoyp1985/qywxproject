@@ -3,101 +3,98 @@
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
-      <template v-else>
-        <div class="s-container" style="top:0;">
-          <form class="addForm">
-            <forminputplate class="required">
-              <span slot="title">{{ $t('Activity product') }}</span>
-              <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
-                <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
-              </div>
-              <div v-if="showproductitem" class="scroll_item border db">
-                <div class="t-table">
-                  <div class="t-cell v_middle" style="width:50px;">
-                    <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
-                  </div>
-                  <div class="t-cell v_middle">
-                    <div class="clamp1">{{ selectproduct.title }}</div>
-                    <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
-                  </div>
-                  <div class="t-cell align_center v_middle" style="width:60px;">
-                    <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
-                  </div>
+      <div class="s-container" style="top:0;">
+        <form class="addForm">
+          <forminputplate class="required">
+            <span slot="title">{{ $t('Activity product') }}</span>
+            <div v-if="showselectproduct" class="qbtn flex_center color-orange" style="border:orange 1px solid;width:100%;line-height:1;padding:4px 0;" @click="selectevent">
+              <span class="mr5 v_middle db-in" style="margin-top:-3px;">+</span><span class="v_middle db-in">{{ $t('Select product') }}</span>
+            </div>
+            <div v-if="showproductitem" class="scroll_item border db">
+              <div class="t-table">
+                <div class="t-cell v_middle" style="width:50px;">
+                  <img class="v_middle imgcover" style="width:40px;height:40px;" :src="selectproduct.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
                 </div>
-              </div>
-            </forminputplate>
-            <forminputplate class="required">
-              <span slot="title">{{ $t('Starttime') }}</span>
-              <group class="x-datetime">
-                <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
-              </group>
-              <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
-            </forminputplate>
-            <forminputplate class="required">
-              <span slot="title">{{ $t('Endtime') }}</span>
-              <group class="x-datetime">
-                <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
-              </group>
-              <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
-            </forminputplate>
-            <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
-            <template v-if="activityType == 'groupbuy'">
-              <form-groupbuy :submitdata="submitdata"></form-groupbuy>
-            </template>
-            <template v-if="activityType == 'bargainbuy'">
-              <form-bargainbuy ref="formBargainbuy" :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
-            </template>
-            <template v-if="activityType == 'discount'">
-              <form-discount :submitdata="submitdata"></form-discount>
-            </template>
-          </form>
-        </div>
-        <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
-        <div v-transfer-dom class="x-popup">
-          <popup v-model="showpopup" height="100%">
-            <div class="popup1">
-              <div class="popup-top flex_center">{{ $t('Select product') }}</div>
-              <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
-                <search
-                  class="x-search"
-                  v-model="searchword"
-                  :auto-fixed="autofixed"
-                  @on-submit="onSubmit"
-                  @on-change="onChange"
-                  @on-cancel="onCancel"
-                  ref="search">
-                </search>
-                <div class="scroll_list">
-                  <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
-                    <template v-if="searchresult">
-                      <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                    </template>
-                    <template v-else>
-                      <div class="flex_center" style="height:80px;">暂无商品</div>
-                    </template>
-                  </div>
-                  <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
-                    <div class="t-table">
-                      <div class="t-cell pic v_middle w50">
-                        <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
-                      </div>
-                      <div class="t-cell v_middle" style="color:inherit;">
-                        <div class="clamp1">{{item.title}}</div>
-                        <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                      </div>
-                    </div>
-                  </check-icon>
+                <div class="t-cell v_middle">
+                  <div class="clamp1">{{ selectproduct.title }}</div>
+                  <div class="mt5 font12 clamp1"><span class="color-orange">{{ $t('RMB') }}{{ selectproduct.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }}{{ selectproduct.storage }}</span></div>
                 </div>
-              </div>
-              <div class="popup-bottom flex_center">
-                <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
-                <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+                <div class="t-cell align_center v_middle" style="width:60px;">
+                  <div class="qbtn color-red btnchange" style="border:#ff3b30 1px solid;line-height:1;" @click="selectevent">修改</div>
+                </div>
               </div>
             </div>
-          </popup>
-        </div>
-      </template>
+          </forminputplate>
+          <forminputplate class="required">
+            <span slot="title">{{ $t('Starttime') }}</span>
+            <group class="x-datetime">
+              <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.starttime' :show.sync="visibility1" @on-change="datechange1" @on-cancel="datecancel1" @on-confirm="dateconfirm1"></datetime>
+            </group>
+            <div @click="showxdate1" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt1 }}</div>
+          </forminputplate>
+          <forminputplate class="required">
+            <span slot="title">{{ $t('Endtime') }}</span>
+            <group class="x-datetime">
+              <datetime format="YYYY-MM-DD HH:mm" v-model='submitdata.endtime' :show.sync="visibility2" @on-change="datechange2" @on-cancel="datecancel2" @on-confirm="dateconfirm2"></datetime>
+            </group>
+            <div @click="showxdate2" class='font14 color-gray align_left' style="position:absolute;left:0;right:0;top:0;height:22px;background-color:transparent;z-index:10;">{{ selectdatetxt2 }}</div>
+          </forminputplate>
+          <div class="bg-gray6 font16 b_bottom_after padding10" style="padding:10px;">活动设置</div>
+          <template v-if="activityType == 'groupbuy'">
+            <form-groupbuy :submitdata="submitdata"></form-groupbuy>
+          </template>
+          <template v-if="activityType == 'bargainbuy'">
+            <form-bargainbuy ref="formBargainbuy" :data="selectproduct" :submitdata="submitdata"></form-bargainbuy>
+          </template>
+          <template v-if="activityType == 'discount'">
+            <form-discount :submitdata="submitdata"></form-discount>
+          </template>
+        </form>
+      </div>
+      <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showpopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">{{ $t('Select product') }}</div>
+            <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
+              <search
+                class="x-search"
+                v-model="searchword"
+                :auto-fixed="autofixed"
+                @on-submit="onSubmit"
+                @on-change="onChange"
+                @on-cancel="onCancel"
+                ref="search">
+              </search>
+              <div class="scroll_list">
+                <div v-if="!productdata || productdata.length === 0" class="scroll_item padding10 color-gray align_center">
+                  <template v-if="searchresult">
+                    <div class="flex_center" style="height:80px;">暂无搜索结果</div>
+                  </template>
+                  <template v-else>
+                    <div class="flex_center" style="height:80px;">暂无商品</div>
+                  </template>
+                </div>
+                <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productdata" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+                  <div class="t-table">
+                    <div class="t-cell pic v_middle w50">
+                      <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" style="width:40px;height:40px;" />
+                    </div>
+                    <div class="t-cell v_middle" style="color:inherit;">
+                      <div class="clamp1">{{item.title}}</div>
+                      <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                    </div>
+                  </div>
+                </check-icon>
+              </div>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
+              <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+            </div>
+          </div>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -132,7 +129,6 @@ import FormDiscount from '@/components/FormDiscount'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
-import OpenVip from '@/components/OpenVip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -142,7 +138,7 @@ export default {
     TransferDom
   },
   components: {
-    Group, XInput, Popup, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip, OpenVip
+    Group, XInput, Popup, Datetime, Search, CheckIcon, Forminputplate, FormGroupbuy, FormBargainbuy, FormDiscount, XImg, Sos, Subscribe, ApplyTip
   },
   data () {
     return {
@@ -169,8 +165,7 @@ export default {
       searchword: '',
       searchresult: false,
       limit: 20,
-      pagestart1: 0,
-      showVip: false
+      pagestart1: 0
     }
   },
   watch: {
@@ -212,14 +207,7 @@ export default {
       this.searchresult = false
       this.pagestart1 = 0
       this.showContainer = false
-      this.showVip = false
       this.showApply = false
-    },
-    hideVip () {
-      this.$router.go(-1)
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
     },
     dateformat (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -465,7 +453,6 @@ export default {
     saveevent () {
       const self = this
       if (self.loginUser.isretailer === 1) {
-        self.showVip = false
         self.saveData()
       } else if (self.loginUser.isretailer === 2) {
         self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
@@ -474,13 +461,24 @@ export default {
         .then(res => {
           const data = res.data
           const retdata = data.data ? data.data : data
-          if (retdata.length >= 5 && !self.query.id) {
-            self.showVip = true
+          if (retdata.length >= 2 && !self.query.id) {
+            self.openVip()
           } else {
             self.saveData()
           }
         })
       }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipActivity,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     refresh () {
       const self = this

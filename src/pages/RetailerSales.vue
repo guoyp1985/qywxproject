@@ -2,7 +2,6 @@
   <div class="containerarea  bg-page  fong14 rsales">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1">
         <div class="row">
@@ -128,11 +127,10 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
-import OpenVip from '@/components/OpenVip'
 
 export default {
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, ApplyTip, OpenVip
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -162,17 +160,21 @@ export default {
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
-      showVip: false,
       salesCount: 0,
       isFirst: true
     }
   },
   methods: {
-    hideVip () {
-      this.showVip = false
-    },
     openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipSales,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     handleScroll: function (refname, index) {
       const self = this
@@ -333,9 +335,8 @@ export default {
     inviteevent (item, index) {
       const self = this
       if (self.loginUser.isretailer === 2 && self.salesCount >= 2) {
-        self.showVip = true
+        self.openVip()
       } else if (self.loginUser.isretailer === 1 || self.salesCount < 2) {
-        self.showVip = false
         let content = `<div class="font14 v_middle">该客户是 <span class="color-orange v_middle">${item.uploadname}</span> 带来的，邀请成返点客后， <span class="color-orange v_middle">${item.uploadname}</span> 的收入可能受到影响，邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？</div>`
         if (item.uploader === self.loginUser.uid) {
           content = `邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？`

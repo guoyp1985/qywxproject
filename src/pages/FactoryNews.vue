@@ -8,7 +8,6 @@
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div id="article-content" class="pagemiddle">
         <div class="article-view">
@@ -78,7 +77,6 @@ import ENV from 'env'
 import jQuery from 'jquery'
 import { User } from '#/storage'
 import Socket from '#/socket'
-import OpenVip from '@/components/OpenVip'
 
 let room = ''
 export default {
@@ -86,7 +84,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos, OpenVip
+    Popup, XButton, Divider, TitleTip, Comment, Reply, CommentPopup, Editor, ShareSuccess, Previewer, Sos
   },
   data () {
     return {
@@ -107,8 +105,7 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       messages: 0,
-      topcss: '',
-      showVip: false
+      topcss: ''
     }
   },
   filters: {
@@ -125,12 +122,6 @@ export default {
     }
   },
   methods: {
-    hideVip () {
-      this.showVip = false
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
-    },
     access () {
       this.$util.wxAccess()
     },
@@ -190,12 +181,23 @@ export default {
           if (retdata.length < 5) {
             self.importNews()
           } else {
-            self.showVip = true
+            self.openVip()
           }
         })
       } else if (self.loginUser.isretailer === 1) {
         self.importNews()
       }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipNews,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     getData () {
       const self = this
@@ -439,7 +441,6 @@ export default {
       const self = this
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.showVip = false
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false

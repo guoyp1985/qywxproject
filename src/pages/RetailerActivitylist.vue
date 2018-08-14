@@ -2,7 +2,6 @@
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
@@ -172,7 +171,6 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
-import OpenVip from '@/components/OpenVip'
 
 const limit = 10
 let pageStart1 = 0
@@ -182,7 +180,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip, OpenVip
+    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -199,7 +197,6 @@ export default {
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
       tabdata1: [],
-      showVip: false,
       isFirst: true,
       activityCount: 0
     }
@@ -212,16 +209,21 @@ export default {
   methods: {
     clickAdd (type) {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
-        this.showVip = true
+        this.openVip()
       } else {
         this.$router.push({path: '/addActivity', query: {type: type}})
       }
     },
-    hideVip () {
-      this.showVip = false
-    },
     openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}&module=payorders`)
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipActivity,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     handleScroll () {
       const self = this
@@ -298,7 +300,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      this.showVip = false
       if (this.loginUser && this.loginUser.subscribe === 1) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()

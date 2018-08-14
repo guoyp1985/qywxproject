@@ -57,7 +57,6 @@
         <div class="collect bg-red flex_center h_100" style="width:85%;" @click="toAdd">{{ $t('Create news') }}</div>
       </div>
     </div>
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
         <div class="popup0">
@@ -140,14 +139,13 @@ import { TransferDom, Popup, CheckIcon, XImg, Search } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
-import OpenVip from '@/components/OpenVip'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, CheckIcon, XImg, Search, OpenVip
+    Popup, CheckIcon, XImg, Search
   },
   filters: {
     dateformat: function (value) {
@@ -188,31 +186,35 @@ export default {
       customerPagestart: 0,
       searchword1: '',
       searchresult1: false,
-      showVip: false,
       newsCount: 0,
       isFirst: true
     }
   },
   methods: {
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipNews,
+        cancelText: '放弃',
+        confirmText: '立即开通',
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
+    },
     toGoodeazy () {
       if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
-        this.showVip = true
+        this.openVip()
       } else {
         this.$router.push('/retailerGoodeazy')
       }
     },
     toAdd () {
       if (this.loginUser.isretailer === 2 && this.newsCount >= 5) {
-        this.showVip = true
+        this.openVip()
       } else {
         this.$router.push('/addNews')
       }
-    },
-    hideVip () {
-      this.showVip = false
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}`)
     },
     handleScroll (refname, type) {
       const self = this
