@@ -219,11 +219,20 @@ export default {
           if (item.isdig) {
             item.isdig = 0
             item.dig = item.dig - 1
+            for (let i = 0; i < item.digman.length; i++) {
+              if (self.loginUser.linkman === item.digman[i]) {
+                item.digman.splice(i, 1)
+                break
+              }
+            }
           } else {
             item.isdig = 1
             item.dig = item.dig + 1
+            item.digman.push(self.loginUser.linkman)
           }
-          this.timelineData[index].clicked = false
+          self.timelineData[index].clicked = false
+          self.timelineData[index].digman = item.digman
+          self.timelineData[index].digmanstr = item.digman.join(',')
         } else {
           self.$vux.toast.show({
             text: data.error,

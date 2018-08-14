@@ -152,6 +152,7 @@ export default {
           }
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+          retdata[i].clicked = false
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = data.count
@@ -232,34 +233,4 @@ export default {
 .userstory .taglist .tagitem{display:inline-block;padding:0 3px;color:rgb(229, 28, 35);}
 .userstory .row3{padding:0px 10px 0px 10px;text-align:right;box-sizing: border-box;}
 
-.tllist .tlitem{
-  display:flex;padding:10px;
-}
-.tllist .avatar{width:50px;text-align:left;}
-.tllist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
-.tllist .con{flex:1;}
-.tllist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
-.tllist .piclist{display:flex;}
-.tllist .picitem{width:33.33333%;padding-bottom:33.33333%;position:relative;}
-.tllist .picitem .inner{
-  position:absolute;top:0;bottom:0;box-sizing:border-box;
-}
-.tllist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
-.tllist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
-.tllist .picitem:nth-child(3n+3) .inner{left:14px;right:0;}
-.tllist .picitem img{width:100%;height:100%;object-fit: cover;}
-.tllist .commentarea{
-  background-color: rgb(244, 244, 244);
-  border-color: rgb(241, 244, 251) 1px solid;
-  border-radius: 4px;text-align: center;
-  padding:10px 5px;box-sizing: border-box;
-}
-.tllist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
-.tllist .commentarea .txt1:before{
-  content:"";
-  position:absolute;left:3px;top:4px;width:3px;height: 16px;
-  background-color: rgb(229, 28, 35);
-}
-.tllist .commentarea .name{color:rgb(93, 102, 155);}
-.tllist .commentarea .txt2{position:relative;padding-left:20px;box-sizing: border-box;text-align:left;}
 </style>
