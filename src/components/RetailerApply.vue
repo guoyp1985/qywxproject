@@ -441,7 +441,7 @@ export default {
 .retailerapply .x-input .weui-input{padding: 5px;font-size: 14px;}
 .retailerapply .form-item{padding:7px 5px;}
 .retailerapply .form-item:after{background-color:transparent;}
-.retailerapply .title-cell{width:70px;}
+.retailerapply .title-cell{width:75px;}
 .retailerapply .vux-x-input .weui-icon {padding-left: 0px;vertical-align: 3px;}
 .retailerapply .vux-input-icon.weui-icon-warn:before, .retailerapply .vux-input-icon.weui-icon-success:before {
     font-size: 14px;
