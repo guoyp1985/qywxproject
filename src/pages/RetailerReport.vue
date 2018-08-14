@@ -153,7 +153,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      this.wid = this.query.wid ? this.query.wid : this.loginUser.wid
+      this.wid = this.query.wid ? this.query.wid : this.loginUser.uid
       this.getData()
     }
   },
