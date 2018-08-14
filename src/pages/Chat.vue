@@ -5,8 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <open-vip v-if="showVip && loginUser.isretailer == 2" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
-    <template v-else>
+    <template v-if="loginUser.isretailer == 1">
       <template v-if="query.fromModule == 'product' && query.fromId && showTip">
         <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
           <div class="db-flex">
@@ -72,7 +71,7 @@
         </div>
       </scroller>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-      <div class="bottom-area" ref="bottomArea" v-if="!(showVip && loginUser.isretailer == 2)">
+      <div class="bottom-area" ref="bottomArea" v-if="loginUser.isretailer == 1">
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -265,8 +264,7 @@ export default {
       selectProductsData: null,
       showUserInfo: false,
       fromProduct: {},
-      showTip: true,
-      showVip: false
+      showTip: true
     }
   },
   filters: {
@@ -286,12 +284,6 @@ export default {
     }
   },
   methods: {
-    hideVip () {
-      this.$router.push('/centerSales')
-    },
-    openVip () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.loginUser.payorderid}&module=payorders`)
-    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -851,6 +843,7 @@ export default {
     //   this.loginUser = User.get()
     // },
     refresh () {
+      const self = this
       room = ''
       minIdFlag = 0
       this.message = ''
@@ -864,9 +857,18 @@ export default {
       this.hasNewMessage = false
       this.loginUser = User.get()
       if (this.loginUser.isretailer === 2) {
-        this.showVip = true
+        self.$vux.confirm.show({
+          content: ENV.vipActivity,
+          cancelText: ENV.giveUpVipText,
+          confirmText: ENV.openVipText,
+          onCancel () {
+            self.$router.push('/centerSales')
+          },
+          onConfirm () {
+            location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+          }
+        })
       } else if (this.loginUser.isretailer === 1) {
-        this.showVip = false
         const usergroup = this.loginUser.usergroup
         if (usergroup && usergroup.length > 0) {
           for (let i = 0; i < usergroup.length; i++) {

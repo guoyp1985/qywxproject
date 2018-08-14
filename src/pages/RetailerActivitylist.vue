@@ -218,8 +218,8 @@ export default {
       const self = this
       self.$vux.confirm.show({
         content: ENV.vipActivity,
-        cancelText: '放弃',
-        confirmText: '立即开通',
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
         onConfirm () {
           location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
         }

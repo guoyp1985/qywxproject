@@ -38,11 +38,13 @@ var ENV = {
   vipProduct: '免费版只能上传5件商品，开通VIP即可无限制上传更多商品哦！',
   vipNews: '免费版只能创建俩篇文章，开通VIP即可无限制创建更多文章哦！',
   vipActivity: '免费版只能创建两个活动，开通VIP即可无限制创建更多活动哦！',
-  vipSales: '免费版只能邀请俩位返点客，开通vip即可无限制邀请更多的返点客哦！',
-  vipMemberView: '免费版不支持查看客户的浏览数据，开通vip即可立即查看客户的浏览数据哦！',
-  vipMemberShare: '免费版不支持查看客户的分享数据，开通vip即可立即查看客户的分享数据哦！',
-  vipMemberOrder: '免费版不支持查看客户的订单数据，开通vip即可立即查看客户的订单数据哦！',
-  vipChat: '免费版不支持与客户联系，开通vip即可立即与客户联系哦！'
+  vipSales: '免费版只能邀请俩位返点客，开通VIP即可无限制邀请更多的返点客哦！',
+  vipMemberView: '免费版不支持查看客户的浏览数据，开通VIP即可立即查看客户的浏览数据哦！',
+  vipMemberShare: '免费版不支持查看客户的分享数据，开通VIP即可立即查看客户的分享数据哦！',
+  vipMemberSale: '免费版不支持查看客户的订单数据，开通VIP即可立即查看客户的订单数据哦！',
+  vipChat: '免费版不支持与客户联系，开通vip即可立即与客户联系哦！',
+  openVipText: '立即开通',
+  giveUpVipText: '放弃=错失良机'
 }
 
 ENV.NoAccessUrls = [
