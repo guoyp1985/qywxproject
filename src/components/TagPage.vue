@@ -60,11 +60,13 @@
                     <span class="v_middle name name1">{{citem.username}}: </span>
                     <span class="v_middle" v-html="filterEmot(citem.message)"></span>
                   </div>
-                  <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                    <span class="v_middle name name2">{{ritem.username}}</span>
-                    <span class="v_middle">回复</span>
-                    <span class="v_middle name name2">{{citem.username}}: </span>
-                    <span class="v_middle" v-html="filterEmot(ritem.message)"></span>
+                  <div class="replylist" v-if="citem.comment.length > 0">
+                    <div class="txt2 ritem" v-for="(ritem,index2) in citem.comment" :key="index2">
+                      <span class="v_middle name name2">{{ritem.username}}</span>
+                      <span class="v_middle">回复</span>
+                      <span class="v_middle name name2">{{citem.username}}: </span>
+                      <span class="v_middle" v-html="filterEmot(ritem.message)"></span>
+                    </div>
                   </div>
                 </div>
               </div>
