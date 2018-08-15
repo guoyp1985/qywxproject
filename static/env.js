@@ -7,8 +7,8 @@ var ENV = {
   WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
-  WeixinQrcode: 'https://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
-  WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
+  WeixinQrcode: 'https://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销汇: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
+  WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销汇
   SocketBokaRoom: 'laravel.boka.cn',
   SocketServer: 'ws://124.207.246.109:7272', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   OrderStatus: [
