@@ -14,7 +14,6 @@
               dots-position="center"
               :interval=6000
               :show-dots="isShowDot"
-              :aspect-ratio="1/1"
               auto
               loop>
               <swiper-item v-for="(item,index) in photoarr" :key="item.id">
@@ -697,7 +696,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .cseller .vux-slider{overflow: initial;}
 .cseller{position:relative;}
 .cseller .topcover{position:relative;padding-bottom:65%;}
@@ -705,6 +704,7 @@ export default {
 .cseller .set-icon{position:absolute;right:12px;top:8px;z-index:1;}
 .cseller .set-icon .al{font-size:22px;}
 .cseller .pic-swiper{width:100%;height:100%;}
+.cseller .pic-swiper .vux-swiper{height:100% !important;}
 .cseller .topcover .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
 .boxouter.box1 .boxinner{
   position:relative;z-index:1;background-color:#fff;
