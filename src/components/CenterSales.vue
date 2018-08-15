@@ -198,7 +198,7 @@
 
 <i18n>
 Sales center:
-  zh-CN: 销售中心
+  zh-CN: 卖家中心
 Content manage:
   zh-CN: 内容管理
 Activity:
