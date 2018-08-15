@@ -46,7 +46,7 @@
                 </div>
               </div>
             </div>
-            <div class="mt5 commentarea" v-if="(item.comments && item.comments.length > 0) || item.digman && item.digman.length > 0">
+            <div class="mt5 commentarea" v-if="(item.comments && item.comments.length > 0) || (item.digman && item.digman.length > 0)">
               <template v-if="item.digman && item.digman.length > 0">
                 <div class="digarea">
                   <span class="al al-zan8 mr5 font12"></span>
