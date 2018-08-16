@@ -11,7 +11,7 @@
           </div>
           <div class="con">
             <div class="txt">{{item.username}}</div>
-            <div v-html="filterEmot(item.title)"></div>
+            <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
             <div class="piclist" v-if="item.photoarr.length > 0">
               <div
                 :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
