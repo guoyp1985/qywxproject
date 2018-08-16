@@ -874,7 +874,7 @@ export default {
         this.createSocket()
       } else if (this.loginUser.isretailer === 2) {
         self.$vux.confirm.show({
-          content: ENV.vipActivity,
+          content: ENV.vipChat,
           cancelText: ENV.giveUpVipText,
           confirmText: ENV.openVipText,
           onCancel () {
