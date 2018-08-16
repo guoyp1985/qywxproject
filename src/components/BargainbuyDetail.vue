@@ -107,7 +107,7 @@
               </div>
               <div class="t-cell align_right v_middle pr10" style="width:130px;">
                 <div class="font13" style="color:#C93A3A">
-                  <img class="v_middle" src="http://vuxlaravel.boka.cn/images/bargainbuy_3.png?_v=1" style="width: 21px;height:19px;">  砍掉 <span class="font16 bold">{{ item.cutmoney }}</span> 元
+                  <img class="v_middle" src="http://vuxlaravel.boka.cn/images/bargainbuy_3.png" style="width: 21px;height:19px;">  砍掉 <span class="font16 bold">{{ item.cutmoney }}</span> 元
                 </div>
               </div>
             </div>

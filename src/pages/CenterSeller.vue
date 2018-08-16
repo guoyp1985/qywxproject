@@ -114,7 +114,7 @@
                       <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
                     </div>
                   </template>
-                  <div class="db-flex mt5 color-gray">
+                  <div class="datetxt">
                     <div class="flex_cell font12 flex_left">
                       <span class="db-in v_middle">{{ item.dateline | dateFormat }}</span>
                       <div class="deletetxt" v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" @click="deleteTimeline(item,index)">删除</div>
