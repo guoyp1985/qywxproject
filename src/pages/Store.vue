@@ -100,8 +100,8 @@
             </newsitemplate>
           </div>
         </template>
-        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10">
-          <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
+        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10 pl10 pr10">
+          <router-link to="/centerSales" class="btn-open db" style="background-color: #e10c00">我也要开店</router-link>
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
