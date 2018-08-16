@@ -79,7 +79,7 @@
           </div>
           <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">商品原价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
               </div>
@@ -275,7 +275,7 @@ export default {
         seodescription: ''
       },
       allowsubmit: true,
-      requireddata: { title: '', oriprice: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       levels: [],
       classData: []
     }
@@ -424,7 +424,7 @@ export default {
       }
       let price = postdata.price.toString().replace(/,/g, '')
       let oriprice = postdata.oriprice.toString().replace(/,/g, '')
-      if (isNaN(oriprice) || oriprice <= 0 || isNaN(price) || price <= 0) {
+      if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0) {
         self.$vux.alert.show({
           title: '',
           content: '请输入正确的价格'
