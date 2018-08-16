@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <template v-if="loginUser.isretailer == 1">
+    <template v-if="query.fromModule == 'product' || query.fromModule == 'news' || loginUser.isretailer == 1">
       <template v-if="query.fromModule == 'product' && query.fromId && showTip">
         <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
           <div class="db-flex">
@@ -71,7 +71,7 @@
         </div>
       </scroller>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-      <div class="bottom-area" ref="bottomArea" v-if="loginUser.isretailer == 1">
+      <div class="bottom-area" ref="bottomArea" v-if="query.fromModule == 'product' || query.fromModule == 'news' || loginUser.isretailer == 1">
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -856,7 +856,23 @@ export default {
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
-      if (this.loginUser.isretailer === 2) {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      if (this.query.fromModule === 'product' || this.query.fromModule === 'news' || this.loginUser.isretailer === 1) {
+        const usergroup = this.loginUser.usergroup
+        if (usergroup && usergroup.length > 0) {
+          for (let i = 0; i < usergroup.length; i++) {
+            if (usergroup[i] === 3) {
+              this.showUserInfo = true
+              break
+            }
+          }
+        }
+        this.setViewHeight()
+        this.getData()
+        this.getProduct()
+        this.createSocket()
+      } else if (this.loginUser.isretailer === 2) {
         self.$vux.confirm.show({
           content: ENV.vipActivity,
           cancelText: ENV.giveUpVipText,
@@ -868,22 +884,6 @@ export default {
             location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
           }
         })
-      } else if (this.loginUser.isretailer === 1) {
-        const usergroup = this.loginUser.usergroup
-        if (usergroup && usergroup.length > 0) {
-          for (let i = 0; i < usergroup.length; i++) {
-            if (usergroup[i] === 3) {
-              this.showUserInfo = true
-              break
-            }
-          }
-        }
-        this.setViewHeight()
-        this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-        this.query = this.$route.query
-        this.getData()
-        this.getProduct()
-        this.createSocket()
       }
     }
   },
