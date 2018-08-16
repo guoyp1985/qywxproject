@@ -69,7 +69,7 @@
     			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
     		</div>
         <div class="b_top_after"></div>
-        <div v-if="disproductdata" class="productlist squarepic">
+        <div v-if="disproductdata" :class="`productlist ${productdata.length == 0 ? '' : 'squarepic'}`">
           <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
           <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
