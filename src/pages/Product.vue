@@ -69,7 +69,14 @@
             <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
             <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
           </div>
-          <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
+          <div class="color-red">
+            <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
+            <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
+            <span class="color-gray font14" style="text-decoration:line-through;">
+              <span class="mr3 v_middle">{{ $t('RMB') }}</span>
+              <span class="v_middle">{{ productdata.oriprice }}</span>
+            </span>
+          </div>
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
     					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>

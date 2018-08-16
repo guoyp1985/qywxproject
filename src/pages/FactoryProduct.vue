@@ -36,8 +36,13 @@
       		<div class="clamp2">
             <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
           </div>
-          <div class="font24 color-red">
-            <span class="font18 mr5">价格: {{ $t('RMB') }}</span>{{ productdata.price }}
+          <div class="color-red">
+            <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
+            <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
+            <span class="color-gray font14" style="text-decoration:line-through;">
+              <span class="mr3 v_middle">{{ $t('RMB') }}</span>
+              <span class="v_middle">{{ productdata.oriprice }}</span>
+            </span>
           </div>
         </div>
         <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">

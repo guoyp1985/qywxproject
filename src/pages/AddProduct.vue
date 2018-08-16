@@ -77,7 +77,16 @@
           </div>
           <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">商品原价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
               </div>
@@ -281,6 +290,7 @@ export default {
         classid: '',
         title: '',
         price: '',
+        oriprice: '',
         storage: '',
         unit: '件',
         postage: '0.00',
@@ -294,7 +304,7 @@ export default {
         allowcard: false
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', oriprice: '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       showRebate: false,
       classData: []
     }
@@ -324,6 +334,7 @@ export default {
       this.submitdata = {
         classid: '',
         title: '',
+        oriprice: '',
         price: '',
         storage: '',
         unit: '件',
@@ -442,11 +453,12 @@ export default {
         return false
       }
       let price = postdata.price.toString().replace(/,/g, '')
+      let oriprice = postdata.oriprice.toString().replace(/,/g, '')
       let rebate = postdata.rebate
       if (self.$util.trim(rebate) !== '') {
         rebate = rebate.toString().replace(/,/g, '')
       }
-      if (isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
+      if (isNaN(oriprice) || oriprice <= 0 || isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
         self.$vux.alert.show({
           title: '',
           content: '请输入正确的价格'
@@ -461,6 +473,7 @@ export default {
         return false
       }
       postdata.price = price
+      postdata.oriprice = oriprice
       postdata.rebate = rebate
       self.$vux.loading.show()
       if (self.query.id) {
