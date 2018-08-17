@@ -448,12 +448,10 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.query.id !== this.$route.query.id) {
-        this.initData()
-        this.query = this.$route.query
-        this.submitdata.shopid = this.query.id
-        this.getData()
-      }
+      this.initData()
+      this.query = this.$route.query
+      this.submitdata.shopid = this.query.id
+      this.getData()
     }
   },
   activated () {
