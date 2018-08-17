@@ -21,11 +21,13 @@
               </div>
             </div>
             <div class="col2">
-              <img class="pic" src="../assets/images/auth2.png" />
-              <div class="icon-radius icon1">智能获客</div>
-              <div class="icon-radius icon2">社交店铺</div>
-              <div class="icon-radius icon3">返点分销</div>
-              <div class="icon-radius icon4">社群营销</div>
+              <div class="pic flex_center">
+                <img src="../assets/images/auth2.png" />
+                <div class="icon-radius icon1">智能获客</div>
+                <div class="icon-radius icon2">社交店铺</div>
+                <div class="icon-radius icon3">返点分销</div>
+                <div class="icon-radius icon4">社群营销</div>
+              </div>
             </div>
           </div>
         </div>
@@ -92,6 +94,8 @@ export default {
 .auth-container .row2{width:100%;}
 .auth-container .grayarea{width: 100%;}
 .auth-container .row2 .col2{position:relative;}
+.auth-container .row2 .col2 .pic{width:290px;position:relative;}
+.auth-container .row2 .col2 .pic img{width:100%;}
 .auth-container .col1 .txt{font-size: 24px;line-height: 35px;}
 .auth-container .btnlist{}
 .auth-container .btnlist .btn{width: 145px;height: 50px;color: rgb(255, 255, 255);border-radius: 4px;font-size: 16px;display:inline-block;text-align:center;line-height:50px;}
@@ -144,7 +148,26 @@ export default {
 .layer-inner .close-area{position:absolute;right:-48px;top:-37px;width:47px;height:47px;}
 .layer-inner .close-area img{width:47px;height:47px;vertical-align:middle;}
 
-@media (min-width: 992px) {
+@media (min-width: 1100px) {
+  .auth-container .row1{padding:45px 50px 180px;}
+  .auth-container .grayarea{
+    height: 270px;padding-left:50px;
+    background-color: rgb(235, 240, 255);
+    box-shadow: rgba(21, 21, 21, 0.28) 0px 3px 22px 0px;
+    display:flex;justify-content: flex-start; align-items: center;
+  }
+  .auth-container .grayarea .col1{width:500px;}
+  .auth-container .col1 .txt{height: 105px;color: rgb(126, 136, 168);}
+  .auth-container .grayarea .col2{
+    flex:1;display:flex;justify-content: center; align-items: center;
+  }
+  .auth-container .row2{height:603px;}
+  .icon-radius.icon1{top:114px;left:-171px;}
+  .icon-radius.icon2{top:127px;right:-110px;}
+  .icon-radius.icon3{top:456px;left:-150px;}
+  .icon-radius.icon4{top:504px;right:-95px;}
+}
+@media (min-width: 1390px) {
   .auth-container .row1{padding:45px 150px 180px;}
   .auth-container .grayarea{
     height: 270px;padding-left:150px;
@@ -158,12 +181,12 @@ export default {
     flex:1;display:flex;justify-content: center; align-items: center;
   }
   .auth-container .row2{height:603px;}
-  .icon-radius.icon1{top:114px;left:-12px;}
-  .icon-radius.icon2{top:127px;left:569px;}
-  .icon-radius.icon3{top:456px;left:58px;}
-  .icon-radius.icon4{top:504px;left:548px;}
+  .icon-radius.icon1{top:114px;left:-171px;}
+  .icon-radius.icon2{top:127px;right:-168px;}
+  .icon-radius.icon3{top:456px;left:-150px;}
+  .icon-radius.icon4{top:504px;right:-129px;}
 }
-@media (max-width: 991px) {
+@media (max-width: 1109px) {
   .auth-container .row1{padding:45px 30px;}
   .auth-container .grayarea .col1{padding:0 30px 30px;color:#fff;}
   .auth-container .col1 .txt{color:#fff;}
@@ -172,8 +195,8 @@ export default {
   .auth-container .row2 .col2{text-align:center;width:290px;margin:0 auto;}
   .auth-container .row2 .col2 .pic{width:100%;}
   .icon-radius.icon1{top:114px;left:-171px;}
-  .icon-radius.icon2{top:127px;right:-163px;}
-  .icon-radius.icon3{top:456px;left:-147px;}
+  .icon-radius.icon2{top:127px;right:-168px;}
+  .icon-radius.icon3{top:456px;left:-150px;}
   .icon-radius.icon4{top:504px;right:-129px;}
 }
 @media (max-width: 700px) {
