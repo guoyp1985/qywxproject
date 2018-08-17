@@ -75,19 +75,22 @@ export default {
 </script>
 
 <style lang="less">
-.authpage{width:100%;height:100%;overflow:auto;min-width:1440px;box-sizing: border-box;}
+.authpage{width:100%;height:100%;overflow:auto;min-width:1440px;box-sizing: border-box;padding-bottom:115px;background-color:#fff;}
 .authpage * {box-sizing: border-box;}
 .auth-container{
-  width:1440px;height:720px;margin:0 auto;
-  background-image:url(../assets/images/auth1.png);
-  background-repeat:no-repeat;background-position:center;
-  background-size:100%;z-index:1;
+  width:1440px;margin:0 auto;
+  background-size:cover;z-index:1;
 }
-.auth-container .inner{padding-top:45px;position:relative;z-index:2;}
-.auth-container .row1{color:#fff;padding:0 150px;}
+.auth-container .inner{position:relative;z-index:2;}
+.auth-container .row1{color:#fff;padding:45px 150px 180px;background-color:rgb(100, 140, 255);}
 .auth-container .row1 .logo{width:90px;vertical-align:left;}
 .auth-container .row1 .txt{text-shadow: rgb(170, 170, 170) 1px 1px 1px;font-size: 28px;}
-.auth-container .row2{padding-top:180px;padding-bottom:125px;}
+.auth-container .row2{
+  width:100%;height:603px;
+  background-image:url(../assets/images/auth1.png);
+  background-repeat:no-repeat;background-position:center;
+  background-size:100% 100%;
+}
 .auth-container .grayarea{
   width: 100%;height: 270px;padding-left:155px;
   background-color: rgb(235, 240, 255);
