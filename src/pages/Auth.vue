@@ -148,7 +148,7 @@ export default {
 .layer-inner .close-area{position:absolute;right:-48px;top:-37px;width:47px;height:47px;}
 .layer-inner .close-area img{width:47px;height:47px;vertical-align:middle;}
 
-@media (min-width: 1100px) {
+@media (min-width: 1115px) {
   .auth-container .row1{padding:45px 50px 180px;}
   .auth-container .grayarea{
     height: 270px;padding-left:50px;
@@ -186,7 +186,7 @@ export default {
   .icon-radius.icon3{top:456px;left:-150px;}
   .icon-radius.icon4{top:504px;right:-129px;}
 }
-@media (max-width: 1109px) {
+@media (max-width: 1114px) {
   .auth-container .row1{padding:45px 30px;}
   .auth-container .grayarea .col1{padding:0 30px 30px;color:#fff;}
   .auth-container .col1 .txt{color:#fff;}
