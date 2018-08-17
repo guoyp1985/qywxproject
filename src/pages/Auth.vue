@@ -77,6 +77,7 @@ export default {
 </script>
 
 <style lang="less">
+body{background-color: #5b81ec;}
 .authpage{
   width:100%;height:100%;
   background-image:url(../assets/images/auth1.png);
