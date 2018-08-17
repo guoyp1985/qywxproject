@@ -153,6 +153,7 @@ export default {
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
           retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = data.count
