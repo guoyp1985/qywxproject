@@ -177,6 +177,8 @@ export default {
   .icon-radius.icon4{top:504px;right:-129px;}
 }
 @media (max-width: 700px) {
+  .auth-container .row1 .txt{font-size:20px;}
+  .auth-container .col1 .txt{font-size:16px;line-height: 25px;}
   .auth-container .row2 .col2{text-align:center;width:200px;margin:0 auto;}
   .auth-container .row2 .col2 .pic{width:100%;}
   .icon-radius.icon1{top:114px;left:-80px;width:60px;height:60px;font-size:12px;}
