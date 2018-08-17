@@ -38,6 +38,7 @@
         :timeline-count="timelineCount"
         :after-delete="afterDelete"
         :click-comment="clickComment"
+        seller-type="userstory"
         :cancel-comment="cancelComment">
       </tag-page>
     </div>

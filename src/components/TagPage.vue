@@ -29,7 +29,7 @@
             <div class="datetxt">
               <div class="flex_cell font12 flex_left">
                 <span class="db-in v_middle">{{ item.dateline | dateFormat }}</span>
-                <div class="deletetxt" v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" @click="deleteTimeline(item,index)">删除</div>
+                <div class="deletetxt" v-if="item.uid == loginUser.uid || query.uid == loginUser.uid || sellerType == 'userstory'" @click="deleteTimeline(item,index)">删除</div>
               </div>
               <div class="flex_right ricon">
                 <i class="al al-pl font12" @click="clickIcon(item, index)"></i>
@@ -131,6 +131,10 @@ export default {
     tagName: {
       type: String,
       default: '卖家动态'
+    },
+    sellerType: {
+      type: String,
+      default: ''
     },
     afterDelete: Function,
     clickComment: Function,
