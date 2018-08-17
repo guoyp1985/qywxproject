@@ -500,12 +500,10 @@ export default {
       this.loginUser = User.get()
     },
     refresh (query) {
-      if (query.wid === undefined || this.query.wid !== query.wid) {
-        this.initData()
-        this.query = query
-        this.$vux.loading.show()
-        this.getData()
-      }
+      this.initData()
+      this.query = query
+      this.$vux.loading.show()
+      this.getData()
       if (this.productdata.length < limit) {
         this.productdata = []
         this.getData1()
