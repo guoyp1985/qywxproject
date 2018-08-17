@@ -48,7 +48,7 @@
     						</div>
     					</div>
             </div>
-            <div class="b_bottom_after padding10 color-orange" v-if="cardList.length && allowCard">
+            <div class="b_bottom_after padding10 color-orange" v-if="cardList && cardList.length && allowCard">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
                 <div class="t-cell v_middle align_right" @click="checkCard">
