@@ -16,7 +16,7 @@
             <div class="col1">
               <div class="txt">一款基于微信，赋能微商用社交电商的方式创业，最终实现为商品找销售，为销售找商品的共享销售平台。</div>
               <div class="btnlist">
-                <div class="btn">立即授权</div>
+                <div class="btn" @click="clickAuth">立即授权</div>
                 <div class="btn" @click="clickChat">联系客服</div>
               </div>
             </div>
@@ -65,6 +65,26 @@ export default {
     },
     closeLayer () {
       this.showLayer = false
+    },
+    clickAuth () {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.get(`${ENV.BokaApi}/api/open/getPreAuthorizationUrl`, {
+        params: {url: `${ENV.Host}/#/mpSetting`}
+      }).then(res => {
+        self.$vux.loading.hide()
+        let data = res.data
+        if (data.flag && data.data) {
+          location.replace(data.data)
+        } else if (data.error) {
+          self.$vux.toast.show({
+            text: data.error,
+            type: 'warn',
+            time: self.$util.delay(data.error)
+          })
+        }
+        console.log(res)
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
