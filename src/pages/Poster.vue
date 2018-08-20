@@ -291,20 +291,29 @@ export default {
       self.$vux.loading.show()
       self.iscreating = true
       self.$http.post(`${ENV.BokaApi}/api/retailer/createPoster`, self.submitdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.iscreating = false
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
-        self.$vux.toast.show({
-          text: data.error,
-          type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push('/posterDetail')
+        if (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.iscreating = false
+          let toasttype = data.flag !== 1 ? 'warn' : 'success'
+          self.$vux.toast.show({
+            text: data.error,
+            type: toasttype,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.$router.push('/posterDetail')
+              }
             }
-          }
-        })
+          })
+        } else {
+          self.$vux.loading.hide()
+          self.iscreating = false
+          self.$vux.toast.show({
+            text: '请求超时, 请重试',
+            type: 'warn'
+          })
+        }
       })
     },
     getData () {
