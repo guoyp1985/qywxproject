@@ -38,6 +38,14 @@
               </div>
             </div>
           </div>
+          <div class="form-item">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input type="text" class="input" placeholder="卖家名额" />
+              </div>
+            </div>
+          </div>
           <div class="form-item bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Cover photo') }}</div>
@@ -250,39 +258,53 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-        { params: { fid: self.query.id } }
-      ).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        self.infoData = retdata
-        self.photoarr = []
-        if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
-          self.photoarr.push(retdata.photo)
-        }
-        for (let key in self.submitData) {
-          self.submitData[key] = retdata[key]
-        }
-        if (self.disClassData) {
-          return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-            { params: { limit: 100 } }
-          )
-        }
-      }).then(function (res) {
-        if (res) {
+      if (self.query.id) {
+        self.$http.get(`${ENV.BokaApi}/api/factory/info`,
+          { params: { fid: self.query.id } }
+        ).then(function (res) {
+          self.$vux.loading.hide()
           let data = res.data
-          data = data.data ? data.data : data
-          self.classData = data
-          self.productClass = []
-          if (self.infoData.productclass && self.$util.trim(self.infoData.productclass) !== '') {
-            let idarr = self.infoData.productclass.split(',')
-            for (let i = 0; i < idarr.length; i++) {
-              self.productClass.push(parseInt(idarr[i]))
+          let retdata = data.data ? data.data : data
+          self.infoData = retdata
+          self.photoarr = []
+          if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
+            self.photoarr.push(retdata.photo)
+          }
+          for (let key in self.submitData) {
+            self.submitData[key] = retdata[key]
+          }
+          if (self.disClassData) {
+            return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+              { params: { limit: 100 } }
+            )
+          }
+        }).then(function (res) {
+          if (res) {
+            let data = res.data
+            data = data.data ? data.data : data
+            self.classData = data
+            self.productClass = []
+            if (self.infoData.productclass && self.$util.trim(self.infoData.productclass) !== '') {
+              let idarr = self.infoData.productclass.split(',')
+              for (let i = 0; i < idarr.length; i++) {
+                self.productClass.push(parseInt(idarr[i]))
+              }
             }
           }
-        }
-      })
+        })
+      } else {
+        self.$vux.loading.hide()
+        self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+          { params: { limit: 100 } }
+        ).then(function (res) {
+          if (res) {
+            let data = res.data
+            data = data.data ? data.data : data
+            self.classData = data
+            self.productClass = []
+          }
+        })
+      }
     },
     init () {
     },

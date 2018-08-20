@@ -32,7 +32,7 @@
       </div>
       <div v-if="article.identity == 'retailer'" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importNews">引入到我的文章</div>
+          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">引入到我的文章</div>
         </div>
       </div>
       <share-success
@@ -165,6 +165,37 @@ export default {
               time: self.$util.delay(data.error)
             })
           })
+        }
+      })
+    },
+    importEvent () {
+      const self = this
+      if (self.loginUser.isretailer === 2) {
+        self.$vux.loading.show()
+        this.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer`, {
+          params: { pagestart: 0, limit: 5 }
+        }).then(res => {
+          self.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length < 5) {
+            self.importNews()
+          } else {
+            self.openVip()
+          }
+        })
+      } else if (self.loginUser.isretailer === 1) {
+        self.importNews()
+      }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipNews,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
         }
       })
     },

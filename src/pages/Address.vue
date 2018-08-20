@@ -4,8 +4,8 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="personal-address" v-cloak>
-    <view-box class="view-box" body-padding-bottom="0">
+  <div id="personal-address">
+    <view-box class="view-box" body-padding-bottom="65px">
       <group v-if="!items.length">
         <cell-box><span class="font14 color-gray">{{$t('No Address')}}</span></cell-box>
       </group>

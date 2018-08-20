@@ -79,7 +79,16 @@
           </div>
           <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
               </div>
@@ -254,6 +263,7 @@ export default {
       submitdata: {
         classid: '',
         title: '',
+        oriprice: '',
         price: '',
         storage: '',
         unit: '件',
@@ -267,7 +277,8 @@ export default {
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       levels: [],
-      classData: []
+      classData: [],
+      submitIng: false
     }
   },
   watch: {
@@ -296,6 +307,7 @@ export default {
       this.submitdata = {
         classid: '',
         title: '',
+        oriprice: '',
         price: '',
         storage: '',
         unit: '件',
@@ -394,57 +406,64 @@ export default {
     },
     savedata (postdata) {
       const self = this
-      let validateData = []
-      for (let key in self.requireddata) {
-        let v = {}
-        v[key] = self.submitdata[key]
-        validateData.push(v)
-      }
-      let iscontinue = self.$util.validateQueue(validateData,
-        model => {
-          switch (model.key) {
-            default:
-              self.$vux.toast.text('必填项不能为空', 'middle')
-          }
+      if (!self.submitIng) {
+        self.submitIng = true
+        let validateData = []
+        for (let key in self.requireddata) {
+          let v = {}
+          v[key] = self.submitdata[key]
+          validateData.push(v)
         }
-      )
-      if (!iscontinue) {
-        return false
-      }
-      let price = postdata.price.toString().replace(/,/g, '')
-      if (isNaN(price) || price <= 0) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入正确的价格'
-        })
-        return false
-      }
-      if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
-        self.$vux.alert.show({
-          title: '',
-          content: '请完善商品介绍或者详情图片'
-        })
-        return false
-      }
-      self.$vux.loading.show()
-      if (self.query.id) {
-        postdata.id = self.query.id
-      }
-      postdata.fid = self.query.fid
-      self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag !== 1 ? 'warn' : 'success',
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push({ path: '/factoryAgentFee', query: { id: data.data, fid: self.query.fid, from: 'add' } })
+        let iscontinue = self.$util.validateQueue(validateData,
+          model => {
+            switch (model.key) {
+              default:
+                self.$vux.toast.text('必填项不能为空', 'middle')
             }
           }
+        )
+        if (!iscontinue) {
+          return false
+        }
+        let price = postdata.price.toString().replace(/,/g, '')
+        let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的价格'
+          })
+          return false
+        }
+        if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
+          self.$vux.alert.show({
+            title: '',
+            content: '请完善商品介绍或者详情图片'
+          })
+          return false
+        }
+        postdata.price = price
+        postdata.oriprice = oriprice
+        self.$vux.loading.show()
+        if (self.query.id) {
+          postdata.id = self.query.id
+        }
+        postdata.fid = self.query.fid
+        self.$http.post(`${ENV.BokaApi}/api/add/factoryproduct`, postdata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            type: data.flag !== 1 ? 'warn' : 'success',
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              self.submitIng = false
+              if (data.flag === 1) {
+                self.$router.push({ path: '/factoryAgentFee', query: { id: data.data, fid: self.query.fid, from: 'add' } })
+              }
+            }
+          })
         })
-      })
+      }
     },
     saveevent () {
       const self = this
@@ -510,6 +529,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       const self = this
       this.loginUser = User.get()
+      self.submitIng = false
       if (this.loginUser) {
         this.$vux.loading.show()
         let isAdmin = false

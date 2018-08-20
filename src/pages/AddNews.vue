@@ -90,10 +90,11 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe
+    Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip
   },
   data () {
     return {
@@ -186,7 +187,7 @@ export default {
       this.photoarr.splice(index, 1)
       this.submitdata.photo = this.photoarr.join(',')
     },
-    save () {
+    saveData () {
       const self = this
       const query = self.$route.query
       let validateData = []
@@ -229,6 +230,36 @@ export default {
             }
           }
         })
+      })
+    },
+    save () {
+      const self = this
+      if (self.loginUser.isretailer === 1) {
+        self.saveData()
+      } else if (self.loginUser.isretailer === 2) {
+        self.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer`, {
+          params: {pagestart: 0, limit: 6}
+        })
+        .then(res => {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length >= 5 && !self.query.id) {
+            self.openVip()
+          } else {
+            self.saveData()
+          }
+        })
+      }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipNews,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
       })
     },
     popupSubmit (cutimg) {
@@ -275,35 +306,35 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        } else {
-          self.initContainer()
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
-          }
-          if (!self.loginUser.isretailer && !isAdmin) {
-            this.$vux.loading.hide()
-            self.initContainer()
-            self.showApply = true
-          } else {
-            self.initContainer()
-            self.showContainer = true
-            this.$vux.loading.hide()
-            if (this.query.id !== this.$route.query.id) {
-              this.initData()
-              this.query = this.$route.query
-              this.getData()
-            }
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        self.initContainer()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
           }
         }
+        if (!self.loginUser.isretailer && !isAdmin) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showApply = true
+        } else {
+          self.initContainer()
+          self.showContainer = true
+          this.$vux.loading.hide()
+          if (this.query.id === undefined || this.query.id !== this.$route.query.id) {
+            this.initData()
+          }
+          this.query = this.$route.query
+          this.getData()
+        }
+        // }
       }
     }
   },

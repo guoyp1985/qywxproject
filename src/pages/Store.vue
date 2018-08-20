@@ -69,7 +69,7 @@
     			<span class="db-in pl5 font16 vline">{{ $t('All products') }}</span>
     		</div>
         <div class="b_top_after"></div>
-        <div v-if="disproductdata" class="productlist squarepic">
+        <div v-if="disproductdata" :class="`productlist ${productdata.length == 0 ? '' : 'squarepic'}`">
           <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
           <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
@@ -100,8 +100,8 @@
             </newsitemplate>
           </div>
         </template>
-        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10">
-          <router-link to="/centerSales" class="btn-open" style="display: block;background-color: #e10c00">我也要开店</router-link>
+        <div v-if="query.wid && query.wid != loginUser.uid" class="pb10 pl10 pr10">
+          <router-link to="/centerSales" class="btn-open db" style="background-color: #e10c00">我也要开店</router-link>
         </div>
       </div>
       <div class="s-bottom flex_center list-shadow">
@@ -500,12 +500,10 @@ export default {
       this.loginUser = User.get()
     },
     refresh (query) {
-      if (query.wid === undefined || this.query.wid !== query.wid) {
-        this.initData()
-        this.query = query
-        this.$vux.loading.show()
-        this.getData()
-      }
+      this.initData()
+      this.query = query
+      this.$vux.loading.show()
+      this.getData()
       if (this.productdata.length < limit) {
         this.productdata = []
         this.getData1()

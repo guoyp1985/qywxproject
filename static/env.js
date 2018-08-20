@@ -7,8 +7,8 @@ var ENV = {
   WxOAuthUrl: 'https://api.weixin.qq.com/sns/oauth2/access_token?',
   Host: 'http://vue.boka.cn', // vue: http://vue.boka.cn // vux: http://vux.boka.cn
   BokaApi: 'https://laravel.boka.cn',//'http://laravel.boka.cn', // test: http://124.207.246.107 // vux: http://vuxserver.boka.cn
-  WeixinQrcode: 'https://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销宝: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
-  WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销宝
+  WeixinQrcode: 'https://osslaravel.boka.cn/weixin_qrcode.jpg',//vue 博卡授权中心: http://osslaravel.boka.cn/weixin_qrcode.jpg // vux 共销汇: http://vuxlaravel.boka.cn/weixin_qrcode.jpg
+  WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销汇
   SocketBokaRoom: 'laravel.boka.cn',
   SocketServer: 'ws://124.207.246.109:7272', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
   OrderStatus: [
@@ -34,10 +34,21 @@ var ENV = {
     '拳头', '差劲', '爱你', 'NO', 'OK', '爱情', '飞吻',
     '跳跳', '发抖', '怄火', '转圈', '磕头', '回头', '跳绳', '挥手',
     '激动', '街舞', '献吻', '左太极', '右太极'
-  ]
+  ],
+  vipProduct: '免费版只能上传5件商品，开通VIP即可无限制上传更多商品哦！',
+  vipNews: '免费版只能创建5篇文章，开通VIP即可无限制创建更多文章哦！',
+  vipActivity: '免费版只能创建两个活动，开通VIP即可无限制创建更多活动哦！',
+  vipSales: '免费版只能邀请两位返点客，开通VIP即可无限制邀请更多的返点客哦！',
+  vipMemberView: '免费版不支持查看客户的浏览数据，开通VIP即可立即查看客户的浏览数据哦！',
+  vipMemberShare: '免费版不支持查看客户的分享数据，开通VIP即可立即查看客户的分享数据哦！',
+  vipMemberSale: '免费版不支持查看客户的订单数据，开通VIP即可立即查看客户的订单数据哦！',
+  vipChat: '免费版不支持与客户联系，开通vip即可立即与客户联系哦！',
+  openVipText: '立即开通',
+  giveUpVipText: '放弃=错失良机'
 }
 
 ENV.NoAccessUrls = [
+  ENV.BokaApi + '/api/login/*',
   ENV.BokaApi + '/api/authLogin/*',
   ENV.BokaApi + '/api/qrcode/login*',
   ENV.BokaApi + '/api/scanlogin'

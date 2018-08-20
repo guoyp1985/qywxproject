@@ -159,37 +159,52 @@ export default {
       limit: 10,
       pagestart1: 0,
       pagestart2: 0,
-      pagestart3: 0
+      pagestart3: 0,
+      salesCount: 0,
+      isFirst: true
     }
   },
   methods: {
-    handleScroll: function (refname, index) {
+    openVip () {
       const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: function () {
-          if (index === 0) {
-            if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
-              self.pagestart1++
-              self.$vux.loading.show()
-              self.getData1()
-            }
-          } else if (index === 1) {
-            if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
-              self.pagestart2++
-              self.$vux.loading.show()
-              self.getData2()
-            }
-          } else if (index === 2) {
-            if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
-              self.pagestart3++
-              self.$vux.loading.show()
-              self.getData3()
-            }
-          }
+      self.$vux.confirm.show({
+        content: ENV.vipSales,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
         }
       })
+    },
+    handleScroll: function (refname, index) {
+      const self = this
+      if (self.loginUser.isretailer === 1) {
+        const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+        self.$util.scrollEvent({
+          element: scrollarea,
+          callback: function () {
+            if (index === 0) {
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.$vux.loading.show()
+                self.getData1()
+              }
+            } else if (index === 1) {
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.$vux.loading.show()
+                self.getData2()
+              }
+            } else if (index === 2) {
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.$vux.loading.show()
+                self.getData3()
+              }
+            }
+          }
+        })
+      }
     },
     getData1 () {
       this.$vux.loading.show()
@@ -208,6 +223,10 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
+        if (self.isFirst) {
+          self.salesCount = self.tabdata1.length
+          self.isFirst = false
+        }
       })
     },
     getData2 () {
@@ -315,30 +334,35 @@ export default {
     },
     inviteevent (item, index) {
       const self = this
-      let content = `<div class="font14 v_middle">该客户是 <span class="color-orange v_middle">${item.uploadname}</span> 带来的，邀请成返点客后， <span class="color-orange v_middle">${item.uploadname}</span> 的收入可能受到影响，邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？</div>`
-      if (item.uploader === self.loginUser.uid) {
-        content = `邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？`
-      }
-      self.$vux.confirm.show({
-        content: content,
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid })
-          .then(res => {
-            const data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  self.tabdata2.splice(index, 1)
-                }
-              }
-            })
-          })
+      if (self.loginUser.isretailer === 2 && self.salesCount >= 2) {
+        self.openVip()
+      } else if (self.loginUser.isretailer === 1 || self.salesCount < 2) {
+        let content = `<div class="font14 v_middle">该客户是 <span class="color-orange v_middle">${item.uploadname}</span> 带来的，邀请成返点客后， <span class="color-orange v_middle">${item.uploadname}</span> 的收入可能受到影响，邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？</div>`
+        if (item.uploader === self.loginUser.uid) {
+          content = `邀请成功后，返点客可在商品页面看到佣金金额，返点客购买以及带来客户购买后均可获得佣金奖励！确定邀请吗？`
         }
-      })
+        self.$vux.confirm.show({
+          content: content,
+          onConfirm () {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/retailer/inviteSeller`, { inviteuid: item.uid })
+            .then(res => {
+              const data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.salesCount++
+                    self.tabdata2.splice(index, 1)
+                  }
+                }
+              })
+            })
+          }
+        })
+      }
     },
     init () {
       this.loginUser = User.get()
@@ -357,23 +381,23 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        self.initContainer()
+        self.$vux.loading.hide()
+        if (!self.loginUser.isretailer) {
           self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+          self.showApply = true
         } else {
           self.initContainer()
-          if (!this.loginUser.isretailer) {
-            this.$vux.loading.hide()
-            self.initContainer()
-            this.showApply = true
-          } else {
-            self.initContainer()
-            this.showContainer = true
-            this.swiperChange()
-          }
+          this.showContainer = true
+          this.swiperChange()
         }
+        // }
       }
     }
   },

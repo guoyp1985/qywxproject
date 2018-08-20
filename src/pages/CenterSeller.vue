@@ -5,8 +5,8 @@
       <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     </template>
     <template v-if="showContainer">
-      <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" style="position:fixed;top:0;left:0;right:0;bottom:0;">
-        <div class="topcover">
+      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
+        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover">
           <div class="inner">
             <swiper
               v-if="photoarr.length > 0"
@@ -14,24 +14,19 @@
               dots-position="center"
               :interval=6000
               :show-dots="isShowDot"
-              :aspect-ratio="1/1"
+              auto
               loop>
               <swiper-item v-for="(item,index) in photoarr" :key="item.id">
                 <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
               </swiper-item>
             </swiper>
             <div v-else class="color-black">
-                <div class="align_right" style="padding:40px 40px 0px;">
-                  <i class="al al-feiji" style="font-size:40px;"></i>
-                </div>
-                <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
+              <div class="align_right" style="padding:40px 40px 0px;">
+                <i class="al al-feiji" style="font-size:40px;"></i>
+              </div>
+              <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="pagemiddle" ref="scrollContainer1" @scroll="handleScroll1('scrollContainer1')">
-        <div v-if="!query.uid || query.uid == loginUser.uid || (query.uid != loginUser.uid && photoarr.length > 0)" class="topcover" style="pointer-events: none;">
-          <div class="inner"></div>
         </div>
         <div v-else style="height:50px;"></div>
         <template v-if="!query.uid || query.uid == loginUser.uid">
@@ -61,7 +56,7 @@
               </div>
               <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
-                <span class="v_middle">{{userInfo.slogan}}</span>
+                <span class="v_middle" v-html="userInfo.slogan"></span>
               </div>
               <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
                 <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
@@ -104,9 +99,11 @@
                 </div>
                 <div class="con">
                   <div class="txt no_bold">{{item.username}}</div>
-                  <div v-html="filterEmot(item.title)"></div>
-                  <div class="piclist">
-                    <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+                  <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
+                  <div class="piclist" v-if="item.photoarr.length > 0">
+                    <div
+                      :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length >= 2 ? 'more' : ''}`"
+                      v-for="(pic,index1) in item.photoarr">
                       <div class="inner">
                         <img :src="pic" @click="showBigimg1(pic,item.photoarr,`previewer${index}`,index1)" />
                       </div>
@@ -117,29 +114,48 @@
                       <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
                     </div>
                   </template>
-                  <div class="db-flex mt5 color-gray">
-                    <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-                    <span class="w60 color-gray flex_right" @click="clickDig(item)">
-                      <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                      <span class="v_middle ml3">{{item.dig}}</span>
-                    </span>
-                    <div class="w30 flex_right" @click="onReplyShow(item,index)">
-                      <i class="al al-pinglun3 font14"></i>
+                  <div class="datetxt">
+                    <div class="flex_cell font12 flex_left">
+                      <span class="db-in v_middle">{{ item.dateline | dateFormat }}</span>
+                      <div class="deletetxt" v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" @click="deleteTimeline(item,index)">删除</div>
                     </div>
-                    <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
-                      <i class="al al-shanchu font14"></i>
+                    <div class="flex_right ricon">
+                      <i class="al al-pl font12" @click="clickIcon(item, index)"></i>
+                      <div :class="`iconlayer flex_center ${item.clicked ? 'active' : ''}`">
+                        <span class="iconitem" @click="clickDig(item, index)">
+                          <i class="al al-zan8 mr5 font12"></i>
+                          <span class="v_middle" v-if="item.isdig">取消</span>
+                          <span class="v_middle" v-else>赞</span>
+                        </span>
+                        <div class="iconitem" @click="onReplyShow(item,index)">
+                          <i class="al al-pinglun1 font14 mr5"></i>
+                          <span class="v_middle">评论</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-                    <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                      <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                        <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                        <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+                  <div class="mt5 commentarea" v-if="(item.comments && item.comments.length > 0) || item.digman && item.digman.length > 0">
+                    <template v-if="item.digman && item.digman.length > 0">
+                      <div class="digarea">
+                        <span class="al al-zan8 mr5 font12"></span>
+                        <span class="v_middle">{{item.digmanstr}}</span>
                       </div>
-                      <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                        <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                        <div class="v_middle db-in">回复: </div>
-                        <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+                    </template>
+                    <div class="line" v-if="(item.comments && item.comments.length > 0) && item.digman && item.digman.length > 0"></div>
+                    <div class="commlist" v-if="item.comments && item.comments.length > 0">
+                      <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                        <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                          <span class="v_middle name name1">{{citem.username}}: </span>
+                          <span class="v_middle" v-html="filterEmot(citem.message)"></span>
+                        </div>
+                        <div class="replylist" v-if="citem.comment.length > 0">
+                          <div class="txt2 ritem" v-for="(ritem,index2) in citem.comment" :key="index2">
+                            <span class="v_middle name name2">{{ritem.username}}</span>
+                            <span class="v_middle">回复</span>
+                            <span class="v_middle name name2">{{citem.username}}: </span>
+                            <span class="v_middle" v-html="filterEmot(ritem.message)"></span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -260,7 +276,7 @@ export default {
   },
   filters: {
     dateFormat (date) {
-      return new Time(date * 1000).format()
+      return new Time(date * 1000).format1()
     }
   },
   data () {
@@ -321,6 +337,9 @@ export default {
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
+    clickIcon (item, index) {
+      this.tlData[index].clicked = !this.tlData[index].clicked
+    },
     showBigimg (src, arr, index) {
       const self = this
       if (self.$util.isPC()) {
@@ -349,6 +368,7 @@ export default {
     },
     deleteTimeline (item, index) {
       const self = this
+      self.tlData[index].clicked = false
       self.$vux.confirm.show({
         title: '确定要删除吗？',
         onConfirm () {
@@ -420,6 +440,8 @@ export default {
           }
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+          retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = self.timelineData.length
@@ -436,7 +458,7 @@ export default {
       self.clickTagId = tagitem.id
       self.getTimelineData()
     },
-    clickDig (item) {
+    clickDig (item, index) {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
       if (item.isdig) {
@@ -453,10 +475,20 @@ export default {
           if (item.isdig) {
             item.isdig = 0
             item.dig = item.dig - 1
+            for (let i = 0; i < item.digman.length; i++) {
+              if (self.loginUser.linkman === item.digman[i]) {
+                item.digman.splice(i, 1)
+                break
+              }
+            }
           } else {
             item.isdig = 1
             item.dig = item.dig + 1
+            item.digman.push(self.loginUser.linkman)
           }
+          self.tlData[index].clicked = false
+          self.tlData[index].digman = item.digman
+          self.tlData[index].digmanstr = item.digman.join(',')
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -481,6 +513,7 @@ export default {
         this.replyData = null
         this.replyIndex = 0
       }
+      this.tlData[index].clicked = false
     },
     replyPopupCancel () {
       this.replyPopupShow = false
@@ -538,6 +571,8 @@ export default {
           }
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+          retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.tlData = self.tlData.concat(retdata)
         self.disTimeline = true
@@ -663,7 +698,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .cseller .vux-slider{overflow: initial;}
 .cseller{position:relative;}
 .cseller .topcover{position:relative;padding-bottom:65%;}
@@ -671,6 +706,7 @@ export default {
 .cseller .set-icon{position:absolute;right:12px;top:8px;z-index:1;}
 .cseller .set-icon .al{font-size:22px;}
 .cseller .pic-swiper{width:100%;height:100%;}
+.cseller .pic-swiper .vux-swiper{height:100% !important;}
 .cseller .topcover .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
 .boxouter.box1 .boxinner{
   position:relative;z-index:1;background-color:#fff;

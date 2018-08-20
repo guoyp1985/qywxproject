@@ -3,7 +3,7 @@
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
-    <template v-if="showContainer">
+    <template v-if="showContainer && loginUser.isretailer == 1">
       <div class="s-topbanner s-topbanner1">
         <div class="flex_center h_100 toprow">
           <div class="flex_cell font16 pl20 color-white">{{ viewuser.linkman }}的订单</div>
@@ -47,6 +47,7 @@
 import { Search, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -63,8 +64,9 @@ export default {
       sosTitle: '',
       showContainer: false,
       autofixed: false,
-      query: Object,
-      viewuser: Object,
+      query: {},
+      viewuser: {},
+      loginUser: {},
       tabmodel: 0,
       disdata: false,
       data: [],
@@ -148,15 +150,34 @@ export default {
         }
       })
     },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipMemberSale,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onCancel () {
+          self.$router.push('/centerSales')
+        },
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTarbar: true})
-      if (this.query.uid !== this.$route.query.uid) {
-        this.query = this.$route.query
-        self.pagestart1 = 0
-        this.disdata = false
-        this.data = []
-        this.$vux.loading.show()
-        this.getData()
+      this.loginUser = User.get()
+      if (this.loginUser.isretailer === 2) {
+        this.openVip()
+      } else {
+        if (this.query.uid !== this.$route.query.uid) {
+          this.query = this.$route.query
+          self.pagestart1 = 0
+          this.disdata = false
+          this.data = []
+          this.$vux.loading.show()
+          this.getData()
+        }
       }
     }
   },

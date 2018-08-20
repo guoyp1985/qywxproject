@@ -66,6 +66,12 @@
             </div>
           </div>
         </div>
+        <div v-if="data && data.content != ''"  class="padding10 b_top_after bg-white">
+          <div class="flex_left font12">
+            <div class="w40">留言: </div>
+            <div class="flex_cell">{{data.content}}</div>
+          </div>
+        </div>
         <div class="align_right">
           <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
             <div class="t-table">
@@ -81,7 +87,7 @@
       </div>
       <div v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0" class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
-      <div v-else-if="data.flag == 3" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
+      <div v-else-if="data.flag == 3 && (!data.fid || data.fid == loginUser.fid)" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
         <popup v-model="showpopup" height="100%">
           <div class="popup1 font14">
@@ -358,26 +364,26 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
           self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+          this.showApply = true
         } else {
-          if (!this.loginUser.isretailer) {
-            this.$vux.loading.hide()
+          this.$vux.loading.hide()
+          if (this.query.id !== this.$route.query.id) {
             self.initContainer()
-            this.showApply = true
-          } else {
-            this.$vux.loading.hide()
-            if (this.query.id !== this.$route.query.id) {
-              self.initContainer()
-              this.query = this.$route.query
-              this.$vux.loading.show()
-              this.getData()
-            }
+            this.query = this.$route.query
+            this.$vux.loading.show()
+            this.getData()
           }
         }
+        // }
       }
     }
   },

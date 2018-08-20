@@ -60,10 +60,10 @@
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
       <div class="flex_cell flex_center" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
-        <router-link class="addproduct flex_center btn-bottom-orange" style="width:85%;" to="/recommendProducts">{{ $t('Source of goods') }}</router-link>
+        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
       </div>
       <div class="flex_cell flex_center">
-        <router-link class="addproduct flex_center btn-bottom-red" style="width:85%;" to="/addProduct">{{ $t('Add product') }}</router-link>
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
       </div>
     </div>
     <div v-transfer-dom>
@@ -245,6 +245,31 @@ export default {
     }
   },
   methods: {
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipProduct,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
+    },
+    toRecommend () {
+      if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
+        this.openVip()
+      } else {
+        this.$router.push('/recommendProducts')
+      }
+    },
+    toAdd () {
+      if (this.loginUser.isretailer === 2 && this.productdata.length >= 5) {
+        this.openVip()
+      } else {
+        this.$router.push('/addProduct')
+      }
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -466,13 +491,11 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      if (this.productdata.length < limit) {
-        this.disproductdata = false
-        this.productdata = []
-        this.$vux.loading.show()
-        pageStart1 = 0
-        this.getData1()
-      }
+      this.disproductdata = false
+      this.productdata = []
+      this.$vux.loading.show()
+      pageStart1 = 0
+      this.getData1()
     }
   },
   created () {

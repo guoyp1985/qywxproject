@@ -77,7 +77,16 @@
           </div>
           <div class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product price') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
               </div>
@@ -120,6 +129,16 @@
                 <input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+          <div class="form-item bg-white" v-if="showRebate">
+            <div class="t-table">
+              <!--
+              <div class="t-cell title-cell font14 v_middle" style="width:120px;">是否允许使用卡券</div>
+            -->
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-switch title='是否允许使用卡券' v-model="submitdata.allowcard"></x-switch>
+              </div>
             </div>
           </div>
           <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
@@ -238,15 +257,17 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea } from 'vux'
+import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
+import ApplyTip from '@/components/ApplyTip'
+import OpenVip from '@/components/OpenVip'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Sos, Subscribe
+    Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch
   },
   data () {
     return {
@@ -269,6 +290,7 @@ export default {
         classid: '',
         title: '',
         price: '',
+        oriprice: '',
         storage: '',
         unit: '件',
         postage: '0.00',
@@ -278,12 +300,14 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        video: ''
+        video: '',
+        allowcard: false
       },
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       showRebate: false,
-      classData: []
+      classData: [],
+      submitIng: false
     }
   },
   watch: {
@@ -311,6 +335,7 @@ export default {
       this.submitdata = {
         classid: '',
         title: '',
+        oriprice: '',
         price: '',
         storage: '',
         unit: '件',
@@ -321,7 +346,8 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        video: ''
+        video: '',
+        allowcard: false
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -410,66 +436,72 @@ export default {
     },
     savedata (postdata) {
       const self = this
-      let validateData = []
-      for (let key in self.requireddata) {
-        let v = {}
-        v[key] = self.submitdata[key]
-        validateData.push(v)
-      }
-      let iscontinue = self.$util.validateQueue(validateData,
-        model => {
-          switch (model.key) {
-            default:
-              self.$vux.toast.text('必填项不能为空', 'middle')
-          }
+      if (!self.submitIng) {
+        self.submitIng = true
+        let validateData = []
+        for (let key in self.requireddata) {
+          let v = {}
+          v[key] = self.submitdata[key]
+          validateData.push(v)
         }
-      )
-      if (!iscontinue) {
-        return false
-      }
-      let price = postdata.price.toString().replace(/,/g, '')
-      let rebate = postdata.rebate
-      if (self.$util.trim(rebate) !== '') {
-        rebate = rebate.toString().replace(/,/g, '')
-      }
-      if (isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入正确的价格'
-        })
-        return false
-      }
-      if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
-        self.$vux.alert.show({
-          title: '',
-          content: '请完善商品介绍或者详情图片'
-        })
-        return false
-      }
-      postdata.price = price
-      postdata.rebate = rebate
-      self.$vux.loading.show()
-      if (self.query.id) {
-        postdata.id = self.query.id
-      }
-      self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag !== 1 ? 'warn' : 'success',
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              if (self.query.from === 'apply') {
-                self.$router.push({path: '/centerSales'})
-              } else {
-                self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
-              }
+        let iscontinue = self.$util.validateQueue(validateData,
+          model => {
+            switch (model.key) {
+              default:
+                self.$vux.toast.text('必填项不能为空', 'middle')
             }
           }
+        )
+        if (!iscontinue) {
+          return false
+        }
+        let price = postdata.price.toString().replace(/,/g, '')
+        let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let rebate = postdata.rebate
+        if (self.$util.trim(rebate) !== '') {
+          rebate = rebate.toString().replace(/,/g, '')
+        }
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的价格'
+          })
+          return false
+        }
+        if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
+          self.$vux.alert.show({
+            title: '',
+            content: '请完善商品介绍或者详情图片'
+          })
+          return false
+        }
+        postdata.price = price
+        postdata.oriprice = oriprice
+        postdata.rebate = rebate
+        self.$vux.loading.show()
+        if (self.query.id) {
+          postdata.id = self.query.id
+        }
+        self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            type: data.flag !== 1 ? 'warn' : 'success',
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              self.submitIng = false
+              if (data.flag === 1) {
+                if (self.query.from === 'apply') {
+                  self.$router.push({path: '/centerSales'})
+                } else {
+                  self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
+                }
+              }
+            }
+          })
         })
-      })
+      }
     },
     saveevent () {
       const self = this
@@ -480,7 +512,33 @@ export default {
       const self = this
       let postdata = self.submitdata
       postdata['moderate'] = 1
-      self.savedata(postdata)
+      if (self.loginUser.isretailer === 1) {
+        self.savedata(postdata)
+      } else if (self.loginUser.isretailer === 2) {
+        self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
+          params: {pagestart: 0, limit: 6}
+        })
+        .then(res => {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length >= 5 && !self.query.id) {
+            self.openVip()
+          } else {
+            self.savedata(postdata)
+          }
+        })
+      }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipProduct,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
     },
     priceChange (key) {
       let val = event.target.value
@@ -503,7 +561,15 @@ export default {
           self.data = data.data ? data.data : data
           self.activityInfo = self.data.activitinfo
           for (let key in self.submitdata) {
-            self.submitdata[key] = self.data[key]
+            if (key === 'allowcard') {
+              if (self.data[key]) {
+                self.submitdata[key] = true
+              } else {
+                self.submitdata[key] = false
+              }
+            } else {
+              self.submitdata[key] = self.data[key]
+            }
           }
           if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
             self.photoarr = self.submitdata.photo.split(',')
@@ -544,36 +610,37 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      self.submitIng = false
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
-          self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        } else {
-          self.initContainer()
-          let isAdmin = false
-          for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-            if (self.loginUser.usergroup[i] === 1) {
-              isAdmin = true
-              break
-            }
-          }
-          if (!self.loginUser.isretailer && !isAdmin) {
-            this.$vux.loading.hide()
-            self.initContainer()
-            self.showApply = true
-          } else {
-            self.initContainer()
-            self.showContainer = true
-            this.$vux.loading.hide()
-            if (this.query.id !== this.$route.query.id) {
-              this.initSubmitData()
-            }
-            this.query = this.$route.query
-            this.getData()
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        self.initContainer()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
           }
         }
+        if (!self.loginUser.isretailer && !isAdmin) {
+          this.$vux.loading.hide()
+          self.initContainer()
+          self.showApply = true
+        } else {
+          self.initContainer()
+          self.showContainer = true
+          this.$vux.loading.hide()
+          if (this.query.id === undefined || this.query.id !== this.$route.query.id) {
+            this.initSubmitData()
+          }
+          this.query = this.$route.query
+          this.getData()
+        }
+        // }
       }
     }
   },

@@ -12,7 +12,7 @@
         <tab-item @on-item-click="onItemClick(selectedIndex)">{{ $t('Store') }}</tab-item>
       </tab>
     </div>
-    <div class="s-container s-container1" style="bottom:53px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+    <div class="s-container s-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <swipeout v-show="selectedIndex===0">
         <template v-if="disData1">
           <template v-if="articles.length">
@@ -117,7 +117,7 @@ import { User } from '#/storage'
 let pageStart1 = 0
 let pageStart2 = 0
 let pageStart3 = 0
-const limit = 5
+const limit = 20
 export default {
   components: {
     Grid, GridItem, Tab, TabItem, Swiper, SwiperItem, Swipeout, SwipeoutItem, SwipeoutButton, XImg

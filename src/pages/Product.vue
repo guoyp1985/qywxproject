@@ -69,7 +69,14 @@
             <span class="v_middle db-in bold"><span v-if="productdata.moderate != 1" class="color-gray bold">【已下架】</span>{{ productdata.title }}</span>
             <span v-if="loginUser && loginUser.groupid == 1" class="v_middle db-in color-gray font12">分享次数:{{ productdata.shares }}</span>
           </div>
-          <div class="font24 color-red"><span class="font18 mr5">{{ $t('RMB') }}</span>{{ productdata.price }}</div>
+          <div class="color-red">
+            <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
+            <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
+              <span class="mr3 v_middle">{{ $t('RMB') }}</span>
+              <span class="v_middle">{{ productdata.oriprice }}</span>
+            </span>
+          </div>
           <div class="t-table font12 mt5 color-gray2">
             <template v-if="productdata.postage">
     					<div v-if="productdata.postage == 0" class="t-cell v_middle">{{ $t('Postage') }}: 包邮</div>
@@ -190,20 +197,27 @@
             </div>
   				</div>
   			</div>
-        <template v-if="buyuserdata.length > 0">
+        <div v-show="disBuyFriends">
           <div class="bg-page" style="height:10px;"></div>
           <div class="bg-white b_bottom_after">
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
-            <div class="buylist pt10 pb15 pl10 pr10">
-              <router-link class="item" :to="{path:'/chat',query:{uid:item.uid, fromModule: 'product', fromId: query.id}}" v-for="(item,index) in buyuserdata" :key="index">
-                <div class="align_center">
-                  <img class="avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
-                </div>
-      					<div class="clamp1 mt5 font12 color-gray2">{{ item.username }}</div>
-              </router-link>
+            <div class="flex_left pb10">
+              <div class="buylist" ref="buyList">
+                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id}}" v-for="(item,index) in buyuserdata" :key="index">
+                  <div class="pic">
+                    <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div class="txt">
+                    <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
+                  </div>
+                </router-link>
+              </div>
+              <div v-if="disMore" class="moreicon flex_center color-red" @click="moreFriends">
+                <i class="al al-asmkticon0165 v_middle"></i>
+              </div>
             </div>
           </div>
-        </template>
+        </div>
         <div class="bg-page" style="height:10px;"></div>
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after">
@@ -344,6 +358,28 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showMoreFriends" height="100%">
+          <div class="popup1 tagpopup">
+            <div class="popup-top flex_center">购买过的好友</div>
+            <div class="popup-middle">
+              <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div class="t-table">
+                  <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
+                  <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    <div class="clamp1 font14 color-lightgray">{{item.username}}</div>
+                  </div>
+                </div>
+              </router-link>
+            </div>
+            <div class="popup-bottom flex_center bg-orange color-white" @click="closeFriendsPopup">
+              <span>{{ $t('Close') }}</span>
+            </div>
+          </div>
+        </popup>
+      </div>
       <div v-transfer-dom>
         <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
       </div>
@@ -447,7 +483,12 @@ export default {
       replyData: null,
       messages: 0,
       showVideo: true,
-      playVideo: false
+      playVideo: false,
+      disBuyFriends: false,
+      disMore: false,
+      friendsData: [],
+      pageStart2: 0,
+      showMoreFriends: false
     }
   },
   watch: {
@@ -544,6 +585,8 @@ export default {
       this.submitdata = { flag: 1, quantity: 1 }
       this.replyData = null
       this.messages = 0
+      this.disBuyFriends = false
+      this.disMore = false
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -893,6 +936,10 @@ export default {
           let data = res.data
           if (data.flag === 1) {
             self.buyuserdata = data.data
+            if (self.buyuserdata.length > 0) {
+              self.disBuyFriends = true
+              self.getMoreStatus(self)
+            }
           }
           return self.$http.get(`${ENV.BokaApi}/api/user/favorite/show`,
             { params: { module: self.module, id: self.productid } }
@@ -946,6 +993,55 @@ export default {
       room = `${this.module}-${this.query.id}`
       Socket.listening({room: room, uid: uid, linkman: linkman, fromModule: this.module, fromId: this.query.id})
     },
+    handleScroll2 (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.friendsData.length === (self.pageStart2 + 1) * self.limit) {
+            self.pageStart2++
+            self.$vux.loading.show()
+            self.getFriends()
+          }
+        }
+      })
+    },
+    getFriends () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/friendBuy`, {
+        params: { wid: self.retailerInfo.uid, productid: self.productid }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          self.friendsData = retdata
+        }
+      })
+    },
+    moreFriends () {
+      const self = this
+      this.showMoreFriends = true
+      self.getFriends()
+    },
+    closeFriendsPopup () {
+      this.showMoreFriends = false
+    },
+    getMoreStatus (self) {
+      const wW = window.innerWidth
+      const disCols = Math.floor(wW / 48)
+      let buyList = self.$refs.buyList[0] ? self.$refs.buyList[0] : self.$refs.buyList
+      if (self.buyuserdata.length > disCols - 1) {
+        const listW = (disCols - 1) * 48
+        buyList.style.flex = ''
+        buyList.style.width = `${listW}px`
+        self.disMore = true
+      } else {
+        buyList.style.width = ''
+        buyList.style.flex = '1'
+        self.disMore = false
+      }
+    },
     init () {
       // this.$util.wxAccess()
       this.$util.wxAccessListening()
@@ -962,6 +1058,12 @@ export default {
         this.$vux.loading.show()
         this.getData()
         this.createSocket()
+      }
+      window.onresize = function () {
+        if (self.buyuserdata.length > 0) {
+          console.log('in')
+          self.getMoreStatus(self)
+        }
       }
     }
   },
@@ -1086,4 +1188,19 @@ export default {
 
 .product .pagemiddle{bottom:50px;}
 .product .pagebottom{height:50px;}
+
+.product .buylist{display:flex;overflow:hidden;}
+.product .buylist:after{
+  content:'';
+  display:block;
+  clear:both;
+}
+.product .buylist .item{
+  width: 48px;padding-top:10px;
+  text-align: center;display:block;color:inherit;
+}
+.product .buylist .pic{padding-left:10px;width:38px;}
+.product .buylist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
+.product .buylist .txt{padding-left:10px;width:38px;}
+.product .moreicon{width:48px;}
 </style>

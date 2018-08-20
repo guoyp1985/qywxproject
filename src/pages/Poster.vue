@@ -173,6 +173,17 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.showSos = false
+      this.sosTitle = ''
+      this.showContainer = false
+      this.coverphotoarr = []
+      this.photoarr = []
+      this.submitdata = { title: '', photo: '', subtitle: '' }
+      this.iscreating = false
+      this.cutImg = ''
+      this.popupShow = false
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -291,20 +302,29 @@ export default {
       self.$vux.loading.show()
       self.iscreating = true
       self.$http.post(`${ENV.BokaApi}/api/retailer/createPoster`, self.submitdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.iscreating = false
-        let toasttype = data.flag !== 1 ? 'warn' : 'success'
-        self.$vux.toast.show({
-          text: data.error,
-          type: toasttype,
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              self.$router.push('/posterDetail')
+        if (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.iscreating = false
+          let toasttype = data.flag !== 1 ? 'warn' : 'success'
+          self.$vux.toast.show({
+            text: data.error,
+            type: toasttype,
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.$router.push('/posterDetail')
+              }
             }
-          }
-        })
+          })
+        } else {
+          self.$vux.loading.hide()
+          self.iscreating = false
+          self.$vux.toast.show({
+            text: '请求超时, 请重试',
+            type: 'warn'
+          })
+        }
       })
     },
     getData () {
@@ -338,13 +358,14 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
-        this.query = this.$route.query
-        this.submitdata.type = this.query.module
-        this.submitdata.id = this.query.id
-        this.$vux.loading.show()
-        this.getData()
-      }
+      // if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+      this.initData()
+      this.query = this.$route.query
+      this.submitdata.type = this.query.module
+      this.submitdata.id = this.query.id
+      this.$vux.loading.show()
+      this.getData()
+      // }
     }
   },
   activated () {

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page userstory nobottom">
+  <div :class="`containerarea font14 bg-page userstory nobottom ${topcss}`">
     <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'customer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagetop b_bottom_after bg-page">
       <div class="boxinner box1">
@@ -36,7 +36,10 @@
         :timeline-data="timelineData"
         :show-list="showList"
         :timeline-count="timelineCount"
-        :after-delete="afterDelete">
+        :after-delete="afterDelete"
+        :click-comment="clickComment"
+        seller-type="userstory"
+        :cancel-comment="cancelComment">
       </tag-page>
     </div>
   </div>
@@ -83,12 +86,19 @@ export default {
       commentIndex: 0,
       replyData: null,
       replyIndex: 0,
-      commentModule: 'timeline'
+      commentModule: 'timeline',
+      topcss: ''
     }
   },
   methods: {
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    cancelComment () {
+      this.topcss = ''
+    },
+    clickComment () {
+      this.topcss = 'notop'
     },
     initData () {
       pageStart = 0
@@ -143,6 +153,8 @@ export default {
           }
           retdata[i].photoarr = photoarr
           retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+          retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
         }
         self.timelineData = self.timelineData.concat(retdata)
         self.timelineCount = data.count
@@ -184,6 +196,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.userstory.notop .pagetop{display:none;}
+.userstory.notop .pagemiddle{top:0 !important;}
 .userstory .pagetop{z-index: 2;height:110px;box-shadow: rgba(0, 0, 0, 0.1) 0px 9px 36px -3px;}
 .userstory .add-icon{
   position:absolute;right:20px;bottom:20px;border-radius:50%;
@@ -221,34 +235,4 @@ export default {
 .userstory .taglist .tagitem{display:inline-block;padding:0 3px;color:rgb(229, 28, 35);}
 .userstory .row3{padding:0px 10px 0px 10px;text-align:right;box-sizing: border-box;}
 
-.tllist .tlitem{
-  display:flex;padding:10px;
-}
-.tllist .avatar{width:50px;text-align:left;}
-.tllist .avatar img{width:40px;height:40px;border-radius:50%;vertical-align:middle;}
-.tllist .con{flex:1;}
-.tllist .con .txt{height: 23px;line-height:23px;color: rgb(93, 102, 155);font-weight: bold;}
-.tllist .piclist{display:flex;}
-.tllist .picitem{width:33.33333%;padding-bottom:33.33333%;position:relative;}
-.tllist .picitem .inner{
-  position:absolute;top:0;bottom:0;box-sizing:border-box;
-}
-.tllist .picitem:nth-child(3n+1) .inner{left:0;right:14px;}
-.tllist .picitem:nth-child(3n+2) .inner{left:7px;right:7px;}
-.tllist .picitem:nth-child(3n+3) .inner{left:14px;right:0;}
-.tllist .picitem img{width:100%;height:100%;object-fit: cover;}
-.tllist .commentarea{
-  background-color: rgb(244, 244, 244);
-  border-color: rgb(241, 244, 251) 1px solid;
-  border-radius: 4px;text-align: center;
-  padding:10px 5px;box-sizing: border-box;
-}
-.tllist .commentarea .txt1{position:relative;padding-left:10px;box-sizing: border-box;text-align:left;}
-.tllist .commentarea .txt1:before{
-  content:"";
-  position:absolute;left:3px;top:4px;width:3px;height: 16px;
-  background-color: rgb(229, 28, 35);
-}
-.tllist .commentarea .name{color:rgb(93, 102, 155);}
-.tllist .commentarea .txt2{position:relative;padding-left:20px;box-sizing: border-box;text-align:left;}
 </style>

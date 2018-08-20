@@ -363,7 +363,7 @@ zh-CN:
   Operate: 运营
   Sales: 促销
   Service: 服务
-  Sales center: 销售中心
+  Sales center: 卖家中心
   My tasks: 我的任务
   My logs: 我的日志
   Month Sharing Goal: 月分享目标
@@ -670,7 +670,7 @@ zh-CN:
   Delete Article Confirm: 是否确认删除？
   Apply: 申请
   Submit: 提交
-  tIndex: 共销宝
+  tIndex: 共销汇
   tLogin: 扫码登录
   tCenter: 个人中心
   tCenterSales: 卖家管理中心
@@ -703,7 +703,7 @@ zh-CN:
   tArticles: 新闻
   tEvaluation: 评价
   tRetailerSetting: 卖家信息设置
-  tUserproducts: 共销宝
+  tUserproducts: 共销汇
   tAddActivity: 创建活动
   tAddProduct: 添加商品
   tRetailerGoodeazy: 易采集
@@ -758,6 +758,8 @@ zh-CN:
   tSubscribeInfo: 我
   Shelf sale: 上架出售
   Manage center: 管理中心
+  Seller center: 卖家中心
+  Management center: 管理中心
   Rolling display: 滚动展示
   Order Number: 订单编号
   Pre Sale: 售前
@@ -823,7 +825,7 @@ zh-CN:
   Source of goods: 货源
   tRecommendProducts: 货源
   tFactoryOrderDetail: 订单详情
-  tRetailerAcademic: 共销宝商学院
+  tRetailerAcademic: 共销汇商学院
   Academic title: 素材标题
   Academic share description placeholder: 如不填写自动截取素材内容
   Change price: 修改价格
@@ -831,7 +833,7 @@ zh-CN:
   Postage: 运费
   Product class: 商品类别
   Region: 地区
-  tCenterSeller: 共销宝
+  tCenterSeller: 共销汇
   Personal image: 个人形象
   Seller said: 卖家说
   Seller show: 卖家秀
@@ -845,3 +847,10 @@ zh-CN:
   tSellerTimeline: 卖家动态
   Seller tags: 卖家标签
   Seller timeline: 卖家动态
+  tOpen: 授权
+  Card: 优惠券
+  tFactoryReport: 经营报告
+  Business report: 经营报告
+  tRetailerReport: 经营报告
+  tMpSetting: 微信开发管理
+  tAuth: 授权

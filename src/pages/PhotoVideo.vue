@@ -59,7 +59,7 @@ import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 
-const limit = 20
+const limit = 30
 let pageStart = 0
 
 export default {

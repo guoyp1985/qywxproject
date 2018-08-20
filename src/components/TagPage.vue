@@ -11,9 +11,11 @@
           </div>
           <div class="con">
             <div class="txt">{{item.username}}</div>
-            <div v-html="filterEmot(item.title)"></div>
-            <div class="piclist">
-              <div class="picitem" v-if="item.photoarr.length > 0" v-for="(pic,index1) in item.photoarr">
+            <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
+            <div class="piclist" v-if="item.photoarr.length > 0">
+              <div
+                :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
+                  v-for="(pic,index1) in item.photoarr">
                 <div class="inner">
                   <img :src="pic" @click="showBigimg(pic,item.photoarr,`previewer${index}`,index1)" />
                 </div>
@@ -24,32 +26,48 @@
                 <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
               </div>
             </template>
-            <div class="db-flex mt5 color-gray">
-              <div class="flex_cell font12">{{ item.dateline | dateFormat }}</div>
-              <div class="w30 align_center">
-                <i class="al"></i>
+            <div class="datetxt">
+              <div class="flex_cell font12 flex_left">
+                <span class="db-in v_middle">{{ item.dateline | dateFormat }}</span>
+                <div class="deletetxt" v-if="item.uid == loginUser.uid || query.uid == loginUser.uid || sellerType == 'userstory'" @click="deleteTimeline(item,index)">删除</div>
               </div>
-              <span class="w60 color-gray flex_right" @click="clickDig(item)">
-                <span :class="`v_middle digicon ${item.isdig ? 'diged' : ''}`"></span>
-                <span class="v_middle ml3">{{item.dig}}</span>
-              </span>
-              <div class="w30 flex_right" @click="onReplyShow(item,index)">
-                <i class="al al-pinglun3 font14"></i>
-              </div>
-              <div v-if="item.uid == loginUser.uid || query.uid == loginUser.uid" class="w30 flex_right" @click="deleteTimeline(item,index)">
-                <i class="al al-shanchu font14"></i>
+              <div class="flex_right ricon">
+                <i class="al al-pl font12" @click="clickIcon(item, index)"></i>
+                <div :class="`iconlayer flex_center ${item.clicked ? 'active' : ''}`">
+                  <span class="iconitem" @click="clickDig(item,index)">
+                    <i class="al al-zan8 mr5 font12"></i>
+                    <span class="v_middle" v-if="item.isdig">取消</span>
+                    <span class="v_middle" v-else>赞</span>
+                  </span>
+                  <div class="iconitem" @click="onReplyShow(item,index)">
+                    <i class="al al-pinglun1 font14 mr5"></i>
+                    <span class="v_middle">评论</span>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="mt5 commentarea" v-if="item.comments && item.comments.length > 0">
-              <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
-                <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
-                  <div class="v_middle db-in name name1">{{citem.username}}: </div>
-                  <div class="v_middle db-in" v-html="filterEmot(citem.message)"></div>
+            <div class="mt5 commentarea" v-if="(item.comments && item.comments.length > 0) || (item.digman && item.digman.length > 0)">
+              <template v-if="item.digman && item.digman.length > 0">
+                <div class="digarea">
+                  <span class="al al-zan8 mr5 font12"></span>
+                  <span class="v_middle">{{item.digmanstr}}</span>
                 </div>
-                <div class="txt2" v-for="(ritem,index2) in citem.comment" :key="index2">
-                  <div class="v_middle name name2 db-in">{{ritem.username}}</div>
-                  <div class="v_middle db-in">回复: </div>
-                  <div class="v_middle db-in" v-html="filterEmot(ritem.message)"></div>
+              </template>
+              <div class="line" v-if="(item.comments && item.comments.length > 0) && item.digman && item.digman.length > 0"></div>
+              <div class="commlist" v-if="item.comments && item.comments.length > 0">
+                <div class="citem" v-for="(citem,index1) in item.comments" :key="index1">
+                  <div class="txt1" @click="onReplyShow(item,index,citem,index1)">
+                    <span class="v_middle name name1">{{citem.username}}: </span>
+                    <span class="v_middle" v-html="filterEmot(citem.message)"></span>
+                  </div>
+                  <div class="replylist" v-if="citem.comment.length > 0">
+                    <div class="txt2 ritem" v-for="(ritem,index2) in citem.comment" :key="index2">
+                      <span class="v_middle name name2">{{ritem.username}}</span>
+                      <span class="v_middle">回复</span>
+                      <span class="v_middle name name2">{{citem.username}}: </span>
+                      <span class="v_middle" v-html="filterEmot(ritem.message)"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -114,7 +132,13 @@ export default {
       type: String,
       default: '卖家动态'
     },
-    afterDelete: Function
+    sellerType: {
+      type: String,
+      default: ''
+    },
+    afterDelete: Function,
+    clickComment: Function,
+    cancelComment: Function
   },
   directives: {
     TransferDom
@@ -124,7 +148,7 @@ export default {
   },
   filters: {
     dateFormat (date) {
-      return new Time(date * 1000).format()
+      return new Time(date * 1000).format1()
     }
   },
   data () {
@@ -143,6 +167,7 @@ export default {
   methods: {
     deleteTimeline (item, index) {
       const self = this
+      self.timelineData[index].clicked = false
       self.$vux.confirm.show({
         title: '确定要删除吗？',
         onConfirm () {
@@ -168,6 +193,9 @@ export default {
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
+    clickIcon (item, index) {
+      this.timelineData[index].clicked = !this.timelineData[index].clicked
+    },
     showBigimg (src, arr, refname, index) {
       const self = this
       if (self.$util.isPC()) {
@@ -180,7 +208,7 @@ export default {
         })
       }
     },
-    clickDig (item) {
+    clickDig (item, index) {
       const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
       if (item.isdig) {
@@ -197,10 +225,20 @@ export default {
           if (item.isdig) {
             item.isdig = 0
             item.dig = item.dig - 1
+            for (let i = 0; i < item.digman.length; i++) {
+              if (self.loginUser.linkman === item.digman[i]) {
+                item.digman.splice(i, 1)
+                break
+              }
+            }
           } else {
             item.isdig = 1
             item.dig = item.dig + 1
+            item.digman.push(self.loginUser.linkman)
           }
+          self.timelineData[index].clicked = false
+          self.timelineData[index].digman = item.digman
+          self.timelineData[index].digmanstr = item.digman.join(',')
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -213,6 +251,7 @@ export default {
     onReplyShow (item, index, citem, index1) {
       this.commentData = item
       this.commentIndex = index
+      this.clickComment && this.clickComment()
       this.replyPopupShow = true
       if (citem) {
         this.disCommentTitle = this.replyTitle
@@ -225,12 +264,15 @@ export default {
         this.replyData = null
         this.replyIndex = 0
       }
+      this.timelineData[index].clicked = false
     },
     replyPopupCancel () {
+      this.cancelComment && this.cancelComment()
       this.replyPopupShow = false
     },
     replySubmit (value) { // 回复提交
       const self = this
+      this.cancelComment && this.cancelComment()
       this.replyPopupShow = false
       let nid = 0
       if (this.commentModule === 'comments') {
@@ -303,8 +345,4 @@ export default {
   border-color:rgb(229, 28, 35);color:rgb(229, 28, 35);
 }
 .tagpage .row3{padding:15px 20px;box-sizing: border-box;}
-.timelinelist .con .txt{font-weight:normal;}
-.timelinelist .tlitem{padding:15px 10px;}
-.timelinelist .commentarea .txt1:before{display: none;}
-.timelinelist .commentarea .txt1{padding-left:0px;}
 </style>

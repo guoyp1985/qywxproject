@@ -11,7 +11,7 @@
       </div>
       <div class="s-container" style="top:44px">
         <template v-if="!tabdata1 || tabdata1.length == 0">
-          <create-activity :retailer-info="retailerInfo"></create-activity>
+          <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
         </template>
         <swiper v-else v-model="tabmodel" class="x-swiper no-indicator">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
@@ -115,7 +115,7 @@
               </div>
             </div>
             <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo"></create-activity>
+              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
             </template>
           </swiper-item>
         </swiper>
@@ -196,7 +196,9 @@ export default {
       retailerInfo: {},
       tabtxts: [ '全部活动', '创建活动' ],
       tabmodel: 0,
-      tabdata1: []
+      tabdata1: [],
+      isFirst: true,
+      activityCount: 0
     }
   },
   watch: {
@@ -205,6 +207,24 @@ export default {
     }
   },
   methods: {
+    clickAdd (type) {
+      if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
+        this.openVip()
+      } else {
+        this.$router.push({path: '/addActivity', query: {type: type}})
+      }
+    },
+    openVip () {
+      const self = this
+      self.$vux.confirm.show({
+        content: ENV.vipActivity,
+        cancelText: ENV.giveUpVipText,
+        confirmText: ENV.openVipText,
+        onConfirm () {
+          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
+        }
+      })
+    },
     handleScroll () {
       const self = this
       self.$util.scrollEvent({
@@ -227,6 +247,10 @@ export default {
         let retdata = data.data ? data.data : data
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.showContainer = true
+        if (self.isFirst) {
+          self.activityCount = self.tabdata1.length
+          self.isFirst = false
+        }
       })
     },
     stopevent (item, index) {
@@ -277,27 +301,27 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && this.loginUser.subscribe === 1) {
-        if (self.loginUser.isretailer === 2) {
+        // if (self.loginUser.isretailer === 2) {
+        //   self.initContainer()
+        //   self.$vux.loading.hide()
+        //   let backUrl = encodeURIComponent(location.href)
+        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+        // } else {
+        if (!this.loginUser.isretailer) {
+          this.$vux.loading.hide()
           self.initContainer()
-          self.$vux.loading.hide()
-          let backUrl = encodeURIComponent(location.href)
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
+          this.showApply = true
         } else {
-          if (!this.loginUser.isretailer) {
-            this.$vux.loading.hide()
+          this.$vux.loading.hide()
+          this.query = this.$route.query
+          if (this.tabdata1.length < limit || this.query.from === 'add') {
             self.initContainer()
-            this.showApply = true
-          } else {
-            this.$vux.loading.hide()
-            this.query = this.$route.query
-            if (this.tabdata1.length < limit || this.query.from === 'add') {
-              self.initContainer()
-              pageStart1 = 0
-              this.tabdata1 = []
-              this.getData1()
-            }
+            pageStart1 = 0
+            this.tabdata1 = []
+            this.getData1()
           }
         }
+        // }
       }
     }
   },

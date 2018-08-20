@@ -9,7 +9,11 @@
           </div>
         </div>
         <div class="txt-cell">
-          <div class="font17 color-white">{{ retailerInfo.linkman }}</div>
+          <div class="font17 color-white">
+            <span class="v_middle">{{ retailerInfo.linkman }}</span>
+            <span class="vip-icon bg-gray color-white" v-if="retailerInfo.isretailer == 2" @click="onVip">VIP</span>
+            <span class="vip-icon bg-orange color-white" v-if="retailerInfo.isretailer == 1" @click="onVip">VIP</span>
+          </div>
           <div class="font13 color-white mt5">{{ $t('Business tool') }}</div>
         </div>
       </div>
@@ -22,7 +26,7 @@
       </div>
       <div class="header-nav flex_table list-shadow02">
         <router-link class="flex_cell flex_center color-gray2" :to="{path: '/centerSeller', query: {wid:retailerInfo.uid}}">
-          <span class="nav_icon bg-green1 al al-maijiaxiu21 font17"></span>
+          <span class="nav_icon bg-orange al al-maijiaxiu21 font17"></span>
           <span class="ml10 font15">{{$t('Seller show')}}</span>
         </router-link>
         <router-link class="flex_cell flex_center color-gray2" :to="{path: '/store', query: {wid:retailerInfo.uid}}">
@@ -157,6 +161,12 @@
           </div>
         </cell>
       </template>
+      <cell :link="{path:'/retailerReport', query:{wid: retailerInfo.uid}}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-zongshuju db-in font18" style="color:#efa42e;"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Business report')}}</span>
+        </div>
+      </cell>
       <template>
         <cell :link="{path:'/retailerSetting'}" style="position:relative">
           <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
@@ -188,7 +198,7 @@
 
 <i18n>
 Sales center:
-  zh-CN: 销售中心
+  zh-CN: 卖家中心
 Content manage:
   zh-CN: 内容管理
 Activity:
@@ -267,6 +277,9 @@ export default {
     }
   },
   methods: {
+    onVip () {
+      this.$emit('vip-event')
+    },
     showBigimg (index) {
       const self = this
       if (self.imgarr.length === 0) {
@@ -298,7 +311,7 @@ export default {
     inviteEvent () {
       this.$vux.alert.show({
         title: '',
-        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销宝，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
+        content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销汇，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
       })
     }
   }
@@ -502,4 +515,5 @@ export default {
   border:1px solid #fff;
   text-align: center;
 }
+.vip-icon{display:inline-block;border-radius:5px;width:28px;height:20px;line-height:20px;text-align:center;font-size:13px !important;vertical-align:middle;}
 </style>

@@ -194,7 +194,10 @@ export default {
           content: '线下支付模式无法创建活动，请到设置中修改支付方式再来创建！'
         })
       } else {
-        self.$router.push({path: '/addActivity', query: {type: type}})
+        this.showgroupbuy = false
+        this.showbargainbuy = false
+        this.showdiscount = false
+        this.$emit('on-add', type)
       }
     }
   }

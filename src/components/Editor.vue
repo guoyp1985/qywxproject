@@ -396,7 +396,6 @@ export default {
       if (self.module === 'factorynews') {
         toolbars.splice(0, 1)
       }
-      console.log(self.module)
       editor = new Eleditor({
         el: this.elem,
         toolbars: toolbars,
