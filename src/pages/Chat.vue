@@ -311,10 +311,17 @@ export default {
       return true
     },
     inputText (value) {
+      const self = this
       this.showSendBtn = true
       if (this.$util.trim(value) === '') {
         this.showSendBtn = false
       }
+      let text = self.$refs.text[0] ? self.$refs.text[0] : self.$refs.text
+      text.updateAutosize()
+      setTimeout(function () {
+        let text = self.$refs.text[0] ? self.$refs.text[0] : self.$refs.text
+        text.updateAutosize()
+      }, 50)
     },
     inputEmot (value) {
       this.message = value
@@ -328,6 +335,8 @@ export default {
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
+      let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
+      text.updateAutosize()
     },
     onBlur () {
       clearInterval(intervalId)
@@ -568,7 +577,6 @@ export default {
       if (this.msgType === 'text' && this.$util.trim(postData.content) === '') {
         return false
       }
-      this.$refs.text.updateAutosize()
       this.sendData(postData)
     },
     viewUserInfo () {
