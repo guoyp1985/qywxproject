@@ -87,7 +87,7 @@
       </div>
       <div v-if="data.flag == 1 && data.fid == 0 && data.crowdid == 0" class="pagebottom flex_center font16 bg-orange5 color-white" @click="changePrice">{{ $t('Change price') }}</div>
       <div v-if="data.flag == 2 && data.candeliver" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Deliver goods') }}</div>
-      <div v-else-if="data.flag == 3 && (!data.fid || data.fid == loginUser.uid)" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
+      <div v-else-if="data.flag == 3 && (!data.fid || data.fid == loginUser.fid)" class="pagebottom flex_center font16 bg-orange5 color-white" @click="uploaddeliver">{{ $t('Update deliver info') }}</div>
       <div v-transfer-dom class="x-popup popup-deliver">
         <popup v-model="showpopup" height="100%">
           <div class="popup1 font14">
