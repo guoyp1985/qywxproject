@@ -626,11 +626,13 @@ export default {
             self.showContainer = true
             self.userInfo = data.data ? data.data : data
             document.title = self.userInfo.title
+            let shareDesc = self.userInfo.slogan ? self.userInfo.slogan : self.userInfo.title
+            shareDesc = shareDesc.replace(/<br \/>/g, '').replace(/<br\/>/g, '').replace(/<br>/g, '')
             let shareParams = {
               module: 'centerseller',
               moduleid: moduleid,
               title: self.userInfo.title,
-              desc: self.userInfo.slogan ? self.userInfo.slogan : self.userInfo.title,
+              desc: shareDesc,
               photo: self.userInfo.avatar,
               link: `${ENV.Host}/#/centerSeller?uid=${moduleid}&share_uid=${self.loginUser.uid}`
             }
