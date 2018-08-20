@@ -491,13 +491,11 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      if (this.productdata.length < limit) {
-        this.disproductdata = false
-        this.productdata = []
-        this.$vux.loading.show()
-        pageStart1 = 0
-        this.getData1()
-      }
+      this.disproductdata = false
+      this.productdata = []
+      this.$vux.loading.show()
+      pageStart1 = 0
+      this.getData1()
     }
   },
   created () {
