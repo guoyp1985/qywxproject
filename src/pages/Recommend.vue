@@ -104,7 +104,7 @@
       <view-box v-show="selectedIndex1===2">
         <div v-if="disTabData3" class="scroll_list">
           <template v-if="tabData3.length" v-for="(item, index) in tabData3">
-            <router-link v-if="item.type == 'groupbuy'" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}">
+            <router-link v-if="item.type == 'groupbuy'" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.productid, wid: item.uploader}}">
               <div class="w80 align_center">
                 <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
               </div>
