@@ -29,10 +29,12 @@
                 </template>
                 <div v-if="photoarr.length >= 1 && photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput','photo')">
                   <div class="inner">
-                    <div class="icon flex_center">
-                      <div class="txt">
-                        <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
-                        <div><span class="havenum">{{ photoarr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                    <div class="innerlist">
+                      <div class="flex_center h_100">
+                        <div class="txt">
+                          <i class="al al-zhaopian" style="color:#c6c5c5;line-height:30px;"></i>
+                          <div><span class="havenum">{{ photoarr.length }}</span><span class="ml5 mr5">/</span><span class="maxnum">{{ maxnum }}</span></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -99,7 +101,7 @@
                 <div class="t-table">
                   <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
+                    <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" />
                   </div>
                 </div>
               </div>
