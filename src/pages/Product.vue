@@ -252,7 +252,7 @@
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
+            <div v-if="query.wid && loginUser.uid != query.wid" class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
