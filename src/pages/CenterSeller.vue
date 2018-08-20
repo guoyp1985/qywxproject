@@ -26,7 +26,7 @@
               </div>
               <div class="align_center padding10">您还没有个人形象照，快去设置吧</div>
             </div>
-        </div>
+          </div>
         </div>
         <div v-else style="height:50px;"></div>
         <template v-if="!query.uid || query.uid == loginUser.uid">

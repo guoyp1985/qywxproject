@@ -306,7 +306,8 @@ export default {
       allowsubmit: true,
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       showRebate: false,
-      classData: []
+      classData: [],
+      submitIng: false
     }
   },
   watch: {
@@ -435,68 +436,72 @@ export default {
     },
     savedata (postdata) {
       const self = this
-      let validateData = []
-      for (let key in self.requireddata) {
-        let v = {}
-        v[key] = self.submitdata[key]
-        validateData.push(v)
-      }
-      let iscontinue = self.$util.validateQueue(validateData,
-        model => {
-          switch (model.key) {
-            default:
-              self.$vux.toast.text('必填项不能为空', 'middle')
-          }
+      if (!self.submitIng) {
+        self.submitIng = true
+        let validateData = []
+        for (let key in self.requireddata) {
+          let v = {}
+          v[key] = self.submitdata[key]
+          validateData.push(v)
         }
-      )
-      if (!iscontinue) {
-        return false
-      }
-      let price = postdata.price.toString().replace(/,/g, '')
-      let oriprice = postdata.oriprice.toString().replace(/,/g, '')
-      let rebate = postdata.rebate
-      if (self.$util.trim(rebate) !== '') {
-        rebate = rebate.toString().replace(/,/g, '')
-      }
-      if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入正确的价格'
-        })
-        return false
-      }
-      if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
-        self.$vux.alert.show({
-          title: '',
-          content: '请完善商品介绍或者详情图片'
-        })
-        return false
-      }
-      postdata.price = price
-      postdata.oriprice = oriprice
-      postdata.rebate = rebate
-      self.$vux.loading.show()
-      if (self.query.id) {
-        postdata.id = self.query.id
-      }
-      self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: data.flag !== 1 ? 'warn' : 'success',
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              if (self.query.from === 'apply') {
-                self.$router.push({path: '/centerSales'})
-              } else {
-                self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
-              }
+        let iscontinue = self.$util.validateQueue(validateData,
+          model => {
+            switch (model.key) {
+              default:
+                self.$vux.toast.text('必填项不能为空', 'middle')
             }
           }
+        )
+        if (!iscontinue) {
+          return false
+        }
+        let price = postdata.price.toString().replace(/,/g, '')
+        let oriprice = postdata.oriprice.toString().replace(/,/g, '')
+        let rebate = postdata.rebate
+        if (self.$util.trim(rebate) !== '') {
+          rebate = rebate.toString().replace(/,/g, '')
+        }
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的价格'
+          })
+          return false
+        }
+        if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
+          self.$vux.alert.show({
+            title: '',
+            content: '请完善商品介绍或者详情图片'
+          })
+          return false
+        }
+        postdata.price = price
+        postdata.oriprice = oriprice
+        postdata.rebate = rebate
+        self.$vux.loading.show()
+        if (self.query.id) {
+          postdata.id = self.query.id
+        }
+        self.$http.post(`${ENV.BokaApi}/api/add/product`, postdata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            type: data.flag !== 1 ? 'warn' : 'success',
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              self.submitIng = false
+              if (data.flag === 1) {
+                if (self.query.from === 'apply') {
+                  self.$router.push({path: '/centerSales'})
+                } else {
+                  self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
+                }
+              }
+            }
+          })
         })
-      })
+      }
     },
     saveevent () {
       const self = this
@@ -605,6 +610,7 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      self.submitIng = false
       if (this.loginUser && this.loginUser.subscribe === 1) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
