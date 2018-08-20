@@ -56,7 +56,7 @@
               </div>
               <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
-                <span class="v_middle">{{userInfo.slogan}}</span>
+                <span class="v_middle" v-html="userInfo.slogan"></span>
               </div>
               <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
                 <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
