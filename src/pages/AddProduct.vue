@@ -101,7 +101,7 @@
                 <div class="t-table">
                   <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" />
+                    <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" />
                   </div>
                 </div>
               </div>
