@@ -312,6 +312,15 @@ export default {
                 self.$vux.loading.hide()
               }
               break
+            case 3:
+              if (self.tabData4.length === (pageStart4 + 1) * limit) {
+                pageStart4++
+                self.$vux.loading.show()
+                self.getData4()
+              } else {
+                self.$vux.loading.hide()
+              }
+              break
           }
         }
       })
