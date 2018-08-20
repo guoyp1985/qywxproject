@@ -173,6 +173,17 @@ export default {
   computed: {
   },
   methods: {
+    initData () {
+      this.showSos = false
+      this.sosTitle = ''
+      this.showContainer = false
+      this.coverphotoarr = []
+      this.photoarr = []
+      this.submitdata = { title: '', photo: '', subtitle: '' }
+      this.iscreating = false
+      this.cutImg = ''
+      this.popupShow = false
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -347,13 +358,14 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
-        this.query = this.$route.query
-        this.submitdata.type = this.query.module
-        this.submitdata.id = this.query.id
-        this.$vux.loading.show()
-        this.getData()
-      }
+      // if (this.query.module !== this.$route.query.module || this.query.id !== this.$route.query.id) {
+      this.initData()
+      this.query = this.$route.query
+      this.submitdata.type = this.query.module
+      this.submitdata.id = this.query.id
+      this.$vux.loading.show()
+      this.getData()
+      // }
     }
   },
   activated () {
