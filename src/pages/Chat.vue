@@ -546,6 +546,7 @@ export default {
     },
     checkRecordApi () {
       const self = this
+      console.log('ookoko')
       Voice.recordCheck(
         () => {
           self.recordCheck = true
