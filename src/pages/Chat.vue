@@ -948,10 +948,11 @@ export default {
       }
     }
   },
-  created () {
-    this.checkRecordApi()
-  },
+  // created () {
+  //   this.checkRecordApi()
+  // },
   mounted () {
+    this.checkRecordApi()
     // console.log('mounted')
     // this.$util.wxPreviewImage('#chat-room')
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
