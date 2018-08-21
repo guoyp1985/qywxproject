@@ -547,10 +547,10 @@ export default {
     },
     checkRecordApi () {
       const self = this
+      self.$vux.toast.text('录音设备不可用', 'middle')
       Voice.recordCheck(
         () => {
           self.recordCheck = true
-          alert('okok')
         },
         () => {
           self.recordCheck = false
