@@ -75,7 +75,7 @@ const Voice = {
       success: function(res) {
         console.log(res)
       }
-    )
+    })
     Voice.wxVoiceRecord(res => {
       Voice.wxVoiceUpload(res, callback)
     })
