@@ -70,12 +70,6 @@ const Voice = {
     Vue.wechat.stopVoice({ localId: id })
   },
   record: function (callback) {
-    Vue.wechat.checkJsApi({
-      jsApiList: ['startRecord'],
-      success: function(res) {
-        console.log(res)
-      }
-    })
     Voice.wxVoiceRecord(res => {
       Voice.wxVoiceUpload(res, callback)
     })
@@ -93,6 +87,18 @@ const Voice = {
   },
   playStop: function (lid) {
     Voice.wxVoiceStop(lid)
+  },
+  recordCheck: function (success, fail) {
+    Vue.wechat.checkJsApi({
+      jsApiList: ['startRecord'],
+      success: function(res) {
+        if (res.checkResult.startRecord) {
+          success && success()
+        } else {
+          fail && fail()
+        }
+      }
+    })
   }
 }
 

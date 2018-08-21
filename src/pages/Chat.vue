@@ -90,7 +90,8 @@
             <group class="textarea-box">
               <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
             </group>
-            <x-button class="talk-btn no-select" v-show="showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
+            <x-button class="talk-btn no-select" v-if="recordCheck && showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
+            <x-button class="talk-btn no-select" v-else @click="checkRecordApi">{{$t('Press And Talk')}}</x-button>
           </div>
           <div class="emotion-cell">
             <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
@@ -269,7 +270,8 @@ export default {
       selectProductsData: null,
       showUserInfo: false,
       fromProduct: {},
-      showTip: true
+      showTip: true,
+      recordCheck: false
     }
   },
   filters: {
@@ -539,6 +541,17 @@ export default {
       res => {
         self.$vux.toast.text('录音时间过短', 'middle')
       })
+    },
+    checkRecordApi () {
+      const self = this
+      Voice.recordCheck(
+        () => {
+          self.recordCheck = true
+        },
+        () => {
+          self.recordCheck = false
+        }
+      )
     },
     getItemClass (item) {
       const self = this
@@ -931,9 +944,9 @@ export default {
       }
     }
   },
-  // created () {
-  //   this.init()
-  // },
+  created () {
+    this.checkRecordApi()
+  },
   mounted () {
     // console.log('mounted')
     // this.$util.wxPreviewImage('#chat-room')
