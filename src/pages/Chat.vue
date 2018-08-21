@@ -92,7 +92,7 @@
             </group>
             <template v-if="showVoiceCom">
               <x-button class="talk-btn no-select" v-if="recordCheck" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
-              <x-button class="talk-btn no-select" v-else @click="checkRecordApi">{{$t('Check Record API')}}</x-button>
+              <x-button class="talk-btn no-select" v-else @click.native.prevent="checkRecordApi">{{$t('Check Record API')}}</x-button>
             </template>
           </div>
           <div class="emotion-cell">
