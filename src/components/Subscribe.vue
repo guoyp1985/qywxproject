@@ -1,7 +1,13 @@
 <template>
   <div class="containerarea font14">
     <div class="pagemiddle flex_center" style="top:0;">
-      <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+      <div>
+        <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
+        <div class="align_left pt10 pb10" style="width:90%;">
+          <div>1、长按识别二维码关注【共销汇】</div>
+          <div>2、搜索公众号【共销汇】关注</div>
+        </div>
+      </div>
     </div>
     <div class="pagebottom flex_center b_top_after font16">请先关注</div>
   </div>
