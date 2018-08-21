@@ -89,12 +89,11 @@ const Voice = {
     Voice.wxVoiceStop(lid)
   },
   recordCheck: function (success, fail) {
-    alert(Vue.wechat.checkJsApi)
     Vue.wechat.checkJsApi({
       jsApiList: ['startRecord'],
       success: (res) => {
+        alert(res)
         const checkResult = JSON.parse(res.checkResult)
-        console.log(checkResult)
         if (checkResult.startRecord) {
           success && success(checkResult.startRecord)
         } else {
