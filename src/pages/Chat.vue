@@ -690,6 +690,7 @@ export default {
           if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
           setTimeout(() => {
             const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+            console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
             // this.$refs.scrollContainer.scrollTo(0, top, false)
           }, 100)
