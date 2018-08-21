@@ -4,8 +4,8 @@
       <div>
         <img :src="WeixinQrcode" style="max-width:90%;max-height:90%;" />
         <div class="align_left pt10 pb10" style="width:90%;">
-          <div>1、长按识别二维码关注【共销汇】</div>
-          <div>2、搜索公众号【共销汇】关注</div>
+          <div>1、长按识别二维码关注【{{WeixinName}}】</div>
+          <div>2、搜索公众号【{{WeixinName}}】关注</div>
         </div>
       </div>
     </div>
@@ -20,7 +20,8 @@ export default {
   name: 'Subscribe',
   data () {
     return {
-      WeixinQrcode: ENV.WeixinQrcode
+      WeixinQrcode: ENV.WeixinQrcode,
+      WeixinName: ENV.WeixinName
     }
   }
 }
