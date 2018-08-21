@@ -92,7 +92,7 @@ const Voice = {
     Vue.wechat.checkJsApi({
       jsApiList: ['startRecord'],
       success: (res) => {
-        alert(res)
+        alert(res.checkResult)
         const checkResult = JSON.parse(res.checkResult)
         if (checkResult.startRecord) {
           success && success(checkResult.startRecord)
