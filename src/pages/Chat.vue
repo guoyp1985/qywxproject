@@ -547,14 +547,13 @@ export default {
     },
     checkRecordApi () {
       const self = this
-      console.log('ookoko')
       Voice.recordCheck(
         () => {
           self.recordCheck = true
-          console.log(self.recordCheck)
         },
         () => {
           self.recordCheck = false
+          self.$vux.toast.text('录音设备不可用', 'middle')
         }
       )
     },
