@@ -30,9 +30,14 @@
               <div class="name disusername">{{item.username}}</div>
               <div class="msg">
                 <template v-if="item.msgtype == 'image'">
-                  <div class="main message-text">
+                  <div class="main message-text" @click="showBigimg1(item,`previewer${index}`)">
                     <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
                   </div>
+                  <template v-if="item.previewerPhoto">
+                    <div v-transfer-dom>
+                      <previewer :list="item.previewerPhoto" :ref="`previewer${index}`"></previewer>
+                    </div>
+                  </template>
                 </template>
                 <template v-else-if="item.msgtype == 'news'">
                   <div class="main message-text">
@@ -208,7 +213,7 @@
   </div>
 </template>
 <script>
-import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon } from 'vux'
+import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, Previewer } from 'vux'
 import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
@@ -227,7 +232,7 @@ export default {
     TransferDom
   },
   components: {
-    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, OpenVip
+    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, OpenVip, Previewer
   },
   data () {
     return {
@@ -290,6 +295,21 @@ export default {
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
+    showBigimg1 (item, refname) {
+      const self = this
+      let src = item.picurl
+      if (self.$util.isPC()) {
+        if (item.previewerPhoto) {
+          let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+          view.show(0)
+        }
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: src,
+          urls: [src]
+        })
+      }
+    },
     touchContainer () {
       this.isUserTouch = this.isUserScroll()
       // console.log(this.isUserTouch)
@@ -297,6 +317,7 @@ export default {
       this.showFeatureBox = false
     },
     isUserScroll () {
+      console.log('in scroller')
       const transform = this.$refs.scrollContainer.$el.children[0].style[`${prefix}Transform`]
       const matches = transform.match(Reg.rTranslateY)
       if (matches && matches[1]) {
@@ -446,16 +467,22 @@ export default {
         this.toggleFeatureBoard()
         this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData)
         .then(res => {
-          const data = res.data
           self.$vux.loading.hide()
-          if (data.flag === 1 && data.data) {
-            self.sendData({
-              touid: self.query.uid,
-              content: '',
-              module: self.module,
-              sendtype: 'image',
-              picurl: data.data,
-              thumb: ''
+          if (res) {
+            const data = res.data
+            if (data.flag === 1 && data.data) {
+              self.sendData({
+                touid: self.query.uid,
+                content: '',
+                module: self.module,
+                sendtype: 'image',
+                picurl: data.data,
+                thumb: ''
+              })
+            }
+          } else {
+            self.$vux.toast.show({
+              text: '请求超时，请刷新重试'
             })
           }
         })
@@ -783,6 +810,9 @@ export default {
             item.unread = true
           }
         }
+        if (item.msgtype === 'image') {
+          item.previewerPhoto = self.$util.previewerImgdata([item.picurl])
+        }
         self.messages.push(item)
         self.setScrollToBottom()
       })
@@ -803,6 +833,11 @@ export default {
             self.$vux.toast.text('没有更多记录', 'middle')
           }
           self.$vux.loading.hide()
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].msgtype === 'image') {
+              data[i].previewerPhoto = self.$util.previewerImgdata([data[i].picurl])
+            }
+          }
           self.messages = data.concat(self.messages)
           callback && callback()
         } else {
@@ -901,7 +936,7 @@ export default {
   // },
   mounted () {
     // console.log('mounted')
-    this.$util.wxPreviewImage('#chat-room')
+    // this.$util.wxPreviewImage('#chat-room')
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {

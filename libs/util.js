@@ -509,9 +509,16 @@ Util.install = function (Vue, options) {
                     Vue.http.post(`${ENV.BokaApi}/api/weixinUpload`, {
                       imgid: res1.serverId
                     }).then(function (res) {
-                      let data = res.data
-                      os.handleCallback && os.handleCallback(data)
-                      done()
+                      if (res) {
+                        let data = res.data
+                        os.handleCallback && os.handleCallback(data)
+                        done()
+                      } else {
+                        Vue.$vux.loading.hide()
+                        Vue.$vux.toast.show({
+                          text: '请求超时，请刷新重试'
+                        })
+                      }
                     })
                   },
                   fail: function (res2) {

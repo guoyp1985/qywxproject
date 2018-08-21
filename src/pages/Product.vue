@@ -246,13 +246,13 @@
   				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
   					<i class="al font12 mr3"></i>
           </div>
-          <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+          <div v-if="loginUser.uid != productdata.wid" class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
         </div>
   		</div>
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
+            <div v-if="loginUser.uid != productdata.wid" class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
@@ -275,7 +275,7 @@
       				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
       					<i class="al font12 mr3"></i>
       				</div>
-              <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+              <div v-if="loginUser.uid != productdata.wid" class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
       				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
       			</div>
@@ -285,7 +285,7 @@
       				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
       					<i class="al font12 mr3"></i>
       				</div>
-              <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+              <div v-if="loginUser.uid != productdata.wid" class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       			</div>
       		</div>
         </template>
