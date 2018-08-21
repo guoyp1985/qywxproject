@@ -31,7 +31,7 @@
               <div class="msg">
                 <template v-if="item.msgtype == 'image'">
                   <div class="main message-text" @click="showBigimg1(item,`previewer${index}`)">
-                    <x-img class="wx__img-preview" :src="item.picurl" @on-success="imageLoad(item)" container="#chat-scoller"></x-img>
+                    <img class="wx__img-preview" :src="item.picurl" @load="imageLoad(item)" container="#chat-scoller"/>
                   </div>
                   <template v-if="item.previewerPhoto">
                     <div v-transfer-dom>
