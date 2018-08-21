@@ -90,8 +90,10 @@
             <group class="textarea-box">
               <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
             </group>
-            <x-button class="talk-btn no-select" v-if="recordCheck && showVoiceCom" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
-            <x-button class="talk-btn no-select" v-else @click="checkRecordApi">{{$t('Check Record API')}}</x-button>
+            <template v-if="showVoiceCom">
+              <x-button class="talk-btn no-select" v-if="recordCheck" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
+              <x-button class="talk-btn no-select" v-else @click="checkRecordApi">{{$t('Check Record API')}}</x-button>
+            </template>
           </div>
           <div class="emotion-cell">
             <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
