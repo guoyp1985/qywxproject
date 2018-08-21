@@ -93,6 +93,7 @@ const Voice = {
       jsApiList: ['startRecord'],
       success: (res) => {
         const checkResult = JSON.parse(res.checkResult)
+        console.log(checkResult)
         if (checkResult.startRecord) {
           success && success(checkResult.startRecord)
         } else {
