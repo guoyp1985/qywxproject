@@ -549,6 +549,7 @@ export default {
       Voice.recordCheck(
         () => {
           self.recordCheck = true
+          console.log(self.recordCheck)
         },
         () => {
           self.recordCheck = false
