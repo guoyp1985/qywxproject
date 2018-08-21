@@ -7,7 +7,7 @@ const Voice = {
     if (!switcher) return
     switcher = false
     time = new Time()
-    console.log(Vue.wechat.config())
+    console.log(wx.config)
     Vue.wechat.startRecord()
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
