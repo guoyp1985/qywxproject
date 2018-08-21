@@ -548,12 +548,8 @@ export default {
     checkRecordApi () {
       const self = this
       Voice.recordCheck(
-        (res) => {
-          console.log('cahahasch')
-          self.$vux.toast.text(res, 'middle')
-          self.$nextTick(() => {
-            self.recordCheck = true
-          })
+        res => {
+          self.recordCheck = true
         },
         () => {
           self.recordCheck = false
