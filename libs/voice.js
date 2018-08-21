@@ -4,7 +4,7 @@ let switcher = true
 let time = null
 const Voice = {
   wxVoiceRecord: function (callback) {
-    if (!Vue.wechat.startRecord || !switcher) return
+    if (!switcher) return
     switcher = false
     time = new Time()
     Vue.wechat.startRecord()
@@ -18,7 +18,6 @@ const Voice = {
     })
   },
   wxVoiceRecordStop: function (success, fail) {
-    if (!Vue.wechat.stopRecord) return
     const seconds = time.secondsCounter(time.time())
     console.log(seconds)
     if (seconds < 1) {
@@ -71,6 +70,12 @@ const Voice = {
     Vue.wechat.stopVoice({ localId: id })
   },
   record: function (callback) {
+    Vue.wechat.checkJsApi({
+      jsApiList: ['startRecord'] // 需要检测的JS接口列表，所有JS接口列表见附录2,
+      success: function(res) {
+        console.log(res)
+      }
+    )
     Voice.wxVoiceRecord(res => {
       Voice.wxVoiceUpload(res, callback)
     })
