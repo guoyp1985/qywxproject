@@ -296,8 +296,6 @@ export default {
       return this.$util.getPhoto(src)
     },
     showBigimg1 (item, refname) {
-      console.log('in click img')
-      console.log(item)
       const self = this
       let src = item.picurl
       if (self.$util.isPC()) {
@@ -319,6 +317,7 @@ export default {
       this.showFeatureBox = false
     },
     isUserScroll () {
+      console.log('in scroller')
       const transform = this.$refs.scrollContainer.$el.children[0].style[`${prefix}Transform`]
       const matches = transform.match(Reg.rTranslateY)
       if (matches && matches[1]) {
@@ -468,16 +467,22 @@ export default {
         this.toggleFeatureBoard()
         this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData)
         .then(res => {
-          const data = res.data
           self.$vux.loading.hide()
-          if (data.flag === 1 && data.data) {
-            self.sendData({
-              touid: self.query.uid,
-              content: '',
-              module: self.module,
-              sendtype: 'image',
-              picurl: data.data,
-              thumb: ''
+          if (res) {
+            const data = res.data
+            if (data.flag === 1 && data.data) {
+              self.sendData({
+                touid: self.query.uid,
+                content: '',
+                module: self.module,
+                sendtype: 'image',
+                picurl: data.data,
+                thumb: ''
+              })
+            }
+          } else {
+            self.$vux.toast.show({
+              text: '请求超时，请刷新重试'
             })
           }
         })
@@ -930,7 +935,7 @@ export default {
   // },
   mounted () {
     // console.log('mounted')
-    this.$util.wxPreviewImage('#chat-room')
+    // this.$util.wxPreviewImage('#chat-room')
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
