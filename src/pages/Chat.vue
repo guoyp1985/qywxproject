@@ -550,6 +550,7 @@ export default {
       Voice.recordCheck(
         () => {
           self.recordCheck = true
+          self.$vux.toast.text(self.recordCheck, 'middle')
         },
         () => {
           self.recordCheck = false
