@@ -71,7 +71,7 @@ const Voice = {
   },
   record: function (callback) {
     Vue.wechat.checkJsApi({
-      jsApiList: ['startRecord'] // 需要检测的JS接口列表，所有JS接口列表见附录2,
+      jsApiList: ['startRecord'],
       success: function(res) {
         console.log(res)
       }
