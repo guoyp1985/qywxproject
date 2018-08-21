@@ -549,6 +549,7 @@ export default {
       const self = this
       Voice.recordCheck(
         (res) => {
+          console.log('cahahasch')
           self.$vux.toast.text(res, 'middle')
           self.$nextTick(() => {
             self.recordCheck = true
