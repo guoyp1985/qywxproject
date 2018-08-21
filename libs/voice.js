@@ -4,10 +4,9 @@ let switcher = true
 let time = null
 const Voice = {
   wxVoiceRecord: function (callback) {
-    if (!switcher) return
+    if (!Vue.wechat.startRecord || !switcher) return
     switcher = false
     time = new Time()
-    console.log(wx.config)
     Vue.wechat.startRecord()
     Vue.wechat.onVoiceRecordEnd({
       complete: function (res) {
@@ -19,6 +18,7 @@ const Voice = {
     })
   },
   wxVoiceRecordStop: function (success, fail) {
+    if (!Vue.wechat.stopRecord) return
     const seconds = time.secondsCounter(time.time())
     console.log(seconds)
     if (seconds < 1) {
