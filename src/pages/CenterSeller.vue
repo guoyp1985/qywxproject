@@ -417,7 +417,9 @@ export default {
     moreFriends () {
       const self = this
       this.showMoreFriends = true
-      self.getFriends()
+      if (!self.friendsData.length) {
+        self.getFriends()
+      }
     },
     getTimelineData (tagid) {
       const self = this
@@ -667,6 +669,9 @@ export default {
           if (self.focusData.length > 0) {
             self.disFocus = true
             self.getMoreStatus(self)
+          }
+          if (self.focusData.length < 15) {
+            self.friendsData = self.focusData
           }
         }
       })
