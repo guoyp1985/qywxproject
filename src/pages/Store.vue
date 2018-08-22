@@ -109,10 +109,10 @@
           <i class="al al-maijiaxiu2 color-orange font18 v_middle" style="margin-top:-1px;"></i>
           <span class="v_middle" style="color:#323232;margin-left:-4px;">卖家秀</span>
         </div>
-        <router-link v-if="query.wid && loginUser.uid != query.wid" :to="{path: '/chat', query: {uid: query.wid}}" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
+        <div @click="toChat" class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9;border-right:#e8e8e8 1px solid;">
           <i class="al al-zixun color-red font18 v_middle" style="padding-right:3px;"></i>
           <span class="v_middle" style="color:#323232">{{ $t('Online consulting') }}</span>
-        </router-link>
+        </div>
         <div class="flex_cell color-white h_100 flex_center" style="background:#f9f9f9" @click="clickWetchat"><i class="al al-weixin  font18" style="padding-right:3px;color:#36ab60;"></i><span style="color:#323232">{{ $t('Wechat contact') }}</span></div>
       </div>
       <div v-transfer-dom class="x-popup">
@@ -270,6 +270,18 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+    },
+    toChat () {
+      const self = this
+      let params = { uid: self.query.wid }
+      if (!self.query.wid) {
+        params.uid = self.loginUser.uid
+      }
+      if (parseInt(params.uid) === self.loginUser.uid) {
+        self.$vux.toast.text('不能和自己聊天哦', 'middle')
+      } else {
+        self.$router.push({path: '/chat', query: params})
+      }
     },
     toCenterSales () {
       const self = this
@@ -502,6 +514,7 @@ export default {
     refresh (query) {
       this.initData()
       this.query = query
+      console.log(this.query)
       this.$vux.loading.show()
       this.getData()
       if (this.productdata.length < limit) {
