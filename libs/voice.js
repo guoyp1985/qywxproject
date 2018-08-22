@@ -87,6 +87,20 @@ const Voice = {
   },
   playStop: function (lid) {
     Voice.wxVoiceStop(lid)
+  },
+  recordCheck: function (success, fail) {
+    Vue.wechat.checkJsApi({
+      jsApiList: ['startRecord'],
+      success: (res) => {
+        // alert(res.checkResult.startRecord)
+        // const checkResult = JSON.parse(res.checkResult)
+        if (res.checkResult.startRecord) {
+          success && success(res.checkResult.startRecord)
+        } else {
+          fail && fail()
+        }
+      }
+    })
   }
 }
 
