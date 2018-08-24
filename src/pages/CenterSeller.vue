@@ -58,7 +58,7 @@
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
                 <span class="v_middle" v-html="userInfo.slogan"></span>
               </div>
-              <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
+              <div class="row3" v-if="(userInfo.tags && userInfo.tags.length > 0) || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
                 <div class="taglist">
                   <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
