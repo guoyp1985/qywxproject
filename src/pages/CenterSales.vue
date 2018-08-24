@@ -22,7 +22,8 @@
             :retailer-info="retailerInfo"
             :messages="messages"
             :login-user="loginUser"
-            :marquee-data="marqueeData">
+            :marquee-data="marqueeData"
+            @vip-event="vipEvent">
           </center-sales>
         </template>
         <template v-if="showApply">
@@ -31,9 +32,7 @@
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
-    <!--
     <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip1"></vip>
-  -->
   </div>
 </template>
 
@@ -63,12 +62,15 @@ export default {
       marqueeData: [],
       classData: [],
       messages: 0,
-      showVip: false
+      showVip: false,
+      allowVipFee: ENV.allowVipFee
     }
   },
   methods: {
     vipEvent () {
-      this.showVip = true
+      if (this.allowVipFee) {
+        this.showVip = true
+      }
     },
     hideVip () {
       this.showVip = false
@@ -77,6 +79,9 @@ export default {
       location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}&module=payorders`)
     },
     openVip1 () {
+      if (this.allowVipFee) {
+        console.log('续费')
+      }
     },
     applySuccess () {
       const self = this

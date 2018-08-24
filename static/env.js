@@ -44,7 +44,8 @@ var ENV = {
   vipMemberSale: '免费版不支持查看客户的订单数据，开通VIP即可立即查看客户的订单数据哦！',
   vipChat: '免费版不支持与客户联系，开通vip即可立即与客户联系哦！',
   openVipText: '立即开通',
-  giveUpVipText: '放弃=错失良机'
+  giveUpVipText: '放弃=错失良机',
+  allowVipFee: true
 }
 
 ENV.NoAccessUrls = [
