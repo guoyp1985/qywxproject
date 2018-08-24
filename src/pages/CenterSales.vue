@@ -85,7 +85,7 @@ export default {
         this.$http.post(`${ENV.BokaApi}/api/retailer/vipRenew`).then(res => {
           this.$vux.loading.hide()
           const data = res.data
-          if (data.flag) {
+          if (data.flag && data.data) {
             location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=payorders`)
           } else {
             this.$vux.toast.show({
