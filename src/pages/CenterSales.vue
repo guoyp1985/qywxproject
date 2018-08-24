@@ -80,7 +80,7 @@ export default {
     },
     openVip1 () {
       if (this.allowVipFee) {
-        console.log('续费')
+        this.showVip = false
       }
     },
     applySuccess () {
