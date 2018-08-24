@@ -54,7 +54,7 @@
                   <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
                 </div>
               </div>
-              <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
+              <div class="row2" v-if="(userInfo.slogan && userInfo.slogan != '') || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
                 <span class="v_middle" v-html="userInfo.slogan"></span>
               </div>
