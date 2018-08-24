@@ -90,8 +90,8 @@ export default {
           } else {
             this.$vux.toast.show({
               text: data.error,
-              type: 'warn',
-              time: self.$util.delay(data.error)
+              type: data.flag ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
             })
           }
         })
