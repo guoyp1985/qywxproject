@@ -22,8 +22,7 @@
             :retailer-info="retailerInfo"
             :messages="messages"
             :login-user="loginUser"
-            :marquee-data="marqueeData"
-            @vip-event="vipEvent">
+            :marquee-data="marqueeData">
           </center-sales>
         </template>
         <template v-if="showApply">
@@ -32,7 +31,9 @@
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
-    <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></vip>
+    <!--
+    <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip1"></vip>
+  -->
   </div>
 </template>
 
@@ -74,6 +75,8 @@ export default {
     },
     openVip () {
       location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}&module=payorders`)
+    },
+    openVip1 () {
     },
     applySuccess () {
       const self = this
