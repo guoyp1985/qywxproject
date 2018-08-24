@@ -673,7 +673,7 @@ zh-CN:
   tIndex: 共销汇
   tLogin: 扫码登录
   tCenter: 个人中心
-  tCenterSales: 卖家管理中心
+  tCenterSales: 卖家中心
   tRetailerSales: 返点客
   tRetailerSaleview: 返点客
   tRetailerSalechance: 销售机会
@@ -796,7 +796,7 @@ zh-CN:
   tFactory: 厂商
   Time of admission: 入驻时间
   Apply join: 申请加入
-  tCenterFactory: 厂商管理中心
+  tCenterFactory: 厂商中心
   Factory center: 厂商中心
   tFactoryLevel: 厂商等级管理
   tSellerList: 卖家列表
