@@ -81,6 +81,20 @@ export default {
     openVip1 () {
       if (this.allowVipFee) {
         this.showVip = false
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/retailer/vipRenew`).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          if (data.flag) {
+            location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=payorders`)
+          } else {
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
       }
     },
     applySuccess () {
