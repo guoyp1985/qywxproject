@@ -8,7 +8,8 @@
         :login-user="loginUser"
         :photoarr="photoarr"
         :showphoto-arr="showphotoArr"
-        :submitdata="submitdata">
+        :submitdata="submitdata"
+        :submitdata1="submitdata1">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -37,7 +38,8 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', qrcode: '', buyonline: 1, showphoto: '', slogan: '', tags: '', content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
       classData: []
@@ -63,11 +65,14 @@ export default {
           for (let key in self.submitdata) {
             self.submitdata[key] = self.retailerInfo[key]
           }
+          for (let key in self.submitdata1) {
+            self.submitdata1[key] = self.retailerInfo[key]
+          }
           let qrcode = self.submitdata.qrcode
           if (qrcode && self.$util.trim(qrcode) !== '') {
             self.photoarr = qrcode.split(',')
           }
-          let showphoto = self.submitdata.showphoto
+          let showphoto = self.submitdata1.showphoto
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
           }
@@ -116,7 +121,6 @@ export default {
         } else {
           self.initContainer()
           self.showSetting = true
-          console.log(11)
           this.getData()
         }
         // }
