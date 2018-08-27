@@ -200,7 +200,7 @@
             <template v-if="!query.uid || query.uid == loginUser.uid">
               <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer',tagid:clickTagId}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
             </template>
-            <div class="popup-middle" style="top:0;">
+            <div class="popup-middle" style="top:0;" ref="tagScrollContainer" @scroll="handleScrollTag('tagScrollContainer')">
               <tag-page
                 :query="query"
                 :user-info="userInfo"
@@ -327,6 +327,7 @@ export default {
       this.disTimeline = false
       this.tlData = []
       this.pageStart1 = 0
+      this.pageStart2 = 0
       this.replyPopupShow = false
       this.commentData = null
       this.commentIndex = 0
@@ -388,20 +389,6 @@ export default {
     closeFriendsPopup () {
       this.showMoreFriends = false
     },
-    handleScroll2 (refname) {
-      const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: function () {
-          if (self.friendsData.length === (self.pageStart2 + 1) * self.limit) {
-            self.pageStart2++
-            self.$vux.loading.show()
-            self.getFriends()
-          }
-        }
-      })
-    },
     getFriends () {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
@@ -459,6 +446,20 @@ export default {
       self.pageStart = 0
       self.clickTagId = tagitem.id
       self.getTimelineData()
+    },
+    handleScrollTag (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
+            self.pageStart++
+            self.$vux.loading.show()
+            self.getTimelineData()
+          }
+        }
+      })
     },
     clickDig (item, index) {
       const self = this
