@@ -243,21 +243,29 @@
       </div>
   		<div class="pagebottom b_top_after" v-if="productdata.moderate != 1">
   			<div class="t-table h_100">
-  				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
-  					<i class="al font12 mr3"></i>
-          </div>
+          <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+            <div><i class="al al-dianpu font18 color-red"></i></div>
+            <div class="font12">首页</div>
+          </router-link>
+  				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+  					<div><i class="al font18"></i></div>
+  				</div>
           <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
         </div>
   		</div>
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
+            <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+              <div><i class="al al-dianpu font18 color-red"></i></div>
+              <div class="font12">首页</div>
+            </router-link>
+            <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:40px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
-    					<i class="al font18 mr3"></i>
+    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+    					<div><i class="al font18"></i></div>
     				</div>
     				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
     					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
@@ -272,8 +280,12 @@
         <template v-else>
       		<div v-if="productdata.buyonline >= 1" class="pagebottom b_top_after">
       			<div class="t-table h_100">
-      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-      					<i class="al font12 mr3"></i>
+              <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+                <div><i class="al al-dianpu font18 color-red"></i></div>
+                <div class="font12">首页</div>
+              </router-link>
+      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+                <div><i class="al font18"></i></div>
       				</div>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
@@ -282,8 +294,12 @@
       		</div>
           <div v-else class="pagebottom b_top_after">
       			<div class="t-table h_100">
-      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-      					<i class="al font12 mr3"></i>
+              <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+                <div><i class="al al-dianpu font18 color-red"></i></div>
+                <div class="font12">首页</div>
+              </router-link>
+      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+                <div><i class="al font18"></i></div>
       				</div>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       			</div>
