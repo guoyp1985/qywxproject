@@ -2,7 +2,7 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex || (query.from == 'seller' && index == 1)" :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container" style="top:44px;">
@@ -289,6 +289,10 @@ import ENV from 'env'
 export default {
   name: 'RetailerSetting',
   props: {
+    query: {
+      type: Object,
+      default: {}
+    },
     loginUser: {
       type: Object,
       default: {}
@@ -340,6 +344,10 @@ export default {
     },
     submitdata: function () {
       return this.submitdata
+    },
+    selectedIndex: function () {
+      this.selectedIndex = this.query.from === 'seller' ? 1 : 0
+      return this.selectedIndex
     }
   },
   methods: {

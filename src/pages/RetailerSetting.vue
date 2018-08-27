@@ -4,6 +4,7 @@
     <template v-if="showSetting">
       <retailer-setting
         ref="retailerSetting"
+        :query="query"
         :retailer-info="retailerInfo"
         :login-user="loginUser"
         :photoarr="photoarr"
@@ -34,6 +35,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       loginUser: {},
       showSetting: false,
       showApply: false,
@@ -94,6 +96,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.query = this.$route.query
       if (this.loginUser && this.loginUser.subscribe === 1) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
