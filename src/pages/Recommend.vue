@@ -476,7 +476,7 @@ export default {
 .card-demo-flex {
   display: flex;
 }
-.card-demo-content01 {
+.recommend .card-demo-content01 {
   padding: 10px 0;
 }
 .card-padding {

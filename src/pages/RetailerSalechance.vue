@@ -4,7 +4,7 @@
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner">
-        <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
+        <div slot="content" class="card-demo-flex flex_center" style="height:88px;">
           <div class="vux-1px-r">
             <div class="color-white font14">访问量</div>
             <div class="color-white font21 mt10 clamp1">{{ viewdata.views }}</div>
@@ -314,7 +314,7 @@ export default {
 
 .bordertxt{border-top:@list-border-color 1px solid;border-bottom:@list-border-color 1px solid;}
 .rsalechance .s-topbanner{height:132px;}
-.rsalechance .pagemiddle{top:152px;}
+.rsalechance .pagemiddle{top:132px;}
 .rsalechance .vux-1px-r:after {border: none}
 .rsalechance .x-timeline .vux-timeline-item-color{left: 40px; background-color: #f4dcdc;}
 .rsalechance .x-timeline .vux-timeline-item-tail{left: 44px;background-color: #f4dcdc;}
