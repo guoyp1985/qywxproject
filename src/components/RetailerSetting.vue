@@ -136,7 +136,7 @@
                   <group class="textarea-outer" style="padding:0;">
                     <x-textarea
                       ref="sloganTextarea"
-                      v-model="submitdata.slogan"
+                      v-model="submitdata1.slogan"
                       style="padding:5px;"
                       class="x-textarea noborder"
                       :placeholder="$t('Seller said')"
@@ -362,7 +362,7 @@ export default {
           self.submitdata.qrcode = self.photoarr.join(',')
         } else if (type === 'showphoto') {
           self.showphotoArr.push(data.data)
-          self.submitdata.showphoto = self.showphotoArr.join(',')
+          self.submitdata1.showphoto = self.showphotoArr.join(',')
         }
       } else if (data.error) {
         self.$vux.toast.show({
@@ -412,7 +412,7 @@ export default {
         this.submitdata.qrcode = this.photoarr.join(',')
       } else if (type === 'showphoto') {
         this.showphotoArr.splice(index, 1)
-        this.submitdata.showphoto = this.showphotoArr.join(',')
+        this.submitdata1.showphoto = this.showphotoArr.join(',')
       }
     },
     setbuyonline (val) {
