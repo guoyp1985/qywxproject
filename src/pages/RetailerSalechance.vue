@@ -314,7 +314,7 @@ export default {
 
 .bordertxt{border-top:@list-border-color 1px solid;border-bottom:@list-border-color 1px solid;}
 .rsalechance .s-topbanner{height:132px;}
-.rsalechance .pagemiddle{top:132px;}
+.rsalechance .pagemiddle{top:152px;}
 .rsalechance .vux-1px-r:after {border: none}
 .rsalechance .x-timeline .vux-timeline-item-color{left: 40px; background-color: #f4dcdc;}
 .rsalechance .x-timeline .vux-timeline-item-tail{left: 44px;background-color: #f4dcdc;}

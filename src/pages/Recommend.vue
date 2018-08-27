@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div id="to-recommend" class="font14 containerarea" ref="scrollContainer" @scroll="handleScroll">
+  <div id="to-recommend" class="font14 containerarea recommend" ref="scrollContainer" @scroll="handleScroll">
     <tab v-model="selectedIndex" class="bg-white radius-tab">
       <tab-item class="font14" selected @on-item-click="clickTabItem">全部收入</tab-item>
       <tab-item class="font14" @on-item-click="clickTabItem">客户资源</tab-item>
