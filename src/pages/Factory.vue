@@ -126,6 +126,18 @@ export default {
     }
   },
   methods: {
+    initData () {
+      pageStart1 = 0
+      pageStart2 = 0
+      this.selectedIndex = 0
+      this.disProductData = false
+      this.productData = []
+      this.tabData1 = []
+      this.tabData2 = []
+      this.disTabData1 = false
+      this.disTabData2 = false
+      this.showBottom = false
+    },
     joinEvent () {
       const self = this
       self.$vux.confirm.show({
@@ -315,6 +327,7 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
       if (!self.loginUser.isretailer) {
         self.showBottom = true
