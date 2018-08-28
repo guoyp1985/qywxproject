@@ -220,6 +220,7 @@ export default {
       query: {},
       payPrice: '0.00',
       orderPrice: '0.00',
+      postage: 0,
       selectaddress: null,
       orderdata: [],
       // payprice: '0.00',
@@ -329,8 +330,9 @@ export default {
       const self = this
       if (data.checked) {
         self.selectedCard = data
-        let cha = (parseFloat(self.orderPrice) - parseFloat(data.money)).toFixed(2)
-        self.payPrice = (cha < 0 ? '0.00' : cha)
+        let cha = parseFloat(self.orderPrice) - parseFloat(self.postage) - parseFloat(data.money)
+        cha = cha < 0 ? 0 : cha
+        self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
       } else {
         self.selectedCard = null
         self.payPrice = self.orderPrice
@@ -407,6 +409,7 @@ export default {
             if (order.postage) {
               total += parseFloat(order.postage)
             }
+            self.postage = order.postage
           }
           self.payPrice = total.toFixed(2)
           self.orderPrice = self.payPrice
