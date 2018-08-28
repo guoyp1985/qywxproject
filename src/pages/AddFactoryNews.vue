@@ -292,7 +292,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
+          if (this.query.id === undefined || this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
             this.initData()
             this.query = this.$route.query
             this.getData()
