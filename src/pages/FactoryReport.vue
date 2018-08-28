@@ -11,12 +11,6 @@
     </tab>
     <div class="x-card">
       <div class="border-box posi_r">
-        <!--
-        <div class="rebates-explain font12 color-red">
-          <i class="al al-gantanhaozhong font20 v_middle"></i>
-          <span class="v_middle">{{$t('More')}}</span>
-        </div>
-      -->
         <card>
           <router-link :to="{path: '/factoryOrders', query: {fid: fid}}" slot="content" class="card-demo-flex card-demo-content01">
             <div class="vux-1px-r">
@@ -120,7 +114,20 @@ export default {
       disList: false,
       selectedIndex1: 0,
       fid: null,
-      viewData: {}
+      viewData: {
+        orderuids: 0,
+        orders: 0,
+        totalmoney: '0.00',
+        newcustomer: 0,
+        newbuyer: 0,
+        conversion: 0,
+        productviews: 0,
+        productshares: 0,
+        productfavorites: 0,
+        newsviews: 0,
+        newsshares: 0,
+        newsfavorites: 0
+      }
     }
   },
   filters: {
@@ -146,7 +153,9 @@ export default {
       }
       this.$http.post(`${ENV.BokaApi}/api/common/businessReport`, params).then(res => {
         let data = res.data
-        self.viewData = data.data ? data.data : data
+        if (data.flag) {
+          self.viewData = data.data ? data.data : data
+        }
       })
     },
     refresh () {
