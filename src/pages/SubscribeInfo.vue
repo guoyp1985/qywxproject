@@ -13,7 +13,7 @@
               <img class="avatarimg1" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
 						</div>
 						<div class="t-cell v_middle">
-							<div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.username }}</div>
+							<div class="clamp1">{{ item.username }}</div>
 						</div>
 					</div>
         </div>
@@ -56,14 +56,6 @@ export default {
     }
   },
   methods: {
-    getDateState (dt) {
-      return this.$util.getDateState(dt)
-    },
-    getDateClass (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
-    },
     handleScroll () {
       const self = this
       self.$util.scrollEvent({
