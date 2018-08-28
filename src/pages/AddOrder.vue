@@ -147,7 +147,7 @@
                   <template v-else>
                     <div class="x-check-icon scroll_item padding10 color-gray">
                       <div class="t-table">
-                        <div class="t-cell v_middle" style="width:70px;">【不可用】</div>
+                        <div class="t-cell v_middle w80">【不可用】</div>
                         <div class="t-cell v_middle">
                           <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
                         </div>
