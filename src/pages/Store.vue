@@ -280,6 +280,8 @@ export default {
       if (parseInt(params.uid) === self.loginUser.uid) {
         self.$vux.toast.text('不能和自己聊天哦', 'middle')
       } else {
+        params.fromModule = 'store'
+        params.fromId = params.uid
         self.$router.push({path: '/chat', query: params})
       }
     },

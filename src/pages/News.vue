@@ -418,13 +418,17 @@ export default {
       }
     },
     onAdvisory () {
-      if (this.loginUser.subscribe === 0) {
-        // this.$util.wxAccess()
-        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=news&fromId=${this.query.id}`)
-        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      if (this.loginUser.uid === this.retailerInfo.uid) {
+        this.$vux.toast.text('不能和自己聊天哦', 'middle')
       } else {
-        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id}})
+        if (this.loginUser.subscribe === 0) {
+          // this.$util.wxAccess()
+          const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=news&fromId=${this.query.id}`)
+          const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+        } else {
+          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id}})
+        }
       }
     },
     onStore () {
