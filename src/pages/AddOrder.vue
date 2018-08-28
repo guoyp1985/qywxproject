@@ -48,7 +48,7 @@
     						</div>
     					</div>
             </div>
-            <div class="b_bottom_after padding10 color-orange" v-if="cardList && cardList.length && allowCard">
+            <div class="b_bottom_after pl10 pr10 color-orange" v-if="cardList && cardList.length && allowCard">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
                 <div class="t-cell v_middle align_right" @click="checkCard">
@@ -134,13 +134,27 @@
             <div class="popup-top flex_center">选择{{$t('Card')}}</div>
             <div class="popup-middle font14">
               <div class="scroll_list">
-                <check-icon class="x-check-icon scroll_item padding10" v-for="(item,index) in cardList" :key="item.id" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                <template v-for="(item,index) in cardList">
+                  <template v-if="productData.special >= item.ordermoney">
+                    <check-icon class="x-check-icon scroll_item padding10" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                  </template>
+                  <template v-else>
+                    <div class="x-check-icon scroll_item padding10 color-gray">
+                      <div class="t-table">
+                        <div class="t-cell v_middle" style="width:70px;">【不可用】</div>
+                        <div class="t-cell v_middle">
+                          <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </check-icon>
+                  </template>
+                </template>
               </div>
             </div>
             <div class="popup-bottom flex_center">
@@ -236,7 +250,8 @@ export default {
       showCard: false,
       cardList: [],
       selectedCard: null,
-      allowCard: false
+      allowCard: false,
+      productData: {}
     }
   },
   watch: {
@@ -390,6 +405,7 @@ export default {
         } else {
           self.showContainer = true
           self.orderdata = data
+          self.productData = self.orderdata[0].info[0]
           let total = 0
           for (let i = 0; i < self.orderdata.length; i++) {
             let order = self.orderdata[i]
@@ -435,7 +451,6 @@ export default {
               self.submitdata.addressid = self.selectaddress.id
             }
           }
-          console.log('in card/canUse')
           return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
             wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
           })
