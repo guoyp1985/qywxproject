@@ -329,7 +329,8 @@ export default {
       const self = this
       if (data.checked) {
         self.selectedCard = data
-        self.payPrice = (parseFloat(self.orderPrice) - parseFloat(data.money)).toFixed(2)
+        let cha = (parseFloat(self.orderPrice) - parseFloat(data.money)).toFixed(2)
+        self.payPrice = (cha < 0 ? 0.00 : cha)
       } else {
         self.selectedCard = null
         self.payPrice = self.orderPrice
