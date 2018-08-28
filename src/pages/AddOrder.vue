@@ -416,7 +416,7 @@ export default {
               let p = { shopid: info.id, quantity: info.quantity }
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
-              if (info.fid > 0) {
+              if (self.query.activityid || info.fid > 0) {
                 self.allowCard = false
               } else {
                 self.allowCard = true
@@ -451,9 +451,11 @@ export default {
               self.submitdata.addressid = self.selectaddress.id
             }
           }
-          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-            wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
-          })
+          if (!self.query.activityid) {
+            return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
+              wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
+            })
+          }
         }
       }).then(res => {
         if (res) {

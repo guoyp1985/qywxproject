@@ -725,9 +725,11 @@ export default {
     },
     buyevent (buytype) {
       const self = this
+      let isActivity = false
       self.$vux.loading.show()
       if (buytype === 'groupbuy' && self.activityInfo.id) {
         self.submitdata['activityid'] = self.activityInfo.id
+        isActivity = true
       }
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerInfo.uid
@@ -735,7 +737,11 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.$router.push({ path: '/addOrder', query: { id: data.data } })
+          let rparams = {id: data.data}
+          if (isActivity) {
+            rparams['activityid'] = self.activityInfo.id
+          }
+          self.$router.push({ path: '/addOrder', query: rparams })
         } else if (data.error) {
           self.$vux.toast.show({
             text: data.error,
