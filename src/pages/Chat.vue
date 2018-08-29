@@ -391,6 +391,7 @@ export default {
         this.showFeatureBox = false
       }
       this.showEmotBox = true
+      this.setViewHeight()
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
