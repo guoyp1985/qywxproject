@@ -399,7 +399,7 @@ export default {
           self.showFeatureBox = false
         }
         self.showEmotBox = true
-      }, 50)
+      }, 500)
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
