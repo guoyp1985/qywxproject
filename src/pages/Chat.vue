@@ -275,8 +275,7 @@ export default {
       showTip: true,
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist'],
-      allowChat: false,
-      isInInput: false
+      allowChat: false
     }
   },
   filters: {
@@ -359,8 +358,6 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      console.log('in focus')
-      this.isInInput = true
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
@@ -369,9 +366,6 @@ export default {
       text.updateAutosize()
     },
     onBlur () {
-      console.log('in onBlur')
-      this.isInInput = false
-      this.setViewHeight()
       clearInterval(intervalId)
     },
     toggleVoice () {
@@ -389,7 +383,6 @@ export default {
       }
     },
     toggleEmotion () {
-      console.log('in toggleEmotion')
       const self = this
       setTimeout(function () {
         if (self.showVoiceCom) {
@@ -399,7 +392,7 @@ export default {
           self.showFeatureBox = false
         }
         self.showEmotBox = true
-      }, 500)
+      }, 300)
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
