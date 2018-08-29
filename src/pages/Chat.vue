@@ -390,14 +390,15 @@ export default {
     },
     toggleEmotion () {
       console.log('in toggleEmotion')
+      const self = this
       setTimeout(function () {
-        if (this.showVoiceCom) {
-          this.showVoiceCom = false
+        if (self.showVoiceCom) {
+          self.showVoiceCom = false
         }
-        if (this.showFeatureBox) {
-          this.showFeatureBox = false
+        if (self.showFeatureBox) {
+          self.showFeatureBox = false
         }
-        this.showEmotBox = true
+        self.showEmotBox = true
       }, 50)
     },
     toggleKeyboard () {
