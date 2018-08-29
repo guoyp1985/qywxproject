@@ -366,10 +366,7 @@ export default {
       text.updateAutosize()
     },
     onBlur () {
-      document.body.scrollTop = document.body.scrollHeight
-      setTimeout(function () {
-        document.body.scrollTop = document.body.scrollHeight
-      }, 200)
+      this.setViewHeight()
       clearInterval(intervalId)
     },
     toggleVoice () {
