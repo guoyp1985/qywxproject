@@ -359,6 +359,7 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      console.log('in focus')
       this.isInInput = true
       this.showFeatureBox = false
       intervalId = setInterval(function () {
@@ -368,6 +369,7 @@ export default {
       text.updateAutosize()
     },
     onBlur () {
+      console.log('in onBlur')
       this.isInInput = false
       this.setViewHeight()
       clearInterval(intervalId)
@@ -387,17 +389,8 @@ export default {
       }
     },
     toggleEmotion () {
-      if (this.isInInput) {
-        setTimeout(function () {
-          if (this.showVoiceCom) {
-            this.showVoiceCom = false
-          }
-          if (this.showFeatureBox) {
-            this.showFeatureBox = false
-          }
-          this.showEmotBox = true
-        }, 50)
-      } else {
+      console.log('in toggleEmotion')
+      setTimeout(function () {
         if (this.showVoiceCom) {
           this.showVoiceCom = false
         }
@@ -405,7 +398,7 @@ export default {
           this.showFeatureBox = false
         }
         this.showEmotBox = true
-      }
+      }, 50)
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
