@@ -357,6 +357,9 @@ export default {
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
+      setTimeout(function () {
+        curArea.updateAutosize()
+      }, 50)
     },
     textareaFocus (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -557,7 +560,7 @@ export default {
       const params1 = { module: 'product', action: 'add' }
       if (this.query.id) {
         params1.id = this.query.id
-        const params2 = { params: { id: this.query.id, module: 'product' } }
+        const params2 = { params: { id: this.query.id, module: 'product', from: 'edit' } }
         this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, params2).then(res => {
           const data = res.data
           self.data = data.data ? data.data : data
