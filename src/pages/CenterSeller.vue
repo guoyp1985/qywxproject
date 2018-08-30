@@ -165,50 +165,7 @@
           </div>
         </div>
       </div>
-      <div class="pagebottom">
-        <div class="w_100 h_100 flex_center">
-          <router-link v-if="loginUser.isretailer" :to="{path: '/centerSales'}" class="flex_cell item flex_center">
-            <div class="inner">
-              <div class="tet"><i class="al al-shouye1 font24 db-in" style="margin-top:3px;"></i></div>
-              <div class="txt">首页</div>
-            </div>
-          </router-link>
-          <div v-else class="flex_cell item flex_center">
-            <div class="inner">
-              <div class="tet"><i class="al al-shouye1 font24 db-in" style="margin-top:3px;"></i></div>
-              <div class="txt">首页</div>
-            </div>
-          </div>
-          <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div class="inner">
-              <div class="tet"><i class="al al-goodsnewfill db-in"></i></div>
-              <div class="txt">促销</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_center flex_cell item ">
-            <div class="inner">
-              <div class="tet">
-                <div class="radius-icon">
-                  <i class="al al-dianpufill font28 color-white" style="line-height: 45px !important;"></i>
-                </div>
-              </div>
-              <div class="txt" style="color: rgba(230, 28, 36, 0.5);">店铺</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div class="inner">
-              <div class="tet"><i class="al al-zhaopian font24 db-in"></i></div>
-              <div class="txt">图片</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div class="inner">
-              <div class="tet"><i class="al al-yonghuxinxi font26 db-in"></i></div>
-              <div class="txt">反馈</div>
-            </div>
-          </router-link>
-        </div>
-      </div>
+      <seller-bottom :query="query" :login-user="loginUser"></seller-bottom>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
           <div class="popup1 tagpopup">
@@ -281,13 +238,14 @@ import { User } from '#/storage'
 import TagPage from '@/components/TagPage'
 import CommentPopup from '@/components/CommentPopup'
 import ApplyTip from '@/components/ApplyTip'
+import SellerBottom from '@/components/SellerBottom'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup, ApplyTip
+    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup, ApplyTip, SellerBottom
   },
   filters: {
     dateFormat (date) {
@@ -815,24 +773,6 @@ export default {
 .cseller .moreicon{width:48px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
-.cseller .pagebottom{
-  height: 50px;border-top:rgb(249, 249, 249) 1px solid;background-color:#fff;
-  box-shadow: rgb(170, 170, 170) 0px -1px 8px -4px;text-align: center;
-  border-top:rgb(249, 249, 249) 1px solid;z-index:2;overflow-x: initial;
-}
-
-.cseller .pagebottom .al,.cseller .pagebottom .tet{height: 26px;line-height: 26px !important;color:#999;position:relative;}
-.cseller .pagebottom .al-zhaopian:before{display: block;line-height: 36px;}
-.cseller .pagebottom .al-goodsnewfill:before{display: block;line-height: 32px;}
-.cseller .pagebottom .al-yonghuxinxi:before{display: block;line-height: 26px;}
-.cseller .pagebottom .item{height:100%;position:relative;color:#999;}
-.cseller .pagebottom .item .inner{height:48px;}
-.cseller .pagebottom .al{font-size:22px;overflow: hidden;}
-.cseller .pagebottom .txt{height: 22px;line-height: 22px !important;font-size: 8pt;}
-.cseller .pagebottom .radius-icon{
-  width:46px;height:46px;position:absolute;left:50%;margin-left:-23px;top:-18px;z-index:1;
-  border-radius:50%;background-color:#e51c23;color:#fff;
-}
 .tagpopup .close-tag{
   position:absolute;top:10px;right:10px;z-index:1;text-align:center;
   width: 67px;height: 24px;line-height:24px;color: rgba(16, 16, 16, 0.88);
