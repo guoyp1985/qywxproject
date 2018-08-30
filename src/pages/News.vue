@@ -591,6 +591,8 @@ export default {
   },
   activated () {
     jQuery('.Eleditor-wrap').remove()
+    jQuery('.Eleditor-active').removeClass('Eleditor-active')
+    jQuery('.Eleditor-placeholder').removeClass('Eleditor-placeholder')
     this.refresh(this.$route.query)
   }
   // beforeRouteLeave (to, from, next) {
