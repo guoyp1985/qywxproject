@@ -55,7 +55,9 @@
                   <template v-if="!selectedCard">
                     <span class="v_middle">请选择</span><i class="al al-mjiantou-copy2 v_middle"></i>
                   </template>
-                  <span v-else>满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span>
+                  <template v-else>
+                    <span class="v_middle">满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span><i class="al al-mjiantou-copy2 v_middle"></i>
+                  </template>
                 </div>
               </div>
             </div>
@@ -135,7 +137,7 @@
             <div class="popup-middle font14">
               <div class="scroll_list">
                 <template v-for="(item,index) in cardList">
-                  <template v-if="payPrice - curOrder.postageNumber - curOrder.rebate >= item.ordermoney">
+                  <template v-if="(payPrice - curOrder.postageNumber >= item.ordermoney) && (payPrice - curOrder.postageNumber - item.money - curOrder.rebate >= 0)">
                     <check-icon class="x-check-icon scroll_item padding10" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
                       <div class="t-table">
                         <div class="t-cell v_middle" style="color:inherit;">
