@@ -20,7 +20,7 @@
     <div class="pagemiddle" style="top:132px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
-          <div v-if="tabData1.length == 0" class="emptyitem flex_center">暂无商品</div>
+          <div v-if="tabData1.length == 0" class="emptyitem flex_center flex_cell">暂无商品</div>
           <router-link v-else v-for="(item,index) in tabData1" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
         		<div class="inner list-shadow">
         			<div class="picarea">
@@ -50,7 +50,7 @@
                 <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
               </div>
               <div class="t-cell v_middle">
-                <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
                 <div class="clamp1 font14 color-gray v_middle mt5">
                     <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
                     <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
@@ -126,6 +126,18 @@ export default {
     }
   },
   methods: {
+    initData () {
+      pageStart1 = 0
+      pageStart2 = 0
+      this.selectedIndex = 0
+      this.disProductData = false
+      this.productData = []
+      this.tabData1 = []
+      this.tabData2 = []
+      this.disTabData1 = false
+      this.disTabData2 = false
+      this.showBottom = false
+    },
     joinEvent () {
       const self = this
       self.$vux.confirm.show({
@@ -223,14 +235,6 @@ export default {
         }
       })
     },
-    getDateState (dt) {
-      return this.$util.getDateState(dt)
-    },
-    getDateClass (dt) {
-      let ret = this.$util.getDateClass(dt)
-      ret = `${ret} mr5`
-      return ret
-    },
     handleScroll (refname) {
       const self = this
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -315,6 +319,7 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
       if (!self.loginUser.isretailer) {
         self.showBottom = true

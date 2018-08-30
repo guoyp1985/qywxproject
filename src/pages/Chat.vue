@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <template v-if="query.fromModule == 'product' || query.fromModule == 'news' || loginUser.isretailer == 1">
+    <template v-if="allowChat || loginUser.isretailer == 1">
       <template v-if="query.fromModule == 'product' && query.fromId && showTip">
         <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
           <div class="db-flex">
@@ -76,7 +76,7 @@
         </div>
       </scroller>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-      <div class="bottom-area" ref="bottomArea" v-if="query.fromModule == 'product' || query.fromModule == 'news' || loginUser.isretailer == 1">
+      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1">
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -273,7 +273,9 @@ export default {
       showUserInfo: false,
       fromProduct: {},
       showTip: true,
-      recordCheck: false
+      recordCheck: false,
+      allowChatModule: ['news', 'product', 'store', 'messagelist'],
+      allowChat: false
     }
   },
   filters: {
@@ -381,13 +383,16 @@ export default {
       }
     },
     toggleEmotion () {
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      this.showEmotBox = true
+      const self = this
+      setTimeout(function () {
+        if (self.showVoiceCom) {
+          self.showVoiceCom = false
+        }
+        if (self.showFeatureBox) {
+          self.showFeatureBox = false
+        }
+        self.showEmotBox = true
+      }, 200)
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
@@ -919,7 +924,13 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      if (this.query.fromModule === 'product' || this.query.fromModule === 'news' || this.loginUser.isretailer === 1) {
+      for (var i = 0; i < self.allowChatModule.length; i++) {
+        if (this.query.fromModule === self.allowChatModule[i]) {
+          self.allowChat = true
+          break
+        }
+      }
+      if (self.allowChat || this.loginUser.isretailer === 1) {
         const usergroup = this.loginUser.usergroup
         if (usergroup && usergroup.length > 0) {
           for (let i = 0; i < usergroup.length; i++) {

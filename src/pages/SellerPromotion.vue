@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page spromotion nobottom">
+  <div class="containerarea font14 bg-page spromotion">
     <div class="pagetop b_bottom_after bg-page">
       <div class="boxinner box1">
         <div class="flex_left row1 pt15">
@@ -53,6 +53,7 @@
         </div>
       </div>
     </div>
+    <seller-bottom :query="query" :login-user="loginUser" active-name="promotion"></seller-bottom>
   </div>
 </template>
 
@@ -66,6 +67,7 @@ import Time from '#/time'
 import { User } from '#/storage'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import SellerBottom from '@/components/SellerBottom'
 
 const limit = 10
 let pageStart = 0
@@ -75,7 +77,7 @@ export default {
     TransferDom
   },
   components: {
-    Groupbuyitemplate, Bargainbuyitemplate
+    Groupbuyitemplate, Bargainbuyitemplate, SellerBottom
   },
   filters: {
     dateFormat (date) {

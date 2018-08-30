@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea font14 bg-page userstory nobottom ${topcss}`">
+  <div :class="`containerarea font14 bg-page userstory ${topcss}`">
     <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'customer'}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
     <div class="pagetop b_bottom_after bg-page">
       <div class="boxinner box1">
@@ -42,6 +42,7 @@
         :cancel-comment="cancelComment">
       </tag-page>
     </div>
+    <seller-bottom :query="query" :login-user="loginUser"  active-name="story"></seller-bottom>
   </div>
 </template>
 
@@ -54,6 +55,7 @@ import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
 import TagPage from '@/components/TagPage'
+import SellerBottom from '@/components/SellerBottom'
 
 const limit = 10
 let pageStart = 0
@@ -63,7 +65,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, TagPage
+    Previewer, TagPage, SellerBottom
   },
   filters: {
     dateFormat (date) {
@@ -199,8 +201,9 @@ export default {
 .userstory.notop .pagetop{display:none;}
 .userstory.notop .pagemiddle{top:0 !important;}
 .userstory .pagetop{z-index: 2;height:110px;box-shadow: rgba(0, 0, 0, 0.1) 0px 9px 36px -3px;}
+.userstory .pagemiddle{padding-bottom:60px;}
 .userstory .add-icon{
-  position:absolute;right:20px;bottom:20px;border-radius:50%;
+  position:absolute;right:20px;bottom:60px;border-radius:50%;
   width: 44px;height: 44px;z-index: 10;overflow:hidden;
   color:#fff;background-color: rgb(229, 28, 35);font-size: 28px;
 }

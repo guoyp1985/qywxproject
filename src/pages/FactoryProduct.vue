@@ -4,6 +4,24 @@
       <sos :title="sosTitle"></sos>
     </template>
     <template v-if="showContainer">
+      <div v-if="playVideo" class="videoarea">
+        <video
+          ref="productVideo"
+          :src="productdata.video"
+          controls
+          autoplay="true"
+          webkit-playsinline=""
+          playsinline="true"
+          x-webkit-airplay="true"
+          raw-controls=""
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          x5-video-orientation="portrait">
+        </video>
+        <div class="close-icon flex_center" @click="stopPlay('productVideo')">
+          <i class="al al-guanbi"></i>
+        </div>
+      </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
         <template v-if="showFlash">
           <swiper
@@ -13,22 +31,13 @@
             :show-dots="isshowdot"
             :aspect-ratio="1/1"
             loop>
-            <swiper-item v-show="showVideo" v-if="productdata.video && productdata.video != ''">
-              <video
-                class="w_100 h_100"
-                style="max-width:100%;max-height:100%;"
-                controls
-                :src="productdata.video"
-                autoplay="true"
-                preload="auto"
-                x-webkit-airplay="true"
-                x5-playsinline="true"
-                webkit-playsinline="true"
-                playsinline="true">
-              </video>
-            </swiper-item>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
               <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+              <template v-if="index == 0 && productdata.video && productdata.video != ''">
+                <div class="play-icon flex_center" @click="clickPlay('productVideo')">
+                  <i class="al al-bofang"></i>
+                </div>
+              </template>
             </swiper-item>
           </swiper>
         </template>
@@ -39,7 +48,7 @@
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
-            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
@@ -177,7 +186,8 @@ export default {
       levelpolicy: [],
       levelNameData: {},
       topcss: '',
-      showVideo: true
+      showVideo: true,
+      playVideo: false
     }
   },
   watch: {
@@ -240,6 +250,12 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    clickPlay (refname) {
+      this.playVideo = true
+    },
+    stopPlay (refname) {
+      this.playVideo = false
     },
     access () {
       if (this.loginUser.subscribe === 0) {
@@ -430,6 +446,15 @@ export default {
 
 <style lang="less">
 .notop .pagetop{display:none;}
+.product .videobg{width:100%;height:100%;background-size:cover;background-position:center;position:relative;}
+.product .play-icon{
+  width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
+  position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
+}
+.product .play-icon .al{margin-left:4px;}
+.product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
+.product .videoarea video{position: absolute;width: 100%;height: 100%;}
+.product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
 .vline{position:relative;}
 .vline:after {
   content: " ";

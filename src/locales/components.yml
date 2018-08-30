@@ -673,7 +673,7 @@ zh-CN:
   tIndex: 共销汇
   tLogin: 扫码登录
   tCenter: 个人中心
-  tCenterSales: 卖家管理中心
+  tCenterSales: 卖家中心
   tRetailerSales: 返点客
   tRetailerSaleview: 返点客
   tRetailerSalechance: 销售机会
@@ -796,7 +796,7 @@ zh-CN:
   tFactory: 厂商
   Time of admission: 入驻时间
   Apply join: 申请加入
-  tCenterFactory: 厂商管理中心
+  tCenterFactory: 厂商中心
   Factory center: 厂商中心
   tFactoryLevel: 厂商等级管理
   tSellerList: 卖家列表
@@ -805,7 +805,7 @@ zh-CN:
   Level manage: 等级管理
   Join qrcode: 加盟二维码
   Business school: 商学院
-  I want to distribute: 我要分销
+  I want to distribute: 共销返利
   tFactoryProductlist: 商品列表
   tFactoryNewsList: 文章列表
   tFactoryNews: 文章详情
@@ -834,6 +834,7 @@ zh-CN:
   Product class: 商品类别
   Region: 地区
   tCenterSeller: 共销汇
+  tCenterseller: 共销汇
   Personal image: 个人形象
   Seller said: 卖家说
   Seller show: 卖家秀
@@ -855,3 +856,4 @@ zh-CN:
   tMpSetting: 微信开发管理
   tAuth: 授权
   Check Record API: 录音接口检查
+  tTimeline: 客户行为

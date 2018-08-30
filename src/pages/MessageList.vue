@@ -11,7 +11,7 @@
     <div class="s-container scroll-container" style="top:44px;">
       <div v-if="disData" class="scroll_list pl10 pr10">
         <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无消息</div>
-        <router-link v-else :to="{path: '/chat', query: {uid: item.uid}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
+        <router-link v-else :to="{path: '/chat', query: {uid: item.uid, fromModule: 'messagelist'}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
               <img class="avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />

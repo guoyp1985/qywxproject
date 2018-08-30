@@ -32,7 +32,7 @@
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
-    <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></vip>
+    <vip v-if="showVip && retailerInfo.isretailer == 1" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip1"></vip>
   </div>
 </template>
 
@@ -62,18 +62,40 @@ export default {
       marqueeData: [],
       classData: [],
       messages: 0,
-      showVip: false
+      showVip: false,
+      allowVipFee: ENV.allowVipFee
     }
   },
   methods: {
     vipEvent () {
-      this.showVip = true
+      if (this.allowVipFee) {
+        this.showVip = true
+      }
     },
     hideVip () {
       this.showVip = false
     },
     openVip () {
       location.replace(`${ENV.Host}/#/pay?id=${this.retailerInfo.payorderid}&module=payorders`)
+    },
+    openVip1 () {
+      if (this.allowVipFee) {
+        this.showVip = false
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/retailer/vipRenew`).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          if (data.flag && data.data) {
+            location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=payorders`)
+          } else {
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag ? 'success' : 'warn',
+              time: this.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
     applySuccess () {
       const self = this

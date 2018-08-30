@@ -109,7 +109,8 @@ export default {
       maxnum: 1,
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '', classid: 100 },
-      requireddata: { title: '', 'photo': '' }
+      requireddata: { title: '', 'photo': '' },
+      submitIng: false
     }
   },
   computed: {
@@ -189,46 +190,50 @@ export default {
     },
     save () {
       const self = this
-      const query = self.$route.query
-      let validateData = []
-      for (let key in self.requireddata) {
-        let v = {}
-        v[key] = self.submitdata[key]
-        validateData.push(v)
-      }
-      let iscontinue = self.$util.validateQueue(validateData,
-        model => {
-          switch (model.key) {
-            default:
-              self.$vux.toast.text('必填项不能为空', 'middle')
-          }
+      if (!self.submitIng) {
+        const query = self.$route.query
+        let validateData = []
+        for (let key in self.requireddata) {
+          let v = {}
+          v[key] = self.submitdata[key]
+          validateData.push(v)
         }
-      )
-      if (!iscontinue) {
-        return false
-      }
-      self.$vux.loading.show()
-      if (query.id) {
-        self.submitdata['id'] = query.id
-      } else {
-        delete self.submitdata['id']
-      }
-      self.submitdata.fid = self.query.fid
-      self.$http.post(`${ENV.BokaApi}/api/add/academic`, self.submitdata).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        self.$vux.toast.show({
-          text: data.error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag === 1) {
-              let params = { id: data.data, fid: self.query.fid }
-              self.$router.push({ path: '/academic', query: params })
+        let iscontinue = self.$util.validateQueue(validateData,
+          model => {
+            switch (model.key) {
+              default:
+                self.$vux.toast.text('必填项不能为空', 'middle')
             }
           }
+        )
+        if (!iscontinue) {
+          return false
+        }
+        self.submitIng = true
+        self.$vux.loading.show()
+        if (query.id) {
+          self.submitdata['id'] = query.id
+        } else {
+          delete self.submitdata['id']
+        }
+        self.submitdata.fid = self.query.fid
+        self.$http.post(`${ENV.BokaApi}/api/add/academic`, self.submitdata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            type: (data.flag !== 1 ? 'warn' : 'success'),
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              self.submitIng = false
+              if (data.flag === 1) {
+                let params = { id: data.data, fid: self.query.fid }
+                self.$router.push({ path: '/academic', query: params })
+              }
+            }
+          })
         })
-      })
+      }
     },
     popupSubmit (cutimg) {
       this.photoarr = [ cutimg ]
@@ -283,7 +288,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          if (this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
+          if (this.query.id === undefined || this.query.id !== this.$route.query.id || this.query.fid !== this.$route.query.fid) {
             this.initData()
             this.query = this.$route.query
             this.getData()

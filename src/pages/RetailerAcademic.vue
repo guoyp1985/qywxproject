@@ -131,6 +131,8 @@ export default {
           if (this.data.length < limit) {
             this.initData()
             this.getData()
+          } else {
+            this.$vux.loading.hide()
           }
         }
       }

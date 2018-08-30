@@ -54,11 +54,11 @@
                   <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
                 </div>
               </div>
-              <div class="row2" v-if="userInfo.slogan && userInfo.slogan != ''">
+              <div class="row2" v-if="(userInfo.slogan && userInfo.slogan != '') || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
                 <span class="v_middle" v-html="userInfo.slogan"></span>
               </div>
-              <div class="row3" v-if="userInfo.tags && userInfo.tags.length > 0">
+              <div class="row3" v-if="(userInfo.tags && userInfo.tags.length > 0) || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
                 <div class="taglist">
                   <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
@@ -165,42 +165,14 @@
           </div>
         </div>
       </div>
-      <div class="pagebottom">
-        <div class="w_100 h_100 flex_center">
-          <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_center flex_cell item ">
-            <div>
-              <div class="radius-icon"><i class="al al-dianpufill font28" style="line-height: 45px !important;"></i></div>
-              <div class="tet"><i class="al al-zhaopian color-white"></i></div>
-              <div class="txt">店主精选</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div>
-              <div class="tet"><i class="al al-zhaopian font24 db-in"></i></div>
-              <div class="txt">图片视频</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div>
-              <div class="tet"><i class="al al-yonghuxinxi font26 db-in"></i></div>
-              <div class="txt">用户反馈</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div>
-              <div class="tet"><i class="al al-goodsnewfill db-in"></i></div>
-              <div class="txt">店主促销</div>
-            </div>
-          </router-link>
-        </div>
-      </div>
+      <seller-bottom :query="query" :login-user="loginUser" active-name="home"></seller-bottom>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
           <div class="popup1 tagpopup">
             <template v-if="!query.uid || query.uid == loginUser.uid">
               <router-link :to="{path:'/addTimeline',query:{uid:retailerUid,type:'retailer',tagid:clickTagId}}" class="add-icon flex_center"><span class="txt">+</span></router-link>
             </template>
-            <div class="popup-middle" style="top:0;">
+            <div class="popup-middle" style="top:0;" ref="tagScrollContainer" @scroll="handleScrollTag('tagScrollContainer')">
               <tag-page
                 :query="query"
                 :user-info="userInfo"
@@ -266,13 +238,14 @@ import { User } from '#/storage'
 import TagPage from '@/components/TagPage'
 import CommentPopup from '@/components/CommentPopup'
 import ApplyTip from '@/components/ApplyTip'
+import SellerBottom from '@/components/SellerBottom'
 
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup, ApplyTip
+    Swiper, SwiperItem, Popup, TagPage, Previewer, CommentPopup, ApplyTip, SellerBottom
   },
   filters: {
     dateFormat (date) {
@@ -327,6 +300,7 @@ export default {
       this.disTimeline = false
       this.tlData = []
       this.pageStart1 = 0
+      this.pageStart2 = 0
       this.replyPopupShow = false
       this.commentData = null
       this.commentIndex = 0
@@ -388,20 +362,6 @@ export default {
     closeFriendsPopup () {
       this.showMoreFriends = false
     },
-    handleScroll2 (refname) {
-      const self = this
-      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: function () {
-          if (self.friendsData.length === (self.pageStart2 + 1) * self.limit) {
-            self.pageStart2++
-            self.$vux.loading.show()
-            self.getFriends()
-          }
-        }
-      })
-    },
     getFriends () {
       const self = this
       self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
@@ -417,7 +377,9 @@ export default {
     moreFriends () {
       const self = this
       this.showMoreFriends = true
-      self.getFriends()
+      if (!self.friendsData.length) {
+        self.getFriends()
+      }
     },
     getTimelineData (tagid) {
       const self = this
@@ -457,6 +419,20 @@ export default {
       self.pageStart = 0
       self.clickTagId = tagitem.id
       self.getTimelineData()
+    },
+    handleScrollTag (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.timelineData.length === (self.pageStart + 1) * self.limit) {
+            self.pageStart++
+            self.$vux.loading.show()
+            self.getTimelineData()
+          }
+        }
+      })
     },
     clickDig (item, index) {
       const self = this
@@ -668,6 +644,9 @@ export default {
             self.disFocus = true
             self.getMoreStatus(self)
           }
+          if (self.focusData.length < 15) {
+            self.friendsData = self.focusData
+          }
         }
       })
     },
@@ -730,7 +709,7 @@ export default {
   display: block;width:100%;height:100%;border-radius:50%;
 }
 .cseller .box1 .pic .pic_top:after{border-radius:50%;}
-.cseller .box1 .pic .pic_top:after,.cseller .taglist .tagitem:after,.cseller .linearea .line:after{
+.cseller .box1 .pic .pic_top:after,.cseller .linearea .line:after{
   content: " ";
   width: 200%;
   height: 200%;
@@ -746,9 +725,6 @@ export default {
   transform-origin: 0 0;
   box-sizing: border-box;
 }
-.cseller .taglist .tagitem:after{border-radius:10px;}
-.cseller .taglist .tagitem:nth-child(odd):after{border: 1px solid #99d0ff;}
-.cseller .taglist .tagitem:nth-child(even):after{border: 1px solid #ff9999;}
 
 .cseller .box1 .btn-cell{
   width:90px;text-align:center;
@@ -764,11 +740,11 @@ export default {
 .cseller .box1 .row3{margin-top:8px;padding:0 10px;box-sizing: border-box;}
 .cseller .taglist{display:inline-block;}
 .cseller .taglist .tagitem{
-  display:inline-block;padding:0 5px;height: 20px;line-height:20px;
-  font-size:12px;text-align: center;margin:0 5px 5px;position: relative;
+  display:inline-block;padding:0 5px;height: 20px;line-height:20px;color:#fff;
+  font-size:12px;text-align: center;margin:0 5px 5px;position: relative;border-radius:5px;
 }
-.cseller .taglist .tagitem:nth-child(odd){color:#99d0ff;}
-.cseller .taglist .tagitem:nth-child(even){color:#ff9999;}
+.cseller .taglist .tagitem:nth-child(odd){background-color:#99d0ff;}
+.cseller .taglist .tagitem:nth-child(even){background-color:#ff9999;}
 .cseller .linearea{position:relative;height:8px;}
 .cseller .linearea .line{
   width: 6px;height: 20px;position:absolute;top:50%;margin-top:-10px;z-index:5;border-radius: 12px;background-color:#fff;
@@ -797,23 +773,6 @@ export default {
 .cseller .moreicon{width:48px;}
 
 .cseller .pagemiddle{top:0;bottom:50px;padding-bottom:35px;}
-.cseller .pagebottom{
-  height: 50px;border-top:rgb(249, 249, 249) 1px solid;background-color:#fff;
-  box-shadow: rgb(170, 170, 170) 0px -1px 8px -4px;text-align: center;
-  border-top:rgb(249, 249, 249) 1px solid;z-index:2;overflow-x: initial;
-}
-
-.cseller .pagebottom .al,.cseller .pagebottom .tet{height: 26px;line-height: 26px !important}
-.cseller .pagebottom .al-zhaopian:before{display: block;line-height: 36px;}
-.cseller .pagebottom .al-goodsnewfill:before{display: block;line-height: 32px;}
-.cseller .pagebottom .al-yonghuxinxi:before{display: block;line-height: 26px;}
-.cseller .pagebottom .item{height:100%;position:relative;color:rgb(229, 28, 35);}
-.cseller .pagebottom .al{font-size:22px;overflow: hidden;}
-.cseller .pagebottom .txt{height: 22px;line-height: 22px !important;font-size: 8pt;color: rgba(230, 28, 36, 0.5);}
-.cseller .pagebottom .radius-icon{
-  width:46px;height:46px;position:absolute;left:50%;margin-left:-23px;top:-18px;z-index:1;
-  border-radius:50%;background-color:#e51c23;color:#fff;
-}
 .tagpopup .close-tag{
   position:absolute;top:10px;right:10px;z-index:1;text-align:center;
   width: 67px;height: 24px;line-height:24px;color: rgba(16, 16, 16, 0.88);

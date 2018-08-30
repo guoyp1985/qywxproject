@@ -95,6 +95,7 @@
                           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                         </template>
                       </div>
+                      <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
                       <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                     </div>
                     <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -195,6 +196,7 @@
                         <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                       </template>
                     </div>
+                    <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">
@@ -285,6 +287,7 @@
                         <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
                       </template>
                     </div>
+                    <div class="clamp1 font14 color-gray" v-if="item.carddeduct && item.carddeduct != '0.00'">优惠券抵扣: -￥{{ item.carddeduct }}</div>
                     <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
                   </div>
                   <div class="pl12 pr12 pt10 pb10 flex_right">

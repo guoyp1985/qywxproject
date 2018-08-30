@@ -48,14 +48,16 @@
     						</div>
     					</div>
             </div>
-            <div class="b_bottom_after padding10 color-orange" v-if="cardList && cardList.length && allowCard">
+            <div class="b_bottom_after pl10 pr10 color-orange" v-if="cardList && cardList.length && allowCard">
               <div class="t-table">
                 <div class="t-cell v_middle" style="width:60px;">{{ $t('Card') }}</div>
                 <div class="t-cell v_middle align_right" @click="checkCard">
                   <template v-if="!selectedCard">
                     <span class="v_middle">请选择</span><i class="al al-mjiantou-copy2 v_middle"></i>
                   </template>
-                  <span v-else>满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span>
+                  <template v-else>
+                    <span class="v_middle">满{{selectedCard.ordermoney}}减{{selectedCard.money}}</span><i class="al al-mjiantou-copy2 v_middle"></i>
+                  </template>
                 </div>
               </div>
             </div>
@@ -134,13 +136,27 @@
             <div class="popup-top flex_center">选择{{$t('Card')}}</div>
             <div class="popup-middle font14">
               <div class="scroll_list">
-                <check-icon class="x-check-icon scroll_item padding10" v-for="(item,index) in cardList" :key="item.id" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
-                  <div class="t-table">
-                    <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                <template v-for="(item,index) in cardList">
+                  <template v-if="(payPrice - curOrder.postageNumber >= item.ordermoney) && (payPrice - curOrder.postageNumber - item.money - curOrder.rebate >= 0)">
+                    <check-icon class="x-check-icon scroll_item padding10" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                  </template>
+                  <template v-else>
+                    <div class="x-check-icon scroll_item padding10 color-gray">
+                      <div class="t-table">
+                        <div class="t-cell v_middle w80">【不可用】</div>
+                        <div class="t-cell v_middle">
+                          <div class="clamp1">满{{item.ordermoney}}减{{item.money}}</div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </check-icon>
+                  </template>
+                </template>
               </div>
             </div>
             <div class="popup-bottom flex_center">
@@ -220,6 +236,7 @@ export default {
       query: {},
       payPrice: '0.00',
       orderPrice: '0.00',
+      postage: 0,
       selectaddress: null,
       orderdata: [],
       // payprice: '0.00',
@@ -235,7 +252,8 @@ export default {
       showCard: false,
       cardList: [],
       selectedCard: null,
-      allowCard: false
+      allowCard: false,
+      curOrder: {postageNumber: 0, rebate: 0}
     }
   },
   watch: {
@@ -329,7 +347,9 @@ export default {
       const self = this
       if (data.checked) {
         self.selectedCard = data
-        self.payPrice = (parseFloat(self.orderPrice) - parseFloat(data.money)).toFixed(2)
+        let cha = parseFloat(self.orderPrice) - parseFloat(self.postage) - parseFloat(data.money)
+        cha = cha < 0 ? 0 : cha
+        self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
       } else {
         self.selectedCard = null
         self.payPrice = self.orderPrice
@@ -387,6 +407,9 @@ export default {
         } else {
           self.showContainer = true
           self.orderdata = data
+          self.curOrder = self.orderdata[0]
+          self.curOrder.postageNumber = parseFloat(self.curOrder.postage).toFixed(2)
+          self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
           let total = 0
           for (let i = 0; i < self.orderdata.length; i++) {
             let order = self.orderdata[i]
@@ -397,7 +420,7 @@ export default {
               let p = { shopid: info.id, quantity: info.quantity }
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
-              if (info.fid > 0) {
+              if (self.query.activityid || info.fid > 0) {
                 self.allowCard = false
               } else {
                 self.allowCard = true
@@ -406,6 +429,7 @@ export default {
             if (order.postage) {
               total += parseFloat(order.postage)
             }
+            self.postage = order.postage
           }
           self.payPrice = total.toFixed(2)
           self.orderPrice = self.payPrice
@@ -431,10 +455,11 @@ export default {
               self.submitdata.addressid = self.selectaddress.id
             }
           }
-          console.log('in card/canUse')
-          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-            wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
-          })
+          if (!self.query.activityid) {
+            return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
+              wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
+            })
+          }
         }
       }).then(res => {
         if (res) {

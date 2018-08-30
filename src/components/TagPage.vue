@@ -14,7 +14,7 @@
             <div v-if="item.title && item.title != ''" v-html="filterEmot(item.title)"></div>
             <div class="piclist" v-if="item.photoarr.length > 0">
               <div
-                :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length > 2 ? 'more' : ''}`"
+                :class="`picitem ${item.photoarr.length == 1 ? 'one' : ''} ${item.photoarr.length >= 2 ? 'more' : ''}`"
                   v-for="(pic,index1) in item.photoarr">
                 <div class="inner">
                   <img :src="pic" @click="showBigimg(pic,item.photoarr,`previewer${index}`,index1)" />

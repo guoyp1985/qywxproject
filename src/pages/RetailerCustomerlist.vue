@@ -294,7 +294,7 @@ export default {
       pagestart1: 0,
       pagestart2: 0,
       pagestart3: 0,
-      dateClass: '',
+      dateClass: 'active',
       areaClass: '',
       sexClass: '',
       orderby: '',
@@ -557,6 +557,10 @@ export default {
             self.pagestart1 = 0
             self.distabdata1 = false
             this.tabdata1 = []
+            self.orderbyParams = {}
+            if (self.dateClass.indexOf('active') > -1) {
+              self.orderbyParams = { orderby: 'dateline' }
+            }
             self.getData1()
           }
           break

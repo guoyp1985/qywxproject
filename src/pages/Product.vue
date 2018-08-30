@@ -18,20 +18,6 @@
           x5-video-player-fullscreen="true"
           x5-video-orientation="portrait">
         </video>
-        <!--
-        <video
-          class="w_100 h_100"
-          style="max-width:100%;max-height:100%;object-fit:fill;"
-          controls
-          :src="productdata.video"
-          autoplay="true"
-          preload="auto"
-          x-webkit-airplay="true"
-          x5-playsinline="true"
-          webkit-playsinline="true"
-          playsinline="true">
-        </video>
-      -->
         <div class="close-icon flex_center" @click="stopPlay('productVideo')">
           <i class="al al-guanbi"></i>
         </div>
@@ -72,7 +58,7 @@
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
-            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
@@ -243,21 +229,29 @@
       </div>
   		<div class="pagebottom b_top_after" v-if="productdata.moderate != 1">
   			<div class="t-table h_100">
-  				<div :class="`t-cell h_100 v_middle align_center btnfavorite ${favoritecss}`" style="width:100px;" @click="favoriteevent">
-  					<i class="al font12 mr3"></i>
-          </div>
-          <div v-if="loginUser.uid != productdata.wid" class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+          <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+            <div><i class="al al-dianpu font18 color-red"></i></div>
+            <div class="font12">首页</div>
+          </router-link>
+  				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+  					<div><i class="al font18"></i></div>
+  				</div>
+          <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
         </div>
   		</div>
       <template v-else>
     		<div v-if="activityInfo.id && activityInfo.type == 'groupbuy'" class="pagebottom b_top_after groupbybottom">
     			<div class="t-table h_100">
-            <div v-if="loginUser.uid != productdata.wid" class="t-cell h_100 v_middle align_center" @click="toChat" style="width:50px;">
+            <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+              <div><i class="al al-dianpu font18 color-red"></i></div>
+              <div class="font12">首页</div>
+            </router-link>
+            <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:40px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:50px;" @click="favoriteevent">
-    					<i class="al font18 mr3"></i>
+    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+    					<div><i class="al font18"></i></div>
     				</div>
     				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
     					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
@@ -272,20 +266,28 @@
         <template v-else>
       		<div v-if="productdata.buyonline >= 1" class="pagebottom b_top_after">
       			<div class="t-table h_100">
-      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-      					<i class="al font12 mr3"></i>
+              <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+                <div><i class="al al-dianpu font18 color-red"></i></div>
+                <div class="font12">首页</div>
+              </router-link>
+      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+                <div><i class="al font18"></i></div>
       				</div>
-              <div v-if="loginUser.uid != productdata.wid" class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+              <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
       				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
       			</div>
       		</div>
           <div v-else class="pagebottom b_top_after">
       			<div class="t-table h_100">
-      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center`" style="width:100px;" @click="favoriteevent">
-      					<i class="al font12 mr3"></i>
+              <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
+                <div><i class="al al-dianpu font18 color-red"></i></div>
+                <div class="font12">首页</div>
+              </router-link>
+      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
+                <div><i class="al font18"></i></div>
       				</div>
-              <div v-if="loginUser.uid != productdata.wid" class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
+              <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       			</div>
       		</div>
         </template>
@@ -598,12 +600,16 @@ export default {
       this.playVideo = false
     },
     toChat () {
-      if (this.loginUser.subscribe === 0) {
-        const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=product&fromId=${this.query.id}`)
-        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      if (this.loginUser.uid === this.productdata.wid) {
+        this.$vux.toast.text('不能和自己聊天哦', 'middle')
       } else {
-        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'product', fromId: this.query.id}})
+        if (this.loginUser.subscribe === 0) {
+          const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=product&fromId=${this.query.id}`)
+          const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+        } else {
+          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'product', fromId: this.query.id}})
+        }
       }
     },
     access () {
@@ -705,9 +711,11 @@ export default {
     },
     buyevent (buytype) {
       const self = this
+      let isActivity = false
       self.$vux.loading.show()
       if (buytype === 'groupbuy' && self.activityInfo.id) {
         self.submitdata['activityid'] = self.activityInfo.id
+        isActivity = true
       }
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerInfo.uid
@@ -715,7 +723,11 @@ export default {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
-          self.$router.push({ path: '/addOrder', query: { id: data.data } })
+          let rparams = {id: data.data}
+          if (isActivity) {
+            rparams['activityid'] = self.activityInfo.id
+          }
+          self.$router.push({ path: '/addOrder', query: rparams })
         } else if (data.error) {
           self.$vux.toast.show({
             text: data.error,
@@ -1087,6 +1099,7 @@ export default {
   width:60px;height:60px;background: rgba(0,0,0,.4);border-radius: 50%;color:#fff;
   position:absolute;left:50%;top:50%;margin-left:-30px;margin-top:-30px;
 }
+.product .play-icon .al{margin-left:4px;}
 .product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
 .product .videoarea video{position: absolute;width: 100%;height: 100%;}
 .product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}

@@ -4,7 +4,7 @@
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner">
-        <div slot="content" class="card-demo-flex card-demo-content01 flex_center" style="height:88px;">
+        <div slot="content" class="card-demo-flex flex_center" style="height:88px;">
           <div class="vux-1px-r">
             <div class="color-white font14">访问量</div>
             <div class="color-white font21 mt10 clamp1">{{ viewdata.views }}</div>
