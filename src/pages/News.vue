@@ -39,10 +39,6 @@
             <p v-if="article.content == '' && article.uploader == loginUser.uid">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
             <div v-else v-html="article.content"></div>
           </div>
-          <!--
-          <div v-if="article.content == '' && article.uploader == loginUser.uid" id="editor-content" class="article-content color-gray font16">文章内容为空，点击【编辑】按钮可修改内容哦！</div>
-          <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
-        -->
           <div class="operate-area">
             <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
               <span class="al al-xing3 font14"></span>
