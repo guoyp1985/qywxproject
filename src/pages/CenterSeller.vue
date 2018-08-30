@@ -167,29 +167,38 @@
       </div>
       <div class="pagebottom">
         <div class="w_100 h_100 flex_center">
-          <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_center flex_cell item ">
-            <div>
-              <div class="radius-icon"><i class="al al-dianpufill font28" style="line-height: 45px !important;"></i></div>
-              <div class="tet"><i class="al al-zhaopian color-white"></i></div>
-              <div class="txt">店主精选</div>
-            </div>
-          </router-link>
           <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div>
-              <div class="tet"><i class="al al-zhaopian font24 db-in"></i></div>
-              <div class="txt">图片视频</div>
-            </div>
-          </router-link>
-          <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div>
-              <div class="tet"><i class="al al-yonghuxinxi font26 db-in"></i></div>
-              <div class="txt">用户反馈</div>
+            <div class="inner">
+              <div class="tet"><i class="al al-shouye1 font24 db-in" style="margin-top:3px;"></i></div>
+              <div class="txt">首页</div>
             </div>
           </router-link>
           <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
-            <div>
+            <div class="inner">
               <div class="tet"><i class="al al-goodsnewfill db-in"></i></div>
-              <div class="txt">店主促销</div>
+              <div class="txt">促销</div>
+            </div>
+          </router-link>
+          <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_center flex_cell item ">
+            <div class="inner">
+              <div class="tet">
+                <div class="radius-icon">
+                  <i class="al al-dianpufill font28 color-white" style="line-height: 45px !important;"></i>
+                </div>
+              </div>
+              <div class="txt" style="color: rgba(230, 28, 36, 0.5);">店铺</div>
+            </div>
+          </router-link>
+          <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
+            <div class="inner">
+              <div class="tet"><i class="al al-zhaopian font24 db-in"></i></div>
+              <div class="txt">图片</div>
+            </div>
+          </router-link>
+          <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
+            <div class="inner">
+              <div class="tet"><i class="al al-yonghuxinxi font26 db-in"></i></div>
+              <div class="txt">反馈</div>
             </div>
           </router-link>
         </div>
@@ -736,7 +745,7 @@ export default {
   display: block;width:100%;height:100%;border-radius:50%;
 }
 .cseller .box1 .pic .pic_top:after{border-radius:50%;}
-.cseller .box1 .pic .pic_top:after,.cseller .taglist .tagitem:after,.cseller .linearea .line:after{
+.cseller .box1 .pic .pic_top:after,.cseller .linearea .line:after{
   content: " ";
   width: 200%;
   height: 200%;
@@ -752,9 +761,6 @@ export default {
   transform-origin: 0 0;
   box-sizing: border-box;
 }
-.cseller .taglist .tagitem:after{border-radius:10px;}
-.cseller .taglist .tagitem:nth-child(odd):after{border: 1px solid #99d0ff;}
-.cseller .taglist .tagitem:nth-child(even):after{border: 1px solid #ff9999;}
 
 .cseller .box1 .btn-cell{
   width:90px;text-align:center;
@@ -770,11 +776,11 @@ export default {
 .cseller .box1 .row3{margin-top:8px;padding:0 10px;box-sizing: border-box;}
 .cseller .taglist{display:inline-block;}
 .cseller .taglist .tagitem{
-  display:inline-block;padding:0 5px;height: 20px;line-height:20px;
-  font-size:12px;text-align: center;margin:0 5px 5px;position: relative;
+  display:inline-block;padding:0 5px;height: 20px;line-height:20px;color:#fff;
+  font-size:12px;text-align: center;margin:0 5px 5px;position: relative;border-radius:5px;
 }
-.cseller .taglist .tagitem:nth-child(odd){color:#99d0ff;}
-.cseller .taglist .tagitem:nth-child(even){color:#ff9999;}
+.cseller .taglist .tagitem:nth-child(odd){background-color:#99d0ff;}
+.cseller .taglist .tagitem:nth-child(even){background-color:#ff9999;}
 .cseller .linearea{position:relative;height:8px;}
 .cseller .linearea .line{
   width: 6px;height: 20px;position:absolute;top:50%;margin-top:-10px;z-index:5;border-radius: 12px;background-color:#fff;
@@ -809,13 +815,14 @@ export default {
   border-top:rgb(249, 249, 249) 1px solid;z-index:2;overflow-x: initial;
 }
 
-.cseller .pagebottom .al,.cseller .pagebottom .tet{height: 26px;line-height: 26px !important}
+.cseller .pagebottom .al,.cseller .pagebottom .tet{height: 26px;line-height: 26px !important;color:#999;position:relative;}
 .cseller .pagebottom .al-zhaopian:before{display: block;line-height: 36px;}
 .cseller .pagebottom .al-goodsnewfill:before{display: block;line-height: 32px;}
 .cseller .pagebottom .al-yonghuxinxi:before{display: block;line-height: 26px;}
-.cseller .pagebottom .item{height:100%;position:relative;color:rgb(229, 28, 35);}
+.cseller .pagebottom .item{height:100%;position:relative;color:#999;}
+.cseller .pagebottom .item .inner{height:48px;}
 .cseller .pagebottom .al{font-size:22px;overflow: hidden;}
-.cseller .pagebottom .txt{height: 22px;line-height: 22px !important;font-size: 8pt;color: rgba(230, 28, 36, 0.5);}
+.cseller .pagebottom .txt{height: 22px;line-height: 22px !important;font-size: 8pt;}
 .cseller .pagebottom .radius-icon{
   width:46px;height:46px;position:absolute;left:50%;margin-left:-23px;top:-18px;z-index:1;
   border-radius:50%;background-color:#e51c23;color:#fff;
