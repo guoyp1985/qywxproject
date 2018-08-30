@@ -191,7 +191,6 @@ export default {
     save () {
       const self = this
       if (!self.submitIng) {
-        self.submitIng = true
         const query = self.$route.query
         let validateData = []
         for (let key in self.requireddata) {
@@ -210,6 +209,7 @@ export default {
         if (!iscontinue) {
           return false
         }
+        self.submitIng = true
         self.$vux.loading.show()
         if (query.id) {
           self.submitdata['id'] = query.id
