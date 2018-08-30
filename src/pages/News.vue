@@ -34,7 +34,7 @@
               <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
-          <div v-if="article.content == '' && article.uploader == loginUser.uid" id="editor-content" class="article-content color-gray font16">文章内容为空，点击【编辑】可更新文章内容</div>
+          <div v-if="article.content == '' && article.uploader == loginUser.uid" id="editor-content" class="article-content color-gray font16">文章内容为空，点击【编辑】按钮可修改内容哦！</div>
           <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
           <div class="operate-area">
             <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
