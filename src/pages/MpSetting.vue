@@ -1,91 +1,63 @@
 <template>
 <div class="containerarea mpsetting font14">
   <div class="bigtitle">开发管理</div>
+  <!--
   <div class="tiptxt flex_left">
     <div class="w40">
       <span class="al al-gantanhaozhong color-blue"></span>
     </div>
     <div class="v_middle flex_cell flex_cell">你已暂停小程序的服务，用户不可正常访问线上版本小程序。暂停服务不影响小程序代码提交审核及发布。</div>
   </div>
+-->
   <div class="boxlist">
     <div class="boxitem">
-      <div class="title">线上版本</div>
-      <div class="db-flex">
-        <div class="col1">
-          <div>
-            <div class="gray">版本号</div>
-            <div class="font22">0.02</div>
-          </div>
-        </div>
-        <div class="col2 flex_cell">
-          <div class="flex_left">
-            <div class="gray w100">发布者</div>
-            <div>Theoneจุ๊บ</div>
-          </div>
-          <div class="flex_left mt12">
-            <div class="gray w100">发布时间</div>
-            <div>2018-07-11 14:49:00</div>
-          </div>
-          <div class="flex_left mt12">
-            <div class="gray w100">描述</div>
-            <div>Theone 在 7/11/2018 9:59:58 AM 提交上传</div>
-          </div>
-        </div>
-        <div class="col3">
-          <div class="btn">详情</div>
-        </div>
-        <div class="col4">
-          <div class="btn" @click="clickBtn1"><i class="al al-jiantou_down"></i></div>
-          <div v-if="showBtn1" class="btnlayer">
-            <div class="item">版本退回</div>
-            <div class="item">暂停服务</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="boxitem">
       <div class="title">审核版本</div>
-      <div class="db-flex">
-        <div class="col1">
-          <div>
-            <div class="gray">版本号</div>
-            <div class="font22">0.02</div>
-            <div>
-              <div class="btn1">审核不通过</div>
+      <template v-if="disCensorData">
+        <div v-if="!censorData.length" class="pt20 pb20 flex_left">暂无审核数据</div>
+        <div v-else class="scroll_list">
+          <div class="db-flex pb20 scroll_item" v-for="(item,index) in censorData" :key="index">
+            <div class="col1">
+              <div>
+                <div class="gray">版本号</div>
+                <div class="font22">0.02</div>
+                <div>
+                  <div class="btn1">审核不通过</div>
+                </div>
+              </div>
+            </div>
+            <div class="col2 flex_cell">
+              <div class="flex_left">
+                <div class="gray w100">开发者</div>
+                <div>Theoneจุ๊บ</div>
+              </div>
+              <div class="flex_left mt12">
+                <div class="gray w100">提交审核时间</div>
+                <div>2018-07-11 14:49:00</div>
+              </div>
+              <div class="flex_left mt12">
+                <div class="gray w100">描述</div>
+                <div>Theone 在 7/11/2018 9:59:58 AM 上传</div>
+              </div>
+            </div>
+            <div class="col3">
+              <div class="btn">详情</div>
+            </div>
+            <div class="col4">
+              <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
+              <div v-if="showBtn2" class="btnlayer">
+                <div class="item">撤回审核</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col2 flex_cell">
-          <div class="flex_left">
-            <div class="gray w100">开发者</div>
-            <div>Theoneจุ๊บ</div>
-          </div>
-          <div class="flex_left mt12">
-            <div class="gray w100">提交审核时间</div>
-            <div>2018-07-11 14:49:00</div>
-          </div>
-          <div class="flex_left mt12">
-            <div class="gray w100">描述</div>
-            <div>Theone 在 7/11/2018 9:59:58 AM 上传</div>
-          </div>
-        </div>
-        <div class="col3">
-          <div class="btn">详情</div>
-        </div>
-        <div class="col4">
-          <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
-          <div v-if="showBtn2" class="btnlayer">
-            <div class="item">撤回审核</div>
-          </div>
-        </div>
-      </div>
+      </template>
     </div>
     <div class="boxitem">
       <div class="title">开发版本</div>
       <template v-if="disDevelopmentData">
         <div v-if="!developmentData.length" class="pt20 pb20 flex_left">暂无上传开发数据</div>
-        <div v-else class="data-list">
-          <div class="db-flex b_bottom_after pb20 data-item" v-for="(item,index) in developmentData" :key="index">
+        <div v-else class="scroll_list">
+          <div class="db-flex pb20 scroll_item" v-for="(item,index) in developmentData" :key="index">
             <div class="col1">
               <div>
                 <div class="gray">版本号</div>
@@ -140,6 +112,8 @@ export default {
       showBtn2: false,
       showBtn3: false,
       showBtn4: false,
+      censorData: [],
+      disCensorData: false,
       developmentData: [],
       disDevelopmentData: false
     }
@@ -185,6 +159,11 @@ export default {
     },
     refresh () {
       const self = this
+      self.$http.get(`${ENV.BokaApi}/api/open/getAuthInfo`).then(function (res) {
+        let data = res.data
+        self.censorData = data.data ? data.data : data
+        self.disCensorData = true
+      })
       self.$http.get(`${ENV.BokaApi}/api/open/getTemplates`).then(function (res) {
         let data = res.data
         self.developmentData = data.data ? data.data : data
@@ -237,5 +216,5 @@ export default {
 .btnlayer .item{min-width:90px;padding: 0 22px;line-height:40px;color:#353535;}
 .btnlayer .item:not(:last-child){border-bottom: 1px solid #e7e7eb;}
 
-.data-list .data-item:not(:first-child){padding-top:20px;}
+.scroll_list .scroll_item:not(:first-child){padding-top:20px;}
 </style>
