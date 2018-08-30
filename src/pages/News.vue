@@ -590,6 +590,7 @@ export default {
     this.init()
   },
   activated () {
+    jQuery('.Eleditor-wrap').remove()
     this.refresh(this.$route.query)
   }
   // beforeRouteLeave (to, from, next) {

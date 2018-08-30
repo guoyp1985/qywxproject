@@ -13,30 +13,32 @@
     <div class="boxitem">
       <div class="title">审核版本</div>
       <template v-if="disCensorData">
-        <div v-if="!censorData.length" class="pt20 pb20 flex_left">暂无审核数据</div>
+        <div v-if="!censorData" class="pt20 pb20 flex_left">暂无审核数据</div>
         <div v-else class="scroll_list">
-          <div class="db-flex pb20 scroll_item" v-for="(item,index) in censorData" :key="index">
+          <div class="db-flex pb20 scroll_item">
             <div class="col1">
               <div>
                 <div class="gray">版本号</div>
-                <div class="font22">0.02</div>
+                <div class="font22">{{censorData.code_ver}}</div>
                 <div>
                   <div class="btn1">审核不通过</div>
                 </div>
               </div>
             </div>
             <div class="col2 flex_cell">
+              <!--
               <div class="flex_left">
                 <div class="gray w100">开发者</div>
-                <div>Theoneจุ๊บ</div>
+                <div class="flex_cell">{{censorData.user_name}}</div>
               </div>
-              <div class="flex_left mt12">
+            -->
+              <div class="flex_left">
                 <div class="gray w100">提交审核时间</div>
-                <div>2018-07-11 14:49:00</div>
+                <div class="flex_cell">{{censorData.code_uploadtime | dateFormat}}</div>
               </div>
               <div class="flex_left mt12">
                 <div class="gray w100">描述</div>
-                <div>Theone 在 7/11/2018 9:59:58 AM 上传</div>
+                <div class="flex_cell">{{censorData.code_desc}}</div>
               </div>
             </div>
             <div class="col3">
@@ -108,14 +110,16 @@ export default {
   },
   data () {
     return {
+      query: {},
       showBtn1: false,
       showBtn2: false,
       showBtn3: false,
       showBtn4: false,
-      censorData: [],
+      censorData: null,
       disCensorData: false,
       developmentData: [],
-      disDevelopmentData: false
+      disDevelopmentData: false,
+      appid: null
     }
   },
   methods: {
@@ -159,10 +163,23 @@ export default {
     },
     refresh () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/open/getAuthInfo`).then(function (res) {
+      this.query = this.$route.query
+      self.$http.get(`${ENV.BokaApi}/api/open/getAuthAppId`, {
+        params: {authcode: self.query.auth_code}
+      }).then(function (res) {
         let data = res.data
-        self.censorData = data.data ? data.data : data
-        self.disCensorData = true
+        if (data.flag) {
+          self.appid = data.data
+          return self.$http.get(`${ENV.BokaApi}/api/open/getAuthInfo`, {
+            params: {appid: self.appid}
+          })
+        }
+      }).then(res => {
+        if (res) {
+          let data = res.data
+          self.censorData = data.data ? data.data : data
+          self.disCensorData = true
+        }
       })
       self.$http.get(`${ENV.BokaApi}/api/open/getTemplates`).then(function (res) {
         let data = res.data
