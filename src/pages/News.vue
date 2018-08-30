@@ -562,13 +562,13 @@ export default {
     refresh (query) {
       const self = this
       this.loginUser = User.get()
+      this.showEditor = false
+      this.showsharetip = false
       if (this.query.id !== query.id) {
         room = ''
         this.comments = []
         this.pagestart = 0
         this.query = query
-        this.showEditor = false
-        this.showsharetip = false
       }
       this.getData()
       this.loginUser = User.get()
