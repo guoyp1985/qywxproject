@@ -20,9 +20,11 @@
               <div>
                 <div class="gray">版本号</div>
                 <div class="font22">{{censorData.code_ver}}</div>
+                <!--
                 <div>
                   <div class="btn1">审核不通过</div>
                 </div>
+              -->
               </div>
             </div>
             <div class="col2 flex_cell">
@@ -84,7 +86,7 @@
               <!--
               <div class="btn">详情</div>
             -->
-              <div class="btn">上传代码</div>
+              <div class="btn" @click="uploadFile(item)">上传代码</div>
             </div>
             <!--
             <div class="col4">
@@ -164,6 +166,16 @@ export default {
         this.initBtn()
         this.showBtn4 = true
       }
+    },
+    uploadFile (item) {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/open/commitTemplate`, {
+        appid: self.appid,
+        templateid: item.template_id
+      }).then(res => {
+        self.$vux.loading.hide()
+      })
     },
     refresh () {
       const self = this
