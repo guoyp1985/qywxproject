@@ -42,22 +42,22 @@
                 <template v-else-if="item.msgtype == 'news'">
                   <div class="main message-text">
                     <div class="scroll_item">
-            					<div class="con">
-            						<router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
-            							<div class="pic">
-            								<div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
-            								<span class="title">{{news.title}}</span>
-            							</div>
-            						</router-link>
-            					</div>
-            				</div>
+                      <div class="con">
+                        <router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
+                          <div class="pic">
+                            <div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
+                            <span class="title">{{news.title}}</span>
+                          </div>
+                        </router-link>
+                      </div>
+                    </div>
                   </div>
                 </template>
                 <template v-else-if="item.msgtype == 'voice'">
                   <div :style="`width: ${40 + Math.round(5 * parseInt(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
                     <div class="audio_play_area">
-            					<i class="icon_audio_default"></i>
-            					<i class="icon_audio_playing"></i>
+                      <i class="icon_audio_default"></i>
+                      <i class="icon_audio_playing"></i>
                     </div>
                     <div v-if="item.unread" class="new-voice-tips"></div>
                     <div class="min">
