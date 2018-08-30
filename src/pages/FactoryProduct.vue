@@ -48,7 +48,7 @@
           <div class="color-red">
             <span class="font18 mr3 v_middle">{{ $t('RMB') }}</span>
             <span class="font18 mr5 v_middle">{{ productdata.price }}</span>
-            <span class="color-gray font14 line-through" v-if="productdata.oriprice && productdata.oriprice > 0">
+            <span class="color-gray font14 line-through" v-if="productdata.oriprice">
               <span class="mr3 v_middle">{{ $t('RMB') }}</span>
               <span class="v_middle">{{ productdata.oriprice }}</span>
             </span>
