@@ -135,7 +135,7 @@
             <div class="popup-middle font14">
               <div class="scroll_list">
                 <template v-for="(item,index) in cardList">
-                  <template v-if="productData.special >= item.ordermoney">
+                  <template v-if="payPrice - curOrder.postageNumber - curOrder.rebate >= item.ordermoney">
                     <check-icon class="x-check-icon scroll_item padding10" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
                       <div class="t-table">
                         <div class="t-cell v_middle" style="color:inherit;">
@@ -251,7 +251,7 @@ export default {
       cardList: [],
       selectedCard: null,
       allowCard: false,
-      productData: {}
+      curOrder: {postageNumber: 0, rebate: 0}
     }
   },
   watch: {
@@ -405,7 +405,9 @@ export default {
         } else {
           self.showContainer = true
           self.orderdata = data
-          self.productData = self.orderdata[0].info[0]
+          self.curOrder = self.orderdata[0]
+          self.curOrder.postageNumber = parseFloat(self.curOrder.postage).toFixed(2)
+          self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
           let total = 0
           for (let i = 0; i < self.orderdata.length; i++) {
             let order = self.orderdata[i]
