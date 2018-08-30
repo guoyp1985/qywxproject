@@ -409,7 +409,6 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
-        self.submitIng = true
         let validateData = []
         for (let key in self.requireddata) {
           let v = {}
@@ -443,6 +442,7 @@ export default {
           })
           return false
         }
+        self.submitIng = true
         postdata.price = price
         postdata.oriprice = oriprice
         self.$vux.loading.show()
