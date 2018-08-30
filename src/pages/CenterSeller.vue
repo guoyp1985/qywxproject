@@ -165,7 +165,7 @@
           </div>
         </div>
       </div>
-      <seller-bottom :query="query" :login-user="loginUser"></seller-bottom>
+      <seller-bottom :query="query" :login-user="loginUser" active-name="home"></seller-bottom>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
           <div class="popup1 tagpopup">

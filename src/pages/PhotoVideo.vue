@@ -47,7 +47,7 @@
         <previewer :list="previewArr" ref="previewer"></previewer>
       </div>
     </div>
-    <seller-bottom :query="query" :login-user="loginUser"></seller-bottom>
+    <seller-bottom :query="query" :login-user="loginUser" active-name="photo"></seller-bottom>
   </div>
 </template>
 

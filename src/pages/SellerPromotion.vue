@@ -53,7 +53,7 @@
         </div>
       </div>
     </div>
-    <seller-bottom :query="query" :login-user="loginUser"></seller-bottom>
+    <seller-bottom :query="query" :login-user="loginUser" active-name="promotion"></seller-bottom>
   </div>
 </template>
 

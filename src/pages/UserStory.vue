@@ -42,7 +42,7 @@
         :cancel-comment="cancelComment">
       </tag-page>
     </div>
-    <seller-bottom :query="query" :login-user="loginUser"></seller-bottom>
+    <seller-bottom :query="query" :login-user="loginUser"  active-name="story"></seller-bottom>
   </div>
 </template>
 

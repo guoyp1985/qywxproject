@@ -7,13 +7,13 @@
         <div class="txt">首页</div>
       </div>
     </router-link>
-    <router-link v-else :to="{path: '/centerSeller', query:{uid: query.uid,wid:query.wid}}" class="flex_cell item flex_center">
+    <router-link v-else :to="{path: '/centerSeller', query:{uid: query.uid,wid:query.wid}}" :class="`flex_cell item flex_center ${activeName == 'home' ? 'active' : ''}`">
       <div class="inner">
         <div class="tet"><i class="al al-shouye1 font24 db-in" style="margin-top:3px;"></i></div>
         <div class="txt">首页</div>
       </div>
     </router-link>
-    <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
+    <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" :class="`flex_cell item flex_center ${activeName == 'promotion' ? 'active' : ''}`">
       <div class="inner">
         <div class="tet"><i class="al al-goodsnewfill db-in"></i></div>
         <div class="txt">促销</div>
@@ -29,13 +29,13 @@
         <div class="txt" style="color: rgba(230, 28, 36, 0.5);">店铺</div>
       </div>
     </router-link>
-    <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" class="flex_cell item flex_center">
+    <router-link :to="{path: '/photoVideo', query: {uid: query.uid}}" :class="`flex_cell item flex_center ${activeName == 'photo' ? 'active' : ''}`">
       <div class="inner">
         <div class="tet"><i class="al al-zhaopian font24 db-in"></i></div>
         <div class="txt">图片</div>
       </div>
     </router-link>
-    <router-link :to="{path: '/userStory', query: {uid: query.uid}}" class="flex_cell item flex_center">
+    <router-link :to="{path: '/userStory', query: {uid: query.uid}}" :class="`flex_cell item flex_center ${activeName == 'story' ? 'active' : ''}`">
       <div class="inner">
         <div class="tet"><i class="al al-yonghuxinxi font26 db-in"></i></div>
         <div class="txt">反馈</div>
@@ -50,7 +50,11 @@ export default {
   name: 'SellerBottom',
   props: {
     query: Object,
-    loginUser: Object
+    loginUser: Object,
+    activeName: {
+      type: String,
+      default: ''
+    }
   },
 }
 </script>
@@ -62,11 +66,12 @@ export default {
   border-top:rgb(249, 249, 249) 1px solid;z-index:2;overflow-x: initial;
 }
 
-.seller-bottom .al,.seller-bottom .tet{height: 26px;line-height: 26px !important;color:#999;position:relative;}
+.seller-bottom .al,.seller-bottom .tet{height: 26px;line-height: 26px !important;position:relative;}
 .seller-bottom .al-zhaopian:before{display: block;line-height: 36px;}
 .seller-bottom .al-goodsnewfill:before{display: block;line-height: 32px;}
 .seller-bottom .al-yonghuxinxi:before{display: block;line-height: 26px;}
 .seller-bottom .item{height:100%;position:relative;color:#999;}
+.seller-bottom .item.active{color:#e19194;}
 .seller-bottom .item .inner{height:48px;}
 .seller-bottom .al{font-size:22px;overflow: hidden;}
 .seller-bottom .txt{height: 22px;line-height: 22px !important;font-size: 8pt;}
