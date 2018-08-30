@@ -81,9 +81,12 @@
               </div>
             </div>
             <div class="col3">
+              <!--
               <div class="btn">详情</div>
-              <div class="btn">提交审核</div>
+            -->
+              <div class="btn">上传代码</div>
             </div>
+            <!--
             <div class="col4">
               <div class="btn" @click="clickBtn3"><i class="al al-jiantou_down"></i></div>
               <div v-if="showBtn3" class="btnlayer">
@@ -91,6 +94,7 @@
                 <div class="item">删除</div>
               </div>
             </div>
+          -->
           </div>
         </div>
       </template>
@@ -178,8 +182,8 @@ export default {
         if (res) {
           let data = res.data
           self.censorData = data.data ? data.data : data
-          self.disCensorData = true
         }
+        self.disCensorData = true
       })
       self.$http.get(`${ENV.BokaApi}/api/open/getTemplates`).then(function (res) {
         let data = res.data

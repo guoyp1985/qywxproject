@@ -665,6 +665,9 @@ export default {
   },
   mounted () {
     const self = this
+    if (editor) {
+      editor.destory()
+    }
     let start = !self.$util.isPC() ? 'touchstart' : 'mousedown'
     let move = !self.$util.isPC() ? 'touchmove' : 'mousemove'
     let end = !self.$util.isPC() ? 'touchend' : 'mouseup'
