@@ -34,7 +34,8 @@
               <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
-          <div id="editor-content" class="article-content" v-html="article.content"></div>
+          <div v-if="article.content == '' && article.uploader == loginUser.uid" id="editor-content" class="article-content color-gray font16">点击此处可编辑文章内容</div>
+          <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
           <div class="operate-area">
             <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
               <span class="al al-xing3 font14"></span>
