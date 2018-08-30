@@ -167,12 +167,18 @@
       </div>
       <div class="pagebottom">
         <div class="w_100 h_100 flex_center">
-          <router-link :to="{path: '/centerSeller', query: {uid: query.uid, wid: query.wid}}" class="flex_cell item flex_center">
+          <router-link v-if="loginUser.isretailer" :to="{path: '/centerSeller', query: {uid: query.uid, wid: query.wid}}" class="flex_cell item flex_center">
             <div class="inner">
               <div class="tet"><i class="al al-shouye1 font24 db-in" style="margin-top:3px;"></i></div>
               <div class="txt">首页</div>
             </div>
           </router-link>
+          <div v-else class="flex_cell item flex_center">
+            <div class="inner">
+              <div class="tet"><i class="al al-shouye1 font24 db-in" style="margin-top:3px;"></i></div>
+              <div class="txt">首页</div>
+            </div>
+          </div>
           <router-link :to="{path: '/sellerPromotion', query: {uid: query.uid}}" class="flex_cell item flex_center">
             <div class="inner">
               <div class="tet"><i class="al al-goodsnewfill db-in"></i></div>
