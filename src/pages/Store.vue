@@ -280,9 +280,15 @@ export default {
       if (parseInt(params.uid) === self.loginUser.uid) {
         self.$vux.toast.text('不能和自己聊天哦', 'middle')
       } else {
-        params.fromModule = 'store'
-        params.fromId = params.uid
-        self.$router.push({path: '/chat', query: params})
+        if (self.loginUser.subscribe === 0) {
+          const originHref = encodeURIComponent(`${ENV.Host}/#/store?wid=${params.uid}&fromModule=store&fromId=${params.uid}`)
+          const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+        } else {
+          params.fromModule = 'store'
+          params.fromId = params.uid
+          self.$router.push({path: '/chat', query: params})
+        }
       }
     },
     toCenterSales () {
