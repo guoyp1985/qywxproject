@@ -175,6 +175,10 @@ export default {
         templateid: item.template_id
       }).then(res => {
         self.$vux.loading.hide()
+        self.$vux.alert.show({
+          title: '',
+          content: res.data.error
+        })
       })
     },
     refresh () {
