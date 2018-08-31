@@ -34,8 +34,10 @@
               <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
-          <div v-if="article.content == '' && article.uploader == loginUser.uid" id="editor-content" class="article-content color-gray font16">文章内容为空，点击【编辑】按钮可修改内容哦！</div>
-          <div v-else id="editor-content" class="article-content" v-html="article.content"></div>
+          <div id="editor-content" :class="`article-content ${(article.content == '' && article.uploader == loginUser.uid) ? 'color-gray font16' : ''}`">
+            <p v-if="article.content == '' && article.uploader == loginUser.uid">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+            <div v-else v-html="article.content"></div>
+          </div>
           <div class="operate-area">
             <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
               <span class="al al-xing3 font14"></span>
@@ -590,9 +592,6 @@ export default {
     this.init()
   },
   activated () {
-    jQuery('.Eleditor-wrap').remove()
-    jQuery('.Eleditor-active').removeClass('Eleditor-active')
-    jQuery('.Eleditor-placeholder').removeClass('Eleditor-placeholder')
     this.refresh(this.$route.query)
   }
   // beforeRouteLeave (to, from, next) {

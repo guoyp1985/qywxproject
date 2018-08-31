@@ -20,9 +20,11 @@
               <div>
                 <div class="gray">版本号</div>
                 <div class="font22">{{censorData.code_ver}}</div>
+                <!--
                 <div>
                   <div class="btn1">审核不通过</div>
                 </div>
+              -->
               </div>
             </div>
             <div class="col2 flex_cell">
@@ -81,9 +83,12 @@
               </div>
             </div>
             <div class="col3">
+              <!--
               <div class="btn">详情</div>
-              <div class="btn">提交审核</div>
+            -->
+              <div class="btn" @click="uploadFile(item)">上传代码</div>
             </div>
+            <!--
             <div class="col4">
               <div class="btn" @click="clickBtn3"><i class="al al-jiantou_down"></i></div>
               <div v-if="showBtn3" class="btnlayer">
@@ -91,6 +96,7 @@
                 <div class="item">删除</div>
               </div>
             </div>
+          -->
           </div>
         </div>
       </template>
@@ -161,6 +167,20 @@ export default {
         this.showBtn4 = true
       }
     },
+    uploadFile (item) {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/open/commitTemplate`, {
+        appid: self.appid,
+        templateid: item.template_id
+      }).then(res => {
+        self.$vux.loading.hide()
+        self.$vux.alert.show({
+          title: '',
+          content: res.data.error
+        })
+      })
+    },
     refresh () {
       const self = this
       this.query = this.$route.query
@@ -178,8 +198,8 @@ export default {
         if (res) {
           let data = res.data
           self.censorData = data.data ? data.data : data
-          self.disCensorData = true
         }
+        self.disCensorData = true
       })
       self.$http.get(`${ENV.BokaApi}/api/open/getTemplates`).then(function (res) {
         let data = res.data

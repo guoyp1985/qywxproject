@@ -23,7 +23,10 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
-          <div id="editor-content" class="article-content" v-html="article.content"></div>
+          <div id="editor-content" :class="`article-content ${(article.content == '' && article.uploader == loginUser.uid) ? 'color-gray font16' : ''}`">
+            <p v-if="article.content == '' && article.uploader == loginUser.uid">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+            <div v-else v-html="article.content"></div>
+          </div>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
             <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
@@ -43,7 +46,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader" elem="#editor-content" module="factorynews" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor" elem="#editor-content" module="factorynews" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showSubscribe" height="100%">
           <div class="popup1">
@@ -105,7 +108,8 @@ export default {
       photoarr: [],
       previewerPhotoarr: [],
       messages: 0,
-      topcss: ''
+      topcss: '',
+      showEditor: false
     }
   },
   filters: {
@@ -222,6 +226,7 @@ export default {
           }
           if (res.data.flag) {
             self.article = res.data.data
+            self.showEditor = true
             document.title = self.article.title
             self.reward = User.get()
             self.retailerInfo = self.article.retailerinfo
@@ -441,13 +446,14 @@ export default {
       const self = this
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.showEditor = false
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false
         room = ''
         this.query = query
-        this.getData()
       }
+      this.getData()
     }
   },
   created () {

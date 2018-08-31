@@ -421,6 +421,8 @@ export default {
         this.datalist[index1] = []
         self.$vux.loading.show()
         this.getData1()
+      } else {
+        self.arrData = self.datalist[index1]
       }
     },
     getData () {

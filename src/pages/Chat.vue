@@ -25,7 +25,7 @@
             <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
             <div :class="`chatitem ${getItemClass(item)}`">
               <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
-                <img :src="item.avatar">
+                <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';"/>
               </router-link>
               <div class="name disusername">{{item.username}}</div>
               <div class="msg">
