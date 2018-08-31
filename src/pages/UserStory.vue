@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="btn-cell">
-            <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
+            <div  @click="toChat" class="btn">联系TA</div>
           </div>
         </div>
         <div class="row3">
@@ -107,6 +107,26 @@ export default {
       this.disData = false
       this.timelineData = []
       this.timelineCount = 0
+    },
+    toChat () {
+      const self = this
+      let params = { uid: self.query.uid }
+      if (!self.query.uid) {
+        params.uid = self.loginUser.uid
+      }
+      if (parseInt(params.uid) === self.loginUser.uid) {
+        self.$vux.toast.text('不能和自己聊天哦', 'middle')
+      } else {
+        if (self.loginUser.subscribe === 0) {
+          const originHref = encodeURIComponent(`${ENV.Host}/#/userStory?uid=${params.uid}&fromModule=retailer&fromId=${params.uid}`)
+          const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+        } else {
+          params.fromModule = 'retailer'
+          params.fromId = params.uid
+          self.$router.push({path: '/chat', query: params})
+        }
+      }
     },
     afterDelete (item, index) {
       this.timelineData.splice(index, 1)
