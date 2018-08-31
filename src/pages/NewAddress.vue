@@ -102,13 +102,16 @@ export default {
           }
         )) {
           this.isSubmitIng = true
+          this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
           .then(res => {
-            this.isSubmitIng = false
+            this.$vux.loading.hide()
             if (self.query.lasturl) {
               self.$router.push(self.query.lasturl)
+              this.isSubmitIng = false
             } else {
               this.$router.go(-1)
+              this.isSubmitIng = false
             }
           })
         }
@@ -117,6 +120,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.isSubmitIng = false
       this.initItem = {
         linkman: '',
         telephone: '',
