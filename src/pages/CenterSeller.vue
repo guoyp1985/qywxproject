@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div class="btn-cell">
-                  <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
+                  <router-link :to="{path: '/chat', query: {uid: userInfo.uid, fromModule: 'retailer'}}" class="btn">联系TA</router-link>
                 </div>
               </div>
               <div class="row2" v-if="(userInfo.slogan && userInfo.slogan != '') || userInfo.uid == loginUser.uid">
