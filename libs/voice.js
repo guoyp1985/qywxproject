@@ -94,6 +94,7 @@ const Voice = {
       success: (res) => {
         // alert(res.checkResult.startRecord)
         // const checkResult = JSON.parse(res.checkResult)
+        alert(res.checkResult.startRecord)
         if (res.checkResult.startRecord) {
           success && success(res.checkResult.startRecord)
         } else {
