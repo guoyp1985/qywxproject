@@ -42,7 +42,8 @@ export default {
         area: [],
         address: ''
       },
-      switcher: true
+      switcher: true,
+      isSubmitIng: false
     }
   },
   computed: {
@@ -68,50 +69,58 @@ export default {
   },
   methods: {
     save () {
-      this.initItem.area = value2name(this.initItem.area || [], ChinaAddressV4Data).split(' ')
-      this.initItem.isdefault = this.switcher ? 1 : 0
-      const self = this
-      const address = {
-        id: this.item.id,
-        linkman: this.item.linkman,
-        telephone: this.$util.trim(this.item.telephone),
-        address: this.item.address,
-        isdefault: this.item.isdefault,
-        province: this.item.area[0],
-        city: this.item.area[1],
-        counties: this.item.area[2],
-        do: this.item.id ? 'update' : 'add'
-      }
-      if (this.$util.validateQueue(
-        [
-          {linkman: address.linkman},
-          {telephone: address.telephone, r: 'Phone'},
-          {address: address.address},
-          {area: this.item.area.join('')}
-        ],
-        model => {
-          switch (model.key) {
-            case 'telephone':
-              self.$vux.toast.text('手机号错误', 'middle')
-              break
-            default:
-              self.$vux.toast.text('未填必选项', 'middle')
-          }
+      if (!this.isSubmitIng) {
+        this.initItem.area = value2name(this.initItem.area || [], ChinaAddressV4Data).split(' ')
+        this.initItem.isdefault = this.switcher ? 1 : 0
+        const self = this
+        const address = {
+          id: this.item.id,
+          linkman: this.item.linkman,
+          telephone: this.$util.trim(this.item.telephone),
+          address: this.item.address,
+          isdefault: this.item.isdefault,
+          province: this.item.area[0],
+          city: this.item.area[1],
+          counties: this.item.area[2],
+          do: this.item.id ? 'update' : 'add'
         }
-      )) {
-        this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
-        .then(res => {
-          if (self.query.lasturl) {
-            self.$router.push(self.query.lasturl)
-          } else {
-            this.$router.go(-1)
+        if (this.$util.validateQueue(
+          [
+            {linkman: address.linkman},
+            {telephone: address.telephone, r: 'Phone'},
+            {address: address.address},
+            {area: this.item.area.join('')}
+          ],
+          model => {
+            switch (model.key) {
+              case 'telephone':
+                self.$vux.toast.text('手机号错误', 'middle')
+                break
+              default:
+                self.$vux.toast.text('未填必选项', 'middle')
+            }
           }
-        })
+        )) {
+          this.isSubmitIng = true
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/user/address/add`, address)
+          .then(res => {
+            this.$vux.loading.hide()
+            if (self.query.lasturl) {
+              self.$router.push(self.query.lasturl)
+              this.isSubmitIng = false
+            } else {
+              this.$router.go(-1)
+              this.isSubmitIng = false
+            }
+          })
+        }
       }
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.isSubmitIng = false
       this.initItem = {
         linkman: '',
         telephone: '',

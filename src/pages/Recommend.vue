@@ -63,7 +63,12 @@
       </tab>
       <view-box v-show="selectedIndex1===0">
         <template v-if="disTabData1">
-          <group v-if="tabData1.length">
+          <template v-if="!tabData1.length">
+            <div class="no-related-x color-gray">
+              <span>{{$t('No relevant data')}}</span>
+            </div>
+          </template>
+          <group v-else>
             <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
               <div class="store-img">
                 <img class="imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
@@ -75,16 +80,14 @@
               </div>
             </cell-box>
           </group>
-          <template v-else>
-            <div class="no-related-x color-gray">
-              <span>{{$t('No relevant data')}}</span>
-            </div>
-          </template>
         </template>
       </view-box>
       <view-box v-show="selectedIndex1===1">
         <div class="scroll_list" v-if="disTabData2">
-          <router-link v-if="tabData2.length" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData2" :key="index">
+          <div v-if="!tabData2.length" class="scroll_item emptyitem flex_center">
+            <span>{{$t('No relevant data')}}</span>
+          </div>
+          <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData2" :key="index">
             <div class="w80 align_center">
               <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
             </div>
@@ -96,14 +99,14 @@
               </div>
             </div>
           </router-link>
-          <div v-else class="scroll_item emptyitem flex_center">
-            <span>{{$t('No relevant data')}}</span>
-          </div>
         </div>
       </view-box>
       <view-box v-show="selectedIndex1===2">
         <div v-if="disTabData3" class="scroll_list">
-          <template v-if="tabData3.length" v-for="(item, index) in tabData3">
+          <div v-if="!tabData3.length" class="scroll_item emptyitem flex_center">
+            <span>{{$t('No relevant data')}}</span>
+          </div>
+          <template v-else v-for="(item, index) in tabData3">
             <router-link v-if="item.type == 'groupbuy'" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.productid, wid: item.uploader}}">
               <div class="w80 align_center">
                 <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
@@ -123,14 +126,14 @@
               </div>
             </router-link>
           </template>
-          <div v-else class="scroll_item emptyitem flex_center">
-            <span>{{$t('No relevant data')}}</span>
-          </div>
         </div>
       </view-box>
       <view-box v-show="selectedIndex1===3">
         <div class="scroll_list" v-if="disTabData4">
-          <router-link v-if="tabData4.length" class="scroll_item flex_left pt10 pb10" :to="{path: '/news', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData4" :key="index">
+          <div v-if="!tabData4.length" class="scroll_item emptyitem flex_center">
+            <span>{{$t('No relevant data')}}</span>
+          </div>
+          <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/news', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData4" :key="index">
             <div class="w80 align_center">
               <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
             </div>
@@ -143,9 +146,6 @@
               </div>
             </div>
           </router-link>
-          <div v-else class="scroll_item emptyitem flex_center">
-            <span>{{$t('No relevant data')}}</span>
-          </div>
         </div>
       </view-box>
     </div>
