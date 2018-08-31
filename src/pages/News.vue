@@ -34,7 +34,6 @@
               <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
-          <template v-html="article.content"></template>
           <div id="editor-content" :class="`article-content ${(article.content == '' && article.uploader == loginUser.uid) ? 'color-gray font16' : ''}`">
             <p v-if="article.content == '' && article.uploader == loginUser.uid">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
             <div v-else v-html="article.content"></div>
