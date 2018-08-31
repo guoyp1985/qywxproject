@@ -94,8 +94,9 @@ const Voice = {
       success: (res) => {
         // alert(res.checkResult.startRecord)
         // const checkResult = JSON.parse(res.checkResult)
-        alert(res.checkResult.startRecord)
         if (res.checkResult.startRecord) {
+          Vue.wechat.startRecord()
+          Vue.wechat.stopRecord()
           success && success(res.checkResult.startRecord)
         } else {
           fail && fail()
