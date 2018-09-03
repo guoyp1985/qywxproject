@@ -1,114 +1,164 @@
 <template>
 <div class="containerarea mpsetting font14">
-  <div class="bigtitle">开发管理</div>
-  <!--
-  <div class="tiptxt flex_left">
-    <div class="w40">
-      <span class="al al-gantanhaozhong color-blue"></span>
-    </div>
-    <div class="v_middle flex_cell flex_cell">你已暂停小程序的服务，用户不可正常访问线上版本小程序。暂停服务不影响小程序代码提交审核及发布。</div>
+  <div class="pagetop">
+    <tab v-model="selectedIndex" class="b-tab">
+      <tab-item :selected="selectedIndex == 0">开发管理</tab-item>
+      <tab-item :selected="selectedIndex == 1">体验者管理</tab-item>
+    </tab>
   </div>
--->
-  <div class="boxlist">
-    <div class="boxitem">
-      <div class="title">审核版本</div>
-      <template v-if="disCensorData">
-        <div v-if="!censorData" class="pt20 pb20 flex_left">暂无审核数据</div>
-        <div v-else class="scroll_list">
-          <div class="db-flex pb20 scroll_item">
-            <div class="col1">
-              <div>
-                <div class="gray">版本号</div>
-                <div class="font22">{{censorData.code_ver}}</div>
-                <!--
-                <div>
-                  <div class="btn1">审核不通过</div>
+  <div class="pagemiddle">
+    <swiper v-model="selectedIndex" class="x-swiper no-indicator">
+      <swiper-item>
+        <div class="boxlist">
+          <div class="boxitem">
+            <div class="title">审核版本</div>
+            <template v-if="disCensorData">
+              <div v-if="!censorData" class="pt20 pb20 flex_left">暂无审核数据</div>
+              <div v-else class="scroll_list">
+                <div class="db-flex pb20 scroll_item">
+                  <div class="col1">
+                    <div>
+                      <div class="gray">版本号</div>
+                      <div class="font22">{{censorData.code_ver}}</div>
+                      <!--
+                      <div>
+                        <div class="btn1">审核不通过</div>
+                      </div>
+                    -->
+                    </div>
+                  </div>
+                  <div class="col2 flex_cell">
+                    <!--
+                    <div class="flex_left">
+                      <div class="gray w100">开发者</div>
+                      <div class="flex_cell">{{censorData.user_name}}</div>
+                    </div>
+                  -->
+                    <div class="flex_left">
+                      <div class="gray w100">提交审核时间</div>
+                      <div class="flex_cell">{{censorData.code_uploadtime | dateFormat}}</div>
+                    </div>
+                    <div class="flex_left mt12">
+                      <div class="gray w100">描述</div>
+                      <div class="flex_cell">{{censorData.code_desc}}</div>
+                    </div>
+                  </div>
+                  <div class="col3">
+                    <div class="btn">详情</div>
+                  </div>
+                  <div class="col4">
+                    <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
+                    <div v-if="showBtn2" class="btnlayer">
+                      <div class="item">撤回审核</div>
+                    </div>
+                  </div>
                 </div>
-              -->
               </div>
-            </div>
-            <div class="col2 flex_cell">
-              <!--
-              <div class="flex_left">
-                <div class="gray w100">开发者</div>
-                <div class="flex_cell">{{censorData.user_name}}</div>
+            </template>
+          </div>
+          <div class="boxitem">
+            <div class="title">开发版本</div>
+            <template v-if="disDevelopmentData">
+              <div v-if="!developmentData.length" class="pt20 pb20 flex_left">暂无上传开发数据</div>
+              <div v-else class="scroll_list">
+                <div class="db-flex pb20 scroll_item" v-for="(item,index) in developmentData" :key="index">
+                  <div class="col1">
+                    <div>
+                      <div class="gray">版本号</div>
+                      <div class="font22">{{item.user_version}}</div>
+                      <div class="color-blue flex_left">
+                        <div class="align_center" @click="previewEvent" style="width:50px;border:#007aff 1px solid;border-radius:5px;">
+                          <span class="font12">预览</span>
+                          <i class="al al-erweima1 font12"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col2 flex_cell">
+                    <div class="flex_left">
+                      <div class="gray w100">开发者</div>
+                      <div class="flex_cell">{{item.developer}}</div>
+                    </div>
+                    <div class="flex_left mt12">
+                      <div class="gray w100">提交时间</div>
+                      <div class="flex_cell">{{item.create_time | dateFormat}}</div>
+                    </div>
+                    <div class="flex_left mt12">
+                      <div class="gray w100">描述</div>
+                      <div class="flex_cell">{{item.user_desc}}</div>
+                    </div>
+                  </div>
+                  <div class="col3">
+                    <!--
+                    <div class="btn">详情</div>
+                  -->
+                    <div class="btn db" @click="uploadFile(item)">上传代码</div>
+                    <div class="btn db mt12" @click="uploadFile(item)">提交审核</div>
+                  </div>
+                  <!--
+                  <div class="col4">
+                    <div class="btn" @click="clickBtn3"><i class="al al-jiantou_down"></i></div>
+                    <div v-if="showBtn3" class="btnlayer">
+                      <div class="item">选为体验版本</div>
+                      <div class="item">删除</div>
+                    </div>
+                  </div>
+                -->
+                </div>
               </div>
-            -->
-              <div class="flex_left">
-                <div class="gray w100">提交审核时间</div>
-                <div class="flex_cell">{{censorData.code_uploadtime | dateFormat}}</div>
-              </div>
-              <div class="flex_left mt12">
-                <div class="gray w100">描述</div>
-                <div class="flex_cell">{{censorData.code_desc}}</div>
-              </div>
-            </div>
-            <div class="col3">
-              <div class="btn">详情</div>
-            </div>
-            <div class="col4">
-              <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
-              <div v-if="showBtn2" class="btnlayer">
-                <div class="item">撤回审核</div>
+            </template>
+          </div>
+        </div>
+      </swiper-item>
+      <swiper-item>
+          <div class="align_center font16 pt15 pb15">请输入体验者微信号</div>
+          <div class="form-item bg-white mt12">
+            <div class="t-table">
+              <div class="t-cell input-cell v_middle">
+                <input v-model="testerWechatId" type="text" class="input" placeholder="体验者微信号" />
               </div>
             </div>
           </div>
-        </div>
-      </template>
-    </div>
-    <div class="boxitem">
-      <div class="title">开发版本</div>
-      <template v-if="disDevelopmentData">
-        <div v-if="!developmentData.length" class="pt20 pb20 flex_left">暂无上传开发数据</div>
-        <div v-else class="scroll_list">
-          <div class="db-flex pb20 scroll_item" v-for="(item,index) in developmentData" :key="index">
-            <div class="col1">
-              <div>
-                <div class="gray">版本号</div>
-                <div class="font22">{{item.user_version}}</div>
-              </div>
-            </div>
-            <div class="col2 flex_cell">
-              <div class="flex_left">
-                <div class="gray w100">开发者</div>
-                <div class="flex_cell">{{item.developer}}</div>
-              </div>
-              <div class="flex_left mt12">
-                <div class="gray w100">提交时间</div>
-                <div class="flex_cell">{{item.create_time | dateFormat}}</div>
-              </div>
-              <div class="flex_left mt12">
-                <div class="gray w100">描述</div>
-                <div class="flex_cell">{{item.user_desc}}</div>
-              </div>
-            </div>
-            <div class="col3">
-              <!--
-              <div class="btn">详情</div>
-            -->
-              <div class="btn" @click="uploadFile(item)">上传代码</div>
-            </div>
-            <!--
-            <div class="col4">
-              <div class="btn" @click="clickBtn3"><i class="al al-jiantou_down"></i></div>
-              <div v-if="showBtn3" class="btnlayer">
-                <div class="item">选为体验版本</div>
-                <div class="item">删除</div>
-              </div>
-            </div>
-          -->
+          <div class="pt15">
+            <div class="padding10 bg-green color-white align_center font16" style="width:60%;margin:0 auto;border-radius:10px;" @click="bindUser">提交</div>
           </div>
+      </swiper-item>
+    </swiper>
+  </div>
+  <div v-transfer-dom class="x-popup">
+    <popup v-model="showPreview" height="100%">
+      <div class="popup1">
+        <div class="popup-top flex_center">扫码体验</div>
+        <div v-if="disPreview" class="popup-middle font14 flex_center">
+            <img v-if="previewQrcode" :src="previewQrcode" style="max-width:90%;max-height:90%;" />
+            <div v-else class="flex_cell">
+              <div class="align_center">体验码生成失败</div>
+              <div class="pt15">
+                <div class="padding10 bg-green color-white align_center font16" style="width:60%;margin:0 auto;border-radius:10px;" @click="createTesterCode">生成体验码</div>
+              </div>
+            </div>
         </div>
-      </template>
-    </div>
+        <div class="popup-bottom flex_center">
+          <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closePreview">{{ $t('Close') }}</div>
+        </div>
+      </div>
+    </popup>
   </div>
 </div>
 </template>
 
 <script>
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
+let self = {}
 export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Tab, TabItem, Swiper, SwiperItem, Popup
+  },
   filters: {
     dateFormat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
@@ -117,6 +167,11 @@ export default {
   data () {
     return {
       query: {},
+      selectedIndex: 0,
+      testerWechatId: '',
+      showPreview: false,
+      previewQrcode: null,
+      disPreview: false,
       showBtn1: false,
       showBtn2: false,
       showBtn3: false,
@@ -134,6 +189,59 @@ export default {
       this.showBtn2 = false
       this.showBtn3 = false
       this.showBtn4 = false
+    },
+    bindUser () {
+      if (self.$util.trim(self.testerWechatId) === '') {
+        self.$vux.toast.text('请输入体验者微信号', 'middle')
+        return false
+      }
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/open/bindTester`, {
+        appid: self.appid, wechatId: self.testerWechatId
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag) {
+              self.testerWechatId = ''
+            }
+          }
+        })
+      })
+    },
+    getQRCode () {
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/open/getQRCode`, {
+        appid: self.appid
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error)
+        })
+        if (data.flag) {
+          self.previewQrcode = data.data
+        } else {
+          self.previewQrcode = null
+        }
+        self.disPreview = true
+      })
+    },
+    previewEvent () {
+      self.showPreview = true
+      self.getQRCode()
+    },
+    closePreview () {
+      self.showPreview = false
+    },
+    createTesterCode () {
+      self.getQRCode()
     },
     clickBtn1 () {
       if (this.showBtn1) {
@@ -209,6 +317,7 @@ export default {
     }
   },
   activated () {
+    self = this
     this.refresh()
   }
 }
