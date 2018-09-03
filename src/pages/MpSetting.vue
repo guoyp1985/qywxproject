@@ -93,7 +93,7 @@
                     <div class="btn">详情</div>
                   -->
                     <div class="btn db" @click="uploadFile(item)">上传代码</div>
-                    <div class="btn db mt12" @click="uploadFile(item)">提交审核</div>
+                    <div class="btn db mt12" @click="submitCensor(item)">提交审核</div>
                   </div>
                   <!--
                   <div class="col4">
@@ -144,11 +144,136 @@
       </div>
     </popup>
   </div>
+  <div class="modalarea flex_center" v-if="showConfirmModal">
+    <div class="modal">
+      <div class="pagetop flex_left font16 pl10 pr10">
+        <span>提交审核的相关须知</span>
+        <div class="close flex_center" @click="closeConfirmModal"><i class="al al-guanbi"></i></div>
+      </div>
+      <div class="pagemiddle flex_center" style="bottom:100px;">
+        <div>
+          <div class="align_center"><i class="al al-wenhao" style="color:#10aeff;font-size:72px;"></i></div>
+            <div class="align_center font16">确定要提交审核？</div>
+            <div class="mt12" style="color:#9a9a9a;">提交给微信团队审核前，请确保:</div>
+            <ul style="color:#9a9a9a;">
+              <li style="margin:10px 0;">
+                <div class="db-in">
+                  <div>提交的小程序功能完整，可正常打开和运行，而不是测试版或 Demo</div>
+                  <div>小程序的调试和预览可在开发者工具进行。多次提交测试内容或 Demo，将受到相应处罚。</div>
+                </div>
+              </li>
+              <li style="margin:10px 0;">
+                <div class="db-in">已仔细阅读<a href="https://developers.weixin.qq.com/miniprogram/product/index.html" target="_blank">《微信小程序平台运营规范》</a>和<a href="https://developers.weixin.qq.com/miniprogram/product/reject.html" target="_blank">《微信小程序平台审核常见被拒绝情形》</a>
+                </div>
+              </li>
+            </ul>
+        </div>
+      </div>
+      <div class="pagebottom" style="height:100px;">
+        <div class="font0 align_center">
+          <span class="font14 v_top">
+            <check-icon class="green color-gray2" :value.sync="isagree" @click.native.stop="clickagree">已阅读并了解平台审核规则</check-icon>
+          </span>
+        </div>
+        <div class="flex_center mt12">
+          <div class="flex_cell flex_right pr10">
+            <div :class="`btn flex_center ${btncss}`" @click="nextEvent">下一步</div>
+          </div>
+          <div class="flex_cell flex_left pl10">
+            <div class="btn flex_center" @click="closeConfirmModal">取消</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modalarea flex_center" v-if="showSetModal">
+    <div class="modal">
+      <div class="pagetop flex_left font16 pl10 pr10">
+        <span>提交审核</span>
+        <div class="close flex_center" @click="closeSetModal"><i class="al al-guanbi"></i></div>
+      </div>
+      <div class="pagemiddle padding10">
+        <div class="font20">配置功能页面<span class="font14" style="color:#9a9a9a;">至少填写一组，填写正确的信息有利于用户快速搜索出你的小程序</span></div>
+        <div class="setlist">
+          <div class="setitem" v-for="(item,index) in setArr" :key="index">
+            <div class="lineitem">功能页面{{index+1}}</div>
+            <div class="lineitem border-box mb10">
+              <div class="t-table">
+                <div class="t-cell title-cell w100 font14 v_middle">功能页面</div>
+                <div class="t-cell input-cell v_middle border1px" style="position:relative;">
+                  <select class="w_100" style="height:35px;" v-model="item.page">
+                    <option v-for="(o,oindex) in pagesArr" :value="o">{{o}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="lineitem border-box mb10">
+              <div class="t-table">
+                <div class="t-cell title-cell w100 font14 v_middle">标题</div>
+                <div class="t-cell input-cell v_middle border1px" style="position:relative;">
+                  <x-input
+                    class="font14"
+                    placeholder="标题"
+                    :max="32"
+                    v-model="item.title">
+                  </x-input>
+                </div>
+              </div>
+            </div>
+            <div class="lineitem border-box mb10">
+              <div class="t-table">
+                <div class="t-cell title-cell w100 font14 v_top pt10">所在服务类目</div>
+                <div class="t-cell input-cell v_top" style="position:relative;">
+                  <div>
+                    <select style="height:35px;" v-model="item.first_id" @change="firstChange(item, index)">
+                      <option v-for="(c,cindex) in categoryArr" :value="c.id">{{c.title}}</option>
+                    </select>
+                    <select style="height:35px;" v-model="item.second_id">
+                      <option v-for="(sc,cindex) in item.second" :value="sc.id">{{sc.title}}</option>
+                    </select>
+                  </div>
+                  <div class="mt10" style="color:#9a9a9a;">功能页面和服务类目必须一一对应，且功能页面提供的内容必须符合该类目范围</div>
+                </div>
+              </div>
+            </div>
+            <div class="lineitem border-box mb10">
+              <div class="t-table">
+                <div class="t-cell title-cell w100 font14 v_top pt10">标签</div>
+                <div class="t-cell input-cell v_top">
+                  <x-input style="position:relative;"
+                    class="font14 border1px"
+                    placeholder="标签"
+                    :max="32"
+                    v-model="item.tags">
+                  </x-input>
+                  <div class="mt10" style="color:#9a9a9a;">标签用回车分开，填写与页面功能相关的标签，更容易被搜索</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="addarea" v-if="setArr.length <= 5">
+          <div class="btnadd flex_left" @click="addSetItem">
+            <span class="icon flex_center">+</span>
+            <span>添加功能页面</span>
+          </div>
+      </div>
+      </div>
+      <div class="pagebottom flex_center">
+        <div class="flex_cell flex_right pr10">
+          <div class="btn flex_center active" @click="censorEvent">提交审核</div>
+        </div>
+        <div class="flex_cell flex_left pl10">
+          <div class="btn flex_center" @click="closeSetModal">取消</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XInput } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 let self = {}
@@ -157,7 +282,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup
+    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon, XInput
   },
   filters: {
     dateFormat: function (value) {
@@ -180,7 +305,19 @@ export default {
       disCensorData: false,
       developmentData: [],
       disDevelopmentData: false,
-      appid: null
+      appid: null,
+      isagree: false,
+      btncss: '',
+      allownext: false,
+      showConfirmModal: false,
+      showSetModal: false,
+      defaultSubmitData: {page: '', title: '', tags: '', first_id: null, second_id: null, second: []},
+      setArr: [{page: '', title: '', tags: '', first_id: null, second_id: null, second: []}],
+      pagesArr: [],
+      categoryArr: [],
+      secondCategoryObject: {},
+      secondCategoryArr: [],
+      selectedPage: ''
     }
   },
   methods: {
@@ -189,6 +326,37 @@ export default {
       this.showBtn2 = false
       this.showBtn3 = false
       this.showBtn4 = false
+    },
+    getCategory () {
+      self.$http.get(`${ENV.BokaApi}/api/open/getCategory`, {
+        params: {appid: self.appid}
+      }).then(function (res) {
+        const data = res.data
+        if (data.flag) {
+          const retdata = data.data
+          for (let i = 0; i < retdata.length; i++) {
+            const curd = retdata[i]
+            retdata[i].id = curd.first_id
+            retdata[i].title = curd.first_class
+            retdata[i].second = [{id: curd.second_id, title: curd.second_class}]
+            self.secondCategoryObject[curd.first_id] = [{id: curd.second_id, title: curd.second_class}]
+          }
+          self.secondCategoryArr = retdata[0].second
+          self.setArr[0].second = retdata[0].second
+          self.defaultSubmitData.second = retdata[0].second
+          self.categoryArr = retdata
+        }
+      })
+    },
+    getPages () {
+      self.$http.get(`${ENV.BokaApi}/api/open/getPages`, {
+        params: {appid: self.appid}
+      }).then(function (res) {
+        const data = res.data
+        if (data.flag) {
+          self.pagesArr = data.data
+        }
+      })
     },
     bindUser () {
       if (self.$util.trim(self.testerWechatId) === '') {
@@ -220,15 +388,15 @@ export default {
       }).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
-        self.$vux.toast.show({
-          text: data.error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error)
-        })
-        if (data.flag) {
-          self.previewQrcode = data.data
-        } else {
+        if (!data.qrcode) {
+          self.$vux.toast.show({
+            text: data.error,
+            type: (data.flag !== 1 ? 'warn' : 'success'),
+            time: self.$util.delay(data.error)
+          })
           self.previewQrcode = null
+        } else {
+          self.previewQrcode = data.qrcode
         }
         self.disPreview = true
       })
@@ -242,6 +410,58 @@ export default {
     },
     createTesterCode () {
       self.getQRCode()
+    },
+    submitCensor (item) {
+      self.showConfirmModal = true
+    },
+    closeConfirmModal () {
+      self.showConfirmModal = false
+    },
+    clickagree () {
+      const self = this
+      if (self.isagree) {
+        self.btncss = 'active'
+        self.allownext = true
+      } else {
+        self.btncss = ''
+        self.allownext = false
+      }
+    },
+    nextEvent () {
+      if (self.allownext) {
+        if (!self.categoryArr.length) {
+          self.getCategory()
+        }
+        if (!self.pagesArr.length) {
+          self.getPages()
+        }
+        self.showConfirmModal = false
+        self.showSetModal = true
+      }
+    },
+    closeSetModal () {
+      self.showSetModal = false
+    },
+    censorEvent () {
+      self.showSetModal = false
+      self.$vux.loading.hide()
+      self.$http.post(`${ENV.BokaApi}/api/open/submitAudit`, {
+        appid: self.appid, itemlist: self.setArr
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error)
+        })
+      })
+    },
+    addSetItem () {
+      self.setArr.push(self.defaultSubmitData)
+    },
+    firstChange (item, index) {
+      self.setArr[index].second = self.secondCategoryObject[item.first_id]
     },
     clickBtn1 () {
       if (this.showBtn1) {
@@ -363,4 +583,26 @@ export default {
 .btnlayer .item:not(:last-child){border-bottom: 1px solid #e7e7eb;}
 
 .scroll_list .scroll_item:not(:first-child){padding-top:20px;}
+
+.mpsetting .modalarea ul{list-style:none;}
+.mpsetting .modalarea li:before {float:left;color: #e7e7eb;content: "●";margin-right: 1em;}
+.mpsetting .modalarea a{color: #576b95;}
+.mpsetting .modalarea .btn{
+  color: #353535;width:110px;text-align:center;
+  background-image: linear-gradient(to bottom,#fbfbfb 0,#fbfbfb 100%);
+  border: #e4e8eb 1px solid;
+}
+.mpsetting .modalarea .btn.active{
+  color:#fff;
+  background-image: linear-gradient(to bottom,#1aad19 0,#1aad19 100%);
+  border: #1aad19 1px solid;
+}
+.setitem{border-bottom: 1px dashed #e7e7eb;}
+.setitem .lineitem{padding-top:25px;}
+.mpsetting .addarea{padding: 10px;}
+.addarea .btnadd{width:130px;}
+.addarea .icon{
+  width:22px;height:22px;margin-right:5px;
+  border:#576b95 1px solid;border-radius:50%;line-height:22px;text-align:center;color:#576b95;
+}
 </style>

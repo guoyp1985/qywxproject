@@ -859,6 +859,7 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 .pic-swiper.notitle .vux-swiper-desc{display:none;}
 
 .blue .weui-icon-success {color: #1c90fe;}
+.green .weui-icon-success {color: #09BB07;}
 .vux-check-icon.blue > .weui-icon-success:before, .vux-check-icon.blue > .weui-icon-success-circle:before {
     color: #1c90fe;
 }
@@ -1039,3 +1040,17 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 
 .line-through{position:relative;}
 .line-through:after{content:"";position:absolute;left:-1px;top:50%;right:-2px;height:1px;background-color:#999;}
+
+.modalarea{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.3);box-sizing: border-box;}
+.modalarea *{box-sizing: border-box;}
+.modalarea .modal{
+  width:80%;height:70%;position:relative;display:block;
+  background-color:#fff;border-radius:5px;
+	box-shadow: 0 0 20px #e4e8eb;
+}
+.modalarea .btn{width:80%;height:35px;border-radius:5px;}
+.modalarea .close{
+	position:absolute;right:10px;top:50%;margin-top:-14px;
+	width:28px;height:28px;text-align:center;overflow:hidden;
+	color:#9a9a9a;
+}
