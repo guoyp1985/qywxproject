@@ -38,6 +38,7 @@
               </div>
             </div>
           </div>
+          <!--
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
@@ -46,6 +47,7 @@
               </div>
             </div>
           </div>
+        -->
           <div class="form-item bg-white">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Cover photo') }}</div>
