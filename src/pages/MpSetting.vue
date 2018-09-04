@@ -313,7 +313,7 @@ export default {
     },
     previewEvent () {
       if (!self.censorData.code_ver || self.censorData.code_ver === '') {
-        self.$vux.toast.text('请先上传代码', 'middle')
+        self.$vux.toast.text('请先上传代码后再体验！', 'middle')
       } else {
         self.showPreview = true
         self.getQRCode()
