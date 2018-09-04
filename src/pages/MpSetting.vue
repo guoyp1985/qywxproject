@@ -266,6 +266,8 @@ export default {
         let showError = data.error
         if (data.error.search(/user already bind hint/g) > -1) {
           showError = '该用户已绑定过体验者'
+        } else if (data.error.search(/user not exist or user cannot be searched hint/g) > -1) {
+          showError = '无法搜索到该微信号，请确保微信号输入正确'
         }
         if (data.flag) {
           self.$vux.toast.text(showError, 'middle')
