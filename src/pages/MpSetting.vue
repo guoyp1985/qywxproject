@@ -43,6 +43,7 @@
                       <div class="flex_cell">{{censorData.code_desc}}</div>
                     </div>
                   </div>
+                  <!--
                   <div class="col3">
                     <div class="btn">详情</div>
                   </div>
@@ -52,6 +53,7 @@
                       <div class="item">撤回审核</div>
                     </div>
                   </div>
+                -->
                 </div>
               </div>
             </template>
@@ -261,16 +263,19 @@ export default {
       }).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
-        self.$vux.toast.show({
-          text: data.error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error),
-          onHide: function () {
-            if (data.flag) {
-              self.testerWechatId = ''
-            }
-          }
-        })
+        let showError = data.error
+        if (data.error.search(/user already bind hint/g) > -1) {
+          showError = '该用户已绑定过体验者'
+        }
+        if (data.flag) {
+          self.$vux.toast.text(showError, 'middle')
+          self.testerWechatId = ''
+        } else {
+          self.$vux.alert.show({
+            title: '',
+            content: showError
+          })
+        }
       })
     },
     getQRCode () {
