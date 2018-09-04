@@ -186,89 +186,6 @@
       </div>
     </div>
   </div>
-  <div class="modalarea flex_center" v-if="showSetModal">
-    <div class="modal">
-      <div class="pagetop flex_left font16 pl10 pr10">
-        <span>提交审核</span>
-        <div class="close flex_center" @click="closeSetModal"><i class="al al-guanbi"></i></div>
-      </div>
-      <div class="pagemiddle padding10">
-        <div class="font20">配置功能页面<span class="font14" style="color:#9a9a9a;">至少填写一组，填写正确的信息有利于用户快速搜索出你的小程序</span></div>
-        <div class="setlist">
-          <div class="setitem" v-for="(item,index) in setArr" :key="index">
-            <div class="lineitem">功能页面{{index+1}}</div>
-            <div class="lineitem border-box mb10">
-              <div class="t-table">
-                <div class="t-cell title-cell w100 font14 v_middle">功能页面</div>
-                <div class="t-cell input-cell v_middle border1px" style="position:relative;">
-                  <select class="w_100" style="height:35px;" v-model="item.page">
-                    <option v-for="(o,oindex) in pagesArr" :value="o">{{o}}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="lineitem border-box mb10">
-              <div class="t-table">
-                <div class="t-cell title-cell w100 font14 v_middle">标题</div>
-                <div class="t-cell input-cell v_middle border1px" style="position:relative;">
-                  <x-input
-                    class="font14"
-                    placeholder="标题"
-                    :max="32"
-                    v-model="item.title">
-                  </x-input>
-                </div>
-              </div>
-            </div>
-            <div class="lineitem border-box mb10">
-              <div class="t-table">
-                <div class="t-cell title-cell w100 font14 v_top pt10">所在服务类目</div>
-                <div class="t-cell input-cell v_top" style="position:relative;">
-                  <div>
-                    <select style="height:35px;" v-model="item.first_id" @change="firstChange(item, index)">
-                      <option v-for="(c,cindex) in categoryArr" :value="c.id">{{c.title}}</option>
-                    </select>
-                    <select style="height:35px;" v-model="item.second_id">
-                      <option v-for="(sc,cindex) in item.second" :value="sc.id">{{sc.title}}</option>
-                    </select>
-                  </div>
-                  <div class="mt10" style="color:#9a9a9a;">功能页面和服务类目必须一一对应，且功能页面提供的内容必须符合该类目范围</div>
-                </div>
-              </div>
-            </div>
-            <div class="lineitem border-box mb10">
-              <div class="t-table">
-                <div class="t-cell title-cell w100 font14 v_top pt10">标签</div>
-                <div class="t-cell input-cell v_top">
-                  <x-input style="position:relative;"
-                    class="font14 border1px"
-                    placeholder="标签"
-                    :max="32"
-                    v-model="item.tags">
-                  </x-input>
-                  <div class="mt10" style="color:#9a9a9a;">标签用回车分开，填写与页面功能相关的标签，更容易被搜索</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="addarea" v-if="setArr.length <= 5">
-          <div class="btnadd flex_left" @click="addSetItem">
-            <span class="icon flex_center">+</span>
-            <span>添加功能页面</span>
-          </div>
-      </div>
-      </div>
-      <div class="pagebottom flex_center">
-        <div class="flex_cell flex_right pr10">
-          <div class="btn flex_center active" @click="censorEvent">提交审核</div>
-        </div>
-        <div class="flex_cell flex_left pl10">
-          <div class="btn flex_center" @click="closeSetModal">取消</div>
-        </div>
-      </div>
-    </div>
-  </div>
 </div>
 </template>
 
@@ -309,54 +226,29 @@ export default {
       isagree: false,
       btncss: '',
       allownext: false,
-      showConfirmModal: false,
-      showSetModal: false,
-      defaultSubmitData: {page: '', title: '', tags: '', first_id: null, second_id: null, second: []},
-      setArr: [{page: '', title: '', tags: '', first_id: null, second_id: null, second: []}],
-      pagesArr: [],
-      categoryArr: [],
-      secondCategoryObject: {},
-      secondCategoryArr: [],
-      selectedPage: ''
+      showConfirmModal: false
     }
   },
   methods: {
-    initBtn () {
+    initData () {
       this.showBtn1 = false
       this.showBtn2 = false
       this.showBtn3 = false
       this.showBtn4 = false
-    },
-    getCategory () {
-      self.$http.get(`${ENV.BokaApi}/api/open/getCategory`, {
-        params: {appid: self.appid}
-      }).then(function (res) {
-        const data = res.data
-        if (data.flag) {
-          const retdata = data.data
-          for (let i = 0; i < retdata.length; i++) {
-            const curd = retdata[i]
-            retdata[i].id = curd.first_id
-            retdata[i].title = curd.first_class
-            retdata[i].second = [{id: curd.second_id, title: curd.second_class}]
-            self.secondCategoryObject[curd.first_id] = [{id: curd.second_id, title: curd.second_class}]
-          }
-          self.secondCategoryArr = retdata[0].second
-          self.setArr[0].second = retdata[0].second
-          self.defaultSubmitData.second = retdata[0].second
-          self.categoryArr = retdata
-        }
-      })
-    },
-    getPages () {
-      self.$http.get(`${ENV.BokaApi}/api/open/getPages`, {
-        params: {appid: self.appid}
-      }).then(function (res) {
-        const data = res.data
-        if (data.flag) {
-          self.pagesArr = data.data
-        }
-      })
+      this.selectedIndex = 0
+      this.testerWechatId = ''
+      this.showPreview = false
+      this.previewQrcode = null
+      this.disPreview = false
+      this.censorData = null
+      this.disCensorData = false
+      this.developmentData = []
+      this.disDevelopmentData = false
+      this.appid = null
+      this.isagree = false
+      this.btncss = ''
+      this.allownext = false
+      this.showConfirmModal = false
     },
     bindUser () {
       if (self.$util.trim(self.testerWechatId) === '') {
@@ -429,69 +321,30 @@ export default {
     },
     nextEvent () {
       if (self.allownext) {
-        if (!self.categoryArr.length) {
-          self.getCategory()
-        }
-        if (!self.pagesArr.length) {
-          self.getPages()
-        }
-        self.showConfirmModal = false
-        self.showSetModal = true
-      }
-    },
-    closeSetModal () {
-      self.showSetModal = false
-    },
-    censorEvent () {
-      self.showSetModal = false
-      self.$vux.loading.hide()
-      self.$http.post(`${ENV.BokaApi}/api/open/submitAudit`, {
-        appid: self.appid, itemlist: self.setArr
-      }).then(function (res) {
-        self.$vux.loading.hide()
-        const data = res.data
-        self.$vux.toast.show({
-          text: data.error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error)
-        })
-      })
-    },
-    addSetItem () {
-      self.setArr.push(self.defaultSubmitData)
-    },
-    firstChange (item, index) {
-      self.setArr[index].second = self.secondCategoryObject[item.first_id]
-    },
-    clickBtn1 () {
-      if (this.showBtn1) {
-        this.initBtn()
-      } else {
-        this.initBtn()
-        this.showBtn1 = true
+        self.$router.push({path: '/wxOpen', query: {'auth_code': self.query.auth_code}})
       }
     },
     clickBtn2 () {
       if (this.showBtn2) {
-        this.initBtn()
+        this.initData()
       } else {
-        this.initBtn()
+        this.initData()
         this.showBtn2 = true
       }
     },
     clickBtn3 () {
       if (this.showBtn3) {
-        this.initBtn()
+        this.initData()
       } else {
-        this.initBtn()
+        this.initData()
         this.showBtn3 = true
       }
     },
     clickBtn4 () {
       if (this.showBtn4) {
-        this.initBtn()
+        this.initData()
       } else {
-        this.initBtn()
+        this.initData()
         this.showBtn4 = true
       }
     },
@@ -511,6 +364,7 @@ export default {
     },
     refresh () {
       const self = this
+      this.initData()
       this.query = this.$route.query
       self.$http.get(`${ENV.BokaApi}/api/open/getAuthAppId`, {
         params: {authcode: self.query.auth_code}
