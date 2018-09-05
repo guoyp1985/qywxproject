@@ -437,11 +437,15 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
-                  if (self.query.type === 'bargainbuy') {
-                    self.$refs.formBargainbuy.minprice = ''
-                    self.$refs.formBargainbuy.everymin = ''
-                    self.$refs.formBargainbuy.everymax = ''
+                  if (self.query.from === 'miniprogram') {
+                    self.$wechat.miniProgram.navigateTo({url: '/pages/contents'})
+                  } else {
+                    self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
+                    if (self.query.type === 'bargainbuy') {
+                      self.$refs.formBargainbuy.minprice = ''
+                      self.$refs.formBargainbuy.everymin = ''
+                      self.$refs.formBargainbuy.everymax = ''
+                    }
                   }
                 }
               }

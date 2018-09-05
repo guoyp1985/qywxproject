@@ -226,11 +226,15 @@ export default {
             onHide: function () {
               self.submitIng = false
               if (data.flag === 1) {
-                let params = { id: data.data }
-                if (self.query.id) {
-                  params.newadd = 1
+                if (self.query.from === 'miniprogram') {
+                  self.$wechat.miniProgram.navigateTo({url: '/pages/contents'})
+                } else {
+                  let params = { id: data.data }
+                  if (self.query.id) {
+                    params.newadd = 1
+                  }
+                  self.$router.push({ path: '/news', query: params })
                 }
-                self.$router.push({ path: '/news', query: params })
               }
             }
           })

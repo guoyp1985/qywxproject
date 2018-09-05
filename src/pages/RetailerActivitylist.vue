@@ -6,7 +6,11 @@
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
           <tab-item v-if="!tabdata1 || tabdata1.length == 0" :selected="true">创建活动</tab-item>
-          <tab-item v-else v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item
+            v-else
+            v-for="(item,index) in tabtxts"
+            :selected="(query.from != 'miniprogram' && index == 0) || (query.from == 'miniprogram' && index == 1)" 
+            :key="index">{{item}}</tab-item>
         </tab>
       </div>
       <div class="s-container" style="top:44px">
@@ -211,7 +215,7 @@ export default {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.openVip()
       } else {
-        this.$router.push({path: '/addActivity', query: {type: type}})
+        this.$router.push({path: '/addActivity', query: {type: type, from: this.query.from}})
       }
     },
     openVip () {

@@ -497,7 +497,9 @@ export default {
             onHide: function () {
               self.submitIng = false
               if (data.flag === 1) {
-                if (self.query.from === 'apply') {
+                if (self.query.from === 'miniprogram') {
+                  self.$wechat.miniProgram.navigateTo({url: '/pages/contents'})
+                } else if (self.query.from === 'apply') {
                   self.$router.push({path: '/centerSales'})
                 } else {
                   self.$router.push({ path: '/product', query: { id: data.data, newadd: 1 } })
