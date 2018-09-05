@@ -6,6 +6,7 @@ import Time from './time'
 import urlParse from 'url-parse'
 import { User, Roomid } from './storage'
 const Util = {}
+console.log(Vue)
 Util.install = function (Vue, options) {
   Vue.isPC = function () {
     const userAgentInfo = navigator.userAgent
