@@ -103,7 +103,7 @@ export default {
       self.afterApply = true
       self.$vux.loading.hide()
       if (self.query.from === 'miniprogram') {
-          self.$wechat.miniProgram.navigateTo({url: '/pages/index'})
+        self.$wechat.miniProgram.navigateTo({url: '/pages/index'})
       }
     },
     inCenter () {
