@@ -209,7 +209,7 @@ export default {
     }
   },
   activated () {
-    this.$wechat.miniProgram.navigateTo({url: '/path/to/page'})
+    this.$wechat.miniProgram.navigateTo({url: '/pages/index'})
     this.refresh()
   }
 }
