@@ -2,7 +2,10 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1)" :key="index">{{item}}</tab-item>
+        <tab-item
+          v-for="(item,index) in tabtxts"
+          :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1) || (query.from == 'miniprogram' && query.from_type != 'activity' && index == 1) || (query.from == 'miniprogram' && query.from_type == 'activity' && index == 0)" 
+          :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container" style="top:44px;">
