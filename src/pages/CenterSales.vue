@@ -209,7 +209,8 @@ export default {
     }
   },
   activated () {
-    this.$wechat.miniProgram.navigateTo({url: '/pages/index'})
+    console.log(this.$wechat)
+    this.$wechat.miniProgram.navigateTo({url: 'pages/index'})
     this.refresh()
   }
 }
