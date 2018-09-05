@@ -24,7 +24,7 @@ Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
-
+console.log(Vue.wechat)
 require('es6-promise').polyfill()
 
 const CancelToken = AjaxPlugin.$http.CancelToken
