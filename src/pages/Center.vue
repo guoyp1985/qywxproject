@@ -65,6 +65,7 @@ import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import Reg from '#/reg'
 import { Token, User } from '#/storage'
+import jWeixin from 'jweixin'
 
 let sellerBtn = [
   {
@@ -178,8 +179,14 @@ export default {
   },
   methods: {
     buttonClick (btn) {
+      console.log(btn)
       if (btn.link) {
-        this.$router.push({path: btn.link})
+        if (btn.link === '/centerSales') {
+          console.log(jWeixin)
+          jWeixin.miniProgram.navigateTo({url: '/pages/index'})
+        } else {
+          this.$router.push({path: btn.link})
+        }
       } else {
         btn.react.call(this)
       }
