@@ -12,7 +12,9 @@
           <div class="content-box">
               <div class="user-info pt10 pb5">
                 <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
-                  <div class="c_pic"><img :src="avatar"/></div>
+                  <div class="c_pic">
+                    <img :src="avatar" class="v_middle" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                  </div>
                 </router-link>
               </div>
               <div class="flex_center">

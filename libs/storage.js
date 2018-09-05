@@ -106,5 +106,20 @@ const Version = {
     }
   }
 }
+const VoiceAccess = {
+  set (access) {
+    localStorage.setItem('voiceAccess', access)
+  },
+  get () {
+    const res = localStorage.getItem('voiceAccess')
+    return (res === null || res === 'false') ? false : true
+  },
+  remove () {
+    const access = VoiceAccess.get()
+    if (access) {
+      localStorage.removeItem('voiceAccess')
+    }
+  }
+}
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess }

@@ -38,6 +38,7 @@
               </div>
             </div>
           </div>
+          <!--
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
@@ -46,9 +47,10 @@
               </div>
             </div>
           </div>
+        -->
           <div class="form-item bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Cover photo') }}</div>
+              <div class="t-cell title-cell w80 font14 v_middle">logo</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <div class="q_photolist align_left bg-white">
                   <template v-if="photoarr.length > 0">

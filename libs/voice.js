@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import Time from './time'
+import { VoiceAccess } from './storage'
+
 let switcher = true
 let time = null
 const Voice = {
+  wxTestRecord: function() {
+    Vue.wechat.startRecord()
+    Vue.wechat.stopRecord()
+  },
   wxVoiceRecord: function (callback) {
     if (!switcher) return
     switcher = false
@@ -95,8 +101,14 @@ const Voice = {
         // alert(res.checkResult.startRecord)
         // const checkResult = JSON.parse(res.checkResult)
         if (res.checkResult.startRecord) {
+          const access = VoiceAccess.get()
+          if (!access) {
+            Voice.wxTestRecord()
+            VoiceAccess.set(true)
+          }
           success && success(res.checkResult.startRecord)
         } else {
+          VoiceAccess.remove()
           fail && fail()
         }
       }
