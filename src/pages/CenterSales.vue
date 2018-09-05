@@ -102,6 +102,9 @@ export default {
       self.initContainer()
       self.afterApply = true
       self.$vux.loading.hide()
+      if (self.query.from === 'miniprogram') {
+          self.$wechat.miniProgram.navigateTo({url: '/pages/index'})
+      }
     },
     inCenter () {
       const self = this
@@ -209,8 +212,6 @@ export default {
     }
   },
   activated () {
-    console.log(this.$wechat)
-    this.$wechat.miniProgram.navigateTo({url: 'pages/index'})
     this.refresh()
   }
 }
