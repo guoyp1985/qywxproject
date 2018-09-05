@@ -210,6 +210,7 @@ export default {
     }
   },
   activated () {
+    console.log(jWeixin)
     jWeixin.miniProgram.navigateTo({url: '/pages/index'})
     this.refresh()
   }

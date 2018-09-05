@@ -1,4 +1,4 @@
-// import Vue from 'vue'
+import Vue from 'vue'
 import Reg from './reg'
 import ENV from 'env'
 import SHA1 from 'js-sha1'
