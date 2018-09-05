@@ -45,7 +45,7 @@ import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
 import { User } from '#/storage'
-import {jweixin} from 'jweixin'
+import jWeixin from 'jweixin'
 
 export default {
   components: {
@@ -210,8 +210,8 @@ export default {
     }
   },
   activated () {
+    jWeixin.miniProgram.navigateTo({url: '/pages/index'})
     this.refresh()
-    jweixin.miniProgram.navigateTo({url: '/pages/index'})
   }
 }
 </script>

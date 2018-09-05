@@ -57,9 +57,6 @@ import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
 import { User } from '#/storage'
 import ENV from 'env'
-import jWeixin from 'jweixin'
-
-console.log(jWeixin)
 
 export default {
   name: 'app',
