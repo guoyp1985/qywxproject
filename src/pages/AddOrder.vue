@@ -137,7 +137,7 @@
             <div class="popup-middle font14">
               <div class="scroll_list">
                 <template v-for="(item,index) in cardList">
-                  <template v-if="(payPrice - curOrder.postageNumber >= item.ordermoney) && (payPrice - curOrder.postageNumber - item.money - curOrder.rebate >= 0)">
+                  <template v-if="(cardPrice >= item.ordermoney) && (cardPrice - item.money - curOrder.rebate >= 0)">
                     <check-icon class="x-check-icon scroll_item padding10" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
                       <div class="t-table">
                         <div class="t-cell v_middle" style="color:inherit;">
@@ -236,10 +236,10 @@ export default {
       query: {},
       payPrice: '0.00',
       orderPrice: '0.00',
+      cardPrice: '0.00',
       postage: 0,
       selectaddress: null,
       orderdata: [],
-      // payprice: '0.00',
       showpopup: false,
       addressdata: [],
       submitdata: {
@@ -282,6 +282,7 @@ export default {
       this.showContainer = false
       this.query = {}
       this.payPrice = '0.00'
+      this.cardPrice = '0.00'
       this.selectaddress = null
       this.orderdata = []
       this.showpopup = false
@@ -316,6 +317,7 @@ export default {
           total += parseFloat(pd.special) * self.submitdata.quantity
         }
       }
+      self.cardPrice = total
       if (self.orderdata[0].postage) {
         total += parseFloat(self.orderdata[0].postage)
       }
@@ -411,6 +413,7 @@ export default {
           self.curOrder.postageNumber = parseFloat(self.curOrder.postage).toFixed(2)
           self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
           let total = 0
+          let total1 = 0
           for (let i = 0; i < self.orderdata.length; i++) {
             let order = self.orderdata[i]
             let postd = { shopinfo: [], content: '' }
@@ -420,6 +423,7 @@ export default {
               let p = { shopid: info.id, quantity: info.quantity }
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
+              total1 += parseFloat(info.special) * info.quantity
               if (self.query.activityid || info.fid > 0) {
                 self.allowCard = false
               } else {
@@ -431,6 +435,7 @@ export default {
             }
             self.postage = order.postage
           }
+          self.cardPrice = total1
           self.payPrice = total.toFixed(2)
           self.orderPrice = self.payPrice
           return self.$http.get(`${ENV.BokaApi}/api/user/address/list`)
