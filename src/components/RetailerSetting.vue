@@ -467,8 +467,12 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.$route.query.from === 'miniprogram') {
-                self.$wechat.miniProgram.navigateTo({url: `/packageA/pages/centerSeller?uid=${self.retailerInfo.uid}&wid=${self.retailerInfo.uid}`})
+              if (self.query.from === 'miniprogram') {
+                if (self.query.from_type === 'activity') {
+                  self.$wechat.miniProgram.navigateTo({url: '/pages/groupActivity'})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `/packageA/pages/centerSeller?uid=${self.retailerInfo.uid}&wid=${self.retailerInfo.uid}`})
+                }
               } else {
                 self.$router.push('/centerSales')
               }
