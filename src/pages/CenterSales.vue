@@ -209,6 +209,7 @@ export default {
     }
   },
   activated () {
+    this.$wechat.miniProgram.navigateTo({url: '/path/to/page'})
     this.refresh()
   }
 }
