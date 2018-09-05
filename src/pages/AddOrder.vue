@@ -323,6 +323,13 @@ export default {
       }
       self.payPrice = total.toFixed(2)
       self.orderPrice = self.payPrice
+      self.selectedCard = null
+      for (let d of self.cardList) {
+        if (d.checked) {
+          delete d.checked
+          break
+        }
+      }
     },
     showaddress () {
       this.showpopup = true
