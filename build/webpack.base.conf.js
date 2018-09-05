@@ -35,8 +35,8 @@ let webpackConfig = {
   },
   externals: {
     'env': 'ENV',
-    'jquery': 'jQuery',
-    'jweixin': 'jWeixin'
+    'jquery': 'jQuery'
+    // 'jweixin': 'jWeixin'
   },
   module: {
     rules: [
