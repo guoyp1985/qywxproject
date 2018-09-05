@@ -305,26 +305,27 @@ export default {
       }
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/verifyMobile`, {
-        params: { phone: self.$util.trim(self.submitdata.mobile) }
+        params: { phone: self.$util.trim(self.submitdata.mobile), type: 'apply' }
       }).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
+          type: data.flag ? 'success' : 'warn',
           time: self.$util.delay(data.error)
         })
         if (data.flag === 1) {
           self.verifyCode = data.data
+          self.showGetcode = false
+          self.timer = setInterval(function () {
+            self.timenum--
+            if (self.timenum === 0) {
+              clearInterval(self.timer)
+              self.showGetcode = true
+              self.timenum = 60
+            }
+          }, 1000)
         }
-        self.showGetcode = false
-        self.timer = setInterval(function () {
-          self.timenum--
-          if (self.timenum === 0) {
-            clearInterval(self.timer)
-            self.showGetcode = true
-            self.timenum = 60
-          }
-        }, 1000)
       })
     },
     clickagree () {
