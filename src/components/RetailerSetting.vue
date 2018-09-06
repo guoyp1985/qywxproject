@@ -4,7 +4,7 @@
       <tab v-model="selectedIndex" class="v-tab">
         <tab-item
           v-for="(item,index) in tabtxts"
-          :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1) || (query.from == 'miniprogram' && query.from_type != 'activity' && index == 1) || (query.from == 'miniprogram' && query.from_type == 'activity' && index == 0)" 
+          :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1) || (query.from == 'miniprogram' && query.from_type != 'activity' && index == 1) || (query.from == 'miniprogram' && query.from_type == 'activity' && index == 0)"
           :key="index">{{item}}</tab-item>
       </tab>
     </div>
@@ -512,7 +512,15 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
+              if (self.query.from === 'miniprogram') {
+                if (self.query.from_type === 'activity') {
+                  self.$wechat.miniProgram.navigateTo({url: '/pages/groupActivity'})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `/packageA/pages/centerSeller?uid=${self.retailerInfo.uid}&wid=${self.retailerInfo.uid}`})
+                }
+              } else {
+                self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
+              }
             }
           }
         })
