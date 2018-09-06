@@ -1,7 +1,7 @@
 <template>
   <div id="centersales" class="containerarea font14">
     <template v-if="loginUser">
-      <subscribe v-if="query.from != 'miniprogram' && loginUser.subscribe != 1"></subscribe>
+      <subscribe v-if="loginUser.subscribe != 1"></subscribe>
       <template v-else>
         <template v-if="afterApply">
           <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
