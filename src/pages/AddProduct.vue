@@ -483,6 +483,7 @@ export default {
         postdata.price = price
         postdata.oriprice = oriprice
         postdata.rebate = rebate
+        postdata.postage = postdata.postage.toString().replace(/,/g, '')
         self.$vux.loading.show()
         if (self.query.id) {
           postdata.id = self.query.id
