@@ -122,6 +122,7 @@ export default {
             }
           })
         } else {
+          self.$vux.loading.hide()
           self.initContainer()
           self.showSetting = true
           this.getData()
