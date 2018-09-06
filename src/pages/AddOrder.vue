@@ -319,7 +319,8 @@ export default {
       }
       self.cardPrice = total
       if (self.orderdata[0].postage) {
-        total += parseFloat(self.orderdata[0].postage)
+        let curpostage = self.orderdata[0].postage.replace(/,/g, '')
+        total += parseFloat(curpostage)
       }
       self.payPrice = total.toFixed(2)
       self.orderPrice = self.payPrice
@@ -417,7 +418,9 @@ export default {
           self.showContainer = true
           self.orderdata = data
           self.curOrder = self.orderdata[0]
-          self.curOrder.postageNumber = parseFloat(self.curOrder.postage).toFixed(2)
+
+          let curpostage = self.curOrder.postage.replace(/,/g, '')
+          self.curOrder.postageNumber = parseFloat(curpostage).toFixed(2)
           self.curOrder.rebate = parseFloat(self.curOrder.rebate).toFixed(2)
           let total = 0
           let total1 = 0
@@ -438,9 +441,9 @@ export default {
               }
             }
             if (order.postage) {
-              total += parseFloat(order.postage)
+              total += parseFloat(order.postage.replace(/,/g, ''))
             }
-            self.postage = order.postage
+            self.postage = parseFloat(order.postage.replace(/,/g, ''))
           }
           self.cardPrice = total1
           self.payPrice = total.toFixed(2)
