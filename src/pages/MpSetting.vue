@@ -332,7 +332,6 @@ export default {
       self.showConfirmModal = false
     },
     clickagree () {
-      const self = this
       if (self.isagree) {
         self.btncss = 'active'
         self.allownext = true
@@ -371,7 +370,6 @@ export default {
       }
     },
     uploadFile (item) {
-      const self = this
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/open/commitTemplate`, {
         appid: self.appid,
@@ -384,25 +382,9 @@ export default {
         })
       })
     },
-    refresh () {
-      const self = this
-      this.initData()
-      this.query = this.$route.query
-      self.$http.get(`${ENV.BokaApi}/api/open/getAuthAppId`, {
-        params: {authcode: self.query.auth_code}
-      }).then(function (res) {
-        let data = res.data
-        if (data.flag) {
-          self.appid = data.data
-          self.haveAppid = true
-          self.showContainer = true
-          return self.$http.get(`${ENV.BokaApi}/api/open/getAuthInfo`, {
-            params: {appid: self.appid}
-          })
-        } else {
-          self.haveAppid = false
-          self.showContainer = true
-        }
+    getAuthInfo () {
+      self.$http.get(`${ENV.BokaApi}/api/open/getAuthInfo`, {
+        params: {appid: self.appid}
       }).then(res => {
         if (res) {
           let data = res.data
@@ -410,6 +392,31 @@ export default {
         }
         self.disCensorData = true
       })
+    },
+    refresh () {
+      this.initData()
+      this.query = this.$route.query
+      self.appid = self.query.appid ? self.query.appid : null
+      if (self.appid) {
+        self.haveAppid = true
+        self.showContainer = true
+        self.getAuthInfo()
+      } else {
+        self.$http.get(`${ENV.BokaApi}/api/open/getAuthAppId`, {
+          params: {authcode: self.query.auth_code}
+        }).then(function (res) {
+          let data = res.data
+          if (data.flag) {
+            self.appid = data.data
+            self.haveAppid = true
+            self.showContainer = true
+            self.getAuthInfo()
+          } else {
+            self.haveAppid = false
+            self.showContainer = true
+          }
+        })
+      }
       self.$http.get(`${ENV.BokaApi}/api/open/getTemplates`).then(function (res) {
         let data = res.data
         self.developmentData = data.data ? data.data : data
