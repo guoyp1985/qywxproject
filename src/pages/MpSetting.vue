@@ -16,9 +16,9 @@
           <swiper-item>
             <div class="boxlist">
               <div class="boxitem">
-                <div class="title">审核版本</div>
+                <div class="title">在用版本</div>
                 <template v-if="disCensorData">
-                  <div v-if="!censorData" class="pt20 pb20 flex_left">暂无审核数据</div>
+                  <div v-if="!censorData" class="pt20 pb20 flex_left">暂无数据</div>
                   <div v-else class="scroll_list">
                     <div class="db-flex pb20 scroll_item">
                       <div class="col1">
@@ -48,10 +48,10 @@
                           <div class="flex_cell">{{censorData.code_desc}}</div>
                         </div>
                       </div>
-                      <!--
                       <div class="col3">
-                        <div class="btn">详情</div>
+                        <div class="btn db mt12" @click="submitCensor(censorData)">提交审核</div>
                       </div>
+                      <!--
                       <div class="col4">
                         <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
                         <div v-if="showBtn2" class="btnlayer">
@@ -100,7 +100,6 @@
                         <div class="btn">详情</div>
                       -->
                         <div class="btn db" @click="uploadFile(item)">上传代码</div>
-                        <div class="btn db mt12" @click="submitCensor(item)">提交审核</div>
                       </div>
                       <!--
                       <div class="col4">
