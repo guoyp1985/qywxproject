@@ -44,7 +44,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, Token } from '#/storage'
 
 export default {
   components: {
@@ -102,8 +102,10 @@ export default {
       self.initContainer()
       self.afterApply = true
       self.$vux.loading.hide()
+      console.log('after apply token')
+      console.log(Token.get())
       if (self.query.from === 'miniprogram') {
-        self.$wechat.miniProgram.navigateTo({url: '/pages/index'})
+        self.$wechat.miniProgram.navigateTo({url: `/pages/index?token=${Token.get()}`})
       }
     },
     inCenter () {
@@ -207,7 +209,19 @@ export default {
       self.showApply = false
     },
     refresh () {
+      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      console.log('before apply token')
+      console.log(Token.get())
+      if (this.$route.query.miniopenid && self.$route.query.appid) {
+        self.$http.get(`${ENV.BokaApi}/api/withMiniLogin`, {
+          params: {code: Token.get(), miniopenid: self.$route.query.miniopenid, appid: self.$route.query.appid}
+        }).then(function (res) {
+          if (res) {
+            Token.set(null)
+          }
+        })
+      }
       this.getData()
     }
   },
