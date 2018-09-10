@@ -210,8 +210,6 @@ const access = success => {
       res => {
         alert('after authUrl')
         alert(JSON.stringify(res))
-        MiniApp.removeOpenId()
-        MiniApp.removeAppId()
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
@@ -227,6 +225,11 @@ const access = success => {
         alert(lUrl.hash.replace(/#/, ''))
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        if (MiniApp.getOpenId() && MiniApp.getAppId()) {
+          MiniApp.removeOpenId()
+          MiniApp.removeAppId()
+          router.push({path: lUrl.hash.replace(/#/, '')})
+        }
         success && success(lUrl.hash.replace(/#/, ''))
       }
     )
