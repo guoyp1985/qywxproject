@@ -187,6 +187,8 @@ const access = success => {
   const state = lUrl.query.state
   alert('in access')
   alert(token)
+  alert(state)
+  alert(code)
   if (token && token !== '') {
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
