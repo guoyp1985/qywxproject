@@ -195,7 +195,7 @@ const access = success => {
       }
     )
   } else if (state === 'defaultAccess' && code) {
-    alert('defaultAccess')
+    alert('defaultAccess before authUrl')
     // 401授权，取得token
     let authUrl = `${ENV.BokaApi}/api/authLogin/${code}`
     let authParams = {}
@@ -203,6 +203,7 @@ const access = success => {
       authUrl = `${ENV.BokaApi}/api/withMiniLogin`
       authParams = {code: code, miniopenid: MiniApp.getOpenId(), appid: MiniApp.getAppId()}
     }
+    alert(authUrl)
     Vue.http.get(authUrl, {
       params: authParams
     }).then(
