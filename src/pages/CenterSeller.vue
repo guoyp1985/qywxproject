@@ -421,7 +421,7 @@ export default {
     },
     afterDelete (item, index) {
       this.timelineData.splice(index, 1)
-      let params = {pagestart: self.timelineData.length, limit: self.limit, type: 'retailer'}
+      let params = {pagestart: self.timelineData.length, limit: 1, type: 'retailer'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
