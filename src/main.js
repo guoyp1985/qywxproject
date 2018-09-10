@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access, MiniApp } from '#/storage'
+import { User, Version, Token, Access, MiniApp, AuthIng } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -167,8 +167,11 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     if (error.response.status === 401) {
-      console.error('未授权请求')
-      access()
+      if (!AuthIng.get()) {
+        AuthIng.set(true)
+        console.error('未授权请求')
+        access()
+      }
     }
   }
 })
@@ -204,6 +207,7 @@ const access = success => {
     }).then(
       res => {
         if (!res || !res.data || res.data.errcode) return
+        AuthIng.remove()
         Token.set(res.data.data)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -215,6 +219,10 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        let hashurl = lUrl.hash.replace(/#/, '')
+        if (hashurl.search('/login') > -1) {
+          hashurl = '/center'
+        }
         success && success(lUrl.hash.replace(/#/, ''))
         if (MiniApp.getOpenId() && MiniApp.getAppId()) {
           MiniApp.removeOpenId()
