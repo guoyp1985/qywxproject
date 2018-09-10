@@ -227,7 +227,8 @@ const access = success => {
         if (MiniApp.getOpenId() && MiniApp.getAppId()) {
           MiniApp.removeOpenId()
           MiniApp.removeAppId()
-          router.push({path: '/centerSales?from=miniprogram'})
+          let dt = new Date().getTime()
+          router.push({path: `/centerSales?from=miniprogram&_dt=${dt}`})
         }
       }
     )
