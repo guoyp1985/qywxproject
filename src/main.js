@@ -183,7 +183,6 @@ const access = success => {
   alert(lUrl)
   alert(code)
   if (token && token !== '') {
-    alert(1)
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     .then(
@@ -220,8 +219,11 @@ const access = success => {
     )
     .then(
       res => {
+        alert('user show')
+        alert(JSON.stringify(res))
         if (!res) return
         User.set(res.data)
+        alert(lUrl.hash.replace(/#/, ''))
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         success && success(lUrl.hash.replace(/#/, ''))
