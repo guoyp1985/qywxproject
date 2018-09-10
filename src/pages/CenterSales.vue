@@ -44,7 +44,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, Token, MiniApp } from '#/storage'
+import { User, Token, MiniApp, AuthIng } from '#/storage'
 
 export default {
   components: {
@@ -212,6 +212,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (self.$route.query.miniopenid && self.$route.query.appid) {
+        AuthIng.remove()
         MiniApp.setOpenId(self.$route.query.miniopenid)
         MiniApp.setAppId(self.$route.query.appid)
         Token.set({isExpired: null})
