@@ -121,5 +121,31 @@ const VoiceAccess = {
     }
   }
 }
+const MiniApp = {
+  setAppId (val) {
+    localStorage.setItem('miniAppId', val)
+  },
+  getAppId () {
+    return localStorage.getItem('miniAppId')
+  },
+  removeAppId () {
+    const data = MiniApp.getAppId()
+    if (data) {
+      localStorage.removeItem('miniAppId')
+    }
+  },
+  setOpenId (val) {
+    localStorage.setItem('miniOpenId', val)
+  },
+  getOpenId (val) {
+    return localStorage.getItem('miniOpenId')
+  },
+  removeOpenId () {
+    const data = MiniApp.getOpenId()
+    if (data) {
+      localStorage.removeItem('miniOpenId')
+    }
+  }
+}
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp }

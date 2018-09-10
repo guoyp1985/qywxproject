@@ -241,7 +241,7 @@ import TagPage from '@/components/TagPage'
 import CommentPopup from '@/components/CommentPopup'
 import ApplyTip from '@/components/ApplyTip'
 import SellerBottom from '@/components/SellerBottom'
-
+let self = {}
 export default {
   directives: {
     TransferDom
@@ -314,7 +314,6 @@ export default {
       return this.$util.emotPrase(text)
     },
     toChat () {
-      const self = this
       let params = { uid: self.query.uid }
       if (!self.query.uid) {
         params.uid = self.loginUser.uid
@@ -337,7 +336,6 @@ export default {
       this.tlData[index].clicked = !this.tlData[index].clicked
     },
     showBigimg (src, arr, index) {
-      const self = this
       if (self.$util.isPC()) {
         self.$refs.previewerPhoto.show(index)
       } else {
@@ -348,7 +346,6 @@ export default {
       }
     },
     showBigimg1 (src, arr, refname, index) {
-      const self = this
       if (self.$util.isPC()) {
         let view = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
         view.show(index)
@@ -363,7 +360,6 @@ export default {
       this.showTagPopup = false
     },
     deleteTimeline (item, index) {
-      const self = this
       self.tlData[index].clicked = false
       self.$vux.confirm.show({
         title: '确定要删除吗？',
@@ -374,18 +370,39 @@ export default {
           }).then(function (res) {
             self.$vux.loading.hide()
             self.tlData.splice(index, 1)
+            let params = {pagestart: self.tlData.length, limit: 1, type: 'retailer'}
+            if (self.query.uid) {
+              params.wid = self.query.uid
+            }
+            self.handlePageTimeline(params)
           })
         }
       })
     },
-    afterDelete (item, index) {
-      this.timelineData.splice(index, 1)
+    handlePageTimeline (params) {
+      self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          let photoarr = []
+          let photo = retdata[i].photo
+          if (photo && self.$util.trim(photo) !== '') {
+            photoarr = photo.split(',')
+          }
+          retdata[i].photoarr = photoarr
+          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
+          retdata[i].clicked = false
+          retdata[i].digmanstr = retdata[i].digman.join(',')
+        }
+        self.tlData = self.tlData.concat(retdata)
+        self.disTimeline = true
+      })
     },
     closeFriendsPopup () {
       this.showMoreFriends = false
     },
     getFriends () {
-      const self = this
       self.$http.post(`${ENV.BokaApi}/api/member/friendsCustomer`, {
         wid: self.query.uid ? self.query.uid : self.loginUser.uid, limit: 5000
       }).then(function (res) {
@@ -397,21 +414,23 @@ export default {
       })
     },
     moreFriends () {
-      const self = this
       this.showMoreFriends = true
       if (!self.friendsData.length) {
         self.getFriends()
       }
     },
-    getTimelineData (tagid) {
-      const self = this
-      let params = {pagestart: self.pageStart, limit: self.limit, type: 'retailer'}
+    afterDelete (item, index) {
+      this.timelineData.splice(index, 1)
+      let params = {pagestart: self.timelineData.length, limit: self.limit, type: 'retailer'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
       if (self.clickTagId && self.clickTagId !== '') {
         params.tagid = self.clickTagId
       }
+      self.handleTabTimeline(params)
+    },
+    handleTabTimeline (params) {
       self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
@@ -432,8 +451,17 @@ export default {
         self.showList = true
       })
     },
+    getTimelineData (tagid) {
+      let params = {pagestart: self.pageStart, limit: self.limit, type: 'retailer'}
+      if (self.query.uid) {
+        params.wid = self.query.uid
+      }
+      if (self.clickTagId && self.clickTagId !== '') {
+        params.tagid = self.clickTagId
+      }
+      self.handleTabTimeline(params)
+    },
     clickTag (tagitem) {
-      const self = this
       self.showTagPopup = true
       self.tagName = tagitem.title
       self.showList = false
@@ -443,7 +471,6 @@ export default {
       self.getTimelineData()
     },
     handleScrollTag (refname) {
-      const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
@@ -457,7 +484,6 @@ export default {
       })
     },
     clickDig (item, index) {
-      const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
       if (item.isdig) {
         url = `${ENV.BokaApi}/api/user/digs/delete`
@@ -517,7 +543,6 @@ export default {
       this.replyPopupShow = false
     },
     replySubmit (value) { // 回复提交
-      const self = this
       this.replyPopupShow = false
       let nid = 0
       if (this.commentModule === 'comments') {
@@ -552,32 +577,13 @@ export default {
       })
     },
     getTlData () {
-      const self = this
       let params = {pagestart: self.pageStart1, limit: self.limit, type: 'retailer'}
       if (self.query.uid) {
         params.wid = self.query.uid
       }
-      self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
-        self.$vux.loading.hide()
-        let data = res.data
-        let retdata = data.data ? data.data : data
-        for (let i = 0; i < retdata.length; i++) {
-          let photoarr = []
-          let photo = retdata[i].photo
-          if (photo && self.$util.trim(photo) !== '') {
-            photoarr = photo.split(',')
-          }
-          retdata[i].photoarr = photoarr
-          retdata[i].previewerPhoto = self.$util.previewerImgdata(photoarr)
-          retdata[i].clicked = false
-          retdata[i].digmanstr = retdata[i].digman.join(',')
-        }
-        self.tlData = self.tlData.concat(retdata)
-        self.disTimeline = true
-      })
+      self.handlePageTimeline(params)
     },
     handleScroll1 (refname) {
-      const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
@@ -591,7 +597,6 @@ export default {
       })
     },
     refresh () {
-      const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.replyPopupShow = false
       self.loginUser = User.get()
@@ -689,7 +694,7 @@ export default {
     }
   },
   activated () {
-    const self = this
+    self = this
     self.initData()
     this.refresh()
     window.onresize = function () {

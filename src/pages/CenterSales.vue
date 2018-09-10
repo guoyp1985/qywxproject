@@ -44,7 +44,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User, Token, MiniApp } from '#/storage'
 
 export default {
   components: {
@@ -105,7 +105,7 @@ export default {
       console.log('after apply token')
       console.log(Token.get())
       if (self.query.from === 'miniprogram') {
-        self.$wechat.miniProgram.navigateTo({url: `/pages/index?token=${Token.get()}`})
+        self.$wechat.miniProgram.navigateTo({url: `/pages/index?token=${Token.get().token}`})
       }
     },
     inCenter () {
@@ -211,16 +211,10 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      console.log('before apply token')
-      console.log(Token.get())
-      if (this.$route.query.miniopenid && self.$route.query.appid) {
-        self.$http.get(`${ENV.BokaApi}/api/withMiniLogin`, {
-          params: {code: Token.get(), miniopenid: self.$route.query.miniopenid, appid: self.$route.query.appid}
-        }).then(function (res) {
-          if (res) {
-            Token.set(null)
-          }
-        })
+      if (self.$route.query.miniopenid && self.$route.query.appid) {
+        MiniApp.setOpenId(self.$route.query.miniopenid)
+        MiniApp.setAppId(self.$route.query.appid)
+        Token.set({isExpired: null})
       }
       this.getData()
     }

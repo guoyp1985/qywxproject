@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access } from '#/storage'
+import { User, Version, Token, Access, MiniApp } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -144,10 +144,13 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
+    console.log('in interceptors')
+    console.log(token)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
+        alert(path)
         router.push({path: path})
       })
     } else {
@@ -191,9 +194,18 @@ const access = success => {
     )
   } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
-    .then(
+    let authUrl = `${ENV.BokaApi}/api/authLogin/${code}`
+    let authParams = {}
+    if (MiniApp.getOpenId() && MiniApp.getAppId()) {
+      authUrl = `${ENV.BokaApi}/api/withMiniLogin`
+      authParams = {code: code, miniopenid: MiniApp.getOpenId(), appid: MiniApp.getAppId()}
+    }
+    Vue.http.get(authUrl, {
+      params: authParams
+    }).then(
       res => {
+        MiniApp.removeOpenId()
+        MiniApp.removeAppId()
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
