@@ -150,7 +150,6 @@ Vue.http.interceptors.request.use(config => {
       // console.log(config.url)
       cancelAllPendings(config)
       access((path) => {
-        alert(path)
         router.push({path: path})
       })
     } else {
@@ -180,7 +179,11 @@ const access = success => {
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
   const state = lUrl.query.state
+  alert('in access lurl')
+  alert(lUrl)
+  alert(code)
   if (token && token !== '') {
+    alert(1)
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
     .then(
@@ -193,6 +196,7 @@ const access = success => {
       }
     )
   } else if (state === 'defaultAccess' && code) {
+    alert('defaultAccess')
     // 401授权，取得token
     let authUrl = `${ENV.BokaApi}/api/authLogin/${code}`
     let authParams = {}
@@ -204,6 +208,8 @@ const access = success => {
       params: authParams
     }).then(
       res => {
+        alert('after authUrl')
+        alert(JSON.stringify(res))
         MiniApp.removeOpenId()
         MiniApp.removeAppId()
         if (!res || !res.data || res.data.errcode) return
