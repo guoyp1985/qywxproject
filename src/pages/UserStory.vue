@@ -59,6 +59,7 @@ import SellerBottom from '@/components/SellerBottom'
 
 const limit = 10
 let pageStart = 0
+let self = {}
 
 export default {
   directives: {
@@ -109,7 +110,6 @@ export default {
       this.timelineCount = 0
     },
     toChat () {
-      const self = this
       let params = { uid: self.query.uid }
       if (!self.query.uid) {
         params.uid = self.loginUser.uid
@@ -130,9 +130,13 @@ export default {
     },
     afterDelete (item, index) {
       this.timelineData.splice(index, 1)
+      let params = {pagestart: self.timelineData.length, limit: 1, type: 'customer'}
+      if (self.query.uid) {
+        params.wid = self.query.uid
+      }
+      self.handlePageTimeline(params)
     },
     showBigimg (arr, index) {
-      const self = this
       if (self.$util.isPC()) {
         self.previewArr = self.$util.previewerImgdata(arr)
         self.$refs.previewer.show(index)
@@ -144,7 +148,6 @@ export default {
       }
     },
     handleScroll (refname) {
-      const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
@@ -157,12 +160,7 @@ export default {
         }
       })
     },
-    getTimelineData () {
-      const self = this
-      let params = {pagestart: pageStart, limit: limit, type: 'customer'}
-      if (self.query.uid) {
-        params.wid = self.query.uid
-      }
+    handlePageTimeline (params) {
       self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
@@ -184,8 +182,14 @@ export default {
         self.showList = true
       })
     },
+    getTimelineData () {
+      let params = {pagestart: pageStart, limit: limit, type: 'customer'}
+      if (self.query.uid) {
+        params.wid = self.query.uid
+      }
+      self.handlePageTimeline(params)
+    },
     refresh () {
-      const self = this
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.replyPopupShow = false
       self.loginUser = User.get()
@@ -212,6 +216,7 @@ export default {
     }
   },
   activated () {
+    self = this
     this.refresh()
   }
 }
