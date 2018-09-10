@@ -125,6 +125,7 @@ export default {
       const self = this
       self.query = self.$route.query
       self.$vux.loading.show()
+      alert('in sales get user')
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
         if (res) {
           if (res.status === 200) {
