@@ -211,6 +211,7 @@ export default {
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      alert('in centersales refresh')
       if (self.$route.query.miniopenid && self.$route.query.appid) {
         AuthIng.remove()
         MiniApp.setOpenId(self.$route.query.miniopenid)
