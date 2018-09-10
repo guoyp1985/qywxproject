@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access, MiniApp, AuthIng } from '#/storage'
+import { User, Version, Token, Access, MiniApp } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -167,15 +167,8 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     if (error.response.status === 401) {
-      alert('in 401')
-      alert(AuthIng.get())
-      // console.error('未授权请求')
-      // access()
-      if (!AuthIng.get()) {
-        AuthIng.set(true)
-        console.error('未授权请求')
-        access()
-      }
+      console.error('未授权请求')
+      access()
     }
   }
 })
@@ -223,7 +216,6 @@ const access = success => {
     .then(
       res => {
         if (!res) return
-        AuthIng.remove()
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)

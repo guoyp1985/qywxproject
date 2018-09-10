@@ -147,19 +147,5 @@ const MiniApp = {
     }
   }
 }
-const AuthIng = {
-  set (val) {
-    localStorage.setItem('authIng', val)
-  },
-  get () {
-    return localStorage.getItem('authIng')
-  },
-  remove () {
-    const data = AuthIng.get()
-    if (data) {
-      localStorage.removeItem('authIng')
-    }
-  }
-}
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AuthIng }
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp }
