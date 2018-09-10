@@ -223,14 +223,15 @@ const access = success => {
         if (!res) return
         User.set(res.data)
         alert(lUrl.hash.replace(/#/, ''))
+        alert('location.href=' + location.href)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        success && success(lUrl.hash.replace(/#/, ''))
         if (MiniApp.getOpenId() && MiniApp.getAppId()) {
           MiniApp.removeOpenId()
           MiniApp.removeAppId()
           router.push({path: lUrl.hash.replace(/#/, '')})
         }
-        success && success(lUrl.hash.replace(/#/, ''))
       }
     )
   } else {
