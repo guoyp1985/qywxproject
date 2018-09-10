@@ -179,9 +179,6 @@ const access = success => {
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
   const state = lUrl.query.state
-  alert('in access lurl')
-  alert(lUrl)
-  alert(code)
   if (token && token !== '') {
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -195,7 +192,6 @@ const access = success => {
       }
     )
   } else if (state === 'defaultAccess' && code) {
-    alert('defaultAccess before authUrl')
     // 401授权，取得token
     let authUrl = `${ENV.BokaApi}/api/authLogin/${code}`
     let authParams = {}
@@ -203,13 +199,10 @@ const access = success => {
       authUrl = `${ENV.BokaApi}/api/withMiniLogin`
       authParams = {code: code, miniopenid: MiniApp.getOpenId(), appid: MiniApp.getAppId()}
     }
-    alert(authUrl)
     Vue.http.get(authUrl, {
       params: authParams
     }).then(
       res => {
-        alert('after authUrl')
-        alert(JSON.stringify(res))
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
@@ -218,12 +211,8 @@ const access = success => {
     )
     .then(
       res => {
-        alert('user show')
-        alert(JSON.stringify(res))
         if (!res) return
         User.set(res.data)
-        alert(lUrl.hash.replace(/#/, ''))
-        alert('location.href=' + location.href)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         success && success(lUrl.hash.replace(/#/, ''))
