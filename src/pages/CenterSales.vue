@@ -212,6 +212,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (self.$route.query.miniopenid && self.$route.query.appid) {
+        alert('in apply')
         MiniApp.setOpenId(self.$route.query.miniopenid)
         MiniApp.setAppId(self.$route.query.appid)
         Token.set({isExpired: null})
