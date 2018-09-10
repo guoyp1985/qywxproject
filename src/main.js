@@ -230,7 +230,7 @@ const access = success => {
         if (MiniApp.getOpenId() && MiniApp.getAppId()) {
           MiniApp.removeOpenId()
           MiniApp.removeAppId()
-          router.push({path: lUrl.hash.replace(/#/, '')})
+          router.push({path: '/centerSales?from=miniprogram'})
         }
       }
     )
