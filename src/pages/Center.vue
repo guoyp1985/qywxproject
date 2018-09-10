@@ -64,7 +64,7 @@ import { Grid, GridItem, Group, Cell } from 'vux'
 import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import Reg from '#/reg'
-import { Token, User } from '#/storage'
+import { Token, User, MiniApp } from '#/storage'
 
 let sellerBtn = [
   {
@@ -243,6 +243,12 @@ export default {
   },
   activated () {
     this.refresh()
+    if (this.$route.query.miniopenid && this.$route.query.appid) {
+      alert('in center from miniapp')
+      MiniApp.setOpenId(this.$route.query.miniopenid)
+      MiniApp.setAppId(this.$route.query.appid)
+      Token.set({isExpired: null})
+    }
   }
 }
 </script>
