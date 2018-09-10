@@ -167,11 +167,13 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     if (error.response.status === 401) {
-      if (!AuthIng.get()) {
-        AuthIng.set(true)
-        console.error('未授权请求')
-        access()
-      }
+      console.error('未授权请求')
+      access()
+      // if (!AuthIng.get()) {
+      //   AuthIng.set(true)
+      //   console.error('未授权请求')
+      //   access()
+      // }
     }
   }
 })
