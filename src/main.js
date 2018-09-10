@@ -167,13 +167,14 @@ Vue.http.interceptors.response.use(response => {
 }, error => {
   if (error.response) {
     if (error.response.status === 401) {
-      console.error('未授权请求')
-      access()
-      // if (!AuthIng.get()) {
-      //   AuthIng.set(true)
-      //   console.error('未授权请求')
-      //   access()
-      // }
+      alert('in 401')
+      // console.error('未授权请求')
+      // access()
+      if (!AuthIng.get()) {
+        AuthIng.set(true)
+        console.error('未授权请求')
+        access()
+      }
     }
   }
 })
@@ -184,6 +185,8 @@ const access = success => {
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
   const state = lUrl.query.state
+  alert('in access')
+  alert(token)
   if (token && token !== '') {
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
