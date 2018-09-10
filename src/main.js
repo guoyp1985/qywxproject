@@ -179,10 +179,6 @@ const access = success => {
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
   const state = lUrl.query.state
-  alert('in access')
-  alert(token)
-  alert(state)
-  alert(code)
   if (token && token !== '') {
     Token.set({token: token, expired_at: expiredAt})
     Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -219,10 +215,6 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        let hashurl = lUrl.hash.replace(/#/, '')
-        if (hashurl.search('/login') > -1) {
-          hashurl = '/center'
-        }
         success && success(lUrl.hash.replace(/#/, ''))
         if (MiniApp.getOpenId() && MiniApp.getAppId()) {
           MiniApp.removeOpenId()
