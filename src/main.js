@@ -215,7 +215,6 @@ const access = success => {
     }).then(
       res => {
         if (!res || !res.data || res.data.errcode) return
-        AuthIng.remove()
         Token.set(res.data.data)
         // 取用户信息
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
@@ -224,6 +223,7 @@ const access = success => {
     .then(
       res => {
         if (!res) return
+        AuthIng.remove()
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
