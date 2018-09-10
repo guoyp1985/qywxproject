@@ -163,6 +163,7 @@ Vue.http.interceptors.request.use(config => {
 
 // 响应拦截器
 Vue.http.interceptors.response.use(response => {
+  alert(JSON.stringify(response))
   return response
 }, error => {
   if (error.response) {
