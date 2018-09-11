@@ -123,7 +123,6 @@ export default {
     },
     getData () {
       const self = this
-      self.query = self.$route.query
       self.$vux.loading.show()
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
         if (res) {
@@ -208,19 +207,24 @@ export default {
       self.showCenter = false
       self.showApply = false
     },
-    refresh () {
+    refresh (query) {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (self.$route.query.miniopenid && self.$route.query.appid) {
-        MiniApp.setOpenId(self.$route.query.miniopenid)
-        MiniApp.setAppId(self.$route.query.appid)
+      self.query = query
+      if (self.query.miniopenid && self.query.appid) {
+        MiniApp.setOpenId(self.query.miniopenid)
+        MiniApp.setAppId(self.query.appid)
         Token.set({isExpired: null})
       }
       this.getData()
     }
   },
   activated () {
-    this.refresh()
+    this.refresh(this.$route.query)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.refresh(to.query)
+    next && next()
   }
 }
 </script>
