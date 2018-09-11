@@ -25,7 +25,6 @@
 import { Token, User } from '#/storage'
 import ENV from 'env'
 let intervalId = 0
-let fromParams = {}
 export default {
   data () {
     return {
@@ -71,7 +70,6 @@ export default {
       )
     },
     refresh () {
-      console.log(this.$router)
       this.$vux.loading.hide()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.requestLogin()
@@ -79,12 +77,6 @@ export default {
   },
   activated () {
     this.refresh()
-  },
-  beforeRouteEnter (to, from, next) {
-    console.log(to)
-    console.log(from)
-    fromParams = from
-    next()
   }
 }
 </script>
