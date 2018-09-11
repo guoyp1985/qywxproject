@@ -105,7 +105,7 @@ export default {
       console.log('after apply token')
       console.log(Token.get())
       if (self.query.from === 'miniprogram') {
-        self.$wechat.miniProgram.redirectTo({url: `/pages/index?token=${Token.get().token}`})
+        self.$wechat.miniProgram.redirectTo({url: `/pages/index?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
       }
     },
     inCenter () {
