@@ -51,11 +51,7 @@ export default {
             self.$http.get(`${ENV.BokaApi}/api/user/show`)
             .then(res => {
               User.set(res.data)
-              if (!fromParams.name) {
-                self.$router.push('/center')
-              } else {
-                self.$router.go(-1)
-              }
+              self.$router.go(-1)
               self.$store.commit('updateToggleTabbar', {toggleTabbar: true})
               clearInterval(intervalId)
             })
@@ -85,6 +81,8 @@ export default {
     this.refresh()
   },
   beforeRouteEnter (to, from, next) {
+    console.log(to)
+    console.log(from)
     fromParams = from
     next()
   }
