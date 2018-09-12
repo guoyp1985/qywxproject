@@ -14,7 +14,7 @@
             <span class="vip-icon bg-gray color-white" v-if="retailerInfo.isretailer == 2" @click="onVip">VIP</span>
             <span class="vip-icon bg-orange color-white" v-if="retailerInfo.isretailer == 1" @click="onVip">VIP</span>
           </div>
-          <div class="font13 color-white mt5">{{ $t('Business tool') }}</div>
+          <div class="font13 color-white mt5">共销汇—{{ $t('Business tool') }}</div>
         </div>
       </div>
       <div class="font0" style="position:absolute;top:20px;right:14px;height:35px;">
