@@ -56,12 +56,12 @@
               </div>
               <div class="row2" v-if="(userInfo.slogan && userInfo.slogan != '') || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
-                <router-link v-if="(!userInfo.slogan || userInfo.slogan == '') && userInfo.uid == loginUser.uid" :to="{path:'/retailerSetting'}" class="color-gray">点击此处设置</router-link>
+                <router-link v-if="(!userInfo.slogan || userInfo.slogan == '') && userInfo.uid == loginUser.uid" :to="{path:'/retailerSetting',query:{from: 'seller'}}" class="color-gray">点击此处设置</router-link>
                 <span v-else class="v_middle" v-html="userInfo.slogan"></span>
               </div>
               <div class="row3" v-if="(userInfo.tags && userInfo.tags.length > 0) || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller tags')}}: </span>
-                <router-link v-if="!userInfo.tags.length" :to="{path:'/retailerSetting'}" class="color-gray">点击此处设置</router-link>
+                <router-link v-if="!userInfo.tags.length" :to="{path:'/retailerSetting',query:{from: 'seller'}}" class="color-gray">点击此处设置</router-link>
                 <div v-else class="taglist">
                   <div class="tagitem" @click="clickTag(item)" v-for="(item,index) in userInfo.tags">{{item.title}}({{item.timelines}})</div>
                 </div>
