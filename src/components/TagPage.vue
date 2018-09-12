@@ -138,7 +138,9 @@ export default {
     },
     afterDelete: Function,
     clickComment: Function,
-    cancelComment: Function
+    cancelComment: Function,
+    afterReply: Function,
+    afterDig: Function
   },
   directives: {
     TransferDom
@@ -178,7 +180,9 @@ export default {
             self.$vux.loading.hide()
             let data = res.data
             if (data.flag) {
-              self.afterDelete(item, index)
+              if (self.afterDelete) {
+                self.afterDelete(item, index)
+              }
             } else {
               self.$vux.toast.show({
                 text: data.error,
@@ -239,6 +243,9 @@ export default {
           self.timelineData[index].clicked = false
           self.timelineData[index].digman = item.digman
           self.timelineData[index].digmanstr = item.digman.join(',')
+          if (self.afterDig) {
+            self.afterDig(self.timelineData[index])
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -296,6 +303,9 @@ export default {
             } else {
               self.timelineData[self.commentIndex].comments[self.replyIndex].comment.push(data.data)
             }
+          }
+          if (self.afterReply) {
+            self.afterReply(self.timelineData[self.commentIndex])
           }
         } else {
           self.$vux.toast.show({

@@ -185,7 +185,9 @@
                 :show-list="showList"
                 :timeline-count="timelineCount"
                 :tag-name="tagName"
-                :after-delete="afterDelete">
+                :after-reply="afterTagReply"
+                :after-delete="afterDelete"
+                :after-dig="afterDig">
               </tag-page>
             </div>
             <div class="popup-bottom flex_center color-white" @click="closeTagPopup" style="background-color:#e51c23;">
@@ -375,6 +377,16 @@ export default {
               params.wid = self.query.uid
             }
             self.handlePageTimeline(params)
+            for (let i = 0; i < self.timelineData.length; i++) {
+              if (self.timelineData[i].id === item.id) {
+                self.timelineData.splice(i, 1)
+                self.handleTagTimelineData({
+                  pagestart: self.timelineData.length,
+                  limit: 1
+                })
+                break
+              }
+            }
           })
         }
       })
@@ -420,18 +432,31 @@ export default {
       }
     },
     afterDelete (item, index) {
-      this.timelineData.splice(index, 1)
-      let params = {pagestart: self.timelineData.length, limit: 1, type: 'retailer'}
+      self.timelineData.splice(index, 1)
+      self.handleTagTimeline({pagestart: self.timelineData.length, limit: 1})
+      for (let i = 0; i < self.tlData.length; i++) {
+        if (self.tlData[i].id === item.id) {
+          self.tlData.splice(i, 1)
+          self.handlePageTimeline({
+            pagestart: self.tlData.length,
+            limit: 1
+          })
+          break
+        }
+      }
+    },
+    handleTagTimeline (params) {
+      let getparams = {
+        ...params,
+        type: 'retailer'
+      }
       if (self.query.uid) {
-        params.wid = self.query.uid
+        getparams.wid = self.query.uid
       }
       if (self.clickTagId && self.clickTagId !== '') {
-        params.tagid = self.clickTagId
+        getparams.tagid = self.clickTagId
       }
-      self.handleTabTimeline(params)
-    },
-    handleTabTimeline (params) {
-      self.$http.post(`${ENV.BokaApi}/api/timeline/list`, params).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/timeline/list`, getparams).then(function (res) {
         self.$vux.loading.hide()
         let data = res.data
         let retdata = data.data ? data.data : data
@@ -452,14 +477,7 @@ export default {
       })
     },
     getTimelineData (tagid) {
-      let params = {pagestart: self.pageStart, limit: self.limit, type: 'retailer'}
-      if (self.query.uid) {
-        params.wid = self.query.uid
-      }
-      if (self.clickTagId && self.clickTagId !== '') {
-        params.tagid = self.clickTagId
-      }
-      self.handleTabTimeline(params)
+      self.handleTagTimeline({pagestart: self.pageStart, limit: self.limit})
     },
     clickTag (tagitem) {
       self.showTagPopup = true
@@ -513,6 +531,12 @@ export default {
           self.tlData[index].clicked = false
           self.tlData[index].digman = item.digman
           self.tlData[index].digmanstr = item.digman.join(',')
+          let updateData = self.tlData[index]
+          for (let i = 0; i < self.timelineData.length; i++) {
+            if (self.timelineData[i].id === updateData.id) {
+              self.timelineData[i] = updateData
+            }
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -567,6 +591,12 @@ export default {
               self.tlData[self.commentIndex].comments[self.replyIndex].comment.push(data.data)
             }
           }
+          const updateData = self.tlData[self.commentIndex]
+          for (let i = 0; i < self.timelineData.length; i++) {
+            if (self.timelineData[i].id === updateData.id) {
+              self.timelineData[i].comments = updateData.comments
+            }
+          }
         } else {
           self.$vux.toast.show({
             text: data.error,
@@ -575,6 +605,20 @@ export default {
           })
         }
       })
+    },
+    afterTagReply (updateData) {
+      for (let i = 0; i < self.tlData.length; i++) {
+        if (self.tlData[i].id === updateData.id) {
+          self.tlData[i].comments = updateData.comments
+        }
+      }
+    },
+    afterDig (updateData) {
+      for (let i = 0; i < self.tlData.length; i++) {
+        if (self.tlData[i].id === updateData.id) {
+          self.tlData[i] = updateData
+        }
+      }
     },
     getTlData () {
       let params = {pagestart: self.pageStart1, limit: self.limit, type: 'retailer'}
