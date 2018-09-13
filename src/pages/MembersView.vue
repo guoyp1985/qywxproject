@@ -15,7 +15,8 @@
           <div class="font16 clamp1">{{ viewuser.linkman }}</div>
           <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
         </div>
-        <router-link :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
+        <div v-if="loginUser.subscribe != 1" class="qbtn7 font14 bg-white color-red5" @click="toSubscribe">联系</div>
+        <router-link v-else :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       </div>
       <div class="s-container">
         <div class="list-shadow">
@@ -135,6 +136,16 @@
           </group>
         </popup>
       </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showSubscribe" height="100%">
+          <div class="popup1 font14">
+            <div class="popup-middle" style="top:0;">
+              <subscribe></subscribe>
+            </div>
+            <div class="popup-bottom flex_center bg-gray color-white" @click="closeSubscribe">{{ $t('Close') }}</div>
+          </div>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -193,7 +204,8 @@ export default {
         { key: 1, value: '低' },
         { key: 2, value: '中' },
         { key: 3, value: '高' }
-      ]
+      ],
+      showSubscribe: false
     }
   },
   watch: {
@@ -433,6 +445,12 @@ export default {
           this.getData()
         }
       }
+    },
+    toSubscribe () {
+      this.showSubscribe = true
+    },
+    closeSubscribe () {
+      this.showSubscribe = false
     }
   },
   activated () {
