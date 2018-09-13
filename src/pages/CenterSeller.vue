@@ -167,7 +167,7 @@
           </div>
         </div>
       </div>
-      <seller-bottom :query="query" :login-user="loginUser" active-name="home"></seller-bottom>
+      <seller-bottom :query="query" :login-user="loginUser" active-name="home" :show-store="showStore"></seller-bottom>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showTagPopup" height="100%">
           <div class="popup1 tagpopup">
@@ -293,7 +293,8 @@ export default {
       friendsData: [],
       commentTitle: '评论',
       replyTitle: '回复',
-      disCommentTitle: '评论'
+      disCommentTitle: '评论',
+      showStore: false
     }
   },
   methods: {
@@ -718,6 +719,15 @@ export default {
           if (self.focusData.length < 15) {
             self.friendsData = self.focusData
           }
+        }
+        return self.$http.post(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=1`)
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (retdata.length) {
+          self.showStore = true
+        } else {
+          self.showStore = false
         }
       })
     },

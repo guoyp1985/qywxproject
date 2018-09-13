@@ -42,7 +42,7 @@
         :cancel-comment="cancelComment">
       </tag-page>
     </div>
-    <seller-bottom :query="query" :login-user="loginUser"  active-name="story"></seller-bottom>
+    <seller-bottom :query="query" :login-user="loginUser"  active-name="story" :show-store="showStore"></seller-bottom>
   </div>
 </template>
 
@@ -90,7 +90,8 @@ export default {
       replyData: null,
       replyIndex: 0,
       commentModule: 'timeline',
-      topcss: ''
+      topcss: '',
+      showStore: false
     }
   },
   methods: {
@@ -210,6 +211,15 @@ export default {
             let data = res.data
             self.userInfo = data.data ? data.data : data
             self.getTimelineData()
+          }
+          return self.$http.post(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=1`)
+        }).then(res => {
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          if (retdata.length) {
+            self.showStore = true
+          } else {
+            self.showStore = false
           }
         })
       }

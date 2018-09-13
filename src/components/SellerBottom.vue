@@ -13,7 +13,7 @@
         <div class="txt">促销</div>
       </div>
     </router-link>
-    <router-link :to="{path: '/store', query: {wid: query.uid}}" class="flex_center flex_cell item ">
+    <router-link v-if="showStore" :to="{path: '/store', query: {wid: query.uid}}" class="flex_center flex_cell item ">
       <div class="inner">
         <div class="tet">
           <div class="radius-icon">
@@ -48,6 +48,10 @@ export default {
     activeName: {
       type: String,
       default: ''
+    },
+    showStore: {
+      type: Boolean,
+      default: false
     }
   }
 }
