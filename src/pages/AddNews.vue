@@ -1,6 +1,6 @@
 <template>
   <div id="article-info-edit" class="font14 containerarea notop">
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagemiddle">

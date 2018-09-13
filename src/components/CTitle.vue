@@ -37,13 +37,11 @@
             <div class="head_banner mt5"></div>
         </div>
       </div>
-      <div class="message-btn">
-        <router-link :to="{ name: 'tMessages', params: { profile: profile } }">
-          <span class="al al-xiaoxi1 color-white font22"></span>
-          <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
-          <span class="msg-badge" v-if="messages >= 100">···</span>
-        </router-link>
-      </div>
+      <router-link class="message-btn" :to="{ name: 'tMessages', params: { profile: profile } }">
+        <span class="al al-xiaoxi1 color-white font22"></span>
+        <span class="msg-badge" v-if="messages > 0 && messages < 100">{{messages}}</span>
+        <span class="msg-badge" v-if="messages >= 100">···</span>
+      </router-link>
     </div>
   </div>
 </template>

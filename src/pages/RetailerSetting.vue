@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14">
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <template v-if="showSetting">
       <retailer-setting
         ref="retailerSetting"
