@@ -488,7 +488,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.loginUser && this.loginUser.subscribe === 1) {
+      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         this.initData()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {

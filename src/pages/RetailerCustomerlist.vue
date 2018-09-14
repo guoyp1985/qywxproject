@@ -614,7 +614,7 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.loginUser && this.loginUser.subscribe === 1) {
+      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
         //   self.$vux.loading.hide()

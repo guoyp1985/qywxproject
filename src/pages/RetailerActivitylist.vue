@@ -9,7 +9,7 @@
           <tab-item
             v-else
             v-for="(item,index) in tabtxts"
-            :selected="(query.from != 'miniprogram' && index == 0) || (query.from == 'miniprogram' && index == 1)" 
+            :selected="(query.from != 'miniprogram' && index == 0) || (query.from == 'miniprogram' && index == 1)"
             :key="index">{{item}}</tab-item>
         </tab>
       </div>
@@ -304,7 +304,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && this.loginUser.subscribe === 1) {
+      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
         //   self.$vux.loading.hide()
