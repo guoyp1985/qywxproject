@@ -288,6 +288,8 @@ export default {
           }
           break
         case 1:
+          let curArea = this.$refs.urlTextarea[0] ? this.$refs.urlTextarea[0] : this.$refs.urlTextarea
+          curArea.updateAutosize()
           if (this.newsdata.length < this.limit) {
             this.pagestart = 0
             this.disNewslist = false
@@ -397,6 +399,10 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      if (self.selectedIndex === 1) {
+        let curArea = self.$refs.urlTextarea[0] ? self.$refs.urlTextarea[0] : self.$refs.urlTextarea
+        curArea.updateAutosize()
+      }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
