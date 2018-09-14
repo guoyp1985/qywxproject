@@ -370,6 +370,7 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
+                self.collecturl = ''
                 self.$router.push({path: '/news', query: {id: data.data.id}})
               }
             }
