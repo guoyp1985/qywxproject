@@ -222,10 +222,10 @@ export default {
     },
     miniPost () {
       const self = this
-      this.$wechat.miniProgram.postMessage({token: Token.get()})
+      this.$wechat.miniProgram.postMessage({data: 'From Web'})
       this.$wechat.miniProgram.getEnv(res => {
         if (res.miniprogram) {
-          self.$wechat.miniProgram.postMessage({token: Token.get()})
+          self.$wechat.miniProgram.postMessage({data: {token: Token.get()}})
         }
       })
     }
