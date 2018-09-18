@@ -221,6 +221,7 @@ export default {
     miniPost () {
       console.log(this.$wechat)
       this.$wechat.miniProgram.getEnv(res => {
+        console.log(res)
         if (res.miniprogram) {
           this.$wechat.miniProgram.postMessage({token: Token.get()})
         }
