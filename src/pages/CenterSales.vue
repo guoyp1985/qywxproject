@@ -211,9 +211,9 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.query = query
-      if (self.query.miniopenid && self.query.appid) {
+      if (self.query.miniopenid && self.query.miniappid) {
         MiniApp.setOpenId(self.query.miniopenid)
-        MiniApp.setAppId(self.query.appid)
+        MiniApp.setAppId(self.query.miniappid)
         Token.set({isExpired: null})
       }
       this.getData()
