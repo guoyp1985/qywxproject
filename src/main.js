@@ -183,7 +183,7 @@ const access = success => {
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
       const originHref = encodeURIComponent(location.href)
-      // 小程序web-view内微信授权
+      // 小程序web-view内授权
       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
     } else if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
@@ -216,16 +216,16 @@ const access = success => {
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         success && success(lUrl.hash.replace(/#/, ''))
+        // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
+        //   MiniApp.removeOpenId()
+        //   MiniApp.removeAppId()
+        //   let dt = new Date().getTime()
+        //   router.push({path: `/centerSales?from=miniprogram&_dt=${dt}`})
+        // }
       }
     )
   } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
-    // let authUrl = `${ENV.BokaApi}/api/authLogin/${code}`
-    // let authParams = {}
-    // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
-    //   authUrl = `${ENV.BokaApi}/api/withMiniLogin`
-    //   authParams = {code: code, miniopenid: MiniApp.getOpenId(), appid: MiniApp.getAppId()}
-    // }
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
     .then(
       res => {
@@ -242,12 +242,6 @@ const access = success => {
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         success && success(lUrl.hash.replace(/#/, ''))
-        // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
-        //   MiniApp.removeOpenId()
-        //   MiniApp.removeAppId()
-        //   let dt = new Date().getTime()
-        //   router.push({path: `/centerSales?from=miniprogram&_dt=${dt}`})
-        // }
       }
     )
   } else {

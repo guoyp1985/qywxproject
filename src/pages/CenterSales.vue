@@ -211,9 +211,9 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.query = query
-      if (self.query.miniopenid && self.query.appid) {
+      if (self.query.miniopenid && self.query.miniappid) {
         MiniApp.setOpenId(self.query.miniopenid)
-        MiniApp.setAppId(self.query.appid)
+        MiniApp.setAppId(self.query.miniappid)
         Token.set({isExpired: null})
       }
       this.getData()
@@ -221,10 +221,18 @@ export default {
   },
   activated () {
     this.refresh(this.$route.query)
+    this.miniPost()
   },
   beforeRouteUpdate (to, from, next) {
     this.refresh(to.query)
     next && next()
+  },
+  miniPost () {
+    this.$wechat.getEnv(res => {
+      if (res.miniprogram) {
+        this.$wechat.postMessage({token: Token.get()})
+      }
+    })
   }
 }
 </script>

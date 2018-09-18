@@ -16,6 +16,15 @@
           <swiper-item>
             <div class="boxlist">
               <div class="boxitem">
+                <div class="title">厂商</div>
+                <template v-if="disFactory">
+                  <div v-if="haveFactory" class="pt20 pb20 flex_left">{{factory.title}}</div>
+                  <div v-else class="flex_right pr10">
+                    <div class="btn db" style="width:102px;" @click="showFactoryPopup">选择厂商</div>
+                  </div>
+                </template>
+              </div>
+              <div class="boxitem">
                 <div class="title">在用版本</div>
                 <template v-if="disCensorData">
                   <div v-if="!censorData" class="pt20 pb20 flex_left">暂无数据</div>
@@ -25,20 +34,9 @@
                         <div>
                           <div class="gray">版本号</div>
                           <div class="font22">{{censorData.code_ver}}</div>
-                          <!--
-                          <div>
-                            <div class="btn1">审核不通过</div>
-                          </div>
-                        -->
                         </div>
                       </div>
                       <div class="col2 flex_cell">
-                        <!--
-                        <div class="flex_left">
-                          <div class="gray w100">开发者</div>
-                          <div class="flex_cell">{{censorData.user_name}}</div>
-                        </div>
-                      -->
                         <div class="flex_left">
                           <div class="gray w100">提交审核时间</div>
                           <div class="flex_cell">{{censorData.code_uploadtime | dateFormat}}</div>
@@ -51,14 +49,6 @@
                       <div class="col3">
                         <div class="btn db mt12" @click="submitCensor(censorData)">提交审核</div>
                       </div>
-                      <!--
-                      <div class="col4">
-                        <div class="btn" @click="clickBtn2"><i class="al al-jiantou_down"></i></div>
-                        <div v-if="showBtn2" class="btnlayer">
-                          <div class="item">撤回审核</div>
-                        </div>
-                      </div>
-                    -->
                     </div>
                   </div>
                 </template>
@@ -96,20 +86,8 @@
                         </div>
                       </div>
                       <div class="col3">
-                        <!--
-                        <div class="btn">详情</div>
-                      -->
                         <div class="btn db" @click="uploadFile(item)">上传代码</div>
                       </div>
-                      <!--
-                      <div class="col4">
-                        <div class="btn" @click="clickBtn3"><i class="al al-jiantou_down"></i></div>
-                        <div v-if="showBtn3" class="btnlayer">
-                          <div class="item">选为体验版本</div>
-                          <div class="item">删除</div>
-                        </div>
-                      </div>
-                    -->
                     </div>
                   </div>
                 </template>
@@ -194,20 +172,50 @@
       </div>
     </div>
   </div>
+  <div v-transfer-dom class="x-popup">
+    <popup v-model="showFactory" height="100%">
+      <div class="popup1">
+        <div class="popup-top flex_center">选择厂商</div>
+        <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
+          <div class="scroll_list" v-if="disFactoryList">
+            <div v-if="!factoryData || !factoryData.length" class="scroll_item padding10 color-gray align_center">
+              <div class="flex_center" style="height:80px;">暂无厂商数据</div>
+            </div>
+            <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in factoryData" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
+              <div class="t-table">
+                <div class="t-cell pic v_middle w50">
+                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" style="width:40px;height:40px;" />
+                </div>
+                <div class="t-cell v_middle" style="color:inherit;">
+                  <div class="clamp1">{{item.title}}</div>
+                </div>
+              </div>
+            </check-icon>
+          </div>
+        </div>
+        <div class="popup-bottom flex_center">
+          <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeFactoryPopup">{{ $t('Close') }}</div>
+          <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmFactoryPopup">{{ $t('Confirm txt') }}</div>
+        </div>
+      </div>
+    </popup>
+  </div>
 </div>
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XInput } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XInput, Search, Radio } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 let self = {}
+let pageStart1 = 0
+let limit = 20
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon, XInput
+    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon, XInput, Search, Radio
   },
   filters: {
     dateFormat: function (value) {
@@ -236,7 +244,14 @@ export default {
       allownext: false,
       showConfirmModal: false,
       showContainer: false,
-      haveAppid: false
+      haveAppid: false,
+      disFactory: false,
+      haveFactory: false,
+      factory: {},
+      showFactory: false,
+      factoryData: [],
+      disFactoryList: false,
+      selectedFactory: null
     }
   },
   methods: {
@@ -261,6 +276,11 @@ export default {
       this.btncss = ''
       this.allownext = false
       this.showConfirmModal = false
+      this.factory = {}
+      this.showFactory = false
+      pageStart1 = 0
+      this.factoryData = []
+      this.disFactoryList = false
     },
     bindUser () {
       if (self.$util.trim(self.testerWechatId) === '') {
@@ -344,29 +364,75 @@ export default {
         self.$router.push({path: '/wxOpen', query: {'auth_code': self.query.auth_code}})
       }
     },
-    clickBtn2 () {
-      if (this.showBtn2) {
-        this.initData()
-      } else {
-        this.initData()
-        this.showBtn2 = true
+    showFactoryPopup () {
+      this.showFactory = true
+      if (!this.factoryData.length) {
+        this.getFactory()
       }
     },
-    clickBtn3 () {
-      if (this.showBtn3) {
-        this.initData()
-      } else {
-        this.initData()
-        this.showBtn3 = true
-      }
+    closeFactoryPopup () {
+      this.showFactory = false
     },
-    clickBtn4 () {
-      if (this.showBtn4) {
-        this.initData()
-      } else {
-        this.initData()
-        this.showBtn4 = true
+    radioclick (item, index) {
+      this.selectedFactory = item
+      for (let i = 0; i < this.factoryData.length; i++) {
+        if (this.factoryData[i].id !== item.id) {
+          delete this.factoryData[i].checked
+        }
       }
+      console.log(this.selectedFactory)
+    },
+    confirmFactoryPopup () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/open/bindFactory`, {
+        appid: this.appid,
+        fid: this.selectedFactory.id
+      }).then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag) {
+              self.factory.id = self.selectedFactory.id
+              self.factory.title = self.selectedFactory.title
+              self.haveFactory = true
+              console.log(self.factory)
+            }
+          }
+        })
+        this.showFactory = false
+      })
+    },
+    getFactory () {
+      const self = this
+      const params = { pagestart: pageStart1, limit: limit }
+      this.$http.get(`${ENV.BokaApi}/api/factory/list`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.factoryData = self.factoryData.concat(retdata)
+        self.disFactoryList = true
+      })
+    },
+    handleScroll: function (refname, index) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.factoryData.length === (pageStart1 + 1) * limit) {
+            pageStart1++
+            self.$vux.loading.show()
+            self.getFactory()
+          }
+        }
+      })
     },
     uploadFile (item) {
       self.$vux.loading.show()
@@ -388,6 +454,14 @@ export default {
         if (res) {
           let data = res.data
           self.censorData = data.data ? data.data : data
+          self.factory.id = self.censorData.fid
+          self.factory.title = self.censorData.factoryname
+          if (self.factory.id > 0) {
+            self.haveFactory = true
+          } else {
+            self.haveFactory = false
+          }
+          self.disFactory = true
         }
         self.disCensorData = true
       })
