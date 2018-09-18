@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access, MiniApp } from '#/storage'
+import { User, Version, Token, Access } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -183,8 +183,8 @@ const access = success => {
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
       const originHref = encodeURIComponent(location.href)
-      // 微信授权
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}&#wechat_redirect`)
+      // 小程序web-view内微信授权
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
     } else if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
       Vue.http.get(`${ENV.BokaApi}/api/user/show`)
