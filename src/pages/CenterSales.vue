@@ -142,6 +142,7 @@ export default {
               if (self.loginUser.isretailer === 0) {
                 self.initContainer()
                 self.showApply = true
+                document.title = '申请卖家'
                 self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
                   { params: { limit: 100 } }
                 ).then(function (res) {
@@ -206,6 +207,7 @@ export default {
       const self = this
       self.showCenter = false
       self.showApply = false
+      document.title = '卖家中心'
     },
     refresh (query) {
       const self = this
