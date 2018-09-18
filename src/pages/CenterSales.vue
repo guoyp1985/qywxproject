@@ -217,6 +217,13 @@ export default {
         Token.set({isExpired: null})
       }
       this.getData()
+    },
+    miniPost () {
+      this.$wechat.getEnv(res => {
+        if (res.miniprogram) {
+          this.$wechat.postMessage({token: Token.get()})
+        }
+      })
     }
   },
   activated () {
@@ -226,13 +233,6 @@ export default {
   beforeRouteUpdate (to, from, next) {
     this.refresh(to.query)
     next && next()
-  },
-  miniPost () {
-    this.$wechat.getEnv(res => {
-      if (res.miniprogram) {
-        this.$wechat.postMessage({token: Token.get()})
-      }
-    })
   }
 }
 </script>
