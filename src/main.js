@@ -172,7 +172,18 @@ Vue.http.interceptors.response.use(response => {
 })
 
 const access = success => {
-  const lUrl = urlParse(location.href, true)
+  let query = ''
+  const url = location.href
+              .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+                query = p3
+                return `${p1}?${p3}${p2}` // '$1?$3$2'
+              })
+              .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+                query = p3
+                return `${p1}&${p3}${p2}` // '$1&$3$2'
+              })
+  console.log(url)
+  const lUrl = urlParse(url, true)
   const token = lUrl.query.token
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
@@ -180,6 +191,8 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
+  console.log(lUrl)
+  console.log(from)
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
       const originHref = encodeURIComponent(location.href)
@@ -194,7 +207,8 @@ const access = success => {
          User.set(res.data)
          // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-         router.push(lUrl.hash.replace(/#/, ''))
+         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+         router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
        }
       )
     }
@@ -203,6 +217,7 @@ const access = success => {
     Vue.http.get(`${ENV.BokaApi}/api/withMiniLogin`, {params: params})
     .then(
       res => {
+        console.log(res)
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
@@ -215,7 +230,8 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        success && success(lUrl.hash.replace(/#/, ''))
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
         // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
         //   MiniApp.removeOpenId()
         //   MiniApp.removeAppId()
@@ -241,7 +257,8 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        success && success(lUrl.hash.replace(/#/, ''))
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
       }
     )
   } else {

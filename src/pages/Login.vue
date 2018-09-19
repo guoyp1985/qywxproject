@@ -38,6 +38,7 @@ export default {
   methods: {
     polling () {
       const self = this
+      clearInterval(intervalId)
       intervalId = setInterval(() => {
         self.$http.get(`${ENV.BokaApi}/api/scanlogin/${this.qrCode.verifycode}`)
         .then(res => {
