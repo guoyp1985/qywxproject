@@ -20,7 +20,7 @@
               </div>
             </div>
             <div class="btn-cell">
-              <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系TA</router-link>
+              <router-link :to="{path: '/chat', query: {uid: userInfo.uid}}" class="btn">联系</router-link>
             </div>
           </div>
           <div class="row3">

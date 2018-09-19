@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div class="btn-cell">
-                  <div  @click="toChat" class="btn">联系TA</div>
+                  <div  @click="toChat" class="btn">联系</div>
                 </div>
               </div>
               <div class="row2" v-if="(userInfo.slogan && userInfo.slogan != '') || userInfo.uid == loginUser.uid">
