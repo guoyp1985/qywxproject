@@ -207,6 +207,7 @@ const access = success => {
          User.set(res.data)
          // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
          router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
        }
       )
@@ -229,6 +230,7 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
         router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
         // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
         //   MiniApp.removeOpenId()
@@ -255,6 +257,7 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
       }
     )
