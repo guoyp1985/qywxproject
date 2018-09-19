@@ -231,7 +231,8 @@ const access = success => {
       const originHref = encodeURIComponent(redirectUri)
       console.log(originHref)
       // 小程序web-view内授权
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
+      // location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     } else if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
       Vue.http.get(`${ENV.BokaApi}/api/user/show`)
