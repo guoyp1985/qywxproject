@@ -182,7 +182,6 @@ const access = success => {
                 query = p3
                 return `${p1}&${p3}${p2}` // '$1&$3$2'
               })
-  console.log(url)
   const lUrl = urlParse(url, true)
   const token = lUrl.query.token
   const expiredAt = lUrl.query.expired_at
@@ -191,8 +190,8 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
-  console.log(lUrl)
-  console.log(from)
+  alert(JSON.parse(lUrl))
+  alert(from)
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
       const originHref = encodeURIComponent(location.href)
