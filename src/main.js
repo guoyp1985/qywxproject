@@ -192,26 +192,7 @@ const access = success => {
   const miniOpenId = lUrl.query.miniopenid
   alert(lUrl)
   alert(from)
-  if (from === 'miniprogram') {
-    if (miniAppId && miniAppId !== '') {
-      const originHref = encodeURIComponent(location.href)
-      // 小程序web-view内授权
-      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
-    } else if (token && token !== '') {
-      Token.set({token: token, expired_at: expiredAt})
-      Vue.http.get(`${ENV.BokaApi}/api/user/show`)
-      .then(
-       res => {
-         if (!res) return
-         User.set(res.data)
-         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
-         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-         router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-       }
-      )
-    }
-  } else if (state === 'miniAccess' && code) {
+  if (state === 'miniAccess' && code) {
     const params = {code: code, miniopenid: miniOpenId, appid: miniAppId}
     Vue.http.get(`${ENV.BokaApi}/api/withMiniLogin`, {params: params})
     .then(
@@ -239,6 +220,25 @@ const access = success => {
         // }
       }
     )
+  } else if (from === 'miniprogram') {
+    if (miniAppId && miniAppId !== '') {
+      const originHref = encodeURIComponent(location.href)
+      // 小程序web-view内授权
+      location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
+    } else if (token && token !== '') {
+      Token.set({token: token, expired_at: expiredAt})
+      Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      .then(
+       res => {
+         if (!res) return
+         User.set(res.data)
+         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
+         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
+         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+         router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+       }
+      )
+    }
   } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
     Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
