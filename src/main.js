@@ -171,7 +171,7 @@ Vue.http.interceptors.response.use(response => {
         if (isPC) {
           router.push('login')
         }
-      )
+      })
     }
   }
 })
