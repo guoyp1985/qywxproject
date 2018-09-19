@@ -77,7 +77,7 @@
           </div>
           <div class="boxouter box2">
             <div class="boxinner b_top_after">
-              <div v-if="focusCount > 0" class="row1 pt15">{{focusCount}}位好友关注了TA</div>
+              <div v-if="focusCount > 0" class="row1 pt15">{{focusCount}}位好友关注了</div>
               <div v-show="disFocus" class="flex_left b_bottom_after pb15">
                 <div class="focuslist" ref="focusList">
                   <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
