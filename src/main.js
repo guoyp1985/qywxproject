@@ -222,7 +222,9 @@ const access = success => {
     )
   } else if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
-      const originHref = encodeURIComponent(location.href)
+      const redirectUri = location.href.replace(/from=miniprogram/, '')
+      const originHref = encodeURIComponent(redirectUri)
+      console.log(originHref)
       // 小程序web-view内授权
       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
     } else if (token && token !== '') {
