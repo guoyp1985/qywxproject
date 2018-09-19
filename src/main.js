@@ -180,6 +180,7 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
+  console.log(from)
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
       const originHref = encodeURIComponent(location.href)
@@ -203,6 +204,7 @@ const access = success => {
     Vue.http.get(`${ENV.BokaApi}/api/withMiniLogin`, {params: params})
     .then(
       res => {
+        console.log(res)
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
