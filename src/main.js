@@ -172,7 +172,9 @@ Vue.http.interceptors.response.use(response => {
 })
 
 const access = success => {
-  const url = location.href.replace(/(.+?)(#\/\w+)\?(.+)/, '$1&$3$2')
+  const url = location.href
+              .replace(/(.+?\/)(#\/\w+)\?(.+)/, '$1?$3$2')
+              .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, '$1&$3$2')
   console.log(url)
   const lUrl = urlParse(url, true)
   const token = lUrl.query.token
