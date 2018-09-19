@@ -255,7 +255,7 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        success && success(lUrl.hash.replace(/#/, ''))
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
       }
     )
   } else {
