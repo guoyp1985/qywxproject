@@ -180,6 +180,7 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
+  console.log(lUrl)
   console.log(from)
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
