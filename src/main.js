@@ -167,7 +167,7 @@ Vue.http.interceptors.response.use(response => {
   if (error.response) {
     if (error.response.status === 401) {
       console.error('未授权请求')
-      access()
+      router.push('login')
     }
   }
 })
