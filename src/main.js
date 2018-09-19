@@ -172,7 +172,8 @@ Vue.http.interceptors.response.use(response => {
 })
 
 const access = success => {
-  const lUrl = urlParse(location.href, true)
+  const url = location.href.replace(/\/#/, '')
+  const lUrl = urlParse(url, true)
   const token = lUrl.query.token
   const expiredAt = lUrl.query.expired_at
   const code = lUrl.query.code
