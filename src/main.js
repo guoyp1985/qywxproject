@@ -136,6 +136,7 @@ const matchExclude = url => {
   return false
 }
 
+let responseFail = false
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   if (!matchExclude(config.url)) {
@@ -166,7 +167,7 @@ Vue.http.interceptors.response.use(response => {
   if (error.response) {
     if (error.response.status === 401) {
       console.error('未授权请求')
-      access()
+      // access()
     }
   }
 })
