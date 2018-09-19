@@ -136,7 +136,7 @@ const matchExclude = url => {
   return false
 }
 
-let responseFail = false
+// let responseFail = false
 // 请求拦截器
 Vue.http.interceptors.request.use(config => {
   if (!matchExclude(config.url)) {
