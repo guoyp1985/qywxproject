@@ -190,8 +190,8 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
-  alert(lUrl)
-  alert(from)
+  console.log(lUrl)
+  console.log(from)
   if (state === 'miniAccess' && code) {
     const params = {code: code, miniopenid: miniOpenId, appid: miniAppId}
     Vue.http.get(`${ENV.BokaApi}/api/withMiniLogin`, {params: params})
