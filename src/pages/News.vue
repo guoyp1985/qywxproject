@@ -17,7 +17,9 @@
     				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
     			</div>
     		</div>
+        <!--
         <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+      -->
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>

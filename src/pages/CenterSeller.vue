@@ -56,7 +56,10 @@
               </div>
               <div class="row2" v-if="(userInfo.slogan && userInfo.slogan != '') || userInfo.uid == loginUser.uid">
                 <span class="v_middle color-red5">{{$t('Seller said')}}: </span>
-                <router-link v-if="(!userInfo.slogan || userInfo.slogan == '') && userInfo.uid == loginUser.uid" :to="{path:'/retailerSetting',query:{from: 'seller'}}" class="color-gray">点击此处设置</router-link>
+                <template v-if="!userInfo.slogan || userInfo.slogan == ''">
+                  <router-link v-if="userInfo.uid == loginUser.uid" :to="{path:'/retailerSetting',query:{from: 'seller'}}" class="color-gray">点击此处设置</router-link>
+                  <span v-else class="v_middle">{{userInfo.linkman}}去外太空了，什么都没写</span>
+                </template>
                 <span v-else class="v_middle" v-html="userInfo.slogan"></span>
               </div>
               <div class="row3" v-if="(userInfo.tags && userInfo.tags.length > 0) || userInfo.uid == loginUser.uid">
