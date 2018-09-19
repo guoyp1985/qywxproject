@@ -190,8 +190,8 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
-  console.log(lUrl)
-  console.log(from)
+  alert(JSON.stringify(lUrl))
+  alert(from)
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
       const originHref = encodeURIComponent(location.href)
