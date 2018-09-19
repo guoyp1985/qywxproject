@@ -190,7 +190,7 @@ const access = success => {
   const from = lUrl.query.from
   const miniAppId = lUrl.query.miniappid
   const miniOpenId = lUrl.query.miniopenid
-  alert(JSON.stringify(lUrl))
+  alert(lUrl)
   alert(from)
   if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
