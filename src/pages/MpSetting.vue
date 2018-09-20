@@ -34,6 +34,12 @@
                         <div>
                           <div class="gray">版本号</div>
                           <div class="font22">{{censorData.code_ver}}</div>
+                          <div class="color-blue flex_left">
+                            <div class="align_center" @click="previewEvent" style="width:50px;border:#007aff 1px solid;border-radius:5px;">
+                              <span class="font12">预览</span>
+                              <i class="al al-erweima1 font12"></i>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div class="col2 flex_cell">
@@ -63,12 +69,6 @@
                         <div>
                           <div class="gray">版本号</div>
                           <div class="font22">{{item.user_version}}</div>
-                          <div class="color-blue flex_left">
-                            <div class="align_center" @click="previewEvent" style="width:50px;border:#007aff 1px solid;border-radius:5px;">
-                              <span class="font12">预览</span>
-                              <i class="al al-erweima1 font12"></i>
-                            </div>
-                          </div>
                         </div>
                       </div>
                       <div class="col2 flex_cell">
