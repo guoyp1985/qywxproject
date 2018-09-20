@@ -210,7 +210,7 @@ const access = success => {
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
-        console.log(`miniAccess: /user/show`)
+        // console.log(`miniAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
@@ -241,7 +241,7 @@ const access = success => {
       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     } else if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
-      console.log(`miniprogram: /user/show`)
+      // console.log(`miniprogram: /user/show`)
       Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       .then(
        res => {
@@ -263,7 +263,7 @@ const access = success => {
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
-        console.log(`defaultAccess: /user/show`)
+        // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
