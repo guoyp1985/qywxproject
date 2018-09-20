@@ -46,7 +46,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, Token, MiniApp } from '#/storage'
+import { User, Token } from '#/storage'
 
 export default {
   components: {
@@ -126,6 +126,7 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
+      // console.log(`centerSales: /user/show`)
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
         if (res) {
           if (res.status === 200) {
@@ -212,14 +213,14 @@ export default {
       document.title = '卖家中心'
     },
     refresh (query) {
-      const self = this
+      // const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      self.query = query
-      if (self.query.miniopenid && self.query.miniappid) {
-        MiniApp.setOpenId(self.query.miniopenid)
-        MiniApp.setAppId(self.query.miniappid)
-        Token.set({isExpired: null})
-      }
+      this.query = query
+      // if (self.query.miniopenid && self.query.miniappid) {
+      //   MiniApp.setOpenId(self.query.miniopenid)
+      //   MiniApp.setAppId(self.query.miniappid)
+      //   Token.set({isExpired: null})
+      // }
       this.getData()
     },
     miniPost () {

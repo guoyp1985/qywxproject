@@ -145,6 +145,8 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
+    console.log(`interceptors: ${config.url}`)
+    console.log(`interceptors: ${JSON.stringify(token)}`)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
@@ -152,6 +154,7 @@ Vue.http.interceptors.request.use(config => {
         router.push({path: path})
       })
     } else {
+      console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
     }
   }
@@ -198,6 +201,7 @@ const access = success => {
   console.log(lUrl)
   console.log(from)
   if (state === 'miniAccess' && code) {
+    console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
     const params = {code: code, miniopenid: miniOpenId, appid: miniAppId}
     Vue.http.get(`${ENV.BokaApi}/api/withMiniLogin`, {params: params})
     .then(
@@ -206,6 +210,7 @@ const access = success => {
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
+        // console.log(`miniAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
@@ -216,7 +221,8 @@ const access = success => {
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
         // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
         //   MiniApp.removeOpenId()
         //   MiniApp.removeAppId()
@@ -227,7 +233,7 @@ const access = success => {
     )
   } else if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
-      const redirectUri = location.href.replace(/from=miniprogram/, '')
+      const redirectUri = location.href.replace(/(?:&from=miniprogram)|(?:from=miniprogram&)/g, '')
       const originHref = encodeURIComponent(redirectUri)
       console.log(originHref)
       // 小程序web-view内授权
@@ -235,6 +241,7 @@ const access = success => {
       location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     } else if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
+      // console.log(`miniprogram: /user/show`)
       Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       .then(
        res => {
@@ -243,7 +250,8 @@ const access = success => {
          // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
          console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
-         router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+         // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
+         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
        }
       )
     }
@@ -255,6 +263,7 @@ const access = success => {
         if (!res || !res.data || res.data.errcode) return
         Token.set(res.data.data)
         // 取用户信息
+        // console.log(`defaultAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       }
     )
