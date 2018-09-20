@@ -213,12 +213,12 @@ export default {
     refresh (query) {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      self.query = query
-      if (self.query.miniopenid && self.query.miniappid) {
-        MiniApp.setOpenId(self.query.miniopenid)
-        MiniApp.setAppId(self.query.miniappid)
-        Token.set({isExpired: null})
-      }
+      // self.query = query
+      // if (self.query.miniopenid && self.query.miniappid) {
+      //   MiniApp.setOpenId(self.query.miniopenid)
+      //   MiniApp.setAppId(self.query.miniappid)
+      //   Token.set({isExpired: null})
+      // }
       this.getData()
     },
     miniPost () {
