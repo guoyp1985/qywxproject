@@ -306,7 +306,7 @@ const render = () => {
   }).$mount('#app-box')
 }
 
-clearCache()
+// clearCache()
 
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
