@@ -175,7 +175,7 @@ Vue.http.interceptors.response.use(response => {
     }
   }
 })
-//https://www.sharingsales.cn/#/centerSales?from=miniprogram&miniopenid=o7Sc-5dJ67O6U7EkKnWUiBYJxn5o&miniappid=wx7ce62088102d5b2f&fid=2
+
 const access = success => {
   let query = ''
   const url = location.href
