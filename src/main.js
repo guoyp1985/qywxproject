@@ -145,7 +145,7 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
-    console.log(`interceptors: ${token}`)
+    console.log(`interceptors: ${token.token}`)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
@@ -153,6 +153,7 @@ Vue.http.interceptors.request.use(config => {
         router.push({path: path})
       })
     } else {
+      console.log(`interceptors: Bearer ${token.token}`)
       config.headers['Authorization'] = `Bearer ${token.token}`
     }
   }
