@@ -175,7 +175,7 @@ Vue.http.interceptors.response.use(response => {
     }
   }
 })
-
+//https://www.sharingsales.cn/#/centerSales?from=miniprogram&miniopenid=o7Sc-5dJ67O6U7EkKnWUiBYJxn5o&miniappid=wx7ce62088102d5b2f&fid=2
 const access = success => {
   let query = ''
   const url = location.href
@@ -227,7 +227,7 @@ const access = success => {
     )
   } else if (from === 'miniprogram') {
     if (miniAppId && miniAppId !== '') {
-      const redirectUri = location.href.replace(/from=miniprogram/, '')
+      const redirectUri = location.href.replace(/(?:&from=miniprogram)|(?:from=miniprogram&)/g, '')
       const originHref = encodeURIComponent(redirectUri)
       console.log(originHref)
       // 小程序web-view内授权
