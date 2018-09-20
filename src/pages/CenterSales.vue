@@ -44,7 +44,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, Token, MiniApp } from '#/storage'
+import { User, Token } from '#/storage'
 
 export default {
   components: {
@@ -211,7 +211,7 @@ export default {
       document.title = '卖家中心'
     },
     refresh (query) {
-      const self = this
+      // const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       // self.query = query
       // if (self.query.miniopenid && self.query.miniappid) {
