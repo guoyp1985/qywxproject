@@ -145,6 +145,7 @@ Vue.http.interceptors.request.use(config => {
     })
 
     const token = Token.get()
+    console.log(`interceptors: ${token}`)
     if (Token.isExpired()) {
       // console.log(config.url)
       cancelAllPendings(config)
