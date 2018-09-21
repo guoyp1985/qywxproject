@@ -179,7 +179,7 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
-console.log(Vue.ToastPlugin)
+console.log(Vue.prototype)
 
 const access = success => {
   let query = ''
