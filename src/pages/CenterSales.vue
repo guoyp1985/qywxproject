@@ -134,76 +134,76 @@ export default {
           if (res.status === 200) {
             self.loginUser = res.data
             User.set(self.loginUser)
-            if (self.loginUser.subscribe !== 1 && self.query.from !== 'miniprogram') {
-              self.$vux.loading.hide()
-              self.initContainer()
-            } else {
+            // if (self.loginUser.subscribe !== 1 && self.query.from !== 'miniprogram') {
+            //   self.$vux.loading.hide()
+            //   self.initContainer()
+            // } else {
               // if (self.loginUser.isretailer === 2) {
               //   self.initContainer()
               //   self.$vux.loading.hide()
               //   let backUrl = encodeURIComponent(location.href)
               //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
               // }
-              if (self.loginUser.isretailer === 0) {
-                self.initContainer()
-                self.showApply = true
-                document.title = '申请卖家'
-                self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                  { params: { limit: 100 } }
-                ).then(function (res) {
-                  self.$vux.loading.hide()
-                  if (res.status === 200) {
-                    let data = res.data
-                    data = data.data ? data.data : data
-                    for (let i = 0; i < data.length; i++) {
-                      data[i].checked = false
-                    }
-                    self.classData = data
+            if (!self.loginUser.isretailer) {
+              self.initContainer()
+              self.showApply = true
+              document.title = '申请卖家'
+              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+                { params: { limit: 100 } }
+              ).then(function (res) {
+                self.$vux.loading.hide()
+                if (res.status === 200) {
+                  let data = res.data
+                  data = data.data ? data.data : data
+                  for (let i = 0; i < data.length; i++) {
+                    data[i].checked = false
                   }
-                })
-              } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
-                self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-                  module: 'retailer', action: 'index'
-                }).then(function (res) {
-                  if (self.loginUser.isretailer) {
-                    self.initContainer()
-                    self.showCenter = true
-                    let shareParams = {
-                      module: 'retailer',
-                      moduleid: self.loginUser.uid,
-                      title: `${self.loginUser.linkman}邀请你一起入驻共销汇`,
-                      desc: '共销汇帮你解决微商创业难题',
-                      photo: self.loginUser.avatar,
-                      link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
-                    }
-                    if (self.query.share_uid) {
-                      shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
-                      shareParams.lastshareuid = self.query.share_uid
-                    }
-                    self.$util.handleWxShare(shareParams)
-                    self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
-                      if (res.status === 200) {
-                        let data = res.data
-                        self.retailerInfo = data.data ? data.data : data
-                        self.$vux.loading.hide()
-                        return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
-                      }
-                    }).then(function (res) {
-                      if (res) {
-                        let data = res.data
-                        self.messages = data.data
-                        return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
-                      }
-                    }).then(function (res) {
-                      if (res) {
-                        let data = res.data
-                        self.marqueeData = data.data ? data.data : data
-                      }
-                    })
+                  self.classData = data
+                }
+              })
+            } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {
+              self.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
+                module: 'retailer', action: 'index'
+              }).then(function (res) {
+                if (self.loginUser.isretailer) {
+                  self.initContainer()
+                  self.showCenter = true
+                  let shareParams = {
+                    module: 'retailer',
+                    moduleid: self.loginUser.uid,
+                    title: `${self.loginUser.linkman}邀请你一起入驻共销汇`,
+                    desc: '共销汇帮你解决微商创业难题',
+                    photo: self.loginUser.avatar,
+                    link: `${ENV.Host}/#/centerSales?&share_uid=${self.loginUser.uid}`
                   }
-                })
-              }
+                  if (self.query.share_uid) {
+                    shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+                    shareParams.lastshareuid = self.query.share_uid
+                  }
+                  self.$util.handleWxShare(shareParams)
+                  self.$http.get(`${ENV.BokaApi}/api/retailer/home`).then(function (res) {
+                    if (res.status === 200) {
+                      let data = res.data
+                      self.retailerInfo = data.data ? data.data : data
+                      self.$vux.loading.hide()
+                      return self.$http.get(`${ENV.BokaApi}/api/message/newMessages`)
+                    }
+                  }).then(function (res) {
+                    if (res) {
+                      let data = res.data
+                      self.messages = data.data
+                      return self.$http.get(`${ENV.BokaApi}/api/retailer/shareview`)
+                    }
+                  }).then(function (res) {
+                    if (res) {
+                      let data = res.data
+                      self.marqueeData = data.data ? data.data : data
+                    }
+                  })
+                }
+              })
             }
+            // }
           }
         }
       })
