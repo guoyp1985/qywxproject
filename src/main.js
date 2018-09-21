@@ -179,8 +179,6 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
-console.log(Vue.prototype)
-
 const access = success => {
   let query = ''
   const url = location.href
@@ -210,8 +208,8 @@ const access = success => {
       res => {
         console.log(res)
         if (!res || !res.data || res.data.errcode) {
-          if (res.data.flag === 0) Vue.toast.text(res.data.error)
-          else Vue.toast.text(JSON.stringify(res))
+          if (res.data.flag === 0) console.error(res.data.error)
+          else console.error(res)
           return
         }
         Token.set(res.data.data)
@@ -220,7 +218,7 @@ const access = success => {
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
       },
       res => {
-        Vue.toast.text(JSON.stringify(res))
+        console.error(res)
       }
     )
     .then(
