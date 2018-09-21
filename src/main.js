@@ -179,6 +179,8 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
+console.log(Vue.toast)
+
 const access = success => {
   let query = ''
   const url = location.href
