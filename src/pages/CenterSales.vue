@@ -128,6 +128,7 @@ export default {
       self.$vux.loading.show()
       // console.log(`centerSales: /user/show`)
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
+        alert(JSON.stringify(res))
         if (res) {
           if (res.status === 200) {
             self.loginUser = res.data
