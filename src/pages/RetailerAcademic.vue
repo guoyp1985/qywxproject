@@ -14,7 +14,7 @@
           <router-link v-else v-for="(item,index) in data" :key="index" :to="{path: '/academic', query: {id: item.id, fid: item.fid}}" class="scroll_item db bg-white">
             <div class="pic">
               <div class="inner">
-                <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               </div>
             </div>
             <div class="padding15 border-box">

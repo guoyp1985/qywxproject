@@ -6,7 +6,7 @@
     <template v-if="showContainer">
       <div class="s-topbanner flex_left pl15 pr15 border-box">
         <div class="">
-          <img @click="showBigimg(0)" class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+          <img @click="showBigimg(0)" class="avatarimg5 imgcover" :src="viewuser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>
@@ -184,12 +184,12 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      viewuser: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg' },
+      viewuser: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg' },
       imgarr: [{
-        msrc: 'http://vuxlaravel.boka.cn/images/user.jpg',
-        src: 'http://vuxlaravel.boka.cn/images/user.jpg'
+        msrc: 'https://tossharingsales.boka.cn/images/user.jpg',
+        src: 'https://tossharingsales.boka.cn/images/user.jpg'
       }],
-      wximgarr: ['http://vuxlaravel.boka.cn/images/user.jpg'],
+      wximgarr: ['https://tossharingsales.boka.cn/images/user.jpg'],
       showPopupLevel: false,
       userIntention: 0,
       userIntentionDesc: '无',

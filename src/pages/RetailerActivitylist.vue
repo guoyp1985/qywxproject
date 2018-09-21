@@ -34,7 +34,7 @@
                     <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
@@ -55,7 +55,7 @@
                     <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
@@ -73,7 +73,7 @@
                     <div v-if="item.isfinished === 1" class="ico finished"></div>
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">{{item.title}}</div>
@@ -90,7 +90,7 @@
                   <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'sharehongbao'" :key="item.id" class="db" style="position:relative;">
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">分享红包: {{item.title}}</div>
@@ -105,7 +105,7 @@
                   <router-link :to="{path:'/activity',query:{id:item.id}}" v-else-if="item.type == 'answer'" :key="item.id" class="db" style="position:relative;">
                     <div class="t-table">
                       <div class="t-cell align_left pr10 v_middle" style="width:100px;">
-                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        <img class="v_middle imgcover" :src="item.photo" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell align_left v_middle">
                         <div class="clamp1 font16 color-lightgray">答题: {{item.title}}</div>

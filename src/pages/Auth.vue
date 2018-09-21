@@ -8,7 +8,7 @@
     <div class="auth-container">
       <div class="inner">
         <div class="row1 flex_left">
-          <img class="logo" src="http://vuxlaravel.boka.cn/images/auth3.png" />
+          <img class="logo" src="https://tossharingsales.boka.cn/images/auth3.png" />
           <span class="txt">{{WeixinName}}授权中心</span>
         </div>
         <div class="row2">
@@ -22,7 +22,7 @@
             </div>
             <div class="col2">
               <div class="pic flex_center">
-                <img src="http://vuxlaravel.boka.cn/images/auth2.png" />
+                <img src="https://tossharingsales.boka.cn/images/auth2.png" />
                 <div class="icon-radius icon1">智能获客</div>
                 <div class="icon-radius icon2">社交店铺</div>
                 <div class="icon-radius icon3">返点分销</div>
@@ -36,7 +36,7 @@
     <div class="layer flex_center" v-if="showLayer">
       <div class="layer-inner">
         <div class="close-area" @click="closeLayer">
-          <img class="logo" src="http://vuxlaravel.boka.cn/images/auth4.png" />
+          <img class="logo" src="https://tossharingsales.boka.cn/images/auth4.png" />
         </div>
         <div class="pagetop flex_center font24 b_bottom_after" style="height:92px;">微信扫码加官方微信</div>
         <div class="pagemiddle flex_center" style="bottom:0;top:92px;">
@@ -100,7 +100,7 @@ export default {
 body{background-color: #5b81ec;}
 .authpage{
   width:100%;height:100%;
-  background-image:url(http://vuxlaravel.boka.cn/images/auth1.png);
+  background-image:url(https://tossharingsales.boka.cn/images/auth1.png);
   background-repeat:no-repeat;
   background-position:top center;
   background-size:cover;

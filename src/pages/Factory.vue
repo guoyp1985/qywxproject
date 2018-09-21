@@ -3,7 +3,7 @@
     <div class="s-topbanner">
       <div class="flex_left border-box padding10 color-white" style="height:88px;">
         <div v-if="viewData.photo && viewData.photo != ''" class="w70">
-            <img class="imgcover v_middle" style="width:60px;height:60px;" :src="viewData.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+            <img class="imgcover v_middle" style="width:60px;height:60px;" :src="viewData.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
         </div>
         <div class="flex_cell">
           <div class="clamp1">{{ viewData.title }}</div>
@@ -25,7 +25,7 @@
         		<div class="inner list-shadow">
         			<div class="picarea">
         				<div class="pic">
-                  <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
         			</div>
         			<div class="desbox" style="overflow:hidden;">
@@ -47,7 +47,7 @@
           <router-link :to="{path: '/factoryNews', query: {id: item.id, fid: query.id}}" v-else v-for="(item,index1) in tabData2" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
             <div class="t-table">
               <div class="t-cell v_middle w70">
-                <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
               </div>
               <div class="t-cell v_middle">
                 <div class="clamp1 font14 color-lightgray">{{item.title}}</div>

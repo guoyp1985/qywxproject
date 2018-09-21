@@ -10,7 +10,7 @@
         <div v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db pt10 pb10">
           <div class="t-table">
 						<div class="t-cell w50 v_middle">
-              <img class="avatarimg1" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+              <img class="avatarimg1" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
 						</div>
 						<div class="t-cell v_middle">
 							<div class="clamp1">{{ item.username }}</div>

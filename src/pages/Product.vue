@@ -35,7 +35,7 @@
             :aspect-ratio="1/1"
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+              <img class="db imgcover w_100 h_100" :src="item" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
               <template v-if="index == 0 && productdata.video && productdata.video != ''">
                 <div class="play-icon flex_center" @click="clickPlay('productVideo')">
                   <i class="al al-bofang"></i>
@@ -87,7 +87,7 @@
             <div v-if="activitydata.length <= 2" v-for="(item,index) in activitydata" :key="item.id" class="scroll_item padding10">
               <div class="t-table">
                 <div class="t-cell v_middle w50">
-                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                  <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 </div>
                 <div class="t-cell v_middle align_left">
                   <div class="clamp1">{{ item.username }}</div>
@@ -114,7 +114,7 @@
                   <div class="scroll_item padding10">
           					<div class="t-table">
           						<div class="t-cell v_middle w50">
-                        <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                        <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           						</div>
           						<div class="t-cell v_middle align_left">
           							<div class="clamp1">{{ item.username }}</div>
@@ -162,7 +162,7 @@
               <div v-else v-for="(item,index) in evluatedata" :key="item.id" class="scroll_item padding10">
       					<div class="t-table">
       						<div class="t-cell pic" style="width:40px;">
-                    <img class="v_middle avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img class="v_middle avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
       						<div class="t-cell">{{ item.username }}</div>
       						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -193,7 +193,7 @@
               <div class="buylist" ref="buyList">
                 <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id}}" v-for="(item,index) in buyuserdata" :key="index">
                   <div class="pic">
-                    <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
                   <div class="txt">
                     <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
@@ -211,7 +211,7 @@
         <div class="padding10 b_bottom_after">
           <router-link class="t-table" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
     				<div class="t-cell v_middle" style="width:70px;">
-              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
             </div>
     				<div class="t-cell v_middle">
     					<div class="distitle clamp2">{{ retailerInfo.title }}</div>
@@ -298,7 +298,7 @@
   			<div class="ico"><i class="al al-feiji"></i></div>
   			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
   			<div class="pic">
-  				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
+  				<img src="https://tossharingsales.boka.cn/images/share1.jpg" />
   			</div>
   		</div>
       <div v-transfer-dom class="x-popup" v-if="productdata.buyonline != 1">
@@ -336,7 +336,7 @@
                 <div v-else v-for="(item,index) in evluatedata1" :key="item.id" class="scroll_item padding10">
         					<div class="t-table">
         						<div class="t-cell pic" style="width:40px;">
-                      <img class="v_middle avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                      <img class="v_middle avatarimg imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         						</div>
         						<div class="t-cell">{{ item.username }}</div>
         						<div class="t-cell color-gray font12 align_right" style="width:70px;">{{ item.dateline | dateformat }}</div>
@@ -370,7 +370,7 @@
               <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
                   <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.username}}</div>

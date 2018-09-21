@@ -32,7 +32,7 @@
             :aspect-ratio="1/1"
             loop>
             <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-              <img class="db imgcover w_100 h_100" :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
+              <img class="db imgcover w_100 h_100" :src="item" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" @click="showBigimg1(index)" />
               <template v-if="index == 0 && productdata.video && productdata.video != ''">
                 <div class="play-icon flex_center" @click="clickPlay('productVideo')">
                   <i class="al al-bofang"></i>
@@ -77,7 +77,7 @@
         <div class="padding10 b_bottom_after">
           <div class="t-table">
     				<div class="t-cell v_middle w70" v-if="factoryinfo.photo && factoryinfo.photo != ''">
-              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img class="v_middle imgcover" style="width:60px;height:60px;" :src="factoryinfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
     				<div class="t-cell v_middle">
     					<div class="distitle clamp2">{{ factoryinfo.title }}</div>

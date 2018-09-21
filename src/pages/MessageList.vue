@@ -14,7 +14,7 @@
         <router-link v-else :to="{path: '/chat', query: {uid: item.uid, fromModule: 'messagelist'}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
-              <img class="avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+              <img class="avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
             </div>
             <div class="t-cell v_middle align_left">
               <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span><span>{{ item.linkman }}</span></div>

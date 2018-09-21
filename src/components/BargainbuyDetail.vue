@@ -1,12 +1,12 @@
 <template>
   <div class="containerarea font14 bargainbuydetail scroll-container" style="overflow-y:auto;">
     <div class="topimg">
-      <img src="http://vuxlaravel.boka.cn/images/bargainbuy_2.png">
+      <img src="https://tossharingsales.boka.cn/images/bargainbuy_2.png">
     </div>
     <div class="b_header">
       <div class="inner">
         <div class="pic">
-          <img class="imgcover" :src="crowduser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+          <img class="imgcover" :src="crowduser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
         <div class="clamp1 font13 color-gray7 pt5 align_center mauto" style="width:168px;">{{ crowduser.linkman }}</div>
       </div>
@@ -16,7 +16,7 @@
         <div class="innerbg">
           <router-link class="t-table" style="color:inherit;" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}">
             <div class="t-cell v_middle w80">
-              <img class="imgcover" :src="product.photo" style="width:70px;height:70px;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img class="imgcover" :src="product.photo" style="width:70px;height:70px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="t-cell">
               <div class="clamp2 font13 color-gray7">{{ product.title }}</div>
@@ -100,14 +100,14 @@
           <div v-else v-for="(item,index) in cutData" :key="item.id" class="scroll_item">
             <div class="t-table" style="height:60px;">
               <div class="t-cell v_middle" style="width:55px;">
-                <img class="v_middle imgcover avatarimg1" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                <img class="v_middle imgcover avatarimg1" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
               </div>
               <div class="t-cell v_middle" style="padding-right:25px;">
                 <div class="clamp1 font13">{{ item.linkman }}</div>
               </div>
               <div class="t-cell align_right v_middle pr10" style="width:130px;">
                 <div class="font13" style="color:#C93A3A">
-                  <img class="v_middle" src="http://vuxlaravel.boka.cn/images/bargainbuy_3.png" style="width: 21px;height:19px;">  砍掉 <span class="font16 bold">{{ item.cutmoney }}</span> 元
+                  <img class="v_middle" src="https://tossharingsales.boka.cn/images/bargainbuy_3.png" style="width: 21px;height:19px;">  砍掉 <span class="font16 bold">{{ item.cutmoney }}</span> 元
                 </div>
               </div>
             </div>
@@ -132,11 +132,11 @@ export default {
     data: Object,
     crowduser: {
       type: Object,
-      default: { 'avatar': 'http://vuxlaravel.boka.cn/images/user.jpg' }
+      default: { 'avatar': 'https://tossharingsales.boka.cn/images/user.jpg' }
     },
     user: {
       type: Object,
-      default: { 'avatar': 'http://vuxlaravel.boka.cn/images/user.jpg' }
+      default: { 'avatar': 'https://tossharingsales.boka.cn/images/user.jpg' }
     },
     cutData: Array,
     onJoin: Function,

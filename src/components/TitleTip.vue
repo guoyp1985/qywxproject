@@ -11,7 +11,7 @@
     <template v-else>
       <div class="title-tip">
         <router-link class="avatar-cell" to="/center">
-          <img :src="avatarHref" class="imgavatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+          <img :src="avatarHref" class="imgavatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         </router-link>
         <router-link class="info-cell" to="/center">
           <div class="user-name">
@@ -43,7 +43,7 @@ export default {
     scrollBox: String,
     avatarHref: {
       type: String,
-      default: 'http://vuxlaravel.boka.cn/images/user.jpg'
+      default: 'https://tossharingsales.boka.cn/images/user.jpg'
     },
     userName: {
       type: String,

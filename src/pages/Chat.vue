@@ -10,7 +10,7 @@
         <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
           <div class="db-flex">
             <div class="w50 flex_left">
-              <img :src="fromProduct.photo" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+              <img :src="fromProduct.photo" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             </div>
             <div class="flex_cell flex_left" to="/center">{{fromProduct.title}} </div>
           </div>
@@ -25,7 +25,7 @@
             <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
             <div :class="`chatitem ${getItemClass(item)}`">
               <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
-                <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';"/>
+                <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
               </router-link>
               <div class="name disusername">{{item.username}}</div>
               <div class="msg">
@@ -80,10 +80,10 @@
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
-              <img src="http://vuxlaravel.boka.cn/images/icon-voice.png"/>
+              <img src="https://tossharingsales.boka.cn/images/icon-voice.png"/>
             </a>
             <a v-else class="emotion-btn" @click="toggleKeyboard">
-              <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
+              <img src="https://tossharingsales.boka.cn/images/icon-keyboard.png"/>
             </a>
           </div>
           <div class="input-cell">
@@ -97,10 +97,10 @@
           </div>
           <div class="emotion-cell">
             <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
-              <img src="http://vuxlaravel.boka.cn/images/icon-face.png"/>
+              <img src="https://tossharingsales.boka.cn/images/icon-face.png"/>
             </a>
             <a v-else class="emotion-btn" @click="toggleKeyboard">
-              <img src="http://vuxlaravel.boka.cn/images/icon-keyboard.png"/>
+              <img src="https://tossharingsales.boka.cn/images/icon-keyboard.png"/>
             </a>
           </div>
           <div v-if="showSendBtn" class="send-cell flex_center">
@@ -108,7 +108,7 @@
           </div>
           <div v-else class="feature-cell">
             <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
-              <img src="http://vuxlaravel.boka.cn/images/icon-add.png"/>
+              <img src="https://tossharingsales.boka.cn/images/icon-add.png"/>
             </a>
           </div>
         </div>
@@ -170,7 +170,7 @@
                       <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
                         <div class="t-table">
                           <div class="t-cell pic v_middle w50">
-                            <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
+                            <x-img class="v_middle imgcover" :src="item.photo" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
                           </div>
                           <div class="t-cell v_middle" style="color:inherit;">
                             <div class="clamp1">{{item.title}}</div>
@@ -192,7 +192,7 @@
                       <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
                         <div class="t-table">
                           <div class="t-cell pic v_middle w50">
-                            <x-img class="v_middle imgcover" :src="item.photo" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
+                            <x-img class="v_middle imgcover" :src="item.photo" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
                           </div>
                           <div class="t-cell v_middle" style="color:inherit;">
                             <div class="clamp1">{{item.title}}</div>

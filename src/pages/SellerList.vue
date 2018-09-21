@@ -23,7 +23,7 @@
               <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
                 <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
                   <div class="t-cell v_middle w70">
-                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
             			<div class="t-cell v_middle">
                     <div class="clamp1 font16 pr10">{{item.title}}</div>

@@ -2,12 +2,12 @@
   <div class="containerarea font14 bargainbuy notop nobottom">
     <div class="pagemiddle scroll-container">
       <div class="topimg">
-        <img src="http://vuxlaravel.boka.cn/images/bargainbuy_bg.png" />
+        <img src="https://tossharingsales.boka.cn/images/bargainbuy_bg.png" />
       </div>
       <div class="boxarea productarea">
         <router-link class="t-table" :to="{path:'/product',query:{wid:product.uploader,id:product.id}}" style="color:inherit;">
             <div class="t-cell pic v_middle">
-              <img class="imgcover" :src="product.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img class="imgcover" :src="product.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="t-cell pl10 v_middle">
               <div class="clamp2 title font13 color-gray7">{{ product.title }}</div>
@@ -57,7 +57,7 @@ export default {
     product: Object,
     user: {
       type: Object,
-      default: { 'avatar': 'http://vuxlaravel.boka.cn/images/user.jpg' }
+      default: { 'avatar': 'https://tossharingsales.boka.cn/images/user.jpg' }
     },
     onJoin: Function
   },

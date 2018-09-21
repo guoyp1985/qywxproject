@@ -3,7 +3,7 @@
     <div class="bk-salestop">
       <div class="flex_left" style="height:108px;">
         <div class="img-cell">
-          <img class="imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" @click="showBigimg(0)" />
+          <img class="imgcover" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" @click="showBigimg(0)" />
           <div v-transfer-dom>
             <previewer :list="imgarr" ref="previewer"></previewer>
           </div>

@@ -114,7 +114,7 @@ export default {
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
+      reward: { headimgurl: 'https://tossharingsales.boka.cn/images/user.jpg', avatar: 'https://tossharingsales.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       comments: [],
       showSubscribe: false,

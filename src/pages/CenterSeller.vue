@@ -17,7 +17,7 @@
               auto
               loop>
               <swiper-item v-for="(item,index) in photoarr" :key="item.id">
-                <img :src="item" default-src="http://vuxlaravel.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
+                <img :src="item" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" @click="showBigimg(item,photoarr,index)" />
               </swiper-item>
             </swiper>
             <div v-else class="color-black">
@@ -38,7 +38,7 @@
               <div class="flex_left row1">
                 <div class="pic">
                   <div class="pic_top">
-                    <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img :src="userInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
                 </div>
                 <div class="flex_cell">
@@ -82,7 +82,7 @@
                 <div class="focuslist" ref="focusList">
                   <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
                     <div class="pic">
-                      <img :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                      <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
                     <div class="txt">
                       <div class="clamp1 font12 color-gray2 align_center">{{ item.username }}</div>
@@ -216,7 +216,7 @@
               <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
                   <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray">{{item.username}}</div>

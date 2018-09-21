@@ -87,7 +87,7 @@ export default {
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       showShareSuccess: false,
-      reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
+      reward: { headimgurl: 'https://tossharingsales.boka.cn/images/user.jpg', avatar: 'https://tossharingsales.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       factoryinfo: {},
       comments: [],

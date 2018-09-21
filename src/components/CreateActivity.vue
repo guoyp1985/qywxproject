@@ -2,7 +2,7 @@
   <div class="font14">
     <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('groupbuy')">
       <div class="flex_left" style="width:110px;">
-        <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="http://vuxlaravel.boka.cn/images/groupbuy.jpg">
+        <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="https://tossharingsales.boka.cn/images/groupbuy.jpg">
       </div>
       <div class="flex_cell flex_left">
         <div>
@@ -19,7 +19,7 @@
     </div>
     <div class="db-flex pl12 pr12 pt10 pb10 mb5 bg-white" @click="clickadd('bargainbuy')">
       <div class="flex_left" style="width:110px;">
-        <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="http://vuxlaravel.boka.cn/images/bargainbuy.jpg">
+        <img class="disphoto db middle-cell" style="width:100px;height:100px;" src="https://tossharingsales.boka.cn/images/bargainbuy.jpg">
       </div>
       <div class="flex_cell flex_left">
         <div>
@@ -38,7 +38,7 @@
     <!--
     <div class="db-flex padding10 mb5 bg-white" @click="clickadd('discount')">
       <div class="flex_left" style="width:90px;">
-        <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="http://vuxlaravel.boka.cn/images/discount.jpg">
+        <img class="disphoto db middle-cell" style="width:80px;height:80px;" src="https://tossharingsales.boka.cn/images/discount.jpg">
       </div>
       <div class="flex_cell flex_left">
         <div>
@@ -72,7 +72,7 @@
               <p class="title-popup">活动优势</p>
               <div class="pl10 pr10 color-999 font12 line22">团购是一个聚人气，易成交的活动方式，能够以薄利多销形式激励买家购买，通过团购也可以让买家介绍更多买家帮他成团来获得优惠，从而积累销量、聚拢人气、获得更多成交客户！</div>
               <p class="title-popup">界面效果</p>
-              <img class="db mt10 w_100" style="margin-bottom: 20px;" src="http://vuxlaravel.boka.cn/images/groupbuy_1.png" />
+              <img class="db mt10 w_100" style="margin-bottom: 20px;" src="https://tossharingsales.boka.cn/images/groupbuy_1.png" />
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -100,7 +100,7 @@
               <p class="title-popup">活动优势</p>
               <div class="pl10 pr10 color-999 font12 line22">砍价是一个传播范围广、成单机会大的活动方式，买家可以在短时间内通过多位好友的帮助，以最低的价格购买商品，从而为卖家带来大量潜在客户，为以后的销售提供更多机会！</div>
               <p class="title-popup">界面效果</p>
-              <img src="http://vuxlaravel.boka.cn/images/bargainbuy_1.png" style="width:100%;margin-bottom: 20px;margin-top: 10px;" class="db">
+              <img src="https://tossharingsales.boka.cn/images/bargainbuy_1.png" style="width:100%;margin-bottom: 20px;margin-top: 10px;" class="db">
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -128,7 +128,7 @@
               <p class="title-popup">活动优势</p>
               <div class="pl10 pr10 color-999 font12 line22">限时抢购可短时间进行大量商品销售，吸引买家及时以低价格抢购心仪商品，以达到快速获客，快速成单的目的。</div>
               <p class="title-popup">界面效果</p>
-              <img src="http://vuxlaravel.boka.cn/images/discount_1.png" style="width:100%;margin-bottom: 20px;margin-top: 10px;" class="db">
+              <img src="https://tossharingsales.boka.cn/images/discount_1.png" style="width:100%;margin-bottom: 20px;margin-top: 10px;" class="db">
             </div>
           </div>
           <div class="popup-bottom flex_center">

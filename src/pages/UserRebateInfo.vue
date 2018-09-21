@@ -24,7 +24,7 @@
                       <check-icon :value.sync="item.checked" @click.native.stop="itemCheck(item)"></check-icon>
                     </div>
                     <div class="avatar-cell w50">
-                      <img class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                      <img class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </div>
                     <div class="db-flex flex_cell font14">
                       <div>
@@ -64,7 +64,7 @@
               <template v-if="tabdata2.length">
                 <group>
                   <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index">
-                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     <div slot="inline-desc">
                       <div class="clamp1">{{item.username}}</div>
                       <div class="clamp1">店铺: {{item.title}}</div>
@@ -89,7 +89,7 @@
               <template v-if="tabdata3.length">
                 <group>
                   <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index">
-                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                    <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     <div slot="inline-desc">
                       <div class="clamp1">{{item.username}}</div>
                       <div class="clamp1">店铺: {{item.title}}</div>

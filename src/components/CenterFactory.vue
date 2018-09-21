@@ -6,7 +6,7 @@
           <img
             class="imgcover"
             :src="factoryInfo.photo"
-            onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"
+            onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"
             @click="showBigimg(0)" />
           <div v-transfer-dom>
             <previewer :list="factoryInfo.photoArr" ref="previewer"></previewer>

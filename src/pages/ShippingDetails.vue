@@ -8,7 +8,7 @@
     <sticky scroll-box="vux_view_box_body">
       <div class="express-info">
         <div class="goods-cell">
-          <img :src="orderImg" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+          <img :src="orderImg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
         </div>
         <div class="express-cell font13">
           <div class="express-status">

@@ -5,7 +5,7 @@
       <div class="boxinner box1">
         <div class="flex_left row1 pt15">
           <div class="pic">
-            <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            <img :src="userInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="flex_cell flex_left">
             <div class="clamp1">

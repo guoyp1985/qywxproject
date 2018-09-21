@@ -7,7 +7,7 @@
       <div class="s-topbanner">
         <div class="flex_left h_100 toprow color-white pl15 pr15">
           <router-link class="w70" :to="{ path: '/membersView', query: { uid: sellerUser.uid } }">
-            <img class="avatarimg5 v_middle imgcover" :src="sellerUser.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            <img class="avatarimg5 v_middle imgcover" :src="sellerUser.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </router-link>
           <div class="clamp1 flex_cell">
             <router-link class="db font16" :to="{ path: '/membersView', query: { uid: sellerUser.uid } }">{{ sellerUser.username }}</router-link>
@@ -46,7 +46,7 @@
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                   <div class="t-table">
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </router-link>
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -70,7 +70,7 @@
                 <div v-else class="scroll_item pt10 pb10 db" v-for="(item,index1) in tabdata2" :key="item.id" @click="clickItem(item)">
                   <div class="t-table">
                     <div class="t-cell v_middle w80">
-                      <img class="imgcover v_middle" style="width:70px;height:70px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                      <img class="imgcover v_middle" style="width:70px;height:70px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                     </div>
                     <div class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.title}}</div>
@@ -99,7 +99,7 @@
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                   <div class="t-table">
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                      <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </router-link>
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
@@ -139,14 +139,14 @@
                     <div class="pro" >
                       <div class="pro-sucess">
                         <div class="flex_left">
-                          <img class="v_middle" src="http://vuxlaravel.boka.cn/images/infor.png"/>
+                          <img class="v_middle" src="https://tossharingsales.boka.cn/images/infor.png"/>
                           <div class="color-blue">什么是成交概率</div>
                         </div>
                         <div class="font12" >成交概率是系统自动根据客户查看文章等行为，自动计算出该客户的真正成为购买客户的可能性。数字越大,可能性越大,成交概率就越高。</div>
                       </div>
                       <div class="pro-push">
                         <div class="flex_left">
-                          <img class="v_middle" src="http://vuxlaravel.boka.cn/images/infor.png"/>
+                          <img class="v_middle" src="https://tossharingsales.boka.cn/images/infor.png"/>
                           <div class="color-blue">如何提升成交概率</div>
                         </div>
                         <div class="font12">1、推送客户感兴趣的文章;</div>
@@ -207,7 +207,7 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      sellerUser: { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
+      sellerUser: { avatar: 'https://tossharingsales.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 },
       isshowpopup: false,
       tabtxts: [ '带来消费', '分享记录', '带来客户' ],
       selectedIndex: 0,
@@ -231,7 +231,7 @@ export default {
       this.showSos = false
       this.sosTitle = '该记录不存在'
       this.showContainer = false
-      this.sellerUser = { avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 }
+      this.sellerUser = { avatar: 'https://tossharingsales.boka.cn/images/user.jpg', total: '0.00', shares: 0, customers: 0 }
       this.isshowpopup = false
       this.selectedIndex = 0
       this.distabdata1 = false

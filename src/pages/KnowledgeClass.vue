@@ -11,7 +11,7 @@
         <router-link v-else v-for="(item,index) in data" :key="item.id" :to="{path: '/knowledge', query: {id: item.id}}" class="scroll_item">
           <div class="pic">
             <div class="inner">
-              <img class="imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
           </div>
           <div class="padding15 border-box">
@@ -37,7 +37,7 @@
                 <router-link class="pitem" to="/center">{{ $t('Personal Center') }}</router-link>
               </div>
             </div>
-            <div><img class="ico" src="http://vuxlaravel.boka.cn/images/icon-menu.png" /><span class="v_middle">{{ $t('Sales Assistant') }}</span></div>
+            <div><img class="ico" src="https://tossharingsales.boka.cn/images/icon-menu.png" /><span class="v_middle">{{ $t('Sales Assistant') }}</span></div>
           </popover>
         </div>
       -->

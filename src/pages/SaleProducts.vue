@@ -8,7 +8,7 @@
       <div v-if="!tabdata1 || tabdata1.length == 0" class="emptyitem flex_center">暂无促销商品</div>
       <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="bg-page">
         <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'" style="background-color:#f6f6f6 !important;">
-          <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+          <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
           <span slot="title">{{item.title}}</span>
           <span slot="numbers">{{ item.numbers }}</span>
           <span slot="havetuan">{{ item.havetuan }}</span>
@@ -16,7 +16,7 @@
           <span slot="price">{{item.price}}</span>
         </groupbuyitemplate>
         <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'" style="background-color:#f6f6f6 !important;">
-          <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+          <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
           <span slot="title">{{item.title}}</span>
           <span slot="saveprice">{{ item.saveprice }}</span>
           <span slot="minprice">{{item.minprice}}</span>

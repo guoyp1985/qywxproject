@@ -14,7 +14,7 @@
     			<div class="ico"><i class="al al-feiji"></i></div>
     			<div class="txt">点击···，分享给好友或朋友圈吧！</div>
     			<div class="pic">
-    				<img src="http://vuxlaravel.boka.cn/images/share1.jpg" />
+    				<img src="https://tossharingsales.boka.cn/images/share1.jpg" />
     			</div>
     		</div>
         <!--
@@ -61,7 +61,7 @@
           <div class="qrcode-area">
             <div class="qrcode-bg">
               <div class="qrcode">
-                <img src="http://vuxlaravel.boka.cn/images/fingerprint.gif"/>
+                <img src="https://tossharingsales.boka.cn/images/fingerprint.gif"/>
                 <div class="scan-area">
                   <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
                   <img v-else :src="WeixinQrcode">
@@ -150,7 +150,7 @@ export default {
       commentPopupShow: false,
       replyPopupShow: false,
       notFavorite: true,
-      reward: { headimgurl: 'http://vuxlaravel.boka.cn/images/user.jpg', avatar: 'http://vuxlaravel.boka.cn/images/user.jpg', linkman: '', credit: 0 },
+      reward: { headimgurl: 'https://tossharingsales.boka.cn/images/user.jpg', avatar: 'https://tossharingsales.boka.cn/images/user.jpg', linkman: '', credit: 0 },
       article: {},
       retailerInfo: {},
       comments: [],

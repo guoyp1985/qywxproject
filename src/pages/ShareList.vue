@@ -30,7 +30,7 @@
             <template v-else v-for="(item,index) in data">
               <router-link v-if="item.module === 'retailer'" to="/centerSales" class="scroll_item db padding10">
                 <div class="flex_left">
-                  <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                   <div class="flex_cell pl10">
                     <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
                     <div class="clamp1 color-gray font12">
@@ -43,7 +43,7 @@
               </router-link>
               <router-link v-else :to="{path: `/${item.module}`,query:{id: item.moduleid,wid: item.wid}}" class="scroll_item db padding10">
                 <div class="flex_left">
-                  <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <img class="imgcover avatarimg2 radius0" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                   <div class="flex_cell pl10">
                     <div class="clamp1"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{ item.title }}</div>
                     <div class="clamp1 color-gray font12">

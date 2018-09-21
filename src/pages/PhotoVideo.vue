@@ -7,7 +7,7 @@
       <div class="boxinner box1">
         <div class="flex_left row1 pt15">
           <div class="pic">
-            <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            <img :src="userInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="flex_cell flex_left">
             <div class="clamp1">
@@ -38,7 +38,7 @@
           </div>
           <div v-else class="picitem" v-for="(item,index) in timelineData" :key="index">
             <div class="inner">
-              <img :src="item.photo" @click="showBigimg(item.photo,index)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img :src="item.photo" @click="showBigimg(item.photo,index)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
           </div>
         </div>

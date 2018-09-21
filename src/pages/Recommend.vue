@@ -71,7 +71,7 @@
           <group v-else>
             <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
               <div class="store-img">
-                <img class="imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                <img class="imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
               </div>
               <div class="store-info font14">
                 <div class="store-name">
@@ -89,7 +89,7 @@
           </div>
           <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData2" :key="index">
             <div class="w80 align_center">
-              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             </div>
             <div class="pr10 flex_cell border-box">
               <div class="clamp2">{{ item.title }}</div>
@@ -109,7 +109,7 @@
           <template v-else v-for="(item, index) in tabData3">
             <router-link v-if="item.type == 'groupbuy'" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.productid, wid: item.uploader}}">
               <div class="w80 align_center">
-                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
               </div>
               <div class="pr10 flex_cell border-box">
                   <div class="clamp2">{{ item.title }}</div>
@@ -118,7 +118,7 @@
             </router-link>
             <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/activity', query: {id: item.id}}">
               <div class="w80 align_center">
-                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
               </div>
               <div class="pr10 flex_cell border-box">
                   <div class="clamp2">{{ item.title }}</div>
@@ -135,7 +135,7 @@
           </div>
           <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/news', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData4" :key="index">
             <div class="w80 align_center">
-              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             </div>
             <div class="pr10 flex_cell border-box">
               <div class="clamp2">{{ item.title }}</div>

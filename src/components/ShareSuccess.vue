@@ -12,7 +12,7 @@
             <img class="avatar" :src="loginUser.avatar" />
           </div>
           <div class="align_center mt5">
-    			     <img class="w_100" src="http://vuxlaravel.boka.cn/images/icon-guanxi.gif" >
+    			     <img class="w_100" src="https://tossharingsales.boka.cn/images/icon-guanxi.gif" >
           </div>
     		</div>
     		<router-link v-if="module != 'store' && module != 'shop'" :to="{path: '/stat', query: {id: data.id, module: module}}" class="db color-orange2 align_center pt10 pl15 pr15 border-box" >系统已向你推送了【分享统计】，也可以 点击此处查看统计</router-link>
@@ -42,7 +42,7 @@ export default {
     data: Object,
     loginUser: {
       type: Object,
-      default: { 'avatar': 'http://vuxlaravel.boka.cn/images/user.jpg' }
+      default: { 'avatar': 'https://tossharingsales.boka.cn/images/user.jpg' }
     },
     module: String,
     onClose: Function

@@ -4,7 +4,7 @@
       <div class="boxinner box1">
         <div class="flex_left row1 pt15">
           <div class="pic">
-            <img :src="userInfo.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+            <img :src="userInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="flex_cell flex_left">
             <div class="clamp1">
@@ -35,7 +35,7 @@
           </div>
           <div v-else v-for="(item,index) in timelineData" :key="item.id">
             <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
-              <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <span slot="title">{{item.title}}</span>
               <span slot="numbers">{{ item.numbers }}</span>
               <span slot="havetuan">{{ item.havetuan }}</span>
@@ -43,7 +43,7 @@
               <span slot="price">{{item.price}}</span>
             </groupbuyitemplate>
             <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
-              <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+              <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <span slot="title">{{item.title}}</span>
               <span slot="saveprice">{{ item.saveprice }}</span>
               <span slot="minprice">{{item.minprice}}</span>

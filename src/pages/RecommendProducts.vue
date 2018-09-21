@@ -13,7 +13,7 @@
       		<div class="inner list-shadow">
       			<div class="picarea">
       				<div class="pic">
-                <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                <img class="imgcover" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               </div>
       			</div>
       			<div class="desbox" style="overflow:hidden;">

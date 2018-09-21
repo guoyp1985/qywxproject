@@ -13,7 +13,7 @@
               <div class="user-info pt10 pb5">
                 <router-link :to="{ name: 'tProfile', params: { profile: profile } }">
                   <div class="c_pic">
-                    <img :src="avatar" class="v_middle" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                    <img :src="avatar" class="v_middle" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
                 </router-link>
               </div>
@@ -60,7 +60,7 @@ export default {
     profile: Object,
     avatarHref: {
       type: String,
-      default: 'http://vuxlaravel.boka.cn/images/user.jpg'
+      default: 'https://tossharingsales.boka.cn/images/user.jpg'
     },
     userName: {
       type: String,

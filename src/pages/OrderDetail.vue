@@ -38,7 +38,7 @@
       </group>
       <group>
         <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}`">
-          <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+          <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
           <div slot="title">
             {{order.name}}
           </div>

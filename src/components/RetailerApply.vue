@@ -3,7 +3,7 @@
     <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
-            <img src="http://vuxlaravel.boka.cn/images/banner_top.png" width="100%"/>
+            <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
             <div class="waveWrapper waveAnimation">
               <div class="waveWrapperInner bgTop">
                 <div class="wave waveTop"></div>
@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="posi_a logo">
-            <img src="http://vuxlaravel.boka.cn/images/logo_red.png"/>
+            <img src="https://tossharingsales.boka.cn/images/logo_red.png"/>
           </div>
       </div>
       <form class="applyform pr12 pl12 pt15">

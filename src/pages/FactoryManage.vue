@@ -97,7 +97,7 @@
                 <div v-else v-for="(item,index) in managerData" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                   <div class="t-table">
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
-                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" />
+                      <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </router-link>
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>

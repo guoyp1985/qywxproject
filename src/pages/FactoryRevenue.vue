@@ -32,7 +32,7 @@
                       <div class="pl12 pr12 pt10 pb10">
                         <div class="t-table">
                           <div class="t-cell pic v_middle w45">
-                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                           </div>
                           <div class="t-cell v_middle" style="color:inherit;">
                             <div class="clamp1 font14 color-999">{{item.buyername}}</div>
@@ -56,7 +56,7 @@
                       <div class="pl12 pr12 pt10 pb10">
                         <div class="t-table">
                           <div class="t-cell pic v_middle w45">
-                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                           </div>
                           <div class="t-cell v_middle" style="color:inherit;">
                             <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -92,7 +92,7 @@
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -116,7 +116,7 @@
                     <div class="pl12 pr12 pt10 pb10">
                     <div class="t-table">
                       <div class="t-cell pic v_middle w45 pr10 border-box">
-                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                        <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                       </div>
                       <div class="t-cell v_middle" style="color:inherit;">
                         <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -151,7 +151,7 @@
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 color-999">{{item.buyername}}</div>
@@ -175,7 +175,7 @@
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';"/>
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                         </div>
                         <div class="t-cell v_middle" style="color:inherit;">
                           <div class="clamp1 color-999">{{item.buyername}}</div>

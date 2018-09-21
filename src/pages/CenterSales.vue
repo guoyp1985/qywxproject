@@ -8,13 +8,13 @@
         <template v-if="afterApply">
           <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
             <swiper-item>
-              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide1.jpg" />
+              <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide1.jpg" />
             </swiper-item>
             <swiper-item>
-              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide2.jpg" />
+              <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide2.jpg" />
             </swiper-item>
             <swiper-item>
-              <img class="db mauto" src="http://vuxlaravel.boka.cn/images/guide3.jpg" />
+              <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide3.jpg" />
                <div class="in-btn" @click="inCenter">立即体验</div>
             </swiper-item>
           </swiper>

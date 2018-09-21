@@ -184,7 +184,7 @@
             <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in factoryData" :key="item.id" :value.sync="item.checked" @click.native.stop="radioclick(item,index)">
               <div class="t-table">
                 <div class="t-cell pic v_middle w50">
-                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/user.jpg';" style="width:40px;height:40px;" />
+                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:40px;height:40px;" />
                 </div>
                 <div class="t-cell v_middle" style="color:inherit;">
                   <div class="clamp1">{{item.title}}</div>

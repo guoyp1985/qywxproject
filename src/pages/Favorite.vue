@@ -22,7 +22,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <img :src="getPhoto(article.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <img :src="getPhoto(article.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -51,7 +51,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <img :src="getPhoto(commodity.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <img :src="getPhoto(commodity.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">
@@ -80,7 +80,7 @@
               </div>
               <div slot="content" class="item-content vux-1px-t">
                 <div class="img-cell">
-                  <img :src="getPhoto(store.photo)" onerror="javascript:this.src='http://vuxlaravel.boka.cn/images/nopic.jpg';" />
+                  <img :src="getPhoto(store.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
                 <div class="info-cell flex_cell">
                   <div class="font14 clamp1">

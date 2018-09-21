@@ -166,7 +166,7 @@ export default {
       ],
       showBtn1: false,
       btns1: featureBtns,
-      avatarHref: 'http://vuxlaravel.boka.cn/images/user.jpg',
+      avatarHref: 'https://tossharingsales.boka.cn/images/user.jpg',
       linkMan: '',
       userCredits: 0,
       userLevels: 0,
