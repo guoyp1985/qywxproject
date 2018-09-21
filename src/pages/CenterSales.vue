@@ -1,36 +1,31 @@
 <template>
   <div id="centersales" class="containerarea font14">
     <template v-if="loginUser">
-      <!--
-      <subscribe v-if="loginUser.subscribe != 1 && query.from != 'miniprogram'"></subscribe>
-    -->
-      <template>
-        <template v-if="afterApply">
-          <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
-            <swiper-item>
-              <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide1.jpg" />
-            </swiper-item>
-            <swiper-item>
-              <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide2.jpg" />
-            </swiper-item>
-            <swiper-item>
-              <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide3.jpg" />
-               <div class="in-btn" @click="inCenter">立即体验</div>
-            </swiper-item>
-          </swiper>
-        </template>
-        <template v-if="showCenter">
-          <center-sales
-            :retailer-info="retailerInfo"
-            :messages="messages"
-            :login-user="loginUser"
-            :marquee-data="marqueeData"
-            @vip-event="vipEvent">
-          </center-sales>
-        </template>
-        <template v-if="showApply">
-          <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
-        </template>
+      <template v-if="afterApply">
+        <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
+          <swiper-item>
+            <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide1.jpg" />
+          </swiper-item>
+          <swiper-item>
+            <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide2.jpg" />
+          </swiper-item>
+          <swiper-item>
+            <img class="db mauto" src="https://tossharingsales.boka.cn/images/guide3.jpg" />
+             <div class="in-btn" @click="inCenter">立即体验</div>
+          </swiper-item>
+        </swiper>
+      </template>
+      <template v-if="showCenter">
+        <center-sales
+          :retailer-info="retailerInfo"
+          :messages="messages"
+          :login-user="loginUser"
+          :marquee-data="marqueeData"
+          @vip-event="vipEvent">
+        </center-sales>
+      </template>
+      <template v-if="showApply">
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
@@ -126,23 +121,11 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      // console.log(`centerSales: /user/show`)
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
-        alert(JSON.stringify(res))
         if (res) {
           if (res.status === 200) {
             self.loginUser = res.data
             User.set(self.loginUser)
-            // if (self.loginUser.subscribe !== 1 && self.query.from !== 'miniprogram') {
-            //   self.$vux.loading.hide()
-            //   self.initContainer()
-            // } else {
-              // if (self.loginUser.isretailer === 2) {
-              //   self.initContainer()
-              //   self.$vux.loading.hide()
-              //   let backUrl = encodeURIComponent(location.href)
-              //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-              // }
             if (!self.loginUser.isretailer) {
               self.initContainer()
               self.showApply = true
@@ -202,7 +185,6 @@ export default {
                 }
               })
             }
-            // }
           }
         }
       })
