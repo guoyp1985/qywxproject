@@ -179,7 +179,7 @@ Vue.http.interceptors.response.use(response => {
   }
 })
 
-console.log(Vue)
+console.log(Vue.plugin)
 
 const access = success => {
   let query = ''
