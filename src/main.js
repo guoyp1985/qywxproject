@@ -207,11 +207,18 @@ const access = success => {
     .then(
       res => {
         console.log(res)
-        if (!res || !res.data || res.data.errcode) return
+        if (!res || !res.data || res.data.errcode) {
+          if (res.data.flag === 0) console.error(res.data.error)
+          else console.error(res)
+          return
+        }
         Token.set(res.data.data)
         // 取用户信息
         // console.log(`miniAccess: /user/show`)
         return Vue.http.get(`${ENV.BokaApi}/api/user/show`)
+      },
+      res => {
+        console.error(res)
       }
     )
     .then(
