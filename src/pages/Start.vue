@@ -159,9 +159,9 @@ export default{
     width: 50%;
     margin-top: 100px;
   }
-  .especial{
+  /*.especial{
     width: 55% !important;
-  }
+  }*/
   .close-btn{
     position: absolute;
     top: 20px;
@@ -278,11 +278,12 @@ export default{
     margin: 30px 0;
   }
   .detail-item>ul>li>div>img{
-    width: 70%;
+    width: 130px;
+    height: 281px;
   }
-  .detail-item>ul>li:nth-child(2)>div:nth-child(3)>img{
+  /*.detail-item>ul>li:nth-child(2)>div:nth-child(3)>img{
     width: 80%;
-  }
+  }*/
   .detail-item>ul>li>button{
     margin: 0 auto 30px;
     background-color: #0c7ebb;
