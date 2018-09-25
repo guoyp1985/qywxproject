@@ -2,7 +2,7 @@
   <div class="containerarea">
     <div class="intro">
       <div class="inner">
-        <img class="pic" src="https://tossharingsales.boka.cn/start/intro.jpg">
+        <img class="pic" src="../assets/images/start/intro.jpg">
         <ul class="txtlist">
           <li class="txtitem" v-for="item in skills" :key="item.id"><span><img :src="item.skillImg"></span><span>{{item.skillTitle}}</span></li>
         </ul>
@@ -57,38 +57,38 @@ export default{
       skills: [{
         skillTitle: '微信获客信手捏来',
         skillIntro: '看过的用户都会成为你的潜在客户',
-        skillImg: 'https://tossharingsales.boka.cn/start/skill1.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill1phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill1phone2.png',
+        skillImg: '/src/assets/images/start/skill1.png',
+        phone1: '/src/assets/images/start/skill1phone1.png',
+        phone2: '/src/assets/images/start/skill1phone2.png',
         skillMore: '发动你的客户及朋友帮你分享，只要查看过你店铺、商品或文章的用户，都会成为你的潜在客户。访客秒变客户，微信获客可以如此简单！'
       }, {
         especial: true,
         skillTitle: '客户层级直观体现',
         skillIntro: '根据潜在的客户自动计算成交概率',
-        skillImg: 'https://tossharingsales.boka.cn/start/skill2.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill2phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill2phone2.png',
+        skillImg: '/src/assets/images/start/skill2.png',
+        phone1: '/src/assets/images/start/skill2phone1.png',
+        phone2: '/src/assets/images/start/skill2phone2.png',
         skillMore: '系统根据每位客户的分享、浏览等行为精确计算成交概率，成交概率越高的客户证明对你的产品越感兴趣，此时可主动出击与他取得联系，有效提高销售额。'
       }, {
         skillTitle: '沟通客户主动及时',
         skillIntro: '即便不是微信好友也可直接联系',
-        skillImg: 'https://tossharingsales.boka.cn/start/skill3.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill3phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill3phone2.png',
+        skillImg: '/src/assets/images/start/skill3.png',
+        phone1: '/src/assets/images/start/skill3phone1.png',
+        phone2: '/src/assets/images/start/skill3phone2.png',
         skillMore: '潜在客户及时不是微信好友，也可通过系统直接联系，让你与客户的沟通随时随地。'
       }, {
         skillTitle: '销售过程信任传递',
         skillIntro: '买家通过购买过的好友获取反馈',
-        skillImg: 'https://tossharingsales.boka.cn/start/skill4.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill4phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill4phone2.png',
+        skillImg: '/src/assets/images/start/skill4.png',
+        phone1: '/src/assets/images/start/skill4phone1.png',
+        phone2: '/src/assets/images/start/skill4phone2.png',
         skillMore: '成交过程最难解决的就是“信任”问题，客户可通过商品页面查看到“本店购买过的好友”，并一键向购买过的好友咨询使用反馈，通过好友来解决买家对产品的信任问题。'
       }, {
         skillTitle: '更多的人帮你销售',
         skillIntro: '返点客让你不再一个人销售',
-        skillImg: 'https://tossharingsales.boka.cn/start/skill5.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill5phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill5phone2.png',
+        skillImg: '/src/assets/images/start/skill5.png',
+        phone1: '/src/assets/images/start/skill5phone1.png',
+        phone2: '/src/assets/images/start/skill5phone2.png',
         skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
       }],
       summaries: ['共销汇六脉神剑，助力新型微商', '轻松解决获客、销售双重难题'],
@@ -168,7 +168,7 @@ export default{
     right: 20px;
     width: 20px;
     height: 20px;
-    background: url('https://tossharingsales.boka.cn/start/closebtn.png') no-repeat center;
+    background: url('../assets/images/start/closebtn.png') no-repeat center;
     background-size: 100% auto;
   }
   .skill-more{
@@ -241,7 +241,7 @@ export default{
     margin: 0 auto;
     top: -7px;
     color: #fff;
-    background: url('https://tossharingsales.boka.cn/start/detailtitle.png') no-repeat center top;
+    background: url('../assets/images/start/detailtitle.png') no-repeat center top;
     background-size: 100% auto;
   }
   .detail-summary>ul>li{
@@ -266,7 +266,7 @@ export default{
     border-bottom: 1px solid #dddddd;
   }
   .detail-item>ul>li>p{
-    background: url('https://tossharingsales.boka.cn/start/detailitem.png') no-repeat center top;
+    background: url('../assets/images/start/detailitem.png') no-repeat center top;
     font-size: 14px;
     color: #323232;
     padding-top: 15px;
@@ -296,7 +296,7 @@ export default{
     width: 100vw;
     height: 400px;
     text-align: center;
-    background: url('https://tossharingsales.boka.cn/start/btnbk.png') no-repeat center;
+    background: url('../assets/images/start/btnbk.png') no-repeat center;
     background-size: 100% auto;
   }
   .btn>button{
@@ -319,23 +319,23 @@ export default{
     padding: 0 10px;
   }
   .detail-item>ul>li:nth-child(1){
-    background: url('https://tossharingsales.boka.cn/start/skill1bk.jpg') no-repeat center;
+    background: url('../assets/images/start/skill1bk.jpg') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(2){
-    background: url('https://tossharingsales.boka.cn/start/skill2bk.png') no-repeat center;
+    background: url('../assets/images/start/skill2bk.png') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(3){
-    background: url('https://tossharingsales.boka.cn/start/skill3bk.png') no-repeat center;
+    background: url('../assets/images/start/skill3bk.png') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(4){
-    background: url('https://tossharingsales.boka.cn/start/skill4bk.jpg') no-repeat center;
+    background: url('../assets/images/start/skill4bk.jpg') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(5){
-    background: url('https://tossharingsales.boka.cn/start/skill5bk.jpg') no-repeat center;
+    background: url('../assets/images/start/skill5bk.jpg') no-repeat center;
     background-size: 100% auto;
   }
 </style>
