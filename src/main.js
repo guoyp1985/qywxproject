@@ -333,7 +333,8 @@ clearCache()
 
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
-  access(() => {
+  access(path => {
+    router.push(path)
     render()
   })
 } else {
