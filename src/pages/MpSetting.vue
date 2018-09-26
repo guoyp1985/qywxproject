@@ -400,6 +400,7 @@ export default {
               self.factory.title = self.selectedFactory.title
               self.haveFactory = true
               console.log(self.factory)
+              location.reload()
             }
           }
         })
@@ -445,6 +446,7 @@ export default {
           title: '',
           content: res.data.error
         })
+        location.reload()
       })
     },
     getAuthInfo () {
