@@ -470,12 +470,9 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.query.from === 'miniprogram') {
-                if (self.query.from_type === 'activity') {
-                  self.$wechat.miniProgram.navigateTo({url: '/pages/groupActivity'})
-                } else {
-                  self.$wechat.miniProgram.navigateTo({url: `/packageA/pages/centerSeller?uid=${self.retailerInfo.uid}&wid=${self.retailerInfo.uid}`})
-                }
+              if (self.query.minibackurl) {
+                let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+                self.$wechat.miniProgram.redirectTo({url: minibackurl})
               } else {
                 self.$router.push('/centerSales')
               }
@@ -512,12 +509,9 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              if (self.query.from === 'miniprogram') {
-                if (self.query.from_type === 'activity') {
-                  self.$wechat.miniProgram.navigateTo({url: '/pages/groupActivity'})
-                } else {
-                  self.$wechat.miniProgram.navigateTo({url: `/packageA/pages/centerSeller?uid=${self.retailerInfo.uid}&wid=${self.retailerInfo.uid}`})
-                }
+              if (self.query.minibackurl) {
+                let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+                self.$wechat.miniProgram.redirectTo({url: minibackurl})
               } else {
                 self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
               }
