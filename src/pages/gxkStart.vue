@@ -2,10 +2,13 @@
   <div class="containerarea">
     <div class="intro">
       <div class="inner">
-        <img class="pic" src="http://localhost/vue-images/intro.jpg">
-        <ul class="txtlist">
-          <li class="txtitem" v-for="item in skills" :key="item.id"><span><img :src="item.skillImg"></span><span>{{item.skillTitle}}</span></li>
-        </ul>
+        <img class="pic" src="http://localhost/gxk/intros.jpg">
+        <!-- <ul class="txtlist">
+          <li class="txtitem" v-for="item in skills" :key="item.id"><span>{{item.skillTitle}}</span></li>
+        </ul> -->
+        <!-- <ul class="txtphone">
+          <li class="txtphoto" v-for="item in skills" :key="item.id">{{item.skillImg}}</li>
+        </ul> -->
       </div>
     </div>
     <div class="detail">
@@ -30,7 +33,8 @@
           <ul>
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
-            <button class="animation">免费入驻<div class="sweep-light"></div></button>
+          <button class="animation">免费入驻<div class="sweep-light"></div></button>
+
         </div>
     </div>
     <div class="photo-show" v-if="photoShow" ref="photoShowContainer">
@@ -55,53 +59,62 @@ export default{
       photoShow: false,
       currentSkill: {},
       skills: [{
-        skillTitle: '微信获客信手捏来',
-        skillIntro: '看过的用户都会成为你的潜在客户',
+        skillTitle: '微信群轻松获客',
+        skillIntro: '新人入群领福利，微信群获客更容易',
         skillImg: 'https://tossharingsales.boka.cn/start/skill1.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill1phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill1phone2.png',
-        phone3: 'http://localhost/vue-images/skill1phone3.png',
-        phone4: 'http://localhost/vue-images/skill1phone4.png',
+        phone1: 'https://tossharingsales.boka.cn/front/skill1phone1.png',
+        phone2: 'http://localhost/gxk/skill1phone2.png',
+        phone3: 'http://localhost/gxk/skill1phone3.png',
+        phone4: 'http://localhost/gxk/skill1phone4.png',
         skillMore: '发动你的客户及朋友帮你分享，只要查看过你店铺、商品或文章的用户，都会成为你的潜在客户。访客秒变客户，微信获客可以如此简单！'
       }, {
         especial: true,
-        skillTitle: '成交可能直观体现',
-        skillIntro: '根据潜在客户行为自动计算成交概率',
+        skillTitle: '邀请进群有福利',
+        skillIntro: '老用户邀请新用户，群快速发展更简单',
         skillImg: 'https://tossharingsales.boka.cn/start/skill2.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill2phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill2phone2.png',
-        phone3: 'http://localhost/vue-images/skill2phone3.png',
-        phone4: 'http://localhost/vue-images/skill2phone4.png',
+        phone1: 'https://tossharingsales.boka.cn/front/skill2phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/front/skill2phone2.png',
+        phone3: 'http://localhost/gxk/skill2phone3.png',
+        phone4: 'http://localhost/gxk/skill2phone4.png',
         skillMore: '系统根据每位客户的分享、浏览等行为精确计算成交概率，成交概率越高的客户证明对你的产品越感兴趣，此时可主动出击与他取得联系，有效提高销售额。'
       }, {
-        skillTitle: '沟通客户主动及时',
-        skillIntro: '即便不是微信好友也可直接联系',
+        skillTitle: '微信群裂变轻松管理',
+        skillIntro: '一个微信群，快速裂变百个微信群',
         skillImg: 'https://tossharingsales.boka.cn/start/skill3.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill3phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill3phone2.png',
-        phone3: 'http://localhost/vue-images/skill3phone3.png',
-        phone4: 'http://localhost/vue-images/skill3phone4.png',
+        phone1: 'https://tossharingsales.boka.cn/front/skill3phone2.png',
+        phone2: 'https://tossharingsales.boka.cn/front/skill3phone1.png',
+        phone3: 'http://localhost/gxk/skill3phone3.png',
+        phone4: 'http://localhost/gxk/skill3phone4.png',
         skillMore: '潜在客户及时不是微信好友，也可通过系统直接联系，让你与客户的沟通随时随地。'
       }, {
-        skillTitle: '销售过程信任传递',
-        skillIntro: '买家通过购买过的好友获取反馈',
+        skillTitle: '个人影响力全新打造',
+        skillIntro: '与其让用户了解产品，不如先让用户了解你',
         skillImg: 'https://tossharingsales.boka.cn/start/skill4.png',
-        phone1: 'http://localhost/vue-images/skill4phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill4phone2.png',
-        phone3: 'http://localhost/vue-images/skill4phone3.png',
-        phone4: 'http://localhost/vue-images/skill4phone4.png',
+        phone1: 'https://tossharingsales.boka.cn/front/skill4phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/front/skill4phone2.png',
+        phone3: 'http://localhost/gxk/skill4phone3.png',
+        phone4: 'http://localhost/gxk/skill4phone4.png',
         skillMore: '成交过程最难解决的就是“信任”问题，客户可通过商品页面查看到“本店购买过的好友”，并一键向购买过的好友咨询使用反馈，通过好友来解决买家对产品的信任问题。'
       }, {
-        skillTitle: '更多的人帮你销售',
-        skillIntro: '每一个客户都能帮你销售',
+        skillTitle: '微信群培训一劳永逸',
+        skillIntro: '课程素材提前准备，在线培训随时随地',
         skillImg: 'https://tossharingsales.boka.cn/start/skill5.png',
-        phone1: 'https://tossharingsales.boka.cn/start/skill5phone1.png',
-        phone2: 'https://tossharingsales.boka.cn/start/skill5phone2.png',
-        phone3: 'http://localhost/vue-images/skill5phone3.png',
-        phone4: 'http://localhost/vue-images/skill5phone4.png',
+        phone1: 'https://tossharingsales.boka.cn/front/skill5phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/front/skill5phone2.png',
+        phone3: 'http://localhost/gxk/skill5phone3.png',
+        phone4: 'http://localhost/gxk/skill5phone4.png',
+        skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
+      }, {
+        skillTitle: '群活跃度迅速提高',
+        skillIntro: '群活动调动群氛围，迅速提高群活跃度',
+        skillImg: 'https://tossharingsales.boka.cn/start/skill5.png',
+        phone1: 'https://tossharingsales.boka.cn/front/skill6phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/front/skill6phone2.png',
+        phone3: 'http://localhost/gxk/skill6phone3.png',
+        phone4: 'http://localhost/gxk/skill6phone4.png',
         skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
       }],
-      summaries: ['共销汇六脉神剑，助力新型微商', '轻松解决获客、销售双重难题'],
+      summaries: ['获客+留存，一切尽在掌控', '玩好微信群营销，迅速提升销售额'],
       slogens: ['·会销售产品的人，能赚钱；', '·会销售产品又能使用系统的人，能赚更多的钱；', '·会销售产品，又会使用系统，还能够利用工具进行裂变的人，才能轻松挣大钱']
     }
   },
@@ -146,20 +159,19 @@ export default{
 <style type="text/css">
 /* 动画效果 */
   .animation{
-    width: 260px;
+    width: 180px;
     height: 45px;
     border:0;
     line-height: 45px;
     background: #12a7f7;
     text-align: center;
-    border-radius: 20px;
+    border-radius: 5px;
     overflow: hidden;
     margin: 0 auto;
     position: relative;
     font-size:18px;
     color:#fff;
     margin-top:180px;
-    box-shadow:1px 2px 10px #b9b6b6;
   }
   .sweep-light{
     position: absolute;
@@ -168,7 +180,7 @@ export default{
     top: 0;
     bottom: 0;
     margin:auto;
-    margin-left:80px;
+    margin-left:40px;
     pointer-events: none;
     background-color: rgba(255,255,255,0.4);
     -webkit-border-radius: 100%;
@@ -270,17 +282,22 @@ export default{
   }
   .intro .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
   .intro .inner .pic{width:100%;}
-  .intro .txtlist{position:absolute;left:0;right:0;bottom:14%;}
+  .intro .txtlist{position:absolute;left:10px;right:0;bottom:40%;}
   .intro .txtitem{
-    height: 30px;
-    line-height: 30px;
-    color: #d4d7dc;
-    text-align: center;
+    /* height: 30px;
+    line-height: 30px;*/
+    color: #a0a4aa;
+    text-align:left;
+    display:inline-block;
+    padding-left:30px;
+    line-height:5px;
   }
-  .intro .txtlist .txtitem:not(:last-child){margin-bottom:15px;}
+ .intro .txtlist .txtitem:not(:last-child){margin-bottom:15px;}
   .intro:nth-child(1)>ul{
     margin-top: 50vh;
   }
+  .txtlist .txtitem li:nth-child(2){padding-left:50px;}
+    /*
   .intro:nth-child(1)>ul>li{
     height: 30px;
     line-height: 30px;
@@ -288,14 +305,14 @@ export default{
     color: #a0a4aa;
     text-align: center;
     margin-bottom: 15px;
-  }
+  } */
   .txtitem>span{
     display: inline-block;
     vertical-align: top;
-    font-size: 18px;
+    font-size: 14px;
     height: 100%;
   }
-  .txtitem>span:nth-child(1){
+  /* .txtitem>span:nth-child(1){
     width: 30px;
     line-height: 30px;
     height: 30px !important;
@@ -304,12 +321,12 @@ export default{
     border-radius: 50%;
     margin-right: 10px;
     background-size: 60% auto !important;
-  }
-  .txtitem>span:nth-child(1)>img{
+  } */
+  /* .txtitem>span:nth-child(1)>img{
     width: 20px;
     height: 20px;
     margin-top: 5px;
-  }
+  } */
   .detail{
     background-color: #ecf3fd;
   }
@@ -378,18 +395,6 @@ export default{
     background: url('https://tossharingsales.boka.cn/start/btnbk.png') no-repeat center;
     background-size: 100% auto;
   }
-  /* .btn>button{
-    width:180px;
-    height:45px;
-    font-size:18px;
-    background-color: #18acfb;
-    border-radius: 5px;
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    margin-top: 180px;
-    box-shadow: 5px 5px 5px #888888;
-  } */
   .btn>ul{
     padding-top: 40px;
   }
