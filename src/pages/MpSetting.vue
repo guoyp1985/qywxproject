@@ -400,6 +400,7 @@ export default {
               self.factory.title = self.selectedFactory.title
               self.haveFactory = true
               console.log(self.factory)
+              location.reload()
             }
           }
         })
@@ -443,7 +444,10 @@ export default {
         self.$vux.loading.hide()
         self.$vux.alert.show({
           title: '',
-          content: res.data.error
+          content: res.data.error,
+          onHide () {
+            location.reload()
+          }
         })
       })
     },
