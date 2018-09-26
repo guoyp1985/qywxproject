@@ -26,8 +26,8 @@
             <li v-for="(item, index) in skills" :key="item.id">
               <h1>{{item.skillTitle}}</h1>
               <p>{{item.skillIntro}}</p>
-              <div><img :src="item.phone3"></div>
-              <div><img :src="item.phone4"></div>
+              <div><img :src="item.phone1"></div>
+              <div><img :src="item.phone2"></div>
               <button :data-index="index" @touchend="onDetailItem">了解详情></button>
             </li>
           </ul>
@@ -36,7 +36,7 @@
           <ul>
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
-            <button class="animation">免费入驻<div class="sweep-light"></div></button>
+          <button>免费入驻</button>
         </div>
     </div>
     <div class="photo-show" v-if="photoShow" ref="photoShowContainer">
@@ -188,75 +188,6 @@ export default{
 };
 </script>
 <style type="text/css">
-/* 动画效果 */
-  .animation{
-    width: 260px;
-    height: 45px;
-    border:0;
-    line-height: 45px;
-    background: #12a7f7;
-    text-align: center;
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 0 auto;
-    position: relative;
-    font-size:18px;
-    color:#fff;
-    margin-top:180px;
-    box-shadow:1px 2px 10px #b9b6b6;
-  }
-  .sweep-light{
-    position: absolute;
-    left: 0;
-    right: 20px;
-    top: 0;
-    bottom: 0;
-    margin:auto;
-    margin-left:80px;
-    pointer-events: none;
-    background-color: rgba(255,255,255,0.4);
-    -webkit-border-radius: 100%;
-    -moz-border-radius: 100%;
-    -o-border-radius: 100%;
-    -ms-border-radius: 100%;
-    border-radius: 100%;
-    -webkit-animation-fill-mode: both;
-    -moz-animation-fill-mode: both;
-    -ms-animation-fill-mode: both;
-    -o-animation-fill-mode: both;
-    animation-fill-mode: both;
-    display: inline-block;
-    width: 100px;
-    height: 100px;
-    -webkit-animation: ball-scale 1s 0s ease-in-out infinite;
-    -moz-animation: ball-scale 1s 0s ease-in-out infinite;
-    -ms-animation: ball-scale 1s 0s ease-in-out infinite;
-    -o-animation: ball-scale 1s 0s ease-in-out infinite;
-    animation: ball-scale 1s 0s ease-in-out infinite;
-  }
-  @-webkit-keyframes ball-scale {
-    0% {
-    -webkit-transform: scale(0);
-    transform: scale(0)
-  }
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    opacity: 0
-  }
-  }
-  @keyframes ball-scale {
-    0% {
-    -webkit-transform: scale(0);
-    transform: scale(0)
-  }
-  100% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-    opacity: 0
-   }
-  }
-/*------------------------------*/
   .photo-show{
     position: fixed;
     left: 0;
@@ -318,7 +249,7 @@ export default{
   .intro .txtitem{
     height: 30px;
     line-height: 30px;
-    color: #d4d7dc;
+    color: #a0a4aa;
     text-align: center;
   }
   .intro .txtlist .txtitem:not(:last-child){margin-bottom:15px;}
@@ -336,7 +267,7 @@ export default{
   .txtitem>span{
     display: inline-block;
     vertical-align: top;
-    font-size: 18px;
+    font-size: 16px;
     height: 100%;
   }
   .txtitem>span:nth-child(1){
@@ -422,20 +353,16 @@ export default{
     background: url('../assets/images/start/btnbk.png') no-repeat center;
     background-size: 100% auto;
   }
-  /* .btn>button{
-    width:180px;
-    height:45px;
-    font-size:18px;
-    background-color: #18acfb;
+  .btn>button{
+    background-color: #0c7ebb;
     border-radius: 5px;
     border: none;
     color: #fff;
     padding: 10px 20px;
-    margin-top: 180px;
-    box-shadow: 5px 5px 5px #888888;
-  } */
+    margin-top: 100px;
+  }
   .btn>ul{
-    padding-top: 40px;
+    margin-top: 30px;
   }
   .btn>ul>li{
     text-align: left;
