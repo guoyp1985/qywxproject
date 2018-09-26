@@ -33,7 +33,7 @@
           <ul>
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
-          <button class="animation">免费入驻<div class="sweep-light"></div></button>
+          <a href="https://www.sharingsales.cn/#/centerSales"><button class="animation">免费入驻<div class="sweep-light"></div></button></a>
 
         </div>
     </div>
@@ -159,19 +159,20 @@ export default{
 <style type="text/css">
 /* 动画效果 */
   .animation{
-    width: 180px;
+    width: 260px;
     height: 45px;
     border:0;
     line-height: 45px;
     background: #12a7f7;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 20px;
     overflow: hidden;
     margin: 0 auto;
     position: relative;
     font-size:18px;
     color:#fff;
     margin-top:180px;
+    box-shadow: 2px 2px 5px #d4d4d4;
   }
   .sweep-light{
     position: absolute;
@@ -180,7 +181,7 @@ export default{
     top: 0;
     bottom: 0;
     margin:auto;
-    margin-left:40px;
+    margin-left:80px;
     pointer-events: none;
     background-color: rgba(255,255,255,0.4);
     -webkit-border-radius: 100%;

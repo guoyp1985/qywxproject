@@ -30,7 +30,7 @@
           <ul>
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
-          <button class="animation">免费入驻<div class="sweep-light"></div></button>
+          <a href="https://www.sharingsales.cn/#/centerSales"><button class="animation">免费入驻<div class="sweep-light"></div></button></a>
         </div>
     </div>
     <div class="photo-show" v-if="photoShow" ref="photoShowContainer">
@@ -65,8 +65,8 @@ export default{
         skillMore: '发动你的客户及朋友帮你分享，只要查看过你店铺、商品或文章的用户，都会成为你的潜在客户。访客秒变客户，微信获客可以如此简单！'
       }, {
         especial: true,
-        skillTitle: '客户层级直观体现',
-        skillIntro: '根据潜在的客户自动计算成交概率',
+        skillTitle: '成交可能直观体现',
+        skillIntro: '根据潜在客户行为自动计算成交概率',
         skillImg: '/src/assets/images/start/skill2.png',
         phone1: '/src/assets/images/start/skill2phone1.png',
         phone2: '/src/assets/images/start/skill2phone2.png',
@@ -93,7 +93,7 @@ export default{
         skillMore: '成交过程最难解决的就是“信任”问题，客户可通过商品页面查看到“本店购买过的好友”，并一键向购买过的好友咨询使用反馈，通过好友来解决买家对产品的信任问题。'
       }, {
         skillTitle: '更多的人帮你销售',
-        skillIntro: '返点客让你不再一个人销售',
+        skillIntro: '每一个客户都能帮你销售',
         skillImg: '/src/assets/images/start/skill5.png',
         phone1: '/src/assets/images/start/skill5phone1.png',
         phone2: '/src/assets/images/start/skill5phone2.png',
