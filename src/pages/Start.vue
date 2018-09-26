@@ -273,7 +273,7 @@ export default{
   .intro .txtitem{
     height: 30px;
     line-height: 30px;
-    color: #a0a4aa;
+    color: #e1e2e6;
     text-align: center;
   }
   .intro .txtlist .txtitem:not(:last-child){margin-bottom:15px;}
@@ -291,7 +291,7 @@ export default{
   .txtitem>span{
     display: inline-block;
     vertical-align: top;
-    font-size: 16px;
+    font-size: 18px;
     height: 100%;
   }
   .txtitem>span:nth-child(1){
