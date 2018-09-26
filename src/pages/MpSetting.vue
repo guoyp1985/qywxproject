@@ -444,9 +444,11 @@ export default {
         self.$vux.loading.hide()
         self.$vux.alert.show({
           title: '',
-          content: res.data.error
+          content: res.data.error,
+          onHide () {
+            location.reload()
+          }
         })
-        location.reload()
       })
     },
     getAuthInfo () {
