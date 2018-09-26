@@ -499,7 +499,7 @@ export default {
               self.submitIng = false
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
-                  let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+                  let minibackurl = decodeURIComponent(self.query.minibackurl)
                   self.$wechat.miniProgram.redirectTo({url: minibackurl})
                 } else if (self.query.from === 'apply') {
                   self.$router.push({path: '/centerSales'})

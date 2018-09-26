@@ -227,7 +227,7 @@ export default {
               self.submitIng = false
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
-                  let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+                  let minibackurl = decodeURIComponent(self.query.minibackurl)
                   self.$wechat.miniProgram.redirectTo({url: minibackurl})
                 } else {
                   let params = { id: data.data }

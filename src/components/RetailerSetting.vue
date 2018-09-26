@@ -471,7 +471,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
-                let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+                let minibackurl = decodeURIComponent(self.query.minibackurl)
                 self.$wechat.miniProgram.redirectTo({url: minibackurl})
               } else {
                 self.$router.push('/centerSales')
@@ -510,7 +510,7 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
-                let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+                let minibackurl = decodeURIComponent(self.query.minibackurl)
                 self.$wechat.miniProgram.redirectTo({url: minibackurl})
               } else {
                 self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})

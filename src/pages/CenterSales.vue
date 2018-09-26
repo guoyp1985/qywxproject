@@ -102,7 +102,7 @@ export default {
       console.log('after apply token')
       console.log(Token.get())
       if (self.query.minibackurl) {
-        let minibackurl = self.query.minibackurl.replace(/\|\|/g, '/')
+        let minibackurl = decodeURIComponent(self.query.minibackurl)
         self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
       }
     },
