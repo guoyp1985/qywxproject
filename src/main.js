@@ -309,7 +309,7 @@ const clearCache = () => {
   const lUrl = urlParse(url, true)
   const from = lUrl.query.from
   if (from === 'miniprogram') {
-    console.log('mini')
+    console.log('mini clear')
     Token.remove()
   }
   if (ENV.Version !== Version.get()) {
