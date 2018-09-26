@@ -101,8 +101,9 @@ export default {
       self.$vux.loading.hide()
       console.log('after apply token')
       console.log(Token.get())
-      if (self.query.from === 'miniprogram') {
-        self.$wechat.miniProgram.redirectTo({url: `/pages/index?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+      if (self.query.minibackurl) {
+        let minibackurl = decodeURIComponent(self.query.minibackurl)
+        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
       }
     },
     inCenter () {

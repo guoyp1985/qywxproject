@@ -226,8 +226,9 @@ export default {
             onHide: function () {
               self.submitIng = false
               if (data.flag === 1) {
-                if (self.query.from === 'miniprogram') {
-                  self.$wechat.miniProgram.navigateTo({url: '/pages/contents'})
+                if (self.query.minibackurl) {
+                  let minibackurl = decodeURIComponent(self.query.minibackurl)
+                  self.$wechat.miniProgram.redirectTo({url: minibackurl})
                 } else {
                   let params = { id: data.data }
                   if (self.query.id) {

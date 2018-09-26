@@ -227,9 +227,9 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
         // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
         // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
         //   MiniApp.removeOpenId()
         //   MiniApp.removeAppId()
@@ -256,9 +256,9 @@ const access = success => {
          User.set(res.data)
          // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-         console.log(`${lUrl.hash.replace(/#/, '')}?${query}`)
+         console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
          // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
+         success && success(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
        }
       )
     }
@@ -299,6 +299,19 @@ const access = success => {
 }
 
 const clearCache = () => {
+  const url = location.href
+              .replace(/(.+?\/)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+                return `${p1}?${p3}${p2}`
+              })
+              .replace(/(.+\?.+?)(#\/\w+)\?(.+)/, (match, p1, p2, p3) => {
+                return `${p1}&${p3}${p2}`
+              })
+  const lUrl = urlParse(url, true)
+  const from = lUrl.query.from
+  if (from === 'miniprogram') {
+    console.log('mini clear')
+    Token.remove()
+  }
   if (ENV.Version !== Version.get()) {
     Token.remove()
     User.remove()
@@ -320,7 +333,9 @@ clearCache()
 
 // 页面入口
 if (!Token.get() || Token.isExpired()) {
-  access(() => {
+  access(path => {
+    console.log(`Entry: ${path}`)
+    router.push({path: path})
     render()
   })
 } else {
