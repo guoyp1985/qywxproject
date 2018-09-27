@@ -149,7 +149,7 @@ export default{
             snap: {
               loop: false,
               threshold: 0.3,
-              snapSpeed: 800
+              swipeTime: 3000
             }
           })
         })
