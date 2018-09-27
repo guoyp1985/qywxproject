@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea">
+  <div class="containerarea" @click="allShow()">
     <div class="intro">
       <div class="xlist al al-tubiaozhizuomoban-copy">
         <!-- <img src="../assets/images/front/xlist.png" @click="toggle()" /> -->
@@ -107,6 +107,9 @@ export default{
     }
   },
   methods: {
+    // allShow () {
+    //   this.isShow = true
+    // },
     getTogxk () {
       this.$router.push('/gxkstart')
     },
@@ -145,7 +148,8 @@ export default{
             scrollY: false,
             snap: {
               loop: false,
-              threshold: 0.3
+              threshold: 0.3,
+              snapSpeed: 800
             }
           })
         })
@@ -443,7 +447,7 @@ export default{
     border-radius: 5px;
     border: none;
     color: #fff;
-    padding: 5px 10px;
+    padding: 10px 20px;
   }
   .btn{
     width: 100vw;
