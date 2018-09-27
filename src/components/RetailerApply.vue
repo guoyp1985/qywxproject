@@ -57,9 +57,9 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0">
+        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0 && classDataShow">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
-          <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+          <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
           class="x-checker"
           type="checkbox"
@@ -224,7 +224,7 @@
         </div>
       </popup>
     </div>
-    <div class="profit-show-btn" @click="onProfitShow">了解卖家的优势</div>
+    <div class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
     <div class="profit-wraper" v-show="profitShow">
       <div class="profit-close-btn al" @click="onProfitClose"></div>
       <div class="profit-inner">
@@ -233,7 +233,7 @@
           <ul>
             <li v-for="item in profits" :key="item.id"><span>{{item}}</span></li>
           </ul>
-          <button>马上申请</button>
+          <button @click="onProfitClose">马上申请</button>
         </div>
       </div>
     </div>
@@ -288,7 +288,8 @@ export default {
       },
       requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' },
       profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
-      profitShow: false
+      profitShow: false,
+      classDataShow: false
     }
   },
   watch: {
@@ -340,6 +341,7 @@ export default {
           time: self.$util.delay(data.error)
         })
         if (data.flag === 1) {
+          self.classDataShow = true
           self.verifyCode = data.data
           self.showGetcode = false
           self.timer = setInterval(function () {
@@ -445,16 +447,17 @@ export default {
 .profit-show-btn{
   position: fixed;
   right: -10px;
-  top: 45px;
+  top: 40px;
   background-color: #fff;
   color: #fa635e;
-  width: 130px;
-  height: 40px;
-  line-height: 40px;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   z-index: 600;
+  box-shadow: 0 0 3px 0 #c5aaaa;
 }
 .profit-wraper{
   position: fixed;
@@ -478,7 +481,7 @@ export default {
 }
 .profit-inner{
   width: 70%;
-  margin: 100px auto 0;
+  margin: 80px auto 0;
 }
 .profit-inner img{
   display: block;
@@ -501,6 +504,7 @@ export default {
   border-radius: 10px;
   margin-top: 20px;
   padding: 10px 20px;
+  border: none;
 }
 
 .retailerapply .banner_top{
