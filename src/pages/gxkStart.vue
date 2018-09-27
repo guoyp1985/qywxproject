@@ -2,11 +2,11 @@
   <div class="containerarea">
     <div class="intro">
       <div class="xlist al al-tubiaozhizuomoban-copy">
-        <!-- <img src="../assets/images/front/xlist.png" @click="toggle()" /> -->
         <div class="radis"></div>
         <span class="al al-tubiaozhizuomoban-copy" @click="toggle()"></span>
         <div class="menu" v-show="isShow">
           <div class="triangle-up"></div>
+          <!-- <router-link to="/start"></router-link> @click="getTogxh()"-->
           <div class="txtTitle" @click="getTogxh()">共销汇</div>
           <div class="txtGxk">共销客</div>
         </div>
@@ -27,8 +27,8 @@
             <li v-for="(item, index) in skills" :key="item.id">
               <h1>{{item.skillTitle}}</h1>
               <p>{{item.skillIntro}}</p>
-              <div><img :src="item.phone1"></div>
-              <div><img :src="item.phone2"></div>
+              <div><img :data-index="index" @touchend="onDetailItem" :src="item.phone1"></div>
+              <div><img :data-index="index" @touchend="onDetailItem" :src="item.phone2"></div>
               <button :data-index="index" @touchend="onDetailItem">了解详情></button>
             </li>
           </ul>
@@ -115,6 +115,7 @@ export default{
   methods: {
     getTogxh () {
       this.$router.push('/start')
+      window.location.reload()
     },
     toggle () {
       if (this.isShow === true) {
@@ -327,7 +328,7 @@ export default{
   }
   .photo-show>ul>li>img{
     width: 60%;
-    margin-top: 100px;
+    margin-top: 80px;
   }
   /*.especial{
     width: 55% !important;
@@ -465,7 +466,7 @@ export default{
     border-radius: 5px;
     border: none;
     color: #fff;
-    padding: 5px 10px;
+    padding: 10px 20px;
   }
   .btn{
     width: 100vw;

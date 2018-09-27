@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea" @click="allShow()">
+  <div class="containerarea">
     <div class="intro">
       <div class="xlist al al-tubiaozhizuomoban-copy">
         <!-- <img src="../assets/images/front/xlist.png" @click="toggle()" /> -->
@@ -8,7 +8,7 @@
         <div class="menu" v-show="isShow">
           <div class="triangle-up"></div>
           <div class="txtTitle">共销汇</div>
-          <div class="txtGxk" @click="getTogxk()">共销客</div>
+          <router-link to="/gxkstart"><div class="txtGxk" @click="getTogxk()">共销客</div></router-link>
         </div>
       </div>
       <div class="inner">
@@ -30,8 +30,8 @@
             <li v-for="(item, index) in skills" :key="item.id">
               <h1>{{item.skillTitle}}</h1>
               <p>{{item.skillIntro}}</p>
-              <div><img :src="item.phone1"></div>
-              <div><img :src="item.phone2"></div>
+              <div><img :data-index="index" @touchend="onDetailItem" :src="item.phone1"></div>
+              <div><img :data-index="index" @touchend="onDetailItem" :src="item.phone2"></div>
               <button :data-index="index" @touchend="onDetailItem">了解详情></button>
             </li>
           </ul>
@@ -107,12 +107,10 @@ export default{
     }
   },
   methods: {
-    // allShow () {
-    //   this.isShow = true
+    // getTogxk () {
+    //   //this.$router.push('/gxkstart')
+    //   window.location.reload()
     // },
-    getTogxk () {
-      this.$router.push('/gxkstart')
-    },
     toggle () {
       if (this.isShow === true) {
         this.isShow = false
@@ -159,6 +157,9 @@ export default{
 };
 </script>
 <style type="text/css">
+.containerarea{
+  background-color:#ECF2FC;
+}
 .txtTitle{
   border-bottom:1px solid #e5e5e5;
   padding-bottom:5px;
@@ -237,7 +238,7 @@ export default{
     position: relative;
     font-size:18px;
     color:#fff;
-    margin-top:220px;
+    margin-top:180px;
     box-shadow: 0px 0px 7px 1px #abbbd2;
   }
   .sweep-light{
@@ -314,7 +315,7 @@ export default{
   }
   .photo-show>ul>li>img{
     width: 60%;
-    margin-top: 100px;
+    margin-top: 80px;
   }
   /*.especial{
     width: 55% !important;
