@@ -173,7 +173,7 @@ export default{
   margin-top:100px;
   z-index:1;
   position:fixed;
-  right:15px;
+  left:15px;
   top:-80px;
   box-shadow: 0px 0px 7px 1px #abbbd2;
 }
@@ -185,7 +185,7 @@ export default{
   border-right: 6px solid transparent;
   border-bottom: 15px solid #fff;
   margin:0 auto;
-  right:10px;
+  left:10px;
   margin-top:-22px;
 }
 .xlist{
@@ -199,7 +199,7 @@ export default{
     z-index:2;
     font-size:30px;
     position:fixed;
-    right:25px;
+    left:25px;
     top:-80px;
     color:#17426a;
   }
@@ -211,7 +211,7 @@ export default{
     background-color:#fff;
     color:black;
     position:fixed;
-    right:15px;
+    left:15px;
     top:85px;
     border-radius:5px;
     font-size:15px;
