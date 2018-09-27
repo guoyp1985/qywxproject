@@ -1,16 +1,18 @@
 <template>
   <div class="containerarea">
+    <div class="xlist">
+      <ul class="nav">
+52         <li><a href="#">下拉菜单</a></li>
+53         <li class="drop-down al al-tubiaozhizuomoban-copy"><a href="#">下拉菜单</a>
+54             <ul class="drop-down-content">
+55                 <li><a href="#">我是1</a></li>
+56                 <li><a href="#">我是2</a></li>
+57                 <li><a href="#">我是3</a></li>
+58             </ul>
+59         </li>
+63     </ul>
+    </div>
     <div class="intro">
-      <div class="xlist al al-tubiaozhizuomoban-copy">
-        <!-- <img src="../assets/images/front/xlist.png" @click="toggle()" /> -->
-        <div class="radis"></div>
-        <span class="al al-tubiaozhizuomoban-copy" @click="toggle()"></span>
-        <div class="menu" v-show="isShow">
-          <div class="triangle-up"></div>
-          <div class="txtTitle">共销汇</div>
-          <div class="txtGxk" @click="getTogxk()">共销客</div>
-        </div>
-      </div>
       <div class="inner">
         <img class="pic" src="../assets/images/start/intro.jpg">
         <ul class="txtlist">
@@ -62,7 +64,6 @@ import BScroll from 'better-scroll'
 export default{
   data () {
     return {
-      isShow: false,
       photoShow: false,
       currentSkill: {},
       skills: [{
@@ -107,16 +108,6 @@ export default{
     }
   },
   methods: {
-    getTogxk () {
-      this.$router.push('/gxkstart')
-    },
-    toggle () {
-      if (this.isShow === true) {
-        this.isShow = false
-      } else {
-        this.isShow = true
-      }
-    },
     onDetailItem (event) {
       console.log(event)
       let index = event.changedTouches[0].target.dataset.index
@@ -155,69 +146,12 @@ export default{
 };
 </script>
 <style type="text/css">
-.txtTitle{
-  border-bottom:1px solid #e5e5e5;
-  padding-bottom:5px;
-  color:#afa8a8;
-}
-.txtGxk{
-  color:#1b87d6;
-  padding-top:5px;
-}
-.radis{
-  position:absolute;
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background-color:#fff;
-  margin-top:100px;
-  z-index:1;
-  position:fixed;
-  right:15px;
-  top:-80px;
-  box-shadow: 0px 0px 7px 1px #abbbd2;
-}
-.triangle-up {
-  position:absolute;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 15px solid #fff;
-  margin:0 auto;
-  right:10px;
-  margin-top:-22px;
-}
-.xlist{
-  color:#fff;
-  position:absolute;
-  top:0;
-}
-  .xlist>span{
+  .xlist{
     position:absolute;
-    margin-top:103px;
-    z-index:2;
-    font-size:30px;
-    position:fixed;
-    right:25px;
-    top:-80px;
-    color:#17426a;
+    color:#fff;
   }
-  .menu{
-    position:absolute;
-    z-index:1;
-    width:70px;
-    height:80px;
+  .xlist>img{
     background-color:#fff;
-    color:black;
-    position:fixed;
-    right:15px;
-    top:85px;
-    border-radius:5px;
-    font-size:15px;
-    text-align:center;
-    padding-top:10px;
-    box-shadow:0px 0px 7px 1px #abbbd2;
   }
 /* 动画效果 */
   .animation{
@@ -234,7 +168,7 @@ export default{
     font-size:18px;
     color:#fff;
     margin-top:220px;
-    box-shadow: 0px 0px 7px 1px #abbbd2;
+    box-shadow: 2px 2px 5px #d4d4d4;
   }
   .sweep-light{
     position: absolute;
