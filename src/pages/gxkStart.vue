@@ -11,16 +11,15 @@
           <div class="txtGxk">共销客</div>
         </div>
       </div> -->
-      <input type='checkbox' id="sidemenu" />
-      <aside>
+      <div class="aside" v-show="isShow">
         <div class="sideul">
           <div class="txtgxh" @click="getTogxh">共销汇</div>
           <div class="txtgxk">共销客</div>
         </div>
-      </aside>
-        <div class='wrap'>
-          <label id='sideMenuControl' for='sidemenu' class="al al-tubiaozhizuomoban-copy"></label>
-        </div>
+      </div>
+      <div class='wrap'>
+          <div @click="onlayer" class="lbl al al-tubiaozhizuomoban-copy"></div>
+      </div>
       <div class="inner">
         <img class="pic" src="https://tossharingsales.boka.cn/start/gxk/intro.jpg">
       </div>
@@ -64,6 +63,7 @@
       <div class="close-btn" @touchend="onCloseBtn"></div>
       <div class="skill-more">{{currentSkill.skillMore}}</div>
     </div>
+    <div class="mceng" v-show="isShow"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -123,6 +123,14 @@ export default{
     }
   },
   methods: {
+    onlayer () {
+      if (this.isShow === true) {
+        this.isShow = false
+        console.log(this.isShow)
+      } else {
+        this.isShow = true
+      }
+    },
     getTogxh () {
       this.$router.push('/start')
       window.location.reload()
@@ -172,6 +180,16 @@ export default{
 };
 </script>
 <style type="text/css">
+.mceng{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  z-index:0;
+}
 /*侧边栏导航条*/
   .txtgxh{
     padding-left:50px;
@@ -188,13 +206,13 @@ export default{
     left: 0;
   }
   #sidemenu:checked ~ .wrap {
-    padding-left: 220px;
+    padding-left: 10px;
   }
-  aside {
+  .aside {
     position: absolute;
     top: 18px;
     bottom: 0;
-    left: -200px;
+    left: 28px;
     width: 208px;
     height: 45px;
     background: white;
@@ -202,15 +220,17 @@ export default{
     line-height: 45px;
     position:fixed;
     z-index:1;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
   }
   .wrap {
     position: absolute;
     height: 45px;
-    left:-15px;
+    left:-11px;
     padding: 10px;
     transition: 0.2s ease-out;
   }
-  label {
+  .lbl {
     background: white;
     color: #fff;
     cursor: pointer;
@@ -226,8 +246,8 @@ export default{
     z-index:1;
     position:fixed;
     top:18px;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
+    /* border-top-right-radius:5px;
+    border-bottom-right-radius:5px; */
   }
   .sideul {
     display:flex;

@@ -1,17 +1,14 @@
 <template>
   <div class="containerarea">
-    <input type='checkbox' id="sidemenu" />
-      <div class="aside">
-          <div class="sideul">
-              <div class="txtgxh">共销汇</div>
-              <div class="txtgxk" @click="getTogxk">共销客</div>
-          </div>
+    <div class="aside" v-show="isShow">
+      <div class="sideul">
+        <div class="txtgxh">共销汇</div>
+        <div class="txtgxk" @click="getTogxk">共销客</div>
       </div>
-      <div class='wrap'>
-          <div @click="onlayer">
-            <label id='sideMenuControl' for='sidemenu' class="lbl al al-tubiaozhizuomoban-copy"></label>
-          </div>
-      </div>
+    </div>
+    <div class='wrap'>
+        <div @click="onlayer" class="lbl al al-tubiaozhizuomoban-copy"></div>
+    </div>
     <div class="intro">
       <div class="inner">
         <img class="pic" src="https://tossharingsales.boka.cn/start/intro.jpg">
@@ -114,10 +111,10 @@ export default{
       this.$router.push('/gxkstart')
     },
     onlayer () {
-      if (this.isShow === true){
+      if (this.isShow === true) {
         this.isShow = false
         console.log(this.isShow)
-      }else {
+      } else {
         this.isShow = true
       }
     },
@@ -178,20 +175,11 @@ export default{
   .txtgxk{
     padding-left: 20px;
   }
-  #sidemenu{
-    display: none;
-  }
-  #sidemenu:checked + .aside {
-    left: 0;
-  }
-  #sidemenu:checked ~ .wrap {
-    padding-left: 220px;
-  }
   .aside {
     position: absolute;
     top: 18px;
     bottom: 0;
-    left: -200px;
+    left: 28px;
     width: 208px;
     height: 45px;
     background: white;
@@ -199,15 +187,17 @@ export default{
     line-height: 45px;
     position:fixed;
     z-index:1;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
   }
   .wrap {
     position: absolute;
     height: 45px;
-    left:-15px;
+    left:-11px;
     padding: 10px;
     transition: 0.2s ease-out;
   }
-  label {
+  .lbl {
     background: white;
     color: #fff;
     cursor: pointer;
@@ -223,8 +213,6 @@ export default{
     z-index:1;
     position:fixed;
     top:18px;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
   }
   .sideul {
     display:flex;
