@@ -60,6 +60,11 @@ import ENV from 'env'
 
 export default {
   name: 'app',
+  provide () {
+    return {
+      reload: this.reload
+    }
+  },
   directives: {
     TransferDom
   },

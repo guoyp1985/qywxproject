@@ -1,16 +1,18 @@
 <template>
   <div class="containerarea">
+    <input type='checkbox' id="sidemenu" />
+      <div class="aside">
+          <div class="sideul">
+              <div class="txtgxh">共销汇</div>
+              <div class="txtgxk" @click="getTogxk">共销客</div>
+          </div>
+      </div>
+      <div class='wrap'>
+          <div @click="onlayer">
+            <label id='sideMenuControl' for='sidemenu' class="lbl al al-tubiaozhizuomoban-copy"></label>
+          </div>
+      </div>
     <div class="intro">
-      <input type='checkbox' id="sidemenu" />
-        <aside>
-            <div class="sideul">
-                      <div class="txtgxh">共销汇</div>
-                      <div class="txtgxk" @click="getTogxk">共销客</div>
-            </div>
-        </aside>
-        <div class='wrap'>
-            <label id='sideMenuControl' for='sidemenu' class="al al-tubiaozhizuomoban-copy"></label>
-        </div>
       <div class="inner">
         <img class="pic" src="../assets/images/start/intro.jpg">
         <ul class="txtlist">
@@ -55,6 +57,7 @@
       <div class="close-btn" @touchend="onCloseBtn"></div>
       <div class="skill-more">{{currentSkill.skillMore}}</div>
     </div>
+    <div class="mceng" v-show="isShow"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -62,6 +65,7 @@ import BScroll from 'better-scroll'
 export default{
   data () {
     return {
+      isShow: false,
       photoShow: false,
       currentSkill: {},
       skills: [{
@@ -109,6 +113,14 @@ export default{
     getTogxk () {
       this.$router.push('/gxkstart')
     },
+    onlayer () {
+      if (this.isShow === true){
+        this.isShow = false
+        console.log(this.isShow)
+      }else {
+        this.isShow = true
+      }
+    },
     onDetailItem (event) {
       console.log(event)
       let index = event.changedTouches[0].target.dataset.index
@@ -148,6 +160,16 @@ export default{
 };
 </script>
 <style type="text/css">
+.mceng{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  z-index:0;
+}
 /*侧边栏导航条*/
   .txtgxh{
     color:#b8b8bd;
@@ -159,13 +181,13 @@ export default{
   #sidemenu{
     display: none;
   }
-  #sidemenu:checked + aside {
+  #sidemenu:checked + .aside {
     left: 0;
   }
   #sidemenu:checked ~ .wrap {
     padding-left: 220px;
   }
-  aside {
+  .aside {
     position: absolute;
     top: 18px;
     bottom: 0;
