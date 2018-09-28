@@ -1,16 +1,16 @@
 <template>
   <div class="containerarea">
     <div class="intro">
-      <div class="xlist al al-tubiaozhizuomoban-copy">
-        <!-- <img src="../assets/images/front/xlist.png" @click="toggle()" /> -->
-        <div class="radis"></div>
-        <span class="al al-tubiaozhizuomoban-copy" @click="toggle()"></span>
-        <div class="menu" v-show="isShow">
-          <div class="triangle-up"></div>
-          <div class="txtTitle">共销汇</div>
-          <router-link to="/gxkstart"><div class="txtGxk" @click="getTogxk()">共销客</div></router-link>
+      <input type='checkbox' id="sidemenu" />
+        <aside>
+            <div class="sideul">
+                      <div class="txtgxh">共销汇</div>
+                      <div class="txtgxk" @click="getTogxk">共销客</div>
+            </div>
+        </aside>
+        <div class='wrap'>
+            <label id='sideMenuControl' for='sidemenu' class="al al-tubiaozhizuomoban-copy"></label>
         </div>
-      </div>
       <div class="inner">
         <img class="pic" src="../assets/images/start/intro.jpg">
         <ul class="txtlist">
@@ -30,8 +30,8 @@
             <li v-for="(item, index) in skills" :key="item.id">
               <h1>{{item.skillTitle}}</h1>
               <p>{{item.skillIntro}}</p>
-              <div><img :data-index="index" @touchend="onDetailItem" :src="item.phone1"></div>
-              <div><img :data-index="index" @touchend="onDetailItem" :src="item.phone2"></div>
+              <div><img :src="item.phone1"></div>
+              <div><img :src="item.phone2"></div>
               <button :data-index="index" @touchend="onDetailItem">了解详情></button>
             </li>
           </ul>
@@ -62,7 +62,6 @@ import BScroll from 'better-scroll'
 export default{
   data () {
     return {
-      isShow: false,
       photoShow: false,
       currentSkill: {},
       skills: [{
@@ -107,16 +106,8 @@ export default{
     }
   },
   methods: {
-    // getTogxk () {
-    //   //this.$router.push('/gxkstart')
-    //   window.location.reload()
-    // },
-    toggle () {
-      if (this.isShow === true) {
-        this.isShow = false
-      } else {
-        this.isShow = true
-      }
+    getTogxk () {
+      this.$router.push('/gxkstart')
     },
     onDetailItem (event) {
       console.log(event)
@@ -157,72 +148,75 @@ export default{
 };
 </script>
 <style type="text/css">
-.containerarea{
-  background-color:#ECF2FC;
-}
-.txtTitle{
-  border-bottom:1px solid #e5e5e5;
-  padding-bottom:5px;
-  color:#afa8a8;
-}
-.txtGxk{
-  color:#1b87d6;
-  padding-top:5px;
-}
-.radis{
-  position:absolute;
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background-color:#fff;
-  margin-top:100px;
-  z-index:1;
-  position:fixed;
-  left:15px;
-  top:-80px;
-  box-shadow: 0px 0px 7px 1px #abbbd2;
-}
-.triangle-up {
-  position:absolute;
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 15px solid #fff;
-  margin:0 auto;
-  left:10px;
-  margin-top:-22px;
-}
-.xlist{
-  color:#fff;
-  position:absolute;
-  top:0;
-}
-  .xlist>span{
-    position:absolute;
-    margin-top:103px;
-    z-index:2;
-    font-size:30px;
-    position:fixed;
-    left:25px;
-    top:-80px;
-    color:#17426a;
+/*侧边栏导航条*/
+  .txtgxh{
+    color:#b8b8bd;
+    padding-left:50px;
   }
-  .menu{
-    position:absolute;
-    z-index:1;
-    width:70px;
-    height:80px;
-    background-color:#fff;
-    color:black;
+  .txtgxk{
+    padding-left: 20px;
+  }
+  #sidemenu{
+    display: none;
+  }
+  #sidemenu:checked + aside {
+    left: 0;
+  }
+  #sidemenu:checked ~ .wrap {
+    padding-left: 220px;
+  }
+  aside {
+    position: absolute;
+    top: 18px;
+    bottom: 0;
+    left: -200px;
+    width: 208px;
+    height: 45px;
+    background: white;
+    transition: 0.2s ease-out;
+    line-height: 45px;
     position:fixed;
-    left:15px;
-    top:85px;
-    border-radius:5px;
-    font-size:15px;
-    text-align:center;
-    padding-top:10px;
-    box-shadow:0px 0px 7px 1px #abbbd2;
+    z-index:1;
+  }
+  .wrap {
+    position: absolute;
+    height: 45px;
+    left:-15px;
+    padding: 10px;
+    transition: 0.2s ease-out;
+  }
+  label {
+    background: white;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-family: Courier New;
+    font-size: 30px;
+    width: 45px;
+    height: 45px;
+    line-height: 48px;
+    text-align: center;
+    display: inline-block;
+    background-color:#08a4fb;
+    z-index:1;
+    position:fixed;
+    top:18px;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+  }
+  .sideul {
+    display:flex;
+    flex-direction:row;
+    list-style: none;
+    color: #1b87d6;
+    width: 100%;
+    font-size: 15px;
+    text-align: center;
+    z-index:1;
+  }
+/*over*/
+  .containerarea{
+    background-color:#ECF2FC;
   }
 /* 动画效果 */
   .animation{
