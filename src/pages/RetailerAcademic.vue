@@ -6,7 +6,7 @@
 <template>
   <div class="containerarea font14 knowledgeclass notop nobottom bg-page">
     <apply-tip v-if="showApply"></apply-tip>
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <template v-if="disData">

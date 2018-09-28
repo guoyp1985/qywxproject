@@ -437,8 +437,9 @@ export default {
               time: self.$util.delay(data.error),
               onHide: function () {
                 if (data.flag === 1) {
-                  if (self.query.from === 'miniprogram') {
-                    self.$wechat.miniProgram.navigateTo({url: '/pages/contents'})
+                  if (self.query.minibackurl) {
+                    let minibackurl = decodeURIComponent(self.query.minibackurl)
+                    self.$wechat.miniProgram.redirectTo({url: minibackurl})
                   } else {
                     self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                     if (self.query.type === 'bargainbuy') {

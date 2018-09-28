@@ -57,9 +57,9 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0">
+        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0 && classDataShow">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
-          <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+          <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
           class="x-checker"
           type="checkbox"
@@ -224,6 +224,19 @@
         </div>
       </popup>
     </div>
+    <div class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
+    <div class="profit-wraper" v-show="profitShow">
+      <div class="profit-close-btn al" @click="onProfitClose"></div>
+      <div class="profit-inner">
+        <img src="../assets/images/profit.png"></img>
+        <div class="profit">
+          <ul>
+            <li v-for="item in profits" :key="item.id"><span>{{item}}</span></li>
+          </ul>
+          <button @click="onProfitClose">马上申请</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -273,7 +286,10 @@ export default {
         verifycode: '',
         productclass: ''
       },
-      requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' }
+      requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' },
+      profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
+      profitShow: false,
+      classDataShow: false
     }
   },
   watch: {
@@ -284,6 +300,16 @@ export default {
   computed: {
   },
   methods: {
+    onProfitShow (event) {
+      console.log('in onProfitShow')
+      this.profitShow = true
+      event.stopPropagation()
+      console.log(this.profitShow)
+    },
+    onProfitClose () {
+      this.profitShow = false
+      console.log(this.profitShow)
+    },
     getcode () {
       event.preventDefault()
       const self = this
@@ -315,6 +341,7 @@ export default {
           time: self.$util.delay(data.error)
         })
         if (data.flag === 1) {
+          self.classDataShow = true
           self.verifyCode = data.data
           self.showGetcode = false
           self.timer = setInterval(function () {
@@ -413,10 +440,73 @@ export default {
       })
     }
   }
-}
+};
 </script>
 
-<style lang="less">
+<style>
+.profit-show-btn{
+  position: fixed;
+  right: -10px;
+  top: 40px;
+  background-color: #fff;
+  color: #fa635e;
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  z-index: 600;
+  box-shadow: 0 0 3px 0 #c5aaaa;
+}
+.profit-wraper{
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+.profit-close-btn{
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+.profit-close-btn::after{
+  content: '\e70b';
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+}
+.profit-inner{
+  width: 70%;
+  margin: 80px auto 0;
+}
+.profit-inner img{
+  display: block;
+  width: 100%;
+}
+.profit{
+  width: 100%;
+  background-color: #fff;
+  margin-top: -3px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+.profit li{
+  height: 30px;
+  line-height: 30px;
+}
+.profit button{
+  background-color: #f35755;
+  color: #fff;
+  border-radius: 10px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  border: none;
+}
+
 .retailerapply .banner_top{
   background: url(../assets/images/banner_top.png) no-repeat top center;
   background-size:100% 100%;
