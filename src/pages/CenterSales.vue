@@ -222,7 +222,7 @@ export default {
     }
   },
   activated () {
-    self.url = location.href
+    this.url = location.href
     this.refresh(this.$route.query)
     this.miniPost()
   },
