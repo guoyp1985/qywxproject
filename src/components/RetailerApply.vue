@@ -67,7 +67,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
+            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
