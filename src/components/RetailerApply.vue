@@ -24,7 +24,7 @@
       <div class="form-item required border1px border-box mb10">
         <div class="t-table">
           <div class="t-cell title-cell font14 v_middle">url</div>
-          <div class="t-cell input-cell v_middle" style="position:relative;">{{self.url}}</div>
+          <div class="t-cell input-cell v_middle" style="position:relative;">{{url}}</div>
         </div>
       </div>
         <div v-if="shareUser.uid" class="form-item required border1px border-box mb10">
