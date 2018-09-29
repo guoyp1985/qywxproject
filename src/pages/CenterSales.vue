@@ -25,7 +25,7 @@
         </center-sales>
       </template>
       <template v-if="showApply">
-        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :url="url"></retailer-apply>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
@@ -61,7 +61,8 @@ export default {
       // classData: [{title: '服饰内衣'}, {title: '鞋靴'}, {title: '珠宝首饰'}, {title: '礼品箱包'}, {title: '钟表'}, {title: '户外运动'}, {title: '家居家纺'}, {title: '厨具'}, {title: '家具建材'}, {title: '汽车用品'}, {title: '医药保健'}, {title: '母婴'}, {title: '玩具乐器'}, {title: '个护化妆'}, {title: '美妆护肤'}, {title: '家庭清洁/纸品'}, {title: '食品材料'}, {title: '生鲜'}, {title: '酒类'}, {title: '手机'}, {title: '图书影像'}, {title: '数码'}, {title: '电脑办公'}, {title: '家用电器'}, {title: '其他'}],
       messages: 0,
       showVip: false,
-      allowVipFee: ENV.allowVipFee
+      allowVipFee: ENV.allowVipFee,
+      url: ''
     }
   },
   methods: {
@@ -221,6 +222,7 @@ export default {
     }
   },
   activated () {
+    this.url = location.href
     this.refresh(this.$route.query)
     this.miniPost()
   },
