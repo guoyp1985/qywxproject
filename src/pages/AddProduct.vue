@@ -514,6 +514,13 @@ export default {
     },
     saveevent () {
       const self = this
+      if (self.query.minibackurl) {
+        let minibackurl = decodeURIComponent(self.query.minibackurl)
+        alert(minibackurl)
+        return false
+        self.$wechat.miniProgram.redirectTo({url: minibackurl})
+      }
+      return false
       let postdata = self.submitdata
       self.savedata(postdata)
     },
@@ -651,8 +658,6 @@ export default {
         }
         // }
       }
-      alert(location.href)
-      alert(self.query.minibackurl)
     }
   },
   created () {
