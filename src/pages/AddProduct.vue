@@ -651,6 +651,8 @@ export default {
         }
         // }
       }
+      alert(location.href)
+      alert(self.query.minibackurl)
     }
   },
   created () {
