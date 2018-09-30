@@ -522,7 +522,6 @@ export default {
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
         alert(minibackurl)
-        return false
         self.$wechat.miniProgram.redirectTo({url: minibackurl})
       }
       return false
