@@ -514,6 +514,11 @@ export default {
     },
     saveevent () {
       const self = this
+      let postdata = self.submitdata
+      self.savedata(postdata)
+    },
+    saveupevent () {
+      const self = this
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
         alert(minibackurl)
@@ -521,11 +526,6 @@ export default {
         self.$wechat.miniProgram.redirectTo({url: minibackurl})
       }
       return false
-      let postdata = self.submitdata
-      self.savedata(postdata)
-    },
-    saveupevent () {
-      const self = this
       let postdata = self.submitdata
       postdata['moderate'] = 1
       if (self.loginUser.isretailer === 1) {
