@@ -104,7 +104,7 @@ export default {
         self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
       } else {
         self.initContainer()
-        self.afterApply = true
+        self.showCenter = true
         self.$vux.loading.hide()
       }
     },
