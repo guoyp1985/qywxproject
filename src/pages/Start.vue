@@ -1,14 +1,18 @@
 <template>
   <div class="containerarea">
-    <div class="aside" v-show="isShow">
-      <div class="sideul">
-        <div class="txtgxh">共销汇</div>
-        <div class="txtgxk" @click="getTogxk">共销客</div>
+    <div>
+      <input type='checkbox' id="sidemenu" @click="onlayer" />
+      <div class="aside">
+          <div class="sideul">
+              <div class="txtgxh">共销汇</div>
+              <div class="txtgxk" @click="getTogxk">共销客</div>
+          </div>
       </div>
-    </div>
-    <div class='wrap'>
-        <div @click="onlayer" class="lbl al al-tubiaozhizuomoban-copy"></div>
-    </div>
+      <div class='wrap'>
+          <label for='sidemenu' class="al al-tubiaozhizuomoban-copy" v-show="btnOpen"></label>
+          <!-- <label for='sidemenu' class="al al-guanbi" v-show="btnClose" style="background-color:red"></label> -->
+      </div>
+  </div>
     <div class="intro">
       <div class="inner">
         <img class="pic" src="https://tossharingsales.boka.cn/start/intro.jpg">
@@ -62,6 +66,8 @@ import BScroll from 'better-scroll'
 export default{
   data () {
     return {
+      btnOpen: true,
+      btnClose: false,
       isShow: false,
       photoShow: false,
       currentSkill: {},
@@ -113,9 +119,12 @@ export default{
     onlayer () {
       if (this.isShow === true) {
         this.isShow = false
-        console.log(this.isShow)
+        // this.btnOpen = true
+        // this.btnClose = false
       } else {
         this.isShow = true
+        //this.btnOpen = false
+        //this.btnClose = true
       }
     },
     onDetailItem (event) {
@@ -175,54 +184,63 @@ export default{
   .txtgxk{
     padding-left: 20px;
   }
+  #sidemenu{
+  display: none;
+  }
+  #sidemenu:checked + .aside {
+  left: 0;
+  }
+  #sidemenu:checked ~ .wrap {
+  padding-left: 220px;
+  }
   .aside {
-    position: absolute;
-    top: 18px;
-    bottom: 0;
-    left: 28px;
-    width: 208px;
-    height: 45px;
-    background: white;
-    transition: 0.2s ease-out;
-    line-height: 45px;
-    position:fixed;
-    z-index:1;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: -200px;
+  width: 208px;
+  height: 45px;
+  background: white;
+  transition: 0.2s ease-out;
+  line-height: 45px;
+  position:fixed;
+  z-index:1;
   }
   .wrap {
-    position: absolute;
-    height: 45px;
-    left:-11px;
-    padding: 10px;
-    transition: 0.2s ease-out;
+  position: absolute;
+  height: 45px;
+  left:-15px;
+  padding: 10px;
+  transition: 0.2s ease-out;
   }
-  .lbl {
-    background: white;
-    color: #fff;
-    cursor: pointer;
-    display: block;
-    font-family: Courier New;
-    font-size: 30px;
-    width: 45px;
-    height: 45px;
-    line-height: 48px;
-    text-align: center;
-    display: inline-block;
-    background-color:#08a4fb;
-    z-index:1;
-    position:fixed;
-    top:18px;
+  label {
+  background: white;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-family: Courier New;
+  font-size: 30px;
+  width: 45px;
+  height: 45px;
+  line-height: 48px;
+  text-align: center;
+  display: inline-block;
+  background-color:#08a4fb;
+  z-index:1;
+  position:fixed;
+  top:18px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
   }
   .sideul {
-    display:flex;
-    flex-direction:row;
-    list-style: none;
-    color: #1b87d6;
-    width: 100%;
-    font-size: 15px;
-    text-align: center;
-    z-index:1;
+  display:flex;
+  flex-direction:row;
+  list-style: none;
+  color: #1b87d6;
+  width: 100%;
+  font-size: 15px;
+  text-align: center;
+  z-index:1;
   }
 /*over*/
   .containerarea{
@@ -242,7 +260,7 @@ export default{
     position: relative;
     font-size:18px;
     color:#fff;
-    margin-top:180px;
+    margin-top:220px;
     box-shadow: 0px 0px 7px 1px #abbbd2;
   }
   .sweep-light{

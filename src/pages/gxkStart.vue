@@ -1,25 +1,18 @@
 <template>
   <div class="containerarea">
-    <!-- <router-link to="/start"></router-link> @click="getTogxh()"-->
     <div class="intro">
-      <!-- <div class="xlist al al-tubiaozhizuomoban-copy">
-        <div class="radis"></div>
-        <span class="al al-tubiaozhizuomoban-copy" @click="toggle"></span>
-        <div class="menu" v-show="isShow">
-          <div class="triangle-up"></div>
-          <div class="txtTitle" @click="getTogxh">共销汇</div>
-          <div class="txtGxk">共销客</div>
+      <div class="navigation">
+        <input type='checkbox' id="sidemenu" @click="onlayer" />
+        <div class="aside">
+            <div class="sideul">
+                <div class="txtgxh" @click="getTogxh">共销汇</div>
+                <div class="txtgxk">共销客</div>
+            </div>
         </div>
-      </div> -->
-      <div class="aside" v-show="isShow">
-        <div class="sideul">
-          <div class="txtgxh" @click="getTogxh">共销汇</div>
-          <div class="txtgxk">共销客</div>
+        <div class='wrap'>
+            <label id='sideMenuControl' for='sidemenu' class="lbl al al-tubiaozhizuomoban-copy"></label>
         </div>
-      </div>
-      <div class='wrap'>
-          <div @click="onlayer" class="lbl al al-tubiaozhizuomoban-copy"></div>
-      </div>
+    </div>
       <div class="inner">
         <img class="pic" src="https://tossharingsales.boka.cn/start/gxk/intro.jpg">
       </div>
@@ -126,7 +119,6 @@ export default{
     onlayer () {
       if (this.isShow === true) {
         this.isShow = false
-        console.log(this.isShow)
       } else {
         this.isShow = true
       }
@@ -134,13 +126,6 @@ export default{
     getTogxh () {
       this.$router.push('/start')
       window.location.reload()
-    },
-    toggle () {
-      if (this.isShow === true) {
-        this.isShow = false
-      } else {
-        this.isShow = true
-      }
     },
     onDetailItem (event) {
       console.log(event)
@@ -190,82 +175,80 @@ export default{
   overflow: hidden;
   z-index:0;
 }
-/*侧边栏导航条*/
+  /*侧边栏导航条*/
   .txtgxh{
+    color:#1b87d6;
     padding-left:50px;
-    color: #1b87d6;
   }
   .txtgxk{
     color:#b8b8bd;
     padding-left: 20px;
   }
   #sidemenu{
-    display:none;
+  display: none;
   }
-  #sidemenu:checked + aside {
-    left: 0;
+  #sidemenu:checked + .aside {
+  left: 0;
   }
   #sidemenu:checked ~ .wrap {
-    padding-left: 10px;
+  padding-left: 220px;
   }
   .aside {
-    position: absolute;
-    top: 18px;
-    bottom: 0;
-    left: 28px;
-    width: 208px;
-    height: 45px;
-    background: white;
-    transition: 0.2s ease-out;
-    line-height: 45px;
-    position:fixed;
-    z-index:1;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: -200px;
+  width: 208px;
+  height: 45px;
+  background: white;
+  transition: 0.2s ease-out;
+  line-height: 45px;
+  position:fixed;
+  z-index:1;
   }
   .wrap {
-    position: absolute;
-    height: 45px;
-    left:-11px;
-    padding: 10px;
-    transition: 0.2s ease-out;
+  position: absolute;
+  height: 45px;
+  left:-15px;
+  padding: 10px;
+  transition: 0.2s ease-out;
   }
-  .lbl {
-    background: white;
-    color: #fff;
-    cursor: pointer;
-    display: block;
-    font-family: Courier New;
-    font-size: 30px;
-    width: 45px;
-    height: 45px;
-    line-height: 48px;
-    text-align: center;
-    display: inline-block;
-    background-color:#08a4fb;
-    z-index:1;
-    position:fixed;
-    top:18px;
-    /* border-top-right-radius:5px;
-    border-bottom-right-radius:5px; */
+  label {
+  background: white;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-family: Courier New;
+  font-size: 30px;
+  width: 45px;
+  height: 45px;
+  line-height: 48px;
+  text-align: center;
+  display: inline-block;
+  background-color:#08a4fb;
+  z-index:1;
+  position:fixed;
+  top:18px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
   }
   .sideul {
-    display:flex;
-    flex-direction:row;
-    list-style: none;
-    color: #1b87d6;
-    width: 100%;
-    font-size: 15px;
-    text-align: center;
-    z-index:1;
+  display:flex;
+  flex-direction:row;
+  list-style: none;
+  color: #1b87d6;
+  width: 100%;
+  font-size: 15px;
+  text-align: center;
+  z-index:1;
   }
-.txtFont{
-  padding-bottom:20px;
-  letter-spacing:2px;
-}
-.containerarea{
-  background-color:#ECF2FC;
-}
+  .txtFont{
+    padding-bottom:20px;
+    letter-spacing:2px;
+  }
+  .containerarea{
+    background-color:#ECF2FC;
+  }
 /* 动画效果 */
   .animation{
     width: 260px;
