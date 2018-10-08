@@ -215,7 +215,11 @@ export default {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.openVip()
       } else {
-        this.$router.push({path: '/addActivity', query: {type: type, from: this.query.from}})
+        let queryParams = {type: type, from: this.query.from}
+        if (this.query.minibackurl) {
+          queryParams.minibackurl = this.query.minibackurl
+        }
+        this.$router.push({path: '/addActivity', query: queryParams})
       }
     },
     openVip () {
