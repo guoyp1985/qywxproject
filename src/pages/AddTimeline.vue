@@ -223,7 +223,6 @@ export default {
     },
     refresh () {
       const self = this
-      self.$vux.loading.show()
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
       self.initData()
@@ -244,7 +243,6 @@ export default {
         } else {
           self.showTags = false
         }
-        self.$vux.loading.hide()
         self.getData()
       }
     }
