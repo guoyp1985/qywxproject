@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <template v-if="showTags">
+        <template v-if="showTags && tagsData.length > 0">
           <div class="form-item border-box padding10" v-if="tagsData.length > 0">
             <div class="pb10">选择标签</div>
             <checker
