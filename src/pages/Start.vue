@@ -1,8 +1,17 @@
 <template>
   <div class="containerarea">
+    <div class="aside" v-show="isShow">
+      <div class="sideul">
+        <div class="txtgxh">共销汇</div>
+        <div class="txtgxk" @click="getTogxk">共销客</div>
+      </div>
+    </div>
+    <div class='wrap'>
+        <div @click="onlayer" class="lbl al al-tubiaozhizuomoban-copy"></div>
+    </div>
     <div class="intro">
       <div class="inner">
-        <img class="pic" src="../assets/images/start/intro.jpg">
+        <img class="pic" src="https://tossharingsales.boka.cn/start/intro.jpg">
         <ul class="txtlist">
           <li class="txtitem" v-for="item in skills" :key="item.id"><span><img :src="item.skillImg"></span><span>{{item.skillTitle}}</span></li>
         </ul>
@@ -20,8 +29,8 @@
             <li v-for="(item, index) in skills" :key="item.id">
               <h1>{{item.skillTitle}}</h1>
               <p>{{item.skillIntro}}</p>
-              <div><img :src="item.phone3"></div>
-              <div><img :src="item.phone4"></div>
+              <div><img :src="item.phone1"></div>
+              <div><img :src="item.phone2"></div>
               <button :data-index="index" @touchend="onDetailItem">了解详情></button>
             </li>
           </ul>
@@ -45,6 +54,7 @@
       <div class="close-btn" @touchend="onCloseBtn"></div>
       <div class="skill-more">{{currentSkill.skillMore}}</div>
     </div>
+    <div class="mceng" v-show="isShow"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -52,53 +62,44 @@ import BScroll from 'better-scroll'
 export default{
   data () {
     return {
+      isShow: false,
       photoShow: false,
       currentSkill: {},
       skills: [{
         skillTitle: '微信获客信手捏来',
         skillIntro: '看过的用户都会成为你的潜在客户',
-        skillImg: '/src/assets/images/start/skill1.png',
-        phone1: '/src/assets/images/start/skill1phone1.png',
-        phone2: '/src/assets/images/start/skill1phone2.png',
-        phone3: '/src/assets/images/start/skill1phone3.png',
-        phone4: '/src/assets/images/start/skill1phone4.png',
+        skillImg: 'https://tossharingsales.boka.cn/start/skill1.png',
+        phone1: 'https://tossharingsales.boka.cn/start/skill1phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/start/skill1phone2.png',
         skillMore: '发动你的客户及朋友帮你分享，只要查看过你店铺、商品或文章的用户，都会成为你的潜在客户。访客秒变客户，微信获客可以如此简单！'
       }, {
         especial: true,
         skillTitle: '成交可能直观体现',
         skillIntro: '根据潜在客户行为自动计算成交概率',
-        skillImg: '/src/assets/images/start/skill2.png',
-        phone1: '/src/assets/images/start/skill2phone1.png',
-        phone2: '/src/assets/images/start/skill2phone2.png',
-        phone3: '/src/assets/images/start/skill2phone3.png',
-        phone4: '/src/assets/images/start/skill2phone4.png',
+        skillImg: 'https://tossharingsales.boka.cn/start/skill2.png',
+        phone1: 'https://tossharingsales.boka.cn/start/skill2phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/start/skill2phone2.png',
         skillMore: '系统根据每位客户的分享、浏览等行为精确计算成交概率，成交概率越高的客户证明对你的产品越感兴趣，此时可主动出击与他取得联系，有效提高销售额。'
       }, {
         skillTitle: '沟通客户主动及时',
         skillIntro: '即便不是微信好友也可直接联系',
-        skillImg: '/src/assets/images/start/skill3.png',
-        phone1: '/src/assets/images/start/skill3phone1.png',
-        phone2: '/src/assets/images/start/skill3phone2.png',
-        phone3: '/src/assets/images/start/skill3phone3.png',
-        phone4: '/src/assets/images/start/skill3phone4.png',
+        skillImg: 'https://tossharingsales.boka.cn/start/skill3.png',
+        phone1: 'https://tossharingsales.boka.cn/start/skill3phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/start/skill3phone2.png',
         skillMore: '潜在客户及时不是微信好友，也可通过系统直接联系，让你与客户的沟通随时随地。'
       }, {
         skillTitle: '销售过程信任传递',
         skillIntro: '买家通过购买过的好友获取反馈',
-        skillImg: '/src/assets/images/start/skill4.png',
-        phone1: '/src/assets/images/start/skill4phone1.png',
-        phone2: '/src/assets/images/start/skill4phone2.png',
-        phone3: '/src/assets/images/start/skill4phone3.png',
-        phone4: '/src/assets/images/start/skill4phone4.png',
+        skillImg: 'https://tossharingsales.boka.cn/start/skill4.png',
+        phone1: 'https://tossharingsales.boka.cn/start/skill4phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/start/skill4phone2.png',
         skillMore: '成交过程最难解决的就是“信任”问题，客户可通过商品页面查看到“本店购买过的好友”，并一键向购买过的好友咨询使用反馈，通过好友来解决买家对产品的信任问题。'
       }, {
         skillTitle: '更多的人帮你销售',
         skillIntro: '每一个客户都能帮你销售',
-        skillImg: '/src/assets/images/start/skill5.png',
-        phone1: '/src/assets/images/start/skill5phone1.png',
-        phone2: '/src/assets/images/start/skill5phone2.png',
-        phone3: '/src/assets/images/start/skill5phone3.png',
-        phone4: '/src/assets/images/start/skill5phone4.png',
+        skillImg: 'https://tossharingsales.boka.cn/start/skill5.png',
+        phone1: 'https://tossharingsales.boka.cn/start/skill5phone1.png',
+        phone2: 'https://tossharingsales.boka.cn/start/skill5phone2.png',
         skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
       }],
       summaries: ['共销汇六脉神剑，助力新型微商', '轻松解决获客、销售双重难题'],
@@ -106,6 +107,17 @@ export default{
     }
   },
   methods: {
+    getTogxk () {
+      this.$router.push('/gxkstart')
+    },
+    onlayer () {
+      if (this.isShow === true) {
+        this.isShow = false
+        console.log(this.isShow)
+      } else {
+        this.isShow = true
+      }
+    },
     onDetailItem (event) {
       console.log(event)
       let index = event.changedTouches[0].target.dataset.index
@@ -134,7 +146,8 @@ export default{
             scrollY: false,
             snap: {
               loop: false,
-              threshold: 0.3
+              threshold: 0.3,
+              swipeTime: 3000
             }
           })
         })
@@ -144,6 +157,77 @@ export default{
 };
 </script>
 <style type="text/css">
+.mceng{
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  z-index:0;
+}
+/*侧边栏导航条*/
+  .txtgxh{
+    color:#b8b8bd;
+    padding-left:50px;
+  }
+  .txtgxk{
+    padding-left: 20px;
+  }
+  .aside {
+    position: absolute;
+    top: 18px;
+    bottom: 0;
+    left: 28px;
+    width: 208px;
+    height: 45px;
+    background: white;
+    transition: 0.2s ease-out;
+    line-height: 45px;
+    position:fixed;
+    z-index:1;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+  }
+  .wrap {
+    position: absolute;
+    height: 45px;
+    left:-11px;
+    padding: 10px;
+    transition: 0.2s ease-out;
+  }
+  .lbl {
+    background: white;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font-family: Courier New;
+    font-size: 30px;
+    width: 45px;
+    height: 45px;
+    line-height: 48px;
+    text-align: center;
+    display: inline-block;
+    background-color:#08a4fb;
+    z-index:1;
+    position:fixed;
+    top:18px;
+  }
+  .sideul {
+    display:flex;
+    flex-direction:row;
+    list-style: none;
+    color: #1b87d6;
+    width: 100%;
+    font-size: 15px;
+    text-align: center;
+    z-index:1;
+  }
+/*over*/
+  .containerarea{
+    background-color:#ECF2FC;
+  }
 /* 动画效果 */
   .animation{
     width: 260px;
@@ -158,8 +242,8 @@ export default{
     position: relative;
     font-size:18px;
     color:#fff;
-    margin-top:220px;
-    box-shadow: 2px 2px 5px #d4d4d4;
+    margin-top:180px;
+    box-shadow: 0px 0px 7px 1px #abbbd2;
   }
   .sweep-light{
     position: absolute;
@@ -234,8 +318,8 @@ export default{
     vertical-align: top;
   }
   .photo-show>ul>li>img{
-    width: 50%;
-    margin-top: 100px;
+    width: 60%;
+    margin-top: 80px;
   }
   /*.especial{
     width: 55% !important;
@@ -246,7 +330,7 @@ export default{
     right: 20px;
     width: 20px;
     height: 20px;
-    background: url('../assets/images/start/closebtn.png') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/closebtn.png') no-repeat center;
     background-size: 100% auto;
   }
   .skill-more{
@@ -319,7 +403,7 @@ export default{
     margin: 0 auto;
     top: -7px;
     color: #fff;
-    background: url('../assets/images/start/detailtitle.png') no-repeat center top;
+    background: url('https://tossharingsales.boka.cn/start/detailtitle.png') no-repeat center top;
     background-size: 100% auto;
   }
   .detail-summary>ul>li{
@@ -344,7 +428,7 @@ export default{
     border-bottom: 1px solid #dddddd;
   }
   .detail-item>ul>li>p{
-    background: url('../assets/images/start/detailitem.png') no-repeat center top;
+    background: url('https://tossharingsales.boka.cn/start/detailitem.png') no-repeat center top;
     font-size: 14px;
     color: #323232;
     padding-top: 15px;
@@ -368,13 +452,13 @@ export default{
     border-radius: 5px;
     border: none;
     color: #fff;
-    padding: 5px 10px;
+    padding: 10px 20px;
   }
   .btn{
     width: 100vw;
     height: 400px;
     text-align: center;
-    background: url('../assets/images/start/btnbk.png') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/btnbk.png') no-repeat center;
     background-size: 100% auto;
   }
   /* .btn>button{
@@ -397,23 +481,23 @@ export default{
     padding: 0 10px;
   }
   .detail-item>ul>li:nth-child(1){
-    background: url('../assets/images/start/skill1bk.jpg') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/skill1bk.jpg') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(2){
-    background: url('../assets/images/start/skill2bk.png') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/skill2bk.png') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(3){
-    background: url('../assets/images/start/skill3bk.png') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/skill3bk.png') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(4){
-    background: url('../assets/images/start/skill4bk.jpg') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/skill4bk.jpg') no-repeat center;
     background-size: 100% auto;
   }
   .detail-item>ul>li:nth-child(5){
-    background: url('../assets/images/start/skill5bk.jpg') no-repeat center;
+    background: url('https://tossharingsales.boka.cn/start/skill5bk.jpg') no-repeat center;
     background-size: 100% auto;
   }
 </style>

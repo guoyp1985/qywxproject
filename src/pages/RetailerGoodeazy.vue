@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea s-havebottom font14 rgoodeazy bg-white">
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="s-topbanner s-topbanner1 bg-white">

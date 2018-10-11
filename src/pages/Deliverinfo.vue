@@ -22,7 +22,7 @@
               <div class="font16 ddate align_right">{{ item.dateline | dateformat }}</div>
               <div class="font12 dtime align_right">{{ item.dateline | dateformat1 }}</div>
               <div class="t-table">
-                <div class="t-cell" style="padding-bottom:30px;">{{ item.status }}</div>
+                <div class="t-cell" style="padding-bottom:30px;">{{ item.content }}</div>
               </div>
             </timeline-item>
           </timeline>

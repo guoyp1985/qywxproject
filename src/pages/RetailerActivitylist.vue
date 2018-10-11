@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 havetoptab bg-page ractivitylist">
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagetop">
@@ -43,7 +43,7 @@
                         <div class="clamp1 color-999 font14 middle-cell">剩  余:{{ $t('RMB') }}{{ item.leavemoney }}</div>
                       </div>
                       <div class="t-cell align_right v_middle font0" style="width:60px;">
-                        <router-link v-if="item.moderate == 0" class="qbtn bg-red color-white" :to="`/pay/${item.orderid}`">支支付</router-link>
+                        <router-link v-if="item.moderate == 0" class="qbtn bg-red color-white" :to="`/pay/${item.orderid}`">去支付</router-link>
                         <router-link class="qbtn bg-red color-white" to="/activityStat">{{ $t('Stat') }}</router-link>
                         <div class="qbtn bg-red color-white mt5" v-if="item.moderate != 0">补钱</div>
                         <div class="qbtn bg-red color-white mt5" v-if="item.isfinished != 1" @click="stopevent(item,index1)">停止</div>
@@ -215,7 +215,11 @@ export default {
       if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
         this.openVip()
       } else {
-        this.$router.push({path: '/addActivity', query: {type: type, from: this.query.from}})
+        let queryParams = {type: type, from: this.query.from}
+        if (this.query.minibackurl) {
+          queryParams.minibackurl = this.query.minibackurl
+        }
+        this.$router.push({path: '/addActivity', query: queryParams})
       }
     },
     openVip () {
