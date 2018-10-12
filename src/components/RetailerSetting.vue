@@ -538,7 +538,7 @@ export default {
         },
         onConfirm (val) {
           if (self.$util.trim(val) === '') {
-            self.$vux.toast.text('请输入标签名称', 'middle')
+            self.$vux.toast.text('标签名称不能为空', 'middle')
             return false
           }
           let isContinue = true
