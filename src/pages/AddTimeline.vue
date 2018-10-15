@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <template v-if="showTags">
+        <template v-if="showTags && tagsData.length > 0">
           <div class="form-item border-box padding10" v-if="tagsData.length > 0">
             <div class="pb10">选择标签</div>
             <checker
@@ -223,7 +223,6 @@ export default {
     },
     refresh () {
       const self = this
-      self.$vux.loading.show()
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
       self.initData()
@@ -244,7 +243,6 @@ export default {
         } else {
           self.showTags = false
         }
-        self.$vux.loading.hide()
         self.getData()
       }
     }

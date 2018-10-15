@@ -67,7 +67,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
+            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
@@ -287,7 +287,8 @@ export default {
         productclass: ''
       },
       requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' },
-      profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
+      // profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
+      profits: ['看过的用户都会成为你的潜在客户', '根据潜在客户行为自动计算成交概率', '即便不是微信好友也可直接联系'],
       profitShow: false,
       classDataShow: false
     }
@@ -497,6 +498,8 @@ export default {
 .profit li{
   height: 30px;
   line-height: 30px;
+  text-align: center;
+  /*padding: 0 10px;*/
 }
 .profit button{
   background-color: #f35755;
