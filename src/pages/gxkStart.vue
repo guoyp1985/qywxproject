@@ -73,7 +73,7 @@ export default{
         skillImg: 'https://tossharingsales.boka.cn/start/skill1.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill1phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill1phone2.png',
-        skillMore: '发动你的客户及朋友帮你分享，只要查看过你店铺、商品或文章的用户，都会成为你的潜在客户。访客秒变客户，微信获客可以如此简单！'
+        skillMore: '新用户进群群主发红包答谢，发送的红包无法控制领取过的用户不再领取。共销客小程序自动识别新用户身份，为新用户发放入群福利。'
       }, {
         especial: true,
         skillTitle: '邀请进群有福利',
@@ -81,35 +81,35 @@ export default{
         skillImg: 'https://tossharingsales.boka.cn/start/skill2.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill2phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill2phone2.png',
-        skillMore: '系统根据每位客户的分享、浏览等行为精确计算成交概率，成交概率越高的客户证明对你的产品越感兴趣，此时可主动出击与他取得联系，有效提高销售额。'
+        skillMore: '群内老用户邀请新用户进群，即可获得邀请福利，通过老用户介绍新用户的方式，不仅可以调动老用户的积极性，还可以快速解决微信群的获客问题。'
       }, {
         skillTitle: '微信群裂变轻松管理',
         skillIntro: '一个微信群，快速裂变百个微信群',
         skillImg: 'https://tossharingsales.boka.cn/start/skill3.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill3phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill3phone2.png',
-        skillMore: '潜在客户及时不是微信好友，也可通过系统直接联系，让你与客户的沟通随时随地。'
+        skillMore: '利用“返点客”发展裂变群，培养一个300人的返点客群，每位返点客建立一个300人的微信群，卖家即可拥有300*300=90000个潜在客户，通过共销客轻松管理裂变群。'
       }, {
         skillTitle: '个人影响力全新打造',
         skillIntro: '与其让用户了解产品，不如先让用户了解你',
         skillImg: 'https://tossharingsales.boka.cn/start/skill4.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill4phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill4phone2.png',
-        skillMore: '成交过程最难解决的就是“信任”问题，客户可通过商品页面查看到“本店购买过的好友”，并一键向购买过的好友咨询使用反馈，通过好友来解决买家对产品的信任问题。'
+        skillMore: '卖家秀可面向所有微信用户，弥补朋友圈的不足，先让用户来了解你，彼此建立信任感之后，才能走向“成交”。'
       }, {
         skillTitle: '微信群培训一劳永逸',
         skillIntro: '课程素材提前准备，在线培训随时随地',
         skillImg: 'https://tossharingsales.boka.cn/start/skill5.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill5phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill5phone2.png',
-        skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
+        skillMore: '微信群对代理和客户进行培训需实时在群内发送语音、图片以及文字，全程只能一人在忙，培训的内容无法重复利用。培训功能支持培训内容提前录入，一键邀请群成员参与听课，课件永久保存，重复利用。'
       }, {
         skillTitle: '群活跃度迅速提高',
         skillIntro: '群活动调动群氛围，迅速提高群活跃度',
         skillImg: 'https://tossharingsales.boka.cn/start/skill5.png',
         phone1: 'https://tossharingsales.boka.cn/start/gxk/skill6phone1.png',
         phone2: 'https://tossharingsales.boka.cn/start/gxk/skill6phone2.png',
-        skillMore: '微商创业难点就是一个人在卖卖卖，不如将现有客户发展成“返点客”，“返点客”自己购买以及带来好友购买均可获得佣金奖励，返点佣金系统自动分发，“返点客”让你不再一个人战斗。'
+        skillMore: '微信群营销做的好不好，一定程度上取决于群活跃度高不高。微信群活动有效提高群成员的参与度，并鼓励群成员进行分享，短时间内为卖家获得大量客户及微信好友。'
       }],
       summaries: ['获客+留存，一切尽在掌控', '玩好微信群营销，迅速提升销售额'],
       slogens: ['·会销售产品的人，能赚钱；', '·会销售产品又能使用系统的人，能赚更多的钱；', '·会销售产品，又会使用系统，还能够利用工具进行裂变的人，才能轻松挣大钱']
