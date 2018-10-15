@@ -5,7 +5,7 @@
       <div class="aside">
           <div class="sideul">
               <div class="txtgxh">共销汇</div>
-              <div class="txtgxk" @click="getTogxk">共销客</div>
+              <a href="http://localhost:81/#/GxkStart"><div class="txtgxk">共销客</div></a>
           </div>
       </div>
       <div class='wrap'>
@@ -46,7 +46,7 @@
           <a href="https://www.sharingsales.cn/#/centerSales">
             <button class="animation">
               <span>免费入驻</span>
-              <del class="font11 pl10 price">原价:￥99/年</del>
+              <del class="font11 pl10 price">原价:￥199/年</del>
               <div class="sweep-light"></div>
             </button>
           </a>
@@ -70,6 +70,7 @@
 <script type="text/javascript">
 import BScroll from 'better-scroll'
 export default{
+  inject: ['reload'],
   data () {
     return {
       btnOpen: true,
@@ -120,7 +121,7 @@ export default{
   },
   methods: {
     getTogxk () {
-      this.$router.push('/gxkstart')
+      this.$router.push('/GxkStart')
     },
     onlayer () {
       if (this.isShow === true) {
