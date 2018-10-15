@@ -43,7 +43,13 @@
           <ul>
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
-          <a href="https://www.sharingsales.cn/#/centerSales"><button class="animation">免费入驻<div class="sweep-light"></div></button></a>
+          <a href="https://www.sharingsales.cn/#/centerSales">
+            <button class="animation">
+              <span>免费入驻</span>
+              <del class="font11 pl10 price">原价:￥99/年</del>
+              <div class="sweep-light"></div>
+            </button>
+          </a>
         </div>
     </div>
     <div class="photo-show" v-if="photoShow" ref="photoShowContainer">
@@ -119,12 +125,8 @@ export default{
     onlayer () {
       if (this.isShow === true) {
         this.isShow = false
-        // this.btnOpen = true
-        // this.btnClose = false
       } else {
         this.isShow = true
-        //this.btnOpen = false
-        //this.btnClose = true
       }
     },
     onDetailItem (event) {
@@ -166,6 +168,9 @@ export default{
 };
 </script>
 <style type="text/css">
+.price{
+  color:#fff;position:absolute;line-height:48px;
+}
 .mceng{
   position:fixed;
   top:0;
@@ -253,7 +258,6 @@ export default{
     border:0;
     line-height: 45px;
     background: #12a7f7;
-    text-align: center;
     border-radius: 20px;
     overflow: hidden;
     margin: 0 auto;
