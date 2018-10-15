@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14">
-    <template v-if="allowChat || loginUser.isretailer == 1">
+    <template v-if="allowChat || loginUser.isretailer === 1">
       <template v-if="query.fromModule == 'product' && query.fromId && showTip">
         <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
           <div class="db-flex">
