@@ -320,7 +320,7 @@ export default {
       const self = this
       let eleobj = jQuery('#order-detail .deliver_txt')[0]
       console.log(eleobj)
-      // let range = null
+      let range = null
       let save = function (e) {
         e.clipboardData.setData('text/plain', eleobj.innerHTML)
         console.log('in save')
@@ -329,24 +329,24 @@ export default {
       }
       const userAgentInfo = navigator.userAgent
       console.log(userAgentInfo)
-      console.log('in android')
-      document.addEventListener('copy', save)
-      document.execCommand('copy')
-      document.removeEventListener('copy', save)
-      // if (self.$util.isIOS()) { // ios设备
-      //   console.log('in ios')
-      //   window.getSelection().removeAllRanges()
-      //   range = document.createRange()
-      //   range.selectNode(eleobj)
-      //   window.getSelection().addRange(range)
-      //   document.execCommand('copy')
-      //   window.getSelection().removeAllRanges()
-      // } else { // 安卓设备
-      //   console.log('in android')
-      //   document.addEventListener('copy', save)
-      //   document.execCommand('copy')
-      //   document.removeEventListener('copy', save)
-      // }
+      // console.log('in android')
+      // document.addEventListener('copy', save)
+      // document.execCommand('copy')
+      // document.removeEventListener('copy', save)
+      if (self.$util.isIOS()) { // ios设备
+        console.log('in ios')
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
       setTimeout(function () {
         self.$vux.toast.show({
           text: '复制成功',
