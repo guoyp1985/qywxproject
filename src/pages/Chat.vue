@@ -10,9 +10,9 @@
         <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
           <div class="db-flex">
             <div class="w50 flex_left">
-              <img :src="fromProduct.photo" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+              <img :src="fromProduct.sharephoto" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             </div>
-            <div class="flex_cell flex_left" to="/center">{{fromProduct.title}} </div>
+            <div class="flex_cell flex_left" to="/center">{{fromProduct.title}}</div>
           </div>
         </router-link>
       </template>
