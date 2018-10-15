@@ -87,7 +87,7 @@
       </form>
     </div>
     <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
-      <div class="flex_cell flex_center btn-bottom-red">马上免费入驻<del class="font12 pl10 price">原价:￥99/年</del></div>
+      <div class="flex_cell flex_center btn-bottom-red">马上免费入驻<del class="font12 pl10 price">原价:￥199/年</del></div>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="isshowpopup" height="100%">
