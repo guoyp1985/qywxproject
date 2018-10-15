@@ -11,8 +11,7 @@
 				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;"><slot name="title"></slot></div>
 				<div class="clamp1">
 					<div class="flex_table padding5 pro-desc">
-						<span class="color-red font14 flex_cell" style="overflow: hidden;
-    margin-right: 10px;
+						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;
     white-space: nowrap;
     text-overflow: ellipsis;">{{ $t('RMB') }} <slot name="price"></slot></span>
             <!-- <span v-if="data.allowcard" class="color-red" style="margin-right: 10px">优惠券<span class="al al-gou" style="font-size:12px;"></span></span> -->
