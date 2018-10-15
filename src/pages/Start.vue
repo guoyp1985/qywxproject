@@ -5,7 +5,7 @@
       <div class="aside">
           <div class="sideul">
               <div class="txtgxh">共销汇</div>
-              <a href="http://localhost:81/#/GxkStart"><div class="txtgxk">共销客</div></a>
+              <div class="txtgxk" @click="getTogxk">共销客</div>
           </div>
       </div>
       <div class='wrap'>
@@ -121,7 +121,7 @@ export default{
   },
   methods: {
     getTogxk () {
-      this.$router.push('/GxkStart')
+      this.$router.push('/gxkStart')
     },
     onlayer () {
       if (this.isShow === true) {
