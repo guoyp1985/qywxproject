@@ -55,7 +55,7 @@
         <div class="color-red mt5 align_right">
           <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
             <span>复制</span>
-            <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;">{{ data.delivercompanyname }} {{ data.delivercode }}{{ $t('Addressee')}}： {{ data.linkman ? data.linkman : '无' }} {{ data.telephone }}{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}{{ $t('Order Number')}}：{{ data.orderno }}</div>
+            <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.delivercompanyname }} {{ data.delivercode }}{{ $t('Addressee')}}： {{ data.linkman ? data.linkman : '无' }} {{ data.telephone }}{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}{{ $t('Order Number')}}：{{ data.orderno }}</div>
           </div>
         </div>
       -->
