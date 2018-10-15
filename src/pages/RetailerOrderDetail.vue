@@ -321,22 +321,12 @@ export default {
     copyTxt () {
       const self = this
       let eleobj = jQuery('#order-detail .deliver_txt')[0]
-      console.log(eleobj)
       let range = null
       let save = function (e) {
         e.clipboardData.setData('text/plain', eleobj.innerHTML)
-        console.log('in save')
-        console.log(eleobj.innerHTML)
         e.preventDefault()
       }
-      const userAgentInfo = navigator.userAgent
-      console.log(userAgentInfo)
-      // console.log('in android')
-      // document.addEventListener('copy', save)
-      // document.execCommand('copy')
-      // document.removeEventListener('copy', save)
       if (self.$util.isIOS()) { // ios设备
-        console.log('in ios')
         window.getSelection().removeAllRanges()
         range = document.createRange()
         range.selectNode(eleobj)
