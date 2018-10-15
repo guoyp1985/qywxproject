@@ -32,6 +32,12 @@
           </div>
           <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
           <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
+          <div class="color-red mt5 align_right">
+            <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
+              <span>复制</span>
+              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+            </div>
+          </div>
         </div>
         <div class="mt10 bg-white padding10 b_bottom_after">
           <div class="t-table">
@@ -40,11 +46,11 @@
           </div>
         </div>
         <div class="bg-white">
-          <div class="scroll_list productlist color_gray appendarea" ajaxurl="" template=".template">
+          <div class="scroll_list productlist color_gray appendarea">
             <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
-                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"style="width:50px;height:50px;" />
+                  <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:50px;height:50px;" />
                 </div>
                 <div class="t-cell v_top">
                   <div class="clamp2 font12 align_left">{{ item.name }}</div>
@@ -135,6 +141,7 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
+import jQuery from 'jquery'
 import { User } from '#/storage'
 
 export default {
@@ -310,6 +317,34 @@ export default {
           })
         }
       })
+    },
+    copyTxt () {
+      const self = this
+      let eleobj = jQuery('#order-detail .deliver_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
     },
     getData () {
       const self = this

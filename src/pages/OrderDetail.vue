@@ -30,12 +30,36 @@
           </div>
         </div>
       </sticky>
+      <!--
       <group class="shipping-card">
         <cell v-if="expressNumber" class="express-info font14 pb5" :title="expressInfo" :value="$t('View Details')" is-link :link="{path: '/deliverinfo', query: {id: id}}"></cell>
         <cell class="font14" :title="`${$t('Receiver')}: ${receiver}`" :value="receiverPhone"></cell>
         <cell class="shipping-address font12 color-gray" :title="`${$t('Shipping Address')}: ${shippingAddress}`"></cell>
         <cell class="shipping-address font12 color-gray" :title="`${$t('Order Number')}: ${shippingOrderon}`"></cell>
       </group>
+    -->
+      <div v-if="data.flag != 0" class="bg-white b_bottom_after padding10">
+        <div v-if="data.flag != 0 && data.flag != 1 && data.flag != 2" class="t-table mb10">
+          <div class="t-cell v_middle">{{ data.delivercompanyname }} {{ data.delivercode }}</div>
+          <div class="t-cell v_middle align_right w60">
+            <router-link :to="{path: '/deliverinfo', query: {id: data.id}}" class="font12 color-orange5">查看详情</router-link>
+          </div>
+        </div>
+        <div class="t-table">
+          <div class="t-cell v_middle">{{ $t('Addressee')}}：{{ data.linkman ? data.linkman : '无' }}</div>
+          <div class="t-cell v_middle align_right" style="width:110px;">{{ data.telephone }}</div>
+        </div>
+        <div class="font12 color-gray mt5">{{ $t('Shipping Address')}}：{{ data.address ? data.address : '无' }}</div>
+        <div class="font12 color-gray mt5">{{ $t('Order Number')}}：{{ data.orderno }}</div>
+        <!--
+        <div class="color-red mt5 align_right">
+          <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
+            <span>复制</span>
+            <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+          </div>
+        </div>
+      -->
+      </div>
       <group>
         <cell class="order-list font12" v-for="(order, index) in orders" :key="index" :link="`/product?id=${order.pid}`">
           <img slot="icon" class="imgcover" :src="order.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -104,6 +128,7 @@ import OrderInfo from '@/components/OrderInfo'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
+import jQuery from 'jquery'
 export default {
   directives: {
     TransferDom
@@ -215,6 +240,34 @@ export default {
           })
         }
       })
+    },
+    copyTxt () {
+      const self = this
+      let eleobj = jQuery('#order-detail .deliver_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
     },
     getData () {
       const self = this

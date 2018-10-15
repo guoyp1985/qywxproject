@@ -551,12 +551,14 @@ export default {
               }
             }
           }
-          if (val.search(/，/g) > -1) {
-            let arr = val.split('，')
-            for (let i = 0; i < arr.length; i++) {
-              if (self.$util.trim(arr[i]) === '') {
-                isContinue = false
-                break
+          if (isContinue) {
+            if (val.search(/，/g) > -1) {
+              let arr = val.split('，')
+              for (let i = 0; i < arr.length; i++) {
+                if (self.$util.trim(arr[i]) === '') {
+                  isContinue = false
+                  break
+                }
               }
             }
           }
