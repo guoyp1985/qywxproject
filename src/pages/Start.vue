@@ -121,7 +121,7 @@ export default{
   },
   methods: {
     getTogxk () {
-      this.$router.push('/gxkStart')
+      this.$router.push('/MiniStart')
     },
     onlayer () {
       if (this.isShow === true) {
