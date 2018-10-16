@@ -5,7 +5,7 @@
         <input type='checkbox' id="sidemenu" @click="onlayer" />
         <div class="aside">
             <div class="sideul">
-                <div class="txtgxh" @click="getTogxh">共销汇</div>
+                <div class="txtgxh active" @click="getTogxh">共销汇</div>
                 <div class="txtgxk">共销客</div>
             </div>
         </div>
@@ -125,7 +125,6 @@ export default{
     },
     getTogxh () {
       this.$router.push('/start')
-      window.location.reload()
     },
     onDetailItem (event) {
       console.log(event)
@@ -176,14 +175,10 @@ export default{
   z-index:0;
 }
   /*侧边栏导航条*/
-  .txtgxh{
-    color:#1b87d6;
-    padding-left:50px;
-  }
-  .txtgxk{
-    color:#b8b8bd;
-    padding-left: 20px;
-  }
+  .txtgxh{padding-left:50px;}
+  .txtgxh.active{color:#b8b8bd;}
+  .txtgxk{padding-left: 20px;}
+  .txtgxk.active{color:#b8b8bd;}
   #sidemenu{
   display: none;
   }

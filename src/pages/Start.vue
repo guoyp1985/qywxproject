@@ -5,7 +5,7 @@
       <div class="aside">
           <div class="sideul">
               <div class="txtgxh">共销汇</div>
-              <div class="txtgxk" @click="getTogxk">共销客</div>
+              <div class="txtgxk active" @click="getTogxk">共销客</div>
           </div>
       </div>
       <div class='wrap'>
@@ -121,7 +121,7 @@ export default{
   },
   methods: {
     getTogxk () {
-      this.$router.push('/MiniStart')
+      this.$router.push('/miniStart')
     },
     onlayer () {
       if (this.isShow === true) {
@@ -183,13 +183,10 @@ export default{
   z-index:0;
 }
 /*侧边栏导航条*/
-  .txtgxh{
-    color:#b8b8bd;
-    padding-left:50px;
-  }
-  .txtgxk{
-    padding-left: 20px;
-  }
+  .txtgxh{padding-left:50px;}
+  .txtgxh.active{color:#b8b8bd;}
+  .txtgxk{padding-left: 20px;}
+  .txtgxk.active{color:#b8b8bd;}
   #sidemenu{
   display: none;
   }
