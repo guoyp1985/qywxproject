@@ -53,7 +53,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.verifycode" type="tel" class="input" name="verifycode" required placeholder="验证码"/>
+              <x-input type="tel" v-model="submitdata.verifycode" class="input" name="verifycode" required placeholder="验证码" @on-change="codeChange"></x-input>
             </div>
           </div>
         </div>
@@ -313,6 +313,11 @@ export default {
     onProfitClose () {
       this.profitShow = false
       console.log(this.profitShow)
+    },
+    codeChange (val) {
+      if (val !== '') {
+        this.classDataShow = true
+      }
     },
     getcode () {
       event.preventDefault()
