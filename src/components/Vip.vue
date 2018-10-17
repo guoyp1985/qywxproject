@@ -26,7 +26,7 @@
               <div class="btn" style="background-color:#d7d7d7" @click="closeVip">立享特权</div>
             </div>
             <div class="flex_cell flex_right">
-              <div class="btn" style="background-color:#099ded;color:#fff;" @click="openVip">续费 {{$t('RMB')}}99/年</div>
+              <div class="btn" style="background-color:#099ded;color:#fff;" @click="openVip">续费 {{$t('RMB')}}199/年</div>
             </div>
           </div>
         </div>
