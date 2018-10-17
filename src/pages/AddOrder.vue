@@ -460,11 +460,13 @@ export default {
               let a = self.addressdata[i]
               if (a.isdefault) {
                 self.selectaddress = a
+                self.addressdata[i].checked = true
                 break
               }
             }
             if (!self.selectaddress && self.addressdata.length > 0) {
               self.selectaddress = self.addressdata[0]
+              self.addressdata[0].checked = true
             }
             if (self.selectaddress) {
               self.submitdata.addressid = self.selectaddress.id
