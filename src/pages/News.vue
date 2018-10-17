@@ -459,6 +459,10 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.handleImg()
+              if (self.query.minibackurl) {
+                let minibackurl = decodeURIComponent(self.query.minibackurl)
+                self.$wechat.miniProgram.redirectTo({url: minibackurl})
+              }
             }
           }
         })
