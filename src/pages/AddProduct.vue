@@ -50,7 +50,7 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <select v-model="submitdata.classid" class="w_100" style="height:35px;">
-                  <option value=''>请选择</option>
+                  <option value='0'>请选择</option>
                   <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
                 </select>
               </div>
