@@ -330,7 +330,12 @@ export default {
                 onHide: function () {
                   if (data.flag === 1) {
                     self.newsCount++
-                    self.$router.push({path: '/news', query: {id: data.data.id}})
+                    if (self.query.minibackurl) {
+                      let minibackurl = decodeURIComponent(self.query.minibackurl)
+                      self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                    } else {
+                      self.$router.push({path: '/news', query: {id: data.data.id}})
+                    }
                   }
                 }
               })
@@ -373,7 +378,12 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 self.collecturl = ''
-                self.$router.push({path: '/news', query: {id: data.data.id}})
+                if (self.query.minibackurl) {
+                  let minibackurl = decodeURIComponent(self.query.minibackurl)
+                  self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                } else {
+                  self.$router.push({path: '/news', query: {id: data.data.id}})
+                }
               }
             }
           })
