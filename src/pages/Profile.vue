@@ -74,6 +74,8 @@ export default {
         if (res.data.flag) {
           const user = User.get()
           self.getProfile = res.data.data
+          const dt = new Date().getTime()
+          self.getProfile.avatar = `${self.getProfile.avatar}?_dt=${dt}`
           User.set({
             ...user,
             ...self.getProfile
