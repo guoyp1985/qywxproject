@@ -289,7 +289,7 @@ export default {
       havenum2: 0,
       showmore: false,
       submitdata: {
-        classid: '',
+        classid: '0',
         title: '',
         price: '',
         oriprice: '',
@@ -335,7 +335,7 @@ export default {
     initSubmitData () {
       this.videoarr = []
       this.submitdata = {
-        classid: '',
+        classid: '0',
         title: '',
         oriprice: '',
         price: '',
