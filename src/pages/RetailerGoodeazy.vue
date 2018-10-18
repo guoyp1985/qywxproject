@@ -34,7 +34,7 @@
                 default-item-class="ck-item"
                 selected-item-class="ck-item-selected"
                 @on-change="searchEvent">
-                  <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">{{ kw }}</checker-item>
+                  <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw"><div class="clamp1" style="max-width:80px;">{{ kw }}</div></checker-item>
                 </checker>
                 <div class="scroll_list pl10 pr10 mb12">
                   <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
