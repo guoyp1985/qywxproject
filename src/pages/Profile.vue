@@ -73,9 +73,10 @@ export default {
       .then(res => {
         if (res.data.flag) {
           const user = User.get()
-          self.getProfile = res.data.data
-          const dt = new Date().getTime()
-          self.getProfile.avatar = `${self.getProfile.avatar}?_dt=${dt}`
+          const retdata = res.data.data
+          for (let key in retdata) {
+            self.getProfile[key] = retdata[key]
+          }
           User.set({
             ...user,
             ...self.getProfile
