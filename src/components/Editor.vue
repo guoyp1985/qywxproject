@@ -633,6 +633,7 @@ export default {
       let node = event.target
       let linkurl = null
       if (!self.showBtnArea) {
+        console.log('in editor clickproduct')
         while (node) {
           if (node.nodeType === 1) {
             let nodeClass = node.getAttribute('class')

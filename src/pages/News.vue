@@ -306,7 +306,8 @@ export default {
       })
     },
     clickProduct (event) {
-      if (self.reward.uid !== self.article.uploader) {
+      if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
+        console.log('in news clickproduct')
         let node = event.target
         let linkurl = null
         while (node) {
