@@ -129,6 +129,7 @@ import { User } from '#/storage'
 import Socket from '#/socket'
 
 let room = ''
+let self = {}
 export default {
   directives: {
     TransferDom
@@ -208,7 +209,6 @@ export default {
       }
     },
     onCommentDelete (comment) {
-      const self = this
       self.$vux.confirm.show({
         title: '确定要删除该评论吗？',
         onConfirm () {
@@ -238,7 +238,6 @@ export default {
       this.replyPopupShow = false
     },
     commentSubmit (value) { // 留言提交
-      const self = this
       this.commentPopupShow = false
       self.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: this.article.id, module: self.module, message: value})
@@ -260,7 +259,6 @@ export default {
       })
     },
     replySubmit (value) { // 回复提交
-      const self = this
       this.replyPopupShow = false
       this.$http.post(`${ENV.BokaApi}/api/comment/add`, {nid: self.replyData.id, module: 'comments', message: value})
       .then(res => {
@@ -281,7 +279,6 @@ export default {
       })
     },
     handleScroll () {
-      const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
@@ -294,7 +291,6 @@ export default {
       })
     },
     getCommentsList () {
-      const self = this
       let params = { nid: self.query.id, module: self.module, pagestart: self.pagestart, limit: self.limit }
       self.$http.post(`${ENV.BokaApi}/api/comment/list`, params).then(function (res) {
         let data = res.data
@@ -310,21 +306,25 @@ export default {
       })
     },
     clickProduct (event) {
-      const self = this
-      let node = event.target
-      while (node) {
-        if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-          const linkurl = node.getAttribute('linkurl')
-          if (linkurl) {
-            self.$router.push(linkurl)
+      if (self.reward.uid !== self.article.uploader) {
+        let node = event.target
+        let linkurl = null
+        while (node) {
+          if (node.nodeType === 1) {
+            let nodeClass = node.getAttribute('class')
+            if (nodeClass && nodeClass.indexOf('insertproduct') > -1) {
+              linkurl = node.getAttribute('linkurl')
+              break
+            }
           }
-          break
+          node = node.parentNode
         }
-        node = node.parentNode
+        if (linkurl) {
+          self.$router.push(linkurl)
+        }
       }
     },
     getData () {
-      const self = this
       const id = this.query.id
       const infoparams = { id: id, module: this.module }
       if (this.query.from === 'poster') {
@@ -399,7 +399,6 @@ export default {
       })
     },
     onFavorite () {
-      const self = this
       if (this.notFavorite) {
         this.notFavorite = false
         let cururl = `/news?id=${self.query.id}`
@@ -442,7 +441,6 @@ export default {
     onShare () {
     },
     editSave () {
-      const self = this
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
@@ -482,7 +480,6 @@ export default {
       this.showShareSuccess = false
     },
     clickDig () {
-      const self = this
       let url = `${ENV.BokaApi}/api/user/digs/add`
       if (self.isdig) {
         url = `${ENV.BokaApi}/api/user/digs/delete`
@@ -512,7 +509,6 @@ export default {
       })
     },
     handleImg () {
-      const self = this
       self.photoarr = []
       self.previewerPhotoarr = []
       let imgTags = document.querySelectorAll('.news .article-content img')
@@ -541,7 +537,6 @@ export default {
       this.showBigimg(index)
     },
     showBigimg (index) {
-      const self = this
       if (!document.querySelector('.Eleditor-area')) {
         if (self.$util.isPC()) {
           self.$refs.previewer.show(index)
@@ -554,7 +549,6 @@ export default {
       }
     },
     toStore () {
-      const self = this
       self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     },
     createSocket () {
@@ -568,7 +562,6 @@ export default {
       this.$util.wxAccessListening()
     },
     refresh (query) {
-      const self = this
       this.loginUser = User.get()
       this.showEditor = false
       this.showsharetip = false
@@ -587,7 +580,6 @@ export default {
         self.messages = data.data
       })
       if (query.newadd) {
-        const self = this
         setTimeout(() => {
           self.showsharetip = false
         }, 10000)
@@ -595,9 +587,11 @@ export default {
     }
   },
   created () {
+    self = this
     this.init()
   },
   activated () {
+    self = this
     this.refresh(this.$route.query)
   }
   // beforeRouteLeave (to, from, next) {
