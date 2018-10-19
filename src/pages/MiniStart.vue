@@ -62,10 +62,12 @@
 <script type="text/javascript">
 import BScroll from 'better-scroll'
 import ENV from 'env'
+import { User } from '#/storage'
 export default{
   data () {
     return {
       query: {},
+      loginUser: {},
       isShow: false,
       photoShow: false,
       currentSkill: {},
@@ -166,6 +168,7 @@ export default{
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      self.loginUser = User.get()
       if (self.query.share_uid) {
         let params = {uid: self.query.share_uid}
         params.share_uid = self.query.share_uid
@@ -177,6 +180,19 @@ export default{
           params: params
         })
       }
+      let shareParams = {
+        module: 'centerseller',
+        moduleid: self.userInfo.uid,
+        title: '共销客',
+        desc: '微信群营销工具',
+        photo: 'https://tossharingsales.boka.cn/start/gxk/intro.jpg',
+        link: `${ENV.Host}/#/miniStart?share_uid=${self.loginUser.uid}`
+      }
+      if (self.query.share_uid) {
+        shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+        shareParams.lastshareuid = self.query.share_uid
+      }
+      self.$util.handleWxShare(shareParams)
     }
   },
   created () {
