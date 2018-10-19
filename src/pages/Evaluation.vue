@@ -135,6 +135,7 @@ export default {
 #product-evaluation .product-img {
   width: 60px;
   height: 60px;
+  object-fit: cover;
 }
 
 #product-evaluation .product-rater .vux-cell-primary {
