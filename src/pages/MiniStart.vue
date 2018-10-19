@@ -182,7 +182,7 @@ export default{
       }
       let shareParams = {
         module: 'centerseller',
-        moduleid: self.userInfo.uid,
+        moduleid: self.loginUser.uid,
         title: '共销客',
         desc: '微信群营销工具',
         photo: 'https://tossharingsales.boka.cn/start/gxk/intro.jpg',

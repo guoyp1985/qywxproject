@@ -174,6 +174,7 @@ export default{
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       self.loginUser = User.get()
+      console.log(self.loginUser)
       if (self.query.share_uid) {
         let params = {uid: self.query.share_uid}
         params.share_uid = self.query.share_uid
@@ -187,7 +188,7 @@ export default{
       }
       let shareParams = {
         module: 'centerseller',
-        moduleid: self.userInfo.uid,
+        moduleid: self.loginUser.uid,
         title: '共销汇',
         desc: '共销汇六脉神剑，助力新型微商',
         photo: 'https://tossharingsales.boka.cn/start/intro.jpg',
@@ -197,6 +198,7 @@ export default{
         shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
         shareParams.lastshareuid = self.query.share_uid
       }
+      console.log(shareParams)
       self.$util.handleWxShare(shareParams)
     }
   },
