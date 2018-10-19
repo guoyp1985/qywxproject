@@ -61,9 +61,11 @@
 </template>
 <script type="text/javascript">
 import BScroll from 'better-scroll'
+import ENV from 'env'
 export default{
   data () {
     return {
+      query: {},
       isShow: false,
       photoShow: false,
       currentSkill: {},
@@ -115,6 +117,23 @@ export default{
       slogens: ['·会销售产品的人，能赚钱；', '·会销售产品又能使用系统的人，能赚更多的钱；', '·会销售产品，又会使用系统，还能够利用工具进行裂变的人，才能轻松挣大钱']
     }
   },
+  watch: {
+    currentSkill (newValue) {
+      console.log(newValue)
+      if (newValue.skillTitle !== undefined) {
+        this.$nextTick(res => {
+          this.scroll = new BScroll(this.$refs.photoShowContainer, {
+            scrollX: true,
+            scrollY: false,
+            snap: {
+              loop: false,
+              threshold: 0.3
+            }
+          })
+        })
+      }
+    }
+  },
   methods: {
     onlayer () {
       if (this.isShow === true) {
@@ -142,26 +161,28 @@ export default{
       document.addEventListener('touchmove', function (event) {
         window.event.returnValue = true
       }, false)
-    }
-  },
-  watch: {
-    currentSkill (newValue) {
-      console.log(newValue)
-      if (newValue.skillTitle !== undefined) {
-        this.$nextTick(res => {
-          this.scroll = new BScroll(this.$refs.photoShowContainer, {
-            scrollX: true,
-            scrollY: false,
-            snap: {
-              loop: false,
-              threshold: 0.3
-            }
-          })
+    },
+    init () {
+      const self = this
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      if (self.query.share_uid) {
+        let params = {uid: self.query.share_uid}
+        params.share_uid = self.query.share_uid
+        params.share_module = 'centerseller'
+        if (self.query.lastshareuid) {
+          params.lastshareuid = self.query.lastshareuid
+        }
+        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+          params: params
         })
       }
     }
+  },
+  created () {
+    this.init()
   }
-};
+}
 </script>
 <style type="text/css">
 .mceng{
