@@ -363,6 +363,11 @@ export default {
           if (type === 'video') {
             curMaxnum = 1
           }
+          if (type === 'photo') {
+            curMaxnum = 9 - self.photoarr.length
+          } else if (type === 'contentphoto') {
+            curMaxnum = 9 - self.photoarr1.length
+          }
           self.$util.wxUploadImage({
             maxnum: curMaxnum,
             handleCallback: function (data) {

@@ -184,7 +184,7 @@ export default {
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: self.maxnum,
+            maxnum: self.maxnum - self.photoarr.length,
             handleCallback: function (data) {
               self.photoCallback(data)
             }

@@ -386,7 +386,7 @@ export default {
       } else {
         let curmax = 1
         if (type === 'showphoto') {
-          curmax = 9
+          curmax = 9 - self.showphotoArr.length
         }
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
