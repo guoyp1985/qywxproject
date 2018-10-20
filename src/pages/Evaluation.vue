@@ -75,6 +75,11 @@ export default {
       if (!self.eventIng) {
         self.eventIng = true
         const orderId = this.$route.query.id
+        if (self.$util.trim(product.comment) === '') {
+          self.$vux.toast.text('内容不能为空', 'middle')
+          self.eventIng = false
+          return false
+        }
         self.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/comment/add`, {message: product.comment, module: 'product', nid: product.pid, type: 'orders', orderid: orderId})
         .then(res => {
@@ -82,6 +87,7 @@ export default {
           self.$vux.loading.hide()
           self.$vux.toast.show({
             text: data.error,
+            type: data.flag ? 'success' : 'warn',
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
