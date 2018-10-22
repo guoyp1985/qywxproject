@@ -236,8 +236,8 @@
             <div><i class="al al-dianpu font18 color-red"></i></div>
             <div class="font12">首页</div>
           </router-link>
-          <router-link class="t-cell h_100 v_middle align_center" to="/center" style="width:80px;">
-            <div><i class="al al-peoplefill font18 color-blue"></i></div>
+          <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+            <div><i class="al al-people font18 color-blue"></i></div>
             <div class="font12">个人中心</div>
           </router-link>
           <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
@@ -254,8 +254,8 @@
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
-            <router-link class="t-cell h_100 v_middle align_center" to="/center" style="width:80px;">
-              <div><i class="al al-peoplefill font18 color-blue"></i></div>
+            <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+              <div><i class="al al-people font18 color-blue"></i></div>
               <div class="font12">个人中心</div>
             </router-link>
     				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
@@ -275,8 +275,8 @@
                 <div><i class="al al-dianpu font18 color-red"></i></div>
                 <div class="font12">首页</div>
               </router-link>
-              <router-link class="t-cell h_100 v_middle align_center" to="/center" style="width:80px;">
-                <div><i class="al al-peoplefill font18 color-blue"></i></div>
+              <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+                <div><i class="al al-people font18 color-blue"></i></div>
                 <div class="font12">个人中心</div>
               </router-link>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
@@ -290,8 +290,8 @@
                 <div><i class="al al-dianpu font18 color-red"></i></div>
                 <div class="font12">首页</div>
               </router-link>
-              <router-link class="t-cell h_100 v_middle align_center" to="/center" style="width:80px;">
-                <div><i class="al al-peoplefill font18 color-blue"></i></div>
+              <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+                <div><i class="al al-people font18 color-blue"></i></div>
                 <div class="font12">个人中心</div>
               </router-link>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
@@ -1206,6 +1206,8 @@ export default {
 .product .groupbybottom .btnfavorite:after{display:block;}
 .product .btnfavorite.none:after{content:"收藏";}
 .product .btnfavorite.have:after{content:"已收藏";}
+
+.product .center-cell{width:60px;}
 
 .product .pagemiddle{bottom:50px;}
 .product .pagebottom{height:50px;}

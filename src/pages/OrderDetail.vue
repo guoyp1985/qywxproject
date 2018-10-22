@@ -11,17 +11,17 @@
     <template v-if="showContainer">
       <sticky scroll-box="order-detail">
         <div class="order-service">
-          <div class="seller-cell">
-            <span class="font14">卖家: {{retailerInfo.title}}</span>
+          <div class="seller-cell flex_left">
+            <div class="font14 clamp1">卖家: {{retailerInfo.title}}</div>
           </div>
           <div class="contact-cell">
-            <div class="ol-contact">
-              <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader}}">
+            <div class="ol-contact flex_center">
+              <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order'}}">
                 <span class="al al-pinglun3 color-order-detail font14"></span>
                 <span class="font13">{{$t('Contact Seller')}}</span>
               </router-link>
             </div>
-            <div class="wx-contact">
+            <div class="wx-contact flex_center">
               <a @click="wxContact">
                 <span class="al al-liaotian color-order-detail font18"></span>
                 <span class="font13">{{$t('Weixin Contact')}}</span>
