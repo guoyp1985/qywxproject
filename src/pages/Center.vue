@@ -108,6 +108,12 @@ let featureBtns = [
     icon: 'al-qietu19',
     color: 'rgba04',
     link: '/favorite'
+  },
+  {
+    name: 'My CardList',
+    icon: 'al-tubiaozhizuomoban',
+    color: 'rgba07',
+    link: '/cardList'
   }
 ]
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {
