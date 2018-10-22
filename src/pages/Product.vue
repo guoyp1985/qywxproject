@@ -234,10 +234,10 @@
   			<div class="t-table h_100">
           <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
             <div><i class="al al-dianpu font18 color-red"></i></div>
-            <div class="font12">首页</div>
+            <div class="font12">店铺</div>
           </router-link>
           <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
-            <div><i class="al al-people font18 color-blue"></i></div>
+            <div><i class="al al-peoplefill font18 color-red"></i></div>
             <div class="font12">个人中心</div>
           </router-link>
           <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
@@ -248,14 +248,14 @@
     			<div class="t-table h_100">
             <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
               <div><i class="al al-dianpu font18 color-red"></i></div>
-              <div class="font12">首页</div>
+              <div class="font12">店铺</div>
             </router-link>
             <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:40px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
             <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
-              <div><i class="al al-people font18 color-blue"></i></div>
+              <div><i class="al al-peoplefill font18 color-red"></i></div>
               <div class="font12">个人中心</div>
             </router-link>
     				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center " @click="buyevent">
@@ -281,10 +281,10 @@
       			<div class="t-table h_100">
               <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
                 <div><i class="al al-dianpu font18 color-red"></i></div>
-                <div class="font12">首页</div>
+                <div class="font12">店铺</div>
               </router-link>
               <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
-                <div><i class="al al-people font18 color-blue"></i></div>
+                <div><i class="al al-peoplefill font18 color-red"></i></div>
                 <div class="font12">个人中心</div>
               </router-link>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
@@ -296,10 +296,10 @@
       			<div class="t-table h_100">
               <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
                 <div><i class="al al-dianpu font18 color-red"></i></div>
-                <div class="font12">首页</div>
+                <div class="font12">店铺</div>
               </router-link>
               <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
-                <div><i class="al al-people font18 color-blue"></i></div>
+                <div><i class="al al-peoplefill font18 color-red"></i></div>
                 <div class="font12">个人中心</div>
               </router-link>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
@@ -1118,7 +1118,7 @@ export default {
 .product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
 .product .videoarea video{position: absolute;width: 100%;height: 100%;}
 .product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
-.product .fixed-top{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:#999;color:#fff;}
+.product .fixed-top{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.5);color:#fff;}
 .vline{position:relative;}
 .vline:after {
   content: " ";
