@@ -35,9 +35,16 @@
                 <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
       				</div>
               <div v-else class="t-cell v_middle align_right w100">
-                <div :class="`collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
+                <router-link class="collect have" to="/center">个人中心</router-link>
+                <div :class="`collect btnfavorite mt5 ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
               </div>
       			</div>
+            <!--
+            <div class="pt10 align_right">
+              <router-link class="db-in collect have" to="/center">个人中心</router-link>
+              <div :class="`db-in collect btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
+            </div>
+          -->
       		</div>
         </template>
         <template v-if="activitydata && activitydata.length > 0">
