@@ -258,13 +258,21 @@
               <div><i class="al al-people font18 color-blue"></i></div>
               <div class="font12">个人中心</div>
             </router-link>
-    				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
-    					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
-    					<div>原价购买</div>
+    				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center " @click="buyevent">
+              <div class="w_100 flex_center">
+                <div class="w_100 bg-orange1" style="border-top-left-radius:20px;border-bottom-left-radius:20px;padding-top:2px;overflow:hidden;">
+                  <div class="font12">原价购买</div>
+        					<div class="font12" style="margin-top:-4px;">{{ $t('RMB') }} {{ productdata.price }}</div>
+                </div>
+              </div>
     				</div>
-    				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent('groupbuy')">
-    					<div>{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
-    					<div>一键拼团</div>
+    				<div class="t-cell color-white h_100 v_middle align_center " @click="buyevent('groupbuy')">
+              <div class="w_100 flex_center">
+                <div class="w_100 bg-red2" style="border-top-right-radius:20px;border-bottom-right-radius:20px;padding-top:2px;overflow:hidden;">
+                  <div class="font12">一键拼团</div>
+        					<div class="font12" style="margin-top:-4px;">{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
+                </div>
+              </div>
     				</div>
     			</div>
     		</div>
