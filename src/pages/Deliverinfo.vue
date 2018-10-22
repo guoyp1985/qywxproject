@@ -84,6 +84,12 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.showSos = false
+      this.showContainer = false
+      this.showData = false
+      this.data = []
+    },
     getData () {
       const self = this
       const params = { id: this.query.id }
@@ -92,23 +98,31 @@ export default {
         self.deliverinfo = data.data ? data.data : data
         return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
       }).then(function (res) {
-        let data = res.data
+        const data = res.data
+        const retdata = data.data
         self.$vux.loading.hide()
         if (data.flag !== 1) {
           self.sosTitle = data.error
           self.showSos = true
-          self.$vux.loading.hide()
+          self.showContainer = false
         } else {
-          self.showContainer = true
-          let retdata = data.data ? data.data : data
-          if (!retdata.status) {
-            for (let i = 0; i < retdata.length; i++) {
-              let d = retdata[i]
-              d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
+          if (retdata.code === '-1') {
+            self.sosTitle = retdata.msg
+            self.showSos = true
+            self.showContainer = false
+          } else {
+            self.showContainer = true
+            self.showSos = false
+            let retdata = data.data ? data.data : data
+            if (!retdata.status) {
+              for (let i = 0; i < retdata.length; i++) {
+                let d = retdata[i]
+                d.dateline = parseInt(Date.parse(d.time.replace(/-/g, '/')) / 1000)
+              }
+              self.data = retdata
             }
-            self.data = retdata
+            self.showData = true
           }
-          self.showData = true
         }
       })
     },
@@ -116,6 +130,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.$vux.loading.show()
+      this.initData()
       this.getData()
     }
   },
