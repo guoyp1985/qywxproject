@@ -34,7 +34,7 @@
                 <router-link class="font12 color-gray5 mr5 v_middle" to="/decorationShop"><i class="al al-dianpu font18 color-red"></i>{{$t('Rolling display')}}</router-link>
                 <router-link class="font12 color-gray5 v_middle" to="/centerSales"><i class="al al-xiaoshou font18 color-red"></i>{{$t('Manage center')}}</router-link>
       				</div>
-              <div v-else class="t-cell v_middle align_right" style="width:90px;padding-left:10px;">
+              <div v-else class="t-cell v_middle align_right" style="width:90px;padding-left:10px;box-sizing:border-box;">
                 <router-link class="collect have" to="/center">个人中心</router-link>
                 <div :class="`collect btnfavorite mt5 ${favoritecss}`" @click="favoriteevent"><i class="al al-xing font13 v_middle staricon"></i><span class="txt v_middle"></span></div>
               </div>
