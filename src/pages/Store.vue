@@ -566,7 +566,7 @@ export default {
 }
 
 .store .collect{
-  display:inline-block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
+  display:block;vertical-align:middle;width:80px;box-sizing: border-box;font-size:13px;
   padding: 2px 0; background: #8e8e8e;color: #fff;border-radius: 50px;text-align: center;
 }
 .store .collect.have{background: #67cccc;}
