@@ -604,6 +604,7 @@ export default {
       this.messages = 0
       this.disBuyFriends = false
       this.disMore = false
+      this.playVideo = false
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
