@@ -8,7 +8,7 @@
     <div class="imgarea">
       <div class="inner">
         <div class="img-outer">
-          <img class="img" src="/src/assets/images/card/card_bg1.png" />
+          <img class="img" src="https://tossharingsales.boka.cn/images/card_bg1.png" />
           <div class="txt flex_center">
             <div class="font12" v-if="disCardInfo">
               <span class="color-yellow v_middle">满{{params.joincard_ordermoney}}减{{params.joincard_facemoney}}</span>
