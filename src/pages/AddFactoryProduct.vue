@@ -359,14 +359,14 @@ export default {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
-          let curMaxnum = 9
+          let curMaxnum = self.maxnum
           if (type === 'video') {
             curMaxnum = 1
           }
           if (type === 'photo') {
-            curMaxnum = 9 - self.photoarr.length
+            curMaxnum = self.maxnum - self.photoarr.length
           } else if (type === 'contentphoto') {
-            curMaxnum = 9 - self.photoarr1.length
+            curMaxnum = self.maxnum1 - self.photoarr1.length
           }
           self.$util.wxUploadImage({
             maxnum: curMaxnum,
