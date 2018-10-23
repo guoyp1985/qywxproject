@@ -36,10 +36,17 @@
               <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
-          <div id="editor-content" :class="`article-content ${(article.content == '' && article.uploader == loginUser.uid) ? 'color-gray font16' : ''}`">
-            <p v-if="article.content == '' && article.uploader == loginUser.uid">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-            <div v-else v-html="article.content"></div>
-          </div>
+          <template v-if="showArticle">
+            <template v-if="article.uploader == reward.uid">
+              <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
+                <p v-if="article.content == ''">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                <div v-else v-html="article.content"></div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="article-content" v-html="article.content"></div>
+            </template>
+          </template>
           <div class="operate-area">
             <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
               <span class="al al-xing3 font14"></span>
@@ -165,7 +172,8 @@ export default {
       limit: 20,
       replyData: null,
       messages: 0,
-      showEditor: false
+      showEditor: false,
+      showArticle: false
     }
   },
   filters: {
@@ -346,10 +354,11 @@ export default {
             return false
           }
           if (res.data.flag) {
+            self.reward = User.get()
             self.article = res.data.data
+            self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
-            self.reward = User.get()
             self.retailerInfo = self.article.retailerinfo
             let shareParams = {
               data: self.article,
@@ -564,6 +573,7 @@ export default {
     },
     refresh (query) {
       this.loginUser = User.get()
+      this.showArticle = false
       this.showEditor = false
       this.showsharetip = false
       if (this.query.id !== query.id) {

@@ -23,7 +23,7 @@
 </template>
 <script>
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, Token } from '#/storage'
 let self = {}
 export default {
   data () {
@@ -50,6 +50,8 @@ export default {
             type: 'success'
           })
           self.$router.push('/cardList')
+          let minibackurl = decodeURIComponent(self.query.minibackurl)
+          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
         } else {
           self.$vux.toast.show({
             text: data.error,
