@@ -72,6 +72,7 @@
 <script>
 import { Sticky, Tab, TabItem } from 'vux'
 import OrderInfo from '@/components/OrderInfo'
+import { Token } from '#/storage'
 import ENV from 'env'
 
 export default {
