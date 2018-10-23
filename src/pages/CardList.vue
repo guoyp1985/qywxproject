@@ -230,7 +230,7 @@ export default {
   right: -14px;
   width: 30px;
   height: 30px;
-  background-color: #fff;
+  background-color: #f5f9fa;
   border-radius: 50%;
 }
 .cardlist .scroll_item .ball-up{top: -15px;}
