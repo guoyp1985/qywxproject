@@ -216,6 +216,7 @@ Please select address:
 
 <script>
 import { Group, XNumber, XTextarea, TransferDom, Popup, CheckIcon, XImg } from 'vux'
+import { mapState } from 'vuex'
 import Sos from '@/components/Sos'
 import ENV from 'env'
 import { User, Token } from '#/storage'
