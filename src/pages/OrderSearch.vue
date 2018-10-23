@@ -387,6 +387,15 @@ export default {
         }
         this.toggleTab()
       }
+    },
+    miniPost () {
+      const self = this
+      // this.$wechat.miniProgram.postMessage({data: 'From Web'})
+      this.$wechat.miniProgram.getEnv(res => {
+        if (res.miniprogram) {
+          self.$wechat.miniProgram.postMessage({data: {token: Token.get()}})
+        }
+      })
     }
   },
   created () {
@@ -394,6 +403,7 @@ export default {
   },
   activated () {
     this.refresh()
+    this.miniPost()
   }
 }
 </script>
