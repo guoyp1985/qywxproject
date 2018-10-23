@@ -5,16 +5,19 @@
 */
 <template>
   <div class="containerarea font14 receive-card flex_center">
-    <img class="img" src="/src/assets/images/card/card_bg1.png" />
-    <div class="txt-layer flex_center">
-      <div class="txt flex_center">
-        <div class="font12"><span class="color-orange">满100减50</span><span class="color-white ml5">(7日内有效)</span></div>
+    <div class="imgarea">
+      <div class="inner">
+        <div class="img-outer">
+          <img class="img" src="/src/assets/images/card/card_bg1.png" />
+          <div class="txt flex_center">
+            <div class="font12"><span class="color-yellow">满100减50</span><span class="color-white ml5">(7日内有效)</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import ENV from 'env'
 let self = {}
 export default {
   data () {
@@ -28,14 +31,17 @@ export default {
   },
   activated () {
     self = this
-    this.refresh()
+    self.refresh()
   }
 }
 </script>
 
 <style lang="less" scoped>
 .receive-card{background-color:#000;}
-.receive-card .img{vertical-align:middle;max-width:100%;max-height:100%;}
+.receive-card .imgarea{width:100%;max-width:450px;position:relative;}
+.receive-card .imgarea .inner{width:100%;padding-bottom:101%;position:relative;}
+.receive-card .img-outer{position:absolute;left:0;right:0;bottom:0;top:0;}
+.receive-card .img-outer .img{vertical-align:middle;max-width:100%;max-height:100%;}
 .receive-card .txt-layer{position:absolute;left:0;top:0;right:0;bottom:0;}
-.receive-card .txt{color:#fff;width:167px;height:58px;}
+.receive-card .txt{position:absolute;left:0;top:0;right:0;bottom:0;}
 </style>
