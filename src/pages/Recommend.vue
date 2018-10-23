@@ -33,17 +33,17 @@
         </card>
       </div>
       <div class="border-box posi_r" v-show="selectedIndex===1">
-        <card @click.native="bringCustomerClick">
+        <card>
           <div slot="content" class="card-demo-flex card-demo-content01">
-            <div class="vux-1px-r">
+            <div class="vux-1px-r" @click="bringCustomerClick">
               <div class="color-red font18">{{ rebateInfo.customerNumber }}人</div>
               <div class="color-gray font14 mt5">{{$t('Total Number')}}</div>
             </div>
-            <div class="vux-1px-r">
+            <div class="vux-1px-r" @click="bringCustomerClick1">
               <div class="color-red font18">{{ rebateInfo.buyPeople }}人</div>
               <div class="color-gray font14 mt5">{{$t('Purchase Number')}}</div>
             </div>
-            <div>
+            <div @click="bringCustomerClick">
               <div class="color-red font18">{{ rebateInfo.buyPercent }}%</div>
               <div class="color-gray font14 mt5">{{$t('Purchase Ratio')}}</div>
             </div>
@@ -428,8 +428,11 @@ export default {
     withdrawClick () {
       this.$router.push({path: '/userRebateInfo'})
     },
-    bringCustomerClick () {
+    bringCustomerClick (type) {
       this.$router.push({path: '/bringCustomer'})
+    },
+    bringCustomerClick1 (type) {
+      this.$router.push({path: '/bringCustomer', query: {type: 'buy'}})
     },
     getData () {
       const self = this

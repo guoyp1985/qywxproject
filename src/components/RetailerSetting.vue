@@ -386,7 +386,7 @@ export default {
       } else {
         let curmax = 1
         if (type === 'showphoto') {
-          curmax = 9
+          curmax = 9 - self.showphotoArr.length
         }
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
@@ -538,7 +538,32 @@ export default {
         },
         onConfirm (val) {
           if (self.$util.trim(val) === '') {
-            self.$vux.toast.text('请输入标签名称', 'middle')
+            self.$vux.toast.text('标签名称不能为空', 'middle')
+            return false
+          }
+          let isContinue = true
+          if (val.search(/,/g) > -1) {
+            let arr = val.split(',')
+            for (let i = 0; i < arr.length; i++) {
+              if (self.$util.trim(arr[i]) === '') {
+                isContinue = false
+                break
+              }
+            }
+          }
+          if (isContinue) {
+            if (val.search(/，/g) > -1) {
+              let arr = val.split('，')
+              for (let i = 0; i < arr.length; i++) {
+                if (self.$util.trim(arr[i]) === '') {
+                  isContinue = false
+                  break
+                }
+              }
+            }
+          }
+          if (!isContinue) {
+            self.$vux.toast.text('标签名称不能为空', 'middle')
             return false
           }
           postParams.tags = val

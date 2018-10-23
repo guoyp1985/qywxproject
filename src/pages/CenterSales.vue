@@ -57,8 +57,7 @@ export default {
       loginUser: null,
       query: {},
       marqueeData: [],
-      // classData: [],
-      classData: [{title: '服饰内衣'}, {title: '鞋靴'}, {title: '珠宝首饰'}, {title: '礼品箱包'}, {title: '钟表'}, {title: '户外运动'}, {title: '家居家纺'}, {title: '厨具'}, {title: '家具建材'}, {title: '汽车用品'}, {title: '医药保健'}, {title: '母婴'}, {title: '玩具乐器'}, {title: '个护化妆'}, {title: '美妆护肤'}, {title: '家庭清洁/纸品'}, {title: '食品材料'}, {title: '生鲜'}, {title: '酒类'}, {title: '手机'}, {title: '图书影像'}, {title: '数码'}, {title: '电脑办公'}, {title: '家用电器'}, {title: '其他'}],
+      classData: [],
       messages: 0,
       showVip: false,
       allowVipFee: ENV.allowVipFee
@@ -97,14 +96,15 @@ export default {
     },
     applySuccess () {
       const self = this
-      self.initContainer()
-      self.afterApply = true
-      self.$vux.loading.hide()
       console.log('after apply token')
       console.log(Token.get())
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
         self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+      } else {
+        self.initContainer()
+        self.showCenter = true
+        self.$vux.loading.hide()
       }
     },
     inCenter () {
@@ -142,7 +142,7 @@ export default {
                   for (let i = 0; i < data.length; i++) {
                     data[i].checked = false
                   }
-                  // self.classData = data
+                  self.classData = data
                 }
               })
             } else if (self.loginUser.isretailer === 1 || self.loginUser.isretailer === 2) {

@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 s-havebottom rproductlist">
-    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+    <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
       <template v-if="disproductdata">
         <template v-if="!productdata || productdata.length == 0">
           <div class="scroll_list">
@@ -107,7 +107,7 @@
               </check-icon>
             </div>
           </div>
-          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollCustomer" @scroll="handleScroll('scrollCustomer', 'customer')">
+          <div class="popup-middle font14 customer-popup-container" style="top:85px;bottom:86px;" ref="scrollCustomer" @scroll="handleScroll1('scrollCustomer')">
             <div class=" pt10 pb10 pl12 pr12">
               <div v-show="discustomerdata" class="scroll_list">
                 <template v-if="customerdata.length == 0">
@@ -273,24 +273,30 @@ export default {
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
-    handleScroll: function (refname, type) {
+    handleScroll: function (refname) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (type === 'product') {
-            if (self.productdata.length === (pageStart1 + 1) * limit) {
-              pageStart1++
-              self.$vux.loading.show()
-              self.getData1()
-            }
-          } else if (type === 'customer') {
-            if (self.customerdata.length === (pageStart2 + 1) * limit) {
-              pageStart2++
-              self.$vux.loading.show()
-              self.getCustomerdata()
-            }
+          if (self.productdata.length === (pageStart1 + 1) * limit) {
+            pageStart1++
+            self.$vux.loading.show()
+            self.getData1()
+          }
+        }
+      })
+    },
+    handleScroll1: function (refname) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (self.customerdata.length === (pageStart2 + 1) * limit) {
+            pageStart2++
+            self.$vux.loading.show()
+            self.getCustomerdata()
           }
         }
       })

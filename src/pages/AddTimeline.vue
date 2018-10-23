@@ -1,6 +1,6 @@
 <template>
   <div class="font14 containerarea notop addtimeline">
-    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer && query.type != 'customer'"></subscribe>
     <template v-if="showContainer">
       <div class="pagemiddle">
         <group>
@@ -41,7 +41,7 @@
             </div>
           </div>
         </div>
-        <template v-if="showTags">
+        <template v-if="showTags && tagsData.length > 0">
           <div class="form-item border-box padding10" v-if="tagsData.length > 0">
             <div class="pb10">选择标签</div>
             <checker
@@ -132,7 +132,7 @@ export default {
       } else {
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 9,
+            maxnum: 9 - self.photoarr.length,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
@@ -223,7 +223,6 @@ export default {
     },
     refresh () {
       const self = this
-      self.$vux.loading.show()
       self.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       self.loginUser = User.get()
       self.initData()
@@ -234,7 +233,7 @@ export default {
       if (self.query.tagid) {
         self.tagids = [self.query.tagid]
       }
-      if (self.loginUser && (self.loginUser.subscribe === 1 || self.loginUser.isretailer)) {
+      if (self.loginUser && (self.loginUser.subscribe === 1 || self.loginUser.isretailer || self.query.type === 'customer')) {
         self.showContainer = true
         if (self.query.uid && self.query.uid.toString() !== self.loginUser.uid.toString()) {
           self.addType = 'customer'
@@ -244,7 +243,6 @@ export default {
         } else {
           self.showTags = false
         }
-        self.$vux.loading.hide()
         self.getData()
       }
     }

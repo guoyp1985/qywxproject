@@ -460,11 +460,13 @@ export default {
               let a = self.addressdata[i]
               if (a.isdefault) {
                 self.selectaddress = a
+                self.addressdata[i].checked = true
                 break
               }
             }
             if (!self.selectaddress && self.addressdata.length > 0) {
               self.selectaddress = self.addressdata[0]
+              self.addressdata[0].checked = true
             }
             if (self.selectaddress) {
               self.submitdata.addressid = self.selectaddress.id
@@ -479,6 +481,17 @@ export default {
       }).then(res => {
         if (res) {
           self.cardList = res.data.data
+          for (let i = 0; i < self.cardList.length; i++) {
+            const item = self.cardList[i]
+            if (self.cardPrice >= item.ordermoney && (self.cardPrice - item.money - self.curOrder.rebate) >= 0) {
+              self.selectedCard = item
+              self.cardList[i].checked = true
+              let cha = parseFloat(self.orderPrice) - parseFloat(self.postage) - parseFloat(item.money)
+              cha = cha < 0 ? 0 : cha
+              self.payPrice = (cha + parseFloat(self.postage)).toFixed(2)
+              break
+            }
+          }
         }
       })
     },

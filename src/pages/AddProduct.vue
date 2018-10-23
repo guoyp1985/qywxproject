@@ -50,7 +50,7 @@
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <select v-model="submitdata.classid" class="w_100" style="height:35px;">
-                  <option value=''>请选择</option>
+                  <option value='0'>请选择</option>
                   <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
                 </select>
               </div>
@@ -289,7 +289,7 @@ export default {
       havenum2: 0,
       showmore: false,
       submitdata: {
-        classid: '',
+        classid: '0',
         title: '',
         price: '',
         oriprice: '',
@@ -335,7 +335,7 @@ export default {
     initSubmitData () {
       this.videoarr = []
       this.submitdata = {
-        classid: '',
+        classid: '0',
         title: '',
         oriprice: '',
         price: '',
@@ -395,6 +395,11 @@ export default {
           let curMaxnum = 9
           if (type === 'video') {
             curMaxnum = 1
+          }
+          if (type === 'photo') {
+            curMaxnum = 9 - self.photoarr.length
+          } else if (type === 'contentphoto') {
+            curMaxnum = 9 - self.photoarr1.length
           }
           self.$util.wxUploadImage({
             maxnum: curMaxnum,

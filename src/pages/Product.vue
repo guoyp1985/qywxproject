@@ -27,6 +27,7 @@
         <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
       -->
         <template v-if="showFlash">
+          <div :class="`fixed-top flex_center btnfavorite ${favoritecss}`" @click="favoriteevent"><i class="al font18" style="margin-top:-2px;margin-right:3px;"></i></div>
           <swiper
             class="pic-swiper notitle"
             dots-position="center"
@@ -233,11 +234,12 @@
   			<div class="t-table h_100">
           <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
             <div><i class="al al-dianpu font18 color-red"></i></div>
-            <div class="font12">首页</div>
+            <div class="font12">店铺</div>
           </router-link>
-  				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
-  					<div><i class="al font18"></i></div>
-  				</div>
+          <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+            <div><i class="al al-peoplefill font18 color-red"></i></div>
+            <div class="font12">个人中心</div>
+          </router-link>
           <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
         </div>
   		</div>
@@ -246,22 +248,31 @@
     			<div class="t-table h_100">
             <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
               <div><i class="al al-dianpu font18 color-red"></i></div>
-              <div class="font12">首页</div>
+              <div class="font12">店铺</div>
             </router-link>
             <div class="t-cell h_100 v_middle align_center" @click="toChat" style="width:40px;">
               <div><i class="al al-buoumaotubiao10 font16 color-red"></i></div>
               <div class="font12">咨询</div>
             </div>
-    				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
-    					<div><i class="al font18"></i></div>
+            <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+              <div><i class="al al-peoplefill font18 color-red"></i></div>
+              <div class="font12">个人中心</div>
+            </router-link>
+    				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center " @click="buyevent">
+              <div class="w_100 flex_center">
+                <div class="w_100 bg-orange1" style="border-top-left-radius:20px;border-bottom-left-radius:20px;padding-top:2px;overflow:hidden;">
+                  <div class="font12">原价购买</div>
+        					<div class="font12" style="margin-top:-4px;">{{ $t('RMB') }} {{ productdata.price }}</div>
+                </div>
+              </div>
     				</div>
-    				<div v-if="productdata.storage > 0" class="t-cell color-white h_100 v_middle align_center bg-orange1" @click="buyevent">
-    					<div>{{ $t('RMB') }} {{ productdata.price }}</div>
-    					<div>原价购买</div>
-    				</div>
-    				<div class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent('groupbuy')">
-    					<div>{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
-    					<div>一键拼团</div>
+    				<div class="t-cell color-white h_100 v_middle align_center " @click="buyevent('groupbuy')">
+              <div class="w_100 flex_center">
+                <div class="w_100 bg-red2" style="border-top-right-radius:20px;border-bottom-right-radius:20px;padding-top:2px;overflow:hidden;">
+                  <div class="font12">一键拼团</div>
+        					<div class="font12" style="margin-top:-4px;">{{ $t('RMB') }} {{ activityInfo.groupprice }}</div>
+                </div>
+              </div>
     				</div>
     			</div>
     		</div>
@@ -270,11 +281,12 @@
       			<div class="t-table h_100">
               <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
                 <div><i class="al al-dianpu font18 color-red"></i></div>
-                <div class="font12">首页</div>
+                <div class="font12">店铺</div>
               </router-link>
-      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
-                <div><i class="al font18"></i></div>
-      				</div>
+              <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+                <div><i class="al al-peoplefill font18 color-red"></i></div>
+                <div class="font12">个人中心</div>
+              </router-link>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       				<div v-if="productdata.storage <= 0" class="t-cell color-white h_100 v_middle align_center bg-gray">已售罄</div>
       				<div v-else class="t-cell color-white h_100 v_middle align_center bg-red2" @click="buyevent">立即购买</div>
@@ -284,11 +296,12 @@
       			<div class="t-table h_100">
               <router-link class="t-cell h_100 v_middle align_center" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="width:40px;">
                 <div><i class="al al-dianpu font18 color-red"></i></div>
-                <div class="font12">首页</div>
+                <div class="font12">店铺</div>
               </router-link>
-      				<div :class="`t-cell h_100 btnfavorite ${favoritecss} v_middle align_center font12`" style="width:40px;" @click="favoriteevent">
-                <div><i class="al font18"></i></div>
-      				</div>
+              <router-link class="t-cell h_100 v_middle align_center center-cell" to="/center">
+                <div><i class="al al-peoplefill font18 color-red"></i></div>
+                <div class="font12">个人中心</div>
+              </router-link>
               <div class="t-cell bg-orange1 color-white h_100 v_middle align_center" @click="toChat">我要咨询</div>
       			</div>
       		</div>
@@ -591,6 +604,7 @@ export default {
       this.messages = 0
       this.disBuyFriends = false
       this.disMore = false
+      this.playVideo = false
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
@@ -1105,6 +1119,7 @@ export default {
 .product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
 .product .videoarea video{position: absolute;width: 100%;height: 100%;}
 .product .videoarea .close-icon{position:absolute;left:15px;top:15px;width:40px;height:40px;}
+.product .fixed-top{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.8);color:#fff;}
 .vline{position:relative;}
 .vline:after {
   content: " ";
@@ -1200,6 +1215,8 @@ export default {
 .product .groupbybottom .btnfavorite:after{display:block;}
 .product .btnfavorite.none:after{content:"收藏";}
 .product .btnfavorite.have:after{content:"已收藏";}
+
+.product .center-cell{width:60px;}
 
 .product .pagemiddle{bottom:50px;}
 .product .pagebottom{height:50px;}

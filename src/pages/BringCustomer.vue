@@ -186,12 +186,16 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.query.wid !== this.$route.query.wid) {
-        this.query = this.$route.query
-        this.initData()
-        this.swiperChange()
+      if (this.$route.query.type === 'buy') {
+        this.selectedIndex = 1
       } else {
-        this.query = this.$route.query
+        this.selectedIndex = 0
+      }
+      if (this.query.wid !== this.$route.query.wid) {
+        this.initData()
+      }
+      this.query = this.$route.query
+      if (this.$route.query.type !== 'buy') {
         this.swiperChange()
       }
     }

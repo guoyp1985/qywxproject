@@ -53,7 +53,7 @@
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
-              <input v-model="submitdata.verifycode" type="tel" class="input" name="verifycode" required placeholder="验证码"/>
+              <x-input type="tel" v-model="submitdata.verifycode" class="input" name="verifycode" required placeholder="验证码" @on-change="codeChange"></x-input>
             </div>
           </div>
         </div>
@@ -67,7 +67,7 @@
           :max="3"
           default-item-class="ck-item"
           selected-item-class="ck-item-selected">
-            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="index">{{ item.title }}</checker-item>
+            <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
           </checker>
         </div>
         <div class="form-item padding10 font16">
@@ -87,7 +87,10 @@
       </form>
     </div>
     <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
-      <div class="flex_cell flex_center btn-bottom-red">马上免费入驻</div>
+      <div class="flex_cell flex_center btn-bottom-red">
+        <div>马上免费入驻</div>
+        <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
+      </div>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="isshowpopup" height="100%">
@@ -287,7 +290,8 @@ export default {
         productclass: ''
       },
       requireddata: { truename: '', 'mobile': '', 'verifycode': '', 'productclass': '' },
-      profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
+      // profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
+      profits: ['看过的用户都会成为你的潜在客户', '根据潜在客户行为自动计算成交概率', '即便不是微信好友也可直接联系'],
       profitShow: false,
       classDataShow: false
     }
@@ -309,6 +313,11 @@ export default {
     onProfitClose () {
       this.profitShow = false
       console.log(this.profitShow)
+    },
+    codeChange (val) {
+      if (val !== '') {
+        this.classDataShow = true
+      }
     },
     getcode () {
       event.preventDefault()
@@ -444,6 +453,9 @@ export default {
 </script>
 
 <style>
+.price{
+  position:absolute;line-height:38px;left:65%;
+}
 .profit-show-btn{
   position: fixed;
   right: -10px;
@@ -497,6 +509,8 @@ export default {
 .profit li{
   height: 30px;
   line-height: 30px;
+  text-align: center;
+  /*padding: 0 10px;*/
 }
 .profit button{
   background-color: #f35755;

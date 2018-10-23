@@ -39,6 +39,10 @@ Util.install = function (Vue, options) {
       const userAgentInfo = navigator.userAgent
       return Reg.rAndroid.test(userAgentInfo)
     },
+    isIOS: function() {
+      const userAgentInfo = navigator.userAgent
+      return Reg.rIOS.test(userAgentInfo)
+    },
     // 判授权
     access: function (/*response, */authorization) {
       const isPC = this.isPC()

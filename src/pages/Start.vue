@@ -1,14 +1,18 @@
 <template>
   <div class="containerarea">
-    <div class="aside" v-show="isShow">
-      <div class="sideul">
-        <div class="txtgxh">共销汇</div>
-        <div class="txtgxk" @click="getTogxk">共销客</div>
+    <div>
+      <input type='checkbox' id="sidemenu" @click="onlayer" />
+      <div class="aside">
+          <div class="sideul">
+              <div class="txtgxh">共销汇</div>
+              <div class="txtgxk active" @click="getTogxk">共销客</div>
+          </div>
       </div>
-    </div>
-    <div class='wrap'>
-        <div @click="onlayer" class="lbl al al-tubiaozhizuomoban-copy"></div>
-    </div>
+      <div class='wrap'>
+          <label for='sidemenu' class="al al-tubiaozhizuomoban-copy" v-show="btnOpen"></label>
+          <!-- <label for='sidemenu' class="al al-guanbi" v-show="btnClose" style="background-color:red"></label> -->
+      </div>
+  </div>
     <div class="intro">
       <div class="inner">
         <img class="pic" src="https://tossharingsales.boka.cn/start/intro.jpg">
@@ -39,7 +43,13 @@
           <ul>
             <li v-for="item in slogens" :key="item.id">{{item}}</li>
           </ul>
-          <a href="https://www.sharingsales.cn/#/centerSales"><button class="animation">免费入驻<div class="sweep-light"></div></button></a>
+          <a href="https://www.sharingsales.cn/#/centerSales">
+            <button class="animation">
+              <span>免费入驻</span>
+              <del class="font11 pl10 price">原价:￥199/年</del>
+              <div class="sweep-light"></div>
+            </button>
+          </a>
         </div>
     </div>
     <div class="photo-show" v-if="photoShow" ref="photoShowContainer">
@@ -59,9 +69,16 @@
 </template>
 <script type="text/javascript">
 import BScroll from 'better-scroll'
+import ENV from 'env'
+import { User } from '#/storage'
 export default{
+  inject: ['reload'],
   data () {
     return {
+      query: {},
+      loginUser: {},
+      btnOpen: true,
+      btnClose: false,
       isShow: false,
       photoShow: false,
       currentSkill: {},
@@ -106,14 +123,31 @@ export default{
       slogens: ['·会销售产品的人，能赚钱；', '·会销售产品又能使用系统的人，能赚更多的钱；', '·会销售产品，又会使用系统，还能够利用工具进行裂变的人，才能轻松挣大钱']
     }
   },
+  watch: {
+    currentSkill (newValue) {
+      console.log(newValue)
+      if (newValue.skillTitle !== undefined) {
+        this.$nextTick(res => {
+          this.scroll = new BScroll(this.$refs.photoShowContainer, {
+            scrollX: true,
+            scrollY: false,
+            snap: {
+              loop: false,
+              threshold: 0.3,
+              swipeTime: 3000
+            }
+          })
+        })
+      }
+    }
+  },
   methods: {
     getTogxk () {
-      this.$router.push('/gxkstart')
+      this.$router.push('/miniStart')
     },
     onlayer () {
       if (this.isShow === true) {
         this.isShow = false
-        console.log(this.isShow)
       } else {
         this.isShow = true
       }
@@ -134,95 +168,121 @@ export default{
       document.addEventListener('touchmove', function (event) {
         window.event.returnValue = true
       }, false)
-    }
-  },
-  watch: {
-    currentSkill (newValue) {
-      console.log(newValue)
-      if (newValue.skillTitle !== undefined) {
-        this.$nextTick(res => {
-          this.scroll = new BScroll(this.$refs.photoShowContainer, {
-            scrollX: true,
-            scrollY: false,
-            snap: {
-              loop: false,
-              threshold: 0.3,
-              swipeTime: 3000
-            }
-          })
+    },
+    init () {
+      const self = this
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      self.loginUser = User.get()
+      console.log(self.loginUser)
+      if (self.query.share_uid) {
+        let params = {uid: self.query.share_uid}
+        params.share_uid = self.query.share_uid
+        params.share_module = 'centerseller'
+        if (self.query.lastshareuid) {
+          params.lastshareuid = self.query.lastshareuid
+        }
+        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+          params: params
         })
       }
+      let shareParams = {
+        module: 'centerseller',
+        moduleid: self.loginUser.uid,
+        title: '共销汇',
+        desc: '共销汇六脉神剑，助力新型微商',
+        photo: 'https://tossharingsales.boka.cn/start/intro.jpg',
+        link: `${ENV.Host}/#/miniStart?share_uid=${self.loginUser.uid}`
+      }
+      if (self.query.share_uid) {
+        shareParams.link = `${shareParams.link}&lastshareuid=${self.query.share_uid}`
+        shareParams.lastshareuid = self.query.share_uid
+      }
+      console.log(shareParams)
+      self.$util.handleWxShare(shareParams)
     }
+  },
+  created () {
+    this.init()
   }
-};
+}
 </script>
 <style type="text/css">
+.price{
+  color:#fff;position:absolute;line-height:48px;
+}
 .mceng{
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
   background-color: rgba(0, 0, 0, 0.6);
   overflow: hidden;
   z-index:0;
 }
 /*侧边栏导航条*/
-  .txtgxh{
-    color:#b8b8bd;
-    padding-left:50px;
+  .txtgxh{padding-left:50px;}
+  .txtgxh.active{color:#b8b8bd;}
+  .txtgxk{padding-left: 20px;}
+  .txtgxk.active{color:#b8b8bd;}
+  #sidemenu{
+  display: none;
   }
-  .txtgxk{
-    padding-left: 20px;
+  #sidemenu:checked + .aside {
+  left: 0;
+  }
+  #sidemenu:checked ~ .wrap {
+  padding-left: 220px;
   }
   .aside {
-    position: absolute;
-    top: 18px;
-    bottom: 0;
-    left: 28px;
-    width: 208px;
-    height: 45px;
-    background: white;
-    transition: 0.2s ease-out;
-    line-height: 45px;
-    position:fixed;
-    z-index:1;
-    border-top-right-radius:5px;
-    border-bottom-right-radius:5px;
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: -200px;
+  width: 208px;
+  height: 45px;
+  background: white;
+  transition: 0.2s ease-out;
+  line-height: 45px;
+  position:fixed;
+  z-index:1;
   }
   .wrap {
-    position: absolute;
-    height: 45px;
-    left:-11px;
-    padding: 10px;
-    transition: 0.2s ease-out;
+  position: absolute;
+  height: 45px;
+  left:-15px;
+  padding: 10px;
+  transition: 0.2s ease-out;
   }
-  .lbl {
-    background: white;
-    color: #fff;
-    cursor: pointer;
-    display: block;
-    font-family: Courier New;
-    font-size: 30px;
-    width: 45px;
-    height: 45px;
-    line-height: 48px;
-    text-align: center;
-    display: inline-block;
-    background-color:#08a4fb;
-    z-index:1;
-    position:fixed;
-    top:18px;
+  label {
+  background: white;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-family: Courier New;
+  font-size: 30px;
+  width: 45px;
+  height: 45px;
+  line-height: 48px;
+  text-align: center;
+  display: inline-block;
+  background-color:#08a4fb;
+  z-index:1;
+  position:fixed;
+  top:18px;
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
   }
   .sideul {
-    display:flex;
-    flex-direction:row;
-    list-style: none;
-    color: #1b87d6;
-    width: 100%;
-    font-size: 15px;
-    text-align: center;
-    z-index:1;
+  display:flex;
+  flex-direction:row;
+  list-style: none;
+  color: #1b87d6;
+  width: 100%;
+  font-size: 15px;
+  text-align: center;
+  z-index:1;
   }
 /*over*/
   .containerarea{
@@ -235,14 +295,13 @@ export default{
     border:0;
     line-height: 45px;
     background: #12a7f7;
-    text-align: center;
     border-radius: 20px;
     overflow: hidden;
     margin: 0 auto;
     position: relative;
     font-size:18px;
     color:#fff;
-    margin-top:180px;
+    margin-top:220px;
     box-shadow: 0px 0px 7px 1px #abbbd2;
   }
   .sweep-light{

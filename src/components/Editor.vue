@@ -170,6 +170,7 @@ import Eleditor from '#/Eleditor'
 import ENV from 'env'
 import jQuery from 'jquery'
 let editor = null
+let self = {}
 export default {
   name: 'Editor',
   directives: {
@@ -250,7 +251,6 @@ export default {
       this.showMenuIcon = true
     },
     pushEvent () {
-      const self = this
       this.showMenuArea = false
       this.showpush = true
       if (self.customerdata.length === 0) {
@@ -258,13 +258,11 @@ export default {
       }
     },
     closepush () {
-      const self = this
       self.showpush = false
       this.showEditIcon = true
       this.showMenuIcon = true
     },
     submitpush () {
-      const self = this
       if (self.pushdata.length === 0) {
         self.$vux.toast.show({
           text: '请选择返点客'
@@ -290,7 +288,6 @@ export default {
       })
     },
     radioclick1 (data, index) {
-      const self = this
       if (data.checked) {
         self.pushdata.push(data.uid)
       } else {
@@ -304,7 +301,6 @@ export default {
       }
     },
     checkAllEvent () {
-      const self = this
       for (let i = 0; i < self.customerdata.length; i++) {
         if (self.checkAll) {
           self.customerdata[i].checked = true
@@ -314,7 +310,6 @@ export default {
       }
     },
     handleScroll: function (refname, type) {
-      const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
@@ -336,7 +331,6 @@ export default {
       })
     },
     getProductData () {
-      const self = this
       let params = { params: { from: 'retailer', pagestart: self.pagestart1, limit: self.limit } }
       let keyword = self.searchword
       if (typeof keyword !== 'undefined' && self.$util.trim(keyword) !== '') {
@@ -355,7 +349,6 @@ export default {
       })
     },
     getCustomerdata () {
-      const self = this
       self.$vux.loading.show()
       let params = { params: { pagestart: self.customerPagestart, limit: self.limit } }
       self.$http.get(`${ENV.BokaApi}/api/retailer/sellersList`, params).then(function (res) {
@@ -381,7 +374,6 @@ export default {
       this.showMenuIcon = true
     },
     createEditor () {
-      const self = this
       let toolbars = [
         'insertProduct',
         'insertText',
@@ -456,7 +448,8 @@ export default {
         clickInsertProduct: function (area, d) {
           area.addEventListener('click', function () {
             if (!self.showBtnArea) {
-              self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
+              console.log('in editor.vue 459')
+              // self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
             }
           })
         },
@@ -486,7 +479,6 @@ export default {
       this.showMenuArea = false
     },
     radioclick (data, index) {
-      const self = this
       if (data.checked) {
         self.selectpopupdata = data
       } else {
@@ -503,7 +495,6 @@ export default {
       this.checkeduid = val
     },
     confirmpopup () {
-      const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
         self.$vux.alert.show({
           title: '',
@@ -520,7 +511,6 @@ export default {
       this.searchword = val
     },
     onCancelSearch () {
-      const self = this
       self.searchword = ''
       self.$vux.loading.show()
       self.productdata = []
@@ -528,14 +518,12 @@ export default {
       self.getProductData()
     },
     onSubmit () {
-      const self = this
       self.$vux.loading.show()
       self.productdata = []
       self.pagestart1 = 0
       self.getProductData()
     },
     selectevent () {
-      const self = this
       self.showpopup = true
       if (self.productdata.length === 0) {
         self.getProductData()
@@ -545,7 +533,6 @@ export default {
       this.showpopup = false
     },
     deleteNews () {
-      const self = this
       self.showMenuArea = false
       self.$vux.confirm.show({
         title: '确定要删除吗？',
@@ -567,7 +554,6 @@ export default {
       })
     },
     movePoint () {
-      const self = this
       let e = event
       let move = { x: 0, y: 0 }
       let _e = e.touches ? e : window.event
@@ -587,7 +573,6 @@ export default {
       return move
     },
     startEvent () {
-      const self = this
       let e = event
       let cur = self.touchElement
       self.isDown = true
@@ -599,7 +584,6 @@ export default {
       return false // 取消元素事件向下冒泡
     },
     moveEvent () {
-      const self = this
       let e = event
       let cur = self.touchElement
       if (self.isDown) {
@@ -624,7 +608,6 @@ export default {
       return false // 取消元素事件向下冒泡
     },
     endEvent () {
-      const self = this
       let cur = self.touchElement
       // 添加定时器，是因为有的时候move事件还没运行完就运行了这个事件，为了给这个时间添加一个缓冲时间这里定义了10毫秒
       setTimeout(function () {
@@ -647,24 +630,28 @@ export default {
       return false // 取消元素事件向下冒泡
     },
     clickProduct (event) {
-      const self = this
       let node = event.target
+      let linkurl = null
       if (!self.showBtnArea) {
+        console.log('in editor clickproduct')
         while (node) {
-          if (node.nodeType === 1 && node.getAttribute('class').indexOf('insertproduct') > -1) {
-            const linkurl = node.getAttribute('linkurl')
-            if (linkurl) {
-              self.$router.push(linkurl)
+          if (node.nodeType === 1) {
+            let nodeClass = node.getAttribute('class')
+            if (nodeClass && nodeClass.indexOf('insertproduct') > -1) {
+              linkurl = node.getAttribute('linkurl')
+              break
             }
-            break
           }
           node = node.parentNode
         }
       }
+      if (linkurl) {
+        self.$router.push(linkurl)
+      }
     }
   },
   mounted () {
-    const self = this
+    self = this
     if (editor) {
       editor.destory()
     }
