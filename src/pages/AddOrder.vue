@@ -519,6 +519,7 @@ export default {
       this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
+      console.log(this.query)
       this.submitdata.shopid = this.query.id
       this.getData()
     }
