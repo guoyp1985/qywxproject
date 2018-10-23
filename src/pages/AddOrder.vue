@@ -398,7 +398,7 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 // self.$router.push({path: '/pay', query: {id: data.id}})
-                console.log(self.query.from)
+                console.log(self.query)
                 // if (self.query.from === 'miniprogram') {
                 //   console.log(self.$wechat.miniProgram)
                 //   self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
