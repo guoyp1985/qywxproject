@@ -398,11 +398,11 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 // self.$router.push({path: '/pay', query: {id: data.id}})
-                if (self.query.miniappid) {
-                  self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
-                } else {
-                  location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
-                }
+                // if (self.query.miniappid) {
+                self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
+                // } else {
+                //   location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                // }
               } else {
                 self.submiting = false
               }
