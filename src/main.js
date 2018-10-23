@@ -227,9 +227,9 @@ const access = success => {
         User.set(res.data)
         // 刷新当前页面，剔除微信授跳转参数，保证数据加载正确
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
-        console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+        console.log(`${lUrl.hash.replace(/#/, '')}?${query}&mini=miniprogram`)
         // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        success && success(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}&mini=miniprogram`)
         // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
         //   MiniApp.removeOpenId()
         //   MiniApp.removeAppId()
