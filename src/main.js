@@ -229,7 +229,8 @@ const access = success => {
         // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
         console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
         // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-        success && success(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+        store.commit('updateMiniInvoke', {miniInvoke: true})
+        success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
         // if (MiniApp.getOpenId() && MiniApp.getAppId()) {
         //   MiniApp.removeOpenId()
         //   MiniApp.removeAppId()
@@ -258,7 +259,8 @@ const access = success => {
          // location.replace(`https://${lUrl.hostname}/${lUrl.hash}`)
          console.log(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
          // router.push(`${lUrl.hash.replace(/#/, '')}?${query}`)
-         success && success(`${lUrl.hash.replace(/#/, '')}?${query}&from=miniprogram`)
+         store.commit('updateMiniInvoke', {miniInvoke: true})
+         success && success(`${lUrl.hash.replace(/#/, '')}?${query}`)
        }
       )
     }
