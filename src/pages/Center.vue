@@ -65,7 +65,7 @@ import CTitle from '@/components/CTitle'
 import ENV from 'env'
 import Reg from '#/reg'
 import { Token, User } from '#/storage'
-
+let self = {}
 let sellerBtn = [
   {
     name: 'Seller center',
@@ -191,7 +191,6 @@ export default {
       }
     },
     setUserInfo () {
-      const self = this
       const user = User.get()
       this.avatarHref = user.avatar
       this.linkMan = user.linkman
@@ -234,7 +233,6 @@ export default {
       })
     },
     getData () {
-      const self = this
       self.$http.get(`${ENV.BokaApi}/api/user/show`).then(function (res) {
         if (!res) return
         self.loginUser = res.data
@@ -248,6 +246,7 @@ export default {
     }
   },
   activated () {
+    self = this
     this.refresh()
   }
 }
