@@ -398,14 +398,12 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 // self.$router.push({path: '/pay', query: {id: data.id}})
-                console.log(self.query)
-                // if (self.query.from === 'miniprogram') {
-                //   console.log(self.$wechat.miniProgram)
-                //   self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
-                // }
-                // else {
-                //   location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
-                // }
+                if (self.query.miniappid) {
+                  console.log(self.$wechat.miniProgram)
+                  self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
+                } else {
+                  location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                }
               } else {
                 self.submiting = false
               }
@@ -519,7 +517,6 @@ export default {
       this.loginUser = User.get()
       this.initData()
       this.query = this.$route.query
-      console.log(this.query)
       this.submitdata.shopid = this.query.id
       this.getData()
     }
