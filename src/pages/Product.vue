@@ -613,7 +613,7 @@ export default {
       const self = this
       this.playVideo = true
       setTimeout(function () {
-        console.log(self.$refs[refname])
+        self.$refs[refname].play()
       }, 500)
       console.log(this.$util.isPC())
       console.log(refname)
