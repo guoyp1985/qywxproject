@@ -614,7 +614,7 @@ export default {
       this.playVideo = true
       setTimeout(function () {
         self.$refs[refname].play()
-      }, 500)
+      }, 200)
       console.log(this.$util.isPC())
       console.log(refname)
     },
