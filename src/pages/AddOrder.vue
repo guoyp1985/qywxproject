@@ -216,6 +216,7 @@ Please select address:
 
 <script>
 import { Group, XNumber, XTextarea, TransferDom, Popup, CheckIcon, XImg } from 'vux'
+import { mapState } from 'vuex'
 import Sos from '@/components/Sos'
 import ENV from 'env'
 import { User, Token } from '#/storage'
@@ -274,6 +275,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isMiniInvoke: state => state.vux.miniInvoke
+    })
   },
   methods: {
     initData () {
@@ -398,8 +402,7 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 // self.$router.push({path: '/pay', query: {id: data.id}})
-                if (self.query.from === 'miniprogram') {
-                  console.log(self.$wechat.miniProgram)
+                if (self.isMiniInvoke) {
                   self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
                 } else {
                   location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
