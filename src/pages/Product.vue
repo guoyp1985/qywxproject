@@ -610,7 +610,11 @@ export default {
       return this.$util.emotPrase(text)
     },
     clickPlay (refname) {
+      const self = this
       this.playVideo = true
+      setTimeout(function () {
+        self.$refs[refname].play()
+      }, 100)
     },
     stopPlay (refname) {
       this.playVideo = false
@@ -1089,7 +1093,6 @@ export default {
       }
       window.onresize = function () {
         if (self.buyuserdata.length > 0) {
-          console.log('in')
           self.getMoreStatus(self)
         }
       }
