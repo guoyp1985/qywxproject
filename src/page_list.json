@@ -98,5 +98,6 @@
   "UserRebateInfo",
   "UserStory",
   "ViewList",
-  "wxOpen"
+  "wxOpen",
+  "Payment"
 ]
