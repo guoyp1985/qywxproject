@@ -52,15 +52,21 @@ export default {
               text: '领取成功',
               type: 'success'
             })
-            self.$router.push('/cardList')
-            let minibackurl = decodeURIComponent(self.query.minibackurl)
-            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+            setTimeout(function () {
+              let minibackurl = decodeURIComponent(self.query.minibackurl)
+              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+            }, 600)
           } else {
+            const timeoute = self.$util.delay(data.error)
             self.$vux.toast.show({
               text: data.error,
               type: 'warn',
-              time: self.$util.delay(data.error)
+              time: timeoute
             })
+            setTimeout(function () {
+              let minibackurl = decodeURIComponent(self.query.minibackurl)
+              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+            }, timeoute)
           }
         })
       }
