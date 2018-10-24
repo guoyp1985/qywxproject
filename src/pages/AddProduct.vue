@@ -401,7 +401,6 @@ export default {
           } else if (type === 'contentphoto') {
             curMaxnum = self.maxnum1 - self.photoarr1.length
           }
-          alert('in uploadPhoto')
           self.$util.wxUploadImage({
             maxnum: curMaxnum,
             handleCallback: function (data) {
