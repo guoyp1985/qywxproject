@@ -539,7 +539,6 @@ Util.install = function (Vue, options) {
           })
         },
         fail: function (r) {
-          alert(JSON.stringify(r))
         }
       })
     },
