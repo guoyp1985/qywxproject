@@ -14,7 +14,8 @@ store.registerModule('vux', {
     demoScrollTop: 0,
     isLoading: false,
     direction: 'forward',
-    toggleTabbar: false
+    toggleTabbar: false,
+    miniInvoke: false
   },
   mutations: {
     updateDemoPosition (state, payload) {
@@ -28,6 +29,9 @@ store.registerModule('vux', {
     },
     updateToggleTabbar (state, payload) {
       state.toggleTabbar = payload.toggleTabbar
+    },
+    updateMiniInvoke (state, payload) {
+      state.miniInvoke = payload.miniInvoke
     }
   },
   actions: {

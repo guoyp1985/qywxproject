@@ -26,12 +26,14 @@
                     </div>
                   </router-link>
                 </div>
+                <!--
                 <div class="user-credits">
                   <router-link :to="{ name: 'tCredit', params: { profile: profile } }">
                     <img src="../assets/images/jb_icon.png" style="width: 20px;height: 20px;" />
                     <span class="u-credits" style="color:#fca018;">{{ credits }}</span>
                   </router-link>
                 </div>
+              -->
               </div>
             </div>
             <div class="head_banner mt5"></div>
