@@ -32,37 +32,42 @@ export default {
       loginUser: {},
       retailerInfo: {},
       params: {},
-      disCardInfo: false
+      disCardInfo: false,
+      isIng: false
     }
   },
   methods: {
     receive () {
-      self.$http.post(`${ENV.BokaApi}/api/card/getCard`, {
-        wid: self.retailerInfo.uid,
-        type: 'joincard',
-        gid: self.query.gid,
-        openid: self.query.miniopenid
-      }).then(res => {
-        const data = res.data
-        if (data.flag) {
-          self.$vux.toast.show({
-            text: '领取成功',
-            type: 'success'
-          })
-          self.$router.push('/cardList')
-          let minibackurl = decodeURIComponent(self.query.minibackurl)
-          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            type: 'warn',
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
+      if (!self.isIng) {
+        self.isIng = true
+        self.$http.post(`${ENV.BokaApi}/api/card/getCard`, {
+          wid: self.retailerInfo.uid,
+          type: 'joincard',
+          gid: self.query.gid,
+          openid: self.query.miniopenid
+        }).then(res => {
+          const data = res.data
+          if (data.flag) {
+            self.$vux.toast.show({
+              text: '领取成功',
+              type: 'success'
+            })
+            self.$router.push('/cardList')
+            let minibackurl = decodeURIComponent(self.query.minibackurl)
+            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              type: 'warn',
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      self.isIng = false
       self.loginUser = User.get()
       self.query = self.$route.query
       let params = {}
