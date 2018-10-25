@@ -72,9 +72,9 @@
       <div class="line-two mr10"><div class="left-line"></div></div>
     </div>
     <div class="con-btom">
-      <div class="item left-con">
-        <div class="inner">
-          <div class="bg">
+      <div class="item">
+        <div class="inners">
+          <div class="bg ml5 mr5">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
             <div class="font12 ml10">10.22玫瑰花</div>
             <div class="two">
@@ -84,9 +84,9 @@
           </div>
         </div>
       </div>
-      <div class="item left-con">
-        <div class="inner">
-          <div class="bg">
+      <div class="item">
+        <div class="inners">
+          <div class="bg ml5 mr5">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
             <div class="font12 ml10">玫瑰花</div>
             <div class="two">
@@ -126,13 +126,13 @@
 </script>
 <style lang="less" scoped>
   .payment .content-head{position:relative;}
-  .payment .header{background-color:#FF6B63;width:100%;height:170px;position:absolute;}
+  .payment .header{background-color:#FF6B63;width:100%;height:170px;position:relative;padding-top:1px;}
   .payment .header .quan{width:50px;height:50px;border-radius:50%;background-color:#fff;margin:0 auto;margin-top:40px;}
   .payment .dgou{color:#FF6B63;line-height:50px;text-align:center;}
   .payment .message{color:#fff;text-align:center;}
   .payment .select{
     width:100%;height:70px;background-color:#fff;border-bottom:1px solid #e5e5e5;
-    position:absolute;display:flex;flex-direction:row;margin-top:170px;
+    display:flex;flex-direction:row;
   }
   .payment .ysho{
     height:25px;border:1px solid #FF6B63;background-color:#fff;color:#FF6B63;
@@ -147,27 +147,26 @@
   .payment .inner .btom{text-align:center;color:#A7A7A7;}
   .payment .onclose{width:100%;}
   .payment .closeg{margin-left:48%;color:#fff;}
-  .payment .tuihd{width:100%;height:50px;background-color:#F2F2F2;position:absolute;margin-top:230px;display:flex;flex-direction:row;}
+  .payment .tuihd{width:100%;height:50px;background-color:#F2F2F2;display:flex;flex-direction:row;}
   .payment .tuihd .txtin{width:240px;text-align:center;line-height:50px;color:#666666;}
   .payment .tuihd .line-one{width:50%;margin-top:25px;}
   .payment .tuihd .line-two{width:50%;margin-top:25px;}
   .payment .tuihd .left-line{width:100%;height:1px;background-color:#C8C8C8;}
-  .payment .middle{width:100%;height:160px;border-bottom:1px solid #e5e5e5;margin-top:280px;position:absolute;}
+  .payment .middle{width:100%;height:160px;border-bottom:1px solid #e5e5e5;position:relative;}
   .payment .middle .hdshop{width:100%;height:80px;border-bottom:1px solid #e5e5e5;background-color:#fff;display:flex;flex-direction:row;}
   .payment .con-img img{width:60px;height:60px;}
   .payment .details .two{display:flex;flex-direction:row;}
   .payment .twos{width:50%;}
-  .payment .like{margin-top:440px;}
   .payment .details .tuan{width:40px;height:15px;border:1px solid #FF6B63;border-radius:5px;line-height:15px;text-align:center;}
   .payment .middle .btnbt{
     width:80px;height:25px;background-color:#FF6B63;color:#fff;text-align:center;line-height:25px;border-radius:5px;
     position:absolute;margin-top:40px;right:10px;
   }
-  .payment .con-btom{width:100%;height:260px;display:flex;flex-direction:row;}
+  .payment .con-btom{width:100%;}
   .payment .con-btom:after{content:"";clear:both;display:block;}
   .payment .con-btom .item{width:50%;float:left;}
-  .payment .con-btom .inner{width:100%;padding-bottom:100%;position:relative;}
-  .payment .con-btom .bg{background-color:#fff;border-radius:5px;position:absolute;left:0;top:0;right:0;bottom:0;}
+  .payment .con-btom .inners{width:100%;padding-bottom:100%;position:relative;}
+  .payment .con-btom .bg{background-color:#fff;border-radius:5px;position:absolute;top:0;bottom:0;left:0;right:0;}
   .payment .con-btom img{width:100%;height:100%;border-radius:5px;object-fit:cover;}
   .payment .con-btom .two{position:relative;display:flex;flex-direction:row;}
   .payment .con-btom .txtxl{position:absolute;right:10px;}
