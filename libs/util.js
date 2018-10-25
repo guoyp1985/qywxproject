@@ -4,7 +4,7 @@ import ENV from 'env'
 import SHA1 from 'js-sha1'
 import Time from './time'
 import urlParse from 'url-parse'
-import { User, Roomid } from './storage'
+import { User, Roomid, Token } from './storage'
 const Util = {}
 
 Util.install = function (Vue, options) {
