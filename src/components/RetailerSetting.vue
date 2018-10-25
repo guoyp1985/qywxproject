@@ -288,6 +288,7 @@ Confirm txt:
 import { Tab, TabItem, Swiper, SwiperItem, Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
+import { Token } from '#/storage'
 
 export default {
   name: 'RetailerSetting',
@@ -472,7 +473,7 @@ export default {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
-                self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
               } else {
                 self.$router.push('/centerSales')
               }
@@ -511,7 +512,7 @@ export default {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
-                self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
               } else {
                 self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
               }

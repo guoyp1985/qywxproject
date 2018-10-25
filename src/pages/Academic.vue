@@ -353,7 +353,6 @@ export default {
   },
   activated () {
     const self = this
-    this.$util.miniPost()
     this.loginUser = User.get()
     if (this.loginUser) {
       this.$vux.loading.show()

@@ -131,7 +131,7 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, Token } from '#/storage'
 
 export default {
   directives: {
@@ -439,7 +439,7 @@ export default {
                 if (data.flag === 1) {
                   if (self.query.minibackurl) {
                     let minibackurl = decodeURIComponent(self.query.minibackurl)
-                    self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
                   } else {
                     self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                     if (self.query.type === 'bargainbuy') {

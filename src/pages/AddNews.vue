@@ -87,7 +87,7 @@
 import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, Token } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
@@ -228,7 +228,7 @@ export default {
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
                 } else {
                   let params = { id: data.data }
                   if (self.query.id) {
