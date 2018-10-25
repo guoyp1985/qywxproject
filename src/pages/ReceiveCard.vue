@@ -105,6 +105,7 @@ export default {
   activated () {
     self = this
     self.refresh()
+    this.$util.miniPost()
   }
 }
 </script>

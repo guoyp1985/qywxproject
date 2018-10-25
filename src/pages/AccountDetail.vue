@@ -58,6 +58,7 @@
 import { XImg } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -71,6 +72,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       data: {},
       orders: [],
       showOrders: false,
@@ -108,10 +110,12 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.loginUser = User.get()
       this.getData()
     }
   },
   activated () {
+    this.$util.miniPost()
     this.refresh()
   }
 }

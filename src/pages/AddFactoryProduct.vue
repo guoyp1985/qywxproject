@@ -570,6 +570,7 @@ export default {
     this.init()
   },
   activated () {
+    this.$util.miniPost()
     if (this.query.id !== this.$route.query.id) {
       this.initSubmitData()
     }

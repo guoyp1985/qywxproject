@@ -207,20 +207,11 @@ export default {
       //   Token.set({isExpired: null})
       // }
       this.getData()
-    },
-    miniPost () {
-      const self = this
-      // this.$wechat.miniProgram.postMessage({data: 'From Web'})
-      this.$wechat.miniProgram.getEnv(res => {
-        if (res.miniprogram) {
-          self.$wechat.miniProgram.postMessage({data: {token: Token.get()}})
-        }
-      })
     }
   },
   activated () {
     this.refresh(this.$route.query)
-    this.miniPost()
+    this.$util.miniPost()
   },
   beforeRouteUpdate (to, from, next) {
     this.refresh(to.query)

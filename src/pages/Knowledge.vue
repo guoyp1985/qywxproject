@@ -416,6 +416,7 @@ export default {
   },
   activated () {
     this.refresh()
+    this.$util.miniPost()
   }
   // beforeRouteLeave (to, from, next) {
   //   Socket.destory(room)

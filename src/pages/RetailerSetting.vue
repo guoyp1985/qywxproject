@@ -27,7 +27,7 @@ import RetailerSetting from '@/components/RetailerSetting'
 import RetailerApply from '@/components/RetailerApply'
 import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, Token } from '#/storage'
 
 export default {
   components: {
@@ -136,6 +136,7 @@ export default {
   },
   activated () {
     this.refresh()
+    this.$util.miniPost()
   }
 }
 </script>

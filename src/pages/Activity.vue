@@ -267,6 +267,7 @@ export default {
     this.init()
   },
   activated () {
+    this.$util.miniPost()
     this.refresh(this.$route.query)
   },
   beforeRouteUpdate (to, from, next) {

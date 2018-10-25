@@ -544,6 +544,7 @@ export default {
   },
   activated () {
     this.refresh(this.$route.query)
+    this.$util.miniPost()
   }
 }
 </script>

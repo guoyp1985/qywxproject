@@ -652,6 +652,13 @@ Util.install = function (Vue, options) {
         src = arr[0]
       }
       return src.replace(/\|\|/g, ',')
+    },
+    miniPost: function () {
+      Vue.wechat.miniProgram.getEnv(res => {
+        if (res.miniprogram) {
+          Vue.wechat.miniProgram.postMessage({data: {token: Token.get()}})
+        }
+      })
     }
   }
 }

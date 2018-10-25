@@ -752,6 +752,7 @@ export default {
   },
   activated () {
     self = this
+    this.$util.miniPost()
     self.initData()
     this.refresh()
     window.onresize = function () {

@@ -350,6 +350,7 @@ export default {
   },
   activated () {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    this.$util.miniPost()
     this.refresh()
   }
 }
