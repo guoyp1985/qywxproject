@@ -329,6 +329,7 @@ export default {
 #personal-favorite .item-content .img-cell img {
   width: 40px;
   height: 40px;
+  object-fit:cover;
 }
 
 #personal-favorite .item-content .info-cell {

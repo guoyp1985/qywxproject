@@ -736,6 +736,8 @@ export default {
       if (buytype === 'groupbuy' && self.activityInfo.id) {
         self.submitdata['activityid'] = self.activityInfo.id
         isActivity = true
+      } else {
+        delete self.submitdata.activityid
       }
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerInfo.uid
