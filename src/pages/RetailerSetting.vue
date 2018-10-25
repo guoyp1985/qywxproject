@@ -27,7 +27,7 @@ import RetailerSetting from '@/components/RetailerSetting'
 import RetailerApply from '@/components/RetailerApply'
 import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 
 export default {
   components: {
