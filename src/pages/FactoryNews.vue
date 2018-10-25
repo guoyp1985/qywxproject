@@ -23,10 +23,17 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
           </div>
-          <div id="editor-content" :class="`article-content ${(article.content == '' && article.uploader == loginUser.uid) ? 'color-gray font16' : ''}`">
-            <p v-if="article.content == '' && article.uploader == loginUser.uid">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
-            <div v-else v-html="article.content"></div>
-          </div>
+          <template v-if="showArticle">
+            <template v-if="article.uploader == reward.uid">
+              <div id="editor-content" :class="`article-content ${article.content == '' ? 'color-gray font16' : ''}`">
+                <p v-if="article.content == ''">文章内容为空，点击【编辑】按钮可修改内容哦！</p>
+                <div v-else v-html="article.content"></div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="article-content" v-html="article.content"></div>
+            </template>
+          </template>
           <div class="reading-info">
             <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
             <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
@@ -109,7 +116,8 @@ export default {
       previewerPhotoarr: [],
       messages: 0,
       topcss: '',
-      showEditor: false
+      showEditor: false,
+      showArticle: false
     }
   },
   filters: {
@@ -225,10 +233,11 @@ export default {
             return false
           }
           if (res.data.flag) {
+            self.reward = User.get()
             self.article = res.data.data
+            self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
-            self.reward = User.get()
             self.retailerInfo = self.article.retailerinfo
             let shareParams = {
               data: self.article,
@@ -445,8 +454,9 @@ export default {
     refresh (query) {
       const self = this
       this.loginUser = User.get()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.showArticle = false
       this.showEditor = false
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       if (this.query.id !== query.id) {
         self.showSos = false
         self.showContainer = false
