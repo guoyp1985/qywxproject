@@ -8,11 +8,11 @@
     <div class="imgarea">
       <div class="inner">
         <div class="img-outer">
-          <img class="img" src="https://tossharingsales.boka.cn/images/card_bg1.png" />
+          <img class="img" src="https://tossharingsales.boka.cn/images/card_bg3.png" />
           <div class="txt flex_center">
-            <div class="font12" v-if="disCardInfo">
-              <span class="color-yellow v_middle">满{{params.joincard_ordermoney}}减{{params.joincard_facemoney}}</span>
-              <span class="color-white v_middle ml5">(7日内有效)</span>
+            <div v-if="disCardInfo" class="w_100">
+              <div class="color-yellow font16 align_center" style="margin:0 auto;">满{{params.joincard_ordermoney}}减{{params.joincard_facemoney}}</div>
+              <div class="font12 align_center" style="margin:0 auto;color:#e0d9d9;">(7日内有效)</div>
             </div>
           </div>
           <div class="btnarea" @click="receive"></div>
