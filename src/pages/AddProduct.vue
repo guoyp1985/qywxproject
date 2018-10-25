@@ -401,6 +401,9 @@ export default {
           } else if (type === 'contentphoto') {
             curMaxnum = self.maxnum1 - self.photoarr1.length
           }
+          if (curMaxnum > 9) {
+            curMaxnum = 9
+          }
           self.$util.wxUploadImage({
             maxnum: curMaxnum,
             handleCallback: function (data) {
