@@ -261,7 +261,7 @@
 <script>
 import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'

@@ -131,7 +131,7 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 
 export default {
   directives: {

@@ -288,7 +288,6 @@ Confirm txt:
 import { Tab, TabItem, Swiper, SwiperItem, Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
-import { Token } from '#/storage'
 
 export default {
   name: 'RetailerSetting',

@@ -124,7 +124,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 

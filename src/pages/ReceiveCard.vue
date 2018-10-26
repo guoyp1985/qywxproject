@@ -23,7 +23,7 @@
 </template>
 <script>
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 let self = {}
 export default {
   data () {

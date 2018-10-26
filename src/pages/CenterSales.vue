@@ -41,7 +41,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -96,8 +96,6 @@ export default {
     },
     applySuccess () {
       const self = this
-      console.log('after apply token')
-      console.log(Token.get())
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
         self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
@@ -201,11 +199,6 @@ export default {
       // const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
-      // if (self.query.miniopenid && self.query.miniappid) {
-      //   MiniApp.setOpenId(self.query.miniopenid)
-      //   MiniApp.setAppId(self.query.miniappid)
-      //   Token.set({isExpired: null})
-      // }
       this.getData()
     }
   },

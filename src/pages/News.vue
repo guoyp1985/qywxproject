@@ -132,7 +132,7 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 import Socket from '#/socket'
 
 let room = ''

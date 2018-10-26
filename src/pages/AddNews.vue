@@ -87,7 +87,7 @@
 import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
