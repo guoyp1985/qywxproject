@@ -23,7 +23,7 @@
 </template>
 <script>
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 let self = {}
 export default {
   data () {
@@ -54,7 +54,7 @@ export default {
             })
             setTimeout(function () {
               let minibackurl = decodeURIComponent(self.query.minibackurl)
-              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
             }, 600)
           } else {
             const timeoute = self.$util.delay(data.error)
@@ -65,7 +65,7 @@ export default {
             })
             setTimeout(function () {
               let minibackurl = decodeURIComponent(self.query.minibackurl)
-              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
             }, timeoute)
           }
         })
@@ -105,6 +105,7 @@ export default {
   activated () {
     self = this
     self.refresh()
+    this.$util.miniPost()
   }
 }
 </script>
@@ -112,9 +113,9 @@ export default {
 <style lang="less" scoped>
 .receive-card{background-color:#000;}
 .receive-card .imgarea{width:100%;max-width:450px;position:relative;}
-.receive-card .imgarea .inner{width:100%;padding-bottom:101%;position:relative;}
+.receive-card .imgarea .inner{width:100%;padding-bottom:101.777%;position:relative;}
 .receive-card .img-outer{position:absolute;left:0;right:0;bottom:0;top:0;}
-.receive-card .img-outer .img{vertical-align:middle;max-width:100%;max-height:100%;}
+.receive-card .img-outer .img{width:100%;display:block;margin:0 auto;}
 .receive-card .txt-layer{position:absolute;left:0;top:0;right:0;bottom:0;}
 .receive-card .txt{position:absolute;left:0;top:0;right:0;bottom:0;}
 .receive-card .btnarea{

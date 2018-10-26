@@ -41,7 +41,7 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -96,11 +96,9 @@ export default {
     },
     applySuccess () {
       const self = this
-      console.log('after apply token')
-      console.log(Token.get())
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
-        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
       } else {
         self.initContainer()
         self.showCenter = true
@@ -201,26 +199,12 @@ export default {
       // const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
-      // if (self.query.miniopenid && self.query.miniappid) {
-      //   MiniApp.setOpenId(self.query.miniopenid)
-      //   MiniApp.setAppId(self.query.miniappid)
-      //   Token.set({isExpired: null})
-      // }
       this.getData()
-    },
-    miniPost () {
-      const self = this
-      // this.$wechat.miniProgram.postMessage({data: 'From Web'})
-      this.$wechat.miniProgram.getEnv(res => {
-        if (res.miniprogram) {
-          self.$wechat.miniProgram.postMessage({data: {token: Token.get()}})
-        }
-      })
     }
   },
   activated () {
     this.refresh(this.$route.query)
-    this.miniPost()
+    this.$util.miniPost()
   },
   beforeRouteUpdate (to, from, next) {
     this.refresh(to.query)

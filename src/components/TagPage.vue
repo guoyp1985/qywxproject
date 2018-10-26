@@ -7,7 +7,7 @@
         </div>
         <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
           <div class="avatar">
-            <img :src="item.avatar" />
+            <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="con">
             <div class="txt">{{item.username}}</div>

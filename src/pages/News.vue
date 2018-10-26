@@ -469,7 +469,7 @@ export default {
               self.handleImg()
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
-                self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
               }
             }
           }
@@ -604,6 +604,7 @@ export default {
   activated () {
     self = this
     this.refresh(this.$route.query)
+    this.$util.miniPost()
   }
   // beforeRouteLeave (to, from, next) {
   //   Socket.destory(room)

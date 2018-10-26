@@ -332,7 +332,7 @@ export default {
                     self.newsCount++
                     if (self.query.minibackurl) {
                       let minibackurl = decodeURIComponent(self.query.minibackurl)
-                      self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                     } else {
                       self.$router.push({path: '/news', query: {id: data.data.id}})
                     }
@@ -380,7 +380,7 @@ export default {
                 self.collecturl = ''
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                 } else {
                   self.$router.push({path: '/news', query: {id: data.data.id}})
                 }
@@ -458,6 +458,7 @@ export default {
   },
   activated () {
     this.refresh()
+    this.$util.miniPost()
   }
 }
 </script>

@@ -204,6 +204,9 @@ export default{
   },
   created () {
     this.init()
+  },
+  activated () {
+    this.$util.miniPost()
   }
 }
 </script>

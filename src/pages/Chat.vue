@@ -968,6 +968,7 @@ export default {
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
   },
   activated () {
+    this.$util.miniPost()
     this.refresh()
   }
 }

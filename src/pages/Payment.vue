@@ -150,6 +150,9 @@
       openChat () {
         this.gzhShow = true
       }
+    },
+    activated () {
+      this.$util.miniPost()
     }
 }
 </script>

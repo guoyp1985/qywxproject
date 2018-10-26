@@ -228,7 +228,7 @@ export default {
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                 } else {
                   let params = { id: data.data }
                   if (self.query.id) {
@@ -349,6 +349,7 @@ export default {
     }
   },
   activated () {
+    this.$util.miniPost()
     this.refresh()
   }
 }

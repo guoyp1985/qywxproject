@@ -164,6 +164,9 @@ export default {
         let params = {}
         if (self.query.uid) {
           params.uid = self.query.uid
+          self.retailerUid = self.query.uid
+        } else {
+          self.retailerUid = self.loginUser.uid
         }
         self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
           params: params
@@ -173,7 +176,7 @@ export default {
             self.userInfo = data.data ? data.data : data
             self.getTimelineData()
           }
-          return self.$http.post(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=1`)
+          return self.$http.post(`${ENV.BokaApi}/api/list/product?pagestart=0&limit=1&uploader=${self.retailerUid}`)
         }).then(res => {
           const data = res.data
           const retdata = data.data ? data.data : data

@@ -219,7 +219,7 @@ import { Group, XNumber, XTextarea, TransferDom, Popup, CheckIcon, XImg } from '
 import { mapState } from 'vuex'
 import Sos from '@/components/Sos'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -401,7 +401,6 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
-                // self.$router.push({path: '/pay', query: {id: data.id}})
                 if (self.isMiniInvoke) {
                   self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
                 } else {
@@ -506,15 +505,6 @@ export default {
     checkCard () {
       this.showCard = true
     },
-    miniPost () {
-      const self = this
-      // this.$wechat.miniProgram.postMessage({data: 'From Web'})
-      this.$wechat.miniProgram.getEnv(res => {
-        if (res.miniprogram) {
-          self.$wechat.miniProgram.postMessage({data: {token: Token.get()}})
-        }
-      })
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
@@ -526,7 +516,7 @@ export default {
   },
   activated () {
     this.refresh()
-    this.miniPost()
+    this.$util.miniPost()
   }
 }
 </script>

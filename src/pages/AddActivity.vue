@@ -439,7 +439,7 @@ export default {
                 if (data.flag === 1) {
                   if (self.query.minibackurl) {
                     let minibackurl = decodeURIComponent(self.query.minibackurl)
-                    self.$wechat.miniProgram.redirectTo({url: minibackurl})
+                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                   } else {
                     self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                     if (self.query.type === 'bargainbuy') {
@@ -554,6 +554,7 @@ export default {
     }
   },
   activated () {
+    this.$util.miniPost()
     this.refresh()
   }
 }
