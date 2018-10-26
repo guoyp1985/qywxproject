@@ -164,6 +164,9 @@ export default {
         let params = {}
         if (self.query.uid) {
           params.uid = self.query.uid
+          self.retailerUid = self.query.uid
+        } else {
+          self.retailerUid = self.loginUser.uid
         }
         self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
           params: params
