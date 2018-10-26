@@ -228,7 +228,7 @@ export default {
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                 } else {
                   let params = { id: data.data }
                   if (self.query.id) {

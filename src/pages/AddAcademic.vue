@@ -298,7 +298,6 @@ export default {
     }
   },
   activated () {
-    this.$util.miniPost()
     this.refresh()
   }
 }

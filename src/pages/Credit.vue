@@ -111,7 +111,6 @@ export default {
     this.init()
   },
   activated () {
-    this.$util.miniPost()
     this.refresh()
   }
 }

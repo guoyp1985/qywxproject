@@ -334,7 +334,6 @@ export default {
   },
   activated () {
     this.refresh()
-    this.$util.miniPost()
   }
 }
 </script>
