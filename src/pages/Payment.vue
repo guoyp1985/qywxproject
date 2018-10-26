@@ -71,60 +71,76 @@
       <div class="txtin mr5">你或许还喜欢这些宝贝</div>
       <div class="line-two mr10"><div class="left-line"></div></div>
     </div>
-    <div class="con-btom">
+    <div class="con-btom product-list">
       <div class="item">
         <div class="inners">
-          <div class="bg ml5 mr5">
+          <div class="bg">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
           </div>
         </div>
-        <div class="info mb25 bg-white ml5 mr5">
-          <div class="font12 pl10">10.22玫瑰花</div>
+        <div class="info">
+          <div class="font12">10.22玫瑰花</div>
           <div class="two">
-            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
-            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:1999</div>
+            <div class="txt1 flex_left">
+              <div class="w_100 clamp1">￥1,500.00</div>
+            </div>
+            <div class="txt2 flex_right">
+              <div class="w_100 clamp1">销量:1999</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="item">
         <div class="inners">
-          <div class="bg ml5 mr5">
+          <div class="bg">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
           </div>
         </div>
-        <div class="info mb25 bg-white ml5 mr5">
-          <div class="font12 pl10">玫瑰花</div>
+        <div class="info">
+          <div class="font12">玫瑰花</div>
           <div class="two">
-            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
-            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:100</div>
+            <div class="txt1 flex_left">
+              <div class="w_100 clamp1">￥1,500.00</div>
+            </div>
+            <div class="txt2 flex_right">
+              <div class="w_100 clamp1">销量:1999</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="item">
         <div class="inners">
-          <div class="bg ml5 mr5">
+          <div class="bg">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
           </div>
         </div>
-        <div class="info mb25 bg-white ml5 mr5">
-          <div class="font12 pl10">10.22玫瑰花</div>
+        <div class="info">
+          <div class="font12">10.22玫瑰花</div>
           <div class="two">
-            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
-            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:1999</div>
+            <div class="txt1 flex_left">
+              <div class="w_100 clamp1">￥1,500.00</div>
+            </div>
+            <div class="txt2 flex_right">
+              <div class="w_100 clamp1">销量:1999</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="item">
         <div class="inners">
-          <div class="bg ml5 mr5">
+          <div class="bg">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
           </div>
         </div>
-        <div class="info mb25 bg-white ml5 mr5">
-          <div class="font12 pl10">玫瑰花</div>
+        <div class="info">
+          <div class="font12">玫瑰花</div>
           <div class="two">
-            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
-            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:100</div>
+            <div class="txt1 flex_left">
+              <div class="w_100 clamp1">￥1,500.00</div>
+            </div>
+            <div class="txt2 flex_right">
+              <div class="w_100 clamp1">销量:1999</div>
+            </div>
           </div>
         </div>
       </div>
@@ -157,6 +173,7 @@
 }
 </script>
 <style lang="less" scoped>
+  .payment{background-color:#f2f2f2;}
   .payment .content-head{position:relative;}
   .payment .header{background-color:#FF6B63;width:100%;height:170px;position:relative;padding-top:1px;}
   .payment .header .quan{width:50px;height:50px;border-radius:50%;background-color:#fff;margin:0 auto;margin-top:40px;}
@@ -197,9 +214,13 @@
   .payment .con-btom:after{content:"";clear:both;display:block;}
   .payment .con-btom .item{width:50%;float:left;}
   .payment .con-btom .inners{width:100%;padding-bottom:100%;position:relative;}
-  .payment .con-btom .bg{border-radius:5px;position:absolute;top:0;bottom:0;left:0;right:0;}
+  .payment .con-btom .bg{position:absolute;bottom:0;top:0;left:0;right:0;}
+  .payment .product-list .item{margin-bottom:10px;box-sizing: border-box;}
+  .payment .product-list .item:nth-child(odd){padding-left:10px;padding-right:5px;}
+  .payment .product-list .item:nth-child(even){padding-left:5px;padding-right:10px;}
   .payment .con-btom img{width:100%;height:100%;object-fit:cover;border-top-left-radius:5px;border-top-right-radius:5px;}
-  .payment .con-btom .two{display:flex;flex-direction:row;margin:0;padding:0;}
-  .payment .info{position:relative;}
-  .payment .con-btom .txtxl{position:absolute;right:10px;}
+  .payment .con-btom .two{display:flex;width:100%;padding-top:5px;}
+  .payment .product-list .txt1{color:#FF6B63;font-size:12px;width:50%;text-align:left;}
+  .payment .product-list .txt2{color:#A2A2A2;font-size:10px;width:50%;text-align:right;}
+  .payment .product-list .info{position:relative;background-color:#fff;padding:5px;}
 </style>
