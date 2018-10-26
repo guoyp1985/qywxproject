@@ -212,7 +212,7 @@ export default {
             self.userInfo = data.data ? data.data : data
             self.getTimelineData()
           }
-          return self.$http.post(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=1`)
+          return self.$http.post(`${ENV.BokaApi}/api/list/product?pagestart=0&limit=1&uploader=${self.retailerUid}`)
         }).then(res => {
           const data = res.data
           const retdata = data.data ? data.data : data
