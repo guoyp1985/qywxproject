@@ -18,7 +18,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">投放总数<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_limitbuy" type="text" class="input" name="param_limitbuy" placeholder="此次活动投入的商品总数" />
+          <input v-model="submitdata.param_limitbuy" type="tel" class="input" name="param_limitbuy" placeholder="此次活动投入的商品总数" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">件</div>
       </div>
@@ -27,7 +27,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">砍价周期<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
         <div class="t-cell input-cell v_middle" style="position:relative;">
-          <input v-model="submitdata.param_finishtime" type="text" class="input" name="param_everymin" placeholder="用户完成活动的最长时间,如24" />
+          <input v-model="submitdata.param_finishtime" type="tel" class="input" name="param_everymin" placeholder="用户完成活动的最长时间,如24" />
         </div>
         <div class="t-cell v_middle align_right font12" style="width:40px;">小时</div>
       </div>
