@@ -355,6 +355,7 @@ export default {
         let minval = parseFloat(self.submitdata.param_everymin)
         let maxval = parseFloat(self.submitdata.param_everymax)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
+        let finishtime = parseInt(self.submitdata.param_finishtime)
         if (isNaN(minprice) || minprice < 0) {
           self.$vux.alert.show({
             title: '',
@@ -369,10 +370,24 @@ export default {
           })
           return false
         }
+        if (isNaN(limitbuy)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的投放总数'
+          })
+          return false
+        }
         if (limitbuy > storage) {
           self.$vux.alert.show({
             title: '',
             content: '投放总数不能大于商品库存'
+          })
+          return false
+        }
+        if (isNaN(finishtime)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的砍价周期'
           })
           return false
         }
