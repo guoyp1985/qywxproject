@@ -401,7 +401,6 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
-                // self.$router.push({path: '/pay', query: {id: data.id}})
                 if (self.isMiniInvoke) {
                   self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
                 } else {
