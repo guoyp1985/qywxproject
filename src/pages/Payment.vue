@@ -17,7 +17,7 @@
           <img class="pt15 pl5" src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
           <div class="font10 btom">长按识别二维码添加好友</div>
         </div>
-        <div class="onclose"><div @click="userChat1" class="al al-close closeg"></div></div>
+        <div class="onclose"><div @click="userChat1" class="al al-close closeg align_center"></div></div>
       </div>
       <div class="mceng" v-show="gzhShow">
         <div class="inner">
@@ -26,7 +26,7 @@
           <img class="pt15 pl5" src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
           <div class="font10 btom">长按识别二维码关注公众号</div>
         </div>
-        <div @click="userChat1" class="al al-close closeg"></div>
+        <div @click="userChat1" class="al al-close closeg align_center"></div>
       </div>
     </div>
     <div class="tuihd font12">
@@ -76,11 +76,13 @@
         <div class="inners">
           <div class="bg ml5 mr5">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
-            <div class="font12 ml10">10.22玫瑰花</div>
-            <div class="two">
-              <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
-              <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:1999</div>
-            </div>
+          </div>
+        </div>
+        <div class="info mb25 bg-white ml5 mr5">
+          <div class="font12 pl10">10.22玫瑰花</div>
+          <div class="two">
+            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
+            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:1999</div>
           </div>
         </div>
       </div>
@@ -88,11 +90,41 @@
         <div class="inners">
           <div class="bg ml5 mr5">
             <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
-            <div class="font12 ml10">玫瑰花</div>
-            <div class="two">
-              <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
-              <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:100</div>
-            </div>
+          </div>
+        </div>
+        <div class="info mb25 bg-white ml5 mr5">
+          <div class="font12 pl10">玫瑰花</div>
+          <div class="two">
+            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
+            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:100</div>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="inners">
+          <div class="bg ml5 mr5">
+            <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
+          </div>
+        </div>
+        <div class="info mb25 bg-white ml5 mr5">
+          <div class="font12 pl10">10.22玫瑰花</div>
+          <div class="two">
+            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
+            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:1999</div>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="inners">
+          <div class="bg ml5 mr5">
+            <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
+          </div>
+        </div>
+        <div class="info mb25 bg-white ml5 mr5">
+          <div class="font12 pl10">玫瑰花</div>
+          <div class="two">
+            <div class="font12 ml10 mt10" style="color:#FF6B63;">￥1,500.00</div>
+            <div class="font10 mt10 txtxl" style="color:#A2A2A2;">销量:100</div>
           </div>
         </div>
       </div>
@@ -146,7 +178,7 @@
   .payment .inner img{width:100px;height:100px;margin-left:25%;}
   .payment .inner .btom{text-align:center;color:#A7A7A7;}
   .payment .onclose{width:100%;}
-  .payment .closeg{margin-left:48%;color:#fff;}
+  .payment .closeg{color:#fff;}
   .payment .tuihd{width:100%;height:50px;background-color:#F2F2F2;display:flex;flex-direction:row;}
   .payment .tuihd .txtin{width:240px;text-align:center;line-height:50px;color:#666666;}
   .payment .tuihd .line-one{width:50%;margin-top:25px;}
@@ -162,12 +194,12 @@
     width:80px;height:25px;background-color:#FF6B63;color:#fff;text-align:center;line-height:25px;border-radius:5px;
     position:absolute;margin-top:40px;right:10px;
   }
-  .payment .con-btom{width:100%;}
   .payment .con-btom:after{content:"";clear:both;display:block;}
   .payment .con-btom .item{width:50%;float:left;}
   .payment .con-btom .inners{width:100%;padding-bottom:100%;position:relative;}
-  .payment .con-btom .bg{background-color:#fff;border-radius:5px;position:absolute;top:0;bottom:0;left:0;right:0;}
-  .payment .con-btom img{width:100%;height:100%;border-radius:5px;object-fit:cover;}
-  .payment .con-btom .two{position:relative;display:flex;flex-direction:row;}
+  .payment .con-btom .bg{border-radius:5px;position:absolute;top:0;bottom:0;left:0;right:0;}
+  .payment .con-btom img{width:100%;height:100%;object-fit:cover;border-top-left-radius:5px;border-top-right-radius:5px;}
+  .payment .con-btom .two{display:flex;flex-direction:row;margin:0;padding:0;}
+  .payment .info{position:relative;}
   .payment .con-btom .txtxl{position:absolute;right:10px;}
 </style>
