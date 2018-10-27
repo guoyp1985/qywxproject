@@ -294,7 +294,7 @@ const access = success => {
       } else {
         const originHref = encodeURIComponent(location.href)
         // 微信授权
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=defaultAccess#wechat_redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_userinfo&state=defaultAccess#wechat_redirect`)
       }
     })
   }
