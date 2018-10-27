@@ -124,7 +124,7 @@
 import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, Checker, CheckerItem, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 
@@ -332,7 +332,7 @@ export default {
                     self.newsCount++
                     if (self.query.minibackurl) {
                       let minibackurl = decodeURIComponent(self.query.minibackurl)
-                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                     } else {
                       self.$router.push({path: '/news', query: {id: data.data.id}})
                     }
@@ -380,7 +380,7 @@ export default {
                 self.collecturl = ''
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                 } else {
                   self.$router.push({path: '/news', query: {id: data.data.id}})
                 }

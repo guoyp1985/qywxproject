@@ -7,7 +7,7 @@
         </div>
         <div v-else class="tlitem" v-for="(item,index) in timelineData" :key="index">
           <div class="avatar">
-            <img :src="item.avatar" />
+            <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="con">
             <div class="txt">{{item.username}}</div>
@@ -39,7 +39,7 @@
                     <span class="v_middle" v-if="item.isdig">取消</span>
                     <span class="v_middle" v-else>赞</span>
                   </span>
-                  <div class="iconitem" @click="onReplyShow(item,index)">
+                  <div class="iconitem" @click="onReplyShow(item,index)" v-if="loginUser.subscribe">
                     <i class="al al-pinglun1 font14 mr5"></i>
                     <span class="v_middle">评论</span>
                   </div>

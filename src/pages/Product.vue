@@ -109,10 +109,10 @@
                 </div>
               </div>
             </div>
-            <div v-else-if="activitydata.length > 2" class="vux-marquee" item-height=110 duration=2000>
-              <marquee>
+            <template v-if="activitydata.length > 2">
+              <marquee :item-height="60" :duration="5000">
                 <marquee-item v-for="(item,index) in activitydata" :key="item.id">
-                  <div class="scroll_item padding10">
+                  <div class="scroll_item padding10" v-for="(item, index) in activitydata" :key="index">
           					<div class="t-table">
           						<div class="t-cell v_middle w50">
                         <img class="v_middle avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -138,7 +138,7 @@
           				</div>
                 </marquee-item>
               </marquee>
-            </div>
+            </template>
   				</div>
   			</div>
   			<div class="evluatearea" v-if="productdata.buyonline >= 1 && evluatedata.length > 0">

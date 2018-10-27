@@ -261,7 +261,7 @@
 <script>
 import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
@@ -508,7 +508,7 @@ export default {
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                 } else if (self.query.from === 'apply') {
                   self.$router.push({path: '/centerSales'})
                 } else {

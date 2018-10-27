@@ -54,20 +54,14 @@ export default {
         }
       })
     },
-    init () {
-      this.$vux.loading.show()
-      this.getData()
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.$vux.loading.show()
+      this.getData()
     }
-  },
-  created () {
-    this.init()
   },
   activated () {
     this.refresh()
-    this.$util.miniPost()
   }
 }
 </script>

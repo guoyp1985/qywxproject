@@ -131,7 +131,7 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import { User } from '#/storage'
 
 export default {
   directives: {
@@ -355,6 +355,7 @@ export default {
         let minval = parseFloat(self.submitdata.param_everymin)
         let maxval = parseFloat(self.submitdata.param_everymax)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
+        let finishtime = parseInt(self.submitdata.param_finishtime)
         if (isNaN(minprice) || minprice < 0) {
           self.$vux.alert.show({
             title: '',
@@ -369,10 +370,24 @@ export default {
           })
           return false
         }
+        if (isNaN(limitbuy)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的投放总数'
+          })
+          return false
+        }
         if (limitbuy > storage) {
           self.$vux.alert.show({
             title: '',
             content: '投放总数不能大于商品库存'
+          })
+          return false
+        }
+        if (isNaN(finishtime)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的砍价周期'
           })
           return false
         }
@@ -388,6 +403,7 @@ export default {
         let numbers = parseInt(self.submitdata.param_numbers)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
+        let finishtime = parseInt(self.submitdata.param_finishtime)
         if (isNaN(groupprice) || groupprice < 0) {
           self.$vux.alert.show({
             title: '',
@@ -402,10 +418,17 @@ export default {
           })
           return false
         }
-        if (numbers <= 1) {
+        if (isNaN(numbers) || numbers <= 1) {
           self.$vux.alert.show({
             title: '',
             content: '成团人数应大于1人'
+          })
+          return false
+        }
+        if (isNaN(limitbuy)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的投放总数'
           })
           return false
         }
@@ -420,6 +443,20 @@ export default {
           self.$vux.alert.show({
             title: '',
             content: '投放商品数量应大于<br/>成团人数×限购件数'
+          })
+          return false
+        }
+        if (isNaN(finishtime)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的成团时间'
+          })
+          return false
+        }
+        if (isNaN(everybuy)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的限购件数'
           })
           return false
         }
@@ -439,7 +476,7 @@ export default {
                 if (data.flag === 1) {
                   if (self.query.minibackurl) {
                     let minibackurl = decodeURIComponent(self.query.minibackurl)
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}?token=${Token.get().token}&expired_at=${Token.get().expired_at}`})
+                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                   } else {
                     self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                     if (self.query.type === 'bargainbuy') {
