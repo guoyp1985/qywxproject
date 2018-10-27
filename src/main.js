@@ -239,7 +239,7 @@ const access = success => {
         // }
       }
     )
-  } else if (from === 'miniprogram') {
+  } else if (from === 'miniprogram111') {
     if (miniAppId && miniAppId !== '') {
       const redirectUri = location.href.replace(/(?:&from=miniprogram)|(?:from=miniprogram&)/g, '')
       const originHref = encodeURIComponent(redirectUri)
