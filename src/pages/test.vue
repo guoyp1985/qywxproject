@@ -1,5 +1,6 @@
 <template>
-  <div class="containerarea flex_center bold font20">测试授权
+  <div class="containerarea flex_center bold font20">
+    <div @click="test" class="qbtn bg-green color-white">测试授权</div>
   </div>
 </template>
 
@@ -10,9 +11,11 @@ export default {
     }
   },
   methods: {
+    test () {
+      this.$util.wxAccess()
+    },
     init () {
       this.$util.wxAccessListening()
-      this.$util.wxAccess()
     }
   },
   created () {
