@@ -1,120 +1,196 @@
 <template>
-  <div class="containerarea con-payment payment font14">
+  <div class="containerarea con-payment payment font14" ref="scrollContainer" @scroll="handleScroll">
     <div class="content-head">
       <div class="header">
         <div class="quan flex_center"><div class="al al-gou dgou"></div></div>
         <div class="color-white align_center mt20 font13">支付成功！订单状态会通过公众号进行通知！</div>
       </div>
       <div class="btnlist flex_center">
-        <div class="item">查看订单</div>
-        <div class="item" @click="userChat">卖家微信</div>
-        <div class="item active bejn" @click="openChat">开启订单通知</div>
+        <router-link to="/orderSearch" class="item">查看订单</router-link>
+        <div class="item" @click="viewQrcode" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''">卖家微信</div>
+        <div class="item active bejn" v-if="loginUser.subscribe != 1" @click="viewMpQrcode">开启订单通知</div>
       </div>
     </div>
-    <div class="linearea">
-      <div class="line"></div>
-      <div class="txt flex_center">向你推荐优惠活动</div>
-    </div>
-    <div class="activity-list">
-      <div class="hdshop item db-flex" v-for="(item,index) in activityData" :key="index">
-        <div class="pic con-img"><img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" /></div>
-        <div class="flex_cell">
-          <div class="font10 clamp1">团购：nike腰包</div>
-          <div class="clamp1 mt3">
-            <div class="db-in font10 tuan" style="color:#FF6B63;">2人团</div>
-            <div class="db-in font10 ml5" style="color:#C8C8C8;">已团2件</div>
-          </div>
-          <div class="clamp1 mt3">
-            <div class="db-in font10" style="color:#FF6B63;">￥0.10</div>
-            <div class="db-in font10 ml5" style="color:#C8C8C8;text-decoration:line-through;">￥110.00</div>
-          </div>
-        </div>
-        <div class="btn-cell">
-          <div class="btnbuy font14">一键拼团</div>
-        </div>
+    <template v-if="activityData.length">
+      <div class="linearea">
+        <div class="line"></div>
+        <div class="txt flex_center">向你推荐优惠活动</div>
       </div>
-    </div>
-    <div class="linearea">
-      <div class="line"></div>
-      <div class="txt flex_center" style="width:180px;">你或许还喜欢这些宝贝</div>
-    </div>
-    <div class="con-btom product-list">
-      <div class="item" v-for="(item, index) in productData" :key="index">
-        <div class="inners">
-          <div class="bg">
-            <img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
-          </div>
-        </div>
-        <div class="info">
-          <div class="font12">10.22玫瑰花</div>
-          <div class="two">
-            <div class="txt1 flex_left">
-              <div class="w_100 clamp1">￥1,500.00</div>
+      <div class="activity-list">
+        <template v-for="(item,index) in activityData">
+          <groupbuyitemplate :data="item" v-if="item.type == 'groupbuy'">
+            <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            <span slot="title">{{ item.title }}</span>
+            <span slot="numbers">{{ item.numbers }}</span>
+            <span slot="havetuan">{{ item.havetuan }}</span>
+            <span slot="groupprice">{{ item.groupprice }}</span>
+            <span slot="price">{{ item.price }}</span>
+          </groupbuyitemplate>
+          <bargainbuyitemplate :data="item" v-if="item.type == 'bargainbuy'">
+            <img slot="photo" class="imgcover" style="width:80px;height:80px;" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            <span slot="title">{{ item.title }}</span>
+            <span slot="saveprice">{{ item.saveprice }}</span>
+            <span slot="minprice">{{ item.minprice }}</span>
+            <span slot="price">{{ item.price }}</span>
+          </bargainbuyitemplate>
+        </template>
+        <!--
+        <div class="hdshop item db-flex" v-for="(item,index) in activityData" :key="index">
+          <div class="pic con-img"><img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" /></div>
+          <div class="flex_cell">
+            <div class="font10 clamp1">团购：nike腰包</div>
+            <div class="clamp1 mt3">
+              <div class="db-in font10 tuan" style="color:#FF6B63;">2人团</div>
+              <div class="db-in font10 ml5" style="color:#C8C8C8;">已团2件</div>
             </div>
-            <div class="txt2 flex_right">
-              <div class="w_100 clamp1">销量:1999</div>
+            <div class="clamp1 mt3">
+              <div class="db-in font10" style="color:#FF6B63;">￥0.10</div>
+              <div class="db-in font10 ml5" style="color:#C8C8C8;text-decoration:line-through;">￥110.00</div>
             </div>
           </div>
+          <div class="btn-cell">
+            <div class="btnbuy font14">一键拼团</div>
+          </div>
         </div>
+      -->
       </div>
-    </div>
-    <div class="pay-layer" v-show="isShow">
+    </template>
+    <template v-if="productData.length">
+      <div class="linearea">
+        <div class="line"></div>
+        <div class="txt flex_center" style="width:180px;">你或许还喜欢这些宝贝</div>
+      </div>
+      <div class="con-btom product-list">
+        <router-link :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" class="item" v-for="(item, index) in productData" :key="index">
+          <div class="inners">
+            <div class="bg">
+              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            </div>
+          </div>
+          <div class="info">
+            <div class="font12 clamp1">{{item.title}}</div>
+            <div class="two">
+              <div class="txt1 flex_left">
+                <div class="w_100 clamp1">{{ $t('RMB') }}{{item.price}}</div>
+              </div>
+              <div class="txt2 flex_right">
+                <div class="w_100 clamp1">销量: {{item.saled}}</div>
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </template>
+    <div class="pay-layer" v-show="showQrcode">
       <div class="bg"></div>
       <div class="inner">
         <div class="pt20 pb15 align_center b_bottom_after">加卖家微信有机会享受更多优惠</div>
-        <img class="img" src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
+        <img class="img" :src="retailerInfo.qrcode" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
         <div class="font10 btom">长按识别二维码添加好友</div>
         <div class="onclose">
-          <div @click="userChat1" class="al al-close color-white align_center"></div>
+          <div @click="closeQrcode" class="al al-close color-white align_center"></div>
         </div>
       </div>
     </div>
-    <div class="pay-layer" v-show="gzhShow">
+    <div class="pay-layer" v-show="showMpQrcode">
       <div class="bg"></div>
       <div class="inner">
         <div class="pt20 pb15 align_center b_bottom_after">关注公众号接收订单发货通知</div>
         <img class="img" src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
         <div class="font10 btom">长按识别二维码关注公众号</div>
         <div class="onclose">
-          <div @click="userChat1" class="al al-close color-white align_center"></div>
+          <div @click="closeMpQrcode" class="al al-close color-white align_center"></div>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-  export default{
-    data () {
-      return {
-        isShow: false,
-        gzhShow: false,
-        activityData: [
-          {id: 1, name: '1'},
-          {id: 1, name: '1'}
-        ],
-        productData: [
-          {id: 1, name: '1'},
-          {id: 1, name: '1'},
-          {id: 1, name: '1'},
-          {id: 1, name: '1'}
-        ]
-      }
-    },
-    methods: {
-      userChat () {
-        this.isShow = true
-      },
-      userChat1 () {
-        this.isShow = false
-        this.gzhShow = false
-      },
-      openChat () {
-        this.gzhShow = true
-      }
-    },
-    activated () {
-      this.$util.miniPost()
+import ENV from 'env'
+import { User } from '#/storage'
+import Groupbuyitemplate from '@/components/Groupbuyitemplate'
+import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+let self = {}
+let pageStart = 0
+const limit = 10
+export default{
+  components: {
+    Groupbuyitemplate, Bargainbuyitemplate
+  },
+  data () {
+    return {
+      query: {},
+      loginUser: {},
+      retailerInfo: {},
+      isShow: false,
+      gzhShow: false,
+      activityData: [],
+      productData: [],
+      showQrcode: false,
+      showMpQrcode: false
     }
+  },
+  methods: {
+    viewQrcode () {
+      self.showQrcode = true
+    },
+    closeQrcode () {
+      self.showQrcode = false
+    },
+    viewMpQrcode () {
+      self.showMpQrcode = true
+    },
+    closeMpQrcode () {
+      self.showMpQrcode = false
+    },
+    handleScroll () {
+      self.$util.scrollEvent({
+        element: self.$refs.scrollContainer,
+        callback: function () {
+          if (self.productData.length === (pageStart + 1) * limit) {
+            pageStart++
+            self.$vux.loading.show()
+            self.getProduct()
+          }
+        }
+      })
+    },
+    getProduct () {
+      self.$http.get(`${ENV.BokaApi}/api/list/product`, {
+        params: { wid: self.wid, pagestart: pageStart, limit: limit }
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.productData = self.productData.concat(retdata)
+      })
+    },
+    refresh () {
+      self.query = self.$route.query
+      self.wid = self.query.wid
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: {wid: self.wid}
+      }).then(res => {
+        const data = res.data
+        self.retailerInfo = data.data
+        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
+          params: {do: 'store', wid: self.wid, pagestart: 0, limit: 20}
+        })
+      }).then(res => {
+        const data = res.data
+        self.activityData = data.data ? data.data : data
+        self.getProduct()
+      })
+    }
+  },
+  created () {
+    self = this
+    self.loginUser = User.get()
+  },
+  activated () {
+    self = this
+    self.refresh()
+  }
 }
 </script>
 <style lang="less" scoped>
