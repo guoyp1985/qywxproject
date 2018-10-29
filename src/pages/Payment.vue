@@ -202,7 +202,7 @@ export default{
 .payment .btnlist{width:100%;padding:20px 0;background-color:#fff;box-sizing: border-box;}
 .payment .btnlist .item{
   height:25px;border:1px solid #FF6B63;background-color:#fff;color:#FF6B63;font-size:13px;
-  text-align:center;line-height:25px;border-radius:20px;padding:0 10px;
+  text-align:center;line-height:25px;border-radius:20px;padding:0 10px;display:inline-block;
 }
 .payment .btnlist .item.active{background-color:#FF6B63;color:#fff;}
 .payment .btnlist .item:not(:last-child){margin-right:10px;}
