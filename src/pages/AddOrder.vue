@@ -393,6 +393,7 @@ export default {
         if (self.selectedCard) {
           self.submitdata.cardid = self.selectedCard.id
         }
+        self.submitdata.addressid = self.selectaddress.id
         self.$http.post(`${ENV.BokaApi}/api/order/addOrder`, self.submitdata).then(function (res) {
           let data = res.data
           self.isShowLoading = false
