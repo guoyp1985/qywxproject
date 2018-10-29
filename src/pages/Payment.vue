@@ -209,7 +209,7 @@ export default{
 .payment .linearea{width:100%;height:50px;background-color:#F2F2F2;position:relative;}
 .payment .linearea .line{background-color:#e5e5e5;height:2px;position:absolute;left:10px;right:10px;top:50%;margin-top:-1px;}
 .payment .linearea .txt{background-color:#F2F2F2;width:150px;height:100%;margin:0 auto;position:relative;z-index:2;color:#666666;font-size:13px;}
-.payment .activity-list{width:100%;border-bottom:1px solid #e5e5e5;position:relative;}
+.payment .activity-list{width:100%;position:relative;}
 .payment .activity-list .item{width:100%;background-color:#fff;display:flex;flex-direction:row;position:relative;padding:10px;box-sizing:border-box;}
 .payment .activity-list .item:not(:last-child){border-bottom:1px solid #e5e5e5;}
 .payment .activity-list .pic{width:70px;text-align:left}
