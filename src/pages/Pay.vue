@@ -29,7 +29,8 @@ export default {
       payPrice: 0,
       receivables: '',
       payParams: null,
-      disabled: false
+      disabled: false,
+      wid: 0
     }
   },
   methods: {
@@ -53,12 +54,12 @@ export default {
         function (res) {
           if (res.err_msg === 'get_brand_wcpay_request:ok') {
             if (self.query.module === 'payorders') {
-              self.$router.push({path: '/'})
+              self.$router.push({path: `/payment?wid=${self.wid}`})
             } else {
               if (self.query.lasturl) {
                 self.$router.push({path: '/orderSearch'})
               } else {
-                self.$router.push({path: '/'})
+                self.$router.push({path: `/payment?wid=${self.wid}`})
               }
             }
           }
@@ -76,11 +77,13 @@ export default {
         params: params
       })
       .then(res => {
-        if (res.data.flag) {
+        const data = res.data
+        if (data.flag) {
+          self.wid = data.wid
           self.disabled = false
-          self.payPrice = res.data.money
-          self.receivables = res.data.weixinname
-          self.payParams = res.data.data
+          self.payPrice = data.money
+          self.receivables = data.weixinname
+          self.payParams = data.data
         } else {
           self.disabled = true
           self.$vux.toast.text(res.data.error)
