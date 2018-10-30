@@ -268,7 +268,7 @@ const access = success => {
     }
   } else if (state === 'defaultAccess' && code) {
     // 401授权，取得token
-    Vue.http.get(`${ENV.BokaApi}/api/authLogin/${code}`)
+    Vue.http.get(`${ENV.BokaApi}/api/authUser/${code}`)
     .then(
       res => {
         if (!res || !res.data || res.data.errcode) return
@@ -336,12 +336,12 @@ const render = () => {
 clearCache()
 
 // 页面入口
-if (!Token.get() || Token.isExpired()) {
-  access(path => {
-    console.log(`Entry: ${path}`)
-    router.push({path: path})
-    render()
-  })
-} else {
+// if (!Token.get() || Token.isExpired()) {
+access(path => {
+  console.log(`Entry: ${path}`)
+  router.push({path: path})
   render()
-}
+})
+// } else {
+//   render()
+// }

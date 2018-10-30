@@ -51,6 +51,7 @@ var ENV = {
 ENV.NoAccessUrls = [
   ENV.BokaApi + '/api/login/*',
   ENV.BokaApi + '/api/authLogin/*',
+  ENV.BokaApi + '/api/authUser/*',
   ENV.BokaApi + '/api/qrcode/login*',
   ENV.BokaApi + '/api/scanlogin',
   ENV.BokaApi + '/api/withMiniLogin*'
