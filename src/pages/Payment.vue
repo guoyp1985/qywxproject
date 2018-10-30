@@ -7,7 +7,7 @@
       </div>
       <div class="btnlist flex_center">
         <router-link to="/orderSearch" class="item">查看订单</router-link>
-        <div class="item" @click="viewQrcode" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''">卖家微信{{query.wid}}</div>
+        <div class="item" @click="viewQrcode" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''">卖家微信</div>
         <div class="item active bejn" v-if="loginUser.subscribe != 1" @click="viewMpQrcode">开启订单通知</div>
       </div>
     </div>
@@ -139,7 +139,7 @@ export default{
       self.query = self.$route.query
       self.wid = self.query.wid
       self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-        params: {wid: self.wid}
+        params: {uid: self.wid}
       }).then(res => {
         const data = res.data
         self.retailerInfo = data.data
