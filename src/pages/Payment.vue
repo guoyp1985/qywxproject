@@ -7,7 +7,7 @@
       </div>
       <div class="btnlist flex_center">
         <router-link to="/orderSearch" class="item">查看订单</router-link>
-        <div class="item" @click="viewQrcode" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''">卖家微信</div>
+        <div class="item" @click="viewQrcode" v-if="retailerInfo.qrcode && retailerInfo.qrcode != ''">卖家微信{{query.wid}}</div>
         <div class="item active bejn" v-if="loginUser.subscribe != 1" @click="viewMpQrcode">开启订单通知</div>
       </div>
     </div>
@@ -48,26 +48,6 @@
           <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
           <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
         </productitemplate>
-        <!--
-        <router-link :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" class="item" v-for="(item, index) in productData" :key="index">
-          <div class="inners">
-            <div class="bg">
-              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-            </div>
-          </div>
-          <div class="info">
-            <div class="font12 clamp1">{{item.title}}</div>
-            <div class="two">
-              <div class="txt1 flex_left">
-                <div class="w_100 clamp1">{{ $t('RMB') }}{{item.price}}</div>
-              </div>
-              <div class="txt2 flex_right">
-                <div class="w_100 clamp1">销量: {{item.saled}}</div>
-              </div>
-            </div>
-          </div>
-        </router-link>
-      -->
       </div>
     </template>
     <div class="pay-layer" v-show="showQrcode">
@@ -199,28 +179,6 @@ export default{
 .payment .linearea{width:100%;height:50px;background-color:#F2F2F2;position:relative;}
 .payment .linearea .line{background-color:#e5e5e5;height:2px;position:absolute;left:10px;right:10px;top:50%;margin-top:-1px;}
 .payment .linearea .txt{background-color:#F2F2F2;width:150px;height:100%;margin:0 auto;position:relative;z-index:2;color:#666666;font-size:13px;}
-.payment .activity-list{width:100%;position:relative;}
-.payment .activity-list .item{width:100%;background-color:#fff;display:flex;flex-direction:row;position:relative;padding:10px;box-sizing:border-box;}
-.payment .activity-list .item:not(:last-child){border-bottom:1px solid #e5e5e5;}
-.payment .activity-list .pic{width:70px;text-align:left}
-.payment .activity-list .pic img{width:60px;height:60px;vertical-align:middle;}
-.payment .activity-list .btn-cell {width:90px;text-align:right;position:relative;}
-.payment .activity-list .btnbuy{
-  width:80px;height:25px;background-color:#FF6B63;color:#fff;text-align:center;line-height:25px;border-radius:5px;
-  position:absolute;bottom:5px;right:0px;
-}
-.payment .activity-list .tuan{padding:0 5px;height:15px;border:1px solid #FF6B63;border-radius:5px;line-height:15px;text-align:center;}
-.payment .product-list:after{content:"";clear:both;display:block;}
-.payment .product-list .item{width:50%;float:left;margin-bottom:10px;box-sizing: border-box;}
-.payment .product-list .item:nth-child(odd){padding-left:10px;padding-right:5px;}
-.payment .product-list .item:nth-child(even){padding-left:5px;padding-right:10px;}
-.payment .product-list .inners{width:100%;padding-bottom:100%;position:relative;}
-.payment .product-list .bg{position:absolute;bottom:0;top:0;left:0;right:0;}
-.payment .product-list img{width:100%;height:100%;object-fit:cover;border-top-left-radius:5px;border-top-right-radius:5px;}
-.payment .product-list .two{display:flex;width:100%;padding-top:5px;}
-.payment .product-list .txt1{color:#FF6B63;font-size:12px;width:50%;text-align:left;}
-.payment .product-list .txt2{color:#A2A2A2;font-size:10px;width:50%;text-align:right;}
-.payment .product-list .info{position:relative;background-color:#fff;padding:5px;}
 
 .payment .pay-layer{position:fixed;top:0;bottom:0;left:0;right:0;overflow: hidden;z-index:10;}
 .payment .pay-layer .bg{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);}
