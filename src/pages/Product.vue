@@ -1127,7 +1127,7 @@ export default {
 .product .play-icon .al{margin-left:4px;}
 .product .videoarea{position:absolute;left:0;top:0;right:0;bottom:0;z-index:9999;background-color:#000;color:#fff;}
 .product .videoarea video{position: absolute;width: 100%;height: 100%;}
-.product .videoarea .close-icon{position:absolute;left:50%;top:15px;width:80px;height:40px;margin-left:-40px;background-color:rgba(255,255,255,0.3);color:#fff;border-radius:10px;}
+.product .videoarea .close-icon{position:absolute;left:50%;top:5px;width:80px;height:40px;margin-left:-40px;background-color:rgba(255,255,255,0.3);color:#fff;border-radius:10px;}
 .product .fixed-top{position:absolute;right:0;top:20px;z-index:10;width:80px;height:35px;border-top-left-radius:20px;border-bottom-left-radius:20px;background-color:rgba(153,153,153,0.8);color:#fff;}
 .vline{position:relative;}
 .vline:after {
