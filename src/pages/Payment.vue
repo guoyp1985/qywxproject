@@ -65,7 +65,7 @@
       <div class="bg"></div>
       <div class="inner">
         <div class="pt20 pb15 align_center b_bottom_after">关注公众号接收订单发货通知</div>
-        <img class="img" src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" />
+        <img class="img" :src="WeixinQrcode" />
         <div class="font10 btom">长按识别二维码关注公众号</div>
         <div class="onclose">
           <div @click="closeMpQrcode" class="al al-close color-white align_center"></div>
@@ -97,7 +97,8 @@ export default{
       activityData: [],
       productData: [],
       showQrcode: false,
-      showMpQrcode: false
+      showMpQrcode: false,
+      WeixinQrcode: ENV.WeixinQrcode
     }
   },
   methods: {
