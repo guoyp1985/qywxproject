@@ -183,7 +183,7 @@ export default{
 .payment .pay-layer{position:fixed;top:0;bottom:0;left:0;right:0;overflow: hidden;z-index:10;}
 .payment .pay-layer .bg{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);}
 .payment .pay-layer .inner{width:220px;height:240px;border-radius:5px;background-color:#fff;position:absolute;left:50%;top:50%;margin-left:-110px;margin-top:-120px;}
-.payment .pay-layer .img{width:100px;height:100px;margin:20px auto;display:block;}
+.payment .pay-layer .img{width:100px;height:100px;margin:20px auto;display:block;object-fit:cover;}
 .payment .pay-layer .inner .btom{text-align:center;color:#A7A7A7;}
 .payment .onclose{position:absolute;bottom:-50px;left:0;right:0;text-align:center;}
 
