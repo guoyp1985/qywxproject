@@ -34,25 +34,6 @@
             <span slot="price">{{ item.price }}</span>
           </bargainbuyitemplate>
         </template>
-        <!--
-        <div class="hdshop item db-flex" v-for="(item,index) in activityData" :key="index">
-          <div class="pic con-img"><img src="https://tossqzx.boka.cn/month_201810/15397652641261.jpg" /></div>
-          <div class="flex_cell">
-            <div class="font10 clamp1">团购：nike腰包</div>
-            <div class="clamp1 mt3">
-              <div class="db-in font10 tuan" style="color:#FF6B63;">2人团</div>
-              <div class="db-in font10 ml5" style="color:#C8C8C8;">已团2件</div>
-            </div>
-            <div class="clamp1 mt3">
-              <div class="db-in font10" style="color:#FF6B63;">￥0.10</div>
-              <div class="db-in font10 ml5" style="color:#C8C8C8;text-decoration:line-through;">￥110.00</div>
-            </div>
-          </div>
-          <div class="btn-cell">
-            <div class="btnbuy font14">一键拼团</div>
-          </div>
-        </div>
-      -->
       </div>
     </template>
     <template v-if="productData.length">
@@ -60,7 +41,14 @@
         <div class="line"></div>
         <div class="txt flex_center" style="width:180px;">你或许还喜欢这些宝贝</div>
       </div>
-      <div class="con-btom product-list">
+      <div class="squarepic">
+        <productitemplate :data="item" v-for="(item,index) in productData" :key="item.id">
+          <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+          <span slot="title">{{ item.title }}</span>
+          <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
+          <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
+        </productitemplate>
+        <!--
         <router-link :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" class="item" v-for="(item, index) in productData" :key="index">
           <div class="inners">
             <div class="bg">
@@ -79,6 +67,7 @@
             </div>
           </div>
         </router-link>
+      -->
       </div>
     </template>
     <div class="pay-layer" v-show="showQrcode">
@@ -110,12 +99,13 @@ import ENV from 'env'
 import { User } from '#/storage'
 import Groupbuyitemplate from '@/components/Groupbuyitemplate'
 import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
+import Productitemplate from '@/components/Productitemplate'
 let self = {}
 let pageStart = 0
 const limit = 10
 export default{
   components: {
-    Groupbuyitemplate, Bargainbuyitemplate
+    Groupbuyitemplate, Bargainbuyitemplate, Productitemplate
   },
   data () {
     return {
