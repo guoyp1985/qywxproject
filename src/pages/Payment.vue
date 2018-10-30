@@ -147,7 +147,7 @@ export default{
     },
     getProduct () {
       self.$http.get(`${ENV.BokaApi}/api/list/product`, {
-        params: { wid: self.wid, pagestart: pageStart, limit: limit }
+        params: { uploader: self.wid, pagestart: pageStart, limit: limit }
       }).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
