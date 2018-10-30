@@ -294,6 +294,7 @@ export default {
         } else {
           params.fromModule = 'store'
           params.fromId = params.uid
+          params.wid = params.uid
           self.$router.push({path: '/chat', query: params})
         }
       }

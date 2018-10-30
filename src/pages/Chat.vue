@@ -6,13 +6,19 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <template v-if="query.fromModule == 'product' && query.fromId && showTip">
-        <router-link class="db border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/product',query:{id:query.fromId,wid:query.uid}}">
-          <div class="db-flex">
-            <div class="w50 flex_left">
-              <img :src="fromProduct.sharephoto" style="width:40px;height:40px;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+      <template v-if="query.wid && query.fromId && showTip">
+        <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
+          <div class="flex_left" style="width:70px;">
+            <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+          </div>
+          <div class="flex_cell flex_left">
+            <div class="w_100">
+              <div class="clamp2">{{ retailerInfo.title }}</div>
+              <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
             </div>
-            <div class="flex_cell flex_left" to="/center">{{fromProduct.title}}</div>
+          </div>
+          <div class="flex_right" style="width:80px;">
+            <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
           </div>
         </router-link>
       </template>
@@ -275,7 +281,8 @@ export default {
       showTip: true,
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
-      allowChat: false
+      allowChat: false,
+      retailerInfo: {}
     }
   },
   filters: {
@@ -894,7 +901,26 @@ export default {
           params: { id: self.query.fromId, module: self.query.fromModule }
         }).then(function (res) {
           if (res && res.status === 200) {
-            self.fromProduct = res.data.data
+            const data = res.data
+            const retdata = data.data
+            self.fromProduct = retdata
+            self.retailerInfo = retdata.retailerinfo
+            setTimeout(function () {
+              self.showTip = false
+            }, 10000)
+          }
+        })
+      }
+    },
+    getRetailerInfo () {
+      const self = this
+      if ((self.query.fromModule === 'store' || self.query.fromModule === 'news') && self.query.wid) {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+          params: { uid: self.query.wid }
+        }).then(function (res) {
+          if (res && res.status === 200) {
+            const data = res.data
+            self.retailerInfo = data.data
             setTimeout(function () {
               self.showTip = false
             }, 10000)
@@ -943,6 +969,7 @@ export default {
         this.setViewHeight()
         this.getData()
         this.getProduct()
+        this.getRetailerInfo()
         this.createSocket()
       } else if (this.loginUser.isretailer === 2) {
         self.$vux.confirm.show({

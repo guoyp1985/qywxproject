@@ -437,11 +437,11 @@ export default {
       } else {
         if (this.loginUser.subscribe === 0) {
           // this.$util.wxAccess()
-          const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=news&fromId=${this.query.id}`)
+          const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.retailerInfo.uid}&fromModule=news&fromId=${this.query.id}&wid=${this.retailerInfo.uid}`)
           const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
         } else {
-          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id}})
+          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id, wid: this.retailerInfo.uid}})
         }
       }
     },
