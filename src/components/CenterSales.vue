@@ -193,7 +193,7 @@
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
       <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
     </router-link>
-    <div class="modalarea flex_center store-modal" v-if="showPopupStore">
+    <div class="modalarea modalarea1 flex_center store-modal" v-if="showPopupStore">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
           <div class="close flex_center" @click="closeStoreModal"><i class="al al-guanbi"></i></div>
@@ -206,14 +206,14 @@
         </div>
       </div>
     </div>
-    <div class="modalarea flex_center" v-if="showQrcodeModal">
+    <div class="modalarea modalarea1 flex_center" v-if="showQrcodeModal">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
           <span>小程序店铺</span>
           <div class="close flex_center" @click="closeQrcodeModal"><i class="al al-guanbi"></i></div>
         </div>
         <div class="pagemiddle flex_center" style="bottom:0px;">
-          <img src="https://tossharingsales.boka.cn/minigxk/gxkQrcode.jpg" />
+          <img src="https://tossharingsales.boka.cn/minigxk/gxkQrcode.jpg" style="width:55%;"/>
         </div>
       </div>
     </div>
