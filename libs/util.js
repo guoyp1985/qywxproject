@@ -238,11 +238,10 @@ Util.install = function (Vue, options) {
         if (!res) return
         Vue.wechat.config(res.data)
         Vue.wechat.error(function () {
-          // alert("微信还没有准备好，请刷新页面");
-          Vue.$vux.toast.show({
-            text: '微信还没有准备好，请刷新页面',
-            type: 'warn',
-          })
+          // Vue.$vux.toast.show({
+          //   text: '微信还没有准备好，请刷新页面',
+          //   type: 'warn',
+          // })
         })
         callback && callback()
       })
@@ -294,9 +293,9 @@ Util.install = function (Vue, options) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
             params.beforeShare && params.beforeShare()
-            if (wxData.desc == "undefined" || wxData.desc == undefined) {
-              alert("微信还没准备好分享，请稍后再试");
-            }
+            // if (wxData.desc == "undefined" || wxData.desc == undefined) {
+            //   alert("微信还没准备好分享，请稍后再试");
+            // }
             if (res.shareTo == "favorite") {
               self.wxShareSuccess({
                 data: wxData,
@@ -326,9 +325,9 @@ Util.install = function (Vue, options) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
             params.beforeShare && params.beforeShare()
-            if (wxData.desc === "undefined" || wxData.desc === undefined) {
-              alert("微信还没准备好分享，请稍后再试");
-            }
+            // if (wxData.desc === "undefined" || wxData.desc === undefined) {
+            //   alert("微信还没准备好分享，请稍后再试");
+            // }
           },
           success: function (resp) {
             self.wxShareSuccess({
@@ -349,9 +348,9 @@ Util.install = function (Vue, options) {
             //分享之前执行
             //	alert('用户点击发送给朋友');
             params.beforeShare && params.beforeShare()
-            if (wxData.desc === "undefined" || wxData.desc === undefined) {
-              alert("微信还没准备好分享，请稍后再试");
-            }
+            // if (wxData.desc === "undefined" || wxData.desc === undefined) {
+            //   alert("微信还没准备好分享，请稍后再试");
+            // }
           },
           success: function (resp) {
             self.wxShareSuccess({
