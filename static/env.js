@@ -45,7 +45,9 @@ var ENV = {
   vipChat: '免费版不支持与客户联系，开通vip即可立即与客户联系哦！',
   openVipText: '立即开通',
   giveUpVipText: '放弃=错失良机',
-  allowVipFee: true
+  allowVipFee: true,
+  GxhAppId: 'wx01d2ab9eb61c35e4',
+  GxkAppId: 'wx52f62bbdcf1ee04f'
 }
 
 ENV.NoAccessUrls = [

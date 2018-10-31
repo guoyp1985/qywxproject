@@ -29,10 +29,10 @@
           <span class="nav_icon bg-orange al al-maijiaxiu21 font17"></span>
           <span class="ml10 font15">{{$t('Seller show')}}</span>
         </router-link>
-        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/store', query: {wid:retailerInfo.uid}}">
+        <div class="flex_cell flex_center color-gray2" @click="toStore">
           <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
           <span class="ml10 font15">{{$t('My shop')}}</span>
-        </router-link>
+        </div>
         <router-link class="flex_cell flex_center color-gray2" to="/retailerRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
           <span class="ml10 font15">{{$t('Myrevenue')}}</span>
@@ -193,6 +193,22 @@
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
       <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
     </router-link>
+    <div v-transfer-dom class="red-popup">
+      <popup v-model="showPopupStore">
+        <popup-header
+        :left-text="$t('Cancel')"
+        :right-text="$t('Confirm')"
+        :show-bottom-border="false"
+        @on-click-left="showPopupStore = false"
+        @on-click-right="confirmStore"></popup-header>
+        <group gutter="0" class="red-radio">
+          <radio
+            v-model="storeKey"
+            :options="storeArr"
+            :selected-label-style="{color: '#ea3a3a'}"></radio>
+        </group>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -228,8 +244,9 @@ With the customer rebate money together!:
 </i18n>
 
 <script>
-import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg } from 'vux'
+import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup, PopupHeader, Radio } from 'vux'
 import Time from '#/time'
+import ENV from 'env'
 
 export default {
   name: 'CenterSales',
@@ -255,7 +272,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg
+    Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup, PopupHeader, Radio
   },
   filters: {
     dateFormat (date) {
@@ -265,7 +282,13 @@ export default {
   data () {
     return {
       imgarr: [],
-      wximgarr: []
+      wximgarr: [],
+      showPopupStore: false,
+      storeKey: 0,
+      storeArr: [
+        { key: 0, value: '公众号店铺' },
+        { key: 1, value: '小程序店铺' }
+      ]
     }
   },
   watch: {
@@ -313,6 +336,19 @@ export default {
         title: '',
         content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销汇，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
       })
+    },
+    toStore () {
+      this.showPopupStore = true
+    },
+    confirmStore () {
+      if (this.storeKey === 0) {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      } else if (this.storeKey === 1) {
+        this.$wechat.miniProgram.redirectTo({
+          url: `/pages/store?wid=${this.retailerInfo.uid}`,
+          appId: ENV.GxhAppId
+        })
+      }
     }
   }
 }
