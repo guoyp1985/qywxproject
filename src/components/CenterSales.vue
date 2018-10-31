@@ -209,7 +209,7 @@
     <div class="modalarea modalarea1 flex_center" v-if="showQrcodeModal">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
-          <span>小程序店铺</span>
+          <span>识别二维码进入店铺</span>
           <div class="close flex_center" @click="closeQrcodeModal"><i class="al al-guanbi"></i></div>
         </div>
         <div class="pagemiddle flex_center" style="bottom:0px;">
