@@ -209,6 +209,17 @@
         </group>
       </popup>
     </div>
+    <div class="modalarea flex_center" v-if="showQrcodeModal">
+      <div class="modal">
+        <div class="pagetop flex_left font16 pl10 pr10">
+          <span>小程序店铺</span>
+          <div class="close flex_center" @click="closeQrcodeModal"><i class="al al-guanbi"></i></div>
+        </div>
+        <div class="pagemiddle flex_center" style="bottom:0px;">
+          <img src="https://tossharingsales.boka.cn/minigxk/gxkQrcode.jpg" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -246,7 +257,6 @@ With the customer rebate money together!:
 <script>
 import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup, PopupHeader, Radio } from 'vux'
 import Time from '#/time'
-import ENV from 'env'
 
 export default {
   name: 'CenterSales',
@@ -288,7 +298,8 @@ export default {
       storeArr: [
         { key: 0, value: '公众号店铺' },
         { key: 1, value: '小程序店铺' }
-      ]
+      ],
+      showQrcodeModal: false
     }
   },
   watch: {
@@ -344,11 +355,12 @@ export default {
       if (this.storeKey === 0) {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       } else if (this.storeKey === 1) {
-        this.$wechat.miniProgram.redirectTo({
-          url: '/pages/index'
-          // appId: ENV.GxhAppId
-        })
+        this.showPopupStore = false
+        this.showQrcodeModal = true
       }
+    },
+    closeQrcodeModal () {
+      this.showQrcodeModal = false
     }
   }
 }
