@@ -29,7 +29,7 @@
           <span class="nav_icon bg-orange al al-maijiaxiu21 font17"></span>
           <span class="ml10 font15">{{$t('Seller show')}}</span>
         </router-link>
-        <div class="flex_cell flex_center color-gray2" @click="toStore">
+        <div class="flex_cell flex_center color-gray2" @click="clickStore">
           <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
           <span class="ml10 font15">{{$t('My shop')}}</span>
         </div>
@@ -193,21 +193,31 @@
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
       <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
     </router-link>
+    <!--
     <div v-transfer-dom class="red-popup">
       <popup v-model="showPopupStore">
         <popup-header
         :left-text="$t('Cancel')"
-        :right-text="$t('Confirm')"
         :show-bottom-border="false"
-        @on-click-left="showPopupStore = false"
-        @on-click-right="confirmStore"></popup-header>
+        @on-click-left="showPopupStore = false"></popup-header>
         <group gutter="0" class="red-radio">
           <radio
             v-model="storeKey"
             :options="storeArr"
-            :selected-label-style="{color: '#ea3a3a'}"></radio>
+            :selected-label-style="{color: '#ea3a3a'}" @on-change="radiochange"></radio>
         </group>
       </popup>
+    </div>
+  -->
+    <div class="modalarea flex_center store-modal" v-if="showPopupStore">
+      <div class="modal">
+        <div class="pagemiddle flex_center" style="bottom:0px;top:0px;">
+          <div class="w_100">
+            <div class="btn bg-green color-white" @click="toStore(0)">公众号店铺</div>
+            <div class="btn bg-blue color-white" @click="toStore(1)" style="margin-top:20px;">小程序店铺</div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="modalarea flex_center" v-if="showQrcodeModal">
       <div class="modal">
@@ -294,7 +304,7 @@ export default {
       imgarr: [],
       wximgarr: [],
       showPopupStore: false,
-      storeKey: 0,
+      storeKey: null,
       storeArr: [
         { key: 0, value: '公众号店铺' },
         { key: 1, value: '小程序店铺' }
@@ -348,19 +358,20 @@ export default {
         content: '点击右上角“···”分享当前页面给好友，每成功邀请一位卖家入驻共销汇，即可获得30元推荐奖励金，推荐奖励金将发放到“我的收入”中，卖家入驻成功即可立即提现！'
       })
     },
-    toStore () {
+    clickStore () {
       this.showPopupStore = true
-    },
-    confirmStore () {
-      if (this.storeKey === 0) {
-        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
-      } else if (this.storeKey === 1) {
-        this.showPopupStore = false
-        this.showQrcodeModal = true
-      }
     },
     closeQrcodeModal () {
       this.showQrcodeModal = false
+    },
+    toStore (val) {
+      if (val === 0) {
+        this.showPopupStore = false
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      } else if (val === 1) {
+        this.showPopupStore = false
+        this.showQrcodeModal = true
+      }
     }
   }
 }
@@ -564,4 +575,5 @@ export default {
   text-align: center;
 }
 .vip-icon{display:inline-block;border-radius:5px;width:28px;height:20px;line-height:20px;text-align:center;font-size:13px !important;vertical-align:middle;}
+.store-modal .btn{width:80%;margin: 0 auto;border-radius:10px;height:45px;line-height:45px;text-align:center;font-size:16px;}
 </style>
