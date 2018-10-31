@@ -211,7 +211,10 @@
   -->
     <div class="modalarea flex_center store-modal" v-if="showPopupStore">
       <div class="modal">
-        <div class="pagemiddle flex_center" style="bottom:0px;top:0px;">
+        <div class="pagetop flex_left font16 pl10 pr10">
+          <div class="close flex_center" @click="closeStoreModal"><i class="al al-guanbi"></i></div>
+        </div>
+        <div class="pagemiddle flex_center" style="bottom:0px;">
           <div class="w_100">
             <div class="btn bg-green color-white" @click="toStore(0)">公众号店铺</div>
             <div class="btn bg-blue color-white" @click="toStore(1)" style="margin-top:20px;">小程序店铺</div>
@@ -363,6 +366,9 @@ export default {
     },
     closeQrcodeModal () {
       this.showQrcodeModal = false
+    },
+    closeStoreModal () {
+      this.showPopupStore = false
     },
     toStore (val) {
       if (val === 0) {
