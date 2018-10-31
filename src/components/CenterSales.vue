@@ -345,7 +345,7 @@ export default {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       } else if (this.storeKey === 1) {
         this.$wechat.miniProgram.redirectTo({
-          url: `/pages/index?wid=${this.retailerInfo.uid}`
+          url: '/pages/index'
           // appId: ENV.GxhAppId
         })
       }
