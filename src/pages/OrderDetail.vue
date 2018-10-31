@@ -86,6 +86,13 @@
           </div>
         </cell>
       </group>
+      <group v-if="data.carddeduct > 0">
+        <cell>
+          <div>
+            <span class="v_middle font12 color-orange">实际支付: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.paymoney}}</span><span class="v_middle font12 ml10 color-gray">优惠券抵扣: </span><span class="v_middle font14 color-gray">{{ $t('RMB') }}{{data.carddeduct}}</span>
+          </div>
+        </cell>
+      </group>
       <group>
         <div class="padding10 font12 color-gray">创建时间: {{ data.dateline | dateformat }}</div>
         <div class="pl10 pr10 pb10 font12 color-gray" v-if="data.flag == 3">发货时间: {{ data.delivertime | dateformat }}</div>

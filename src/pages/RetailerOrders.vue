@@ -23,7 +23,7 @@
                 <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                  <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
                     <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
                     <span slot="name">{{ product.name }}</span>
                     <span slot="special">{{ product.special }}</span>
@@ -73,7 +73,7 @@
                 <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
                     <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
                     <span slot="name">{{ product.name }}</span>
                     <span slot="special">{{ product.special }}</span>
@@ -115,7 +115,7 @@
                 <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
                     <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
                     <span slot="name">{{ product.name }}</span>
                     <span slot="special">{{ product.special }}</span>
@@ -148,7 +148,7 @@
                 <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
-                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id">
+                  <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
                     <img slot="photo" class="imgcover" :src="product.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
                     <span slot="name">{{ product.name }}</span>
                     <span slot="special">{{ product.special }}</span>

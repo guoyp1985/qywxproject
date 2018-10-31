@@ -24,15 +24,17 @@
         </div>
       </div>
       <div class="product-info" v-else>
-        <div class="product-img">
+        <div class="product-img" style="position:relative;">
           <img class="v_middle imgcover" :src="item.orderlist[0].photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <img v-if="item.carddeduct > 0" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/>
         </div>
-        <div class="product-detail">
+        <div class="flex_cell">
           <div class="product-name font12">
             {{item.orderlist[0].name}}
           </div>
-          <div class="product-desc" v-if="item.desc">
-            {{item.orderlist[0].desc}}
+          <div class="mt5 db-flex font14">
+            <div class="flex_cell flex_left color-red4">{{ $t('RMB') }} {{ item.orderlist[0].special }}</div>
+            <div class="flex_cell flex_right color-999">× <span class="font12">{{ item.orderlist[0].quantity }}</span></div>
           </div>
         </div>
       </div>
@@ -151,15 +153,14 @@ export default {
 }
 .order-info .store-info,
 .order-info .product-info,
-.order-info .product-info .product-img,
-.order-info .product-info .product-detail {
+.order-info .product-info .product-img{
   display: flex;
 }
+.order-info .yhq{position: absolute;left: 0;top: 0;width: 40px !important;height:40px !important;}
 .order-info .store-info {
   padding: 0 10px;
 }
-.order-info .store-info .info-cell,
-.order-info .product-info .product-detail {
+.order-info .store-info .info-cell{
   flex: 1;
 }
 .order-info .store-info .info-cell span {

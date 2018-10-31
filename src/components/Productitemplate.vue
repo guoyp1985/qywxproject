@@ -33,7 +33,7 @@ export default {
   props: {
     data: Object
   }
-};
+}
 </script>
 
 <style lang="less">
