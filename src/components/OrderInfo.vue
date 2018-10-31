@@ -156,7 +156,7 @@ export default {
 .order-info .product-info .product-img{
   display: flex;
 }
-.order-info .yhq{position: absolute;left: 0;top: 0;width: 40px !important;height:40px !important;}
+.order-info .yhq{position: absolute;left: 0;top: 0;width: 40px !important;height:40px !important;border:none !important;}
 .order-info .store-info {
   padding: 0 10px;
 }
