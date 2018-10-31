@@ -835,6 +835,9 @@ export default {
         // console.log(item.dateline)
         if (uid !== item.uid) {
           self.hasNewMessage = true
+          setTimeout(function () {
+            self.hasNewMessage = false
+          }, 5000)
           if (item.msgtype === 'voice') {
             item.unread = true
           }
