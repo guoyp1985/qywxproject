@@ -25,10 +25,10 @@
         </router-link>
       </div>
       <div class="header-nav flex_table list-shadow02">
-        <router-link class="flex_cell flex_center color-gray2" :to="{path: '/centerSeller', query: {uid:retailerInfo.uid,wid:retailerInfo.uid}}">
-          <span class="nav_icon bg-orange al al-maijiaxiu21 font17"></span>
-          <span class="ml10 font15">{{$t('Seller show')}}</span>
-        </router-link>
+        <div class="flex_cell flex_center color-gray2" @click="toMiniGxk">
+          <span class="nav_icon bg-orange al al-xiaochengxu font17"></span>
+          <span class="ml10 font15">{{$t('Mini gxk')}}</span>
+        </div>
         <div class="flex_cell flex_center color-gray2" @click="clickStore">
           <span class="nav_icon bg-blue11 al al-weidian1 font16"></span>
           <span class="ml10 font15">{{$t('My shop')}}</span>
@@ -141,6 +141,12 @@
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
+      <cell :link="{path:'/centerSeller',query: {uid:retailerInfo.uid,wid:retailerInfo.uid}}" style="position:relative">
+        <div slot="icon" class="pr10" style="width:18px;overflow:hidden;"><i class="al al-maijiaxiu21 color-orange db-in bold font20" style="margin-left:-4px;"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Seller show')}}</span>
+        </div>
+      </cell>
       <template v-if="retailerInfo.products > 0">
         <cell :link="{path:'/retailerOrders'}" style="position:relative">
           <div slot="icon" class="pr10"><i class="al al-dingdan color-red4 db-in font16"></i></div>
@@ -206,14 +212,25 @@
         </div>
       </div>
     </div>
-    <div class="modalarea modalarea1 flex_center" v-if="showQrcodeModal">
+    <div class="modalarea modalarea1 flex_center" v-if="showGxh">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
           <span>识别二维码进入店铺</span>
           <div class="close flex_center" @click="closeQrcodeModal"><i class="al al-guanbi"></i></div>
         </div>
         <div class="pagemiddle flex_center" style="bottom:0px;">
-          <img src="https://tossharingsales.boka.cn/minigxk/gxkQrcode.jpg" style="width:55%;"/>
+          <img src="https://tossharingsales.boka.cn/minigxk/miniGxhQrcode.jpg" style="width:55%;"/>
+        </div>
+      </div>
+    </div>
+    <div class="modalarea modalarea1 flex_center" v-if="showGxk">
+      <div class="modal">
+        <div class="pagetop flex_left font16 pl10 pr10">
+          <span>识别二维码进入小程序</span>
+          <div class="close flex_center" @click="closeGxk"><i class="al al-guanbi"></i></div>
+        </div>
+        <div class="pagemiddle flex_center" style="bottom:0px;">
+          <img src="https://tossharingsales.boka.cn/minigxk/miniGxkQrcode.png" style="width:55%;"/>
         </div>
       </div>
     </div>
@@ -296,7 +313,8 @@ export default {
         { key: 0, value: '公众号店铺' },
         { key: 1, value: '小程序店铺' }
       ],
-      showQrcodeModal: false
+      showGxh: false,
+      showGxk: false
     }
   },
   watch: {
@@ -349,7 +367,7 @@ export default {
       this.showPopupStore = true
     },
     closeQrcodeModal () {
-      this.showQrcodeModal = false
+      this.showGxh = false
     },
     closeStoreModal () {
       this.showPopupStore = false
@@ -360,8 +378,14 @@ export default {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       } else if (val === 1) {
         this.showPopupStore = false
-        this.showQrcodeModal = true
+        this.showGxh = true
       }
+    },
+    toMiniGxk () {
+      this.showGxk = true
+    },
+    closeGxk () {
+      this.showGxk = false
     }
   }
 }
