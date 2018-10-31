@@ -193,22 +193,6 @@
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
       <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
     </router-link>
-    <!--
-    <div v-transfer-dom class="red-popup">
-      <popup v-model="showPopupStore">
-        <popup-header
-        :left-text="$t('Cancel')"
-        :show-bottom-border="false"
-        @on-click-left="showPopupStore = false"></popup-header>
-        <group gutter="0" class="red-radio">
-          <radio
-            v-model="storeKey"
-            :options="storeArr"
-            :selected-label-style="{color: '#ea3a3a'}" @on-change="radiochange"></radio>
-        </group>
-      </popup>
-    </div>
-  -->
     <div class="modalarea flex_center store-modal" v-if="showPopupStore">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
@@ -268,7 +252,7 @@ With the customer rebate money together!:
 </i18n>
 
 <script>
-import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup, PopupHeader, Radio } from 'vux'
+import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg } from 'vux'
 import Time from '#/time'
 
 export default {
@@ -295,7 +279,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg, Popup, PopupHeader, Radio
+    Previewer, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg
   },
   filters: {
     dateFormat (date) {
