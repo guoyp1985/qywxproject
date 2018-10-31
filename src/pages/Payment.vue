@@ -144,13 +144,19 @@ export default{
       }).then(res => {
         const data = res.data
         self.retailerInfo = data.data
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
-          params: {do: 'store', wid: self.wid, pagestart: 0, limit: 20}
-        })
+        if (!self.activityData.length) {
+          return self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, {
+            params: {do: 'store', wid: self.wid, pagestart: 0, limit: 20}
+          })
+        }
       }).then(res => {
-        const data = res.data
-        self.activityData = data.data ? data.data : data
-        self.getProduct()
+        if (res) {
+          const data = res.data
+          self.activityData = data.data ? data.data : data
+          if (!self.productData.length) {
+            self.getProduct()
+          }
+        }
       })
     }
   },
