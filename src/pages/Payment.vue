@@ -52,23 +52,35 @@
     </template>
     <div class="pay-layer" v-show="showQrcode">
       <div class="bg"></div>
-      <div class="inner">
-        <div class="pt20 pb15 align_center b_bottom_after">加卖家微信有机会享受更多优惠</div>
-        <img class="img" :src="retailerInfo.qrcode" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-        <div class="font10 btom">长按识别二维码添加好友</div>
-        <div class="onclose">
-          <div @click="closeQrcode" class="al al-close color-white align_center"></div>
+      <div class="layer-inner">
+        <div class="inner-outer">
+          <div class="inner">
+            <div class="pagetop flex_center b_bottom_after">加卖家微信有机会享受更多优惠</div>
+            <div class="pagemiddle flex_center">
+              <img class="img" :src="retailerInfo.qrcode" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+            </div>
+            <div class="pagebottom flex_center">长按识别二维码添加好友</div>
+            <div class="onclose">
+              <div @click="closeQrcode" class="al al-close color-white align_center"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="pay-layer" v-show="showMpQrcode">
       <div class="bg"></div>
-      <div class="inner">
-        <div class="pt20 pb15 align_center b_bottom_after">关注公众号接收订单发货通知</div>
-        <img class="img" :src="WeixinQrcode" />
-        <div class="font10 btom">长按识别二维码关注公众号</div>
-        <div class="onclose">
-          <div @click="closeMpQrcode" class="al al-close color-white align_center"></div>
+      <div class="layer-inner">
+        <div class="inner-outer">
+          <div class="inner">
+            <div class="pagetop flex_center b_bottom_after">关注公众号接收订单发货通知</div>
+            <div class="pagemiddle flex_center">
+              <img class="img" :src="WeixinQrcode" />
+            </div>
+            <div class="pagebottom flex_center">长按识别二维码关注公众号</div>
+            <div class="onclose">
+              <div @click="closeMpQrcode" class="al al-close color-white align_center"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -187,11 +199,13 @@ export default{
 .payment .linearea .line{background-color:#e5e5e5;height:2px;position:absolute;left:10px;right:10px;top:50%;margin-top:-1px;}
 .payment .linearea .txt{background-color:#F2F2F2;width:150px;height:100%;margin:0 auto;position:relative;z-index:2;color:#666666;font-size:13px;}
 
-.payment .pay-layer{position:fixed;top:0;bottom:0;left:0;right:0;overflow: hidden;z-index:10;}
+.payment .pay-layer{position:fixed;top:0;bottom:0;left:0;right:0;overflow: hidden;z-index:10;display:flex;justify-content: center; align-items: center;}
 .payment .pay-layer .bg{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);}
-.payment .pay-layer .inner{width:220px;height:240px;border-radius:5px;background-color:#fff;position:absolute;left:50%;top:50%;margin-left:-110px;margin-top:-120px;}
-.payment .pay-layer .img{width:100px;height:100px;margin:20px auto;display:block;object-fit:cover;}
-.payment .pay-layer .inner .btom{text-align:center;color:#A7A7A7;}
+.payment .pay-layer .layer-inner{width:80%;}
+.payment .pay-layer .inner-outer{width:100%;padding-bottom:100%;position:relative;box-sizing: border-box;}
+.payment .pay-layer .inner{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:5px;background-color:#fff;}
+.payment .pay-layer .img{object-fit:cover;max-width:90%;max-height:90%;}
+.payment .pay-layer .pagebottom{color:#A7A7A7;}
 .payment .onclose{position:absolute;bottom:-50px;left:0;right:0;text-align:center;}
 
 
