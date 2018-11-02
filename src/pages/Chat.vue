@@ -128,7 +128,7 @@
             <span slot="icon" class="feature-icon al al-zhaopian color-gray"></span>
             <span slot="label" class="color-gray">{{$t('Photo')}}</span>
           </grid-item>
-          <grid-item @click.native="showImgTxtPopup">
+          <grid-item @click.native="showImgTxtPopup" v-if="loginUser.isretailer">
             <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
             <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
           </grid-item>
