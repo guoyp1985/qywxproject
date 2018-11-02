@@ -168,31 +168,13 @@ export default {
   },
   mounted () {
     const self = this
-    if (self.data && self.data.id) {
-      self.minprice = self.submitdata.param_minprice
-      self.everymin = self.submitdata.param_everymin
-      self.everymax = self.submitdata.param_everymax
-      if (self.data && self.data.price) {
-        self.price = self.data.price.replace(/,/g, '')
-      }
-    } else {
-      self.initData()
-      jQuery('.form-bargainbuy .input').val('')
-    }
+    self.initData()
+    jQuery('.form-bargainbuy .input').val('')
   },
   activated () {
     const self = this
-    if (self.data && self.data.id) {
-      self.minprice = self.submitdata.param_minprice
-      self.everymin = self.submitdata.param_everymin
-      self.everymax = self.submitdata.param_everymax
-      if (self.data && self.data.price) {
-        self.price = self.data.price.replace(/,/g, '')
-      }
-    } else {
-      self.initData()
-      jQuery('.form-bargainbuy .input').val('')
-    }
+    self.initData()
+    jQuery('.form-bargainbuy .input').val('')
   }
 }
 </script>
