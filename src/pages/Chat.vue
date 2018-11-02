@@ -642,8 +642,10 @@ export default {
       const self = this
       this.showImgTxt = true
       this.showFeatureBox = false
-      self.$vux.loading.show()
-      self.getNewsData()
+      if (!self.newsData.length) {
+        self.$vux.loading.show()
+        self.getNewsData()
+      }
     },
     closeImgTxtPopup () {
       this.showImgTxt = false
