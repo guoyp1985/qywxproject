@@ -196,8 +196,8 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
-  const miniAppId = lUrl.query.miniappid
-  const miniOpenId = lUrl.query.miniopenid
+  // const miniAppId = lUrl.query.miniappid
+  // const miniOpenId = lUrl.query.miniopenid
   console.log(lUrl)
   console.log(from)
   // if (state === 'miniAccess' && code) {

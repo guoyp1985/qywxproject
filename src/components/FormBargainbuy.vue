@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div>
+  <div class="form-bargainbuy">
     <div class="form-item">
       <div class="t-table">
         <div class="t-cell title-cell w80 font14 v_middle">活动价格<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
@@ -62,6 +62,7 @@
 
 <script>
 import { XInput } from 'vux'
+import jQuery from 'jquery'
 
 export default {
   name: 'FormBargainbuy',
@@ -79,7 +80,8 @@ export default {
       minprice: '0.00',
       everymin: '0.00',
       everymax: '0.00',
-      price: '0.00'
+      price: '0.00',
+      inMounted: false
     }
   },
   watch: {
@@ -120,6 +122,13 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.neednum = 0
+      this.minprice = ''
+      this.everymin = ''
+      this.everymax = ''
+      this.price = ''
+    },
     getNum: function () {
       const self = this
       if (self.data && self.data.price) {
@@ -149,12 +158,40 @@ export default {
     }
   },
   created: function () {
+    // const self = this
+    // self.minprice = self.submitdata.param_minprice
+    // self.everymin = self.submitdata.param_everymin
+    // self.everymax = self.submitdata.param_everymax
+    // if (self.data && self.data.price) {
+    //   self.price = self.data.price.replace(/,/g, '')
+    // }
+  },
+  mounted () {
     const self = this
-    self.minprice = self.submitdata.param_minprice
-    self.everymin = self.submitdata.param_everymin
-    self.everymax = self.submitdata.param_everymax
-    if (self.data && self.data.price) {
-      self.price = self.data.price.replace(/,/g, '')
+    if (self.data && self.data.id) {
+      self.minprice = self.submitdata.param_minprice
+      self.everymin = self.submitdata.param_everymin
+      self.everymax = self.submitdata.param_everymax
+      if (self.data && self.data.price) {
+        self.price = self.data.price.replace(/,/g, '')
+      }
+    } else {
+      self.initData()
+      jQuery('.form-bargainbuy .input').val('')
+    }
+  },
+  activated () {
+    const self = this
+    if (self.data && self.data.id) {
+      self.minprice = self.submitdata.param_minprice
+      self.everymin = self.submitdata.param_everymin
+      self.everymax = self.submitdata.param_everymax
+      if (self.data && self.data.price) {
+        self.price = self.data.price.replace(/,/g, '')
+      }
+    } else {
+      self.initData()
+      jQuery('.form-bargainbuy .input').val('')
     }
   }
 }
