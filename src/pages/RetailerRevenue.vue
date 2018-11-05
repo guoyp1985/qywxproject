@@ -24,6 +24,7 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                   <template v-if="item.content.indexOf('厂商佣金') > -1">
+                    <!--
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -37,6 +38,20 @@
                         </div>
                       </div>
                     </check-icon>
+                  -->
+                    <div class="pl12 pr12 pt10 pb10">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w45">
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font14 color-999">{{item.buyername}}</div>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                       <div class="clamp1 font14 color-gray">厂商佣金: +￥{{ item.special }}</div>
@@ -48,6 +63,7 @@
                     </div>
                   </template>
                   <template v-else-if="item.isaward == 1">
+                    <!--
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -61,6 +77,20 @@
                         </div>
                       </div>
                     </check-icon>
+                  -->
+                    <div class="pl12 pr12 pt10 pb10">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w45">
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 color-999">{{item.linkman}}</div>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999">
                         <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
@@ -73,6 +103,7 @@
                     </div>
                   </template>
                   <template v-else>
+                    <!--
                     <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -86,6 +117,20 @@
                         </div>
                       </div>
                     </check-icon>
+                  -->
+                    <div class="pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell pic v_middle w45">
+                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font14 color-999">{{item.buyername}}</div>
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
                       <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
                       <div class="clamp1 font14 color-gray">
@@ -107,16 +152,10 @@
               </div>
             </div>
             <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
-              <div class="flex_cell h_100 flex_left">
-                <div class="clamp1">
-                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent" style="display:inline-block;">
-                    <span class="color-lightgray">全选</span>
-                    <span class="color-red4">{{ $t('RMB') }}{{ totalPrice }}</span>
-                  </check-icon>
-                  <span>总收入: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
-                </div>
+              <div class="flex_cell pl10 flex_left">
+                <div class="clamp1">待提现: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
               </div>
-              <div class="flex_center h_100 font16 bg-red color-white w80" @click="getcash">{{$t('Withdraw')}}</div>
+              <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
             </div>
           </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
@@ -479,17 +518,17 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
-        if (self.checkedData.length === 0) {
-          self.$vux.toast.show({
-            text: '请选择提现数据',
-            onHide: function () {
-              self.eventIng = false
-            }
-          })
-          return false
-        }
+        // if (self.checkedData.length === 0) {
+        //   self.$vux.toast.show({
+        //     text: '请选择提现数据',
+        //     onHide: function () {
+        //       self.eventIng = false
+        //     }
+        //   })
+        //   return false
+        // }
         self.$vux.confirm.show({
-          content: `本次提现金额为<span class='color-orange'>${self.totalPrice}元</span>，确认提现吗？`,
+          content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
           onCancel () {
             self.eventIng = false
           },

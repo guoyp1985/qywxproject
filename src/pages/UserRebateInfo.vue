@@ -20,9 +20,11 @@
               <template v-if="tabdata1.length">
                 <group>
                   <cell-box class="income-cell" v-for="(item, index) in tabdata1" :key="index" @click.native="itemClick(item)">
+                    <!--
                     <div class="checker-cell">
                       <check-icon :value.sync="item.checked" @click.native.stop="itemCheck(item)"></check-icon>
                     </div>
+                  -->
                     <div class="avatar-cell w50">
                       <img class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </div>
@@ -47,26 +49,17 @@
               </template>
             </template>
           </div>
-          <!--
-          <div v-if="(index == 0)" class="footer-bar">
-            <div class="checker-cell">
-              <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}<span class="color-red">{{ $t('RMB') }}{{total}}</span></span></check-icon>
-            </div>
-            <div class="count-cell">总收入: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
-            <div class="button-cell">
-              <x-button class="withdraw-btn" @click.native="getCash">{{$t('Withdraw')}}</x-button>
-            </div>
-          </div>
-        -->
           <template v-if="(index == 0)">
             <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="flex_cell h_100 flex_left">
-                <div class="clamp1">
+                <div class="clamp1 pl10">
+                  <!--
                   <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}<span class="color-red4">{{ $t('RMB') }}{{total}}</span></span></check-icon>
-                  <span>总收入: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
+                -->
+                  <span>待提现: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
                 </div>
               </div>
-              <div class="flex_center h_100 font16 bg-red color-white w80" @click="getCash">{{$t('Withdraw')}}</div>
+              <div class="flex_center h_100 font16 bg-red color-white w100" @click="getCash">全部提现</div>
             </div>
           </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
@@ -303,17 +296,17 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
-        if (self.checkedData.length === 0) {
-          self.$vux.toast.show({
-            text: '请选择提现数据',
-            onHide: function () {
-              self.eventIng = false
-            }
-          })
-          return false
-        }
+        // if (self.checkedData.length === 0) {
+        //   self.$vux.toast.show({
+        //     text: '请选择提现数据',
+        //     onHide: function () {
+        //       self.eventIng = false
+        //     }
+        //   })
+        //   return false
+        // }
         self.$vux.confirm.show({
-          content: `本次提现金额为<span class='color-orange'>${self.total}元</span>，确认提现吗？`,
+          content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
           onConfirm () {
             self.$vux.loading.show()
             let subdata = { ids: self.checkedData, identity: 'seller' }
