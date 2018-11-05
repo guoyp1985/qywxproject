@@ -383,6 +383,7 @@ export default {
       })
       .then(res => {
         if (res) {
+          self.$util.handleFrame(jQuery('.news iframe'))
           if (self.reward.uid !== self.article.uploader) {
             let items = document.querySelectorAll('.insertproduct')
             for (let i = 0; i < items.length; i++) {

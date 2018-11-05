@@ -4,6 +4,7 @@ import ENV from 'env'
 import SHA1 from 'js-sha1'
 import Time from './time'
 import urlParse from 'url-parse'
+import jQuery from 'jquery'
 import { User, Roomid, Token } from './storage'
 const Util = {}
 
@@ -656,6 +657,49 @@ Util.install = function (Vue, options) {
       Vue.wechat.miniProgram.getEnv(res => {
         if (res.miniprogram) {
           Vue.wechat.miniProgram.postMessage({data: {token: Token.get()}})
+        }
+      })
+    },
+    handleFrame: function (area) {
+      const self = this
+      area.each(function () {
+        const curFrame = jQuery(this)
+        let dataSrc = curFrame.attr('data-src')
+        const clientWidth = document.body.clientWidth - 30
+        if (!dataSrc) {
+          dataSrc = curFrame.attr('src')
+        }
+        if (dataSrc) {
+          let srcQuery = self.query(dataSrc)
+          let frameWidth = srcQuery.width
+          let frameHeight = srcQuery.height
+          if (!frameWidth) {
+            frameWidth = curFrame.attr('width')
+          }
+          if (!frameHeight) {
+            frameHeight = curFrame.attr('height')
+          }
+          if (frameWidth && frameHeight && frameWidth > clientWidth) {
+            const disWidth = clientWidth
+            const disHeight = clientWidth * frameHeight / frameWidth
+            curFrame.removeAttr('width')
+            curFrame.removeAttr('height')
+            srcQuery.width = disWidth
+            srcQuery.height = disHeight
+            let arr = []
+            for (let key in srcQuery) {
+              arr.push(`${key}=${srcQuery[key]}`)
+            }
+            const arrStr = arr.join('&')
+            let url = dataSrc.substr(0, dataSrc.indexOf('?'))
+            dataSrc = `${url}?${arrStr}`
+            curFrame.removeAttr('data-src')
+            curFrame.css({
+              width: disWidth,
+              height: disHeight
+            })
+          }
+          curFrame.attr('src', dataSrc)
         }
       })
     }
