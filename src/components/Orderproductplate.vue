@@ -24,7 +24,10 @@
 export default {
   name: 'Orderproductplate',
   props: {
-    orderData: Object
+    orderData: {
+      type: Object,
+      default: {}
+    }
   }
 }
 </script>
