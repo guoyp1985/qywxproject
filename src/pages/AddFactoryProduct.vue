@@ -48,10 +48,10 @@
           </div>
           <div v-if="classData.length" class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}</div>
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <select v-model="submitdata.classid" class="w_100" style="height:35px;">
-                  <option value=''>请选择</option>
+                  <option value='0'>请选择</option>
                   <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
                 </select>
               </div>
@@ -307,7 +307,7 @@ export default {
   methods: {
     initSubmitData () {
       this.submitdata = {
-        classid: '',
+        classid: '0',
         title: '',
         oriprice: '',
         price: '',
@@ -417,6 +417,10 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
+        if (!parseInt(self.submitdata.classid)) {
+          self.$vux.toast.text('必填项不能为空', 'middle')
+          return false
+        }
         let validateData = []
         for (let key in self.requireddata) {
           let v = {}

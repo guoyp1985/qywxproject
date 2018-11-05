@@ -83,9 +83,17 @@ export default {
           errortip = '请输入正确的佣金'
           break
         } else {
-          let level = i + 1
-          agentfee[level] = self.feeData[i].agentfee
-          levelname[level] = self.feeData[i].levelname
+          const price = self.productData.price
+          const maxRebate = (parseFloat(price) - parseFloat(price) * 0.11).toFixed(2)
+          if (parseFloat(curfee) > maxRebate) {
+            iscontinue = false
+            errortip = `返点佣金应小于${maxRebate}元`
+            break
+          } else {
+            let level = i + 1
+            agentfee[level] = self.feeData[i].agentfee
+            levelname[level] = self.feeData[i].levelname
+          }
         }
       }
       if (!iscontinue) {
@@ -131,6 +139,12 @@ export default {
           self.feeData.push({agentfee: agentfee[key] ? agentfee[key] : '0.00', levelname: levelname[key]})
           self.disFeeData = true
         }
+        return self.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
+          params: {id: self.query.id, module: 'factoryproduct'}
+        })
+      }).then(res => {
+        const data = res.data
+        self.productData = data.data ? data.data : data
       })
     },
     refresh () {
