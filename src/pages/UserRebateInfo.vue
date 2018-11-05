@@ -184,7 +184,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.summoney = data.summoney
+        self.summoney = data.summoney ? data.summoney : '0.00'
         if (self.globalChecked) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true
