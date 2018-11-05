@@ -20,11 +20,6 @@
               <template v-if="tabdata1.length">
                 <group>
                   <cell-box class="income-cell" v-for="(item, index) in tabdata1" :key="index" @click.native="itemClick(item)">
-                    <!--
-                    <div class="checker-cell">
-                      <check-icon :value.sync="item.checked" @click.native.stop="itemCheck(item)"></check-icon>
-                    </div>
-                  -->
                     <div class="avatar-cell w50">
                       <img class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </div>
@@ -53,9 +48,6 @@
             <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="flex_cell h_100 flex_left">
                 <div class="clamp1 pl10">
-                  <!--
-                  <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}<span class="color-red4">{{ $t('RMB') }}{{total}}</span></span></check-icon>
-                -->
                   <span>待提现: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
                 </div>
               </div>
@@ -296,20 +288,11 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
-        // if (self.checkedData.length === 0) {
-        //   self.$vux.toast.show({
-        //     text: '请选择提现数据',
-        //     onHide: function () {
-        //       self.eventIng = false
-        //     }
-        //   })
-        //   return false
-        // }
         self.$vux.confirm.show({
           content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
           onConfirm () {
             self.$vux.loading.show()
-            let subdata = { ids: self.checkedData, identity: 'seller' }
+            let subdata = { identity: 'seller' }
             self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
@@ -318,16 +301,9 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: function () {
                   if (data.flag === 1) {
-                    for (let i = 0; i < self.checkedData.length; i++) {
-                      let ckid = self.checkedData[i]
-                      for (let j = 0; j < self.tabdata1.length; j++) {
-                        if (self.tabdata1[j].id === ckid) {
-                          self.tabdata1.splice(j, 1)
-                          break
-                        }
-                      }
-                    }
                     self.total = '0.00'
+                    self.tabdata1 = []
+                    self.summoney = '0.00'
                   }
                   self.eventIng = false
                 }

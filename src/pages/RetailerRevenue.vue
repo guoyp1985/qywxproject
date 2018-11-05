@@ -24,21 +24,6 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
                   <template v-if="item.content.indexOf('厂商佣金') > -1">
-                    <!--
-                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font14 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  -->
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -63,21 +48,6 @@
                     </div>
                   </template>
                   <template v-else-if="item.isaward == 1">
-                    <!--
-                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.linkman}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  -->
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -103,21 +73,6 @@
                     </div>
                   </template>
                   <template v-else>
-                    <!--
-                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font14 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  -->
                     <div class="pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
@@ -518,15 +473,6 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
-        // if (self.checkedData.length === 0) {
-        //   self.$vux.toast.show({
-        //     text: '请选择提现数据',
-        //     onHide: function () {
-        //       self.eventIng = false
-        //     }
-        //   })
-        //   return false
-        // }
         self.$vux.confirm.show({
           content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
           onCancel () {
@@ -534,8 +480,7 @@ export default {
           },
           onConfirm () {
             self.$vux.loading.show()
-            let subdata = { ids: self.checkedData }
-            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -543,16 +488,9 @@ export default {
                 time: self.$util.delay(data.error),
                 onHide: function () {
                   if (data.flag === 1) {
-                    for (let i = 0; i < self.checkedData.length; i++) {
-                      let ckid = self.checkedData[i]
-                      for (let j = 0; j < self.tabdata1.length; j++) {
-                        if (self.tabdata1[j].id === ckid) {
-                          self.tabdata1.splice(j, 1)
-                          break
-                        }
-                      }
-                    }
                     self.totalPrice = '0.00'
+                    self.tabdata1 = []
+                    self.summoney = '0.00'
                   }
                   self.eventIng = false
                 }
