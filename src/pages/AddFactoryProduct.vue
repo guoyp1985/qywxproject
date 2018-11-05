@@ -417,7 +417,7 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
-        if (!parseInt(self.submitdata.classid)) {
+        if (self.classData.length && !parseInt(self.submitdata.classid)) {
           self.$vux.toast.text('必填项不能为空', 'middle')
           return false
         }
