@@ -108,7 +108,7 @@
             </div>
             <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="flex_cell pl10 flex_left">
-                <div class="clamp1">待提现: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
+                <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
               </div>
               <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
             </div>
