@@ -47,7 +47,7 @@
           </div>
           <div v-if="classData.length" class="form-item required bg-white">
             <div class="t-table">
-              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}</div>
+              <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product class') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <select v-model="submitdata.classid" class="w_100" style="height:35px;">
                   <option value='0'>请选择</option>
@@ -450,6 +450,10 @@ export default {
     savedata (postdata) {
       const self = this
       if (!self.submitIng) {
+        if (!parseInt(self.submitdata.classid)) {
+          self.$vux.toast.text('必填项不能为空', 'middle')
+          return false
+        }
         let validateData = []
         for (let key in self.requireddata) {
           let v = {}
@@ -474,17 +478,18 @@ export default {
           rebate = rebate.toString().replace(/,/g, '')
         }
         if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的价格'
-          })
+          self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
+        if (!isNaN(rebate)) {
+          const maxRebate = (parseFloat(price) - parseFloat(price) * 0.11).toFixed(2)
+          if (rebate > maxRebate) {
+            self.$vux.toast.text(`返点佣金应小于${maxRebate}元`, 'middle')
+            return false
+          }
+        }
         if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
-          self.$vux.alert.show({
-            title: '',
-            content: '请完善商品介绍或者详情图片'
-          })
+          self.$vux.toast.text('请完善商品介绍或者详情图片', 'middle')
           return false
         }
         self.submitIng = true
