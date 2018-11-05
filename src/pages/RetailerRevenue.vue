@@ -108,10 +108,10 @@
             </div>
             <div class="toolbar_bg bg-white list-shadow" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="t-table h_100">
-                <div class="t-cell h_100 v_middle w100 pl5 border-box">
-                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent"><span class="color-lightgray">全选</span></check-icon>
+                <div class="t-cell h_100 v_middle pl5 border-box">
+                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent"><span class="color-lightgray">全选</span><font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></check-icon>
                 </div>
-                <div class="t-cell h_100 v_middle align_left color-lightgray">合计：<font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
+                <div class="t-cell h_100 v_middle align_left color-lightgray">总收入: <font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
                 <div class="t-cell h_100 v_middle font16 align_center bg-red color-white w80" @click="getcash">提现</div>
               </div>
             </div>
