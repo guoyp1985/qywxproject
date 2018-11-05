@@ -106,14 +106,17 @@
                 </div>
               </div>
             </div>
-            <div class="toolbar_bg bg-white list-shadow" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
-              <div class="t-table h_100">
-                <div class="t-cell h_100 v_middle pl5 border-box">
-                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent"><span class="color-lightgray">全选</span><font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></check-icon>
+            <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
+              <div class="flex_cell h_100 flex_left">
+                <div class="clamp1">
+                  <check-icon class="x-check-icon" :value.sync="checkedAll" @click.native.stop="checkAllevent" style="display:inline-block;">
+                    <span class="color-lightgray">全选</span>
+                    <span class="color-red4">{{ $t('RMB') }}{{ totalPrice }}</span>
+                  </check-icon>
+                  <span>总收入: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
                 </div>
-                <div class="t-cell h_100 v_middle align_left color-lightgray">总收入: <font class="color-red4">{{ $t('RMB') }}<span>{{ totalPrice }}</span></font></div>
-                <div class="t-cell h_100 v_middle font16 align_center bg-red color-white w80" @click="getcash">提现</div>
               </div>
+              <div class="flex_center h_100 font16 bg-red color-white w80" @click="getcash">{{$t('Withdraw')}}</div>
             </div>
           </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
@@ -369,7 +372,8 @@ export default {
       checkedData: [],
       checkedAll: true,
       showpopup: false,
-      eventIng: false
+      eventIng: false,
+      summoney: '0.00'
     }
   },
   computed: {
@@ -406,6 +410,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        self.summoney = data.summoney
         if (self.checkedAll) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true

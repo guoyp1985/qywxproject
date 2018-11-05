@@ -47,18 +47,28 @@
               </template>
             </template>
           </div>
+          <!--
           <div v-if="(index == 0)" class="footer-bar">
             <div class="checker-cell">
-              <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}</check-icon>
+              <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}<span class="color-red">{{ $t('RMB') }}{{total}}</span></span></check-icon>
             </div>
-            <div class="count-cell">
-              <span>{{$t('Total')}}:</span>
-              <span class="color-red">¥{{total}}</span>
-            </div>
+            <div class="count-cell">总收入: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
             <div class="button-cell">
               <x-button class="withdraw-btn" @click.native="getCash">{{$t('Withdraw')}}</x-button>
             </div>
           </div>
+        -->
+          <template v-if="(index == 0)">
+            <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
+              <div class="flex_cell h_100 flex_left">
+                <div class="clamp1">
+                  <check-icon :value.sync="globalChecked" @click.native="checkedAll">{{$t('All Checked')}}<span class="color-red4">{{ $t('RMB') }}{{total}}</span></span></check-icon>
+                  <span>总收入: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
+                </div>
+              </div>
+              <div class="flex_center h_100 font16 bg-red color-white w80" @click="getCash">{{$t('Withdraw')}}</div>
+            </div>
+          </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="distabdata2">
               <template v-if="tabdata2.length">
@@ -143,7 +153,8 @@ export default {
       tabdata1: [],
       tabdata2: [],
       tabdata3: [],
-      eventIng: false
+      eventIng: false,
+      summoney: '0.00'
     }
   },
   filters: {
@@ -188,6 +199,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        self.summoney = data.summoney
         if (self.globalChecked) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true
@@ -410,14 +422,8 @@ export default {
   display: flex;
   align-items: center;
 }
-#user-rebate .footer-bar .checker-cell {
-  width: 80px;
-  padding: 0 10px;
-}
-#user-rebate .footer-bar .count-cell {
-  flex: 1;
-  margin: 2px 0 0 10px;
-}
+#user-rebate .footer-bar .checker-cell {padding: 0 10px;}
+#user-rebate .footer-bar .count-cell {flex: 1;}
 #user-rebate .footer-bar .count-cell span + span {
   margin-left: 4px;
 }
