@@ -477,7 +477,7 @@ export default {
         if (self.$util.trim(rebate) !== '') {
           rebate = rebate.toString().replace(/,/g, '')
         }
-        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || rebate < 0))) {
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || parseFloat(oriprice) < 0)) || isNaN(price) || parseFloat(price) <= 0 || (self.$util.trim(rebate) !== '' && (isNaN(rebate) || parseFloat(rebate) < 0))) {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
