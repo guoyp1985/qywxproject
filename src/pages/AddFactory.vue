@@ -76,6 +76,20 @@
               </div>
             </div>
           </div>
+
+          <!-- 分润比例设置 -->
+          <div class="form-item bg-white">
+            <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
+            <div class="profit-level">
+              <span>推荐卖家</span>
+              <input v-model="submitData.superiorrate" placeholder="输入分润比例" />
+            </div>
+            <div class="profit-level">
+              <span>卖家</span>
+              <input v-model="submitData.salesrate" placeholder="输入分润比例" />
+            </div>
+          </div>
+
           <template v-if="disClassData">
             <div class="form-item required border-box padding10" v-if="classData.length > 0">
               <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
@@ -125,7 +139,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { title: '', summary: '', photo: '' },
+      submitData: { title: '', summary: '', photo: '', superiorrate: '', salesrate: '' },
       requireddata: { title: '' },
       classData: [],
       productClass: [],
@@ -210,6 +224,7 @@ export default {
     saveEvent () {
       const self = this
       let postData = self.submitData
+      console.log(postData)
       if (self.productClass) {
         postData.productclass = self.productClass
       } else {
@@ -229,6 +244,17 @@ export default {
           }
         }
       )
+      let reg = /^[1-9]\.?[0-9]*$/
+      console.log('推荐卖家' + postData.superiorrate)
+      console.log('卖家' + postData.salesrate)
+      if (postData.superiorrate !== 0 && !reg.test(postData.superiorrate)) {
+        self.$vux.toast.text('请输入正确的分润比例', 'middle')
+        return
+      }
+      if (postData.salesrate !== 0 && !reg.test(postData.salesrate)) {
+        self.$vux.toast.text('请输入正确的分润比例1', 'middle')
+        return
+      }
       if (!iscontinue) {
         return false
       }
@@ -267,6 +293,8 @@ export default {
           self.$vux.loading.hide()
           let data = res.data
           let retdata = data.data ? data.data : data
+          console.log('in getData')
+          console.log(retdata)
           self.infoData = retdata
           self.photoarr = []
           if (retdata.photo && self.$util.trim(retdata.photo) !== '') {
@@ -312,7 +340,7 @@ export default {
     },
     initData () {
       const self = this
-      self.submitData = { title: '', summary: '', photo: '' }
+      self.submitData = { title: '', summary: '', photo: '', superiorrate: '', salesrate: '' }
       self.requireddata = { title: '' }
       self.disClassData = false
     },
@@ -352,10 +380,23 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.refresh()
   }
-}
+};
 </script>
 
 <style lang="less">
+.profit-level{
+  box-sizing: border-box;
+  padding: 20px 0 20px 10px;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  span{
+    flex: 0 0 60px;
+  }
+  input{
+    padding-left: 10px;
+    flex: 1;
+  }
+}
 .addFactory .x-checker .ck-item{
   font-size:13px;
   display: inline-block;

@@ -97,6 +97,18 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+
+          <!-- 商品利润 -->
+          <div class="form-item required bg-white">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">商品利润<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <input v-model="submitdata.profit" @keyup="priceChange('profit')" type="text" class="input priceInput" name="profit" :placeholder="$t('Saled profit')" />
+              </div>
+              <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
+            </div>
+          </div>
+
           <div class="form-item required bg-white">
             <div class="flex_row">
               <div class="flex_cell">
@@ -126,6 +138,16 @@
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
+
+          <!-- 是否为加盟礼包 -->
+          <!-- <div class="form-item bg-white">
+            <div class="t-table">
+              <div class="t-cell input-cell v_middle" style="position:relative;">
+                <x-switch title='是否为加盟礼包' v-model="submitdata.isgift"></x-switch>
+              </div>
+            </div>
+          </div> -->
+
           <div class="pl12 pr12 pt10 bg-white">文字介绍</div>
           <group class="textarea-outer textarea-text bg-white">
             <x-textarea
@@ -235,14 +257,14 @@
 </i18n>
 
 <script>
-import { Group, XInput, XTextarea } from 'vux'
+import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
 export default {
   components: {
-    Group, XInput, XTextarea, Sos
+    Group, XInput, XTextarea, Sos, XSwitch
   },
   data () {
     return {
@@ -274,10 +296,12 @@ export default {
         content: '',
         contentphoto: '',
         seotitle: '',
-        seodescription: ''
+        seodescription: '',
+        profit: ''
+        // isgift: false
       },
       allowsubmit: true,
-      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
+      requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '', 'profit': '' },
       levels: [],
       classData: [],
       submitIng: false
@@ -319,7 +343,9 @@ export default {
         contentphoto: '',
         seotitle: '',
         seodescription: '',
-        video: ''
+        video: '',
+        profit: ''
+        // isgift: false
       }
       this.photoarr = []
       this.photoarr1 = []
@@ -440,7 +466,16 @@ export default {
         }
         let price = postdata.price.toString().replace(/,/g, '')
         let oriprice = postdata.oriprice.toString().replace(/,/g, '')
-        if ((self.$util.trim(oriprice) !== '' && (isNaN(oriprice) || oriprice < 0)) || isNaN(price) || price <= 0) {
+        let profit = postdata.profit.toString().replace(/,/g, '')
+        if ((self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(oriprice)) || parseFloat(oriprice) < 0)) || isNaN(parseFloat(price)) || parseFloat(price) <= 0) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的价格'
+          })
+          return false
+        }
+        // 商品利润
+        if (self.$util.trim(oriprice) !== '' && (isNaN(parseFloat(profit)) || parseFloat(profit) < 0 || parseFloat(profit) >= parseFloat(price))) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的价格'
@@ -457,6 +492,7 @@ export default {
         self.submitIng = true
         postdata.price = price
         postdata.oriprice = oriprice
+        postdata.profit = profit
         self.$vux.loading.show()
         if (self.query.id) {
           postdata.id = self.query.id
@@ -579,7 +615,7 @@ export default {
     }
     this.refresh()
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
