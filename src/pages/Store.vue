@@ -472,7 +472,7 @@ export default {
           self.showSos = false
           self.showContainer = true
           self.retailerInfo = data.data ? data.data : data
-          this.$util.miniPost(self.retailerInfo)
+          this.$util.miniPost({type: 'store', data: self.retailerInfo})
           document.title = self.retailerInfo.title
           const wid = self.retailerInfo.uid
           let shareParams = {
