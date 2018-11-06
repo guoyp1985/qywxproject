@@ -653,10 +653,10 @@ Util.install = function (Vue, options) {
       }
       return src.replace(/\|\|/g, ',')
     },
-    miniPost: function () {
+    miniPost: function (pageData) {
       Vue.wechat.miniProgram.getEnv(res => {
         if (res.miniprogram) {
-          Vue.wechat.miniProgram.postMessage({data: {token: Token.get()}})
+          Vue.wechat.miniProgram.postMessage({data: {token: Token.get(), pageData: pageData}})
         }
       })
     },
