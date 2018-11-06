@@ -520,8 +520,7 @@ export default {
         if (res) {
           const data = res.data
           self.activitydata = data.data ? data.data : data
-          // self.getData1()
-          self.getnewsdata()
+          // self.getnewsdata()
         }
       })
     },
