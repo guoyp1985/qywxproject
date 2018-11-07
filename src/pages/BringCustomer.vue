@@ -3,7 +3,7 @@
     <div class="s-topbanner s-topbanner1 bg-white">
       <div class="row">
         <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -90,6 +90,7 @@ export default {
   },
   methods: {
     initData () {
+      this.selectedIndex = 0
       this.distabdata1 = false
       this.distabdata2 = false
       this.tabdata1 = []
@@ -149,10 +150,9 @@ export default {
         self.distabdata2 = true
       })
     },
-    swiperChange (index) {
-      if (index !== undefined) {
-        this.selectedIndex = index
-      }
+    swiperChange () {
+      console.log('in swiperchange')
+      console.log(this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < limit) {
@@ -186,18 +186,14 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      if (this.$route.query.type === 'buy') {
-        this.selectedIndex = 1
-      } else {
-        this.selectedIndex = 0
+      this.initData()
+      if (this.query.type !== this.$route.query.type) {
+        this.query = this.$route.query
+        if (this.query.type === 'buy') {
+          this.selectedIndex = 1
+        }
       }
-      if (this.query.wid !== this.$route.query.wid) {
-        this.initData()
-      }
-      this.query = this.$route.query
-      if (this.$route.query.type !== 'buy') {
-        this.swiperChange()
-      }
+      this.swiperChange()
     }
   },
   activated () {
