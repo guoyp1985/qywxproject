@@ -81,11 +81,11 @@
           <div class="form-item bg-white">
             <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
             <div class="profit-level">
-              <span>推荐卖家</span>
+              <span>上级分润</span>
               <input v-model="submitData.superiorrate" placeholder="输入分润比例" />
             </div>
             <div class="profit-level">
-              <span>卖家</span>
+              <span>销售分润</span>
               <input v-model="submitData.salesrate" placeholder="输入分润比例" />
             </div>
           </div>
