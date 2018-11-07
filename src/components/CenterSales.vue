@@ -373,8 +373,7 @@ export default {
       })
     },
     clickStore () {
-      // this.showPopupStore = true
-      this.$wechat.miniProgram.redirectTo({url: `/pages/index?wid=${this.retailerInfo.uid}`})
+      this.showPopupStore = true
     },
     closeQrcodeModal () {
       this.showGxh = false
