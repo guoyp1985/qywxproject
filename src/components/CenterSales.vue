@@ -173,9 +173,18 @@
           <span class="font15">{{$t('Business report')}}</span>
         </div>
       </cell>
+
+      <!-- 我的推荐 -->
+      <cell :link="{path:'/retailerRecommand', query:{wid: retailerInfo.uid}}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-kehu1 db-in font18 color-red4"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Retailer recommand')}}</span>
+        </div>
+      </cell>
+
       <template>
         <cell :link="{path:'/retailerSetting'}" style="position:relative">
-          <div slot="icon" class="pr10"><i class="al al-guanlizhongxin color-red4 db-in font18"></i></div>
+          <div slot="icon" class="pr10"><i class="al al-guanlizhongxin db-in font18" style="color:#efa42e;"></i></div>
           <div slot="inline-desc">
             <span class="font15">{{$t('Setting')}}</span>
           </div>
