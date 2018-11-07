@@ -197,6 +197,7 @@ export default {
     },
     refresh (query) {
       // const self = this
+      console.log(this.$wechat)
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = query
       this.getData()
