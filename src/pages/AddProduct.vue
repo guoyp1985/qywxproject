@@ -12,7 +12,7 @@
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
-            <div class="cover_map" v-if="photoarr.length == 0" @click="uploadPhoto('fileInput','photo')">
+            <div class="cover_map" v-if="photoarr.length == 0" @click.stop="uploadPhoto('fileInput','photo')">
               <div class="button_photo">
                 <i class="al al-zhaoxiangji color-white"></i>
               </div>
