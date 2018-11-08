@@ -32,7 +32,9 @@
       </div>
     </div>
     <div class="message mt5"><span>* </span>拍摄二代身份证原件，确保图片清晰，四角完整。</div>
-    <div class="btnbom">提交审核</div>
+    <div class="btn">
+      <div class="btnbom btn-bottom-red">立即认证</div>
+    </div>
   </div>
 </template>
 
@@ -57,5 +59,9 @@
   .authentication .photo1 .linek .txtph{position:absolute;top:25px;left:5px;}
   .authentication .message{text-align:right;font-size:10px;color:#a5a5a5;}
   .authentication .message span{font-size:16px;color:red;}
-  .authentication .btnbom{width:100%;height:40px;background-color:#ED6A5A;color:#fff;text-align:center;line-height:40px;position:fixed;bottom:0;}
+  .authentication .btn{width:100%;margin:0 auto;}
+  .authentication .btn .btnbom{
+    width:85%;height:40px;color:#fff;text-align:center;line-height:40px;position:fixed;bottom:0;
+    left:0;right:0;margin-left:auto;margin-right:auto;
+  }
 </style>
