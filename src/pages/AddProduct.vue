@@ -388,30 +388,31 @@ export default {
     uploadPhoto (refname, type) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      if (self.$util.isPC() || type === 'video') {
-        fileInput.click()
-      } else {
-        self.$wechat.ready(function () {
-          let curMaxnum = self.maxnum
-          if (type === 'video') {
-            curMaxnum = 1
-          }
-          if (type === 'photo') {
-            curMaxnum = self.maxnum - self.photoarr.length
-          } else if (type === 'contentphoto') {
-            curMaxnum = self.maxnum1 - self.photoarr1.length
-          }
-          if (curMaxnum > 9) {
-            curMaxnum = 9
-          }
-          self.$util.wxUploadImage({
-            maxnum: curMaxnum,
-            handleCallback: function (data) {
-              self.photoCallback(data, type)
-            }
-          })
-        })
-      }
+      fileInput.click()
+      // if (self.$util.isPC() || type === 'video') {
+      //   fileInput.click()
+      // } else {
+      //   self.$wechat.ready(function () {
+      //     let curMaxnum = self.maxnum
+      //     if (type === 'video') {
+      //       curMaxnum = 1
+      //     }
+      //     if (type === 'photo') {
+      //       curMaxnum = self.maxnum - self.photoarr.length
+      //     } else if (type === 'contentphoto') {
+      //       curMaxnum = self.maxnum1 - self.photoarr1.length
+      //     }
+      //     if (curMaxnum > 9) {
+      //       curMaxnum = 9
+      //     }
+      //     self.$util.wxUploadImage({
+      //       maxnum: curMaxnum,
+      //       handleCallback: function (data) {
+      //         self.photoCallback(data, type)
+      //       }
+      //     })
+      //   })
+      // }
     },
     fileChange (refname, type) {
       const self = this

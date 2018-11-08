@@ -3,6 +3,7 @@ vux.boka.cn
 root:PD6FESy7a2aQVCbd
 
 vue.boka.cn
+ssh 123.206.18.149 -l root
 root:YwS3MNPN77x2rnKU
 git pwd: 140707Boka
 
