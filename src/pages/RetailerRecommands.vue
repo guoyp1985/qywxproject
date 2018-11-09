@@ -9,7 +9,7 @@
           <img :src="item.avatar">
           <div class="name-time">
             <span class="name">卖家：{{item.linkman}}</span>
-            <span class="time">推荐时间：{{time.format(item.dateline)}}</span>
+            <span class="time">推荐时间：{{format(item.dateline)}}</span>
           </div>
         </div>
       </div>
@@ -18,7 +18,7 @@
 </template>
 
 <script type="text/javascript">
-import Time from '../../libs/time'
+// import Time from '../../libs/time'
 import getRecommands from '../api/getRecommands'
 import BScroll from 'better-scroll'
 export default {
@@ -28,7 +28,13 @@ export default {
       pagestart: 0,
       limit: 10,
       bscroll: null,
-      time: new Time()
+      format (time) {
+        let result = ''
+        const date = new Date(time * 1000)
+        result = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()} 时 ${date.getMinutes()} 分`
+        return result
+      }
+      // time: new Time()
     }
   },
   created () {
@@ -82,16 +88,19 @@ export default {
     font-size: 14px;
     .title{
       width: 100vw;
-      height: 10vh;
-      line-height: 10vh;
-      text-align: center;
+      height: 7vh;
+      line-height: 7vh;
+      text-align: left;
+      padding-left: 20px;
+      box-sizing: border-box;
+      font-size: 16px;
       font-weight: 700;
       background-color: #f75553;
       color: #fff;
     }
     .recommands{
       width: 100vw;
-      height: 90vh;
+      height: 93vh;
       overflow: hidden;
       .recommand {
         width: 100%;
