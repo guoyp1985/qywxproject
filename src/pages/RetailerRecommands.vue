@@ -31,7 +31,7 @@ export default {
       format (time) {
         let result = ''
         const date = new Date(time * 1000)
-        result = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()} 时 ${date.getMinutes()} 分`
+        result = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()} : ${date.getMinutes()}`
         return result
       }
       // time: new Time()
