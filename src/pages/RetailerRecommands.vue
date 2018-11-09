@@ -86,6 +86,8 @@ export default {
       line-height: 10vh;
       text-align: center;
       font-weight: 700;
+      background-color: #f75553;
+      color: #fff;
     }
     .recommands{
       width: 100vw;
