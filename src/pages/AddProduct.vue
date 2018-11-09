@@ -12,7 +12,7 @@
         </form>
         <div class="list-shadow01">
           <div class="form-item no-after pt15 bg-gray10">
-            <div class="cover_map" v-if="photoarr.length == 0" @click="uploadPhoto('fileInput','photo')">
+            <div class="cover_map" v-if="photoarr.length == 0" @click.stop="uploadPhoto('fileInput','photo')">
               <div class="button_photo">
                 <i class="al al-zhaoxiangji color-white"></i>
               </div>
@@ -388,7 +388,7 @@ export default {
     uploadPhoto (refname, type) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      if (self.$util.isPC() || type === 'video') {
+      if (self.$util.isAndroid() || self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {

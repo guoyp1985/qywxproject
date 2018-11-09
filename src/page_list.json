@@ -101,5 +101,6 @@
   "wxOpen",
   "Payment",
   "test",
-  "RetailerRecommand"
+  "RetailerRecommands",
+  "Authentication"
 ]
