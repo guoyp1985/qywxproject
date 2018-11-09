@@ -621,6 +621,10 @@ export default {
         //   let backUrl = encodeURIComponent(location.href)
         //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
         // } else {
+        this.query = this.$route.query
+        if (this.query.type === 'customer') {
+            self.dateClass = ''
+        }
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
