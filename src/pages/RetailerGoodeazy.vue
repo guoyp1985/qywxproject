@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 rgoodeazy bg-white">
+  <div :class="`containerarea font14 rgoodeazy bg-white ${query.from == 'miniprogram' ? '' : 's-havebottom'}`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -106,7 +106,7 @@
           </swiper-item>
         </swiper>
       </div>
-      <div class="s-bottom bottomnaviarea b_top_after">
+      <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
         <div class="t-table bottomnavi">
           <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
@@ -409,6 +409,8 @@ export default {
       self.$vux.loading.show()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      this.query = this.$route.query
+      console.log(this.query)
       if (self.selectedIndex === 1) {
         let curArea = self.$refs.urlTextarea[0] ? self.$refs.urlTextarea[0] : self.$refs.urlTextarea
         curArea.updateAutosize()
@@ -435,7 +437,6 @@ export default {
         } else {
           self.initContainer()
           self.showContainer = true
-          this.query = this.$route.query
           if (self.loginUser.isretailer === 2) {
             self.$http.get(`${ENV.BokaApi}/api/list/news`, {
               params: { from: 'retailer', pagestart: 0, limit: 5 }

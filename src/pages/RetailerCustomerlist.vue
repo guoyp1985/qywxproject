@@ -623,7 +623,7 @@ export default {
         // } else {
         this.query = this.$route.query
         if (this.query.type === 'customer') {
-            self.dateClass = ''
+          self.dateClass = ''
         }
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
