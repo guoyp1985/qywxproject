@@ -6,7 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <template v-if="(query.wid || query.fromModule == 'product') && query.fromId && showTip">
+      <template v-if="retailerInfo.uid && showTip">
         <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
           <div class="flex_left" style="width:70px;">
             <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -917,7 +917,7 @@ export default {
         })
       }
     },
-    getRetailerInfo () {
+    _getRetailerInfo () {
       const self = this
       if ((self.query.fromModule === 'store' || self.query.fromModule === 'news') && self.query.wid) {
         self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
@@ -932,6 +932,22 @@ export default {
           }
         })
       }
+    },
+    getRetailerInfo () {
+      const self = this
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: { uid: self.query.uid }
+      }).then(function (res) {
+        if (res && res.status === 200) {
+          const data = res.data
+          if (data.flag) {
+            self.retailerInfo = data.data
+            setTimeout(function () {
+              self.showTip = false
+            }, 10000)
+          }
+        }
+      })
     },
     setContactUser () {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
