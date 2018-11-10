@@ -361,7 +361,7 @@ export default {
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
               .match(Reg.rSplitAllTags).map(fragment => {
-                fragment = fragment.replace(Reg.filterSpecStyle('box-sizing'), '$1$4$5')
+                fragment = fragment.replace(Reg.filterSpecStyle('box-sizing'), '$1$5')
                 if (Reg.rTestSelfCloseTag.test(fragment)) {
                   fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5) => {
                     return `${p1}${p5}`
