@@ -420,29 +420,31 @@ var Eleditor = function(){
 
 	var _syncRenderTextEditorView = function(){
 		_$editorTextModule.attr('role', 'edit').show();
-		_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
-		_$editorTextArea.attr('style', _$selected.attr('style'));
-		if( _$selected.css('font-weight') == 'bold' ){
-			_$editorTextModule.find('.Eleditor-textStyle-bold').addClass('Eleditor-active');
-		}
+		setTimout(function() {
+			_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
+			_$editorTextArea.attr('style', _$selected.attr('style'));
+			if( _$selected.css('font-weight') == 'bold' ){
+				_$editorTextModule.find('.Eleditor-textStyle-bold').addClass('Eleditor-active');
+			}
 
-		if( _inArray(_$selected.css('text-decoration'), ['overline', 'line-through', 'underline']) ){
-			_$editorTextModule.find('.Eleditor-textStyle-linedecoration').addClass('Eleditor-active');
-		}
-		if( _$selected[0].tagName == 'A' ){
-			_$editorTextModule.attr('type', 'link');
-			_$editorTextLinkArea.val(_$selected.attr('href'));
-		}else{
-			_$editorTextModule.attr('type', 'word');
-		}
+			if( _inArray(_$selected.css('text-decoration'), ['overline', 'line-through', 'underline']) ){
+				_$editorTextModule.find('.Eleditor-textStyle-linedecoration').addClass('Eleditor-active');
+			}
+			if( _$selected[0].tagName == 'A' ){
+				_$editorTextModule.attr('type', 'link');
+				_$editorTextLinkArea.val(_$selected.attr('href'));
+			}else{
+				_$editorTextModule.attr('type', 'word');
+			}
 
-		var _selectAlign = _$selected.css('text-align');
-		if( _inArray(_selectAlign, ['left', 'center', 'right']) ){
-			_$editorTextModule.find('.Eleditor-textStyle-align[align='+_selectAlign+']').addClass('Eleditor-active');
-		}else{
-			_$editorTextModule.find('.Eleditor-textStyle-align').removeClass('Eleditor-active');
-		}
-		_$editorTextModule.find('.Eleditor-textStyle-color span').css('background-color', _$selected.css('color'));
+			var _selectAlign = _$selected.css('text-align');
+			if( _inArray(_selectAlign, ['left', 'center', 'right']) ){
+				_$editorTextModule.find('.Eleditor-textStyle-align[align='+_selectAlign+']').addClass('Eleditor-active');
+			}else{
+				_$editorTextModule.find('.Eleditor-textStyle-align').removeClass('Eleditor-active');
+			}
+			_$editorTextModule.find('.Eleditor-textStyle-color span').css('background-color', _$selected.css('color'));
+		},500)
 	};
 
 	if( typeof WebUploader != 'undefined' && typeof _args.uploader != 'function' ){
