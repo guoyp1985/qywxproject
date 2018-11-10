@@ -24,6 +24,6 @@ const Reg = {
   // rInsertAttr : /^(<[^\/][^>]+?)((?:\/>)|>)$/i
 }
 
-Reg.filterSpecTag = (tagName) => new RegExp(`^<(?:${tagName}|/${tagName})[^>]*>$`, "i");
+Rex.filterSpecAttr = (attr) => new RegExp(`^(<[^>]+\\s)(${attr}=["'])([^"']*)(["'])([^>]*>)$`, "i");
 
 export default Reg

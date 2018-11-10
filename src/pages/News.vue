@@ -366,7 +366,7 @@ export default {
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
               .match(Reg.rSplitAllTags).map(fragment => {
-                if (Reg.filterSpecTag('br').test(fragment)) return ''
+                // if (Reg.filterSpecTag('br').test(fragment)) return ''
                 // if (Reg.filterSpecTag('img').test(fragment)) return ''
                 // if (Reg.rTestCloseTag.test(fragment)) return ''
                 // if (!Reg.rTestPlainText.test(fragment)) {
@@ -385,6 +385,12 @@ export default {
                 //     }
                 //   }
                 // }
+                fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5, offset, string) => {
+                  if (p3 === '') {
+                    return `${p1}${p5}`
+                  }
+                  return string
+                })
                 if (Reg.rTestSelfCloseTag.test(fragment)) {
                   if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
                     fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
