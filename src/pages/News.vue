@@ -369,9 +369,10 @@ export default {
                 // if (Reg.filterSpecTag('mpvoice').test(fragment)) return ''
                 if (!Reg.rTestPlainText.test(fragment)) {
                   if (Reg.rTestSelfCloseTag.test(fragment)) {
-                    console.log(fragment)
                     scount++
-                    return fragment.replace(Reg.rInsertAttr, '$1/$2')
+                    fragment = fragment.replace(Reg.rInsertAttr, '$1/$2')
+                    console.log(fragment)
+                    return fragment
                   } else {
                     if (Reg.rTestBeginTag.test(fragment)) {
                       bcount++
