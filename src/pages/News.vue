@@ -356,7 +356,9 @@ export default {
           }
           if (res.data.flag) {
             self.reward = User.get()
-            self.article = res.data.data console.log(self.article.content.match(Reg.rSplitAllTags))
+            self.article = res.data.data
+            console.log(self.article.content)
+            console.log(self.article.content.match(Reg.rSplitAllTags))
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
