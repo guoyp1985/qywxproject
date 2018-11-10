@@ -18,9 +18,10 @@ const Reg = {
   rTestPlainText : /^[^<].*[^>]?$/i,
   rTestBeginTag : /^<(?!\/|img|br|hr|input|link)\w*[^>]*>$/i,
   rTestCloseTag : /^<\/[\w:\-]+>/i,
-  rTestSelfCloseTag : /^<(?:img|br|hr|input)[^>]*>$/i
+  rTestSelfCloseTag : /^<(?:img|br|hr|input)[^>]*>$/i,
+  rInsertAttr : /^(<[^\/][^>]+?)((?:\/>)|>)$/i
 }
 
-Reg.filterSpecTag = (tagName) => new RegExp(`^<(?:${tagName}|/${tagName})[^>]*>$`, "i");
+// Reg.filterSpecTag = (tagName) => new RegExp(`^<(?:${tagName}|/${tagName})[^>]*>$`, "i");
 
 export default Reg

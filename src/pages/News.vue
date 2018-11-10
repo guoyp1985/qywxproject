@@ -366,11 +366,12 @@ export default {
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
               .match(Reg.rSplitAllTags).map(fragment => {
-                if (Reg.filterSpecTag('mpvoice').test(fragment)) return ''
+                // if (Reg.filterSpecTag('mpvoice').test(fragment)) return ''
                 if (!Reg.rTestPlainText.test(fragment)) {
                   if (Reg.rTestSelfCloseTag.test(fragment)) {
                     console.log(fragment)
                     scount++
+                    return fragment.replace(Reg.rInsertAttr, '$1/$2')
                   } else {
                     if (Reg.rTestBeginTag.test(fragment)) {
                       bcount++
