@@ -359,22 +359,27 @@ export default {
             self.article = res.data.data
             // console.log(self.article.content)
             // console.log(self.article.content.match(Reg.rSplitAllTags))
-            let count = 0
+            let bcount = 0
+            let ecount = 0
             let scount = 0
             self.article.content
               .replace(/[\r\n]/g, "")
               .replace(/\s{2,}/g, "")
               .match(Reg.rSplitAllTags).map(fragment => {
-              if(!Reg.rTestPlainText.test(fragment)) {
-                if(Reg.rTestSelfCloseTag.test(fragment)) {
+              if (!Reg.rTestPlainText.test(fragment)) {
+                if (Reg.rTestSelfCloseTag.test(fragment)) {
                   scount++
                 } else {
-                  console.log(fragment)
-                  count++
+                  if (Reg.rTestBeginTag(fragment)) {
+                    bcount++
+                  } else if (Reg.rTestCloseTag(fragment)) {
+                    ecount++
+                  }
+
                 }
               }
             })
-            console.log(`self close tags:${scount}::::other tags: ${count}::::total tags:${scount + count}`)
+            console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
