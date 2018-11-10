@@ -421,7 +421,7 @@ var Eleditor = function(){
 	var _syncRenderTextEditorView = function(){
 		_$editorTextModule.attr('role', 'edit').show();
 		setTimeout(function() {
-			_$editorTextArea.css({'width': 300, 'height': 300});
+			_$editorTextArea.css({'width': '300px', 'height': '300px'});
 			_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
 			_$editorTextArea.attr('style', _$selected.attr('style'));
 			if( _$selected.css('font-weight') == 'bold' ){
