@@ -368,7 +368,7 @@ export default {
                 count++
               }
             })
-            console.log(`self close :${scount}::::others: ${count}::::total:${scount + count}`)
+            console.log(`self close tags:${scount}::::other tags: ${count}::::total tags:${scount + count}`)
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
