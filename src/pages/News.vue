@@ -365,8 +365,8 @@ export default {
             self.article.content = self.article.content
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
-              .replace(Reg.filterSpecTag('mpvoice'), '')
               .match(Reg.rSplitAllTags).map(fragment => {
+                if (Reg.filterSpecTag('mpvoice').test(fragment)) return ''
                 if (!Reg.rTestPlainText.test(fragment)) {
                   if (Reg.rTestSelfCloseTag.test(fragment)) {
                     scount++
