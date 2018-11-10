@@ -357,8 +357,18 @@ export default {
           if (res.data.flag) {
             self.reward = User.get()
             self.article = res.data.data
-            console.log(self.article.content)
-            console.log(self.article.content.match(Reg.rSplitAllTags))
+            // console.log(self.article.content)
+            // console.log(self.article.content.match(Reg.rSplitAllTags))
+            let count = 0
+            let scount = 0
+            self.article.content.match(Reg.rSplitAllTags).map(fragment => {
+              if(Reg.rTestSelfCloseTag.test(fragment)) {
+                scount++
+              } else {
+                count++
+              }
+            })
+            console.log(`self close :${scount}::::others: ${count}::::total:${scount + count}`)
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
