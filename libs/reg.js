@@ -21,4 +21,6 @@ const Reg = {
   rTestSelfCloseTag : /^<(?:img|br|hr|input)[^>]*>$/i
 }
 
+Reg.filterSpecTag = (tagName) => new RegExp(`^<${tagName}[^>]*>$`, "i");
+
 export default Reg
