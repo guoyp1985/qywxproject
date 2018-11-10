@@ -444,7 +444,7 @@ var Eleditor = function(){
 				_$editorTextModule.find('.Eleditor-textStyle-align').removeClass('Eleditor-active');
 			}
 			_$editorTextModule.find('.Eleditor-textStyle-color span').css('background-color', _$selected.css('color'));
-		},500)
+		}, 1000)
 	};
 
 	if( typeof WebUploader != 'undefined' && typeof _args.uploader != 'function' ){
