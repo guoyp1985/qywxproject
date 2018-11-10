@@ -31,7 +31,7 @@ var w = window;
 
 // $(function() {
 console.log($('.weui-tab'))
-$('.weui-tab').appendTo('#app')
+$('.weui-tab').appendTo($('#app'))
 // })
 // w[_namespace] = function(){};
 
