@@ -98,7 +98,8 @@ export default {
       const self = this
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
-        self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        // self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
       } else {
         self.initContainer()
         self.showCenter = true
