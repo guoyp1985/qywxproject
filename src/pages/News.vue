@@ -368,13 +368,10 @@ export default {
                   if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
                     fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
                   }
-                  console.log(fragment)
                   return fragment
                 }
                 return fragment
               }).join('') : ''
-            console.log(self.article.content)
-            // console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
