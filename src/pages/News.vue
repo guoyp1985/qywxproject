@@ -366,20 +366,20 @@ export default {
               .replace(/[\r\n]/g, "")
               .replace(/\s{2,}/g, "")
               .match(Reg.rSplitAllTags).map(fragment => {
-              if (!Reg.rTestPlainText.test(fragment)) {
-                if (Reg.rTestSelfCloseTag.test(fragment)) {
-                  scount++
-                } else {
-                  if (Reg.rTestBeginTag.test(fragment)) {
-                    console.log(fragment)
-                    bcount++
-                  } else if (Reg.rTestCloseTag.test(fragment)) {
-                    ecount++
+                if (!Reg.rTestPlainText.test(fragment)) {
+                  if (Reg.rTestSelfCloseTag.test(fragment)) {
+                    scount++
+                  } else {
+                    if (Reg.rTestBeginTag.test(fragment)) {
+                      console.log(fragment)
+                      bcount++
+                    } else if (Reg.rTestCloseTag.test(fragment)) {
+                      ecount++
+                    }
                   }
-
                 }
-              }
-            }).join('')
+                return fragment
+              }).join('')
             console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
             self.showArticle = true
             self.showEditor = true
