@@ -376,6 +376,7 @@ margin-right:10px;
   border:none;
   word-wrap:break-word;
   word-break:normal;
+  margin: 0 !important;
 }
 .Eleditor-inputarea .textarea:empty::before{
   color:lightgrey;
