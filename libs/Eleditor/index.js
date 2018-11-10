@@ -7,6 +7,7 @@
 // (function(w){
 import jQuery from 'jquery';
 import './css/base.css';
+
 var _debug = false;
 var _namespace = 'Eleditor';
 var _notctname = ['INPUT', 'IMG', 'TEXTAREA'];
@@ -193,7 +194,7 @@ var _buildEditorModule = function(_toolbars, _uid){
 					</div>\
 					<div class="Eleditor-inputarea">\
 						<input placeholder="请输入超链接" type="text" />\
-						<div placeholder="点击输入内容" class="textarea" contenteditable="true"></div>\
+						<div placeholder="点击输入内容" class="textarea needsclick" contenteditable="true"></div>\
 					</div>\
 					<div class="Eleditor-method">\
 						<button class="Eleditor-cancel color-white" style="background-color:#c5c5c5;">取消</button>\
@@ -421,6 +422,7 @@ var Eleditor = function(){
 		_$editorTextModule.attr('role', 'edit').show();
 		_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
 		_$editorTextArea.attr('style', _$selected.attr('style'));
+		_$editorTextArea.css({'width': '100%', 'height': '100%'});
 		if( _$selected.css('font-weight') == 'bold' ){
 			_$editorTextModule.find('.Eleditor-textStyle-bold').addClass('Eleditor-active');
 		}
