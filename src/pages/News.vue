@@ -384,7 +384,8 @@ export default {
                 }
                 return fragment
               }).join('')
-            console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
+            console.log(self.article.content)
+            // console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
