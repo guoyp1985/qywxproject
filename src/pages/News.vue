@@ -122,7 +122,7 @@
 </template>
 <script>
 import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
-import Reg from '@/libs/reg'
+import Reg from '#/reg'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
