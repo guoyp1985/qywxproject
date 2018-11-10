@@ -385,13 +385,13 @@ export default {
                 //     }
                 //   }
                 // }
-                fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5, offset, string) => {
-                  if (p3 === '') {
-                    return `${p1}${p5}`
-                  }
-                  return string
-                })
                 if (Reg.rTestSelfCloseTag.test(fragment)) {
+                  fragment = fragment.replace(Reg.filterSpecAttr('style'), (match, p1, p2, p3, p4, p5, offset, string) => {
+                    // if (p3 === '') {
+                    //   return `${p1}${p5}`
+                    // }
+                    return `${p1}${p5}`
+                  })
                   if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
                     fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
                   }
