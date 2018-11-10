@@ -406,7 +406,7 @@ export default {
             }
           }
           self.handleImg()
-          if (self.query.type === 'edit') {
+          if (self.query.control === 'edit') {
             jQuery('.news .edit-btn')[0].click()
           }
           const data = res.data
