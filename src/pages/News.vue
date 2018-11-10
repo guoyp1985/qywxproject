@@ -363,6 +363,7 @@ export default {
             let scount = 0
             self.article.content.match(Reg.rSplitAllTags).map(fragment => {
               if(Reg.rTestSelfCloseTag.test(fragment)) {
+                console.log(fragment)
                 scount++
               } else {
                 count++
