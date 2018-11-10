@@ -29,9 +29,9 @@ var _editorTpl = '';
 var $ = jQuery;
 var w = window;
 
-$(function() {
-	$('.weui-tab').appendTo('#appid')
-})
+// $(function() {
+$('.weui-tab').appendTo('#app')
+// })
 // w[_namespace] = function(){};
 
 // if( typeof jQuery === 'undefined' && typeof Zepto === 'undefined' ){
