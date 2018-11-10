@@ -370,9 +370,9 @@ export default {
                 if (Reg.rTestSelfCloseTag.test(fragment)) {
                   scount++
                 } else {
-                  if (Reg.rTestBeginTag(fragment)) {
+                  if (Reg.rTestBeginTag.test(fragment)) {
                     bcount++
-                  } else if (Reg.rTestCloseTag(fragment)) {
+                  } else if (Reg.rTestCloseTag.test(fragment)) {
                     ecount++
                   }
 
