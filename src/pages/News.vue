@@ -366,8 +366,9 @@ export default {
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
               .match(Reg.rSplitAllTags).map(fragment => {
-                if (Reg.filterSpecTag('br').test(fragment)) return ''
-                if (Reg.filterSpecTag('img').test(fragment)) return ''
+                // if (Reg.filterSpecTag('br').test(fragment)) return ''
+                // if (Reg.filterSpecTag('img').test(fragment)) return ''
+                if (Reg.rTestCloseTag.test(fragment)) return ''
                 if (!Reg.rTestPlainText.test(fragment)) {
                   if (Reg.rTestSelfCloseTag.test(fragment)) {
                     scount++
