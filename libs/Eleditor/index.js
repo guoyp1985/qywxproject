@@ -5,8 +5,14 @@
 * Author: Try
 */
 // (function(w){
+import FastClick from 'fastclick';
 import jQuery from 'jquery';
 import './css/base.css';
+
+$(function() {
+	FastClick.attach(document.body);
+});
+
 var _debug = false;
 var _namespace = 'Eleditor';
 var _notctname = ['INPUT', 'IMG', 'TEXTAREA'];
