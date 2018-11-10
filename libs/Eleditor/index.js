@@ -9,7 +9,7 @@ import FastClick from 'fastclick';
 import jQuery from 'jquery';
 import './css/base.css';
 
-$(function() {
+jQuery(function() {
 	FastClick.attach(document.body);
 });
 
