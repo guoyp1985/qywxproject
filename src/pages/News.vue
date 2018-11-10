@@ -122,6 +122,7 @@
 </template>
 <script>
 import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
+import Reg from '#/reg'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
@@ -356,6 +357,35 @@ export default {
           if (res.data.flag) {
             self.reward = User.get()
             self.article = res.data.data
+            // console.log(self.article.content)
+            // console.log(self.article.content.match(Reg.rSplitAllTags))
+            let bcount = 0
+            let ecount = 0
+            let scount = 0
+            self.article.content = self.article.content
+              .replace(/[\r\n]/g, '')
+              .replace(/\s{2,}/g, '')
+              .match(Reg.rSplitAllTags).map(fragment => {
+                // if (Reg.filterSpecTag('mpvoice').test(fragment)) return ''
+                if (!Reg.rTestPlainText.test(fragment)) {
+                  if (Reg.rTestSelfCloseTag.test(fragment)) {
+                    scount++
+                    fragment = fragment.replace(Reg.rInsertAttr, '$1/$2')
+                    console.log(fragment)
+                    return fragment
+                  } else {
+                    if (Reg.rTestBeginTag.test(fragment)) {
+                      bcount++
+                    } else if (Reg.rTestCloseTag.test(fragment)) {
+                      // console.log(fragment)
+                      ecount++
+                    }
+                  }
+                }
+                return fragment
+              }).join('')
+            console.log(self.article.content)
+            // console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
