@@ -910,9 +910,9 @@ export default {
             const retdata = data.data
             self.fromProduct = retdata
             self.retailerInfo = retdata.retailerinfo
-            setTimeout(function () {
-              self.showTip = false
-            }, 10000)
+            // setTimeout(function () {
+            //   self.showTip = false
+            // }, 10000)
           }
         })
       }
@@ -926,9 +926,9 @@ export default {
           if (res && res.status === 200) {
             const data = res.data
             self.retailerInfo = data.data
-            setTimeout(function () {
-              self.showTip = false
-            }, 10000)
+            // setTimeout(function () {
+            //   self.showTip = false
+            // }, 10000)
           }
         })
       }
@@ -942,9 +942,9 @@ export default {
           const data = res.data
           if (data.flag) {
             self.retailerInfo = data.data
-            setTimeout(function () {
-              self.showTip = false
-            }, 10000)
+            // setTimeout(function () {
+            //   self.showTip = false
+            // }, 10000)
           }
         }
       })
