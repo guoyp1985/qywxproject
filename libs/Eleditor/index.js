@@ -422,7 +422,7 @@ var Eleditor = function(){
 		_$editorTextModule.attr('role', 'edit').show();
 		// console.log(_$editorTextArea.css('width'))
 		let node = _$editorTextArea;
-		let str = '';
+		let str = _$scrollWrap.eq(0).attr('class');
 		while (node[0]) {
 			str += node.attr('class') + '::::' + node.attr('style') + '<br/>';
 			node = node.parent();
