@@ -422,6 +422,7 @@ var Eleditor = function(){
 		_$editorTextModule.attr('role', 'edit').show();
 		setTimeout(function() {
 			_$editorTextArea.css('width', '300px');
+			alert('okok')
 			_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
 			_$editorTextArea.attr('style', _$selected.attr('style'));
 			if( _$selected.css('font-weight') == 'bold' ){
