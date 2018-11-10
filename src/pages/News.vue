@@ -359,9 +359,9 @@ export default {
             self.article = res.data.data
             // console.log(self.article.content)
             // console.log(self.article.content.match(Reg.rSplitAllTags))
-            let bcount = 0
-            let ecount = 0
-            let scount = 0
+            // let bcount = 0
+            // let ecount = 0
+            // let scount = 0
             self.article.content = self.article.content
               .replace(/[\r\n]/g, '')
               .replace(/\s{2,}/g, '')
@@ -369,21 +369,26 @@ export default {
                 // if (Reg.filterSpecTag('br').test(fragment)) return ''
                 // if (Reg.filterSpecTag('img').test(fragment)) return ''
                 // if (Reg.rTestCloseTag.test(fragment)) return ''
-                if (!Reg.rTestPlainText.test(fragment)) {
-                  if (Reg.rTestSelfCloseTag.test(fragment)) {
-                    scount++
-                    // fragment = fragment.replace(Reg.rInsertAttr, '$1/$2')
-                    console.log(fragment)
-                    // return fragment
-                    return ''
-                  } else {
-                    if (Reg.rTestBeginTag.test(fragment)) {
-                      bcount++
-                    } else if (Reg.rTestCloseTag.test(fragment)) {
-                      // console.log(fragment)
-                      ecount++
-                    }
-                  }
+                // if (!Reg.rTestPlainText.test(fragment)) {
+                //   if (Reg.rTestSelfCloseTag.test(fragment)) {
+                //     scount++
+                //     // fragment = fragment.replace(Reg.rInsertAttr, '$1/$2')
+                //     console.log(fragment)
+                //     // return fragment
+                //     return ''
+                //   } else {
+                //     if (Reg.rTestBeginTag.test(fragment)) {
+                //       bcount++
+                //     } else if (Reg.rTestCloseTag.test(fragment)) {
+                //       // console.log(fragment)
+                //       ecount++
+                //     }
+                //   }
+                // }
+                if (Reg.rTestSelfCloseTag.test(fragment)) {
+                  fragment = fragment.replace(Reg.rInsertAttr, '$1/$2')
+                  console.log(fragment)
+                  return fragment
                 }
                 return fragment
               }).join('')
