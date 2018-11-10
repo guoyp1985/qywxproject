@@ -371,6 +371,7 @@ export default {
                   scount++
                 } else {
                   if (Reg.rTestBeginTag.test(fragment)) {
+                    console.log(fragment)
                     bcount++
                   } else if (Reg.rTestCloseTag.test(fragment)) {
                     ecount++
