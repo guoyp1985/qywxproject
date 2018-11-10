@@ -15,6 +15,7 @@ const Reg = {
   rTranslateY:/(?:translateY\((\s*-?(?:[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|[1-9]\d*|0)(?:px)?)\))/,
   rTags: /[~#^$@%&!*,]/gi,
   rSplitAllTags: /(?:<[^>]+?>|[^<>]+(?=<[^>]+>))/ig,
+  rTestPlainText : /^[^<].*[^>]?$/i,
   rTestSelfCloseTag : /^<(?:img|br|hr|input)[^>]*>$/i
 }
 

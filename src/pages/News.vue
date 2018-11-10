@@ -362,11 +362,13 @@ export default {
             let count = 0
             let scount = 0
             self.article.content.match(Reg.rSplitAllTags).map(fragment => {
-              if(Reg.rTestSelfCloseTag.test(fragment)) {
-                scount++
-              } else {
-                console.log(fragment)
-                count++
+              if(!Reg.rTestPlainText.test(fragment)) {
+                if(Reg.rTestSelfCloseTag.test(fragment)) {
+                  scount++
+                } else {
+                  console.log(fragment)
+                  count++
+                }
               }
             })
             console.log(`self close tags:${scount}::::other tags: ${count}::::total tags:${scount + count}`)
