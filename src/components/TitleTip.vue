@@ -13,13 +13,15 @@
         <router-link class="avatar-cell" to="/center">
           <img :src="avatarHref" class="imgavatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         </router-link>
-        <router-link class="info-cell" to="/center">
+        <router-link class="info-cell flex_left" to="/center">
           <div class="user-name">
             {{userName}}
           </div>
+          <!--
           <div class="user-credit">
             {{$t('Credit')}}: {{userCredit}}
           </div>
+        -->
         </router-link>
         <router-link class="op-cell" to="/messages">
           <span class="al al-pinglun color-black font24"></span>
