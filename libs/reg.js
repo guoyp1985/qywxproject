@@ -19,7 +19,8 @@ const Reg = {
   // rTestBeginTag : /^<(?!\/|img|br|hr|input|link)\w*[^>]*>$/i,
   // rTestCloseTag : /^<\/[\w:\-]+>/i,
   rTestSelfCloseTag: /^<(?:img|br|hr|input)[^>]*>$/i,
-  rInsertSlash: /^(<[^\/][^>]+?)([^\/]>)$/i
+  rTestSelfCloseOKTag: /^(<[^\/][^>]+?)(\/>)$/i,
+  rInsertSlash: /^(<[^\/][^>]+?)(>)$/i
   // rInsertAttr : /^(<[^\/][^>]+?)((?:\/>)|>)$/i
 }
 

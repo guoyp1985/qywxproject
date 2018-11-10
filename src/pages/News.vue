@@ -386,7 +386,7 @@ export default {
                 //   }
                 // }
                 if (Reg.rTestSelfCloseTag.test(fragment)) {
-                  if (Reg.rInsertSlash.test(fragment)) {
+                  if (!Reg.rTestSelfCloseOKTag.test(fragment)) {
                     fragment = fragment.replace(Reg.rInsertSlash, '$1/$2')
                   }
                   console.log(fragment)
