@@ -361,7 +361,10 @@ export default {
             // console.log(self.article.content.match(Reg.rSplitAllTags))
             let count = 0
             let scount = 0
-            self.article.content.match(Reg.rSplitAllTags).map(fragment => {
+            self.article.content
+              .replace(/[\r\n]/g, "")
+              .replace(/\s{2,}/g, "")
+              .match(Reg.rSplitAllTags).map(fragment => {
               if(!Reg.rTestPlainText.test(fragment)) {
                 if(Reg.rTestSelfCloseTag.test(fragment)) {
                   scount++
