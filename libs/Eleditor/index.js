@@ -9,10 +9,6 @@ import FastClick from 'fastclick';
 import jQuery from 'jquery';
 import './css/base.css';
 
-jQuery(function() {
-	FastClick.attach(document.body);
-});
-
 var _debug = false;
 var _namespace = 'Eleditor';
 var _notctname = ['INPUT', 'IMG', 'TEXTAREA'];
