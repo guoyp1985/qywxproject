@@ -5,7 +5,6 @@
 * Author: Try
 */
 // (function(w){
-import FastClick from 'fastclick';
 import jQuery from 'jquery';
 import './css/base.css';
 
