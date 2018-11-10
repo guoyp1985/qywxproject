@@ -424,7 +424,7 @@ var Eleditor = function(){
 		let node = _$editorTextArea;
 		let str = '';
 		while (node[0]) {
-			str += node.attr('class') + '--' + node.attr('style') + '/n/r';
+			str += node.attr('class') + '--' + node.attr('style') + '\/n';
 			node = node.parent();
 		}
 		_$editorTextArea.html(str)
