@@ -15,13 +15,12 @@ const Reg = {
   rTranslateY:/(?:translateY\((\s*-?(?:[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|[1-9]\d*|0)(?:px)?)\))/,
   rTags: /[~#^$@%&!*,]/gi,
   rSplitAllTags: /(?:<[^>]+?>|[^<>]+(?=<[^>]+>))/ig,
-  rTestPlainText : /^[^<].*[^>]?$/i,
-  rTestBeginTag : /^<(?!\/|img|br|hr|input|link)\w*[^>]*>$/i,
-  rTestCloseTag : /^<\/[\w:\-]+>/i,
-  rTestSelfCloseTag : /^<(?:img|br|hr|input)[^>]*>$/i,
-  rInsertAttr : /^(<[^\/][^>]+?)((?:\/>)|>)$/i
+  rTestSelfCloseTag: /^<(?:img|br|hr|input)[^>]*>$/i,
+  rTestSelfCloseOKTag: /^(<[^\/][^>]+?)(\/>)$/i,
+  rInsertSlash: /^(<[^\/][^>]+?)(>)$/i
 }
 
-// Reg.filterSpecTag = (tagName) => new RegExp(`^<(?:${tagName}|/${tagName})[^>]*>$`, "i");
+Reg.filterSpecAttr = (attr) => new RegExp(`^(<[^>]+\\s)(${attr}=["'])([^"']*)(["'])([^>]*>)$`, "i");
+Reg.filterSpecStyle = (style) => new RegExp(`(<[^>]+\\sstyle=["'](?:[^"']+[;\\s])?)(${style})([\\s:]+)([^"';]+)([^>]*>)`, "i");
 
 export default Reg
