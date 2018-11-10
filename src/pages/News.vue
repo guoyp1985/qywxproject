@@ -362,7 +362,7 @@ export default {
             let bcount = 0
             let ecount = 0
             let scount = 0
-            self.article.content
+            self.article.content = self.article.content
               .replace(/[\r\n]/g, "")
               .replace(/\s{2,}/g, "")
               .match(Reg.rSplitAllTags).map(fragment => {
@@ -379,7 +379,7 @@ export default {
 
                 }
               }
-            })
+            }).join('')
             console.log(`self close tags:${scount}::::bengin tags: ${bcount}::::end tags:${ecount}::::total tags:${scount + bcount + ecount}`)
             self.showArticle = true
             self.showEditor = true
