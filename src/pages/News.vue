@@ -122,6 +122,7 @@
 </template>
 <script>
 import { Popup, TransferDom, XButton, Divider, Previewer } from 'vux'
+import Reg from '@/libs/reg'
 import TitleTip from '@/components/TitleTip'
 import Comment from '@/components/Comment'
 import Reply from '@/components/Reply'
@@ -355,7 +356,7 @@ export default {
           }
           if (res.data.flag) {
             self.reward = User.get()
-            self.article = res.data.data
+            self.article = res.data.data console.log(self.article.content.match(Reg.rSplitAllTags))
             self.showArticle = true
             self.showEditor = true
             document.title = self.article.title
