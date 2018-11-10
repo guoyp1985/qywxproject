@@ -421,8 +421,8 @@ var Eleditor = function(){
 	var _syncRenderTextEditorView = function(){
 		_$editorTextModule.attr('role', 'edit').show();
 		_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
-		_$editorTextArea.attr('style', _$selected.attr('style'));
-		_$editorTextArea.css({'width': '100%', 'height': '100%'});
+		// _$editorTextArea.attr('style', _$selected.attr('style'));
+		// _$editorTextArea.css({'width': '100%', 'height': '100%'});
 		if( _$selected.css('font-weight') == 'bold' ){
 			_$editorTextModule.find('.Eleditor-textStyle-bold').addClass('Eleditor-active');
 		}
