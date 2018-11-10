@@ -199,7 +199,7 @@ var _buildEditorModule = function(_toolbars, _uid){
 					</div>\
 					<div class="Eleditor-inputarea">\
 						<input placeholder="请输入超链接" type="text" />\
-						<div placeholder="点击输入内容" class="textarea" contenteditable="true"></div>\
+						<div placeholder="点击输入内容" class="textarea needsclick" contenteditable="true"></div>\
 					</div>\
 					<div class="Eleditor-method">\
 						<button class="Eleditor-cancel color-white" style="background-color:#c5c5c5;">取消</button>\
