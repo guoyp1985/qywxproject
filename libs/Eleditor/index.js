@@ -28,10 +28,6 @@ var _toolnames = {
 var _editorTpl = '';
 var $ = jQuery;
 var w = window;
-
-$(function() {
-	$('.weui-tab').appendTo($('#app'))
-})
 // w[_namespace] = function(){};
 
 // if( typeof jQuery === 'undefined' && typeof Zepto === 'undefined' ){
@@ -424,16 +420,15 @@ var Eleditor = function(){
 
 	var _syncRenderTextEditorView = function(){
 		_$editorTextModule.attr('role', 'edit').show();
-		// console.log(_$editorTextArea.css('width'))
-		let node = _$editorTextArea;
-		let str = _$scrollWrap.eq(0).attr('class');
-		while (node[0]) {
-			str += node.attr('class') + '::::' + node.attr('style') + '<br/>';
-			node = node.parent();
-		}
-		_$editorTextArea.html(str)
-		// _$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
-		// _$editorTextArea.attr('style', _$selected.attr('style'));
+		// let node = _$editorTextArea;
+		// let str = _$scrollWrap.eq(0).attr('class');
+		// while (node[0]) {
+		// 	str += node.attr('class') + '::::' + node.attr('style') + '<br/>';
+		// 	node = node.parent();
+		// }
+		// _$editorTextArea.html(str)
+		_$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
+		_$editorTextArea.attr('style', _$selected.attr('style'));
 		// _$editorTextArea.css({'width': '100%', 'height': '100%'});
 		if( _$selected.css('font-weight') == 'bold' ){
 			_$editorTextModule.find('.Eleditor-textStyle-bold').addClass('Eleditor-active');
