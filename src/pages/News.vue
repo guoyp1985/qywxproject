@@ -406,6 +406,9 @@ export default {
             }
           }
           self.handleImg()
+          if (self.query.type === 'edit') {
+            jQuery('.news .edit-btn')[0].click()
+          }
           const data = res.data
           if (data.flag === 1) {
             self.isdig = 1
