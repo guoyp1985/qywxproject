@@ -368,13 +368,14 @@ export default {
               .match(Reg.rSplitAllTags).map(fragment => {
                 // if (Reg.filterSpecTag('br').test(fragment)) return ''
                 // if (Reg.filterSpecTag('img').test(fragment)) return ''
-                if (Reg.rTestCloseTag.test(fragment)) return ''
+                // if (Reg.rTestCloseTag.test(fragment)) return ''
                 if (!Reg.rTestPlainText.test(fragment)) {
                   if (Reg.rTestSelfCloseTag.test(fragment)) {
                     scount++
                     // fragment = fragment.replace(Reg.rInsertAttr, '$1/$2')
                     console.log(fragment)
                     // return fragment
+                    return ''
                   } else {
                     if (Reg.rTestBeginTag.test(fragment)) {
                       bcount++
