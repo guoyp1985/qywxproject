@@ -21,5 +21,6 @@ const Reg = {
 }
 
 Reg.filterSpecAttr = (attr) => new RegExp(`^(<[^>]+\\s)(${attr}=["'])([^"']*)(["'])([^>]*>)$`, "i");
+Reg.filterSpecStyle = (style) => new RegExp(`(<[^>]+\\sstyle=["'](?:[^"']+[;\\s])?)(${style})([\\s:]+)([^"';]+)([^>]*>)`, "i");
 
 export default Reg
