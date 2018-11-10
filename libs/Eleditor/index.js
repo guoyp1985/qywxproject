@@ -421,8 +421,13 @@ var Eleditor = function(){
 	var _syncRenderTextEditorView = function(){
 		_$editorTextModule.attr('role', 'edit').show();
 		// console.log(_$editorTextArea.css('width'))
-		console.log(_$editorTextArea.parent().attr('class'))
-		 _$editorTextArea.html(_$editorTextArea.parent().attr('style'))
+		let node = _$editorTextArea;
+		let str = '';
+		while (node[0]) {
+			str += node.attr('class') + '--' + node.attr('style') + '\/n\/r';
+			node = node.parent();
+		}
+		_$editorTextArea.html(str)
 		// _$editorTextArea.html( _$selected.hasClass('Eleditor-placeholder') ? '' : _$selected.html() );
 		// _$editorTextArea.attr('style', _$selected.attr('style'));
 		// _$editorTextArea.css({'width': '100%', 'height': '100%'});
