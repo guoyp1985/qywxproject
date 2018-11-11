@@ -408,6 +408,11 @@ export default {
           self.handleImg()
           if (self.query.control === 'edit') {
             jQuery('.news .edit-btn')[0].click()
+            self.$vux.toast.show({
+              text: '您已进入编辑模式，请点击文章内容进行编辑',
+              icon: 'none',
+              time: 2000
+            })
           }
           const data = res.data
           if (data.flag === 1) {
