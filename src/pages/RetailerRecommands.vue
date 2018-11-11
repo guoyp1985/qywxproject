@@ -1,9 +1,10 @@
 <template>
-  <div class="recommands-wraper">
+  <div class="recommands-wraper" ref="recommandsWraper">
     <div class="title">
       <span>我的推荐</span>
     </div>
-    <div class="recommands" ref="recommands">
+    <div class="message" v-if="recommands.length === 0"><span>你还没有推荐的卖家</span></div>
+    <div  class="recommands" ref="recommands" v-else>
       <div ref="recommandsInner">
         <div class="recommand" v-for="item in recommands" :key="item.id">
           <img :src="item.avatar">
@@ -18,7 +19,6 @@
 </template>
 
 <script type="text/javascript">
-// import Time from '../../libs/time'
 import getRecommands from '../api/getRecommands'
 import BScroll from 'better-scroll'
 export default {
@@ -34,14 +34,10 @@ export default {
         result = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()} : ${date.getMinutes()}`
         return result
       }
-      // time: new Time()
     }
   },
-  created () {
-    this._getRecommands()
-  },
   mounted () {
-    this.initRecommands()
+    this._getRecommands()
   },
   methods: {
     _getRecommands () {
@@ -52,8 +48,16 @@ export default {
           if (data.flag === 1) {
             if (this.pagestart === 0) {
               this.recommands = data.data
+              if (this.recommands.length > 0) {
+                this.$nextTick(() => {
+                  this.initRecommands()
+                })
+              }
             } else {
               this.recommands.push(...data.data)
+              this.$nextTick(() => {
+                this.bscroll.refresh()
+              })
             }
             this.pagestart++
           }
@@ -73,11 +77,6 @@ export default {
           this._getRecommands()
         }
       })
-    }
-  },
-  watch: {
-    recommands () {
-      this.bscroll.refresh()
     }
   }
 };
@@ -129,6 +128,12 @@ export default {
           }
         }
       }
+    }
+    .message{
+      height: 93vh;
+      line-height: 93vh;
+      text-align: center;
+      color: #999;
     }
   }
 </style>
