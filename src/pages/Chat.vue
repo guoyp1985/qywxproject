@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room" class="containerarea font14">
+  <div id="chat-room" class="font14" style="position:relative;">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <template v-if="retailerInfo.uid && showTip">
         <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
@@ -1028,7 +1028,7 @@ export default {
 #chat-room .bottom-area {
   position: absolute;
   z-index: 500;
-  bottom: 0px;
+  bottom: 10px;
   width: 100%;
   box-sizing: border-box;
 }
