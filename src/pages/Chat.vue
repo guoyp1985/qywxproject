@@ -6,7 +6,7 @@
 <template>
   <div id="chat-room" class="font14" style="width:100%;heiht:100%;overflow:hidden;position:relative;">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <router-link v-if="retailerInfo.uid && showTip" class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
+      <router-link v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
@@ -429,7 +429,7 @@ export default {
       this.$nextTick(() => {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
         if (this.retailerInfo.uid && this.showTip) {
-          clientH = clientH + 80
+          clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
         }
         this.viewHeight = `${-clientH}`
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
