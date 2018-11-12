@@ -84,13 +84,13 @@
             <span class="font14 v_bottom" style="text-decoration: underline" @click="showpopup">卖家入驻协议</span>
           </div>
         </div>
-      </form>
-      <div v-if="query.from == 'miniprogram'" :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" style="height:50px;box-sizing:border-box;" @click="submitevent">
-        <div class="flex_cell flex_center btn-bottom-red">
-          <div>马上免费入驻</div>
-          <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
+        <div v-if="query.from == 'miniprogram'" :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" style="height:50px;box-sizing:border-box;" @click="submitevent">
+          <div class="flex_cell flex_center btn-bottom-red">
+            <div>马上免费入驻</div>
+            <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
+          </div>
         </div>
-      </div>
+      </form>
     </div>
     <div v-if="query.from != 'miniprogram'" :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" style="height:50px;box-sizing:border-box;" @click="submitevent">
       <div class="flex_cell flex_center btn-bottom-red">
