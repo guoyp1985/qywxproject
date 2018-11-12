@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 bg-white retailerapply notop">
-    <div class="pagemiddle bg-white" :style="`${query.from == 'miniprogram' ? 'bottom:0px;padding-bottom:50px;' : ''} `">
+    <div class="pagemiddle bg-white" :style="`${query.from == 'miniprogram' ? 'padding-bottom:50px;' : ''} `">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
             <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
