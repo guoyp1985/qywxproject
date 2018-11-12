@@ -75,7 +75,7 @@
             autosize>
           </x-textarea>
         </group>
-        <div v-if="query.from == 'miniprogram'" class="w_100 pagebottom-area flex_center padding20" style="box-sizing:border-box;">
+        <div v-if="query.from == 'miniprogram'" class="w_100 flex_center padding20" style="box-sizing:border-box;">
           <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
         </div>
       </div>
