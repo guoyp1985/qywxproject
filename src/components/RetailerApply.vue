@@ -1,6 +1,6 @@
 <template>
-  <div class="containerarea font14 bg-white retailerapply notop">
-    <div class="pagemiddle bg-white">
+  <div class="containerarea font14 bg-white retailerapply notop columnarea">
+    <div class="column-content bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
             <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
@@ -86,7 +86,7 @@
         </div>
       </form>
     </div>
-    <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
+    <div class="flex_center pl12 pr12 list-shadow02 bg-white" :class="{'active' : isagree}" @click="submitevent">
       <div class="flex_cell flex_center btn-bottom-red">
         <div>马上免费入驻</div>
         <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
