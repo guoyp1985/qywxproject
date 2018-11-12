@@ -1,6 +1,6 @@
 <template>
-  <div class="containerarea font14 bg-white retailerapply notop columnarea">
-    <div class="column-content bg-white" style="overflow-y:auto;">
+  <div class="containerarea font14 bg-white retailerapply notop">
+    <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
             <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
