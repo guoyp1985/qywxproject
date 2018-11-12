@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room" class="font14">
+  <div id="chat-room" class="containerarea font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <template v-if="retailerInfo.uid && showTip">
         <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
@@ -13,7 +13,7 @@
           </div>
           <div class="flex_cell flex_left">
             <div class="w_100">
-              <div class="clamp2">{{ retailerInfo.title }} {{allowChat}} {{loginUser.isretailer}}</div>
+              <div class="clamp2">{{ retailerInfo.title }}</div>
               <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
             </div>
           </div>
@@ -22,7 +22,7 @@
           </div>
         </router-link>
       </template>
-      <scroller style="border:red 1px solid;" id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+      <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
           <template v-for="(item,index) in messages">
@@ -1028,7 +1028,7 @@ export default {
 #chat-room .bottom-area {
   position: absolute;
   z-index: 500;
-  bottom: 200px;
+  bottom: 0px;
   width: 100%;
   box-sizing: border-box;
 }
