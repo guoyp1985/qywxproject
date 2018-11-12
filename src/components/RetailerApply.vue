@@ -86,7 +86,7 @@
         </div>
       </form>
     </div>
-    <div class="w_100 flex_center pl12 pr12 list-shadow02 bg-white" style="height:50px;" :class="{'active' : isagree}" @click="submitevent">
+    <div :class="`w_100 flex_center pl12 pr12 list-shadow02 bg-white ${isagree ? 'active' : ''}`" style="height:50px;" @click="submitevent">
       <div class="flex_cell flex_center btn-bottom-red">
         <div>马上免费入驻</div>
         <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
