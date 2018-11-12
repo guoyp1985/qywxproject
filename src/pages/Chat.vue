@@ -6,7 +6,6 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <!--
       <template v-if="retailerInfo.uid && showTip">
         <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
           <div class="flex_left" style="width:70px;">
@@ -23,8 +22,7 @@
           </div>
         </router-link>
       </template>
-    -->
-      <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+      <scroller style="border:red 1px solid;" id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
           <template v-for="(item,index) in messages">
