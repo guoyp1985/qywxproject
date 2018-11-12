@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div class="containerarea font14">
+  <div id="chat-room" class="containerarea font14">
     <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1">
       <div class="input-box">
         <div class="voice-cell">
@@ -63,7 +63,7 @@
         </template>
       </grid>
     </div>
-    <div id="chat-room">
+    <div style="height:100%;">
       <template v-if="allowChat || loginUser.isretailer === 1">
         <template v-if="retailerInfo.uid && showTip">
           <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
