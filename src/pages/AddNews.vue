@@ -3,7 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="pagemiddle">
+      <div class="pagemiddle" :style="`${query.from == 'miniprogram' ? 'padding-bottom:50px;' : ''} `">
         <group label-width="5em">
           <group class="textarea-outer">
             <x-textarea
@@ -75,8 +75,11 @@
             autosize>
           </x-textarea>
         </group>
+        <div v-if="query.from == 'miniprogram'" class="w_100 flex_center padding20" style="box-sizing:border-box;">
+          <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
+        </div>
       </div>
-      <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div v-if="query.from != 'miniprogram'" class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
         <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>

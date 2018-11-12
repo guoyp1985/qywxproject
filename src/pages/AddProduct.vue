@@ -3,7 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-container" style="top:0;">
+      <div class="s-container" :style="`${query.from == 'miniprogram' ? 'padding-bottom:50px;' : ''} `">
         <form ref="fileForm" enctype="multipart/form-data">
           <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
         </form>
@@ -247,8 +247,11 @@
         </div>
         <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
         <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('More') }}<i class="al al-jiantouyoushuang- font14"></i></div>
+        <div v-if="query.from == 'miniprogram'" class="w_100 padding20 border-box flex_center color-white">
+          <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
+        </div>
       </div>
-      <div class="s-bottom flex_center color-white list-shadow02">
+      <div v-if="query.from != 'miniprogram'" class="s-bottom flex_center color-white list-shadow02">
         <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
       </div>
     </template>
@@ -677,6 +680,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.addproduct .s-container{top:0;}
 .form-item{position:relative;padding:10px 12px;}
 .form-item:after{
   content:"";display:block;

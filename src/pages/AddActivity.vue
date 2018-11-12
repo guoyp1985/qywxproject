@@ -3,7 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-container" style="top:0;">
+      <div class="s-container" :style="`${query.from == 'miniprogram' ? 'padding-bottom:50px;' : ''} `">
         <form class="addForm">
           <forminputplate class="required">
             <span slot="title">{{ $t('Activity product') }}</span>
@@ -50,8 +50,13 @@
             <form-discount :submitdata="submitdata"></form-discount>
           </template>
         </form>
+        <div v-if="query.from == 'miniprogram'" class="w_100 padding20 border-box flex_center">
+          <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
+        </div>
       </div>
-      <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
+      <div v-if="query.from != 'miniprogram'" class="s-bottom pl20 pr20 border-box flex_center color-white list-shadow02">
+        <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
+      </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showpopup" height="100%">
           <div class="popup1">
@@ -598,4 +603,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.addActivity .s-container{top:0;}
 </style>

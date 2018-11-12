@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 bg-white retailerapply notop">
-    <div class="pagemiddle bg-white">
+    <div class="pagemiddle bg-white" :style="`${query.from == 'miniprogram' ? 'padding-bottom:50px;' : ''} `">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
             <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
@@ -85,8 +85,14 @@
           </div>
         </div>
       </form>
+      <div v-if="query.from == 'miniprogram'" :class="`w_100 pagebottom-area flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
+        <div class="flex_cell flex_center btn-bottom-red">
+          <div>马上免费入驻</div>
+          <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
+        </div>
+      </div>
     </div>
-    <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" style="height:50px;box-sizing:border-box;" @click="submitevent">
+    <div v-if="query.from != 'miniprogram'" :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
       <div class="flex_cell flex_center btn-bottom-red">
         <div>马上免费入驻</div>
         <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
@@ -579,6 +585,9 @@ export default {
 .retailerapply .pagebottom{background-color:#fff;height:50px;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
+.retailerapply .pagebottom-area{background-color:#fff;height:50px;box-sizing: border-box;}
+.retailerapply .pagebottom-area .btn-bottom-red{background-color:#f2f2f2;color:#999;}
+.retailerapply .pagebottom-area.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}
 .retailerapply .blue .weui-icon-success{color:#ea3a3a;}
 .vux-check-icon.blue > .weui-icon-success:before, .vux-check-icon.blue > .weui-icon-success-circle:before{color:#ea3a3a;}
 @keyframes move_wave {
