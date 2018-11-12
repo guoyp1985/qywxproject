@@ -13,7 +13,7 @@
           </div>
           <div class="flex_cell flex_left">
             <div class="w_100">
-              <div class="clamp2">{{ retailerInfo.title }}</div>
+              <div class="clamp2">{{ retailerInfo.title }} {{allowChat}} {{loginUser.isretailer}}</div>
               <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
             </div>
           </div>
