@@ -255,7 +255,7 @@ export default {
       hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: '-184', // '-52',
+      viewHeight: '-132', // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -431,7 +431,7 @@ export default {
         if (this.retailerInfo.uid && this.showTip) {
           clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
         }
-        this.viewHeight = `${-clientH}`
+        this.viewHeight = `${-clientH - 52}`
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         console.log(this.viewHeight)
         this.setScrollToBottom()
@@ -965,7 +965,7 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = '-184'
+      this.viewHeight = '-132'
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
