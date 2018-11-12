@@ -509,7 +509,7 @@ export default {
     },
     sendPhoto () {
       const self = this
-      if (window.WeixinJSBridge && self.$util.isIOS()) {
+      if (window.WeixinJSBridge) {
         self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
