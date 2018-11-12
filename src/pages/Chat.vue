@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room" class="font14" style="width:100%;heiht:100%;overflow:hidden;position:relative;">
+  <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <router-link v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
@@ -255,7 +255,7 @@ export default {
       hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: '-52',
+      viewHeight: '-132', // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -426,15 +426,18 @@ export default {
       }
     },
     setViewHeight () {
+      const self = this
       this.$nextTick(() => {
-        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
-        if (this.retailerInfo.uid && this.showTip) {
-          clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
-        }
-        this.viewHeight = `${-clientH}`
-        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-        console.log(this.viewHeight)
-        this.setScrollToBottom()
+        setTimeout(() => {
+          let clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          if (self.retailerInfo.uid && self.showTip) {
+            clientH = clientH + parseInt(self.$refs.topTipArea.clientHeight)
+          }
+          self.viewHeight = `${-clientH - 80}`
+          // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+          console.log(self.viewHeight)
+          self.setScrollToBottom()
+        }, 1000)
       })
     },
     clickMessageItem (item) {
@@ -965,7 +968,7 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = '-52'
+      this.viewHeight = '-132'
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
