@@ -1028,7 +1028,7 @@ export default {
   height: 100%;
 }
 #chat-room .bottom-area {
-  position: absolute;
+  position: fixed;
   z-index: 500;
   bottom: 0px;
   width: 100%;
