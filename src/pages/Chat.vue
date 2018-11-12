@@ -255,7 +255,7 @@ export default {
       hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: '-132', // '-52',
+      viewHeight: '-184', // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -965,7 +965,7 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = '-132'
+      this.viewHeight = '-184'
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
