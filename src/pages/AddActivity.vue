@@ -50,9 +50,13 @@
             <form-discount :submitdata="submitdata"></form-discount>
           </template>
         </form>
-        <div v-if="query.from = 'miniprogram'" class="w_100 flex_center bg-orange color-white" style="height:50px;" @click="saveevent">{{ $t('Go to create') }}</div>
+        <div v-if="query.from == 'miniprogram'" class="w_100 padding20 border-box flex_center">
+          <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
+        </div>
       </div>
-      <div v-if="query.from != 'miniprogram'" class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
+      <div v-if="query.from != 'miniprogram'" class="s-bottom pl20 pr20 border-box flex_center color-white list-shadow02">
+        <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
+      </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showpopup" height="100%">
           <div class="popup1">
