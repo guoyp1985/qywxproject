@@ -426,18 +426,15 @@ export default {
       }
     },
     setViewHeight () {
-      const self = this
       this.$nextTick(() => {
-        setTimeout(() => {
-          let clientH = parseInt(self.$refs.bottomArea.clientHeight)
-          if (self.retailerInfo.uid && self.showTip) {
-            clientH = clientH + parseInt(self.$refs.topTipArea.clientHeight)
-          }
-          self.viewHeight = `${-clientH - 80}`
-          // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-          console.log(self.viewHeight)
-          self.setScrollToBottom()
-        }, 1000)
+        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        if (this.retailerInfo.uid && this.showTip) {
+          clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+        }
+        this.viewHeight = `${-clientH - 80}`
+        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        console.log(this.viewHeight)
+        this.setScrollToBottom()
       })
     },
     clickMessageItem (item) {
@@ -1029,7 +1026,8 @@ export default {
   height: 100%;
 }
 #chat-room .bottom-area {
-  position: fixed;bottom:0px;
+  position: absolute;
+  bottom: 0px;
   z-index: 500;
   width: 100%;
   box-sizing: border-box;
