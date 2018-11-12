@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room" class="containerarea font14" style="position:relative;">
+  <div id="chat-room" class="containerarea font14" style="position:relative;border:#000 2px solid;box-sizing:border-box;">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <template v-if="retailerInfo.uid && showTip">
         <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
@@ -1175,6 +1175,7 @@ export default {
 //   bottom:52px;
 //   overflow-y:auto;
 // }
+.chat-area *{box-sizing: border-box;}
 .chatlist {
   padding: 0 10px;
   line-height: 1.1;
