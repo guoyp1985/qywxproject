@@ -4,7 +4,7 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room" class="font14" style="width:100%;heiht:100%;overflow:hidden;position:relative;">
+  <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
       <router-link v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
