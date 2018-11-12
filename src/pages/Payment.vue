@@ -197,7 +197,7 @@ export default{
 .payment .btnlist .item:not(:last-child){margin-right:10px;}
 .payment .linearea{width:100%;height:50px;background-color:#F2F2F2;position:relative;}
 .payment .linearea .line{background-color:#e5e5e5;height:2px;position:absolute;left:10px;right:10px;top:50%;margin-top:-1px;}
-.payment .linearea .txt{background-color:#F2F2F2;width:150px;height:100%;margin:0 auto;position:relative;z-index:2;color:#666666;font-size:13px;}
+.payment .linearea .txt{background-color:#F2F2F2;width:150px;height:100%;margin:0 auto;position:relative;z-index:1;color:#666666;font-size:13px;}
 
 .payment .pay-layer{position:fixed;top:0;bottom:0;left:0;right:0;overflow: hidden;z-index:10;display:flex;justify-content: center; align-items: center;}
 .payment .pay-layer .bg{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);}

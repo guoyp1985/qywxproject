@@ -75,7 +75,7 @@
                           <div class="txt font12">{{ item.percent }}%</div>
                         </div>
                     </div>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: 'retailer'}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
                     </router-link>
                   </div>
@@ -119,7 +119,7 @@
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                     </router-link>
                     <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: 'retailer'}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
                     </router-link>
                   </div>
@@ -161,7 +161,7 @@
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: 'retailer'}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
                     </router-link>
                   </div>

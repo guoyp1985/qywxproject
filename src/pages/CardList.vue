@@ -32,7 +32,7 @@
                     <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid}}">联系卖家</router-link>
                   </div>
                   <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yiguoqi1"></div>
+                    <div class="al al-yiguoqi4"></div>
                   </div>
                 </div>
               </div>
@@ -55,7 +55,7 @@
                     <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid}}">联系卖家</router-link>
                   </div>
                   <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yiguoqi1"></div>
+                    <div class="al al-yishiyong11"></div>
                   </div>
                 </div>
               </div>
@@ -124,12 +124,16 @@ export default {
         callback: function () {
           switch (self.selectedIndex) {
             case 0:
-              pageStart1++
-              self.getData1()
+              if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+                pageStart1++
+                self.getData1()
+              }
               break
             case 1:
-              pageStart2++
-              self.getData2()
+              if (self.tabdata2.length === (pageStart2 + 1) * limit) {
+                pageStart2++
+                self.getData2()
+              }
               break
           }
         }

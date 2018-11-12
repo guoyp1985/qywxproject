@@ -4,24 +4,22 @@
 * @created_date: 2018-4-23
 */
 <template>
-  <div id="chat-room" class="font14">
+  <div id="chat-room" class="font14" style="width:100%;heiht:100%;overflow:hidden;position:relative;">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <template v-if="retailerInfo.uid && showTip">
-        <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
-          <div class="flex_left" style="width:70px;">
-            <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+      <router-link v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
+        <div class="flex_left" style="width:70px;">
+          <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        </div>
+        <div class="flex_cell flex_left">
+          <div class="w_100">
+            <div class="clamp2">{{ retailerInfo.title }}</div>
+            <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
           </div>
-          <div class="flex_cell flex_left">
-            <div class="w_100">
-              <div class="clamp2">{{ retailerInfo.title }}</div>
-              <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
-            </div>
-          </div>
-          <div class="flex_right" style="width:80px;">
-            <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
-          </div>
-        </router-link>
-      </template>
+        </div>
+        <div class="flex_right" style="width:80px;">
+          <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
+        </div>
+      </router-link>
       <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
@@ -429,7 +427,11 @@ export default {
     },
     setViewHeight () {
       this.$nextTick(() => {
-        this.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
+        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        if (this.retailerInfo.uid && this.showTip) {
+          clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+        }
+        this.viewHeight = `${-clientH}`
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         console.log(this.viewHeight)
         this.setScrollToBottom()
@@ -942,9 +944,7 @@ export default {
           const data = res.data
           if (data.flag) {
             self.retailerInfo = data.data
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
+            self.setViewHeight()
           }
         }
       })
@@ -1026,9 +1026,8 @@ export default {
   height: 100%;
 }
 #chat-room .bottom-area {
-  position: absolute;
+  position: fixed;bottom:0px;
   z-index: 500;
-  bottom: 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -1173,6 +1172,7 @@ export default {
 //   bottom:52px;
 //   overflow-y:auto;
 // }
+.chat-area *{box-sizing: border-box;}
 .chatlist {
   padding: 0 10px;
   line-height: 1.1;

@@ -120,7 +120,7 @@
                   <div class="t-table">
                     <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
                     <div class="t-cell">
-                      <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
+                      <input v-model="deliverdata.delivercode" type="number" class="input"placeholder="运单号" />
                     </div>
                     <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                       <i class="al al-scanning color-blue"></i>
