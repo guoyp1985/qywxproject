@@ -32,7 +32,7 @@
                     <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid}}">联系卖家</router-link>
                   </div>
                   <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yishiyong11"></div>
+                    <div class="al al-yiguoqi4"></div>
                   </div>
                 </div>
               </div>
