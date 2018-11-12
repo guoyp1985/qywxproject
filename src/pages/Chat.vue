@@ -6,23 +6,21 @@
 <template>
   <div id="chat-room" class="font14" style="width:100%;heiht:100%;overflow:hidden;position:relative;">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <template v-if="retailerInfo.uid && showTip">
-        <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
-          <div class="flex_left" style="width:70px;">
-            <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+      <router-link v-if="retailerInfo.uid && showTip" class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
+        <div class="flex_left" style="width:70px;">
+          <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        </div>
+        <div class="flex_cell flex_left">
+          <div class="w_100">
+            <div class="clamp2">{{ retailerInfo.title }}</div>
+            <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
           </div>
-          <div class="flex_cell flex_left">
-            <div class="w_100">
-              <div class="clamp2">{{ retailerInfo.title }}</div>
-              <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
-            </div>
-          </div>
-          <div class="flex_right" style="width:80px;">
-            <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
-          </div>
-        </router-link>
-      </template>
-      <scroller id="chat-scoller" style="border:red 1px solid;box-sizing:border-box;" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+        </div>
+        <div class="flex_right" style="width:80px;">
+          <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
+        </div>
+      </router-link>
+      <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
           <template v-for="(item,index) in messages">
