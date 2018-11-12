@@ -391,7 +391,7 @@ export default {
     uploadPhoto (refname, type) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      if (self.$util.isAndroid() || self.$util.isPC() || type === 'video') {
+      if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
