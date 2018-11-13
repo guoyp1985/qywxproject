@@ -363,13 +363,13 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      this.isUserTouch = false
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
+      this.isUserTouch = false
       this.setScrollToBottom()
     },
     onBlur () {
@@ -387,6 +387,8 @@ export default {
       } else {
         this.checkRecordApi()
         this.showVoiceCom = true
+        this.isUserTouch = false
+        this.setScrollToBottom()
       }
     },
     toggleEmotion () {
@@ -399,6 +401,8 @@ export default {
           self.showFeatureBox = false
         }
         self.showEmotBox = true
+        self.isUserTouch = false
+        self.setScrollToBottom()
       }, 200)
     },
     toggleKeyboard () {
