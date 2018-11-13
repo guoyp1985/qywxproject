@@ -428,6 +428,7 @@ export default {
     setViewHeight () {
       this.$nextTick(() => {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        console.log(clientH)
         if (this.retailerInfo.uid && this.showTip) {
           clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
         }
