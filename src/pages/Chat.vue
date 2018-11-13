@@ -426,8 +426,8 @@ export default {
       }
       if (!this.showFeatureBox) {
         this.showFeatureBox = true
-        self.isUserTouch = false
-        self.setScrollToBottom()
+        this.isUserTouch = false
+        this.setScrollToBottom()
       } else {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
