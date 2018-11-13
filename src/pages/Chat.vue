@@ -384,9 +384,9 @@ export default {
       if (this.showVoiceCom) {
         this.showVoiceCom = false
       } else {
+        this.setScrollToBottom(false)
         this.checkRecordApi()
         this.showVoiceCom = true
-        this.setScrollToBottom(false)
       }
     },
     toggleEmotion () {
