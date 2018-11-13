@@ -508,7 +508,8 @@ export default {
             onHide: function () {
               self.submitIng = false
               if (data.flag === 1) {
-                self.$router.push({ path: '/factoryAgentFee', query: { id: data.data, fid: self.query.fid, from: 'add' } })
+                // self.$router.push({ path: '/factoryAgentFee', query: { id: data.data, fid: self.query.fid, from: 'add' } })
+                self.$router.push({ path: '/factoryProduct', query: { id: data.data, fid: self.query.fid } })
               }
             }
           })
