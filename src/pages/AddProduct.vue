@@ -486,7 +486,7 @@ export default {
         }
         if (!isNaN(rebate)) {
           const maxRebate = (parseFloat(price) - parseFloat(price) * 0.11).toFixed(2)
-          if (rebate > maxRebate) {
+          if (parseFloat(rebate) > parseFloat(maxRebate)) {
             self.$vux.toast.text(`返点佣金应小于${maxRebate}元`, 'middle')
             return false
           }
