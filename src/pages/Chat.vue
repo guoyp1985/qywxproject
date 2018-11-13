@@ -373,6 +373,7 @@ export default {
     },
     onBlur () {
       clearInterval(intervalId)
+      this.setViewHeight()
     },
     toggleVoice () {
       if (this.showEmotBox) {
