@@ -370,6 +370,7 @@ export default {
       }, 200)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
+      this.setScrollToBottom()
     },
     onBlur () {
       clearInterval(intervalId)
