@@ -326,6 +326,7 @@ export default {
       // console.log(this.isUserTouch)
       this.showEmotBox = false
       this.showFeatureBox = false
+      this.setViewHeight()
     },
     isUserScroll () {
       console.log('in scroller')
@@ -363,14 +364,13 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      this.isUserTouch = false
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
-      this.setScrollToBottom()
+      this.setScrollToBottom(false)
     },
     onBlur () {
       clearInterval(intervalId)
@@ -388,6 +388,7 @@ export default {
         this.checkRecordApi()
         this.showVoiceCom = true
       }
+      this.setScrollToBottom(false)
     },
     toggleEmotion () {
       const self = this
@@ -399,6 +400,7 @@ export default {
           self.showFeatureBox = false
         }
         self.showEmotBox = true
+        self.setScrollToBottom(false)
       }, 200)
     },
     toggleKeyboard () {
@@ -422,6 +424,7 @@ export default {
       }
       if (!this.showFeatureBox) {
         this.showFeatureBox = true
+        this.setScrollToBottom(false)
       } else {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
@@ -748,7 +751,10 @@ export default {
         // this.$refs.scrollContainer.scrollTo(0, 0, false)
       })
     },
-    setScrollToBottom () {
+    setScrollToBottom (isTouch) {
+      this.isUserTouch = typeof isTouch !== 'undefined' ? isTouch : this.isUserTouch
+      console.log(isTouch)
+      console.log(this.isUserTouch)
       if (this.isUserTouch) return
       this.$nextTick(() => {
         const self = this
