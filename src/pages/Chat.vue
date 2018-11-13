@@ -363,12 +363,14 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      this.isUserTouch = false
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 200)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
+      this.setScrollToBottom()
     },
     onBlur () {
       clearInterval(intervalId)
@@ -426,15 +428,19 @@ export default {
       }
     },
     setViewHeight () {
+      const self = this
       this.$nextTick(() => {
-        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
-        if (this.retailerInfo.uid && this.showTip) {
-          clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
-        }
-        this.viewHeight = `${-clientH - 80}`
-        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-        console.log(this.viewHeight)
-        this.setScrollToBottom()
+        setTimeout(() => {
+          let clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          if (self.retailerInfo.uid && self.showTip) {
+            // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+            clientH += 80
+          }
+          self.viewHeight = `${-clientH}`
+          // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+          console.log(self.viewHeight)
+          self.setScrollToBottom()
+        }, this.$util.isAndroid() ? 200 : 0)
       })
     },
     clickMessageItem (item) {
@@ -509,7 +515,7 @@ export default {
     },
     sendPhoto () {
       const self = this
-      if (window.WeixinJSBridge && self.$util.isIOS()) {
+      if (window.WeixinJSBridge) {
         self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
