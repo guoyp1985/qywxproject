@@ -438,7 +438,7 @@ export default {
           // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
           console.log(self.viewHeight)
           self.setScrollToBottom()
-        }, 100)
+        }, this.$util.isAndroid() ? 200 : 0)
       })
     },
     clickMessageItem (item) {
