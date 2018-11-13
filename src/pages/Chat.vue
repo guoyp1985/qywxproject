@@ -752,6 +752,7 @@ export default {
     },
     setScrollToBottom (isTouch) {
       this.isUserTouch = typeof isTouch === 'undefined' ? isTouch : this.isUserTouch
+      console.log(this.isUserTouch)
       if (this.isUserTouch) return
       this.$nextTick(() => {
         const self = this
