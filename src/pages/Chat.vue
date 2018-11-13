@@ -430,10 +430,11 @@ export default {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
         console.log(clientH)
         if (this.retailerInfo.uid && this.showTip) {
-          clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+          // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+          clientH -= 80
         }
         console.log(clientH)
-        this.viewHeight = (-clientH - 80) + ''
+        this.viewHeight = `${-clientH}`
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         console.log(this.viewHeight)
         this.setScrollToBottom()
