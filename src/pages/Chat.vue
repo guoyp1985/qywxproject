@@ -326,6 +326,7 @@ export default {
       // console.log(this.isUserTouch)
       this.showEmotBox = false
       this.showFeatureBox = false
+      this.setViewHeight()
     },
     isUserScroll () {
       console.log('in scroller')
@@ -397,7 +398,6 @@ export default {
         }
         if (self.showFeatureBox) {
           self.showFeatureBox = false
-          self.setViewHeight()
         }
         self.showEmotBox = true
         self.setScrollToBottom(false)
@@ -406,11 +406,9 @@ export default {
     toggleKeyboard () {
       if (this.showEmotBox) {
         this.showEmotBox = false
-        this.setViewHeight()
       }
       if (this.showFeatureBox) {
         this.showFeatureBox = false
-        this.setViewHeight()
       }
       if (this.showVoiceCom) {
         this.showVoiceCom = false
@@ -423,7 +421,6 @@ export default {
       }
       if (this.showEmotBox) {
         this.showEmotBox = false
-        this.setViewHeight()
       }
       if (!this.showFeatureBox) {
         this.showFeatureBox = true
