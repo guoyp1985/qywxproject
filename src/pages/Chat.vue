@@ -426,18 +426,19 @@ export default {
       }
     },
     setViewHeight () {
+      const self = this
       this.$nextTick(() => {
-        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
-        console.log(clientH)
-        if (this.retailerInfo.uid && this.showTip) {
-          // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
-          clientH += 80
-        }
-        console.log(clientH)
-        this.viewHeight = `${-clientH}`
-        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-        console.log(this.viewHeight)
-        this.setScrollToBottom()
+        setTimeout(() => {
+          let clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          if (self.retailerInfo.uid && self.showTip) {
+            // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+            clientH += 80
+          }
+          self.viewHeight = `${-clientH}`
+          // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+          console.log(self.viewHeight)
+          self.setScrollToBottom()
+        }, 300)
       })
     },
     clickMessageItem (item) {
