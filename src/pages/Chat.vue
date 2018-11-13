@@ -363,6 +363,7 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      this.isUserTouch = false
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
