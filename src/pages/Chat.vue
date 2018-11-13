@@ -432,6 +432,7 @@ export default {
         if (this.retailerInfo.uid && this.showTip) {
           clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
         }
+        console.log(clientH)
         this.viewHeight = (-clientH - 80) + ''
         // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         console.log(this.viewHeight)
