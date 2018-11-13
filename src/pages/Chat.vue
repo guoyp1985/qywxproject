@@ -369,8 +369,7 @@ export default {
       }, 200)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
-      this.isUserTouch = false
-      this.setScrollToBottom()
+      this.setScrollToBottom(false)
     },
     onBlur () {
       clearInterval(intervalId)
@@ -387,8 +386,7 @@ export default {
       } else {
         this.checkRecordApi()
         this.showVoiceCom = true
-        this.isUserTouch = false
-        this.setScrollToBottom()
+        this.setScrollToBottom(false)
       }
     },
     toggleEmotion () {
@@ -401,8 +399,7 @@ export default {
           self.showFeatureBox = false
         }
         self.showEmotBox = true
-        self.isUserTouch = false
-        self.setScrollToBottom()
+        self.setScrollToBottom(false)
       }, 200)
     },
     toggleKeyboard () {
@@ -426,8 +423,7 @@ export default {
       }
       if (!this.showFeatureBox) {
         this.showFeatureBox = true
-        this.isUserTouch = false
-        this.setScrollToBottom()
+        this.setScrollToBottom(false)
       } else {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
@@ -754,7 +750,8 @@ export default {
         // this.$refs.scrollContainer.scrollTo(0, 0, false)
       })
     },
-    setScrollToBottom () {
+    setScrollToBottom (isTouch) {
+      this.isUserTouch = typeof isTouch === 'undefined' ? isTouch : this.isUserTouch
       if (this.isUserTouch) return
       this.$nextTick(() => {
         const self = this
