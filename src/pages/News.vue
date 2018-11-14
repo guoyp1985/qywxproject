@@ -487,6 +487,11 @@ export default {
               self.handleImg()
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
+                if (minibackurl.indexOf('?') > -1) {
+                  minibackurl = `${minibackurl}?id=${self.query.id}`
+                } else {
+                  minibackurl = `${minibackurl}&id=${self.query.id}`
+                }
                 self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
               }
             }
