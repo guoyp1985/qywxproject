@@ -481,6 +481,11 @@ export default {
                 if (data.flag === 1) {
                   if (self.query.minibackurl) {
                     let minibackurl = decodeURIComponent(self.query.minibackurl)
+                    if (minibackurl.indexOf('?') > -1) {
+                      minibackurl = `${minibackurl}&id=${data.data}`
+                    } else {
+                      minibackurl = `${minibackurl}?id=${data.data}`
+                    }
                     self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                   } else {
                     self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
