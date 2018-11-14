@@ -334,7 +334,7 @@ export default {
                       let minibackurl = decodeURIComponent(self.query.minibackurl)
                       self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                     } else {
-                      self.$router.push({path: '/news', query: {id: data.data.id}})
+                      self.$router.push({path: '/news', query: {id: data.data.id, control: 'edit'}})
                     }
                   }
                 }
@@ -378,12 +378,13 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 self.collecturl = ''
+                let queryParmas = {id: data.data.id, control: 'edit'}
+                // let minibackurl = decodeURIComponent(self.query.minibackurl)
+                // self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                 if (self.query.minibackurl) {
-                  let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                } else {
-                  self.$router.push({path: '/news', query: {id: data.data.id}})
+                  queryParmas.minibackurl = self.query.minibackurl
                 }
+                self.$router.push({path: '/news', query: queryParmas})
               }
             }
           })
