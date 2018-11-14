@@ -482,9 +482,9 @@ export default {
                   if (self.query.minibackurl) {
                     let minibackurl = decodeURIComponent(self.query.minibackurl)
                     if (minibackurl.indexOf('?') > -1) {
-                      minibackurl = `${minibackurl}&id=${data.data}`
+                      minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}`
                     } else {
-                      minibackurl = `${minibackurl}?id=${data.data}`
+                      minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}`
                     }
                     self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
                   } else {
