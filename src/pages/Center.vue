@@ -118,6 +118,14 @@ let featureBtns = [
 ]
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {
   featureBtns.push({
+    name: 'Admin Manage',
+    icon: 'al-set',
+    color: 'rgba06',
+    react: function () {
+      window.open(ENV.AdminUrl)
+    }
+  })
+  featureBtns.push({
     name: 'Exit',
     icon: 'al-tuichu3',
     color: 'rgba05',
