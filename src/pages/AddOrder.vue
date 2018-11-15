@@ -442,7 +442,12 @@ export default {
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
               total1 += parseFloat(info.special) * info.quantity
-              if (self.query.activityid || info.fid > 0) {
+              // if (self.query.activityid || info.fid > 0) {
+              //   self.allowCard = false
+              // } else {
+              //   self.allowCard = true
+              // }
+              if (info.fid > 0) {
                 self.allowCard = false
               } else {
                 self.allowCard = true
