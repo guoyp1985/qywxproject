@@ -4,7 +4,7 @@
       <div class="t-table">
         <div class="t-cell title-cell w80 v_middle">用户ID<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
         <div class="t-cell input-cell v_middle">
-          <input v-model="uids" type="number" class="input" placeholder="用户ID,英文逗号隔开" />
+          <input v-model="uids" type="text" class="input" placeholder="用户ID,英文逗号隔开" />
         </div>
       </div>
     </div>
