@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 havetoptab bg-page ractivitylist">
+  <div class="containerarea font14 havetoptab bg-page ractivitylist" :style="`height:${viewHeight}px;`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -172,12 +172,13 @@ import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } f
 import CreateActivity from '@/components/CreateActivity'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
 const limit = 10
 let pageStart1 = 0
+const aHeight = AdapterHeight.get()
 
 export default {
   directives: {
@@ -202,7 +203,8 @@ export default {
       tabmodel: 0,
       tabdata1: [],
       isFirst: true,
-      activityCount: 0
+      activityCount: 0,
+      viewHeight: '100%' // '-52'
     }
   },
   watch: {
@@ -337,6 +339,7 @@ export default {
     this.init()
   },
   activated () {
+    this.viewHeight = document.body.clientHeight - aHeight
     this.refresh()
     this.$util.miniPost()
   }

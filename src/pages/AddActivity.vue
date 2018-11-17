@@ -169,7 +169,7 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      viewHeight: `${-(aHeight)}` // '-52',
+      viewHeight: '100%' // '-52'
     }
   },
   watch: {
@@ -600,9 +600,7 @@ export default {
     }
   },
   activated () {
-    console.log('viewHeight')
-    this.viewHeight = document.body.clientHeight + parseInt(this.viewHeight)
-    console.log(this.viewHeight)
+    this.viewHeight = document.body.clientHeight - aHeight
     this.$util.miniPost()
     this.refresh()
   }
