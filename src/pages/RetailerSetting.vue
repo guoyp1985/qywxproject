@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14">
+  <div class="containerarea font14" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <template v-if="showSetting">
       <retailer-setting
@@ -27,8 +27,9 @@ import RetailerSetting from '@/components/RetailerSetting'
 import RetailerApply from '@/components/RetailerApply'
 import Subscribe from '@/components/Subscribe'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 
+const aHeight = AdapterHeight.get()
 export default {
   components: {
     RetailerSetting, RetailerApply, Subscribe
@@ -44,7 +45,9 @@ export default {
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
-      classData: []
+      classData: [],
+      viewHeight: '100%', // '-52'
+      popupBottom: '0'
     }
   },
   methods: {
@@ -135,6 +138,9 @@ export default {
     this.init()
   },
   activated () {
+    let disHeight = document.body.clientHeight - aHeight
+    this.viewHeight = `${disHeight}`
+    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh()
     this.$util.miniPost()
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 addproduct">
+  <div class="containerarea s-havebottom font14 addproduct" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -261,12 +261,13 @@
 <script>
 import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import OpenVip from '@/components/OpenVip'
 
+const aHeight = AdapterHeight.get()
 export default {
   components: {
     Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch
@@ -309,7 +310,9 @@ export default {
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       showRebate: false,
       classData: [],
-      submitIng: false
+      submitIng: false,
+      viewHeight: '100%', // '-52'
+      popupBottom: '0'
     }
   },
   watch: {
@@ -670,6 +673,9 @@ export default {
     this.init()
   },
   activated () {
+    let disHeight = document.body.clientHeight - aHeight
+    this.viewHeight = `${disHeight}`
+    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh()
     this.$util.miniPost()
   }
