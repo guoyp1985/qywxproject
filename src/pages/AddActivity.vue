@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`height:${viewHeight}px;`">
+  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">

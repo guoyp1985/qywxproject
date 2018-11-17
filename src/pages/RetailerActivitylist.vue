@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 havetoptab bg-page ractivitylist" :style="`height:${viewHeight}px;`">
+  <div class="containerarea font14 havetoptab bg-page ractivitylist" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -119,7 +119,7 @@
               </div>
             </div>
             <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd" :popupBottom="popupBottom"></create-activity>
+              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd" :popupBottom="popupBottom" :viewHeight="viewHeight"></create-activity>
             </template>
           </swiper-item>
         </swiper>
@@ -342,7 +342,8 @@ export default {
   activated () {
     let disHeight = document.body.clientHeight - aHeight
     this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? aHeight : 0
+    console.log(this.viewHeight)
+    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh()
     this.$util.miniPost()
   }

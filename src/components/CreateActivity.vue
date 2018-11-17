@@ -55,7 +55,7 @@
     </div>
     -->
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showgroupbuy" height="100%" :style="`bottom:${popupBottom}px;`">
+      <popup v-model="showgroupbuy" :style="`bottom:${popupBottom}px;height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
         <div class="popup1">
           <div class="popup-top">
             <div class="t-table h_100">
@@ -83,7 +83,7 @@
       </popup>
     </div>
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showbargainbuy" height="100%" :style="`bottom:${popupBottom}px;`">
+      <popup v-model="showbargainbuy" :style="`bottom:${popupBottom}px;height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
         <div class="popup1">
           <div class="popup-top flex_center">
             <div class="t-table h_100">
@@ -111,7 +111,7 @@
       </popup>
     </div>
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showdiscount" height="100%" :style="`bottom:${popupBottom}px;`">
+      <popup v-model="showdiscount" :style="`bottom:${popupBottom}px;height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
         <div class="popup1">
           <div class="popup-top flex_center">
             <div class="t-table h_100">
@@ -160,6 +160,10 @@ export default {
       default: {}
     },
     popupBottom: {
+      type: String,
+      default: '100%'
+    },
+    viewHeight: {
       type: String,
       default: '100%'
     }
