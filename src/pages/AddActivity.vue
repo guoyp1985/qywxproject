@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14 addActivity">
+  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`height:${viewHeight}px;`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -133,8 +133,9 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 
+const aHeight = AdapterHeight.get()
 export default {
   directives: {
     TransferDom
@@ -167,7 +168,8 @@ export default {
       searchword: '',
       searchresult: false,
       limit: 20,
-      pagestart1: 0
+      pagestart1: 0,
+      viewHeight: `${-(132 + aHeight)}` // '-52',
     }
   },
   watch: {
@@ -598,6 +600,9 @@ export default {
     }
   },
   activated () {
+    console.log('viewHeight')
+    this.viewHeight = document.body.clientHeight + parseInt(this.viewHeight)
+    console.log(this.viewHeight)
     this.$util.miniPost()
     this.refresh()
   }
