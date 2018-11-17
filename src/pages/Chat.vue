@@ -234,6 +234,8 @@ const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).
 let room = ''
 let minIdFlag = 0
 let intervalId = null
+const aHeight = AdapterHeight.get()
+
 export default {
   directives: {
     TransferDom
@@ -255,7 +257,7 @@ export default {
       hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: '-132', // '-52',
+      viewHeight: `${-(132 + aHeight)}`, // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -438,7 +440,7 @@ export default {
             // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
             clientH += 80
           }
-          self.viewHeight = `${-clientH}`
+          self.viewHeight = `${-(clientH + aHeight)}`
           // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
           console.log(self.viewHeight)
           self.setScrollToBottom()
@@ -976,13 +978,13 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = '-132'
+      this.viewHeight = `${-(132 + aHeight)}`
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      console.log(AdapterHeight.get())
+      console.log(aHeight)
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true
