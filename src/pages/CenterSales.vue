@@ -25,7 +25,7 @@
         </center-sales>
       </template>
       <template v-if="showApply">
-        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :viewHeight="viewHeight"></retailer-apply>
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
@@ -208,13 +208,13 @@ export default {
     }
   },
   activated () {
+    let disHeight = document.body.clientHeight - aHeight
+    this.viewHeight = `${disHeight}`
+    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh(this.$route.query)
     this.$util.miniPost()
   },
   beforeRouteUpdate (to, from, next) {
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh(to.query)
     next && next()
   }
