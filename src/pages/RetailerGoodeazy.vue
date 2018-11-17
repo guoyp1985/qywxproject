@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea font14 rgoodeazy bg-white ${query.from == 'miniprogram' ? '' : 's-havebottom'}`">
+  <div class="containerarea font14 rgoodeazy bg-white s-havebottom">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -106,7 +106,7 @@
           </swiper-item>
         </swiper>
       </div>
-      <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
+      <div class="s-bottom bottomnaviarea b_top_after">
         <div class="t-table bottomnavi">
           <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
