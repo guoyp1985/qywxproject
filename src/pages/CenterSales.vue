@@ -208,6 +208,7 @@ export default {
     }
   },
   activated () {
+    console.log(aHeight)
     let disHeight = document.body.clientHeight - aHeight
     this.viewHeight = `${disHeight}`
     this.popupBottom = aHeight ? `${aHeight}` : '0'

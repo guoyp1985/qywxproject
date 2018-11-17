@@ -1,5 +1,5 @@
 <template>
-  <div id="article-info-edit" class="font14 containerarea notop">
+  <div id="article-info-edit" class="font14 containerarea notop" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -87,11 +87,12 @@
 import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
+const aHeight = AdapterHeight.get()
 export default {
   components: {
     Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip
@@ -110,7 +111,9 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
       requireddata: { title: '', 'photo': '' },
-      submitIng: false
+      submitIng: false,
+      viewHeight: '100%', // '-52'
+      popupBottom: '0'
     }
   },
   computed: {
@@ -349,6 +352,9 @@ export default {
     }
   },
   activated () {
+    let disHeight = document.body.clientHeight - aHeight
+    this.viewHeight = `${disHeight}`
+    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.$util.miniPost()
     this.refresh()
   }
