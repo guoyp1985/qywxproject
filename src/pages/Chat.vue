@@ -326,7 +326,6 @@ export default {
       // console.log(this.isUserTouch)
       this.showEmotBox = false
       this.showFeatureBox = false
-      this.setViewHeight()
     },
     isUserScroll () {
       console.log('in scroller')
@@ -983,6 +982,7 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      console.log(this.query)
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true
