@@ -80,7 +80,7 @@
         </div>
       </scroller>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1">
+      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1" :style="{'bottom': `${bottomPos}px`}">
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -224,7 +224,7 @@ import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom
 import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
@@ -234,6 +234,8 @@ const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).
 let room = ''
 let minIdFlag = 0
 let intervalId = null
+const aHeight = AdapterHeight.get()
+
 export default {
   directives: {
     TransferDom
@@ -255,7 +257,7 @@ export default {
       hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: '-132', // '-52',
+      viewHeight: `${-(132 + aHeight)}`, // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -280,7 +282,8 @@ export default {
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
       allowChat: false,
-      retailerInfo: {}
+      retailerInfo: {},
+      bottomPos: aHeight
     }
   },
   filters: {
@@ -326,7 +329,6 @@ export default {
       // console.log(this.isUserTouch)
       this.showEmotBox = false
       this.showFeatureBox = false
-      this.setViewHeight()
     },
     isUserScroll () {
       console.log('in scroller')
@@ -439,7 +441,7 @@ export default {
             // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
             clientH += 80
           }
-          self.viewHeight = `${-clientH}`
+          self.viewHeight = `${-(clientH + aHeight)}`
           // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
           console.log(self.viewHeight)
           self.setScrollToBottom()
@@ -977,12 +979,13 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = '-132'
+      this.viewHeight = `${-(132 + aHeight)}`
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      console.log(aHeight)
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true
