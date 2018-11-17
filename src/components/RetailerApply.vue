@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-white retailerapply notop">
+  <div class="containerarea font14 bg-white retailerapply notop" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
           <div class="transition-top posi_r" style="width:100%;">
@@ -264,7 +264,11 @@ export default {
       type: Array,
       default: []
     },
-    afterApply: Function
+    afterApply: Function,
+    viewHeight: {
+      type: String,
+      default: '100%'
+    }
   },
   directives: {
     TransferDom

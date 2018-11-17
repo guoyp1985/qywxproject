@@ -25,7 +25,7 @@
         </center-sales>
       </template>
       <template v-if="showApply">
-        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :viewHeight="viewHeight"></retailer-apply>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
