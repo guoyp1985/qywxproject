@@ -1026,6 +1026,9 @@ export default {
   //   this.checkRecordApi()
   // },
   mounted () {
+    this.$wechat.miniProgram.getEnv(res => {
+      console.log(res)
+    })
     // console.log('mounted')
     // this.$util.wxPreviewImage('#chat-room')
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
