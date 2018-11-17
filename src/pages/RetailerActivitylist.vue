@@ -119,7 +119,7 @@
               </div>
             </div>
             <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd" :viewHeight="viewHeight"></create-activity>
+              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd" :popupBottom="popupBottom"></create-activity>
             </template>
           </swiper-item>
         </swiper>
@@ -204,7 +204,8 @@ export default {
       tabdata1: [],
       isFirst: true,
       activityCount: 0,
-      viewHeight: '100%' // '-52'
+      viewHeight: '100%', // '-52'
+      popupBottom: '0'
     }
   },
   watch: {
@@ -341,6 +342,7 @@ export default {
   activated () {
     let disHeight = document.body.clientHeight - aHeight
     this.viewHeight = `${disHeight}`
+    this.popupBottom = aHeight ? aHeight : 0
     this.refresh()
     this.$util.miniPost()
   }
