@@ -119,7 +119,7 @@
               </div>
             </div>
             <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
+              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd" :viewHeight="viewHeight"></create-activity>
             </template>
           </swiper-item>
         </swiper>
@@ -339,7 +339,8 @@ export default {
     this.init()
   },
   activated () {
-    this.viewHeight = document.body.clientHeight - aHeight
+    let disHeight = document.body.clientHeight - aHeight
+    this.viewHeight = `${disHeight}`
     this.refresh()
     this.$util.miniPost()
   }
