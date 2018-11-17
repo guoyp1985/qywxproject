@@ -224,7 +224,7 @@ import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom
 import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
@@ -982,7 +982,7 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      console.log(this.query)
+      console.log(AdapterHeight.get())
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true

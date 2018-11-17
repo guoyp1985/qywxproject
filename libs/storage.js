@@ -148,4 +148,14 @@ const MiniApp = {
   }
 }
 
-export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp }
+let __height = 0
+const AdapterHeight = {
+  set (height) {
+    __height = height
+  },
+  get () {
+    return __height
+  }
+}
+
+export { Token, OpenId, WxQrCode, User, Access, WxAccess, Roomid, Version, VoiceAccess, MiniApp, AdapterHeight }

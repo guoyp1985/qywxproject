@@ -10,7 +10,7 @@ import store from './store'
 // import './coms'
 import App from './App'
 import objectAssign from 'object-assign'
-import { User, Version, Token, Access } from '#/storage'
+import { User, Version, Token, Access, AdapterHeight } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
@@ -196,6 +196,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
+  const adapterHeight = parseInt(lUrl.query.adapterHeight)
   // const miniAppId = lUrl.query.miniappid
   // const miniOpenId = lUrl.query.miniopenid
   console.log(lUrl)
@@ -249,6 +250,9 @@ const access = success => {
     //   // location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
     //   location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     // } else
+    if (adapterHeight) { // 适配小程序web-view高度上的bug
+      AdapterHeight.set(adapterHeight)
+    }
     if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
       // console.log(`miniprogram: /user/show`)
