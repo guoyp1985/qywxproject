@@ -55,7 +55,7 @@
         <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
-        <popup v-model="showpopup" height="100%">
+        <popup v-model="showpopup" :style="`bottom:${popupBottom}px;height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
           <div class="popup1">
             <div class="popup-top flex_center">{{ $t('Select product') }}</div>
             <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
@@ -169,7 +169,8 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      viewHeight: '100%' // '-52'
+      viewHeight: '100%', // '-52'
+      popupBottom: '0'
     }
   },
   watch: {
@@ -602,7 +603,7 @@ export default {
   activated () {
     let disHeight = document.body.clientHeight - aHeight
     this.viewHeight = `${disHeight}`
-    console.log(this.viewHeight)
+    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.$util.miniPost()
     this.refresh()
   }
