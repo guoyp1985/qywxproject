@@ -169,7 +169,7 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      viewHeight: `${-(132 + aHeight)}` // '-52',
+      viewHeight: `${-(aHeight)}` // '-52',
     }
   },
   watch: {
