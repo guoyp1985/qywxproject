@@ -4,7 +4,7 @@
 			<div class="picarea">
 				<div class="pic">
           <slot name="photo"></slot>
-          <img v-if="data.allowcard && !data.activityid" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/>
+          <img v-if="data.allowcard" class="yhq" src="https://tossharingsales.boka.cn/minigxk/yhq.png"/>
 				</div>
 			</div>
 			<div class="desbox" style="overflow:hidden;">

@@ -90,9 +90,11 @@
       <popup class="menuwrap" v-model="showMenuArea">
         <div class="popup0">
           <div class="list">
+            <!--
             <div class="item">
               <div class="inner" @click="pushEvent">推送给返点客</div>
             </div>
+          -->
             <div class="item">
               <router-link class="inner" :to="{path: '/stat', query: {id: query.id,module:'news'}}">文章统计</router-link>
             </div>

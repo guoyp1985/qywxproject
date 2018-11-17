@@ -99,7 +99,7 @@
               <div class="form-item bg-white mt12">
                 <div class="t-table">
                   <div class="t-cell input-cell v_middle">
-                    <input v-model="testerWechatId" type="number" class="input" placeholder="体验者微信号" />
+                    <input v-model="testerWechatId" type="text" class="input" placeholder="体验者微信号" />
                   </div>
                 </div>
               </div>

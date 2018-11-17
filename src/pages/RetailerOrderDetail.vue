@@ -73,7 +73,7 @@
           </div>
           <div class="align_right padding10 flex_right" v-if="data.carddeduct > 0">
             <div>
-              <span class="v_middle">实际支付: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.paymoney }}</span>
+              <span class="v_middle">合计: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.paymoney }}</span>
               <span class="v_middle font12 color-gray">( 优惠券抵扣: {{ $t('RMB') }} {{ data.carddeduct }} )</span>
             </div>
           </div>
@@ -120,7 +120,7 @@
                   <div class="t-table">
                     <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
                     <div class="t-cell">
-                      <input v-model="deliverdata.delivercode" type="number" class="input"placeholder="运单号" />
+                      <input v-model="deliverdata.delivercode" type="text" class="input"placeholder="运单号" />
                     </div>
                     <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                       <i class="al al-scanning color-blue"></i>

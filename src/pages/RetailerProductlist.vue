@@ -169,7 +169,7 @@
                 <div class="t-table">
                   <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="postFee" type="number" class="input" :placeholder="$t('Rebate Commission')" />
+                    <input v-model="postFee" type="text" class="input" :placeholder="$t('Rebate Commission')" />
                   </div>
                 </div>
               </div>

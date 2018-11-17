@@ -3,14 +3,23 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-topbanner s-topbanner1">
+      <div class="s-topbanner s-topbanner1" style="height:99px;">
         <div class="row">
+          <search
+            class="v-search bg-white"
+            v-model='searchword1'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit1"
+            @on-change="onChange1"
+            @on-cancel="onCancel1"
+            ref="search">
+          </search>
           <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
             <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
           </tab>
         </div>
       </div>
-      <div class="s-container s-container1">
+      <div class="s-container s-container1" style="top:99px;">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
             <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
@@ -203,7 +212,7 @@
                   <div class="t-table">
                     <div class="t-cell w80">运单号<span class="al al-xing color-red font12" style="vertical-align: 3px;"></span></div>
                     <div class="t-cell">
-                      <input v-model="deliverdata.delivercode" type="number" class="input" placeholder="运单号" />
+                      <input v-model="deliverdata.delivercode" type="text" class="input" placeholder="运单号" />
                     </div>
                     <div class="t-cell align_right w50" style="position:relative;" @click="scanClick">
                       <i class="al al-scanning color-blue"></i>
@@ -229,7 +238,7 @@ My orders:
   zh-CN: 我的订单
 </i18n>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg, Search } from 'vux'
 import Orderitemplate from '@/components/Orderitemplate'
 import Orderproductplate from '@/components/Orderproductplate'
 import Time from '#/time'
@@ -243,7 +252,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Orderitemplate, Orderproductplate, XImg, Subscribe, ApplyTip, Search
   },
   filters: {
     dateformat: function (value) {
@@ -275,10 +284,21 @@ export default {
       deliveritem: null,
       deliverindex: 0,
       delivercompany: [],
-      deliverdata: { delivercompany: '-1', delivercode: '' }
+      deliverdata: { delivercompany: '-1', delivercode: '' },
+      autofixed: false,
+      searchword1: ''
     }
   },
   methods: {
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      this.searchword1 = ''
+    },
+    onSubmit1 () {
+      this.$router.push({path: '/RetailerOrderSearch', query: {keyword: this.searchword1}})
+    },
     handleScroll: function (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -287,20 +307,28 @@ export default {
         callback: function () {
           switch (self.selectedIndex) {
             case 0:
-              self.pagestart1++
-              self.getData1()
+              if (self.tabdata1.length === (self.pagestart1 + 1) * self.limit) {
+                self.pagestart1++
+                self.getData1()
+              }
               break
             case 1:
-              self.pagestart2++
-              self.getData2()
+              if (self.tabdata2.length === (self.pagestart2 + 1) * self.limit) {
+                self.pagestart2++
+                self.getData2()
+              }
               break
             case 2:
-              self.pagestart3++
-              self.getData3()
+              if (self.tabdata3.length === (self.pagestart3 + 1) * self.limit) {
+                self.pagestart3++
+                self.getData3()
+              }
               break
             case 3:
-              self.pagestart4++
-              self.getData4()
+              if (self.tabdata4.length === (self.pagestart4 + 1) * self.limit) {
+                self.pagestart4++
+                self.getData4()
+              }
               break
           }
         }

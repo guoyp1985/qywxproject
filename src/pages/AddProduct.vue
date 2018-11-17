@@ -81,7 +81,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="number" class="input priceInput" name="oriprice" placeholder="商品原价" />
+                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -90,7 +90,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.price" @keyup="priceChange('price')" type="number" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+                <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -119,7 +119,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.postage" @keyup="priceChange('postage')" type="number" class="input priceInput" name="postage" :placeholder="$t('Postage')" />
+                <input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -128,7 +128,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Rebate Commission') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="number" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
+                <input v-model="submitdata.rebate" @keyup="priceChange('rebate')" type="text" class="input rebateInput" name="rebate" :placeholder="$t('Goods sold to rebate user commission')" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>

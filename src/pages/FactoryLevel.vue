@@ -24,7 +24,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">销售额<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <input v-model="item.money" type="number" class="input" placeholder="销售额" />
+                  <input v-model="item.money" type="text" class="input" placeholder="销售额" />
                 </div>
               </div>
             </div>
