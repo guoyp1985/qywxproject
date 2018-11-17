@@ -80,7 +80,7 @@
         </div>
       </scroller>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1">
+      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1" :style="{'bottom': `${bottomPos}px`}">
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -282,7 +282,8 @@ export default {
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
       allowChat: false,
-      retailerInfo: {}
+      retailerInfo: {},
+      bottomPos: aHeight
     }
   },
   filters: {
