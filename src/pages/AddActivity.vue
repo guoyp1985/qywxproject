@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -600,7 +600,9 @@ export default {
     }
   },
   activated () {
-    this.viewHeight = document.body.clientHeight - aHeight
+    let disHeight = document.body.clientHeight - aHeight
+    this.viewHeight = `${disHeight}`
+    console.log(this.viewHeight)
     this.$util.miniPost()
     this.refresh()
   }

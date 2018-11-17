@@ -342,7 +342,6 @@ export default {
   activated () {
     let disHeight = document.body.clientHeight - aHeight
     this.viewHeight = `${disHeight}`
-    console.log(this.viewHeight)
     this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh()
     this.$util.miniPost()
