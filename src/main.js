@@ -335,7 +335,10 @@ const render = () => {
   new Vue({
     store,
     router,
-    render: h => h(App)
+    render: h => {
+      h(App)
+      alert(`BH:${document.body.clientHeight}`)
+    }
   }).$mount('#app-box')
 }
 
