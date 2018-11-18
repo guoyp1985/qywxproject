@@ -224,7 +224,7 @@ import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom
 import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
