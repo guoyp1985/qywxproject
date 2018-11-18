@@ -148,6 +148,9 @@ export default {
     }
   },
   created () {
+    const aHeight = AdapterHeight.get()
+    AdapterHeight.set(Math.abs(aHeight - document.body.clientHeight))
+    alert(`BH:${document.body.clientHeight}`)
     console.info('App Start Up')
     document.title = this.$t('tIndex')
     this.getData()
