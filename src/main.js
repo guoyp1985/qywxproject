@@ -251,8 +251,6 @@ const access = success => {
     //   location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     // } else
     if (miniHeight) { // 适配小程序web-view高度上的bug
-      // v.toast.show({text: `MH:${miniHeight} - BH:${document.body.clientHeight}`})
-      // alert(`MH:${miniHeight} - BH:${screen.availHeight}`)
       AdapterHeight.set(miniHeight)
     }
     if (token && token !== '') {
