@@ -252,7 +252,7 @@ const access = success => {
     // } else
     if (miniHeight) { // 适配小程序web-view高度上的bug
       // v.toast.show({text: `MH:${miniHeight} - BH:${document.body.clientHeight}`})
-      AdapterHeight.set(Math.abs(miniHeight - document.body.clientHeight))
+      AdapterHeight.set(Math.abs(miniHeight - screen.availHeight))
     }
     if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
@@ -330,9 +330,8 @@ const clearCache = () => {
   }
 }
 
-let v
 const render = () => {
-  v = new Vue({
+  new Vue({
     store,
     router,
     render: h => h(App)
