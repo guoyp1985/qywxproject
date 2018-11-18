@@ -284,7 +284,7 @@ export default {
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
       allowChat: false,
       retailerInfo: {},
-      bottomPos: aHeight
+      bottomPos: 0
     }
   },
   filters: {
@@ -988,7 +988,6 @@ export default {
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
-      console.log(aHeight)
       for (var i = 0; i < self.allowChatModule.length; i++) {
         if (this.query.fromModule === self.allowChatModule[i]) {
           self.allowChat = true

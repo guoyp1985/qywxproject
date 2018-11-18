@@ -196,7 +196,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
-  const miniHeight = parseInt(lUrl.query.miniHeight)
+  // const miniHeight = parseInt(lUrl.query.miniHeight)
   // const miniAppId = lUrl.query.miniappid
   // const miniOpenId = lUrl.query.miniopenid
   console.log(lUrl)
