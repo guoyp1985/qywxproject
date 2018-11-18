@@ -252,6 +252,7 @@ const access = success => {
     // } else
     if (miniHeight) { // 适配小程序web-view高度上的bug
       // v.toast.show({text: `MH:${miniHeight} - BH:${document.body.clientHeight}`})
+      alert(`MH:${miniHeight} - BH:${screen.availHeight}`)
       AdapterHeight.set(Math.abs(miniHeight - screen.availHeight))
     }
     if (token && token !== '') {
