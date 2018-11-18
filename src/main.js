@@ -196,7 +196,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
-  const adapterHeight = parseInt(lUrl.query.adapterHeight)
+  const miniHeight = parseInt(lUrl.query.miniHeight)
   // const miniAppId = lUrl.query.miniappid
   // const miniOpenId = lUrl.query.miniopenid
   console.log(lUrl)
@@ -250,8 +250,9 @@ const access = success => {
     //   // location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
     //   location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     // } else
-    if (adapterHeight) { // 适配小程序web-view高度上的bug
-      AdapterHeight.set(adapterHeight)
+    if (miniHeight) { // 适配小程序web-view高度上的bug
+      v.$vux.toast.show({text : `MH:${miniHeight} - BH:${document.body.clientHeight}`})
+      AdapterHeight.set(Math.abs(miniHeight - document.body.clientHeight))
     }
     if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
@@ -329,8 +330,9 @@ const clearCache = () => {
   }
 }
 
+let v
 const render = () => {
-  new Vue({
+  v = new Vue({
     store,
     router,
     render: h => h(App)
