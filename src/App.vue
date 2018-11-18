@@ -55,7 +55,7 @@ Center:
 <script>
 import { ViewBox, Loading, Tabbar, TabbarItem, TransferDom } from 'vux'
 import { mapState } from 'vuex'
-import { User } from '#/storage'
+import { User, AdapterHeight } from '#/storage'
 import ENV from 'env'
 
 export default {
