@@ -1026,6 +1026,7 @@ export default {
   //   this.checkRecordApi()
   // },
   mounted () {
+    alert(`BH:${document.body.clientHeight}`)
     // console.log('mounted')
     // this.$util.wxPreviewImage('#chat-room')
     // this.$refs.scrollContainer.scrollTop = this.$refs.scrollContent.clientHeight
