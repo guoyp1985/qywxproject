@@ -765,7 +765,7 @@ export default {
       document.getElementById('app').scrollTop = 1000000
       document.body.scrollTop = 1000000
       document.documentElement.scrollTop = 1000000
-      window.scroll(1000000)
+      window.scroll(0, 1000000)
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
