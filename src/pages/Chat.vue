@@ -297,16 +297,10 @@ export default {
   },
   watch: {
     showEmotBox () {
-      const self = this
-      setTimeout(() => {
-        self.setViewHeight()
-      }, this.$util.isAndroid() ? 200 : 0)
+      this.setViewHeight()
     },
     showFeatureBox () {
-      const self = this
-      setTimeout(() => {
-        self.setViewHeight()
-      }, this.$util.isAndroid() ? 200 : 0)
+      this.setViewHeight()
     }
   },
   methods: {
@@ -452,7 +446,7 @@ export default {
       }
     },
     setViewHeight () {
-      // if (this.$util.isAndroid())  return
+      if (this.$util.isAndroid()) return
       this.$nextTick(() => {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
         if (this.retailerInfo.uid && this.showTip) {
