@@ -433,7 +433,7 @@ export default {
       }
     },
     setViewHeight () {
-      if (this.$util.isAndroid()) return
+      // if (this.$util.isAndroid()) return
       this.$nextTick(() => {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
         if (this.retailerInfo.uid && this.showTip) {
