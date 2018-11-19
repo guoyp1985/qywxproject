@@ -297,10 +297,10 @@ export default {
   },
   watch: {
     showEmotBox () {
-      // this.setViewHeight()
+      this.setViewHeight()
     },
     showFeatureBox () {
-      // this.setViewHeight()
+      this.setViewHeight()
     }
   },
   methods: {
@@ -433,20 +433,18 @@ export default {
       }
     },
     setViewHeight () {
-      const self = this
+      if (this.$util.isAndroid()) return
       this.$nextTick(() => {
-        setTimeout(() => {
-          let clientH = parseInt(self.$refs.bottomArea.clientHeight)
-          if (self.retailerInfo.uid && self.showTip) {
-            // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
-            clientH += 80
-          }
-          self.viewHeight = `${-clientH}`
-          // self.viewHeight = `${-(clientH + aHeight)}`
-          // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-          console.log(self.viewHeight)
-          self.setScrollToBottom()
-        }, this.$util.isAndroid() ? 200 : 0)
+        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        if (this.retailerInfo.uid && this.showTip) {
+          // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+          this += 80
+        }
+        this.viewHeight = `${-clientH}`
+        // self.viewHeight = `${-(clientH + aHeight)}`
+        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        console.log(this.viewHeight)
+        this.setScrollToBottom()
       })
     },
     clickMessageItem (item) {
