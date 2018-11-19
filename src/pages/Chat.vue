@@ -367,11 +367,11 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      const globalContianer = document.getElementById('vux_view_box_body')
+      // const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-        globalContianer.scrollTop = globalContianer.scrollHeight
+        // globalContianer.scrollTop = globalContianer.scrollHeight
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
@@ -433,7 +433,7 @@ export default {
       }
     },
     setViewHeight () {
-      // if (this.$util.isAndroid()) return
+      if (this.$util.isAndroid()) return
       this.$nextTick(() => {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
         if (this.retailerInfo.uid && this.showTip) {
@@ -761,6 +761,8 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
+      const globalContianer = document.getElementById('vux_view_box_body')
+      globalContianer.scrollTop = globalContianer.scrollHeight
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
