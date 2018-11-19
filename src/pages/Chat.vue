@@ -1052,9 +1052,6 @@ export default {
   },
   activated () {
     this.$util.miniPost()
-    window.onresize = function () {
-      document.title = 'window resize'
-    }
     this.refresh()
   }
 }
