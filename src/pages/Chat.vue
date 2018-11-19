@@ -373,9 +373,9 @@ export default {
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
-      if (this.$util.isIOS()) {
-        this.setScrollToBottom(false)
-      }
+      // if (this.$util.isIOS()) {
+      this.setScrollToBottom(false)
+      // }
     },
     onBlur () {
       clearInterval(intervalId)
@@ -757,9 +757,10 @@ export default {
       console.log(isTouch)
       console.log(this.isUserTouch)
       if (this.isUserTouch) return
-      if (this.$util.isAndroid()) {
-        document.getElementById('chat-room').scrollTop = 1000000
-      }
+      // if (this.$util.isAndroid()) {
+      //   document.getElementById('chat-room').scrollTop = 1000000
+      //   document.body.scrollTop = document.body.scrollHeight
+      // }
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -768,6 +769,7 @@ export default {
             const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
+            document.body.scrollTop = document.body.scrollHeight
             // this.$refs.scrollContainer.scrollTo(0, top, false)
           }, 100)
         }
