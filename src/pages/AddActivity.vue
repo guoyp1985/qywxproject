@@ -466,8 +466,13 @@ export default {
           return false
         }
       }
+      let con = ''
+      if (self.selectproduct.allowcard) {
+        con = '该商品已经开启可使用优惠券功能，'
+      }
+      con = `${con}活动创建成功后，无法更改活动的相关信息，确定创建吗？`
       self.$vux.confirm.show({
-        content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+        content: con,
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
