@@ -374,7 +374,6 @@ export default {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
-          self.viewHeight = `-52`
           self.$refs.scrollContainer.reset({ top: 100000 })
         }
       }, 100)
