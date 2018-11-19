@@ -440,6 +440,9 @@ export default {
       if (!this.showFeatureBox) {
         this.showFeatureBox = true
         this.setScrollToBottom(false)
+        const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
+        const clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        this.$refs.scrollContainer.reset({ top: top + clientH })
       } else {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
