@@ -759,7 +759,7 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      document.scrollTop = document.scrollHeight
+      document.getElementById('app').scrollTop = document.getElementById('app').scrollHeight
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
