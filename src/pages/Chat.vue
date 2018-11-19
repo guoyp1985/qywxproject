@@ -374,7 +374,7 @@ export default {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
-          self.$refs.scrollContainer.reset({ top: 100000 })
+          self.$refs.scrollContainer.reset({ top: globalContianer.scrollHeight })
         }
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
