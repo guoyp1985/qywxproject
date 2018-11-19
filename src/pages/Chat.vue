@@ -300,13 +300,13 @@ export default {
       const self = this
       setTimeout(() => {
         self.setViewHeight()
-      }, this.$util.isAndroid ? 200 : 0)
+      }, this.$util.isAndroid() ? 200 : 0)
     },
     showFeatureBox () {
       const self = this
       setTimeout(() => {
         self.setViewHeight()
-      }, this.$util.isAndroid ? 200 : 0)
+      }, this.$util.isAndroid() ? 200 : 0)
     }
   },
   methods: {
