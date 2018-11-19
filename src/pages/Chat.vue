@@ -759,8 +759,10 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      document.getElementById('vux_view_box_body').scrollTop = document.getElementById('vux_view_box_body').scrollHeight
+      document.getElementById('vux_view_box_body').scrollTop = 1000000
       document.getElementById('chat-room').scrollTop = 1000000
+      document.getElementById('app').scrollTop = 1000000
+      document.body.scrollTop = document.body.scrollHeight
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
