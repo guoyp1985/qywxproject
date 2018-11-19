@@ -373,9 +373,7 @@ export default {
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
-      // if (this.$util.isIOS()) {
       this.setScrollToBottom(false)
-      // }
     },
     onBlur () {
       clearInterval(intervalId)
@@ -762,6 +760,7 @@ export default {
       //   document.body.scrollTop = document.body.scrollHeight
       // }
       this.$nextTick(() => {
+        document.body.scrollTop = document.body.scrollHeight
         const self = this
         if (this.$refs.scrollContent) {
           if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
@@ -769,7 +768,6 @@ export default {
             const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
-            document.body.scrollTop = document.body.scrollHeight
             // this.$refs.scrollContainer.scrollTo(0, top, false)
           }, 100)
         }
