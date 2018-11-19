@@ -375,7 +375,7 @@ export default {
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
           const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
-          const clientH = parseInt(this.$refs.bottomArea.clientHeight)
+          const clientH = parseInt(self.$refs.bottomArea.clientHeight)
           self.$refs.scrollContainer.reset({ top: top + clientH })
         }
       }, 100)
