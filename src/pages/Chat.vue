@@ -758,7 +758,7 @@ export default {
       console.log(this.isUserTouch)
       if (this.isUserTouch) return
       if (this.$util.isAndroid()) {
-        document.body.scrollTop = 10000000
+        this.$refs.scrollContainer.reset({ top: 100000000000 })
       }
       this.$nextTick(() => {
         const self = this
