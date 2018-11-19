@@ -376,7 +376,7 @@ export default {
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
-      setTimeout(() => {
+      setTimeout(function() {
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
           const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
