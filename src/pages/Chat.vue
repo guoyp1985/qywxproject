@@ -376,7 +376,9 @@ export default {
       this.setScrollToBottom(false)
     },
     onBlur () {
-      alert('blur')
+      if (this.$util.isAndroid()) {
+        this.setViewHeight()
+      }
       clearInterval(intervalId)
     },
     toggleVoice () {
