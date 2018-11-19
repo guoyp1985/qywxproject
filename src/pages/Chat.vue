@@ -759,10 +759,10 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      document.getElementById('vux_view_box_body').scrollTop = 1000000
-      document.getElementById('chat-room').scrollTop = 1000000
-      document.getElementById('app').scrollTop = 1000000
-      document.body.scrollTop = document.body.scrollHeight
+      // document.getElementById('vux_view_box_body').scrollTop = 1000000
+      // document.getElementById('chat-room').scrollTop = 1000000
+      // document.getElementById('app').scrollTop = 1000000
+      // document.body.scrollTop = document.body.scrollHeight
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -772,6 +772,9 @@ export default {
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
             // this.$refs.scrollContainer.scrollTo(0, top, false)
+            if (self.$util.isAndroid()) {
+               document.body.scrollTop = document.body.scrollHeight
+            }
           }, 100)
         }
       })
