@@ -373,12 +373,11 @@ export default {
       }, 200)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
-      this.setScrollToBottom(false)
+      if (this.$util.isIOS()) {
+        this.setScrollToBottom(false)
+      }
     },
     onBlur () {
-      if (this.$util.isAndroid()) {
-        this.setViewHeight()
-      }
       clearInterval(intervalId)
     },
     toggleVoice () {
@@ -397,17 +396,14 @@ export default {
       this.setScrollToBottom(false)
     },
     toggleEmotion () {
-      const self = this
-      setTimeout(function () {
-        if (self.showVoiceCom) {
-          self.showVoiceCom = false
-        }
-        if (self.showFeatureBox) {
-          self.showFeatureBox = false
-        }
-        self.showEmotBox = true
-        self.setScrollToBottom(false)
-      }, 200)
+      if (this.showVoiceCom) {
+        this.showVoiceCom = false
+      }
+      if (this.showFeatureBox) {
+        this.showFeatureBox = false
+      }
+      this.showEmotBox = true
+      this.setScrollToBottom(false)
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
