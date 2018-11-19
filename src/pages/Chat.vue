@@ -370,9 +370,9 @@ export default {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
-      intervalId = setInterval(function () {
-        document.body.scrollTop = document.body.scrollHeight
-      }, 100)
+      // intervalId = setInterval(function () {
+      //   document.body.scrollTop = document.body.scrollHeight
+      // }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
