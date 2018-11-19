@@ -756,15 +756,15 @@ export default {
       this.isUserTouch = typeof isTouch !== 'undefined' ? isTouch : this.isUserTouch
       console.log(isTouch)
       console.log(this.isUserTouch)
+      setTimeout(() => {
+        const globalContianer = document.getElementById('vux_view_box_body')
+        globalContianer.scrollTop = globalContianer.scrollHeight
+      }, 200)
       if (this.isUserTouch) return
       // if (this.$util.isAndroid()) {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      setTimeout(() => {
-        const globalContianer = document.getElementById('vux_view_box_body')
-        globalContianer.scrollTop = globalContianer.scrollHeight
-      }, 200)
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
