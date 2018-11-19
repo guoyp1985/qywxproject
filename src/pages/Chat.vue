@@ -370,17 +370,19 @@ export default {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
-      // intervalId = setInterval(function () {
-      //   document.body.scrollTop = document.body.scrollHeight
-      // }, 100)
+      intervalId = setInterval(function () {
+        document.body.scrollTop = document.body.scrollHeight
+      }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
-      if (this.$util.isAndroid()) {
-        globalContianer.scrollTop = globalContianer.scrollHeight
-        const top = this.$refs.scrollContent.clientHeight - this.$refs.scrollContainer.$el.clientHeight
-        this.$refs.scrollContainer.reset({ top: top + 52 })
-      }
+      setTimeout(() => {
+        if (self.$util.isAndroid()) {
+          globalContianer.scrollTop = globalContianer.scrollHeight
+          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          self.$refs.scrollContainer.reset({ top: top + 52 })
+        }
+      }, 100)
     },
     onBlur () {
       clearInterval(intervalId)
