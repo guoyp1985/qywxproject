@@ -297,10 +297,10 @@ export default {
   },
   watch: {
     showEmotBox () {
-      this.setViewHeight()
+      // this.setViewHeight()
     },
     showFeatureBox () {
-      this.setViewHeight()
+      // this.setViewHeight()
     }
   },
   methods: {
