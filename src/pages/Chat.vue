@@ -375,8 +375,8 @@ export default {
         // document.getElementById('chat-room').scrollTop = 1000000
         // document.getElementById('app').scrollTop = 1000000
         // document.body.scrollTop = 1000000
-        // document.documentElement.scrollTop = 1000000
-        window.scrollTo(0, 1000000)
+        document.documentElement.scrollTop = 1000000
+        // window.scrollTo(0, 1000000)
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
