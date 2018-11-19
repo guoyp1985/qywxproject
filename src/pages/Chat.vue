@@ -372,17 +372,22 @@ export default {
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-      }, 100)
-      let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
-      text.updateAutosize()
-      this.setScrollToBottom(false)
-      setTimeout(function() {
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
           const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
           self.$refs.scrollContainer.reset({ top: top + 52 })
         }
       }, 100)
+      let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
+      text.updateAutosize()
+      this.setScrollToBottom(false)
+      // setTimeout(function() {
+      //   if (self.$util.isAndroid()) {
+      //     globalContianer.scrollTop = globalContianer.scrollHeight
+      //     const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+      //     self.$refs.scrollContainer.reset({ top: top + 52 })
+      //   }
+      // }, 100)
     },
     onBlur () {
       clearInterval(intervalId)
