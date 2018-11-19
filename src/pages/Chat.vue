@@ -367,11 +367,14 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
-      // const globalContianer = document.getElementById('vux_view_box_body')
+      const self = this
+      const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-        // globalContianer.scrollTop = globalContianer.scrollHeight
+        if (self.$util.isAndroid()) {
+          globalContianer.scrollTop = globalContianer.scrollHeight
+        }
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
@@ -756,10 +759,6 @@ export default {
       this.isUserTouch = typeof isTouch !== 'undefined' ? isTouch : this.isUserTouch
       console.log(isTouch)
       console.log(this.isUserTouch)
-      setTimeout(() => {
-        const globalContianer = document.getElementById('vux_view_box_body')
-        globalContianer.scrollTop = globalContianer.scrollHeight
-      }, 200)
       if (this.isUserTouch) return
       // if (this.$util.isAndroid()) {
       //   document.getElementById('chat-room').scrollTop = 1000000
