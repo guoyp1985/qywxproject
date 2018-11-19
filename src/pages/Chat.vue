@@ -768,6 +768,9 @@ export default {
             // this.$refs.scrollContainer.scrollTo(0, top, false)
           }, 100)
         }
+        if (this.$util.isAndroid()) {
+          document.body.scrollTop = document.body.scrollHeight
+        }
       })
     },
     getNewsData () {
