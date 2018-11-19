@@ -375,6 +375,7 @@ export default {
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
           self.viewHeight = `-52`
+          self.$refs.scrollContainer.reset({ top: 100000 })
         }
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
