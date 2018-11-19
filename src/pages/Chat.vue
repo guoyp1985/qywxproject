@@ -367,13 +367,28 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      const self = this
+      const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
+        if (self.$util.isAndroid()) {
+          globalContianer.scrollTop = globalContianer.scrollHeight
+          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          const clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          self.$refs.scrollContainer.reset({ top: top + clientH })
+        }
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
+      // setTimeout(function() {
+      //   if (self.$util.isAndroid()) {
+      //     globalContianer.scrollTop = globalContianer.scrollHeight
+      //     const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+      //     self.$refs.scrollContainer.reset({ top: top + 52 })
+      //   }
+      // }, 100)
     },
     onBlur () {
       clearInterval(intervalId)
@@ -759,11 +774,6 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      document.getElementById('vux_view_box_body').scrollTop = 1000000
-      document.getElementById('chat-room').scrollTop = 1000000
-      document.getElementById('app').scrollTop = 1000000
-      document.body.scrollTop = 1000000
-      document.documentElement.scrollTop = 1000000
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
