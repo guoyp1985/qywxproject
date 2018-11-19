@@ -73,7 +73,7 @@
                     </div>
                   </template>
                   <template v-else>
-                    <div class="pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="checkboxclick(item,index)">
+                    <div class="pl12 pr12 pt10 pb10" :value.sync="item.checked">
                       <div class="t-table">
                         <div class="t-cell pic v_middle w45">
                           <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
@@ -370,8 +370,6 @@ export default {
       summoney: '0.00'
     }
   },
-  computed: {
-  },
   methods: {
     handleScroll (refname, index) {
       const self = this
@@ -408,7 +406,6 @@ export default {
         if (self.checkedAll) {
           for (let i = 0; i < retdata.length; i++) {
             retdata[i].checked = true
-            self.checkedData.push(retdata[i].id)
             self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(retdata[i].money.replace(/,/g, ''))).toFixed(2)
           }
         }
@@ -441,33 +438,6 @@ export default {
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
-    },
-    checkboxclick (d, index) {
-      const self = this
-      let curmoney = parseFloat(d.money.replace(/,/g, ''))
-      if (d.checked) {
-        self.checkedData.push(d.id)
-        self.totalPrice = (parseFloat(self.totalPrice) + curmoney).toFixed(2)
-      } else {
-        self.checkedAll = false
-        self.$util.deleteValue(self.checkedData, d.id)
-        self.totalPrice = (parseFloat(self.totalPrice) - curmoney).toFixed(2)
-      }
-    },
-    checkAllevent () {
-      const self = this
-      self.totalPrice = '0.00'
-      self.checkedData = []
-      for (let i = 0; i < self.tabdata1.length; i++) {
-        let d = self.tabdata1[i]
-        if (self.checkedAll) {
-          self.checkedData.push(d.id)
-          self.tabdata1[i].checked = true
-          self.totalPrice = (parseFloat(self.totalPrice) + parseFloat(d.money.replace(/,/g, ''))).toFixed(2)
-        } else {
-          delete self.tabdata1[i].checked
-        }
-      }
     },
     getcash () {
       const self = this
