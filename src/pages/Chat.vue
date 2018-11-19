@@ -370,7 +370,7 @@ export default {
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-      }, 200)
+      }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       if (this.$util.isIOS()) {
