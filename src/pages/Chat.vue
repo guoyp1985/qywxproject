@@ -759,13 +759,6 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      document.getElementById('vux_view_box_body').scrollTop = 1000000
-      document.getElementById('vux_view_box_body').parentNode.scrollTop = 1000000
-      document.getElementById('chat-room').scrollTop = 1000000
-      document.getElementById('app').scrollTop = 1000000
-      document.body.scrollTop = 1000000
-      document.documentElement.scrollTop = 1000000
-      window.scrollTo(0, 1000000)
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -778,6 +771,13 @@ export default {
             // if (self.$util.isAndroid()) {
             //    document.body.scrollTop = document.body.scrollHeight
             //    document.documentElement.scrollTop = document.documentElement.scrollHeight
+            document.getElementById('vux_view_box_body').scrollTop = 1000000
+            document.getElementById('vux_view_box_body').parentNode.scrollTop = 1000000
+            document.getElementById('chat-room').scrollTop = 1000000
+            document.getElementById('app').scrollTop = 1000000
+            document.body.scrollTop = 1000000
+            document.documentElement.scrollTop = 1000000
+            window.scrollTo(0, 1000000)
             // }
           }, 100)
         }
