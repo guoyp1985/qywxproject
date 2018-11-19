@@ -370,6 +370,13 @@ export default {
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
+        document.getElementById('vux_view_box_body').scrollTop = 1000000
+        document.getElementById('vux_view_box_body').parentNode.scrollTop = 1000000
+        document.getElementById('chat-room').scrollTop = 1000000
+        document.getElementById('app').scrollTop = 1000000
+        document.body.scrollTop = 1000000
+        document.documentElement.scrollTop = 1000000
+        window.scrollTo(0, 1000000)
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
@@ -771,13 +778,6 @@ export default {
             // if (self.$util.isAndroid()) {
             //    document.body.scrollTop = document.body.scrollHeight
             //    document.documentElement.scrollTop = document.documentElement.scrollHeight
-            document.getElementById('vux_view_box_body').scrollTop = 1000000
-            document.getElementById('vux_view_box_body').parentNode.scrollTop = 1000000
-            document.getElementById('chat-room').scrollTop = 1000000
-            document.getElementById('app').scrollTop = 1000000
-            document.body.scrollTop = 1000000
-            document.documentElement.scrollTop = 1000000
-            window.scrollTo(0, 1000000)
             // }
           }, 100)
         }
