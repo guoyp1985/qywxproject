@@ -761,8 +761,10 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      const globalContianer = document.getElementById('vux_view_box_body')
-      globalContianer.scrollTop = globalContianer.scrollHeight
+      setTimeout(() => {
+        const globalContianer = document.getElementById('vux_view_box_body')
+        globalContianer.scrollTop = globalContianer.scrollHeight
+      }, 200)
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
