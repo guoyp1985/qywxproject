@@ -297,10 +297,10 @@ export default {
   },
   watch: {
     showEmotBox () {
-      // this.setViewHeight()
+      this.setViewHeight()
     },
     showFeatureBox () {
-      // this.setViewHeight()
+      this.setViewHeight()
     }
   },
   methods: {
@@ -370,12 +370,10 @@ export default {
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-      }, 200)
+      }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
-      if (this.$util.isIOS()) {
-        this.setScrollToBottom(false)
-      }
+      this.setScrollToBottom(false)
     },
     onBlur () {
       clearInterval(intervalId)
@@ -433,20 +431,18 @@ export default {
       }
     },
     setViewHeight () {
-      const self = this
+      if (this.$util.isAndroid()) return
       this.$nextTick(() => {
-        setTimeout(() => {
-          let clientH = parseInt(self.$refs.bottomArea.clientHeight)
-          if (self.retailerInfo.uid && self.showTip) {
-            // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
-            clientH += 80
-          }
-          self.viewHeight = `${-clientH}`
-          // self.viewHeight = `${-(clientH + aHeight)}`
-          // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
-          console.log(self.viewHeight)
-          self.setScrollToBottom()
-        }, this.$util.isAndroid() ? 200 : 0)
+        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        if (this.retailerInfo.uid && this.showTip) {
+          // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+          clientH += 80
+        }
+        this.viewHeight = `${-clientH}`
+        // self.viewHeight = `${-(clientH + aHeight)}`
+        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        console.log(this.viewHeight)
+        this.setScrollToBottom()
       })
     },
     clickMessageItem (item) {
@@ -759,6 +755,14 @@ export default {
       console.log(isTouch)
       console.log(this.isUserTouch)
       if (this.isUserTouch) return
+      // if (this.$util.isAndroid()) {
+      //   document.getElementById('chat-room').scrollTop = 1000000
+      //   document.body.scrollTop = document.body.scrollHeight
+      // }
+      // document.getElementById('vux_view_box_body').scrollTop = 1000000
+      // document.getElementById('chat-room').scrollTop = 1000000
+      // document.getElementById('app').scrollTop = 1000000
+      // document.body.scrollTop = document.body.scrollHeight
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -768,6 +772,10 @@ export default {
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
             // this.$refs.scrollContainer.scrollTo(0, top, false)
+            if (self.$util.isAndroid()) {
+               document.body.scrollTop = document.body.scrollHeight
+               document.documentElement.scrollTop = document.documentElement.scrollHeight
+            }
           }, 100)
         }
       })
