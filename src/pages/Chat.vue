@@ -376,6 +376,7 @@ export default {
       this.setScrollToBottom(false)
     },
     onBlur () {
+      alert('blur')
       clearInterval(intervalId)
     },
     toggleVoice () {
