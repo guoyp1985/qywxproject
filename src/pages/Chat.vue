@@ -297,10 +297,16 @@ export default {
   },
   watch: {
     showEmotBox () {
-      this.setViewHeight()
+      const self = this
+      setTimeout(() => {
+        self.setViewHeight()
+      }, this.$util.isAndroid ? 200 : 0)
     },
     showFeatureBox () {
-      this.setViewHeight()
+      const self = this
+      setTimeout(() => {
+        self.setViewHeight()
+      }, this.$util.isAndroid ? 200 : 0)
     }
   },
   methods: {
