@@ -774,6 +774,7 @@ export default {
             // this.$refs.scrollContainer.scrollTo(0, top, false)
             if (self.$util.isAndroid()) {
                document.body.scrollTop = document.body.scrollHeight
+               document.documentElement.scrollTop = document.documentElement.scrollHeight
             }
           }, 100)
         }
