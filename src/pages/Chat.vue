@@ -367,16 +367,11 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-        document.getElementById('vux_view_box_body').scrollTop = 1000000
-        // document.getElementById('vux_view_box_body').parentNode.scrollTop = 1000000
-        // document.getElementById('chat-room').scrollTop = 1000000
-        // document.getElementById('app').scrollTop = 1000000
-        // document.body.scrollTop = 1000000
-        // document.documentElement.scrollTop = 1000000
-        // window.scrollTo(0, 1000000)
+        globalContianer.scrollTop = globalContianer.scrollHeight
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
