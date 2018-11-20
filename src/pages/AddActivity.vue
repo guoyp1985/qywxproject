@@ -171,7 +171,25 @@ export default {
       limit: 20,
       pagestart1: 0,
       viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      popupBottom: '0',
+      submitProductData: {
+        id: '',
+        classid: '0',
+        title: '',
+        price: '',
+        oriprice: '',
+        storage: '',
+        unit: '件',
+        postage: '0.00',
+        rebate: '',
+        photo: '',
+        content: '',
+        contentphoto: '',
+        seotitle: '',
+        seodescription: '',
+        video: '',
+        allowcard: false
+      }
     }
   },
   watch: {
@@ -335,6 +353,38 @@ export default {
     dateconfirm2 () {
       this.selectdatetxt2 = ''
     },
+    saveAjax () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              if (self.query.minibackurl) {
+                let minibackurl = decodeURIComponent(self.query.minibackurl)
+                if (minibackurl.indexOf('?') > -1) {
+                  minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+                } else {
+                  minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+                }
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              } else {
+                self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
+                if (self.query.type === 'bargainbuy') {
+                  self.$refs.formBargainbuy.minprice = ''
+                  self.$refs.formBargainbuy.everymin = ''
+                  self.$refs.formBargainbuy.everymax = ''
+                }
+              }
+            }
+          }
+        })
+      })
+    },
     saveData () {
       const self = this
       let validateData = []
@@ -467,46 +517,36 @@ export default {
           return false
         }
       }
-      let con = ''
       if (self.selectproduct.allowcard) {
-        con = '该商品已经开启可使用优惠券功能，'
-      }
-      con = `${con}活动创建成功后，无法更改活动的相关信息，确定创建吗？`
-      self.$vux.confirm.show({
-        content: con,
-        onConfirm () {
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  if (self.query.minibackurl) {
-                    let minibackurl = decodeURIComponent(self.query.minibackurl)
-                    if (minibackurl.indexOf('?') > -1) {
-                      minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
-                    } else {
-                      minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
-                    }
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                  } else {
-                    self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
-                    if (self.query.type === 'bargainbuy') {
-                      self.$refs.formBargainbuy.minprice = ''
-                      self.$refs.formBargainbuy.everymin = ''
-                      self.$refs.formBargainbuy.everymax = ''
-                    }
-                  }
-                }
-              }
+        self.$vux.confirm.show({
+          content: '该商品已经开启可使用优惠券功能，活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+          confirmText: '可以使用',
+          cancelText: '不可使用',
+          onCancel () {
+            self.selectproduct.allowcard = 0
+            self.$vux.loading.show()
+            let postData = {}
+            for (let key in self.submitProductData) {
+              postData[key] = self.selectproduct[key]
+            }
+            self.$http.post(`${ENV.BokaApi}/api/add/product`, postData).then(function (res) {
+              self.saveAjax()
             })
-          })
-        }
-      })
+          },
+          onConfirm () {
+            self.$vux.loading.show()
+            self.saveAjax()
+          }
+        })
+      } else {
+        self.$vux.confirm.show({
+          content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            self.saveAjax()
+          }
+        })
+      }
     },
     saveevent () {
       const self = this
