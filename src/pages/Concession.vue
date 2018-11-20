@@ -16,10 +16,12 @@
               <div v-else class="lists">
                 <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item item-list">
                   <div class="list">
-                    <div class="math">54785874</div>
-                    <div class="date">有效期至 2019年11月15日</div>
+                    <div class="math">{{item.code}}</div>
+                    <div class="date">生成时间: {{item.dateline | dateFormat}}</div>
                   </div>
-                  <div class="btncopy mt25 mr10">复制</div>
+                  <div class="btncopy mt25 mr10" @click="copyTxt(item)">复制
+                    <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                  </div>
                 </div>
               </div>
             </template>
@@ -75,7 +77,9 @@
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom } from 'vux'
 import ENV from 'env'
+import Time from '#/time'
 import { User } from '#/storage'
+import jQuery from 'jquery'
 
 const limit = 10
 let pageStart1 = 0
@@ -105,12 +109,45 @@ export default {
       quantity: ''
     }
   },
+  filters: {
+    dateFormat: function (dt) {
+      return new Time(dt * 1000).dateFormat('yyyy-MM-dd')
+    }
+  },
   methods: {
     btnshow () {
       this.showModal = true
     },
     btnclose () {
       this.showModal = false
+    },
+    copyTxt () {
+      const self = this
+      let eleobj = jQuery('.concession .copy_txt')[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
     },
     handleScroll: function (refname, index) {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
