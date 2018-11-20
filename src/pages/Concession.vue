@@ -31,11 +31,13 @@
               <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
               <div v-else class="lists">
                 <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item item-list">
-                  <div class="list">
-                    <div class="math">54785874</div>
-                    <div class="date">有效期至 2019年11月15日</div>
+                  <div class="pic flex_center" style="width:70px;">
+                    <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
                   </div>
-                  <div class="btncopy mt25 mr10">复制</div>
+                  <div class="list">
+                    <div class="math">{{item.code}}</div>
+                    <div class="date">使用时间: {{item.usedateline | dateFormat}}</div>
+                  </div>
                 </div>
               </div>
             </template>
