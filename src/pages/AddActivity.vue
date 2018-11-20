@@ -84,7 +84,8 @@
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{item.title}}</div>
-                      <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                      <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                      <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
                     </div>
                   </div>
                 </check-icon>
@@ -466,8 +467,13 @@ export default {
           return false
         }
       }
+      let con = ''
+      if (self.selectproduct.allowcard) {
+        con = '该商品已经开启可使用优惠券功能，'
+      }
+      con = `${con}活动创建成功后，无法更改活动的相关信息，确定创建吗？`
       self.$vux.confirm.show({
-        content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+        content: con,
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {

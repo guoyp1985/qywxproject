@@ -367,13 +367,28 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      const self = this
+      const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
+        if (self.$util.isAndroid()) {
+          globalContianer.scrollTop = globalContianer.scrollHeight
+          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          const clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          self.$refs.scrollContainer.reset({ top: top + clientH })
+        }
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
+      // setTimeout(function() {
+      //   if (self.$util.isAndroid()) {
+      //     globalContianer.scrollTop = globalContianer.scrollHeight
+      //     const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+      //     self.$refs.scrollContainer.reset({ top: top + 52 })
+      //   }
+      // }, 100)
     },
     onBlur () {
       clearInterval(intervalId)
@@ -436,7 +451,7 @@ export default {
         let clientH = parseInt(this.$refs.bottomArea.clientHeight)
         if (this.retailerInfo.uid && this.showTip) {
           // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
-          // this += 80
+          clientH += 80
         }
         this.viewHeight = `${-clientH}`
         // self.viewHeight = `${-(clientH + aHeight)}`
@@ -759,10 +774,6 @@ export default {
       //   document.getElementById('chat-room').scrollTop = 1000000
       //   document.body.scrollTop = document.body.scrollHeight
       // }
-      // document.getElementById('vux_view_box_body').scrollTop = 1000000
-      // document.getElementById('chat-room').scrollTop = 1000000
-      // document.getElementById('app').scrollTop = 1000000
-      // document.body.scrollTop = document.body.scrollHeight
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -772,10 +783,10 @@ export default {
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
             // this.$refs.scrollContainer.scrollTo(0, top, false)
-            if (self.$util.isAndroid()) {
-               document.body.scrollTop = document.body.scrollHeight
-               document.documentElement.scrollTop = document.documentElement.scrollHeight
-            }
+            // if (self.$util.isAndroid()) {
+            //    document.body.scrollTop = document.body.scrollHeight
+            //    document.documentElement.scrollTop = document.documentElement.scrollHeight
+            // }
           }, 100)
         }
       })

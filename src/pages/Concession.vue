@@ -3,7 +3,6 @@
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
-          <tab-item v-if="!tabdata1 || tabdata1.length == 0" :selected="true">创建活动</tab-item>
           <tab-item
             v-for="(item,index) in tabtxts"
             :selected="(query.from != 'miniprogram' && index == 0) || (query.from == 'miniprogram' && index == 1)"
@@ -31,15 +30,20 @@
                 <div class="font12 mt5 ml20"><span style="color:red;">*</span>每个优惠码100元，目前免费</div>
                 <div class="bom mt25">
                   <div class="close" @click="btnclose">取消</div>
-                  <div class="close" style="background-color:red;color:#fff;">立即生成</div>
+                  <div class="close color-white" style="background-color:#F85B52;">立即生成</div>
                 </div>
               </div>
               <div class="mceng" v-show="isShow"></div>
             </div>
             <template v-if="index == 1">
-              <div class="list">
-                <div class="math">54785874</div>
-                <div class="date">有效期至 2019年11月15日</div>
+              <div class="list-item">
+                <div class="inner">
+                  <img src="../assets/images/sren.jpg" />
+                </div>
+                <div class="used pt5">
+                  <span class="math">54785874</span>
+                  <div class="date">有效期至 2019年11月15日</div>
+                </div>
               </div>
             </template>
           </swiper-item>
@@ -50,13 +54,9 @@
 </template>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } from 'vux'
-import CreateActivity from '@/components/CreateActivity'
-import Time from '#/time'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom } from 'vux'
 import ENV from 'env'
 import { User, AdapterHeight } from '#/storage'
-import Subscribe from '@/components/Subscribe'
-import ApplyTip from '@/components/ApplyTip'
 
 const limit = 10
 let pageStart1 = 0
@@ -67,12 +67,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Confirm, Popup, XImg, CreateActivity, Subscribe, ApplyTip
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    }
+    Tab, TabItem, Swiper, SwiperItem
   },
   data () {
     return {
@@ -88,14 +83,9 @@ export default {
       activityCount: 0,
       viewHeight: '100%', // '-52'
       popupBottom: '0',
-      codeData: [{id: 1},{id: 2}],
+      codeData: [{id: 1}, {id: 2}],
       isShow: false,
       showModal: false
-    }
-  },
-  watch: {
-    tabdata1: function () {
-      return this.tabdata1
     }
   },
   methods: {
@@ -103,31 +93,9 @@ export default {
       this.isShow = true
       this.showModal = true
     },
-    btnclose() {
+    btnclose () {
       this.isShow = false
       this.showModal = false
-    },
-    clickAdd (type) {
-      if (this.loginUser.isretailer === 2 && this.activityCount >= 2) {
-        this.openVip()
-      } else {
-        let queryParams = {type: type, from: this.query.from}
-        if (this.query.minibackurl) {
-          queryParams.minibackurl = this.query.minibackurl
-        }
-        this.$router.push({path: '/addActivity', query: queryParams})
-      }
-    },
-    openVip () {
-      const self = this
-      self.$vux.confirm.show({
-        content: ENV.vipActivity,
-        cancelText: ENV.giveUpVipText,
-        confirmText: ENV.openVipText,
-        onConfirm () {
-          location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders`)
-        }
-      })
     },
     handleScroll () {
       const self = this
@@ -157,43 +125,6 @@ export default {
         }
       })
     },
-    stopevent (item, index) {
-      event.preventDefault()
-      const self = this
-      self.$vux.confirm.show({
-        content: '确定要停止吗？',
-        onConfirm () {
-          self.$http.post(`${ENV.BokaApi}/api/retailer/stopActivity`, { id: item.id }).then(function (res) {
-            let data = res.data
-            self.isShowLoading = false
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  self.tabdata1[index].isfinished = 1
-                }
-              }
-            })
-          })
-        }
-      })
-    },
-    getData () {
-      const self = this
-      this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
-        module: 'retailer', action: 'activitylist'
-      }).then(function () {
-        return self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
-      }).then(function (res) {
-        const data = res.data
-        self.retailerInfo = data.data ? data.data : data
-      })
-    },
-    init () {
-      this.$vux.loading.show()
-      this.getData()
-    },
     initContainer () {
       const self = this
       self.showApply = false
@@ -205,12 +136,6 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
@@ -229,9 +154,6 @@ export default {
       }
     }
   },
-  created () {
-    this.init()
-  },
   activated () {
     let disHeight = document.body.clientHeight - aHeight
     this.viewHeight = `${disHeight}`
@@ -243,42 +165,26 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.concession .ico{
-  position:absolute;left:0;top:0;width:96px;height:25px;line-height:25px;
-  background-color:#ff9f9f;color:#fff;text-align:center;font-size: 12px;
-  -webkit-transform: translate(-40px,-2px) rotate(-45deg);
-  transform: translate(-40px,-2px) rotate(-45deg);
-}
-.concession .finished.ico{background-color:#8a8a8a;}
-.concession .finished.ico:after{content:"已结束";}
-.concession .scroll_item{
-  padding-top:10px;
-  padding-bottom:10px;
-  position:relative;
-  overflow:hidden;
-}
-.concession .scroll_item .row{
-  display: -webkit-box;
-  position:relative;
-}
-.concession .x-toptab, .x-toptab.vux-tab-warp{
-  height: 44px;
-}
 .concession .item-list{width:100%;display:flex;flex-direction:row;background-color:#fff;border-bottom:1px solid #e5e5e5;}
 .concession .list{width:80%;padding:10px 10px;}
 .concession .list .math{font-weight:bold;}
 .concession .item-list .btncopy{
-  background-color:red;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
+  background-color:#F85B52;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
 }
 .concession .swiper-inner .generate{position: absolute;left: 0;right: 0;bottom: 0;}
 .concession .modal{
   width:70%;padding:15px 10px;border:1px solid #e5e5e5;margin:0 auto;background-color:#fff;text-align:center;
-  position:relative;z-index:9999;
+  position:relative;z-index:9999;border-radius:10px;
 }
 .concession .modal .txt1{text-align:center;border-bottom:1px solid #e5e5e5;}
-.concession .modal input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:20px;margin-right:5px;}
+.concession .modal input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:10px;margin-right:5px;}
 .concession .modal .bom{display:flex;flex-direction:row;}
-.concession .modal .close{width:100px;height:30px;background-color:#e5e5e5;text-align:center;line-height:30px;border-radius:10px;margin:0 auto;}
+.concession .modal .close{width:100px;height:30px;background-color:#e5e5e5;text-align:center;line-height:30px;border-radius:5px;margin:0 auto;}
+.concession .list-item{width:100%;padding:10px 10px;display:flex;flex-direction:row;background-color:#fff;border-bottom:1px solid #e5e5e5;}
+.concession .list-item .inner{width:60px;height:50px;}
+.concession .list-item .inner img{width:50px;height:100%;border-radius:50%;}
+.concession .list-item .used .date{color:#000000;}
+.concession .list-item .used .date{font-size:12px;color:#666666;}
 
 .concession .mceng{
   position:fixed;
