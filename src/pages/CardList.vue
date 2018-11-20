@@ -8,7 +8,7 @@
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -161,9 +161,6 @@ export default {
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
-    },
-    clickTab (index) {
-      this.swiperChange()
     },
     swiperChange (index) {
       const self = this
