@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 bg-page concession">
+  <div class="containerarea font14 bg-page concession s-havebottom">
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
@@ -233,6 +233,7 @@ export default {
                 self.disList1 = false
                 self.tabdata1 = []
                 pageStart1 = 0
+                self.getData1()
               }
             }
           })
