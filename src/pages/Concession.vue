@@ -72,7 +72,7 @@ import Time from '#/time'
 import { User } from '#/storage'
 import jQuery from 'jquery'
 
-const limit = 10
+const limit = 20
 let pageStart1 = 0
 let pageStart2 = 0
 let self = {}
@@ -221,7 +221,6 @@ export default {
       }).then(function (res) {
         const data = res.data
         self.$vux.loading.hide()
-        const retdata = data.data ? data.data : data
         if (data.flag === 2) {
           location.replace(`${ENV.Host}/#/pay?id=${data.orderid}`)
         } else {
@@ -230,7 +229,11 @@ export default {
             type: (data.flag !== 1 ? 'warn' : 'success'),
             time: self.$util.delay(data.error),
             onHide: function () {
-              self.tabdata1 = self.tabdata1.concat(retdata)
+              if (data.flag === 1) {
+                self.disList1 = false
+                self.tabdata1 = []
+                pageStart1 = 0
+              }
             }
           })
         }
