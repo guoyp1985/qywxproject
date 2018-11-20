@@ -89,7 +89,7 @@
         <div class="gridlist">
           <grid-item label="优惠码" :link="{path:`/concession?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
-              <i class="al al-zongshuju"></i>
+              <i class="al al-youhuima"></i>
             </div>
           </grid-item>
         </div>

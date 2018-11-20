@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 havetoptab bg-page concession">
+  <div class="containerarea font14 bg-page concession">
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
@@ -10,51 +10,40 @@
     <div class="s-container s-container1">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer" @scroll="handleScroll('scrollContainer1',index)">
+          <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="disList1">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
-              <div v-else class="lists">
-                <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item item-list">
-                  <div class="list">
-                    <div class="math">{{item.code}}</div>
-                    <div class="date">生成时间: {{item.dateline | dateFormat}}</div>
+              <div v-else class="scroll_list">
+                <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white flex_left">
+                  <div class="flex_cell padding10">
+                    <div class="bold">{{item.code}}</div>
+                    <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
                   </div>
-                  <div class="btncopy mt25 mr10" @click="copyTxt(item)">复制
-                    <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                  <div class="w100 flex_center">
+                    <div class="btncopy" @click="copyTxt(item)">复制
+                      <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.code }}</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </template>
           </div>
-          <div v-if="index === 1" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer2',index)">
+          <div v-if="index === 1" class="swiper-inner scroll-container1" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="disList2">
               <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
-              <div v-else class="lists">
-                <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item item-list">
+              <div v-else class="scroll_list">
+                <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white flex_left">
                   <div class="pic flex_center" style="width:70px;">
                     <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
                   </div>
-                  <div class="list">
-                    <div class="math">{{item.code}}</div>
-                    <div class="date">使用时间: {{item.usedateline | dateFormat}}</div>
+                  <div class="flex_cell padding10">
+                    <div class="bold">{{item.code}}</div>
+                    <div class="color-gray font12">使用时间: {{item.usedateline | dateFormat}}</div>
                   </div>
                 </div>
               </div>
             </template>
           </div>
-          <!--
-          <template v-if="index == 1">
-            <div class="list-item">
-              <div class="inner">
-                <img src="../assets/images/sren.jpg" />
-              </div>
-              <div class="used pt5">
-                <span class="math">54785874</span>
-                <div class="date">有效期至 2019年11月15日</div>
-              </div>
-            </div>
-          </template>
-        -->
         </swiper-item>
       </swiper>
     </div>
@@ -86,6 +75,7 @@ import jQuery from 'jquery'
 const limit = 10
 let pageStart1 = 0
 let pageStart2 = 0
+let self = {}
 
 export default {
   directives: {
@@ -124,7 +114,6 @@ export default {
       this.showModal = false
     },
     copyTxt () {
-      const self = this
       let eleobj = jQuery('.concession .copy_txt')[0]
       let range = null
       let save = function (e) {
@@ -174,7 +163,6 @@ export default {
       })
     },
     getData1 () {
-      const self = this
       let params = { pagestart: pageStart1, limit: limit, used: 0, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
@@ -187,7 +175,6 @@ export default {
       })
     },
     getData2 () {
-      const self = this
       let params = { pagestart: pageStart1, limit: limit, used: 1, fid: self.query.id }
       self.$http.get(`${ENV.BokaApi}/api/factory/listRetailerCode`, {
         params: params
@@ -202,8 +189,6 @@ export default {
     clickTab () {
     },
     swiperChange () {
-      console.log('in swiperChange')
-      const self = this
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < limit) {
@@ -224,7 +209,6 @@ export default {
       }
     },
     createCode () {
-      const self = this
       if (!self.quantity) {
         self.$vux.toast.text('请输入正确的数量', 'middle')
         return false
@@ -253,12 +237,10 @@ export default {
       })
     },
     initContainer () {
-      const self = this
       self.showApply = false
       self.showContainer = false
     },
     refresh () {
-      const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
@@ -282,6 +264,7 @@ export default {
     }
   },
   activated () {
+    self = this
     this.refresh()
     this.$util.miniPost()
   }
@@ -289,11 +272,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.concession .item-list{width:100%;display:flex;flex-direction:row;background-color:#fff;border-bottom:1px solid #e5e5e5;}
-.concession .list{width:80%;padding:10px 10px;}
-.concession .list .math{font-weight:bold;}
-.concession .item-list .btncopy{
-  background-color:#F85B52;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
+.concession .btncopy{
+  position:relative;background-color:#F85B52;color:#fff;width:60px;height:25px;text-align:center;line-height:25px;border-radius:20px;
 }
 .concession .modal{
   width:70%;padding:15px 10px;border:1px solid #e5e5e5;margin:0 auto;background-color:#fff;text-align:center;
@@ -303,12 +283,6 @@ export default {
 .concession .modal input{width:150px;height:25px;border:1px solid #e5e5e5;border-radius:5px;margin-left:10px;margin-right:5px;padding:5px;box-sizing: border-box;}
 .concession .modal .bom{display:flex;flex-direction:row;}
 .concession .modal .close{width:100px;height:30px;background-color:#e5e5e5;text-align:center;line-height:30px;border-radius:5px;margin:0 auto;}
-.concession .list-item{width:100%;padding:10px 10px;display:flex;flex-direction:row;background-color:#fff;border-bottom:1px solid #e5e5e5;}
-.concession .list-item .inner{width:60px;height:50px;}
-.concession .list-item .inner img{width:50px;height:100%;border-radius:50%;}
-.concession .list-item .used .date{color:#000000;}
-.concession .list-item .used .date{font-size:12px;color:#666666;}
-
 
 .concession .modal-layer{position:absolute;left:0;top:0;right:0;bottom:0;z-index:10;}
 .concession .modal-layer .mceng{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);overflow: hidden;}
