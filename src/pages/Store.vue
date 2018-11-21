@@ -309,9 +309,11 @@ export default {
     },
     handleScroll () {
       const self = this
+      const scrollarea = self.$refs['scrollContainer'][0] ? self.$refs['scrollContainer'][0] : self.$refs['scrollContainer']
       self.$util.scrollEvent({
-        element: self.$refs.scrollContainer,
+        element: scrollarea,
         callback: function () {
+          console.log('in 滚动事件到底部了')
           if (self.productdata.length === (pageStart + 1) * limit) {
             pageStart++
             self.$vux.loading.show()

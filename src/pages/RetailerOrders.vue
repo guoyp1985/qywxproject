@@ -297,7 +297,9 @@ export default {
       this.searchword1 = ''
     },
     onSubmit1 () {
-      this.$router.push({path: '/RetailerOrderSearch', query: {keyword: this.searchword1}})
+      const kw = this.searchword1
+      this.searchword1 = ''
+      this.$router.push({path: '/RetailerOrderSearch', query: {keyword: kw}})
     },
     handleScroll: function (refname, index) {
       const self = this

@@ -80,6 +80,14 @@
                   </div>
                 </div>
               </div>
+              <!--
+              <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
+                <div class="flex_cell pl10 flex_left">
+                  <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
+                </div>
+                <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
+              </div>
+            -->
             </template>
             <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
               <div v-if="disData2" class="scroll_list listarea">
@@ -275,10 +283,9 @@ export default {
       disData2: false,
       disData3: false,
       showpopup: false,
-      eventIng: false
+      eventIng: false,
+      summoney: '0.00'
     }
-  },
-  computed: {
   },
   methods: {
     handleScroll (refname, index) {
@@ -312,6 +319,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        self.summoney = data.summoney ? data.summoney : '0.00'
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.disData1 = true
       })
@@ -341,6 +349,37 @@ export default {
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
+    },
+    getcash () {
+      const self = this
+      if (!self.eventIng) {
+        self.eventIng = true
+        self.$vux.confirm.show({
+          content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
+          onCancel () {
+            self.eventIng = false
+          },
+          onConfirm () {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, {fid: self.loginUser.fid}).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.totalPrice = '0.00'
+                    self.tabdata1 = []
+                    self.summoney = '0.00'
+                  }
+                  self.eventIng = false
+                }
+              })
+            })
+          }
+        })
+      }
     },
     popupexplain () {
       this.showpopup = !this.showpopup

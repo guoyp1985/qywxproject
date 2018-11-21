@@ -607,6 +607,7 @@ export default {
       this.disBuyFriends = false
       this.disMore = false
       this.playVideo = false
+      this.startcss = 'start'
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)

@@ -57,6 +57,16 @@
             </div>
           </div>
         </div>
+        <!--
+        <div class="form-item required border1px border-box mb10">
+          <div class="t-table">
+            <div class="t-cell title-cell font14 v_middle">优惠码</div>
+            <div class="t-cell input-cell v_middle" style="position:relative;">
+              <input v-model="submitdata.code" required type="text" class="input" name="code" placeholder="优惠码" />
+            </div>
+          </div>
+        </div>
+      -->
         <div class="form-item required border1px border-box padding10" v-if="classData.length > 0 && classDataShow">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
           <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
