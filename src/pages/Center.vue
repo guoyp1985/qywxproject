@@ -254,11 +254,20 @@ export default {
               window.open(ENV.AdminUrl)
             }
           }
-          if (!Reg.rPlatfrom.test(navigator.userAgent)) {
-            let insertIndex = self.btns1.length - 1
-            self.btns1.splice(insertIndex, 0, btnData)
-          } else {
-            self.btns1.push(btnData)
+          let isAdd = true
+          for (let i = 0; i < self.btns1.length; i++) {
+            if (self.btns1[i].name === 'Admin Manage') {
+              isAdd = false
+              break
+            }
+          }
+          if (isAdd) {
+            if (!Reg.rPlatfrom.test(navigator.userAgent)) {
+              let insertIndex = self.btns1.length - 1
+              self.btns1.splice(insertIndex, 0, btnData)
+            } else {
+              self.btns1.push(btnData)
+            }
           }
         }
       })

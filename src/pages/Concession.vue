@@ -187,8 +187,12 @@ export default {
       })
     },
     clickTab () {
+      console.log('in clicktab')
     },
-    swiperChange () {
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < limit) {

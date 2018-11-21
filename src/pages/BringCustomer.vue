@@ -150,9 +150,10 @@ export default {
         self.distabdata2 = true
       })
     },
-    swiperChange () {
-      console.log('in swiperchange')
-      console.log(this.selectedIndex)
+    swiperChange (index) {
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           if (this.tabdata1.length < limit) {

@@ -86,6 +86,13 @@
             </div>
           </grid-item>
         </div>
+        <div class="gridlist">
+          <grid-item label="优惠码" :link="{path:`/concession?id=${factoryInfo.id}`}" style="position:relative;">
+            <div slot="icon">
+              <i class="al al-youhuima" style="font-size:30px;"></i>
+            </div>
+          </grid-item>
+        </div>
       </grid>
     </div>
     <group class="list-shadow02 order_list_show posi_r">
