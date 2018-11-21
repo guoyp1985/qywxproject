@@ -392,7 +392,7 @@ export default {
     },
     onBlur () {
       clearInterval(intervalId)
-      document.body.scrollTop = document.body.scrollHeight
+      // document.body.scrollTop = document.body.scrollHeight
     },
     toggleVoice () {
       if (this.showEmotBox) {
