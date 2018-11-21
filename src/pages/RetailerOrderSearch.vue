@@ -356,7 +356,7 @@ export default {
           this.$vux.loading.hide()
           this.showContainer = true
           this.query = this.$route.query
-          if (self.query.keyword && self.searchword1 === '') {
+          if (self.query.keyword) {
             self.searchword1 = self.query.keyword
           }
           if (!self.tabdata1.length) {
