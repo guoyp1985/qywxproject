@@ -391,7 +391,7 @@ export default {
       // }, 100)
     },
     onBlur () {
-      clearInterval(intervalId)
+      // clearInterval(intervalId)
       // document.body.scrollTop = document.body.scrollHeight
     },
     toggleVoice () {
