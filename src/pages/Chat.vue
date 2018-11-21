@@ -392,7 +392,7 @@ export default {
     },
     onBlur () {
       clearInterval(intervalId)
-      setTimeout(() => {
+      setTimeout(function () {
         document.body.scrollTop = document.body.scrollHeight
       }, 100)
     },
