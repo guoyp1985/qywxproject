@@ -370,15 +370,15 @@ export default {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
-      // intervalId = setInterval(function () {
-      //   document.body.scrollTop = document.body.scrollHeight
-      //   if (self.$util.isAndroid()) {
-      //     globalContianer.scrollTop = globalContianer.scrollHeight
-      //     const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
-      //     const clientH = parseInt(self.$refs.bottomArea.clientHeight)
-      //     self.$refs.scrollContainer.reset({ top: top + clientH })
-      //   }
-      // }, 100)
+      intervalId = setInterval(function () {
+        document.body.scrollTop = document.body.scrollHeight
+        if (self.$util.isAndroid()) {
+          globalContianer.scrollTop = globalContianer.scrollHeight
+          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          const clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          self.$refs.scrollContainer.reset({ top: top + clientH })
+        }
+      }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
@@ -391,10 +391,10 @@ export default {
       // }, 100)
     },
     onBlur () {
-      // clearInterval(intervalId)
-      // setTimeout(() => {
-      //   document.body.scrollTop = document.body.scrollHeight
-      // }, 100)
+      clearInterval(intervalId)
+      setTimeout(() => {
+        document.body.scrollTop = document.body.scrollHeight
+      }, 100)
     },
     toggleVoice () {
       if (this.showEmotBox) {
