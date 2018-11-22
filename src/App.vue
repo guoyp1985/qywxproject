@@ -130,7 +130,7 @@ export default {
         name = 'tIndex'
       }
       const title = this.$t(name)
-      return title || '$$'
+      return title || ''
     },
     getData () {
       const user = User.get()
