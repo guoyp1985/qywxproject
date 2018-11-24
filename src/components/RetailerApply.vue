@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item required" style="padding: 0px 0px 0 5px">
+        <div class="form-item required border1px" style="padding: 0px 0px 0 5px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
