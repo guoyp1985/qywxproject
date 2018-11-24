@@ -55,7 +55,7 @@
         <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
-        <popup v-model="showpopup">
+        <popup v-model="showpopup" height="100%">
           <div class="popup1">
             <div class="popup-top flex_center">{{ $t('Select product') }}</div>
             <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
