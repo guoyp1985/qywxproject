@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="containerarea font14 bg-white news notop nobottom" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -131,10 +131,9 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 import Socket from '#/socket'
 
-const aHeight = AdapterHeight.get()
 let room = ''
 let self = {}
 export default {
@@ -173,9 +172,7 @@ export default {
       replyData: null,
       messages: 0,
       showEditor: false,
-      showArticle: false,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      showArticle: false
     }
   },
   filters: {
@@ -629,9 +626,6 @@ export default {
   },
   activated () {
     self = this
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh(this.$route.query)
     this.$util.miniPost()
   }

@@ -1,5 +1,5 @@
 <template>
-  <div id="centersales" class="containerarea font14" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div id="centersales" class="containerarea font14">
     <template v-if="loginUser">
       <template v-if="afterApply">
         <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
@@ -41,9 +41,8 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 
-const aHeight = AdapterHeight.get()
 export default {
   components: {
     Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip
@@ -61,9 +60,7 @@ export default {
       classData: [],
       messages: 0,
       showVip: false,
-      allowVipFee: ENV.allowVipFee,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      allowVipFee: ENV.allowVipFee
     }
   },
   methods: {
@@ -208,10 +205,6 @@ export default {
     }
   },
   activated () {
-    console.log(aHeight)
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh(this.$route.query)
     this.$util.miniPost()
   },

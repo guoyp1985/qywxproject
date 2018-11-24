@@ -1,33 +1,34 @@
 <template>
-  <div class="containerarea font14 bg-white retailerapply notop">
+  <div class="containerarea font14 bg-white retailerapply notop nobottom">
     <div class="pagemiddle bg-white">
       <div class="flex_center bg-white posi_r" style="height:auto;">
-          <div class="transition-top posi_r" style="width:100%;">
-            <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
-            <div class="waveWrapper waveAnimation">
-              <div class="waveWrapperInner bgTop">
-                <div class="wave waveTop"></div>
-              </div>
-              <div class="waveWrapperInner bgMiddle">
-                <div class="wave waveMiddle"></div>
-              </div>
-              <div class="waveWrapperInner bgBottom">
-                <div class="wave waveBottom"></div>
-              </div>
+        <div class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
+        <div class="transition-top posi_r" style="width:100%;">
+          <img src="https://tossharingsales.boka.cn/images/banner_top.png" width="100%"/>
+          <div class="waveWrapper waveAnimation">
+            <div class="waveWrapperInner bgTop">
+              <div class="wave waveTop"></div>
+            </div>
+            <div class="waveWrapperInner bgMiddle">
+              <div class="wave waveMiddle"></div>
+            </div>
+            <div class="waveWrapperInner bgBottom">
+              <div class="wave waveBottom"></div>
             </div>
           </div>
-          <div class="posi_a logo">
-            <img src="https://tossharingsales.boka.cn/images/logo_red.png"/>
-          </div>
+        </div>
+        <div class="posi_a logo">
+          <img src="https://tossharingsales.boka.cn/images/logo_red.png"/>
+        </div>
       </div>
       <form class="applyform pr12 pl12 pt15">
-        <div v-if="shareUser.uid" class="form-item required border1px border-box mb10">
+        <div v-if="shareUser.uid" class="form-item required border1px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">推荐人</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">{{ shareUser.linkman }}</div>
           </div>
         </div>
-        <div class="form-item required border1px border-box mb10">
+        <div class="form-item required border1px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">真实姓名<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -35,7 +36,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box mb10" style="padding: 0px 0px 0 5px">
+        <div class="form-item required" style="padding: 0px 0px 0 5px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">手机号<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -49,7 +50,7 @@
             </div>
           </div>
         </div>
-        <div class="form-item required border1px border-box mb10">
+        <div class="form-item required border1px">
           <div class="t-table">
             <div class="t-cell title-cell w80 font14 v_middle">验证码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -58,7 +59,7 @@
           </div>
         </div>
         <!--
-        <div class="form-item required border1px border-box mb10">
+        <div class="form-item required border1px">
           <div class="t-table">
             <div class="t-cell title-cell font14 v_middle">优惠码</div>
             <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -67,7 +68,7 @@
           </div>
         </div>
       -->
-        <div class="form-item required border1px border-box padding10" v-if="classData.length > 0 && classDataShow">
+        <div class="form-item required border1px padding10" v-if="classData.length > 0 && classDataShow">
           <input v-model="submitdata.productclass" type="hidden" name="productclass" />
           <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
           <checker
@@ -80,26 +81,37 @@
             <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
           </checker>
         </div>
+        <div class="form-item required padding0">
+          <div class="db-flex btnlist">
+            <div class="flex_cell flex_left">
+              <div :class="`btn border1px flex_center ${VIP1 ? 'active' : ''}`" @click="clickVIP1">
+                <div>
+                  <div>{{ $t('RMB') }}19.9</div>
+                  <div>7天VIP</div>
+                </div>
+              </div>
+            </div>
+            <div class="flex_cell flex_right">
+              <div :class="`btn border1px flex_center ${VIP2 ? 'active' : ''}`" @click="clickVIP2">
+                <div>
+                  <div><span class="txt1">{{ $t('RMB') }}99</span><span class="txt2">{{ $t('RMB') }}199</span></div>
+                  <div>12个月VIP</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="form-item padding10 font16">
           <div class="font0 align_center">
             <span class="font14 v_top">
               <check-icon class="blue color-gray2" :value.sync="isagree" @click.native.stop="clickagree">同意</check-icon>
-              <!--
-              <label class="qcheckbox1 font16 color-gray" style="width:33px;">
-                <input type="checkbox" @click="clickagree">同意
-                <i class="al"></i>
-              </label>
-            -->
             </span>
             <span class="font14 v_bottom" style="text-decoration: underline" @click="showpopup">卖家入驻协议</span>
           </div>
         </div>
       </form>
-    </div>
-    <div :class="`pagebottom flex_center pl12 pr12 list-shadow02 bg-white ${bottomcss}`" @click="submitevent">
-      <div class="flex_cell flex_center btn-bottom-red">
-        <div>马上免费入驻</div>
-        <del class="font12 pl10 price btn-bottom-red">原价:￥199/年</del>
+      <div :class="`pagebottom-area flex_center pl12 pr12 bg-white ${bottomcss}`" @click="submitevent">
+        <div class="flex_cell flex_center btn-bottom-red">马上入驻</div>
       </div>
     </div>
     <div v-transfer-dom class="x-popup">
@@ -237,7 +249,6 @@
         </div>
       </popup>
     </div>
-    <div class="profit-show-btn font12" @click="onProfitShow">了解卖家优势</div>
     <div class="profit-wraper" v-show="profitShow">
       <div class="profit-close-btn al" @click="onProfitClose"></div>
       <div class="profit-inner">
@@ -303,7 +314,10 @@ export default {
       // profits: ['·微信获客信手拈来', '·成交可能直观体现', '·沟通客户主动及时', '·销售过程信任传递', '·更多的人帮你销售'],
       profits: ['看过的用户都会成为你的潜在客户', '根据潜在客户行为自动计算成交概率', '即便不是微信好友也可直接联系'],
       profitShow: false,
-      classDataShow: false
+      classDataShow: false,
+      VIP1: false,
+      VIP2: true,
+      feetype: 'oneyear'
     }
   },
   watch: {
@@ -384,6 +398,16 @@ export default {
         self.allowsubmit = false
       }
     },
+    clickVIP1 () {
+      this.VIP1 = true
+      this.VIP2 = false
+      this.feetype = 'sevendays'
+    },
+    clickVIP2 () {
+      this.VIP1 = false
+      this.VIP2 = true
+      this.feetype = 'oneyear'
+    },
     showpopup () {
       this.isshowpopup = true
     },
@@ -424,6 +448,7 @@ export default {
         if (self.query.share_uid) {
           self.submitdata.share_uid = self.query.share_uid
         }
+        self.submitdata.feetype = self.feetype
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
@@ -432,15 +457,19 @@ export default {
           let data = res.data
           let curuser = data.data ? data.data : data
           User.set(curuser)
+          let error = '成功'
+          if (!applydata.flag) {
+            error = applydata.error
+          }
           self.$vux.toast.show({
-            text: applydata.error,
-            type: applydata.flag === 1 ? 'success' : 'warn',
-            time: self.$util.delay(applydata.error),
+            text: error,
+            type: !applydata.flag ? 'warn' : 'success',
+            time: self.$util.delay(error),
             onHide: function () {
-              if (applydata.orderid > 0) {
-                location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=payorders`)
-              } else if (applydata.flag === 1 || applydata.flag === 2) {
+              if (applydata.flag === 1) {
                 self.afterApply && self.afterApply()
+              } else if (applydata.flag === 2) {
+                location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`)
               } else {
                 self.$vux.loading.hide()
               }
@@ -463,11 +492,8 @@ export default {
 </script>
 
 <style>
-.price{
-  position:absolute;line-height:38px;left:65%;
-}
 .profit-show-btn{
-  position: fixed;
+  position: absolute;
   right: -10px;
   top: 40px;
   background-color: #fff;
@@ -554,9 +580,19 @@ export default {
 }
 .retailerapply .logo img{width:50%;display: block;}
 .retailerapply .x-input .weui-input{padding: 5px;font-size: 14px;}
-.retailerapply .form-item{padding:7px 5px;}
+.retailerapply .form-item{padding:7px 5px;box-sizing: border-box;}
+.retailerapply .applyform .form-item:not(:last-child){margin-bottom:10px;}
 .retailerapply .form-item:after{background-color:transparent;}
 .retailerapply .title-cell{width:75px;}
+.retailerapply .btnlist{}
+.retailerapply .btnlist .btn{width:95%;color:#999;padding-top:5px;padding-bottom:5px;}
+.retailerapply .btnlist .btn.active{
+  color:#ff4a00;
+  background: #ffffff url(../assets/images/checker.png) no-repeat right bottom;
+}
+.retailerapply .btnlist .btn.active:after{border-color:#ff4a00;}
+.retailerapply .btnlist .btn .txt1{}
+.retailerapply .btnlist .btn .txt2{color:#999;text-decoration: line-through;margin-left:5px;}
 .retailerapply .vux-x-input .weui-icon {padding-left: 0px;vertical-align: 3px;}
 .retailerapply .vux-input-icon.weui-icon-warn:before, .retailerapply .vux-input-icon.weui-icon-success:before {
     font-size: 14px;
@@ -585,7 +621,6 @@ export default {
 }
 .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 .retailerapply .vux-check-icon > span{color:#666;display: inline-block;vertical-align: bottom;line-height: 19px;}
-.retailerapply .pagemiddle{bottom:50px;}
 .retailerapply .pagebottom{background-color:#fff;height:50px;}
 .retailerapply .pagebottom .btn-bottom-red{background-color:#f2f2f2;color:#999;}
 .retailerapply .pagebottom.active .btn-bottom-red{background-color: #ea3a3a;color: #fff;}

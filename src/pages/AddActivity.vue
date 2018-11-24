@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea s-havebottom bg-white font14 addActivity">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -55,7 +55,7 @@
         <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
-        <popup v-model="showpopup" :style="`bottom:${popupBottom}px;height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+        <popup v-model="showpopup">
           <div class="popup1">
             <div class="popup-top flex_center">{{ $t('Select product') }}</div>
             <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
@@ -134,9 +134,8 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 
-const aHeight = AdapterHeight.get()
 export default {
   directives: {
     TransferDom
@@ -170,8 +169,6 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0',
       submitProductData: {
         id: '',
         classid: '0',
@@ -647,9 +644,6 @@ export default {
     }
   },
   activated () {
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.$util.miniPost()
     this.refresh()
   }

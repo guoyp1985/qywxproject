@@ -234,7 +234,6 @@ const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).
 let room = ''
 let minIdFlag = 0
 let intervalId = null
-// const aHeight = AdapterHeight.get()
 
 export default {
   directives: {
@@ -258,7 +257,6 @@ export default {
       query: {},
       messages: [],
       viewHeight: `${-132}`,
-      // viewHeight: `${-(132 + aHeight)}`, // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -457,8 +455,6 @@ export default {
           clientH += 80
         }
         this.viewHeight = `${-clientH}`
-        // self.viewHeight = `${-(clientH + aHeight)}`
-        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         console.log(this.viewHeight)
         this.setScrollToBottom()
       })
@@ -1002,7 +998,6 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      // this.viewHeight = `${-(132 + aHeight)}`
       this.viewHeight = `${-132}`
       this.isUserTouch = false
       this.hasNewMessage = false
