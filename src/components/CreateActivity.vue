@@ -55,7 +55,7 @@
     </div>
     -->
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showgroupbuy">
+      <popup v-model="showgroupbuy" height="100%">
         <div class="popup1">
           <div class="popup-top">
             <div class="t-table h_100">
@@ -83,7 +83,7 @@
       </popup>
     </div>
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showbargainbuy">
+      <popup v-model="showbargainbuy" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">
             <div class="t-table h_100">
@@ -111,7 +111,7 @@
       </popup>
     </div>
     <div v-transfer-dom class="x-popup">
-      <popup v-model="showdiscount">
+      <popup v-model="showdiscount" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">
             <div class="t-table h_100">
