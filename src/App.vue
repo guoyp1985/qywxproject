@@ -130,7 +130,7 @@ export default {
         name = 'tIndex'
       }
       const title = this.$t(name)
-      return title || ' '
+      return title || '加载中'
     },
     getData () {
       const user = User.get()
