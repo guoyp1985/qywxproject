@@ -469,7 +469,11 @@ export default {
               if (applydata.flag === 1) {
                 self.afterApply && self.afterApply()
               } else if (applydata.flag === 2) {
-                location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`)
+                if (self.query.from === 'miniprogram') {
+                  self.$wechat.miniProgram.reLaunch({url: `/packageB/pages/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`})
+                } else {
+                  location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`)
+                }
               } else {
                 self.$vux.loading.hide()
               }
