@@ -318,7 +318,7 @@ export default {
       VIP1: false,
       VIP2: true,
       feetype: 'oneyear',
-      AppName: '{{AppName}}'
+      AppName: '共销汇'
     }
   },
   watch: {
@@ -512,7 +512,7 @@ export default {
   text-align: center;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
-  z-index: 600;
+  z-index: 100;
   box-shadow: 0 0 3px 0 #c5aaaa;
 }
 .profit-wraper{
