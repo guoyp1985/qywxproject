@@ -470,7 +470,7 @@ export default {
                 self.afterApply && self.afterApply()
               } else if (applydata.flag === 2) {
                 if (self.query.from === 'miniprogram') {
-                  self.$wechat.miniProgram.reLaunch({url: `/packageB/pages/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`})
+                  self.$wechat.miniProgram.redirectTo({url: `/packageB/pages/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`})
                 } else {
                   location.replace(`${ENV.Host}/#/pay?id=${applydata.orderid}&module=${applydata.ordermodule}`)
                 }
