@@ -193,7 +193,19 @@ export default {
       this.$util.wxAccess()
     },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      console.log('in in in clickInsertProduct')
+      if (self.query.from === 'miniprogram' && self.query.producturl) {
+        let producturl = decodeURIComponent(self.query.producturl)
+        const params = self.$util.query(url)
+        if (producturl.indexOf('?') < 0) {
+          producturl = `${producturl}?`
+        } else {
+          producturl = `${producturl}&`
+        }
+        self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+      } else {
+        self.$router.push(url)
+      }
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -313,6 +325,7 @@ export default {
       })
     },
     clickProduct (event) {
+      console.log('进入点出商品事件')
       if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
         console.log('in news clickproduct')
         let node = event.target
@@ -328,6 +341,7 @@ export default {
           node = node.parentNode
         }
         if (linkurl) {
+          console.log(linkurl)
           if (self.query.from === 'miniprogram' && self.query.producturl) {
             let producturl = decodeURIComponent(self.query.producturl)
             const params = self.$util.query(linkurl)
