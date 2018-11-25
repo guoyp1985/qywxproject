@@ -31,7 +31,7 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
             <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
-              <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
+              <div @click="onStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
           <template v-if="showArticle">
@@ -584,9 +584,6 @@ export default {
           })
         }
       }
-    },
-    toStore () {
-      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     },
     createSocket () {
       const uid = this.loginUser.uid
