@@ -464,7 +464,11 @@ export default {
       }
     },
     onStore () {
-      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/store?wid=${this.retailerInfo.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      }
     },
     onShare () {
     },
