@@ -319,14 +319,14 @@ export default {
   methods: {
     toStore () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: this.query.storeurl})
+        this.$wechat.miniProgram.redirectTo({url: decodeURIComponent(this.query.storeurl)})
       } else {
         this.$router.push('/store')
       }
     },
     toNews () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: this.query.newsurl})
+        this.$wechat.miniProgram.redirectTo({url: decodeURIComponent(this.newsurl)})
       } else {
         this.$router.push('/store')
       }
