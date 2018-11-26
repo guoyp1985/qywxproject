@@ -454,7 +454,11 @@ export default {
           self.submitdata.share_uid = self.query.share_uid
         }
         self.submitdata.feetype = self.feetype
-        self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, self.submitdata).then(function (res) {
+        let postData = {...self.submitdata}
+        if (self.query.share_uid) {
+          postData.share_uid = self.query.share_uid
+        }
+        self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, postData).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)
         }).then(function (res) {
