@@ -57,7 +57,7 @@
                   </template>
                   <template v-else>
                     <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div>
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
@@ -149,7 +149,7 @@
                   </template>
                   <template v-else>
                     <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div>
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
@@ -317,7 +317,21 @@ export default {
     }
   },
   methods: {
-    handleScroll: function (refname, index) {
+    toStore () {
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: this.query.storeurl})
+      } else {
+        this.$router.push('/store')
+      }
+    },
+    toNews () {
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: this.query.newsurl})
+      } else {
+        this.$router.push('/store')
+      }
+    },
+    handleScroll (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
