@@ -86,7 +86,7 @@
             <div class="flex_cell flex_left">
               <div :class="`btn border1px flex_center ${VIP1 ? 'active' : ''}`" @click="clickVIP1">
                 <div>
-                  <div>{{ $t('RMB') }}19.9</div>
+                  <div>{{ $t('RMB') }}{{systemParams.retailer_apply_sevendays}}</div>
                   <div>7天VIP</div>
                 </div>
               </div>
@@ -94,7 +94,7 @@
             <div class="flex_cell flex_right">
               <div :class="`btn border1px flex_center ${VIP2 ? 'active' : ''}`" @click="clickVIP2">
                 <div>
-                  <div><span class="txt1">{{ $t('RMB') }}{{systemParams.retailer_apply_sevendays}}</span><span class="txt2">{{ $t('RMB') }}{{systemParams.retailer_apply_oneyear}}</span></div>
+                  <div><span class="txt1">{{ $t('RMB') }}{{systemParams.retailer_apply_oneyear}}</span><span class="txt2">{{ $t('RMB') }}199</span></div>
                   <div>12个月VIP</div>
                 </div>
               </div>
