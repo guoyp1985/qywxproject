@@ -94,7 +94,7 @@
             <div class="flex_cell flex_right">
               <div :class="`btn border1px flex_center ${VIP2 ? 'active' : ''}`" @click="clickVIP2">
                 <div>
-                  <div><span class="txt1">{{ $t('RMB') }}99</span><span class="txt2">{{ $t('RMB') }}199</span></div>
+                  <div><span class="txt1">{{ $t('RMB') }}{{systemParams.retailer_apply_sevendays}}</span><span class="txt2">{{ $t('RMB') }}{{systemParams.retailer_apply_oneyear}}</span></div>
                   <div>12个月VIP</div>
                 </div>
               </div>
@@ -278,6 +278,10 @@ export default {
   name: 'RetailerApply',
   props: {
     loginUser: {
+      type: Object,
+      default: {}
+    },
+    systemParams: {
       type: Object,
       default: {}
     },
