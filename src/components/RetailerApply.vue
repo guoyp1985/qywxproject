@@ -498,8 +498,8 @@ export default {
     if (self.query.fromappname) {
       self.AppName = self.query.fromappname
     }
-    if (self.query.share_uid) {
-      self.$http.get(`${ENV.BokaApi}/api/getUser/${self.query.share_uid}`).then(function (res) {
+    if (self.query.wid) {
+      self.$http.get(`${ENV.BokaApi}/api/getUser/${self.query.wid}`).then(function (res) {
         self.shareUser = res.data
       })
     }
