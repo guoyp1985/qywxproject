@@ -186,7 +186,8 @@ export default {
         seodescription: '',
         video: '',
         allowcard: false
-      }
+      },
+      selectProductIndex: -1
     }
   },
   watch: {
@@ -237,8 +238,10 @@ export default {
       const self = this
       if (data.checked) {
         self.selectpopupdata = data
+        self.selectProductIndex = index
       } else {
         self.selectpopupdata = null
+        self.selectProductIndex = -1
       }
       for (let d of self.productdata) {
         if (d.id !== data.id && d.checked) {
@@ -249,6 +252,14 @@ export default {
     },
     radiochange (val) {
       this.checkeduid = val
+    },
+    afterSelectProduct () {
+      const self = this
+      self.selectproduct = self.selectpopupdata
+      self.submitdata.productid = self.selectproduct.id
+      self.showpopup = false
+      self.showselectproduct = false
+      self.showproductitem = true
     },
     confirmpopup () {
       const self = this
@@ -261,21 +272,28 @@ export default {
       }
       if (this.selectpopupdata.allowcard) {
         self.$vux.confirm.show({
-          content: '该商品已经开启可使用优惠券功能，确定要选择该商品吗？',
+          content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
+          confirmText: '继续创建',
+          cancelText: '停用优惠券',
+          onCancel () {
+            self.selectpopupdata.allowcard = 0
+            self.$vux.loading.show()
+            let postData = {}
+            for (let key in self.submitProductData) {
+              postData[key] = self.selectproduct[key]
+            }
+            self.$http.post(`${ENV.BokaApi}/api/add/product`, postData).then(function (res) {
+              self.$vux.loading.hide()
+              self.productdata[self.selectProductIndex].allowcard = 0
+              self.afterSelectProduct()
+            })
+          },
           onConfirm () {
-            self.selectproduct = self.selectpopupdata
-            self.submitdata.productid = self.selectproduct.id
-            self.showpopup = false
-            self.showselectproduct = false
-            self.showproductitem = true
+            self.afterSelectProduct()
           }
         })
       } else {
-        self.selectproduct = self.selectpopupdata
-        self.submitdata.productid = self.selectproduct.id
-        self.showpopup = false
-        self.showselectproduct = false
-        self.showproductitem = true
+        self.afterSelectProduct()
       }
     },
     onChange (val) {
@@ -527,13 +545,36 @@ export default {
           return false
         }
       }
-      self.$vux.confirm.show({
-        content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
-        onConfirm () {
-          self.$vux.loading.show()
-          self.saveAjax()
-        }
-      })
+      if (self.selectproduct.allowcard) {
+        self.$vux.confirm.show({
+          content: '该商品已经开启可使用优惠券功能，活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+          confirmText: '可以使用',
+          cancelText: '不可使用',
+          onCancel () {
+            self.selectproduct.allowcard = 0
+            self.$vux.loading.show()
+            let postData = {}
+            for (let key in self.submitProductData) {
+              postData[key] = self.selectproduct[key]
+            }
+            self.$http.post(`${ENV.BokaApi}/api/add/product`, postData).then(function (res) {
+              self.saveAjax()
+            })
+          },
+          onConfirm () {
+            self.$vux.loading.show()
+            self.saveAjax()
+          }
+        })
+      } else {
+        self.$vux.confirm.show({
+          content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            self.saveAjax()
+          }
+        })
+      }
     },
     saveevent () {
       const self = this
