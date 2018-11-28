@@ -81,7 +81,7 @@
             <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
           </checker>
         </div>
-        <div class="form-item required padding0">
+        <!-- <div class="form-item required padding0">
           <div class="db-flex btnlist">
             <div class="flex_cell flex_left">
               <div :class="`btn border1px flex_center ${VIP1 ? 'active' : ''}`" @click="clickVIP1">
@@ -100,7 +100,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="form-item padding10 font16">
           <div class="font0 align_center">
             <span class="font14 v_top">
