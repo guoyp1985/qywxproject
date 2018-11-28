@@ -259,11 +259,24 @@ export default {
         })
         return false
       }
-      this.selectproduct = this.selectpopupdata
-      self.submitdata.productid = self.selectproduct.id
-      this.showpopup = false
-      this.showselectproduct = false
-      this.showproductitem = true
+      if (this.selectpopupdata.allowcard) {
+        self.$vux.confirm.show({
+          content: '该商品已经开启可使用优惠券功能，确定要选择该商品吗？',
+          onConfirm () {
+            self.selectproduct = self.selectpopupdata
+            self.submitdata.productid = self.selectproduct.id
+            self.showpopup = false
+            self.showselectproduct = false
+            self.showproductitem = true
+          }
+        })
+      } else {
+        self.selectproduct = self.selectpopupdata
+        self.submitdata.productid = self.selectproduct.id
+        self.showpopup = false
+        self.showselectproduct = false
+        self.showproductitem = true
+      }
     },
     onChange (val) {
       this.searchword = val
@@ -514,36 +527,13 @@ export default {
           return false
         }
       }
-      if (self.selectproduct.allowcard) {
-        self.$vux.confirm.show({
-          content: '该商品已经开启可使用优惠券功能，活动创建成功后，无法更改活动的相关信息，确定创建吗？',
-          confirmText: '可以使用',
-          cancelText: '不可使用',
-          onCancel () {
-            self.selectproduct.allowcard = 0
-            self.$vux.loading.show()
-            let postData = {}
-            for (let key in self.submitProductData) {
-              postData[key] = self.selectproduct[key]
-            }
-            self.$http.post(`${ENV.BokaApi}/api/add/product`, postData).then(function (res) {
-              self.saveAjax()
-            })
-          },
-          onConfirm () {
-            self.$vux.loading.show()
-            self.saveAjax()
-          }
-        })
-      } else {
-        self.$vux.confirm.show({
-          content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
-          onConfirm () {
-            self.$vux.loading.show()
-            self.saveAjax()
-          }
-        })
-      }
+      self.$vux.confirm.show({
+        content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.saveAjax()
+        }
+      })
     },
     saveevent () {
       const self = this
