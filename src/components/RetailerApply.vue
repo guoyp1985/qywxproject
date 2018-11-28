@@ -453,7 +453,7 @@ export default {
         if (self.query.share_uid) {
           self.submitdata.share_uid = self.query.share_uid
         }
-        self.submitdata.feetype = self.feetype
+        // self.submitdata.feetype = self.feetype
         let postData = {...self.submitdata}
         if (self.query.share_uid) {
           postData.share_uid = self.query.share_uid
