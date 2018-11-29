@@ -354,6 +354,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       tabtxts: [ '待提现', '待结算', '已提现' ],
       selectedIndex: 0,
       tabdata1: [],
@@ -450,7 +451,11 @@ export default {
           },
           onConfirm () {
             self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`).then(function (res) {
+            let postData = {}
+            if (self.query.from === 'miniprogram') {
+              postData.appid = self.query.appid
+            }
+            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({
@@ -515,6 +520,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.eventIng = false
       this.swiperChange()
     }
