@@ -599,7 +599,7 @@ export default {
 .retailerapply .form-item{padding:7px 5px;box-sizing: border-box;}
 .retailerapply .applyform .form-item:not(:last-child){margin-bottom:10px;}
 .retailerapply .form-item:after{background-color:transparent;}
-.retailerapply .title-cell{width:75px;}
+.retailerapply .title-cell{width:85px;}
 .retailerapply .btnlist{}
 .retailerapply .btnlist .btn{width:95%;color:#999;padding-top:5px;padding-bottom:5px;}
 .retailerapply .btnlist .btn.active{
