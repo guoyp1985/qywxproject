@@ -983,19 +983,16 @@ export default {
       })
     },
     toStore () {
-       if (this.query.from !== 'miniprogram') {
-         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
-       } else {
-         let storeurl = decodeURIComponent(this.query.storeurl)
-         this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
-       }
+      if (this.query.from !== 'miniprogram') {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      } else {
+        let storeurl = decodeURIComponent(this.query.storeurl)
+        this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
+      }
     },
     setContactUser () {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
-    // init () {
-    //   this.loginUser = User.get()
-    // },
     refresh () {
       const self = this
       room = ''
