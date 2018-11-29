@@ -14,7 +14,7 @@
         </tab>
       </div>
       <div class="s-container" style="top:44px">
-        <template v-if="!tabdata1 || tabdata1.length == 0">
+        <template v-if="!tabdata1 || tabdata1.length == 0 || query.from == 'miniprogram'">
           <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
         </template>
         <swiper v-else v-model="tabmodel" class="x-swiper no-indicator">
