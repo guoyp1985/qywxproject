@@ -983,11 +983,11 @@ export default {
       })
     },
     toStore () {
-      if (this.query.from !== 'miniprogram') {
-        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
-      } else {
+      if (this.query.storeurl) {
         let storeurl = decodeURIComponent(this.query.storeurl)
         this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       }
     },
     setContactUser () {
