@@ -6,7 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <router-link v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
+      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
@@ -19,7 +19,7 @@
         <div class="flex_right" style="width:80px;">
           <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
         </div>
-      </router-link>
+      </div>
       <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
@@ -981,6 +981,14 @@ export default {
           }
         }
       })
+    },
+    toStore () {
+       if (this.query.from !== 'miniprogram') {
+         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+       } else {
+         let storeurl = decodeURIComponent(this.query.storeurl)
+         this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
+       }
     },
     setContactUser () {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
