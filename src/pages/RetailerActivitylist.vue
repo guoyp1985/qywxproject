@@ -5,7 +5,7 @@
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
-          <tab-item v-if="!tabdata1 || tabdata1.length == 0" :selected="true">创建活动</tab-item>
+          <tab-item v-if="!tabdata1 || tabdata1.length == 0 || query.from == 'miniprogram'" :selected="true">创建活动</tab-item>
           <tab-item
             v-else
             v-for="(item,index) in tabtxts"
