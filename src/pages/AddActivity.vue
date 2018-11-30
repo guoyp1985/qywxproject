@@ -468,7 +468,7 @@ export default {
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(groupprice) || groupprice < 0) {
+        if (isNaN(groupprice) || groupprice <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的团购价格'
