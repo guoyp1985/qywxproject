@@ -5,7 +5,7 @@
     <Sos v-if="showSos" :title="sosTitle"></Sos>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
-        <div v-if="from == 'miniprogram'" class="v-top font16 color-white clamp1">{{ data.title }}</div>
+        <div v-if="query.from == 'miniprogram'" class="v-top font16 color-white clamp1">{{ data.title }}</div>
         <template v-else>
           <router-link v-if="module == 'activity' && data.type === 'groupbuy'" :to="{path: '/product', query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
           <router-link v-else :to="{path: `/${module}`, query: {id: query.id}}" class="v-top font16 color-white clamp1">{{ data.title }}</router-link>
