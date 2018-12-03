@@ -37,7 +37,7 @@
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -55,7 +55,7 @@
                       <div class="clamp1 color-gray">订单金额：{{$t('RMB')}}{{ item.special }}</div>
                       <div class="clamp1 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -73,7 +73,7 @@
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -91,7 +91,7 @@
                       <div class="clamp1">{{ item.content }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -109,7 +109,7 @@
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -127,7 +127,7 @@
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -145,7 +145,7 @@
                       <div class="color-gray">团员: {{ item.otherusers }}</div>
                       <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -162,7 +162,7 @@
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -183,7 +183,7 @@
                       </div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -200,7 +200,7 @@
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn9-contact">联系</router-link>
+                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
                 </div>
               </template>
@@ -450,6 +450,13 @@ export default {
           self.swiperChange()
         }
       })
+    },
+    toChat (item) {
+      let params = {uid: item.uid}
+      if (this.query.storeurl) {
+        params.storeurl = this.query.storeurl
+      }
+      this.$router.push({path: '/chat', query: params})
     },
     init () {
       this.$vux.loading.show()
