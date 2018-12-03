@@ -190,9 +190,9 @@ export default {
     toProduct (item) {
       console.log(item)
       console.log(this.query)
-      if (this.query.minibackurl !== '') {
-        const minibackurl = decodeURIComponent(this.query.minibackurl)
-        this.$wechat.miniProgram.reLaunch({url: `${minibackurl}?id=${item.pid}&wid=${item.wid}`})
+      if (this.query.producturl !== '') {
+        const producturl = decodeURIComponent(this.query.producturl)
+        this.$wechat.miniProgram.reLaunch({url: `${producturl}?id=${item.pid}&wid=${item.wid}`})
       } else {
         this.$router.push({
           path: '/product',
