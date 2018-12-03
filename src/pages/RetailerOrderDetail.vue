@@ -47,7 +47,7 @@
         </div>
         <div class="bg-white">
           <div class="scroll_list productlist color_gray appendarea">
-            <router-link v-for="(item,index) in data.orderlist" :key="item.id" :to="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
+            <div v-on:click="toProduct(item)" v-for="(item,index) in data.orderlist" :key="item.id" :data-product-url="{path: '/product', query: {id: item.pid, wid: data.wid}}" class="scroll_item db padding10 bg-gray4">
               <div class="t-table">
                 <div class="t-cell v_middle w60 algin_left">
                   <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:50px;height:50px;" />
@@ -60,7 +60,7 @@
                   <div class="color-gray">× <span class="font12">{{ item.quantity }}</span></div>
                 </div>
               </div>
-            </router-link>
+            </div>
           </div>
           <div class="align_right padding10 flex_right">
             <div>
@@ -187,6 +187,22 @@ export default {
   computed: {
   },
   methods: {
+    toProduct (item) {
+      console.log(item)
+      console.log(this.query)
+      if (this.query.minibackurl !== '') {
+        const minibackurl = decodeURIComponent(this.query.minibackurl)
+        this.$wechat.miniProgram.reLaunch({url: `${minibackurl}?id=${item.pid}&wid=${item.wid}`})
+      } else {
+        this.$router.push({
+          path: '/product',
+          query: {
+            id: item.pid,
+            wid: item.wid
+          }
+        })
+      }
+    },
     evaluate () {
       this.$router.push({name: 'evaluation', params: {order: this.order}})
     },
