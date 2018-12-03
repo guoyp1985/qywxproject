@@ -458,8 +458,8 @@ export default {
         if (self.query.share_uid) {
           postData.share_uid = self.query.share_uid
         }
-        if (self.query.appid) {
-          postData.appid = self.query.appid
+        if (self.query.comefrom) {
+          postData.comefrom = self.query.comefrom
         }
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, postData).then(function (res) {
           applydata = res.data
