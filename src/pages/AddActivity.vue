@@ -409,6 +409,7 @@ export default {
           }
         }
       )
+      iscontinue = true
       if (!iscontinue) {
         return false
       }
@@ -420,7 +421,7 @@ export default {
         let maxval = parseFloat(self.submitdata.param_everymax)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(minprice) || minprice < 0) {
+        if (isNaN(self.submitdata.param_minprice) || minprice < 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的活动价格'
@@ -434,7 +435,7 @@ export default {
           })
           return false
         }
-        if (isNaN(limitbuy)) {
+        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的投放总数'
@@ -448,7 +449,7 @@ export default {
           })
           return false
         }
-        if (isNaN(finishtime)) {
+        if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的砍价周期'
@@ -468,7 +469,7 @@ export default {
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(groupprice) || groupprice <= 0) {
+        if (isNaN(self.submitdata.param_groupprice) || groupprice <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的团购价格'
@@ -482,14 +483,14 @@ export default {
           })
           return false
         }
-        if (isNaN(numbers) || numbers <= 1) {
+        if (isNaN(self.submitdata.param_numbers) || numbers <= 1) {
           self.$vux.alert.show({
             title: '',
             content: '成团人数应大于1人'
           })
           return false
         }
-        if (isNaN(limitbuy)) {
+        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的投放总数'
@@ -510,14 +511,14 @@ export default {
           })
           return false
         }
-        if (isNaN(finishtime)) {
+        if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的成团时间'
           })
           return false
         }
-        if (isNaN(everybuy)) {
+        if (isNaN(self.submitdata.param_everybuy) || everybuy <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的限购件数'
