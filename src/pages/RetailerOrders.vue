@@ -78,7 +78,6 @@
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
-                  <div>{{query}}</div>
                 </div>
                 <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item" :minibackurl="query.minibackurl ? query.minibackurl : ''">
                   <span slot="orderno">{{ item.orderno }}</span>
@@ -122,7 +121,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :minibackurl="minibackurl">
+                <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :minibackurl="query.minibackurl ? query.minibackurl : ''">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
