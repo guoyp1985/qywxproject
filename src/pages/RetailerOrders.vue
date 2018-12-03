@@ -29,7 +29,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
+                <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :minibackurl="query.minibackurl ? query.minibackurl : ''">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -155,7 +155,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
+                <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" :minibackurl="query.minibackurl ? query.minibackurl : ''">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
