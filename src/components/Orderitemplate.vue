@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{path: orderLink, query: {id: data.id, minibackurl: minibackurl}}" class="bk-orderitem order-item scroll_item mb10 font14 db list-shadow">
+  <router-link :to="{path: orderLink, query: {id: data.id, producturl: producturl}}" class="bk-orderitem order-item scroll_item mb10 font14 db list-shadow">
     <div class="bg-white padding12 b_bottom_after font13 flex_center ">
         <div class="flex_cell color-lightgray"><!-- 创建时间：<slot name="createdate"></slot> -->
           {{ $t('Order Number')}}：<slot name="orderno"></slot>
@@ -22,7 +22,7 @@ export default {
       type: String,
       default: '/retailerOrderDetail'
     },
-    minibackurl: {
+    producturl: {
       type: String,
       default: ''
     }
