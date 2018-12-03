@@ -196,6 +196,7 @@ const access = success => {
   const code = lUrl.query.code
   const state = lUrl.query.state
   const from = lUrl.query.from
+  // const miniHeight = parseInt(lUrl.query.miniHeight)
   // const miniAppId = lUrl.query.miniappid
   // const miniOpenId = lUrl.query.miniopenid
   console.log(lUrl)
@@ -249,6 +250,9 @@ const access = success => {
     //   // location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess&miniappid=${miniAppId}&miniopenid=${miniOpenId}#wechat_redirect`)
     //   location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${originHref}&response_type=code&scope=snsapi_base&state=miniAccess#wechat_redirect`)
     // } else
+    // if (miniHeight) { // 适配小程序web-view高度上的bug
+    //   AdapterHeight.set(miniHeight)
+    // }
     if (token && token !== '') {
       Token.set({token: token, expired_at: expiredAt})
       // console.log(`miniprogram: /user/show`)

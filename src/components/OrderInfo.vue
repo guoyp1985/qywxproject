@@ -41,7 +41,7 @@
     </router-link>
     <div class="pay-info flex_right">
       <div class="clamp1 w_100">
-        <span class="v_middle font12">支付金额: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.paymoney}}</span>
+        <span class="v_middle font12">合计: </span><span class="v_middle font14">{{ $t('RMB') }}{{item.paymoney}}</span>
         <template v-if="item.postage && item.postage != ''">
           <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
           <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>

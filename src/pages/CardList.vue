@@ -8,7 +8,7 @@
     <div class="s-topbanner s-topbanner1">
       <div class="row">
         <tab v-model="selectedIndex" active-color="#ea3a3a" default-color="#666666">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index" @on-item-click="clickTab(index)">{{item}}</tab-item>
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
         </tab>
       </div>
     </div>
@@ -32,7 +32,7 @@
                     <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid}}">联系卖家</router-link>
                   </div>
                   <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yiguoqi1"></div>
+                    <div class="al al-yiguoqi4"></div>
                   </div>
                 </div>
               </div>
@@ -55,7 +55,7 @@
                     <router-link v-else class="rbtn color-theme" :to="{path:'/chat',query:{uid:item.wid}}">联系卖家</router-link>
                   </div>
                   <div class="btn-cell flex_center" v-else>
-                    <div class="al al-yiguoqi1"></div>
+                    <div class="al al-yishiyong11"></div>
                   </div>
                 </div>
               </div>
@@ -124,12 +124,16 @@ export default {
         callback: function () {
           switch (self.selectedIndex) {
             case 0:
-              pageStart1++
-              self.getData1()
+              if (self.tabdata1.length === (pageStart1 + 1) * limit) {
+                pageStart1++
+                self.getData1()
+              }
               break
             case 1:
-              pageStart2++
-              self.getData2()
+              if (self.tabdata2.length === (pageStart2 + 1) * limit) {
+                pageStart2++
+                self.getData2()
+              }
               break
           }
         }
@@ -157,9 +161,6 @@ export default {
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
-    },
-    clickTab (index) {
-      this.swiperChange()
     },
     swiperChange (index) {
       const self = this

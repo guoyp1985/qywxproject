@@ -238,6 +238,38 @@ export default {
         self.loginUser = res.data
         User.set(self.loginUser)
         self.setUserInfo()
+        let isAdmin = false
+        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
+          if (self.loginUser.usergroup[i] === 1) {
+            isAdmin = true
+            break
+          }
+        }
+        if (isAdmin) {
+          let btnData = {
+            name: 'Admin Manage',
+            icon: 'al-set',
+            color: 'rgba06',
+            react: function () {
+              window.open(`${ENV.AdminUrl}?unionid=${self.loginUser.unionid}`)
+            }
+          }
+          let isAdd = true
+          for (let i = 0; i < self.btns1.length; i++) {
+            if (self.btns1[i].name === 'Admin Manage') {
+              isAdd = false
+              break
+            }
+          }
+          if (isAdd) {
+            if (!Reg.rPlatfrom.test(navigator.userAgent)) {
+              let insertIndex = self.btns1.length - 1
+              self.btns1.splice(insertIndex, 0, btnData)
+            } else {
+              self.btns1.push(btnData)
+            }
+          }
+        }
       })
     },
     refresh () {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea font14 rgoodeazy bg-white ${query.from == 'miniprogram' ? '' : 's-havebottom'}`">
+  <div class="containerarea font14 rgoodeazy bg-white s-havebottom">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -106,7 +106,7 @@
           </swiper-item>
         </swiper>
       </div>
-      <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
+      <div class="s-bottom bottomnaviarea b_top_after">
         <div class="t-table bottomnavi">
           <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
@@ -330,12 +330,11 @@ export default {
                 onHide: function () {
                   if (data.flag === 1) {
                     self.newsCount++
+                    let queryParmas = {id: data.data.id, control: 'edit'}
                     if (self.query.minibackurl) {
-                      let minibackurl = decodeURIComponent(self.query.minibackurl)
-                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                    } else {
-                      self.$router.push({path: '/news', query: {id: data.data.id}})
+                      queryParmas.minibackurl = self.query.minibackurl
                     }
+                    self.$router.push({path: '/news', query: queryParmas})
                   }
                 }
               })
@@ -378,12 +377,11 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 self.collecturl = ''
+                let queryParmas = {id: data.data.id, control: 'edit'}
                 if (self.query.minibackurl) {
-                  let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                } else {
-                  self.$router.push({path: '/news', query: {id: data.data.id}})
+                  queryParmas.minibackurl = self.query.minibackurl
                 }
+                self.$router.push({path: '/news', query: queryParmas})
               }
             }
           })

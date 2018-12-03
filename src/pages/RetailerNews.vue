@@ -171,7 +171,7 @@ export default {
       tabdata1: [],
       tabdata2: [],
       controldata: [
-        { key: 'push', title: '推送给返点客' },
+        // { key: 'push', title: '推送给返点客' },
         { key: 'set', title: '更多设置' },
         { key: 'stat', title: '文章统计' },
         { key: 'createposter', title: '生成海报' }

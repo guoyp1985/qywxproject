@@ -1,5 +1,5 @@
 var ENV = {
-  Version: '2.0.0.0',
+  Version: '2.0.0.2',
   AppId: 'wxd50f3623bec2f5b5', // vux:'wx1e72f0c45242a94e' // vue: 'wxd50f3623bec2f5b5'
   // AppSecret: 'f22214afc8a01ec9a769bd0ba8551c48',
   FeedChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',
@@ -11,6 +11,7 @@ var ENV = {
   WeixinName: '博卡授权中心', //vue: 博卡授权中心 // vux: 共销汇
   SocketBokaRoom: 'laravel.boka.cn',
   SocketServer: 'wss://chat.boka.cn/wss', //'wss://chat.boka.cn/wss', // vux: 'ws://123.206.77.217:7272', // vue: 'ws://124.207.246.109:7272'
+  AdminUrl: 'http://laravelcms.boka.cn/admin/login/unionIdLogin',
   OrderStatus: [
     {id: 0, status: '订单取消'},
     {id: 1, status: '已确认订单'},

@@ -90,9 +90,11 @@
       <popup class="menuwrap" v-model="showMenuArea">
         <div class="popup0">
           <div class="list">
+            <!--
             <div class="item">
               <div class="inner" @click="pushEvent">推送给返点客</div>
             </div>
+          -->
             <div class="item">
               <router-link class="inner" :to="{path: '/stat', query: {id: query.id,module:'news'}}">文章统计</router-link>
             </div>
@@ -646,7 +648,19 @@ export default {
         }
       }
       if (linkurl) {
-        self.$router.push(linkurl)
+        let pquery = self.$route.query
+        if (pquery.from === 'miniprogram' && pquery.producturl) {
+          let producturl = decodeURIComponent(pquery.producturl)
+          const params = self.$util.query(linkurl)
+          if (producturl.indexOf('?') < 0) {
+            producturl = `${producturl}?`
+          } else {
+            producturl = `${producturl}&`
+          }
+          self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+        } else {
+          self.$router.push(linkurl)
+        }
       }
     }
   },

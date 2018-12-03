@@ -3,7 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-container" style="top:0;">
+      <div class="s-container">
         <form class="addForm">
           <forminputplate class="required">
             <span slot="title">{{ $t('Activity product') }}</span>
@@ -51,7 +51,9 @@
           </template>
         </form>
       </div>
-      <div class="s-bottom flex_center bg-orange color-white" @click="saveevent">{{ $t('Go to create') }}</div>
+      <div class="s-bottom pl20 pr20 border-box flex_center color-white list-shadow02">
+        <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
+      </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="showpopup" height="100%">
           <div class="popup1">
@@ -82,7 +84,8 @@
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
                       <div class="clamp1">{{item.title}}</div>
-                      <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                      <div class="font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
+                      <div class="font12 clamp1 color-orange" v-if="item.allowcard">允许使用优惠券</div>
                     </div>
                   </div>
                 </check-icon>
@@ -165,7 +168,8 @@ export default {
       searchword: '',
       searchresult: false,
       limit: 20,
-      pagestart1: 0
+      pagestart1: 0,
+      selectProductIndex: -1
     }
   },
   watch: {
@@ -216,8 +220,10 @@ export default {
       const self = this
       if (data.checked) {
         self.selectpopupdata = data
+        self.selectProductIndex = index
       } else {
         self.selectpopupdata = null
+        self.selectProductIndex = -1
       }
       for (let d of self.productdata) {
         if (d.id !== data.id && d.checked) {
@@ -229,6 +235,14 @@ export default {
     radiochange (val) {
       this.checkeduid = val
     },
+    afterSelectProduct () {
+      const self = this
+      self.selectproduct = self.selectpopupdata
+      self.submitdata.productid = self.selectproduct.id
+      self.showpopup = false
+      self.showselectproduct = false
+      self.showproductitem = true
+    },
     confirmpopup () {
       const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
@@ -238,11 +252,29 @@ export default {
         })
         return false
       }
-      this.selectproduct = this.selectpopupdata
-      self.submitdata.productid = self.selectproduct.id
-      this.showpopup = false
-      this.showselectproduct = false
-      this.showproductitem = true
+      if (this.selectpopupdata.allowcard) {
+        self.$vux.confirm.show({
+          content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
+          confirmText: '继续创建',
+          cancelText: '停用优惠券',
+          onCancel () {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, {
+              module: 'product', id: self.selectpopupdata.id, param: 'allowcard', paramvalue: 0
+            }).then(function (res) {
+              self.$vux.loading.hide()
+              self.selectpopupdata.allowcard = 0
+              self.productdata[self.selectProductIndex].allowcard = 0
+              self.afterSelectProduct()
+            })
+          },
+          onConfirm () {
+            self.afterSelectProduct()
+          }
+        })
+      } else {
+        self.afterSelectProduct()
+      }
     },
     onChange (val) {
       this.searchword = val
@@ -329,6 +361,38 @@ export default {
     dateconfirm2 () {
       this.selectdatetxt2 = ''
     },
+    saveAjax () {
+      const self = this
+      self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              if (self.query.minibackurl) {
+                let minibackurl = decodeURIComponent(self.query.minibackurl)
+                if (minibackurl.indexOf('?') > -1) {
+                  minibackurl = `${minibackurl}&id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+                } else {
+                  minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
+                }
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              } else {
+                self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
+                if (self.query.type === 'bargainbuy') {
+                  self.$refs.formBargainbuy.minprice = ''
+                  self.$refs.formBargainbuy.everymin = ''
+                  self.$refs.formBargainbuy.everymax = ''
+                }
+              }
+            }
+          }
+        })
+      })
+    },
     saveData () {
       const self = this
       let validateData = []
@@ -404,7 +468,7 @@ export default {
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(groupprice) || groupprice < 0) {
+        if (isNaN(groupprice) || groupprice <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的团购价格'
@@ -465,30 +529,7 @@ export default {
         content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/addActivity`, self.submitdata).then(function (res) {
-            let data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              type: (data.flag !== 1 ? 'warn' : 'success'),
-              time: self.$util.delay(data.error),
-              onHide: function () {
-                if (data.flag === 1) {
-                  if (self.query.minibackurl) {
-                    let minibackurl = decodeURIComponent(self.query.minibackurl)
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                  } else {
-                    self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
-                    if (self.query.type === 'bargainbuy') {
-                      self.$refs.formBargainbuy.minprice = ''
-                      self.$refs.formBargainbuy.everymin = ''
-                      self.$refs.formBargainbuy.everymax = ''
-                    }
-                  }
-                }
-              }
-            })
-          })
+          self.saveAjax()
         }
       })
     },
@@ -598,4 +639,5 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.addActivity .s-container{top:0;}
 </style>

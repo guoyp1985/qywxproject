@@ -31,7 +31,7 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
             <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
-              <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
+              <div @click="onStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
           <template v-if="showArticle">
@@ -193,7 +193,19 @@ export default {
       this.$util.wxAccess()
     },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      console.log('in in in clickInsertProduct')
+      if (self.query.from === 'miniprogram' && self.query.producturl) {
+        let producturl = decodeURIComponent(self.query.producturl)
+        const params = self.$util.query(url)
+        if (producturl.indexOf('?') < 0) {
+          producturl = `${producturl}?`
+        } else {
+          producturl = `${producturl}&`
+        }
+        self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+      } else {
+        self.$router.push(url)
+      }
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -313,6 +325,7 @@ export default {
       })
     },
     clickProduct (event) {
+      console.log('进入点出商品事件')
       if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
         console.log('in news clickproduct')
         let node = event.target
@@ -328,7 +341,19 @@ export default {
           node = node.parentNode
         }
         if (linkurl) {
-          self.$router.push(linkurl)
+          console.log(linkurl)
+          if (self.query.from === 'miniprogram' && self.query.producturl) {
+            let producturl = decodeURIComponent(self.query.producturl)
+            const params = self.$util.query(linkurl)
+            if (producturl.indexOf('?') < 0) {
+              producturl = `${producturl}?`
+            } else {
+              producturl = `${producturl}&`
+            }
+            self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+          } else {
+            self.$router.push(linkurl)
+          }
         }
       }
     },
@@ -464,7 +489,11 @@ export default {
       }
     },
     onStore () {
-      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/store?wid=${this.retailerInfo.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      }
     },
     onShare () {
     },
@@ -487,6 +516,11 @@ export default {
               self.handleImg()
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
+                if (minibackurl.indexOf('?') > -1) {
+                  minibackurl = `${minibackurl}&id=${self.query.id}`
+                } else {
+                  minibackurl = `${minibackurl}?id=${self.query.id}`
+                }
                 self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
               }
             }
@@ -575,9 +609,6 @@ export default {
           })
         }
       }
-    },
-    toStore () {
-      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
     },
     createSocket () {
       const uid = this.loginUser.uid

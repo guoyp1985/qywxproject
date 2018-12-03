@@ -25,7 +25,7 @@
         </center-sales>
       </template>
       <template v-if="showApply">
-        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :systemParams="systemParams"></retailer-apply>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
@@ -60,7 +60,8 @@ export default {
       classData: [],
       messages: 0,
       showVip: false,
-      allowVipFee: ENV.allowVipFee
+      allowVipFee: ENV.allowVipFee,
+      systemParams: {}
     }
   },
   methods: {
@@ -131,9 +132,17 @@ export default {
               self.initContainer()
               self.showApply = true
               document.title = '申请卖家'
-              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                { params: { limit: 100 } }
-              ).then(function (res) {
+              self.$http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(function (res) {
+                self.$vux.loading.hide()
+                if (res.status === 200) {
+                  let data = res.data
+                  data = data.data ? data.data : data
+                  self.systemParams = data
+                }
+                return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+                  { params: { limit: 100 } }
+                )
+              }).then(function (res) {
                 self.$vux.loading.hide()
                 if (res.status === 200) {
                   let data = res.data

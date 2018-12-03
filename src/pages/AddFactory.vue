@@ -38,12 +38,21 @@
               </div>
             </div>
           </div>
+          <div class="form-item">
+            <div class="t-table">
+              <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
+              <div class="t-cell input-cell v_middle w80" style="position:relative;">
+                <x-input v-model="submitData.shortcode" type="text" class="input" :max="3"></x-input>
+              </div>
+              <div class="t-cell title-cell color-red v_middle font12">(必须为三位大写字母)</div>
+            </div>
+          </div>
           <!--
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input type="text" class="input" placeholder="卖家名额" />
+                <input type="tel" class="input" placeholder="卖家名额" />
               </div>
             </div>
           </div>
@@ -82,11 +91,11 @@
             <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
             <div class="profit-level">
               <span>上级分润</span>
-              <input v-model="submitData.superiorrate" placeholder="输入分润比例" />
+              <input type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" />
             </div>
             <div class="profit-level">
               <span>销售分润</span>
-              <input v-model="submitData.salesrate" placeholder="输入分润比例" />
+              <input type="tel" v-model="submitData.salesrate" placeholder="输入分润比例" />
             </div>
           </div>
 
@@ -139,7 +148,7 @@ export default {
       loginUser: {},
       infoData: {},
       allowsubmit: true,
-      submitData: { title: '', summary: '', photo: '', superiorrate: '', salesrate: '' },
+      submitData: { title: '', summary: '', shortcode: '', photo: '', superiorrate: '', salesrate: '' },
       requireddata: { title: '' },
       classData: [],
       productClass: [],
@@ -244,6 +253,12 @@ export default {
           }
         }
       )
+      let charReg = /^[A-Z]+$/
+      if (!charReg.test(postData.shortcode) || postData.shortcode.length < 3) {
+        self.$vux.toast.text('缩写码必需为三个大写字母', 'middle')
+        return false
+      }
+      postData.shortcode = postData.shortcode.toUpperCase()
       let reg = /^[1-9]\.?[0-9]*$/
       console.log('推荐卖家' + postData.superiorrate)
       console.log('卖家' + postData.salesrate)
@@ -340,7 +355,7 @@ export default {
     },
     initData () {
       const self = this
-      self.submitData = { title: '', summary: '', photo: '', superiorrate: '', salesrate: '' }
+      self.submitData = { title: '', summary: '', shortcode: '', photo: '', superiorrate: '', salesrate: '' }
       self.requireddata = { title: '' }
       self.disClassData = false
     },

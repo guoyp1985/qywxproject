@@ -6,22 +6,20 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <template v-if="retailerInfo.uid && showTip">
-        <router-link class="db-flex border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
-          <div class="flex_left" style="width:70px;">
-            <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
+        <div class="flex_left" style="width:70px;">
+          <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+        </div>
+        <div class="flex_cell flex_left">
+          <div class="w_100">
+            <div class="clamp2">{{ retailerInfo.title }}</div>
+            <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
           </div>
-          <div class="flex_cell flex_left">
-            <div class="w_100">
-              <div class="clamp2">{{ retailerInfo.title }}</div>
-              <div class="clamp2 color-gray font12 mt5">全部宝贝: {{ retailerInfo.productcount }}件</div>
-            </div>
-          </div>
-          <div class="flex_right" style="width:80px;">
-            <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
-          </div>
-        </router-link>
-      </template>
+        </div>
+        <div class="flex_right" style="width:80px;">
+          <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
+        </div>
+      </div>
       <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
@@ -82,7 +80,7 @@
         </div>
       </scroller>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
-      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1">
+      <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1" :style="{'bottom': `${bottomPos}px`}">
         <div class="input-box">
           <div class="voice-cell">
             <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
@@ -236,6 +234,7 @@ const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).
 let room = ''
 let minIdFlag = 0
 let intervalId = null
+
 export default {
   directives: {
     TransferDom
@@ -257,7 +256,7 @@ export default {
       hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: '-52',
+      viewHeight: `${-132}`,
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -282,7 +281,8 @@ export default {
       recordCheck: false,
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
       allowChat: false,
-      retailerInfo: {}
+      retailerInfo: {},
+      bottomPos: 0
     }
   },
   filters: {
@@ -365,15 +365,34 @@ export default {
       this.showEmotBox = false
     },
     onFocus () {
+      const self = this
+      const globalContianer = document.getElementById('vux_view_box_body')
       this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
-      }, 200)
+        if (self.$util.isAndroid()) {
+          globalContianer.scrollTop = globalContianer.scrollHeight
+          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          const clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          self.$refs.scrollContainer.reset({ top: top + clientH })
+        }
+      }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
+      this.setScrollToBottom(false)
+      // setTimeout(function() {
+      //   if (self.$util.isAndroid()) {
+      //     globalContianer.scrollTop = globalContianer.scrollHeight
+      //     const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+      //     self.$refs.scrollContainer.reset({ top: top + 52 })
+      //   }
+      // }, 100)
     },
     onBlur () {
       clearInterval(intervalId)
+      setTimeout(() => {
+        document.body.scrollTop = document.body.scrollHeight
+      }, 100)
     },
     toggleVoice () {
       if (this.showEmotBox) {
@@ -388,18 +407,17 @@ export default {
         this.checkRecordApi()
         this.showVoiceCom = true
       }
+      this.setScrollToBottom(false)
     },
     toggleEmotion () {
-      const self = this
-      setTimeout(function () {
-        if (self.showVoiceCom) {
-          self.showVoiceCom = false
-        }
-        if (self.showFeatureBox) {
-          self.showFeatureBox = false
-        }
-        self.showEmotBox = true
-      }, 200)
+      if (this.showVoiceCom) {
+        this.showVoiceCom = false
+      }
+      if (this.showFeatureBox) {
+        this.showFeatureBox = false
+      }
+      this.showEmotBox = true
+      this.setScrollToBottom(false)
     },
     toggleKeyboard () {
       if (this.showEmotBox) {
@@ -422,15 +440,21 @@ export default {
       }
       if (!this.showFeatureBox) {
         this.showFeatureBox = true
+        this.setScrollToBottom(false)
       } else {
         this.showFeatureBox = false
         this.$refs.text.$refs.textarea.focus()
       }
     },
     setViewHeight () {
+      if (this.$util.isAndroid()) return
       this.$nextTick(() => {
-        this.viewHeight = `${-this.$refs.bottomArea.clientHeight}`
-        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
+        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        if (this.retailerInfo.uid && this.showTip) {
+          // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+          clientH += 80
+        }
+        this.viewHeight = `${-clientH}`
         console.log(this.viewHeight)
         this.setScrollToBottom()
       })
@@ -507,7 +531,7 @@ export default {
     },
     sendPhoto () {
       const self = this
-      if (window.WeixinJSBridge && self.$util.isIOS()) {
+      if (window.WeixinJSBridge) {
         self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
@@ -740,8 +764,15 @@ export default {
         // this.$refs.scrollContainer.scrollTo(0, 0, false)
       })
     },
-    setScrollToBottom () {
+    setScrollToBottom (isTouch) {
+      this.isUserTouch = typeof isTouch !== 'undefined' ? isTouch : this.isUserTouch
+      console.log(isTouch)
+      console.log(this.isUserTouch)
       if (this.isUserTouch) return
+      // if (this.$util.isAndroid()) {
+      //   document.getElementById('chat-room').scrollTop = 1000000
+      //   document.body.scrollTop = document.body.scrollHeight
+      // }
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -751,6 +782,10 @@ export default {
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
             // this.$refs.scrollContainer.scrollTo(0, top, false)
+            // if (self.$util.isAndroid()) {
+            //    document.body.scrollTop = document.body.scrollHeight
+            //    document.documentElement.scrollTop = document.documentElement.scrollHeight
+            // }
           }, 100)
         }
       })
@@ -942,19 +977,22 @@ export default {
           const data = res.data
           if (data.flag) {
             self.retailerInfo = data.data
-            // setTimeout(function () {
-            //   self.showTip = false
-            // }, 10000)
+            self.setViewHeight()
           }
         }
       })
     },
+    toStore () {
+      if (this.query.storeurl) {
+        let storeurl = decodeURIComponent(this.query.storeurl)
+        this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      }
+    },
     setContactUser () {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
-    // init () {
-    //   this.loginUser = User.get()
-    // },
     refresh () {
       const self = this
       room = ''
@@ -965,7 +1003,7 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = '-52'
+      this.viewHeight = `${-132}`
       this.isUserTouch = false
       this.hasNewMessage = false
       this.loginUser = User.get()
@@ -1027,8 +1065,8 @@ export default {
 }
 #chat-room .bottom-area {
   position: absolute;
+  bottom: 0px;
   z-index: 500;
-  bottom: 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -1173,6 +1211,7 @@ export default {
 //   bottom:52px;
 //   overflow-y:auto;
 // }
+.chat-area *{box-sizing: border-box;}
 .chatlist {
   padding: 0 10px;
   line-height: 1.1;

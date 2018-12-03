@@ -11,7 +11,7 @@
     <div class="s-container scroll-container" style="top:44px;">
       <div v-if="disData" class="scroll_list pl10 pr10">
         <div v-if="!data || data.length == 0" class="emptyitem flex_center">暂无消息</div>
-        <router-link v-else :to="{path: '/chat', query: {uid: item.uid, fromModule: 'messagelist'}}" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
+        <div v-else @click="toChat(item)" class="scroll_item pt10 pb10 db" v-for="(item,index) in data" :key="item.id">
           <div class="t-table">
             <div class="t-cell v_middle align_left" style="width:50px;">
               <img class="avatarimg1 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -25,7 +25,7 @@
               <div class="qbtn6 bg-red color-white">{{ item.unreadNumber }}</div>
             </div>
           </div>
-        </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -48,7 +48,8 @@ export default {
   data () {
     return {
       data: [],
-      disData: false
+      disData: false,
+      query: {}
     }
   },
   methods: {
@@ -69,8 +70,16 @@ export default {
         self.disData = true
       })
     },
+    toChat (data) {
+      let param = {uid: data.uid, fromModule: 'messagelist'}
+      if (this.query.storeurl) {
+        param.storeurl = this.query.storeurl
+      }
+      this.$router.push({path: '/chat', query: param})
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       this.$vux.loading.show()
       this.getData()
     }

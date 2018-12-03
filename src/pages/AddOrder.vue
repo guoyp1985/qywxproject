@@ -442,7 +442,12 @@ export default {
               postd.shopinfo.push(p)
               total += parseFloat(info.special) * info.quantity
               total1 += parseFloat(info.special) * info.quantity
-              if (self.query.activityid || info.fid > 0) {
+              // if (self.query.activityid || info.fid > 0) {
+              //   self.allowCard = false
+              // } else {
+              //   self.allowCard = true
+              // }
+              if (info.fid > 0) {
                 self.allowCard = false
               } else {
                 self.allowCard = true
@@ -480,11 +485,9 @@ export default {
               self.submitdata.addressid = self.selectaddress.id
             }
           }
-          if (!self.query.activityid) {
-            return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
-              wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
-            })
-          }
+          return self.$http.post(`${ENV.BokaApi}/api/card/canUse`, {
+            wid: self.orderdata[0].wid, ordermoney: self.payPrice, productid: self.orderdata[0].info[0].pid
+          })
         }
       }).then(res => {
         if (res) {

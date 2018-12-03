@@ -208,7 +208,7 @@
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
       <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
     </router-link>
-    <div class="modalarea modalarea1 flex_center store-modal" v-if="showPopupStore">
+    <div class="modalarea modalarea1 flex_center store-modal" style="position:fixed;" v-if="showPopupStore">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
           <div class="close flex_center" @click="closeStoreModal"><i class="al al-guanbi"></i></div>
@@ -221,7 +221,7 @@
         </div>
       </div>
     </div>
-    <div class="modalarea modalarea1 flex_center" v-if="showGxh">
+    <div class="modalarea modalarea1 flex_center" style="position:fixed;" v-if="showGxh">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
           <span>识别二维码进入店铺</span>
@@ -232,7 +232,7 @@
         </div>
       </div>
     </div>
-    <div class="modalarea modalarea1 flex_center" v-if="showGxk">
+    <div class="modalarea modalarea1 flex_center" style="position:fixed;" v-if="showGxk">
       <div class="modal">
         <div class="pagetop flex_left font16 pl10 pr10">
           <span>识别二维码进入小程序</span>

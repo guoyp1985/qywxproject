@@ -572,7 +572,8 @@ Util.install = function (Vue, options) {
         if (distance > height) {
           distance = height
         }
-        if ((scrollTop + height >= scrollHeight - distance) && (oScrollHeight != scrollHeight)) {
+        // if ((scrollTop + height >= scrollHeight - distance) && (oScrollHeight != scrollHeight)) { // 后退到页面，滚动事件不执行了，oScrollHeight和scrollHeight值一直相同
+        if ((scrollTop + height >= scrollHeight - distance)) {
           os.callback && os.callback()
           oScrollHeight = scrollHeight
         }

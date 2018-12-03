@@ -3,7 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-container" style="top:0;">
+      <div class="s-container">
         <form ref="fileForm" enctype="multipart/form-data">
           <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('fileForm', 'photo')" />
         </form>
@@ -81,7 +81,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
+                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -90,7 +90,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+                <input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -388,7 +388,7 @@ export default {
     uploadPhoto (refname, type) {
       const self = this
       const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      if (self.$util.isAndroid() || self.$util.isPC() || type === 'video') {
+      if (self.$util.isPC() || type === 'video') {
         fileInput.click()
       } else {
         self.$wechat.ready(function () {
@@ -483,7 +483,7 @@ export default {
         }
         if (!isNaN(rebate)) {
           const maxRebate = (parseFloat(price) - parseFloat(price) * 0.11).toFixed(2)
-          if (rebate > maxRebate) {
+          if (parseFloat(rebate) > parseFloat(maxRebate)) {
             self.$vux.toast.text(`返点佣金应小于${maxRebate}元`, 'middle')
             return false
           }
@@ -677,6 +677,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.addproduct .s-container{top:0;}
 .form-item{position:relative;padding:10px 12px;}
 .form-item:after{
   content:"";display:block;
