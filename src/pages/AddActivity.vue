@@ -481,6 +481,13 @@ export default {
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
+        if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的数字'
+          })
+          return false
+        }
         if (isNaN(self.submitdata.param_groupprice) || groupprice <= 0) {
           self.$vux.alert.show({
             title: '',
