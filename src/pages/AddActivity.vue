@@ -415,7 +415,6 @@ export default {
           }
         }
       )
-      iscontinue = true
       if (!iscontinue) {
         return false
       }
