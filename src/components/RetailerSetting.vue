@@ -2,7 +2,7 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-if="query.from == 'aaa'">{{tabtxts[0]}}</tab-item>
+        <tab-item v-if="query.from == 'miniprogram'">{{tabtxts[0]}}</tab-item>
         <tab-item
           v-else
           v-for="(item,index) in tabtxts"
@@ -113,7 +113,7 @@
               <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
             </div>
           </template>
-          <template v-if="selectedIndex === 1 && query.from != 'aaa'">
+          <template v-if="selectedIndex === 1 && query.from != 'miniprogram'">
             <div class="swiper-inner" style="bottom:50px;">
               <form>
                 <div class="form-item required">
