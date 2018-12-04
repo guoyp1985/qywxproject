@@ -105,6 +105,12 @@
               <div class="t-cell align_right color-gray">{{ viewuser.uploadname }}</div>
             </div>
           </div>
+          <div class="item padding10 b_bottom_after" v-if="viewuser.recommend">
+            <div class="t-table">
+              <div class="t-cell align_left w100">推荐人</div>
+              <div class="t-cell align_right color-gray">{{ viewuser.recommendname }}</div>
+            </div>
+          </div>
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
               <div class="t-cell align_left w100">来源</div>
