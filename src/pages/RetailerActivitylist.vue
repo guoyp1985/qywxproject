@@ -218,7 +218,6 @@ export default {
         let queryParams = {type: type, from: this.query.from}
         if (this.query.minibackurl) {
           queryParams.minibackurl = this.query.minibackurl
-          queryParams.backtype = this.query.backtype
         }
         this.$router.push({path: '/addActivity', query: queryParams})
       }
