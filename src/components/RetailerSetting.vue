@@ -2,10 +2,19 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
+        <tab-item v-if="query.from == 'aaa'">{{tabtxts[0]}}</tab-item>
         <tab-item
+          v-else
+          v-for="(item,index) in tabtxts"
+          :selected="query.from == 'seller' && index == 1"
+          :key="index">{{item}}</tab-item>
+        <!--
+        <tab-item
+          v-else
           v-for="(item,index) in tabtxts"
           :selected="(!query.from && index == selectedIndex) || (query.from == 'seller' && index == 1) || (query.from == 'miniprogram' && query.from_type != 'activity' && index == 1) || (query.from == 'miniprogram' && query.from_type == 'activity' && index == 0)"
           :key="index">{{item}}</tab-item>
+        -->
       </tab>
     </div>
     <div class="s-container" style="top:44px;">
@@ -104,7 +113,7 @@
               <div class="flex_cell flex_center btn-bottom-red">{{ $t('Save') }}</div>
             </div>
           </template>
-          <template v-if="selectedIndex === 1">
+          <template v-if="selectedIndex === 1 && query.from != 'aaa'">
             <div class="swiper-inner" style="bottom:50px;">
               <form>
                 <div class="form-item required">
