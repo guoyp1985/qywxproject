@@ -472,7 +472,13 @@ export default {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                if (self.query.backtype === 'relaunch') {
+                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                } else if (self.query.backtype === 'redirect') {
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                }
               } else {
                 self.$router.push('/centerSales')
               }
@@ -511,7 +517,13 @@ export default {
             if (data.flag === 1) {
               if (self.query.minibackurl) {
                 let minibackurl = decodeURIComponent(self.query.minibackurl)
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                if (self.query.backtype === 'relaunch') {
+                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                } else if (self.query.backtype === 'redirect') {
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                }
               } else {
                 self.$router.push({path: '/centerSeller', query: {uid: self.loginUser.uid}})
               }

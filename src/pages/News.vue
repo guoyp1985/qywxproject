@@ -521,7 +521,13 @@ export default {
                 } else {
                   minibackurl = `${minibackurl}?id=${self.query.id}`
                 }
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                if (self.query.backtype === 'relaunch') {
+                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                } else if (self.query.backtype === 'redirect') {
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                }
               }
             }
           }

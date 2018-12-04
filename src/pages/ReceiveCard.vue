@@ -54,7 +54,13 @@ export default {
             })
             setTimeout(function () {
               let minibackurl = decodeURIComponent(self.query.minibackurl)
-              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              if (self.query.backtype === 'relaunch') {
+                self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+              } else if (self.query.backtype === 'redirect') {
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              } else {
+                self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+              }
             }, 600)
           } else {
             const timeoute = self.$util.delay(data.error)
@@ -65,7 +71,13 @@ export default {
             })
             setTimeout(function () {
               let minibackurl = decodeURIComponent(self.query.minibackurl)
-              self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              if (self.query.backtype === 'relaunch') {
+                self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+              } else if (self.query.backtype === 'redirect') {
+                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+              } else {
+                self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+              }
             }, timeoute)
           }
         })

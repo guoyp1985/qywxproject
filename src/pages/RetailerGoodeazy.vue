@@ -333,6 +333,7 @@ export default {
                     let queryParmas = {id: data.data.id, control: 'edit'}
                     if (self.query.minibackurl) {
                       queryParmas.minibackurl = self.query.minibackurl
+                      queryParmas.backtype = self.query.backtype
                     }
                     self.$router.push({path: '/news', query: queryParmas})
                   }
@@ -380,6 +381,7 @@ export default {
                 let queryParmas = {id: data.data.id, control: 'edit'}
                 if (self.query.minibackurl) {
                   queryParmas.minibackurl = self.query.minibackurl
+                  queryParmas.backtype = self.query.backtype
                 }
                 self.$router.push({path: '/news', query: queryParmas})
               }

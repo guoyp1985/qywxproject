@@ -379,7 +379,13 @@ export default {
                 } else {
                   minibackurl = `${minibackurl}?id=${data.data}&type=${self.query.type}&productid=${self.submitdata.productid}`
                 }
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                if (self.query.backtype === 'relaunch') {
+                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                } else if (self.query.backtype === 'redirect') {
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                }
               } else {
                 self.$router.push({path: '/retailerActivitylist', query: {from: 'add'}})
                 if (self.query.type === 'bargainbuy') {
