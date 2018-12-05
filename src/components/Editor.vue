@@ -649,15 +649,9 @@ export default {
       }
       if (linkurl) {
         let pquery = self.$route.query
-        if (pquery.from === 'miniprogram' && pquery.producturl) {
-          let producturl = decodeURIComponent(pquery.producturl)
+        if (pquery.from === 'miniprogram') {
           const params = self.$util.query(linkurl)
-          if (producturl.indexOf('?') < 0) {
-            producturl = `${producturl}?`
-          } else {
-            producturl = `${producturl}&`
-          }
-          self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+          self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
         } else {
           self.$router.push(linkurl)
         }

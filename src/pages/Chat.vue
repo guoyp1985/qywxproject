@@ -985,7 +985,7 @@ export default {
     toStore () {
       if (this.query.storeurl) {
         let storeurl = decodeURIComponent(this.query.storeurl)
-        this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       }
