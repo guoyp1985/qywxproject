@@ -453,8 +453,8 @@ export default {
     },
     toChat (item) {
       let params = {uid: item.uid}
-      if (this.query.storeurl) {
-        params.storeurl = this.query.storeurl
+      if (this.query.from) {
+        params.from = this.query.from
       }
       this.$router.push({path: '/chat', query: params})
     },
