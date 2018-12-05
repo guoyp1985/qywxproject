@@ -194,15 +194,9 @@ export default {
     },
     clickInsertProduct (url) {
       console.log('in in in clickInsertProduct')
-      if (self.query.from === 'miniprogram' && self.query.producturl) {
-        let producturl = decodeURIComponent(self.query.producturl)
+      if (self.query.from === 'miniprogram') {
         const params = self.$util.query(url)
-        if (producturl.indexOf('?') < 0) {
-          producturl = `${producturl}?`
-        } else {
-          producturl = `${producturl}&`
-        }
-        self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
       } else {
         self.$router.push(url)
       }
@@ -342,15 +336,9 @@ export default {
         }
         if (linkurl) {
           console.log(linkurl)
-          if (self.query.from === 'miniprogram' && self.query.producturl) {
-            let producturl = decodeURIComponent(self.query.producturl)
+          if (self.query.from === 'miniprogram') {
             const params = self.$util.query(linkurl)
-            if (producturl.indexOf('?') < 0) {
-              producturl = `${producturl}?`
-            } else {
-              producturl = `${producturl}&`
-            }
-            self.$wechat.miniProgram.redirectTo({url: `${producturl}id=${params.id}&wid=${params.wid}`})
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
           } else {
             self.$router.push(linkurl)
           }
@@ -490,7 +478,7 @@ export default {
     },
     onStore () {
       if (this.query.from === 'miniprogram') {
-        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/store?wid=${this.retailerInfo.uid}`})
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
       }

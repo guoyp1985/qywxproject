@@ -20,6 +20,13 @@ var ENV = {
     {id: 4, status: '已确认收货'},
     {id: 100, status: '已完成'}
   ],
+  MiniRouter: {
+    contentsNews: '/pages/contentsNews',
+    news: '/packageB/pages/news',
+    pay: '/packageB/pages/pay',
+    product: '/packageB/pages/product',
+    store: '/packageB/pages/store'
+  },
   Emots: [
     '微笑', '撇嘴', '色', '发呆', '得意', '流泪', '害羞', '闭嘴',
     '睡', '大哭', '尴尬', '发怒', '调皮', '呲牙', '惊讶', '难过',
