@@ -47,12 +47,12 @@
                   <div class="main message-text">
                     <div class="scroll_item">
                       <div class="con">
-                        <router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
-                          <div class="pic">
+                        <div v-for="(news, index1) in item.newsdata" :key="index1">
+                          <div class="pic" @click="toNews(news)">
                             <div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
                             <span class="title">{{news.title}}</span>
                           </div>
-                        </router-link>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -988,6 +988,16 @@ export default {
         this.$wechat.miniProgram.redirectTo({url: `${storeurl}?wid=${this.retailerInfo.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      }
+    },
+    toNews (news) {
+      console.log('in toNews')
+      console.log(news)
+      if (this.query.from === 'miniprogram') {
+        // console.log('i am from miniprogram')
+        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages${news.link}`})
+      } else {
+        this.$router.push({path: news.link})
       }
     },
     setContactUser () {
