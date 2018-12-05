@@ -2,7 +2,7 @@
   <div class="containerarea bg-white font14 retailersetting">
     <div class="pagetop">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-if="query.from == 'miniprogram'">{{tabtxts[0]}}</tab-item>
+        <tab-item v-if="query.from == 'miniprogram'">卖家信息设置</tab-item>
         <tab-item
           v-else
           v-for="(item,index) in tabtxts"
