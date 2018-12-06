@@ -983,8 +983,7 @@ export default {
       })
     },
     toStore () {
-      if (this.query.storeurl) {
-        let storeurl = decodeURIComponent(this.query.storeurl)
+      if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
