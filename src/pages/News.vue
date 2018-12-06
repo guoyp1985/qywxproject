@@ -45,36 +45,38 @@
               <div class="article-content" v-html="article.content"></div>
             </template>
           </template>
-          <div class="operate-area">
-            <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-              <span class="al al-xing3 font14"></span>
-              <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
-            </x-button>
-            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
-              <span class="al al-kefu1 font14"></span>
-              <span>{{$t('Advisory')}}</span>
-            </x-button>
-            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
-              <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
-              <span>{{$t('Store')}}</span>
-            </x-button>
-          </div>
-          <div class="reading-info">
-            <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
-          </div>
-          <div class="qrcode-area">
-            <div class="qrcode-bg">
-              <div class="qrcode">
-                <img src="https://tossharingsales.boka.cn/images/fingerprint.gif"/>
-                <div class="scan-area">
-                  <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
-                  <img v-else :src="WeixinQrcode">
-                </div>
-              </div>
-              <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
+          <template v-if="query.control != 'edit'">
+            <div class="operate-area">
+              <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
+                <span class="al al-xing3 font14"></span>
+                <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
+              </x-button>
+              <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
+                <span class="al al-kefu1 font14"></span>
+                <span>{{$t('Advisory')}}</span>
+              </x-button>
+              <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
+                <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
+                <span>{{$t('Store')}}</span>
+              </x-button>
             </div>
-          </div>
+            <div class="reading-info">
+              <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+              <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
+            </div>
+            <div class="qrcode-area">
+              <div class="qrcode-bg">
+                <div class="qrcode">
+                  <img src="https://tossharingsales.boka.cn/images/fingerprint.gif"/>
+                  <div class="scan-area">
+                    <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
+                    <img v-else :src="WeixinQrcode">
+                  </div>
+                </div>
+                <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
+              </div>
+            </div>
+          </template>
         </div>
         <div class="comment-area">
           <div class="comment-op font14">
