@@ -321,7 +321,7 @@ export default {
         const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
         location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
       } else {
-        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'factorynews', fromId: this.query.id}})
+        this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'factorynews', fromId: this.query.id, from: this.query.from}})
       }
     },
     onStore () {

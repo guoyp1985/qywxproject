@@ -16,7 +16,7 @@
           </div>
           <div class="contact-cell">
             <div class="ol-contact flex_center">
-              <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order'}}">
+              <router-link :to="{path: '/chat', query: {uid: retailerInfo.uploader,fromModule: 'order', from: query.from}}">
                 <span class="al al-pinglun3 color-order-detail font14"></span>
                 <span class="font13">{{$t('Contact Seller')}}</span>
               </router-link>
@@ -166,7 +166,8 @@ export default {
       orders: [],
       priceInfos: [],
       userQrCode: '',
-      wxCardShow: false
+      wxCardShow: false,
+      query: {}
     }
   },
   computed: {
@@ -311,6 +312,7 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       if (this.id !== this.$route.query.id) {
         this.getData()
       }

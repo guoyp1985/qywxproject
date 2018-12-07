@@ -16,7 +16,7 @@
           <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
         </div>
         <div v-if="loginUser.subscribe != 1" class="qbtn7 font14 bg-white color-red5" @click="toSubscribe">联系</div>
-        <router-link v-else :to="{path: '/chat', query: {uid: query.uid}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
+        <router-link v-else :to="{path: '/chat', query: {uid: query.uid, from: query.from}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
       </div>
       <div class="s-container">
         <div class="list-shadow">

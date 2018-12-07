@@ -193,7 +193,7 @@
             <div class="pt10 pl10 pr10">购买过本店商品的好友</div>
             <div class="flex_left pb10">
               <div class="buylist" ref="buyList">
-                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id}}" v-for="(item,index) in buyuserdata" :key="index">
+                <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,fromModule:'product',fromId:query.id, from: query.from}}" v-for="(item,index) in buyuserdata" :key="index">
                   <div class="pic">
                     <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                   </div>
@@ -381,7 +381,7 @@
           <div class="popup1 tagpopup">
             <div class="popup-top flex_center">购买过的好友</div>
             <div class="popup-middle">
-              <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+              <router-link :to="{path:'/chat',query:{uid:item.uid, from: query.from}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
                     <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -631,7 +631,7 @@ export default {
           const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
         } else {
-          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'product', fromId: this.query.id}})
+          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'product', fromId: this.query.id, from: this.query.from}})
         }
       }
     },

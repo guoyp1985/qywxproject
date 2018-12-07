@@ -23,7 +23,7 @@
               <span class="v_middle">{{data.retailer.title}}</span>
             </router-link>
             <div class="w80 align_right">
-              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:data.retailer.uid}}">联系卖家</router-link>
+              <router-link class="qbtn bg-red color-white font12" :to="{path:'/chat',query:{uid:data.retailer.uid, from: query.from}}">联系卖家</router-link>
             </div>
           </div>
         </div>

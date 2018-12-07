@@ -119,6 +119,9 @@ export default {
         } else {
           params.fromModule = 'retailer'
           params.fromId = params.uid
+          if (self.query.from) {
+            params.from = self.query.from
+          }
           self.$router.push({path: '/chat', query: params})
         }
       }
