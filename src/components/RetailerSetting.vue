@@ -61,7 +61,7 @@
                   <div class="font12 color-blue3 mt5" @click="disqrcode">{{ $t('Upload qrcode text') }}</div>
                 </div>
               </div>
-              <forminputplate class="required">
+              <forminputplate class="required" v-if="query.from != 'miniprogram'">
                 <span slot="title">{{ $t('Pay type') }}</span>
                 <div>
                   <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
@@ -86,7 +86,7 @@
                     </x-textarea>
                   </group>
                 </forminputplate>
-                <forminputplate>
+                <forminputplate v-if="query.from != 'miniprogram'">
                   <span slot="title">{{ $t('Auto reply') }}</span>
                   <group class="textarea-outer" style="padding:0;">
                     <x-textarea
