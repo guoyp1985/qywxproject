@@ -332,6 +332,7 @@
 
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XImg } from 'vux'
+import { User } from '#/storage'
 import Time from '#/time'
 import ENV from 'env'
 
@@ -355,6 +356,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       tabtxts: [ '待提现', '待结算', '已提现' ],
       selectedIndex: 0,
       tabdata1: [],
@@ -444,35 +446,39 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
-        self.$vux.confirm.show({
-          content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
-          onCancel () {
-            self.eventIng = false
-          },
-          onConfirm () {
-            self.$vux.loading.show()
-            let postData = {}
-            if (self.query.from === 'miniprogram') {
-              postData.appid = self.query.appid
-            }
-            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              self.$vux.toast.show({
-                text: data.error,
-                time: self.$util.delay(data.error),
-                onHide: function () {
-                  if (data.flag === 1) {
-                    self.totalPrice = '0.00'
-                    self.tabdata1 = []
-                    self.summoney = '0.00'
+        if (!self.loginUser.idcardno) {
+          self.$router.push({path: '/authPhoto', query: {fromPage: 'retailerRevenue'}})
+        } else {
+          self.$vux.confirm.show({
+            content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
+            onCancel () {
+              self.eventIng = false
+            },
+            onConfirm () {
+              self.$vux.loading.show()
+              let postData = {}
+              if (self.query.from === 'miniprogram') {
+                postData.appid = self.query.appid
+              }
+              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {
+                let data = res.data
+                self.$vux.loading.hide()
+                self.$vux.toast.show({
+                  text: data.error,
+                  time: self.$util.delay(data.error),
+                  onHide: function () {
+                    if (data.flag === 1) {
+                      self.totalPrice = '0.00'
+                      self.tabdata1 = []
+                      self.summoney = '0.00'
+                    }
+                    self.eventIng = false
                   }
-                  self.eventIng = false
-                }
+                })
               })
-            })
-          }
-        })
+            }
+          })
+        }
       }
     },
     popupexplain () {
@@ -521,6 +527,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.loginUser = User.get()
       this.eventIng = false
       this.swiperChange()
     }

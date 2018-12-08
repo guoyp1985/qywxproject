@@ -30,7 +30,6 @@
           </div>
         </div>
       </div>
-      <div v-if="disResult1 && !photoOk1" class="padding10 color-red align_right">请上传正确格式的身份证照片</div>
       <div class="photo-item">
         <div class="flex_cell flex_center">
           <div class="phleft">
@@ -50,7 +49,7 @@
           </div>
         </div>
       </div>
-      <div v-if="disResult2 && !photoOk2" class="padding10 color-red align_right">请上传正确格式的身份证照片</div>
+      <!--
       <div class="photo-item">
         <div class="flex_cell flex_center">
           <div class="phleft">
@@ -70,6 +69,7 @@
           </div>
         </div>
       </div>
+    -->
       <div class="message mt5"><span>* </span>拍摄二代身份证原件，确保图片清晰，四角完整。</div>
     </div>
     <div class="btn flex_center">
@@ -88,11 +88,7 @@ export default {
       query: {},
       loginUser: {},
       photo1: '',
-      photoOk1: false,
-      disResult1: false,
       photo2: '',
-      photoOk2: false,
-      disResult2: false,
       photo3: '',
       submitIng: false
     }
@@ -134,23 +130,6 @@ export default {
       } else {
         self.wxUpload(function (data) {
           self.photo1 = data.data
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
-            type: 0, cardphoto: self.photo1
-          }).then(function (res) {
-            self.$vux.loading.hide()
-            let retdata = res.data
-            if (retdata.flag) {
-              self.photoOk1 = true
-            } else {
-              self.photoOk1 = false
-            }
-            self.disResult1 = true
-            self.$vux.toast.show({
-              text: retdata.error,
-              time: self.$util.delay(retdata.error)
-            })
-          })
         })
       }
     },
@@ -161,23 +140,6 @@ export default {
       } else {
         self.wxUpload(function (data) {
           self.photo2 = data.data
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
-            type: 1, cardphoto: self.photo2
-          }).then(function (res) {
-            self.$vux.loading.hide()
-            let retdata = res.data
-            if (retdata.flag) {
-              self.photoOk2 = true
-            } else {
-              self.photoOk2 = false
-            }
-            self.disResult2 = true
-            self.$vux.toast.show({
-              text: retdata.error,
-              time: self.$util.delay(retdata.error)
-            })
-          })
         })
       }
     },
@@ -210,26 +172,8 @@ export default {
       if (files.length > 0) {
         const fileForm = e.target.parentNode
         const filedata = new FormData(fileForm)
-        self.$vux.loading.show()
         self.fileUpload(filedata, function (data) {
           self.photo1 = data.data
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
-            type: 0, cardphoto: self.photo1
-          }).then(function (res) {
-            self.$vux.loading.hide()
-            let retdata = res.data
-            if (retdata.flag) {
-              self.photoOk1 = true
-            } else {
-              self.photoOk1 = false
-            }
-            self.disResult1 = true
-            self.$vux.toast.show({
-              text: retdata.error,
-              time: self.$util.delay(retdata.error)
-            })
-          })
         })
       }
     },
@@ -238,26 +182,8 @@ export default {
       if (files.length > 0) {
         const fileForm = e.target.parentNode
         const filedata = new FormData(fileForm)
-        self.$vux.loading.show()
         self.fileUpload(filedata, function (data) {
           self.photo2 = data.data
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
-            type: 1, cardphoto: self.photo2
-          }).then(function (res) {
-            self.$vux.loading.hide()
-            let retdata = res.data
-            if (retdata.flag) {
-              self.photoOk2 = true
-            } else {
-              self.photoOk2 = false
-            }
-            self.disResult2 = true
-            self.$vux.toast.show({
-              text: retdata.error,
-              time: self.$util.delay(retdata.error)
-            })
-          })
         })
       }
     },
@@ -275,7 +201,7 @@ export default {
     },
     submitEvent () {
       if (!self.submitIng) {
-        if (self.photo1 === '' || self.photo2 === '' || self.photo3 === '') {
+        if (self.photo1 === '' || self.photo2 === '') {
           self.$vux.toast.show({
             text: '请按要求上传身份证照片',
             time: 1500
@@ -283,6 +209,26 @@ export default {
           return false
         }
         self.submitIng = true
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
+          cardphoto: self.photo1, cardphotof: self.photo2
+        }).then(function (res) {
+          self.$vux.loading.hide()
+          self.submitIng = false
+          let retdata = res.data
+          self.$vux.toast.show({
+            text: retdata.error,
+            type: retdata.flag ? 'success' : 'warn',
+            time: self.$util.delay(retdata.error)
+          })
+          if (retdata.flag) {
+            self.loginUser = retdata.data
+            User.set(retdata.data)
+            if (self.query.fromPage) {
+              self.$router.push({path: `/${self.query.fromPage}`})
+            }
+          }
+        })
       }
     }
   },

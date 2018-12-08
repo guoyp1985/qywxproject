@@ -111,6 +111,7 @@
 </template>
 <script>
 import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
+import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
 
@@ -288,29 +289,33 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
-        self.$vux.confirm.show({
-          content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
-          onConfirm () {
-            self.$vux.loading.show()
-            let subdata = { identity: 'seller' }
-            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              self.$vux.toast.show({
-                text: data.error,
-                time: self.$util.delay(data.error),
-                onHide: function () {
-                  if (data.flag === 1) {
-                    self.total = '0.00'
-                    self.tabdata1 = []
-                    self.summoney = '0.00'
+        if (!self.loginUser.idcardno) {
+          self.$router.push({path: '/authPhoto', query: {fromPage: 'userRebateInfo'}})
+        } else {
+          self.$vux.confirm.show({
+            content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
+            onConfirm () {
+              self.$vux.loading.show()
+              let subdata = { identity: 'seller' }
+              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+                let data = res.data
+                self.$vux.loading.hide()
+                self.$vux.toast.show({
+                  text: data.error,
+                  time: self.$util.delay(data.error),
+                  onHide: function () {
+                    if (data.flag === 1) {
+                      self.total = '0.00'
+                      self.tabdata1 = []
+                      self.summoney = '0.00'
+                    }
+                    self.eventIng = false
                   }
-                  self.eventIng = false
-                }
+                })
               })
-            })
-          }
-        })
+            }
+          })
+        }
       }
     },
     getData () {
@@ -319,6 +324,7 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.loginUser = User.get()
       this.getData()
     }
   },
