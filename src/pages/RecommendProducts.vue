@@ -1,14 +1,19 @@
 <template>
-  <div class="containerarea bg-white font14 notop nobottom rproducts">
-    <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+  <div class="containerarea columnarea bg-white font14 notop nobottom rproducts">
+    <tab class="w_100 v-tab">
+      <tab-item v-for="(item,index) in classData" :selected="selectedIndex == index" :key="index"  @on-item-click="onItemClick">{{item.title}}</tab-item>
+    </tab>
+    <div class="column-content" style="overflow-y:auto;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
+      <!--
       <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
         <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
         <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
           <div>选择你想要产品去分销吧</div>
         </div>
       </div>
+    -->
       <div v-if="disProductData" class="productlist squarepic pb10">
-        <div v-if="productData.length == 0" class="emptyitem flex_center">还没有厂商提供货源</div>
+        <div v-if="productData.length == 0" class="emptyitem flex_center align_center w_100">该分类下暂无货源数据</div>
         <router-link v-else v-for="(item,index) in productData" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
       		<div class="inner list-shadow">
       			<div class="picarea">
@@ -38,14 +43,17 @@ Apply join:
 </i18n>
 
 <script>
+import { Tab, TabItem } from 'vux'
 import ENV from 'env'
 import Time from '#/time'
 
+let self = this
 const limit = 10
 let pageStart = 0
 
 export default {
   components: {
+    Tab, TabItem
   },
   filters: {
     dateformat: function (value) {
@@ -57,7 +65,9 @@ export default {
       query: {},
       viewData: {},
       disProductData: false,
-      productData: []
+      productData: [],
+      classData: [],
+      selectedIndex: 0
     }
   },
   watch: {
@@ -67,7 +77,6 @@ export default {
   },
   methods: {
     handleScroll (refname) {
-      const self = this
       let scrollArea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollArea,
@@ -81,9 +90,9 @@ export default {
       })
     },
     getData1 () {
-      const self = this
-      self.$http.post(`${ENV.BokaApi}/api/retailer/recommendByFids`, {
-        pagestart: pageStart, limit: limit
+      // self.$http.post(`${ENV.BokaApi}/api/retailer/recommendByFids`, {
+      self.$http.post(`${ENV.BokaApi}/api/list/factoryproduct?orderby=saled`, {
+        pagestart: pageStart, limit: limit, classid: self.classData[self.selectedIndex].id
       }).then(function (res) {
         self.$vux.loading.hide()
         const data = res.data
@@ -92,20 +101,39 @@ export default {
         self.disProductData = true
       })
     },
-    refresh () {
-      const self = this
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
-      if (self.productData.length < limit) {
+    onItemClick (index) {
+      if (index !== self.selectedIndex) {
+        self.selectedIndex = index
         pageStart = 0
         self.$vux.loading.show()
         self.disProductData = false
         self.productData = []
         self.getData1()
       }
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+      if (!self.classData.length) {
+        self.$http.get(`${ENV.BokaApi}/api/list/productclass?ascdesc=asc`).then(function (res) {
+          self.$vux.loading.hide()
+          const data = res.data
+          const retdata = data.data ? data.data : data
+          self.classData = retdata
+          pageStart = 0
+          self.$vux.loading.show()
+          self.disProductData = false
+          self.productData = []
+          self.getData1()
+        })
+      }
     }
   },
+  created () {
+    self = this
+  },
   activated () {
+    self = this
     this.refresh()
   }
 }
@@ -137,5 +165,10 @@ export default {
   background-size: cover;
   background-size: 100%;
   height: 20px;
+}
+.rproducts{
+  .scroll-class{
+    width:100%;
+  }
 }
 </style>

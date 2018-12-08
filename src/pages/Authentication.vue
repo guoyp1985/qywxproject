@@ -1,67 +1,316 @@
 <template>
-  <div class="authentication">
+  <div class="containerarea font14 columnarea authentication">
     <div class="header">根据电子商务法律规定，请先进行实名认证</div>
-    <div class="photo1">
-      <div class="phleft">
-        <img src="../assets/images/card/photo1.png" />
-        <div class="txt">(身份证正面)</div>
+    <div class="column-content" style="overflow-y:auto;">
+      <form enctype="multipart/form-data">
+        <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange1" />
+      </form>
+      <form enctype="multipart/form-data">
+        <input ref="fileInput2" class="hide" type="file" name="files" @change="fileChange2" />
+      </form>
+      <form enctype="multipart/form-data">
+        <input ref="fileInput3" class="hide" type="file" name="files" @change="fileChange3" />
+      </form>
+      <div class="photo-item">
+        <div class="flex_cell flex_center">
+          <div class="phleft">
+            <img src="../assets/images/card/photo1.png" />
+            <div class="txt">(身份证正面)</div>
+          </div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="linek flex_center" @click="uploadPhoto1">
+            <div class="w_100 align_center" v-if="!photo1 || photo1 == ''">
+              <span class="al al-zhaoxiangji"></span>
+              <div class="font10 txtph">上传正面照片</div>
+            </div>
+            <div v-else class="w_100 flex_center">
+              <img :src="photo1" />
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="linek">
-        <span class="al al-zhaoxiangji"></span>
-        <div class="font10 txtph">上传正面照片</div>
+      <div v-if="disResult1 && !photoOk1" class="padding10 color-red align_right">请上传正确格式的身份证照片</div>
+      <div class="photo-item">
+        <div class="flex_cell flex_center">
+          <div class="phleft">
+            <img src="../assets/images/card/photo2.png" />
+            <div class="txt">(身份证反面)</div>
+          </div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="linek flex_center" @click="uploadPhoto2">
+            <div class="w_100 align_center" v-if="!photo2 || photo2 == ''">
+              <span class="al al-zhaoxiangji"></span>
+              <div class="font10 txtph">上传反面照片</div>
+            </div>
+            <div v-else class="w_100 flex_center">
+              <img :src="photo2" />
+            </div>
+          </div>
+        </div>
       </div>
+      <div v-if="disResult2 && !photoOk2" class="padding10 color-red align_right">请上传正确格式的身份证照片</div>
+      <div class="photo-item">
+        <div class="flex_cell flex_center">
+          <div class="phleft">
+            <img src="../assets/images/card/photo3.png" />
+            <div class="txt">(手持正面)</div>
+          </div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="linek flex_center" @click="uploadPhoto3">
+            <div class="w_100 align_center" v-if="!photo3 || photo3 == ''">
+              <span class="al al-zhaoxiangji"></span>
+              <div class="font10 txtph">手持正面照片</div>
+            </div>
+            <div v-else class="w_100 flex_center">
+              <img :src="photo3" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="message mt5"><span>* </span>拍摄二代身份证原件，确保图片清晰，四角完整。</div>
     </div>
-    <div class="photo1 mt10">
-      <div class="phleft">
-        <img src="../assets/images/card/photo2.png" />
-        <div class="txt">(身份证反面)</div>
-      </div>
-      <div class="linek">
-        <span class="al al-zhaoxiangji"></span>
-        <div class="font10 txtph">上传反面照片</div>
-      </div>
-    </div>
-    <div class="photo1 mt10">
-      <div class="phleft">
-        <img src="../assets/images/card/photo3.png" />
-        <div class="txt">(手持正面)</div>
-      </div>
-      <div class="linek">
-        <span class="al al-zhaoxiangji"></span>
-        <div class="font10 txtph">手持正面照片</div>
-      </div>
-    </div>
-    <div class="message mt5"><span>* </span>拍摄二代身份证原件，确保图片清晰，四角完整。</div>
-    <div class="btn">
-      <div class="btnbom btn-bottom-red">立即认证</div>
+    <div class="btn flex_center">
+      <div class="btnbom btn-bottom-red" @click="submitEvent">立即认证</div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-
+import ENV from 'env'
+import { User } from '#/storage'
+let self = this
+export default {
+  data () {
+    return {
+      query: {},
+      loginUser: {},
+      photo1: '',
+      photoOk1: false,
+      disResult1: false,
+      photo2: '',
+      photoOk2: false,
+      disResult2: false,
+      photo3: '',
+      submitIng: false
+    }
+  },
+  methods: {
+    photoCallback (data) {
+      const self = this
+      if (data.flag === 1) {
+        self.photoarr.push(data.data)
+        self.submitdata.photo = self.photoarr.join(',')
+      } else if (data.error) {
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error)
+        })
+      }
+    },
+    wxUpload (callback) {
+      self.$wechat.ready(function () {
+        self.$util.wxUploadImage({
+          maxnum: 1,
+          handleCallback: function (data) {
+            if (data.flag === 1) {
+              callback && callback(data)
+            } else if (data.error) {
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
+            }
+          }
+        })
+      })
+    },
+    uploadPhoto1 () {
+      const fileInput = self.$refs.fileInput1[0] ? self.$refs.fileInput1[0] : self.$refs.fileInput1
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.wxUpload(function (data) {
+          self.photo1 = data.data
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
+            type: 0, cardphoto: self.photo1
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let retdata = res.data
+            if (retdata.flag) {
+              self.photoOk1 = true
+            } else {
+              self.photoOk1 = false
+            }
+            self.disResult1 = true
+            self.$vux.toast.show({
+              text: retdata.error,
+              time: self.$util.delay(retdata.error)
+            })
+          })
+        })
+      }
+    },
+    uploadPhoto2 () {
+      const fileInput = self.$refs.fileInput2[0] ? self.$refs.fileInput2[0] : self.$refs.fileInput2
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.wxUpload(function (data) {
+          self.photo2 = data.data
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
+            type: 1, cardphoto: self.photo2
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let retdata = res.data
+            if (retdata.flag) {
+              self.photoOk2 = true
+            } else {
+              self.photoOk2 = false
+            }
+            self.disResult2 = true
+            self.$vux.toast.show({
+              text: retdata.error,
+              time: self.$util.delay(retdata.error)
+            })
+          })
+        })
+      }
+    },
+    uploadPhoto3 () {
+      const fileInput = self.$refs.fileInput3[0] ? self.$refs.fileInput3[0] : self.$refs.fileInput3
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.wxUpload(function (data) {
+          self.photo3 = data.data
+        })
+      }
+    },
+    fileUpload (filedata, callback) {
+      self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+        let data = res.data
+        self.$vux.loading.hide()
+        if (data.flag === 1) {
+          callback && callback(data)
+        } else if (data.error) {
+          self.$vux.toast.show({
+            text: data.error,
+            time: self.$util.delay(data.error)
+          })
+        }
+      })
+    },
+    fileChange1 (e) {
+      let files = e.target.files
+      if (files.length > 0) {
+        const fileForm = e.target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.fileUpload(filedata, function (data) {
+          self.photo1 = data.data
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
+            type: 0, cardphoto: self.photo1
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let retdata = res.data
+            if (retdata.flag) {
+              self.photoOk1 = true
+            } else {
+              self.photoOk1 = false
+            }
+            self.disResult1 = true
+            self.$vux.toast.show({
+              text: retdata.error,
+              time: self.$util.delay(retdata.error)
+            })
+          })
+        })
+      }
+    },
+    fileChange2 (e) {
+      let files = e.target.files
+      if (files.length > 0) {
+        const fileForm = e.target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.fileUpload(filedata, function (data) {
+          self.photo2 = data.data
+          self.$vux.loading.show()
+          self.$http.post(`${ENV.BokaApi}/api/validateIDCard`, {
+            type: 1, cardphoto: self.photo2
+          }).then(function (res) {
+            self.$vux.loading.hide()
+            let retdata = res.data
+            if (retdata.flag) {
+              self.photoOk2 = true
+            } else {
+              self.photoOk2 = false
+            }
+            self.disResult2 = true
+            self.$vux.toast.show({
+              text: retdata.error,
+              time: self.$util.delay(retdata.error)
+            })
+          })
+        })
+      }
+    },
+    fileChange3 (e) {
+      const self = this
+      let files = e.target.files
+      if (files.length > 0) {
+        const fileForm = e.target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.fileUpload(filedata, function (data) {
+          self.photo3 = data.data
+        })
+      }
+    },
+    submitEvent () {
+      if (!self.submitIng) {
+        if (self.photo1 === '' || self.photo2 === '' || self.photo3 === '') {
+          self.$vux.toast.show({
+            text: '请按要求上传身份证照片',
+            time: 1500
+          })
+          return false
+        }
+        self.submitIng = true
+      }
+    }
+  },
+  activated () {
+    self = this
+    this.$util.miniPost()
+    this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+    this.loginUser = User.get()
   }
+}
 </script>
 
 <style lang="less">
-  .authentication{width:100%;height:100%;background-color:#F2F2F2;}
-  .authentication .header{height:44px;text-align:center;line-height:44px;background: -webkit-linear-gradient(#ff6a61, #f63f3d);color:#fff;}
-  .authentication .photo1{
-    width:100%;padding:20px 50px;background-color:#fff;color:#666666;font-size:14px;display:flex;flex-direction:row;position: relative;
+.authentication{
+  background-color:#F2F2F2;
+  .header{width:100%;height:44px;text-align:center;line-height:44px;background: -webkit-linear-gradient(#ff6a61, #f63f3d);color:#fff;}
+  .photo-item{
+    width:100%;padding:20px 0;background-color:#fff;color:#666666;display:flex;margin-bottom:10px;box-sizing: border-box;
     border-bottom:1px solid #e5e5e5;
+    img{width:80px;height:80px;object-fit:cover;}
+    .txt{padding-left:10px;}
+    .linek{
+      width:80px;height:80px;border:1px dashed #e5e5e5;text-align:center;color:#a5a5a5;
+    }
   }
-  .authentication .photo1 img{width:100px;height:70px;}
-  .authentication .photo1 .txt{padding-left:10px;}
-  .authentication .photo1 .linek{
-    width:80px;height:80px;border:1px dashed #e5e5e5;position:absolute;right:160px;top:25px;text-align:center;color:#a5a5a5;line-height:80px;
-  }
-  .authentication .photo1 .linek .txtph{position:absolute;top:25px;left:5px;}
-  .authentication .message{text-align:right;font-size:10px;color:#a5a5a5;}
-  .authentication .message span{font-size:16px;color:red;}
-  .authentication .btn{width:100%;margin:0 auto;}
-  .authentication .btn .btnbom{
-    width:85%;height:40px;color:#fff;text-align:center;line-height:40px;position:fixed;bottom:0;
-    left:0;right:0;margin-left:auto;margin-right:auto;
-  }
+  .message{text-align:right;font-size:10px;color:#a5a5a5;}
+  .message span{font-size:16px;color:red;}
+  .btn{width:100%;height:50px;}
+  .btn .btnbom{width:85%;height:40px;text-align:center;}
+}
 </style>
