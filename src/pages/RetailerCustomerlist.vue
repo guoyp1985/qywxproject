@@ -616,7 +616,6 @@ export default {
       })
     },
     init () {
-      this.$vux.loading.show()
       this.getData()
     },
     initContainer () {
@@ -640,7 +639,6 @@ export default {
           self.dateClass = ''
         }
         if (!this.loginUser.isretailer) {
-          this.$vux.loading.hide()
           self.initContainer()
           this.showApply = true
         } else {
