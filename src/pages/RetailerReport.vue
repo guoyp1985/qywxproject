@@ -88,6 +88,7 @@
         </card>
       </div>
     </div>
+    <div class="padding10 align_center mt12 bg-white bold color-red" v-if="loginUser.subscribe != 1 && query.commfrom != 'tljk'">关注公众号【{{WeixinName}}】及时接收报告通知</div>
   </div>
 </template>
 <script>
@@ -127,7 +128,8 @@ export default {
         newsviews: 0,
         newsshares: 0,
         newsfavorites: 0
-      }
+      },
+      WeixinName: ENV.WeixinName
     }
   },
   filters: {
