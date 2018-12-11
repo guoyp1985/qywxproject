@@ -305,7 +305,7 @@ Confirm txt:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, XTextarea, XInput, TransferDom, Popup, CheckIcon } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Group, XTextarea, XInput, TransferDom, Popup, CheckIcon, Checker, CheckerItem } from 'vux'
 import Forminputplate from '@/components/Forminputplate'
 import ENV from 'env'
 
@@ -349,7 +349,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, XTextarea, XInput, Popup, CheckIcon, Forminputplate
+    Tab, TabItem, Swiper, SwiperItem, Group, XTextarea, XInput, Popup, CheckIcon, Forminputplate, Checker, CheckerItem
   },
   data () {
     return {
@@ -661,7 +661,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.retailersetting .x-checker checker-item{
+.retailersetting .x-checker .ck-item{
   font-size:13px;
   display: inline-block;
   padding: 0 15px;

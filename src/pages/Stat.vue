@@ -107,6 +107,7 @@
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                      <div class="clamp1 color-gray"><span class="db-in">影响力: {{ item.yingxiangli }}</span><span class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                       <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
