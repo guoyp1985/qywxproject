@@ -41,7 +41,7 @@ export default {
       showSetting: false,
       showApply: false,
       retailerInfo: {},
-      submitdata: { title: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
+      submitdata: { title: '', productclass: '', qrcode: '', buyonline: 1, content: '', fastreply: '你好，请稍等，一会为你服务' },
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
@@ -66,7 +66,11 @@ export default {
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
           for (let key in self.submitdata) {
-            self.submitdata[key] = self.retailerInfo[key]
+            if (key === 'productclass') {
+              self.submitdata[key] = self.retailerInfo[key].split(',')
+            } else {
+              self.submitdata[key] = self.retailerInfo[key]
+            }
           }
           for (let key in self.submitdata1) {
             self.submitdata1[key] = self.retailerInfo[key]
@@ -79,6 +83,17 @@ export default {
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
           }
+          let productclass = self.retailerInfo.productclass.split(',')
+          for (let k = 0; k < productclass.length; k++) {
+            for (let i = 0; i < self.classData.length; i++) {
+              if (parseInt(productclass[k]) === self.classData[i].id) {
+                self.classData[i].checked = true
+                break
+              }
+            }
+          }
+          console.log(self.classData)
+          console.log(productclass)
         }
       })
     },
@@ -99,36 +114,7 @@ export default {
       this.loginUser = User.get()
       this.query = this.$route.query
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         self.initContainer()
-        if (!this.loginUser.isretailer) {
-          self.initContainer()
-          this.showApply = true
-          self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-            { params: { limit: 100 } }
-          ).then(function (res) {
-            self.$vux.loading.hide()
-            if (res.status === 200) {
-              let data = res.data
-              data = data.data ? data.data : data
-              for (let i = 0; i < data.length; i++) {
-                data[i].checked = false
-              }
-              self.classData = data
-            }
-          })
-        } else {
-          self.$vux.loading.hide()
-          self.initContainer()
-          self.showSetting = true
-          this.getData()
-        }
-        // }
         self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
           { params: { limit: 100 } }
         ).then(function (res) {
@@ -140,6 +126,15 @@ export default {
               data[i].checked = false
             }
             self.classData = data
+          }
+          if (!self.loginUser.isretailer) {
+            self.initContainer()
+            self.showApply = true
+          } else {
+            self.$vux.loading.hide()
+            self.initContainer()
+            self.showSetting = true
+            self.getData()
           }
         })
       }
