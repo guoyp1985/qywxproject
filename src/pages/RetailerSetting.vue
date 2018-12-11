@@ -10,7 +10,8 @@
         :photoarr="photoarr"
         :showphoto-arr="showphotoArr"
         :submitdata="submitdata"
-        :submitdata1="submitdata1">
+        :submitdata1="submitdata1"
+        :class-data="classData">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -128,6 +129,19 @@ export default {
           this.getData()
         }
         // }
+        self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+          { params: { limit: 100 } }
+        ).then(function (res) {
+          self.$vux.loading.hide()
+          if (res.status === 200) {
+            let data = res.data
+            data = data.data ? data.data : data
+            for (let i = 0; i < data.length; i++) {
+              data[i].checked = false
+            }
+            self.classData = data
+          }
+        })
       }
     }
   },

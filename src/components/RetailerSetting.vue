@@ -103,6 +103,19 @@
                     </x-textarea>
                   </group>
                 </forminputplate>
+                <div class="form-item required padding10" v-if="classData.length > 0"> <!-- //v-if="classData.length > 0 && classDataShow" -->
+                  <input v-model="submitdata.productclass" type="hidden" name="productclass" />
+                  <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
+                  <checker
+                  class="x-checker"
+                  type="checkbox"
+                  v-model="submitdata.productclass"
+                  :max="3"
+                  default-item-class="ck-item"
+                  selected-item-class="ck-item-selected">
+                    <checker-item class="border1px color-gray" v-for="(item, index) in classData" :key="index" :value="item.id">{{ item.title }}</checker-item>
+                  </checker>
+                </div>
               </div>
               <div v-if="showmore" @click="expandevent" class="padding15 font14 align_center color-gray">{{ $t('Up text') }}<i class="al al-jiantou2-up font14 middle-cell"></i></div>
               <div v-else class="padding15 font14 align_center color-gray"  @click="expandevent">{{ $t('Epand text') }}<i class="al al-jiantouyoushuang- font14"></i></div>
@@ -299,6 +312,10 @@ import ENV from 'env'
 export default {
   name: 'RetailerSetting',
   props: {
+    classData: {
+      type: Array,
+      default: []
+    },
     query: {
       type: Object,
       default: {}
@@ -345,7 +362,14 @@ export default {
       showoffline: false,
       showqrcode: false,
       selectedIndex: 0,
-      tabtxts: [ '基本设置', '卖家秀设置' ]
+      tabtxts: [ '基本设置', '卖家秀设置' ],
+      classDataShow: false,
+      submitdata: {
+        truename: '',
+        mobile: '',
+        verifycode: '',
+        productclass: ''
+      }
     }
   },
   watch: {
@@ -637,6 +661,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.retailersetting .x-checker checker-item{
+  font-size:13px;
+  display: inline-block;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  border:0px;
+  text-align: center;
+  border-radius: 3px;
+  background-color: #fff;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  box-sizing: border-box;
+}
+.retailersetting .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
 .retailersetting .form-item{position:relative;padding:10px;}
 .retailersetting .form-item:after{
   content:"";display:block;
