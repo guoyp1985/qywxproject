@@ -44,7 +44,7 @@
                         <div class="color-orange7 font14">{{ item.linkman }}</div>
                         <div class="color-gray font12 pr10">{{ item.content }}</div>
                       </router-link>
-                      <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
+                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="t-cell w50 align_right v_middle">
                         <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
                       </router-link>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="color-orange7 font14">{{ item.linkman }}</div>
                         <div class="color-gray font12 pr10">{{ item.content }}</div>
                       </router-link>
-                      <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell w50 align_right v_middle">
+                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="t-cell w50 align_right v_middle">
                         <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
                       </router-link>
                     </div>

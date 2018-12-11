@@ -1,11 +1,11 @@
 <template>
-  <div class="containerarea font14 havetoptab bg-page ractivitylist" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea font14 havetoptab bg-page ractivitylist">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
       <div class="pagetop">
         <tab v-model="tabmodel" class="v-tab">
-          <tab-item v-if="!tabdata1 || tabdata1.length == 0" :selected="true">创建活动</tab-item>
+          <tab-item v-if="!tabdata1 || tabdata1.length == 0 || query.from == 'miniprogram'" :selected="true">创建活动</tab-item>
           <tab-item
             v-else
             v-for="(item,index) in tabtxts"
@@ -14,7 +14,7 @@
         </tab>
       </div>
       <div class="s-container" style="top:44px">
-        <template v-if="!tabdata1 || tabdata1.length == 0">
+        <template v-if="!tabdata1 || tabdata1.length == 0 || query.from == 'miniprogram'">
           <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
         </template>
         <swiper v-else v-model="tabmodel" class="x-swiper no-indicator">
@@ -119,7 +119,7 @@
               </div>
             </div>
             <template v-if="index == 1">
-              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd" :popupBottom="popupBottom" :viewHeight="viewHeight"></create-activity>
+              <create-activity :retailer-info="retailerInfo" @on-add="clickAdd"></create-activity>
             </template>
           </swiper-item>
         </swiper>
@@ -172,13 +172,12 @@ import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Confirm, Popup, XImg } f
 import CreateActivity from '@/components/CreateActivity'
 import Time from '#/time'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
 const limit = 10
 let pageStart1 = 0
-const aHeight = AdapterHeight.get()
 
 export default {
   directives: {
@@ -203,9 +202,7 @@ export default {
       tabmodel: 0,
       tabdata1: [],
       isFirst: true,
-      activityCount: 0,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      activityCount: 0
     }
   },
   watch: {
@@ -221,6 +218,7 @@ export default {
         let queryParams = {type: type, from: this.query.from}
         if (this.query.minibackurl) {
           queryParams.minibackurl = this.query.minibackurl
+          queryParams.backtype = this.query.backtype
         }
         this.$router.push({path: '/addActivity', query: queryParams})
       }
@@ -340,9 +338,6 @@ export default {
     this.init()
   },
   activated () {
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh()
     this.$util.miniPost()
   }

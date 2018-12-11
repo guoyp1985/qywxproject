@@ -6,7 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <router-link v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" :to="{path:'/store',query:{ wid: retailerInfo.uid}}" style="color:inherit;">
+      <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
@@ -19,7 +19,7 @@
         <div class="flex_right" style="width:80px;">
           <div class="qbtn4 color-orange5 font12 border-color-orange5" style="padding: 1px 8px;">进店逛逛</div>
         </div>
-      </router-link>
+      </div>
       <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
         <div class="chatlist" ref="scrollContent">
@@ -47,12 +47,12 @@
                   <div class="main message-text">
                     <div class="scroll_item">
                       <div class="con">
-                        <router-link :to="news.link" v-for="(news, index1) in item.newsdata" :key="index1">
-                          <div class="pic">
+                        <div v-for="(news, index1) in item.newsdata" :key="index1">
+                          <div class="pic" @click="toNews(news)">
                             <div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
                             <span class="title">{{news.title}}</span>
                           </div>
-                        </router-link>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -234,7 +234,6 @@ const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).
 let room = ''
 let minIdFlag = 0
 let intervalId = null
-// const aHeight = AdapterHeight.get()
 
 export default {
   directives: {
@@ -258,7 +257,6 @@ export default {
       query: {},
       messages: [],
       viewHeight: `${-132}`,
-      // viewHeight: `${-(132 + aHeight)}`, // '-52',
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -392,6 +390,9 @@ export default {
     },
     onBlur () {
       clearInterval(intervalId)
+      setTimeout(() => {
+        document.body.scrollTop = document.body.scrollHeight
+      }, 100)
     },
     toggleVoice () {
       if (this.showEmotBox) {
@@ -454,8 +455,6 @@ export default {
           clientH += 80
         }
         this.viewHeight = `${-clientH}`
-        // self.viewHeight = `${-(clientH + aHeight)}`
-        // this.viewHeight = `${this.$refs.scrollContainer.$el.clientHeight - this.$refs.bottomArea.clientHeight}`
         console.log(this.viewHeight)
         this.setScrollToBottom()
       })
@@ -983,12 +982,26 @@ export default {
         }
       })
     },
+    toStore () {
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      }
+    },
+    toNews (news) {
+      console.log('in toNews')
+      console.log(news)
+      if (this.query.from === 'miniprogram') {
+        // console.log('i am from miniprogram')
+        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages${news.link}`})
+      } else {
+        this.$router.push({path: news.link})
+      }
+    },
     setContactUser () {
       return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
     },
-    // init () {
-    //   this.loginUser = User.get()
-    // },
     refresh () {
       const self = this
       room = ''
@@ -999,7 +1012,6 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      // this.viewHeight = `${-(132 + aHeight)}`
       this.viewHeight = `${-132}`
       this.isUserTouch = false
       this.hasNewMessage = false

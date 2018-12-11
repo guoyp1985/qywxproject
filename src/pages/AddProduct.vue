@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom font14 addproduct" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea s-havebottom font14 addproduct">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -81,7 +81,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
+                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -90,7 +90,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.price" @keyup="priceChange('price')" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+                <input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -261,13 +261,12 @@
 <script>
 import { Group, XInput, XTextarea, XSwitch } from 'vux'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import OpenVip from '@/components/OpenVip'
 
-const aHeight = AdapterHeight.get()
 export default {
   components: {
     Group, XInput, XTextarea, Sos, Subscribe, ApplyTip, OpenVip, XSwitch
@@ -310,9 +309,7 @@ export default {
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '' },
       showRebate: false,
       classData: [],
-      submitIng: false,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      submitIng: false
     }
   },
   watch: {
@@ -516,7 +513,13 @@ export default {
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                  if (self.query.backtype === 'relaunch') {
+                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                  } else if (self.query.backtype === 'redirect') {
+                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                  } else {
+                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                  }
                 } else if (self.query.from === 'apply') {
                   self.$router.push({path: '/centerSales'})
                 } else {
@@ -673,9 +676,6 @@ export default {
     this.init()
   },
   activated () {
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh()
     this.$util.miniPost()
   }

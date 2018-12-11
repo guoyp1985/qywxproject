@@ -14,7 +14,7 @@
             <template v-if="disList1">
               <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
               <div v-else class="scroll_list">
-                <div v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white flex_left">
+                <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white flex_left item-${item.id}`">
                   <div class="flex_cell padding10">
                     <div class="bold">{{item.code}}</div>
                     <div class="color-gray font12">生成时间: {{item.dateline | dateFormat}}</div>
@@ -113,8 +113,9 @@ export default {
     btnclose () {
       this.showModal = false
     },
-    copyTxt () {
-      let eleobj = jQuery('.concession .copy_txt')[0]
+    copyTxt (item) {
+      const className = `.concession .item-${item.id} .copy_txt`
+      const eleobj = jQuery(className)[0]
       let range = null
       let save = function (e) {
         e.clipboardData.setData('text/plain', eleobj.innerHTML)

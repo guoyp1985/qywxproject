@@ -29,7 +29,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item">
+                <Orderitemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <Orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -79,7 +79,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item">
+                <orderitemplate v-else v-for="(item,index1) in tabdata2" :key="item.id" :data="item" :from="query.from">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -121,7 +121,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item">
+                <orderitemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :from="query.from">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -154,7 +154,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item">
+                <orderitemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" :from="query.from">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <orderproductplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -297,7 +297,9 @@ export default {
       this.searchword1 = ''
     },
     onSubmit1 () {
-      this.$router.push({path: '/RetailerOrderSearch', query: {keyword: this.searchword1}})
+      const kw = this.searchword1
+      this.searchword1 = ''
+      this.$router.push({path: '/RetailerOrderSearch', query: {keyword: kw}})
     },
     handleScroll: function (refname, index) {
       const self = this

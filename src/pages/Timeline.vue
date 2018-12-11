@@ -10,7 +10,7 @@
           <div class="font16 clamp1">{{ viewuser.linkman }}</div>
           <div class="font13">成交概率 {{ viewuser.percent }}%</div>
         </div>
-        <router-link :to="{ path: '/chat', query: {uid: viewuser.uid} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
+        <router-link :to="{ path: '/chat', query: {uid: viewuser.uid, from: query.from} }" class="qbtn7 font14 bg-white color-red5">{{ $t('Contact') }}</router-link>
       </div>
       <div class="s-container">
         <div class="b_top_after padding10 flex_center bg-white list-shadow01">

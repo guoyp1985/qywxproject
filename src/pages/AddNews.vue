@@ -1,5 +1,5 @@
 <template>
-  <div id="article-info-edit" class="font14 containerarea notop" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div id="article-info-edit" class="font14 containerarea notop">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -87,12 +87,11 @@
 import { Group, XInput, XTextarea, Cell, XButton } from 'vux'
 import ClipPopup from '@/components/ClipPopup'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 import Sos from '@/components/Sos'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
-const aHeight = AdapterHeight.get()
 export default {
   components: {
     Group, XInput, XTextarea, Cell, XButton, ClipPopup, Sos, Subscribe, ApplyTip
@@ -111,9 +110,7 @@ export default {
       havenum: 0,
       submitdata: { title: '', photo: '', seodescription: '', summary: '' },
       requireddata: { title: '', 'photo': '' },
-      submitIng: false,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      submitIng: false
     }
   },
   computed: {
@@ -231,7 +228,13 @@ export default {
               if (data.flag === 1) {
                 if (self.query.minibackurl) {
                   let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                  if (self.query.backtype === 'relaunch') {
+                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                  } else if (self.query.backtype === 'redirect') {
+                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                  } else {
+                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                  }
                 } else {
                   let params = { id: data.data }
                   if (self.query.id) {
@@ -352,9 +355,6 @@ export default {
     }
   },
   activated () {
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.$util.miniPost()
     this.refresh()
   }

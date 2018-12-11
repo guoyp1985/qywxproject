@@ -1,5 +1,5 @@
 <template>
-  <div id="centersales" class="containerarea font14" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div id="centersales" class="containerarea font14">
     <template v-if="loginUser">
       <template v-if="afterApply">
         <swiper :show-dots="true" v-model="selectedIndex" class="x-swiper">
@@ -25,7 +25,7 @@
         </center-sales>
       </template>
       <template v-if="showApply">
-        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData"></retailer-apply>
+        <retailer-apply :login-user="loginUser" :after-apply="applySuccess" :class-data="classData" :systemParams="systemParams"></retailer-apply>
       </template>
     </template>
     <open-vip v-if="showVip && retailerInfo.isretailer == 2" :retailer-info="retailerInfo" @hide-vip="hideVip" @open-vip="openVip"></open-vip>
@@ -41,9 +41,8 @@ import Subscribe from '@/components/Subscribe'
 import OpenVip from '@/components/OpenVip'
 import Vip from '@/components/Vip'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 
-const aHeight = AdapterHeight.get()
 export default {
   components: {
     Swiper, SwiperItem, CenterSales, RetailerApply, Subscribe, Vip, OpenVip
@@ -62,8 +61,7 @@ export default {
       messages: 0,
       showVip: false,
       allowVipFee: ENV.allowVipFee,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      systemParams: {}
     }
   },
   methods: {
@@ -101,8 +99,13 @@ export default {
       const self = this
       if (self.query.minibackurl) {
         let minibackurl = decodeURIComponent(self.query.minibackurl)
-        // self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-        self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+        if (self.query.backtype === 'relaunch') {
+          self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+        } else if (self.query.backtype === 'redirect') {
+          self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+        } else {
+          self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+        }
       } else {
         self.initContainer()
         self.showCenter = true
@@ -134,9 +137,17 @@ export default {
               self.initContainer()
               self.showApply = true
               document.title = '申请卖家'
-              self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
-                { params: { limit: 100 } }
-              ).then(function (res) {
+              self.$http.post(`${ENV.BokaApi}/api/common/getSysParas`).then(function (res) {
+                self.$vux.loading.hide()
+                if (res.status === 200) {
+                  let data = res.data
+                  data = data.data ? data.data : data
+                  self.systemParams = data
+                }
+                return self.$http.get(`${ENV.BokaApi}/api/list/applyclass?ascdesc=asc`,
+                  { params: { limit: 100 } }
+                )
+              }).then(function (res) {
                 self.$vux.loading.hide()
                 if (res.status === 200) {
                   let data = res.data
@@ -208,10 +219,6 @@ export default {
     }
   },
   activated () {
-    console.log(aHeight)
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh(this.$route.query)
     this.$util.miniPost()
   },

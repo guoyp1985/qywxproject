@@ -102,7 +102,7 @@
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
                     </router-link>
-                    <div :to="{path: '/chat', query: {uid: item.uid}}" class="t-cell v_middle w60 align_right">
+                    <div :to="{path: '/chat', query: {uid: item.uid,from:query.from}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white" @click="deleteManager(item,index)">删除</div>
                     </div>
                   </div>

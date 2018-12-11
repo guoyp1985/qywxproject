@@ -59,7 +59,12 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <!--
       <div class="flex_cell flex_center" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
+        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
+      </div>
+    -->
+      <div class="flex_cell flex_center">
         <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
       </div>
       <div class="flex_cell flex_center">

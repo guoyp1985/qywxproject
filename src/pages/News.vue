@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="containerarea font14 bg-white news notop nobottom" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -17,7 +17,9 @@
     				<img src="https://tossharingsales.boka.cn/images/share1.jpg" />
     			</div>
     		</div>
+        <!--
         <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+      -->
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>
@@ -31,7 +33,7 @@
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
             <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
-              <div @click="toStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
+              <div @click="onStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
           <template v-if="showArticle">
@@ -45,36 +47,38 @@
               <div class="article-content" v-html="article.content"></div>
             </template>
           </template>
-          <div class="operate-area">
-            <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
-              <span class="al al-xing3 font14"></span>
-              <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
-            </x-button>
-            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
-              <span class="al al-kefu1 font14"></span>
-              <span>{{$t('Advisory')}}</span>
-            </x-button>
-            <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
-              <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
-              <span>{{$t('Store')}}</span>
-            </x-button>
-          </div>
-          <div class="reading-info">
-            <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
-            <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
-          </div>
-          <div class="qrcode-area">
-            <div class="qrcode-bg">
-              <div class="qrcode">
-                <img src="https://tossharingsales.boka.cn/images/fingerprint.gif"/>
-                <div class="scan-area">
-                  <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
-                  <img v-else :src="WeixinQrcode">
-                </div>
-              </div>
-              <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
+          <template v-if="query.control != 'edit'">
+            <div class="operate-area">
+              <x-button mini :plain="notFavorite" type="primary" @click.native="onFavorite">
+                <span class="al al-xing3 font14"></span>
+                <span>{{notFavorite ? $t('Favorite') : $t('Has Favorite')}}</span>
+              </x-button>
+              <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onAdvisory">
+                <span class="al al-kefu1 font14"></span>
+                <span>{{$t('Advisory')}}</span>
+              </x-button>
+              <x-button v-if="retailerInfo && retailerInfo.uid" mini plain type="primary" @click.native="onStore">
+                <span class="al al-aipinpaidianpuxiangqingmaishouzhuye font17"></span>
+                <span>{{$t('Store')}}</span>
+              </x-button>
             </div>
-          </div>
+            <div class="reading-info">
+              <span class="font14 color-gray">{{$t('Reading')}} {{article.views | readingCountFormat}}</span>
+              <span class="font14 color-gray" @click="clickDig"><span :class="`digicon ${isdig ? 'diged' : ''}`"></span> {{article.dig}}</span>
+            </div>
+            <div class="qrcode-area">
+              <div class="qrcode-bg">
+                <div class="qrcode">
+                  <img src="https://tossharingsales.boka.cn/images/fingerprint.gif"/>
+                  <div class="scan-area">
+                    <img v-if="retailerInfo.qrcode" :src="retailerInfo.qrcode">
+                    <img v-else :src="WeixinQrcode">
+                  </div>
+                </div>
+                <div v-if="retailerInfo.qrcode" class="align_center padding10 bold font16">长按二维码加{{ retailerInfo.linkman }}为好友</div>
+              </div>
+            </div>
+          </template>
         </div>
         <div class="comment-area">
           <div class="comment-op font14">
@@ -131,10 +135,9 @@ import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
 import jQuery from 'jquery'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 import Socket from '#/socket'
 
-const aHeight = AdapterHeight.get()
 let room = ''
 let self = {}
 export default {
@@ -173,9 +176,7 @@ export default {
       replyData: null,
       messages: 0,
       showEditor: false,
-      showArticle: false,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0'
+      showArticle: false
     }
   },
   filters: {
@@ -196,7 +197,13 @@ export default {
       this.$util.wxAccess()
     },
     clickInsertProduct (url) {
-      this.$router.push(url)
+      console.log('in in in clickInsertProduct')
+      if (self.query.from === 'miniprogram') {
+        const params = self.$util.query(url)
+        self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+      } else {
+        self.$router.push(url)
+      }
     },
     popupSubscribe () {
       this.showSubscribe = true
@@ -316,6 +323,7 @@ export default {
       })
     },
     clickProduct (event) {
+      console.log('进入点出商品事件')
       if (parseInt(self.reward.uid) !== parseInt(self.article.uploader)) {
         console.log('in news clickproduct')
         let node = event.target
@@ -331,7 +339,13 @@ export default {
           node = node.parentNode
         }
         if (linkurl) {
-          self.$router.push(linkurl)
+          console.log(linkurl)
+          if (self.query.from === 'miniprogram') {
+            const params = self.$util.query(linkurl)
+            self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.product}?id=${params.id}&wid=${params.wid}`})
+          } else {
+            self.$router.push(linkurl)
+          }
         }
       }
     },
@@ -462,12 +476,16 @@ export default {
           const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
         } else {
-          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id, wid: this.retailerInfo.uid}})
+          this.$router.push({path: '/chat', query: {uid: this.retailerInfo.uid, fromModule: 'news', fromId: this.query.id, wid: this.retailerInfo.uid, from: this.query.from}})
         }
       }
     },
     onStore () {
-      this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.store}?wid=${this.retailerInfo.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.retailerInfo.uid}})
+      }
     },
     onShare () {
     },
@@ -495,7 +513,13 @@ export default {
                 } else {
                   minibackurl = `${minibackurl}?id=${self.query.id}`
                 }
-                self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                if (self.query.backtype === 'relaunch') {
+                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                } else if (self.query.backtype === 'redirect') {
+                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                } else {
+                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                }
               }
             }
           }
@@ -584,9 +608,6 @@ export default {
         }
       }
     },
-    toStore () {
-      self.$router.push({path: '/store', query: {wid: self.retailerInfo.uid}})
-    },
     createSocket () {
       const uid = this.loginUser.uid
       const linkman = this.loginUser.linkman
@@ -629,9 +650,6 @@ export default {
   },
   activated () {
     self = this
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.refresh(this.$route.query)
     this.$util.miniPost()
   }

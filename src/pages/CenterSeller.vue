@@ -80,7 +80,7 @@
               <div v-if="focusCount > 0" class="row1 pt15">{{focusCount}}位好友关注了</div>
               <div v-show="disFocus" class="flex_left b_bottom_after pb15">
                 <div class="focuslist" ref="focusList">
-                  <router-link class="item" :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in focusData" :key="index">
+                  <router-link class="item" :to="{path:'/chat',query:{uid:item.uid,from:query.from}}" v-for="(item,index) in focusData" :key="index">
                     <div class="pic">
                       <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
@@ -213,7 +213,7 @@
           <div class="popup1 tagpopup">
             <div class="popup-top flex_center">关注好友</div>
             <div class="popup-middle">
-              <router-link :to="{path:'/chat',query:{uid:item.uid}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+              <router-link :to="{path:'/chat',query:{uid:item.uid,from:query.from}}" v-for="(item,index) in friendsData" :key="item.uid" class="db scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
                 <div class="t-table">
                   <div :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
                     <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -334,6 +334,9 @@ export default {
         } else {
           params.fromModule = 'retailer'
           params.fromId = params.uid
+          if (self.query.from) {
+            params.from = self.query.from
+          }
           self.$router.push({path: '/chat', query: params})
         }
       }

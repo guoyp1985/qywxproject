@@ -4,7 +4,7 @@
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll">
+      <div class="s-container scroll-container" :style="`top:0px;${query.from == 'miniprogram' ? 'bottom:0;' : ''}`" ref="scrollContainer" @scroll="handleScroll">
         <div v-if="disData" class="scroll_list bg-page">
           <template v-if="!productdata || productdata.length == 0">
             <div class="emptyitem">
@@ -39,7 +39,7 @@
           </template>
         </div>
       </div>
-      <div class="s-bottom">
+      <div class="s-bottom" v-if="query.from != 'miniprogram'">
         <div class="t-table h_100 align_center">
           <router-link class="t-cell h_100 v_middle bg-gray color-white" :to="{path: '/store'}">{{ $t('Back go shop') }}</router-link>
           <router-link class="t-cell h_100 v_middle bg-orange color-white" to="/addProduct">{{ $t('Add product') }}</router-link>
@@ -125,6 +125,7 @@ export default {
     return {
       showSos: false,
       sosTitle: '',
+      query: {},
       showContainer: false,
       loginUser: {},
       productdata: [],
@@ -321,6 +322,7 @@ export default {
     init () {
       const self = this
       this.loginUser = User.get()
+      this.query = this.$route.query
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'decorationshop'

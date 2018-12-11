@@ -403,9 +403,13 @@ export default {
             onHide: function () {
               if (data.flag === 1) {
                 if (self.isMiniInvoke) {
-                  self.$wechat.miniProgram.redirectTo({url: `/pages/pay?id=${data.id}`})
+                  self.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.pay}?id=${data.id}`})
                 } else {
-                  location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                  if (data.id) {
+                    location.replace(`${ENV.Host}/#/pay?id=${data.id}`)
+                  } else {
+                    self.$router.push({path: `/payment?wid=${self.curOrder.wid}`})
+                  }
                 }
               } else {
                 self.submiting = false

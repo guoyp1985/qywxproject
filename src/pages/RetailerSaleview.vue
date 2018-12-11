@@ -14,7 +14,7 @@
             <div class="align_left db-in" @click="createQrcode"><i class="al al-a166 font12" style="line-height: 12px;"></i> 返点客推荐码</div>
           </div>
           <div class="align_center w100">
-            <router-link :to="{path: '/chat', query: {uid: query.uid}}" class=""><i class="al al-liaotian font16"><span class="ml5">联系</span></i></router-link>
+            <router-link :to="{path: '/chat', query: {uid: query.uid, from: query.from}}" class=""><i class="al al-liaotian font16"><span class="ml5">联系</span></i></router-link>
             <a class="db mt5" v-if="sellerUser.mobile && sellerUser.mobile != ''" :href="`tel:${sellerUser.mobile}`"><i class="al al-fuwuzhongxin font16"><span class="ml5">电话</span></i></a>
           </div>
         </div>
@@ -54,7 +54,7 @@
                       <div class="clamp1 font14 color-gray">时间:{{ item.dateline | dateformat }}</div>
                     </router-link>
                     <div class="t-cell v_middle align_right w60">
-                      <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-red color-white">联系</router-link>
+                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="qbtn bg-red color-white">联系</router-link>
                     </div>
                   </div>
                 </div>
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div class="t-cell v_middle align_right w60">
-                      <router-link :to="{path: '/chat', query: {uid: item.uid}}" class="qbtn bg-red color-white">联系</router-link>
+                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="qbtn bg-red color-white">联系</router-link>
                     </div>
                   </div>
                 </div>

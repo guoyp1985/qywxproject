@@ -57,7 +57,7 @@
                   </template>
                   <template v-else>
                     <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div>
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
@@ -75,7 +75,7 @@
                           <div class="txt font12">{{ item.percent }}%</div>
                         </div>
                     </div>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: 'retailer'}}" class="t-cell v_middle w60 align_right">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
                     </router-link>
                   </div>
@@ -119,7 +119,7 @@
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                     </router-link>
                     <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: 'retailer'}}" class="t-cell v_middle w60 align_right">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
                     </router-link>
                   </div>
@@ -149,7 +149,7 @@
                   </template>
                   <template v-else>
                     <div><i class="al al-qiangkehu font60 pt20"></i></div>
-                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<router-link to="/store" class="color-blue">商品</router-link>或<router-link to="/retailerNews" class="color-blue">文章</router-link>给微信好友获得客户吧！</div>
+                    <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div>
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
@@ -161,7 +161,7 @@
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
                     </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: 'retailer'}}" class="t-cell v_middle w60 align_right">
+                    <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
                     </router-link>
                   </div>
@@ -317,7 +317,21 @@ export default {
     }
   },
   methods: {
-    handleScroll: function (refname, index) {
+    toStore () {
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.store})
+      } else {
+        this.$router.push('/store')
+      }
+    },
+    toNews () {
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.contentsNews})
+      } else {
+        this.$router.push('/store')
+      }
+    },
+    handleScroll (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
@@ -602,7 +616,6 @@ export default {
       })
     },
     init () {
-      this.$vux.loading.show()
       this.getData()
     },
     initContainer () {
@@ -626,7 +639,6 @@ export default {
           self.dateClass = ''
         }
         if (!this.loginUser.isretailer) {
-          this.$vux.loading.hide()
           self.initContainer()
           this.showApply = true
         } else {

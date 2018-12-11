@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14 addActivity" :style="`height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+  <div class="containerarea s-havebottom bg-white font14 addActivity">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -55,7 +55,7 @@
         <div class="flex_cell flex_center color-white btn-bottom-orange" @click="saveevent">{{ $t('Go to create') }}</div>
       </div>
       <div v-transfer-dom class="x-popup">
-        <popup v-model="showpopup" :style="`bottom:${popupBottom}px;height:${viewHeight == '100%' ? '100%' : viewHeight+'px'};`">
+        <popup v-model="showpopup" height="100%">
           <div class="popup1">
             <div class="popup-top flex_center">{{ $t('Select product') }}</div>
             <div ref="scrollProduct" @scroll="handleScroll('scrollProduct')" class="popup-middle">
@@ -134,9 +134,8 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 import Time from '#/time'
 import ENV from 'env'
-import { User, AdapterHeight } from '#/storage'
+import { User } from '#/storage'
 
-const aHeight = AdapterHeight.get()
 export default {
   directives: {
     TransferDom
@@ -170,26 +169,7 @@ export default {
       searchresult: false,
       limit: 20,
       pagestart1: 0,
-      viewHeight: '100%', // '-52'
-      popupBottom: '0',
-      submitProductData: {
-        id: '',
-        classid: '0',
-        title: '',
-        price: '',
-        oriprice: '',
-        storage: '',
-        unit: '件',
-        postage: '0.00',
-        rebate: '',
-        photo: '',
-        content: '',
-        contentphoto: '',
-        seotitle: '',
-        seodescription: '',
-        video: '',
-        allowcard: false
-      }
+      selectProductIndex: -1
     }
   },
   watch: {
@@ -240,8 +220,10 @@ export default {
       const self = this
       if (data.checked) {
         self.selectpopupdata = data
+        self.selectProductIndex = index
       } else {
         self.selectpopupdata = null
+        self.selectProductIndex = -1
       }
       for (let d of self.productdata) {
         if (d.id !== data.id && d.checked) {
@@ -253,6 +235,14 @@ export default {
     radiochange (val) {
       this.checkeduid = val
     },
+    afterSelectProduct () {
+      const self = this
+      self.selectproduct = self.selectpopupdata
+      self.submitdata.productid = self.selectproduct.id
+      self.showpopup = false
+      self.showselectproduct = false
+      self.showproductitem = true
+    },
     confirmpopup () {
       const self = this
       if (!this.selectpopupdata || !this.selectpopupdata.id) {
@@ -262,11 +252,29 @@ export default {
         })
         return false
       }
-      this.selectproduct = this.selectpopupdata
-      self.submitdata.productid = self.selectproduct.id
-      this.showpopup = false
-      this.showselectproduct = false
-      this.showproductitem = true
+      if (this.selectpopupdata.allowcard) {
+        self.$vux.confirm.show({
+          content: '该商品是可使用优惠券的商品，继续选择该商品将会导致两种优惠叠加使用',
+          confirmText: '继续创建',
+          cancelText: '停用优惠券',
+          onCancel () {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, {
+              module: 'product', id: self.selectpopupdata.id, param: 'allowcard', paramvalue: 0
+            }).then(function (res) {
+              self.$vux.loading.hide()
+              self.selectpopupdata.allowcard = 0
+              self.productdata[self.selectProductIndex].allowcard = 0
+              self.afterSelectProduct()
+            })
+          },
+          onConfirm () {
+            self.afterSelectProduct()
+          }
+        })
+      } else {
+        self.afterSelectProduct()
+      }
     },
     onChange (val) {
       this.searchword = val
@@ -412,7 +420,14 @@ export default {
         let maxval = parseFloat(self.submitdata.param_everymax)
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(minprice) || minprice < 0) {
+        if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的数字'
+          })
+          return false
+        }
+        if (isNaN(self.submitdata.param_minprice) || minprice < 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的活动价格'
@@ -426,7 +441,7 @@ export default {
           })
           return false
         }
-        if (isNaN(limitbuy)) {
+        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的投放总数'
@@ -440,7 +455,7 @@ export default {
           })
           return false
         }
-        if (isNaN(finishtime)) {
+        if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的砍价周期'
@@ -460,7 +475,14 @@ export default {
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
-        if (isNaN(groupprice) || groupprice < 0) {
+        if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '请输入正确的数字'
+          })
+          return false
+        }
+        if (isNaN(self.submitdata.param_groupprice) || groupprice <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的团购价格'
@@ -474,14 +496,14 @@ export default {
           })
           return false
         }
-        if (isNaN(numbers) || numbers <= 1) {
+        if (isNaN(self.submitdata.param_numbers) || numbers <= 1) {
           self.$vux.alert.show({
             title: '',
             content: '成团人数应大于1人'
           })
           return false
         }
-        if (isNaN(limitbuy)) {
+        if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的投放总数'
@@ -502,14 +524,14 @@ export default {
           })
           return false
         }
-        if (isNaN(finishtime)) {
+        if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的成团时间'
           })
           return false
         }
-        if (isNaN(everybuy)) {
+        if (isNaN(self.submitdata.param_everybuy) || everybuy <= 0) {
           self.$vux.alert.show({
             title: '',
             content: '请输入正确的限购件数'
@@ -517,36 +539,13 @@ export default {
           return false
         }
       }
-      if (self.selectproduct.allowcard) {
-        self.$vux.confirm.show({
-          content: '该商品已经开启可使用优惠券功能，活动创建成功后，无法更改活动的相关信息，确定创建吗？',
-          confirmText: '可以使用',
-          cancelText: '不可使用',
-          onCancel () {
-            self.selectproduct.allowcard = 0
-            self.$vux.loading.show()
-            let postData = {}
-            for (let key in self.submitProductData) {
-              postData[key] = self.selectproduct[key]
-            }
-            self.$http.post(`${ENV.BokaApi}/api/add/product`, postData).then(function (res) {
-              self.saveAjax()
-            })
-          },
-          onConfirm () {
-            self.$vux.loading.show()
-            self.saveAjax()
-          }
-        })
-      } else {
-        self.$vux.confirm.show({
-          content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
-          onConfirm () {
-            self.$vux.loading.show()
-            self.saveAjax()
-          }
-        })
-      }
+      self.$vux.confirm.show({
+        content: '活动创建成功后，无法更改活动的相关信息，确定创建吗？',
+        onConfirm () {
+          self.$vux.loading.show()
+          self.saveAjax()
+        }
+      })
     },
     saveevent () {
       const self = this
@@ -647,9 +646,6 @@ export default {
     }
   },
   activated () {
-    let disHeight = document.body.clientHeight - aHeight
-    this.viewHeight = `${disHeight}`
-    this.popupBottom = aHeight ? `${aHeight}` : '0'
     this.$util.miniPost()
     this.refresh()
   }

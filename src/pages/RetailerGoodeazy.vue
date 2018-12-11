@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 rgoodeazy bg-white s-havebottom">
+  <div :class="`containerarea font14 rgoodeazy bg-white ${query.from != 'miniprogram' ? 's-havebottom' : ''}`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -34,8 +34,17 @@
                 default-item-class="ck-item"
                 selected-item-class="ck-item-selected"
                 @on-change="searchEvent">
-                  <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw"><div class="clamp1" style="max-width:80px;">{{ kw }}</div></checker-item>
+                  <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
+                    <div class="clamp1" style="max-width:80px;">{{ kw }}</div>
+                    <!-- <div class="del bg-red color-white flex_center" @click="delKey"><i class="al al-guanbi font16"></i></div> -->
+                  </checker-item>
                 </checker>
+                <!-- <div class="kw-list">
+                  <div class="item" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
+                    <div class="inner">{{kw}}</div>
+                    <div class="del bg-red color-white flex_center" @click="delKey"><i class="al al-guanbi font16"></i></div>
+                  </div>
+                </div> -->
                 <div class="scroll_list pl10 pr10 mb12">
                   <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
                     <div class="t-table">
@@ -106,7 +115,7 @@
           </swiper-item>
         </swiper>
       </div>
-      <div class="s-bottom bottomnaviarea b_top_after">
+      <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
         <div class="t-table bottomnavi">
           <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
@@ -164,6 +173,10 @@ export default {
     }
   },
   methods: {
+    delKey (e) {
+      console.log(e)
+      console.log('删除标签')
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -333,6 +346,7 @@ export default {
                     let queryParmas = {id: data.data.id, control: 'edit'}
                     if (self.query.minibackurl) {
                       queryParmas.minibackurl = self.query.minibackurl
+                      queryParmas.backtype = self.query.backtype
                     }
                     self.$router.push({path: '/news', query: queryParmas})
                   }
@@ -380,6 +394,7 @@ export default {
                 let queryParmas = {id: data.data.id, control: 'edit'}
                 if (self.query.minibackurl) {
                   queryParmas.minibackurl = self.query.minibackurl
+                  queryParmas.backtype = self.query.backtype
                 }
                 self.$router.push({path: '/news', query: queryParmas})
               }
@@ -465,4 +480,8 @@ export default {
 <style lang="less" scoped>
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
+.rgoodeazy .del{
+  position:absolute;right:-10px;top:-10px;z-index:1;
+  width:20px;height:20px;border-radius:50%;font-size:12px;
+}
 </style>

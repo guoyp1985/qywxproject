@@ -251,7 +251,7 @@ export default {
             icon: 'al-set',
             color: 'rgba06',
             react: function () {
-              window.open(ENV.AdminUrl)
+              window.open(`${ENV.AdminUrl}?unionid=${self.loginUser.unionid}`)
             }
           }
           let isAdd = true
