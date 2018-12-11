@@ -92,7 +92,7 @@
                 </form>
               </div>
               <div class="padding10 flex_center">
-                <img src="../assets/images/news_example.png" style="max-width:60%;" />
+                <img src="../assets/images/news_example.png" style="max-width:80%;" />
               </div>
               <!-- <div class="bg-page" style="height:12px;"></div>
               <div class="padding15 font15 b_bottom_after">{{ $t('Collect record') }}</div>
