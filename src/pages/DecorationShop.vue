@@ -20,8 +20,9 @@
             </div>
           </template>
           <template v-else v-for="(item,index) in productdata">
-            <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
-              <div class="t-table bg-white pt10 pb10">
+            <!-- <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;"> -->
+            <div v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
+              <div class="t-table bg-white pt10 pb10" @click="onProduct(item)">
           			<div class="t-cell pl10 v_middle" style="width:90px;">
                   <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:80px;height:80px;" />
           			</div>
@@ -35,7 +36,8 @@
                   </div>
           			</div>
           		</div>
-            </router-link>
+            </div>
+            <!-- </router-link> -->
           </template>
         </div>
       </div>
@@ -150,6 +152,19 @@ export default {
     }
   },
   methods: {
+    onProduct (item) {
+      if (this.query.from === 'miniprogram') {
+        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages/product?id=${item.id}&wid=${this.loginUser.uid}`})
+      } else {
+        this.$router.push({
+          path: '/product',
+          query: {
+            id: item.id,
+            wid: this.loginUser.uid
+          }
+        })
+      }
+    },
     handleScroll () {
       const self = this
       self.$util.scrollEvent({
