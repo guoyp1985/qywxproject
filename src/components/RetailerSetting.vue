@@ -363,13 +363,7 @@ export default {
       showqrcode: false,
       selectedIndex: 0,
       tabtxts: [ '基本设置', '卖家秀设置' ],
-      classDataShow: false,
-      submitdata: {
-        truename: '',
-        mobile: '',
-        verifycode: '',
-        productclass: ''
-      }
+      classDataShow: false
     }
   },
   watch: {
