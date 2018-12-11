@@ -107,7 +107,7 @@
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray"><span class="db-in">影响力: {{ item.yingxiangli }}</span><span class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                       <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
@@ -126,6 +126,7 @@
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                       <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
@@ -145,6 +146,7 @@
                       <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
                       <div class="color-gray">团员: {{ item.otherusers }}</div>
                       <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
@@ -162,6 +164,7 @@
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
@@ -183,6 +186,7 @@
                         <span class="db-in ml5">助力: {{ item.sumothers }}人</span>
                       </div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
@@ -200,6 +204,7 @@
                     <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
@@ -230,6 +235,7 @@
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">分享次数: {{ item.shares }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </div>
                   </div>
                 </router-link>
@@ -246,6 +252,7 @@
                     <router-link :to="{path: '/factoryproduct', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                   </div>
                 </div>
@@ -262,6 +269,7 @@
                     <router-link :to="{path: '/factorynews', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                   </div>
                 </div>
@@ -278,6 +286,7 @@
                     <router-link :to="{path: '/academic', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
+                      <div v-if="item.yingxiangli || item.percent" class="clamp1 color-gray"><span v-if="item.yingxiangli" class="db-in">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in pl10">成交概率: {{ item.percent }}%</span></div>
                     </router-link>
                   </div>
                 </div>
