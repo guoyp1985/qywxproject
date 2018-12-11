@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea font14 rgoodeazy bg-white ${query.from != 'miniprogram' ? 's-havebottom' : ''}`">
+  <div class="containerarea font14 rgoodeazy bg-white">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -91,7 +91,10 @@
                   </div>
                 </form>
               </div>
-              <div class="bg-page" style="height:12px;"></div>
+              <div class="padding10 flex_center">
+                <img src="../assets/images/news_example.png" style="max-width:60%;" />
+              </div>
+              <!-- <div class="bg-page" style="height:12px;"></div>
               <div class="padding15 font15 b_bottom_after">{{ $t('Collect record') }}</div>
               <div v-if="disNewslist" class="scroll_list pl10 pr10 pb10">
                 <div v-if="!newsdata || newsdata.length == 0" class="scroll_item emptyitem">
@@ -110,18 +113,18 @@
                     </div>
                   </div>
                 </router-link>
-              </div>
+              </div> -->
             </div>
           </swiper-item>
         </swiper>
       </div>
-      <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
+      <!-- <div class="s-bottom bottomnaviarea b_top_after" v-if="query.from != 'miniprogram'">
         <div class="t-table bottomnavi">
           <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
           <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
         </div>
-      </div>
+      </div> -->
     </template>
   </div>
 </template>
@@ -186,19 +189,19 @@ export default {
       curArea.updateAutosize()
     },
     handleScroll2 () {
-      const self = this
-      if (self.loginUser.isretailer === 1) {
-        self.$util.scrollEvent({
-          element: self.$refs.scrollContainer2[0],
-          callback: function () {
-            if (self.newsdata.length === (self.pagestart + 1) * self.limit) {
-              self.pagestart++
-              self.$vux.loading.show()
-              self.getnewsdata()
-            }
-          }
-        })
-      }
+      // const self = this
+      // if (self.loginUser.isretailer === 1) {
+      //   self.$util.scrollEvent({
+      //     element: self.$refs.scrollContainer2[0],
+      //     callback: function () {
+      //       if (self.newsdata.length === (self.pagestart + 1) * self.limit) {
+      //         self.pagestart++
+      //         self.$vux.loading.show()
+      //         self.getnewsdata()
+      //       }
+      //     }
+      //   })
+      // }
     },
     getnewsdata () {
       this.$vux.loading.show()
@@ -303,12 +306,12 @@ export default {
         case 1:
           let curArea = this.$refs.urlTextarea[0] ? this.$refs.urlTextarea[0] : this.$refs.urlTextarea
           curArea.updateAutosize()
-          if (this.newsdata.length < this.limit) {
-            this.pagestart = 0
-            this.disNewslist = false
-            this.newsdata = []
-            this.getnewsdata()
-          }
+          // if (this.newsdata.length < this.limit) {
+          //   this.pagestart = 0
+          //   this.disNewslist = false
+          //   this.newsdata = []
+          //   this.getnewsdata()
+          // }
           break
       }
     },
