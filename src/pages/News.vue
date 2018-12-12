@@ -29,7 +29,7 @@
           </div>
           <div class="article-info" style="position:relative;">
             <span class="article-date color-gray">{{article.dateline | dateFormat}}</span>
-            <span v-if="reward.subscribe != 1" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
+            <span v-if="reward.subscribe != 1 && query.control != 'edit'" @click="popupSubscribe" class="article-ex color-blue">{{ WeixinName }}</span>
             <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
             <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
