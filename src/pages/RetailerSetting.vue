@@ -72,9 +72,12 @@ export default {
           }
           self.productClass = self.retailerInfo.productclass.split(',')
           for (let i = 0; i < self.productClass.length; i++) {
-            self.productClass[i] = parseInt(self.productClass[i])
-            if (self.productClass[i] <= 0) {
+            let num = parseInt(self.productClass[i])
+            if (isNaN(num) || num <= 0) {
               delete self.productClass.splice(i, 1)
+              i--
+            } else {
+              self.productClass[i] = num
             }
           }
           for (let key in self.submitdata1) {
