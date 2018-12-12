@@ -11,7 +11,8 @@
         :showphoto-arr="showphotoArr"
         :submitdata="submitdata"
         :submitdata1="submitdata1"
-        :class-data="classData">
+        :class-data="classData"
+        :productClass="productClass">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -45,7 +46,8 @@ export default {
       submitdata1: { showphoto: '', slogan: '', tags: '' },
       photoarr: [],
       showphotoArr: [],
-      classData: []
+      classData: [],
+      productClass: []
     }
   },
   methods: {
@@ -66,10 +68,13 @@ export default {
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
           for (let key in self.submitdata) {
-            if (key === 'productclass') {
-              self.submitdata[key] = self.retailerInfo[key].split(',')
-            } else {
-              self.submitdata[key] = self.retailerInfo[key]
+            self.submitdata[key] = self.retailerInfo[key]
+          }
+          self.productClass = self.retailerInfo.productclass.split(',')
+          for (let i = 0; i < self.productClass.length; i++) {
+            self.productClass[i] = parseInt(self.productClass[i])
+            if (self.productClass[i] <= 0) {
+              delete self.productClass.splice(i, 1)
             }
           }
           for (let key in self.submitdata1) {
@@ -83,17 +88,6 @@ export default {
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
           }
-          let productclass = self.retailerInfo.productclass.split(',')
-          for (let k = 0; k < productclass.length; k++) {
-            for (let i = 0; i < self.classData.length; i++) {
-              if (parseInt(productclass[k]) === self.classData[i].id) {
-                self.classData[i].checked = true
-                break
-              }
-            }
-          }
-          console.log(self.classData)
-          console.log(productclass)
         }
       })
     },

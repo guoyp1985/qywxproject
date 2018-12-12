@@ -104,12 +104,12 @@
                   </group>
                 </forminputplate>
                 <div class="form-item required padding10" v-if="classData.length > 0"> <!-- //v-if="classData.length > 0 && classDataShow" -->
-                  <input v-model="submitdata.productclass" type="hidden" name="productclass" />
+                  <input v-model="productClass" type="hidden" name="productclass" />
                   <div class="pb10">经营产品或服务<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <checker
                   class="x-checker"
                   type="checkbox"
-                  v-model="submitdata.productclass"
+                  v-model="productClass"
                   :max="3"
                   default-item-class="ck-item"
                   selected-item-class="ck-item-selected">
@@ -343,6 +343,10 @@ export default {
     showphotoArr: {
       type: Array,
       default: []
+    },
+    productClass: {
+      type: Array,
+      default: []
     }
   },
   directives: {
@@ -469,6 +473,7 @@ export default {
     },
     submitevent () {
       const self = this
+      self.submitdata.productclass = self.productClass
       let validateData = []
       for (let key in self.requireddata) {
         let v = {}
