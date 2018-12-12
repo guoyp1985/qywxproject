@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page membersview font14 s-havebottom">
+  <div class="containerarea bg-page membersview font14">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -34,13 +34,13 @@
           </div>
         </div>
       </div>
-      <div class="s-bottom bottomnaviarea b_top_after">
+      <!-- <div class="s-bottom bottomnaviarea b_top_after">
         <div class="t-table bottomnavi">
           <router-link class="t-cell item" to="/store">{{ $t('My shop') }}</router-link>
           <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
           <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
         </div>
-      </div>
+      </div> -->
     </template>
   </div>
 </template>
