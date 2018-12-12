@@ -26,7 +26,8 @@
                   @on-cancel="onCancel"
                   ref="search">
                 </search>
-                <checker
+                <!-- <div class="del bg-red color-white flex_center" @click="delKey"><i class="al al-guanbi font16"></i></div> -->
+                <!-- <checker
                 v-if="keywordsData.length > 0"
                 class="v-checker pt10 pl10 pr10"
                 type="radio"
@@ -36,9 +37,14 @@
                 @on-change="searchEvent">
                   <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
                     <div class="clamp1" style="max-width:80px;">{{ kw }}</div>
-                    <!-- <div class="del bg-red color-white flex_center" @click="delKey"><i class="al al-guanbi font16"></i></div> -->
                   </checker-item>
-                </checker>
+                </checker> -->
+                <div class="v-checker pt10 pl10 pr10" @on-change="searchEvent">
+                  <div class="border1px color-gray item" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
+                    <div class="clamp1 list" style="max-width:80px;">{{ kw }}</div>
+                    <div class="close">x</div>
+                  </div>
+                </div>
                 <!-- <div class="kw-list">
                   <div class="item" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
                     <div class="inner">{{kw}}</div>
@@ -481,6 +487,28 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.rgoodeazy .v-checker{
+  position:relative;
+  .item{
+    font-size: 13px;
+    display: inline-block;
+    padding: 0 15px;
+    height: 30px;
+    line-height: 30px;
+    border: 0px;
+    text-align: center;
+    border-radius: 3px;
+    background-color: #fff;
+    margin-right: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+  }
+  .close{
+    position:absolute;width:15px;height:15px;line-height:12px;text-align:center;border-radius:50%;
+    top:-6px;right:-6px;font-weight:bold;background-color:#EC3E3F;color:#fff;z-index:10;
+  }
+}
 .rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
 .rgoodeazy .x-textarea textarea{background-color:transparent;}
 .rgoodeazy .del{

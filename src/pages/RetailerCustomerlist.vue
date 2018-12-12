@@ -60,8 +60,8 @@
                     <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div>
                   </template>
                 </div>
-                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table">
+                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
+                  <div class="t-table pb10">
                     <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </router-link>
@@ -75,9 +75,34 @@
                           <div class="txt font12">{{ item.percent }}%</div>
                         </div>
                     </div>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
-                      <div class="qbtn bg-red color-white">联系</div>
-                    </router-link>
+                    <!-- <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                    </router-link> -->
+                    <div class="t-cell v_middle w60 align_right" @click="btnDetail(index)">
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                    </div>
+                  </div>
+                  <div v-if="detailShow" checked="detailShow ? true : false">
+                    <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
+                      <div class="leftInfo">
+                        <div>性别<span class="pl10">{{item.sexname}}</span></div>
+                        <div>地区<span class="pl10">{{item.province}}</span></div>
+                        <div>浏览<span class="pl10">{{item.intention}}</span>次</div>
+                      </div>
+                      <div class="rightInfo pl20">
+                        <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
+                        <div>手机号<span class="pl10">{{item.dateline}}</span></div>
+                        <div>分享<span class="pl10">{{item.priority}}</span>次</div>
+                      </div>
+                    </div>
+                    <div class="w_100 flex_center menu">
+                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
+                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
+                      <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
+                      <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}">
+                        <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
+                      </router-link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -109,7 +134,7 @@
                     <div class="mt5">暂无意向客户，可到用户资料里设置客户意向程度</div>
                   </template>
                 </div>
-                <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
                   <div class="t-table">
                     <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -152,7 +177,7 @@
                     <div class="mt5">好可怜，一个客户都没有~<br />赶快分享<span @click="toStore" class="color-blue">商品</span>或<span @click="toNews" class="color-blue">文章</span>给微信好友获得客户吧！</div>
                   </template>
                 </div>
-                <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pb10 pl12 pr12 bg-white mb10 list-shadow">
+                <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
                   <div class="t-table">
                     <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -313,10 +338,19 @@ export default {
       disAreaOrder: false,
       disOrderArea: false,
       selectedArea: null,
-      selectedSex: null
+      selectedSex: null,
+      detailShow: false
     }
   },
   methods: {
+    btnDetail (e) {
+      console.log(e)
+      if (this.detailShow === false) {
+        this.detailShow = true
+      } else {
+        this.detailShow = false
+      }
+    },
     toStore () {
       if (this.query.from === 'miniprogram') {
         this.$wechat.miniProgram.navigateTo({url: ENV.MiniRouter.store})
@@ -661,6 +695,28 @@ export default {
 </script>
 
 <style lang="less" >
+.rcustomerlist .detailInfo{
+  background-color:#fff;display:flex;
+  .leftInfo{
+    padding:0 10px 10px 70px;box-sizing:border-box;display:flex;flex-direction:column;
+  }
+}
+.rcustomerlist .menu{
+  padding:0px 20px 0 0;box-sizing:border-box;text-align:center;
+  .menu-item{
+    flex:1;color:red;border-right:1px solid #e5e5e5;height:30px;
+  }
+  .menu-item:last-child{border-right:0;}
+}
+.rcustomerlist .qbtnInfo{
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50px;
+  text-align: center;
+  padding: 2px 10px;
+  font-size: 14px;
+  line-height: 1;
+}
 .rcustomerlist .condition{
   position: relative;
   height: 40px;
