@@ -83,7 +83,7 @@
                       <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                     </div>
                   </div>
-                  <div v-if="detailShow">
+                  <div v-if="item.checked">
                     <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
                       <div class="leftInfo">
                         <div>性别<span class="pl10">{{item.sexname}}</span></div>
@@ -359,13 +359,14 @@ export default {
       }
       this.$router.push({path: '/chat', query: params})
     },
-    btnDetail (e) {
-      console.log(e)
-      if (this.detailShow === false) {
-        this.detailShow = true
-      } else {
-        this.detailShow = false
+    btnDetail (index) {
+      for (var i = 0; i < this.tabdata1.length; i++) {
+        if (i !== index && this.tabdata1[i].checked) {
+          this.tabdata1[i].checked = false
+          break
+        }
       }
+      this.tabdata1[index].checked = !this.tabdata1[index].checked
     },
     toStore () {
       if (this.query.from === 'miniprogram') {
@@ -501,6 +502,9 @@ export default {
           self.disAreaOrder = true
         }
         let retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          retdata[i].checked = false
+        }
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
         if (self.tabdata1.length > 0) {
