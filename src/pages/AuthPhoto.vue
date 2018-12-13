@@ -94,6 +94,12 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.photo1 = ''
+      this.photo2 = ''
+      this.photo3 = ''
+      this.submitIng = false
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -239,6 +245,7 @@ export default {
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.loginUser = User.get()
     this.query = this.$route.query
+    this.initData()
   }
 }
 </script>
