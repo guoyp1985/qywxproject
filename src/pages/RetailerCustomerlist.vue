@@ -164,7 +164,7 @@
                       <div class="rightInfo">
                         <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>最近访问<span class="pl10">{{item.priority}}</span></div>
+                        <div>最近访问<span class="pl10">{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -234,7 +234,7 @@
                       <div class="rightInfo">
                         <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>最近访问<span class="pl10">{{item.priority}}</span></div>
+                        <div>最近访问<span class="pl10">{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
