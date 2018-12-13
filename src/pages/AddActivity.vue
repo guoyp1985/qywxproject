@@ -421,52 +421,31 @@ export default {
         let limitbuy = parseInt(self.submitdata.param_limitbuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
         if (isNaN(self.submitdata.param_minprice) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_finishtime) || isNaN(self.submitdata.param_everymin) || isNaN(self.submitdata.param_everymax)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的数字'
-          })
+          self.$vux.toast.show('请输入正确的数字', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_minprice) || minprice < 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的活动价格'
-          })
+          self.$vux.toast.show('请输入正确的活动价格', 'middle')
           return false
         }
         if (minprice > priceval) {
-          self.$vux.alert.show({
-            title: '',
-            content: '活动价格不能大于原价'
-          })
+          self.$vux.toast.show('活动价格不能大于原价', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的投放总数'
-          })
+          self.$vux.toast.show('请输入正确的投放总数', 'middle')
           return false
         }
         if (limitbuy > storage) {
-          self.$vux.alert.show({
-            title: '',
-            content: '投放总数不能大于商品库存'
-          })
+          self.$vux.toast.show('投放总数不能大于商品库存', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的砍价周期'
-          })
+          self.$vux.toast.show('请输入正确的砍价周期', 'middle')
           return false
         }
         if (minval > priceval || maxval > priceval) {
-          self.$vux.alert.show({
-            title: '',
-            content: '可砍金额不能大于活动价格'
-          })
+          self.$vux.toast.show('可砍金额不能大于活动价格', 'middle')
           return false
         }
       } else if (self.activityType === 'groupbuy') {
@@ -476,66 +455,39 @@ export default {
         let everybuy = parseInt(self.submitdata.param_everybuy)
         let finishtime = parseInt(self.submitdata.param_finishtime)
         if (isNaN(self.submitdata.param_groupprice) || isNaN(self.submitdata.param_numbers) || isNaN(self.submitdata.param_limitbuy) || isNaN(self.submitdata.param_everybuy) || isNaN(self.submitdata.param_finishtime)) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的数字'
-          })
+          self.$vux.toast.show('请输入正确的数字', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_groupprice) || groupprice <= 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的团购价格'
-          })
+          self.$vux.toast.show('请输入正确的团购价格', 'middle')
           return false
         }
         if (groupprice > priceval) {
-          self.$vux.alert.show({
-            title: '',
-            content: '团购价不能大于原价'
-          })
+          self.$vux.toast.show('团购价不能大于原价', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_numbers) || numbers <= 1) {
-          self.$vux.alert.show({
-            title: '',
-            content: '成团人数应大于1人'
-          })
+          self.$vux.toast.show('成团人数应大于1人', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的投放总数'
-          })
+          self.$vux.toast.show('请输入正确的投放总数', 'middle')
           return false
         }
         if (limitbuy > storage) {
-          self.$vux.alert.show({
-            title: '',
-            content: '投放商品数量不能大于商品库存'
-          })
+          self.$vux.toast.show('投放商品数量不能大于商品库存', 'middle')
           return false
         }
         if (limitbuy < numbers * everybuy) {
-          self.$vux.alert.show({
-            title: '',
-            content: '投放商品数量应大于<br/>成团人数×限购件数'
-          })
+          self.$vux.toast.show('投放商品数量应大于<br/>成团人数×限购件数', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_finishtime) || finishtime <= 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的成团时间'
-          })
+          self.$vux.toast.show('请输入正确的成团时间', 'middle')
           return false
         }
         if (isNaN(self.submitdata.param_everybuy) || everybuy <= 0) {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入正确的限购件数'
-          })
+          self.$vux.toast.show('请输入正确的限购件数', 'middle')
           return false
         }
       }
