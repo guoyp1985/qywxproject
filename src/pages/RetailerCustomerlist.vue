@@ -86,19 +86,22 @@
                   <div v-if="item.checked">
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
                       <div class="leftInfo">
-                        <div>性别<span class="pl10">{{item.sexname}}</span></div>
-                        <div>地区<span class="pl10">{{item.province}}</span></div>
-                        <div>影响力<span class="pl10 color-red4">{{item.percent}}</span></div>
+                        <div>性别: <span>{{item.sexname}}</span></div>
+                        <div>地区: <span>{{item.province}}</span></div>
+                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
-                        <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>最近访问<span class="pl10">{{item.dateline_str}}</span></div>
+                        <div style="display:flex;">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                        <div>推荐人: <span>{{item.uploadname}}</span></div>
+                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
+                    <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}"></router-link> -->
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after">客户行为</div>
+                        <router-link :to="{path: '/timeline', query:{ uid: item.uid }}">
+                          <div class="t-cell v_middle b_right_after">客户行为</div>
+                        </router-link>
                         <div class="t-cell v_middle b_right_after">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
@@ -157,19 +160,21 @@
                   <div v-if="item.checked">
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
                       <div class="leftInfo">
-                        <div>性别<span class="pl10">{{item.sexname}}</span></div>
-                        <div>地区<span class="pl10">{{item.province}}</span></div>
-                        <div>影响力<span class="pl10 color-red4">{{item.percent}}</span></div>
+                        <div>性别: <span>{{item.sexname}}</span></div>
+                        <div>地区: <span>{{item.province}}</span></div>
+                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
-                        <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>最近访问<span class="pl10">{{item.dateline_str}}</span></div>
+                        <div style="display:flex;">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                        <div>推荐人: <span>{{item.uploadname}}</span></div>
+                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after">客户行为</div>
+                        <router-link :to="{path: '/timeline', query:{ uid: item.uid }}">
+                          <div class="t-cell v_middle b_right_after">客户行为</div>
+                        </router-link>
                         <div class="t-cell v_middle b_right_after">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
@@ -227,19 +232,21 @@
                   <div v-if="item.checked">
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
                       <div class="leftInfo">
-                        <div>性别<span class="pl10">{{item.sexname}}</span></div>
-                        <div>地区<span class="pl10">{{item.province}}</span></div>
-                        <div>影响力<span class="pl10 color-red4">{{item.percent}}</span></div>
+                        <div>性别: <span>{{item.sexname}}</span></div>
+                        <div>地区: <span>{{item.province}}</span></div>
+                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
-                        <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>最近访问<span class="pl10">{{item.dateline_str}}</span></div>
+                        <div style="display:flex;">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                        <div>推荐人: <span>{{item.uploadname}}</span></div>
+                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <div class="t-cell v_middle b_right_after">客户行为</div>
+                        <router-link :to="{path: '/timeline', query:{ uid: item.uid }}">
+                          <div class="t-cell v_middle b_right_after">客户行为</div>
+                        </router-link>
                         <div class="t-cell v_middle b_right_after">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
