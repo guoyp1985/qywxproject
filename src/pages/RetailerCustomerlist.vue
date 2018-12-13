@@ -136,7 +136,7 @@
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table">
+                  <div class="t-table pb10">
                     <div @click="toMembersView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
@@ -145,8 +145,33 @@
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                     </div>
                     <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                    <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
+                    <!-- <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
+                    </div> -->
+                    <div class="t-cell v_middle w60 align_right" @click="btnDetail1(index)">
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked">
+                    <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
+                      <div class="leftInfo">
+                        <div>性别<span class="pl10">{{item.sexname}}</span></div>
+                        <div>地区<span class="pl10">{{item.province}}</span></div>
+                        <div>浏览<span class="pl10">{{item.intention}}</span>次</div>
+                      </div>
+                      <div class="rightInfo pl20">
+                        <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
+                        <div>手机号<span class="pl10">{{item.dateline}}</span></div>
+                        <div>分享<span class="pl10">{{item.priority}}</span>次</div>
+                      </div>
+                    </div>
+                    <div class="w_100 flex_center menu">
+                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
+                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
+                      <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
+                      <div @click="toChat(item)">
+                        <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -180,7 +205,7 @@
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table">
+                  <div class="t-table pb10">
                     <div @click="toMembersView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
@@ -188,8 +213,33 @@
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
                     </div>
-                    <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
+                    <!-- <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
+                    </div> -->
+                    <div class="t-cell v_middle w60 align_right" @click="btnDetail2(index)">
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked">
+                    <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
+                      <div class="leftInfo">
+                        <div>性别<span class="pl10">{{item.sexname}}</span></div>
+                        <div>地区<span class="pl10">{{item.province}}</span></div>
+                        <div>浏览<span class="pl10">{{item.intention}}</span>次</div>
+                      </div>
+                      <div class="rightInfo pl20">
+                        <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
+                        <div>手机号<span class="pl10">{{item.dateline}}</span></div>
+                        <div>分享<span class="pl10">{{item.priority}}</span>次</div>
+                      </div>
+                    </div>
+                    <div class="w_100 flex_center menu">
+                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
+                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
+                      <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
+                      <div @click="toChat(item)">
+                        <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -279,7 +329,7 @@ Percent:
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg, PopupHeader, Radio, Checker, CheckerItem } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg, PopupHeader, Radio } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
@@ -290,7 +340,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Subscribe, ApplyTip, PopupHeader, Radio, Checker, CheckerItem
+    Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, XImg, Subscribe, ApplyTip, PopupHeader, Radio
   },
   data () {
     return {
@@ -367,6 +417,24 @@ export default {
         }
       }
       this.tabdata1[index].checked = !this.tabdata1[index].checked
+    },
+    btnDetail1 (index) {
+      for (var i = 0; i < this.tabdata3.length; i++) {
+        if (i !== index && this.tabdata3[i].checked) {
+          this.tabdata3[i].checked = false
+          break
+        }
+      }
+      this.tabdata3[index].checked = !this.tabdata3[index].checked
+    },
+    btnDetail2 (index) {
+      for (var i = 0; i < this.tabdata2.length; i++) {
+        if (i !== index && this.tabdata2[i].checked) {
+          this.tabdata2[i].checked = false
+          break
+        }
+      }
+      this.tabdata2[index].checked = !this.tabdata2[index].checked
     },
     toStore () {
       if (this.query.from === 'miniprogram') {
@@ -530,6 +598,9 @@ export default {
         self.$vux.loading.hide()
         self.tabcount2 = data.count
         let retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          retdata[i].checked = false
+        }
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
       })
@@ -550,6 +621,9 @@ export default {
         self.$vux.loading.hide()
         self.tabcount3 = data.count
         let retdata = data.data ? data.data : data
+        for (var i = 0; i < retdata.length; i++) {
+          retdata[i].checked = false
+        }
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
       })
