@@ -137,7 +137,7 @@
             <div class="popup-middle font14">
               <div class="scroll_list">
                 <template v-for="(item,index) in cardList">
-                  <template v-if="(cardPrice >= item.ordermoney) && (cardPrice - item.money - curOrder.rebate >= 0)">
+                  <template v-if="(cardPrice >= item.ordermoney) && ((cardPrice - item.money - curOrder.rebate >= 0) || (item.money > cardPrice && curOrder.rebate <= 0))">
                     <check-icon class="x-check-icon scroll_item padding10" :value.sync="item.checked" @click.native.stop="cardClick(item,index)">
                       <div class="t-table">
                         <div class="t-cell v_middle" style="color:inherit;">
@@ -498,7 +498,7 @@ export default {
           self.cardList = res.data.data
           for (let i = 0; i < self.cardList.length; i++) {
             const item = self.cardList[i]
-            if (self.cardPrice >= item.ordermoney && (self.cardPrice - item.money - self.curOrder.rebate) >= 0) {
+            if (self.cardPrice >= item.ordermoney && ((self.cardPrice - item.money - self.curOrder.rebate) >= 0 || (item.money > self.cardPrice && self.curOrder.rebate <= 0))) {
               self.selectedCard = item
               self.cardList[i].checked = true
               let cha = parseFloat(self.orderPrice) - parseFloat(self.postage) - parseFloat(item.money)
