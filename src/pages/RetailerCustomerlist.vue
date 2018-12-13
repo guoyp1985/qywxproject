@@ -62,13 +62,13 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
                   <div class="t-table pb10">
-                    <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <div @click="toMembersView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    </div>
+                    <div  @click="toMembersView(item)" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                    </router-link>
+                    </div>
                     <div class="t-cell v_middle w60 h_100 align_right">
                         <div class="percentarea db-in v_middle" @click="percentclick">
                           <div class="inner" :style="`width:${item.percent}%`"></div>
@@ -99,9 +99,9 @@
                       <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
                       <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
                       <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
-                      <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}">
+                      <div @click="toChat(item)">
                         <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
-                      </router-link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -136,17 +136,17 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
                   <div class="t-table">
-                    <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <div @click="toMembersView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    </div>
+                    <div @click="toMembersView(item)" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                    </router-link>
+                    </div>
                     <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
+                    <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
-                    </router-link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -179,16 +179,16 @@
                 </div>
                 <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
                   <div class="t-table">
-                    <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle w70">
+                    <div @click="toMembersView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{path: 'membersView', query: {uid: item.uid}}" class="t-cell v_middle">
+                    </div>
+                    <div @click="toMembersView(item)" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
-                    </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, fromModule: 'retailer', from: query.from}}" class="t-cell v_middle w60 align_right">
+                    </div>
+                    <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
                       <div class="qbtn bg-red color-white">联系</div>
-                    </router-link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -343,6 +343,20 @@ export default {
     }
   },
   methods: {
+    toMembersView (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/membersView', query: params})
+    },
+    toChat (item) {
+      let params = {uid: item.uid, fromModule: 'retailer'}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/chat', query: params})
+    },
     btnDetail (e) {
       console.log(e)
       if (this.detailShow === false) {
