@@ -94,6 +94,12 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.photo1 = ''
+      this.photo2 = ''
+      this.photo3 = ''
+      this.submitIng = false
+    },
     photoCallback (data) {
       const self = this
       if (data.flag === 1) {
@@ -200,6 +206,7 @@ export default {
       }
     },
     submitEvent () {
+      const self = this
       if (!self.submitIng) {
         if (self.photo1 === '' || self.photo2 === '') {
           self.$vux.toast.show({
@@ -237,6 +244,8 @@ export default {
     this.$util.miniPost()
     this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
     this.loginUser = User.get()
+    this.query = this.$route.query
+    this.initData()
   }
 }
 </script>
@@ -248,8 +257,8 @@ export default {
   .photo-item{
     width:100%;padding:20px 0;background-color:#fff;color:#666666;display:flex;margin-bottom:10px;box-sizing: border-box;
     border-bottom:1px solid #e5e5e5;
-    img{width:80px;height:80px;object-fit:cover;}
-    .txt{padding-left:10px;}
+    img{width:100px;object-fit:cover;display:block;}
+    .txt{margin-top:10px;text-align:center;}
     .linek{
       width:80px;height:80px;border:1px dashed #e5e5e5;text-align:center;color:#a5a5a5;
     }
