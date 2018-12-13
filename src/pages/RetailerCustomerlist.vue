@@ -608,6 +608,7 @@ export default {
         let retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
           retdata[i].checked = false
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
         }
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
@@ -631,6 +632,7 @@ export default {
         let retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
           retdata[i].checked = false
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
         }
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.distabdata3 = true
