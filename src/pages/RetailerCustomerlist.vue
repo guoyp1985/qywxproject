@@ -84,24 +84,26 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
                       <div class="leftInfo">
                         <div>性别<span class="pl10">{{item.sexname}}</span></div>
                         <div>地区<span class="pl10">{{item.province}}</span></div>
-                        <div>浏览<span class="pl10">{{item.intention}}</span>次</div>
+                        <div>影响力<span class="pl10 color-red4">{{item.percent}}</span></div>
                       </div>
-                      <div class="rightInfo pl20">
+                      <div class="rightInfo">
+                        <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>手机号<span class="pl10">{{item.dateline}}</span></div>
-                        <div>分享<span class="pl10">{{item.priority}}</span>次</div>
+                        <div>最近访问<span class="pl10">{{item.priority}}</span></div>
                       </div>
                     </div>
-                    <div class="w_100 flex_center menu">
-                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
-                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
-                      <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
-                      <div @click="toChat(item)">
-                        <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after">客户行为</div>
+                        <div class="t-cell v_middle b_right_after">置顶</div>
+                        <div class="t-cell v_middle b_right_afte" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                       </div>
                     </div>
                   </div>
@@ -153,24 +155,26 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
                       <div class="leftInfo">
                         <div>性别<span class="pl10">{{item.sexname}}</span></div>
                         <div>地区<span class="pl10">{{item.province}}</span></div>
-                        <div>浏览<span class="pl10">{{item.intention}}</span>次</div>
+                        <div>影响力<span class="pl10 color-red4">{{item.percent}}</span></div>
                       </div>
-                      <div class="rightInfo pl20">
+                      <div class="rightInfo">
+                        <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>手机号<span class="pl10">{{item.dateline}}</span></div>
-                        <div>分享<span class="pl10">{{item.priority}}</span>次</div>
+                        <div>最近访问<span class="pl10">{{item.priority}}</span></div>
                       </div>
                     </div>
-                    <div class="w_100 flex_center menu">
-                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
-                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
-                      <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
-                      <div @click="toChat(item)">
-                        <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after">客户行为</div>
+                        <div class="t-cell v_middle b_right_after">置顶</div>
+                        <div class="t-cell v_middle b_right_afte" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                       </div>
                     </div>
                   </div>
@@ -221,24 +225,26 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font12 color-gray2 b_bottom_after">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
                       <div class="leftInfo">
                         <div>性别<span class="pl10">{{item.sexname}}</span></div>
                         <div>地区<span class="pl10">{{item.province}}</span></div>
-                        <div>浏览<span class="pl10">{{item.intention}}</span>次</div>
+                        <div>影响力<span class="pl10 color-red4">{{item.percent}}</span></div>
                       </div>
-                      <div class="rightInfo pl20">
+                      <div class="rightInfo">
+                        <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>手机号<span class="pl10">{{item.dateline}}</span></div>
-                        <div>分享<span class="pl10">{{item.priority}}</span>次</div>
+                        <div>最近访问<span class="pl10">{{item.priority}}</span></div>
                       </div>
                     </div>
-                    <div class="w_100 flex_center menu">
-                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>客户行为</div>
-                      <div class="menu-item"><span class="al al-kehu1 font16 pl5"></span>返点客</div>
-                      <div class="menu-item"><span class="al al-zhidinge79b font16 pl5"></span>置顶</div>
-                      <div @click="toChat(item)">
-                        <div class="menu-item pl10"><span class="al al-xiaoxi1 font16"></span>联系</div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after">客户行为</div>
+                        <div class="t-cell v_middle b_right_after">置顶</div>
+                        <div class="t-cell v_middle b_right_afte" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
                       </div>
                     </div>
                   </div>
@@ -792,15 +798,13 @@ export default {
 .rcustomerlist .detailInfo{
   background-color:#fff;display:flex;
   .leftInfo{
-    padding:0 10px 10px 70px;box-sizing:border-box;display:flex;flex-direction:column;
+    padding:0 80px 10px 20px;box-sizing:border-box;display:flex;flex-direction:column;
   }
-}
-.rcustomerlist .menu{
-  padding:0px 20px 0 0;box-sizing:border-box;text-align:center;
-  .menu-item{
-    flex:1;color:red;border-right:1px solid #e5e5e5;height:30px;
+  .rightInfo{
+    .phone{
+      width:20px;height:20px;border-radius:5px;background-color:red;color:#fff;text-align:center;line-height:20px;
+    }
   }
-  .menu-item:last-child{border-right:0;}
 }
 .rcustomerlist .qbtnInfo{
   display: inline-block;
