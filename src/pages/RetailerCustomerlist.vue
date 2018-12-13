@@ -93,7 +93,7 @@
                       <div class="rightInfo">
                         <div style="display:flex;">手机<span class="pl10">{{item.dateline}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人<span class="pl10">{{item.uploadname}}</span></div>
-                        <div>最近访问<span class="pl10">{{item.priority}}</span></div>
+                        <div>最近访问<span class="pl10">{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -337,6 +337,7 @@ Percent:
 <script>
 import { Tab, TabItem, Swiper, SwiperItem, Search, Group, Popup, TransferDom, XImg, PopupHeader, Radio } from 'vux'
 import ENV from 'env'
+import Time from '../../libs/time'
 import { User } from '#/storage'
 import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
@@ -578,6 +579,7 @@ export default {
         let retdata = data.data ? data.data : data
         for (var i = 0; i < retdata.length; i++) {
           retdata[i].checked = false
+          retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
         }
         self.tabdata1 = self.tabdata1.concat(retdata)
         self.distabdata1 = true
