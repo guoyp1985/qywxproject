@@ -100,7 +100,7 @@
                       <div class="t-table align_center color-gray2 font14 color-gray2">
                         <div class="t-cell v_middle b_right_after">客户行为</div>
                         <div class="t-cell v_middle b_right_after">置顶</div>
-                        <div class="t-cell v_middle b_right_afte" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -171,7 +171,7 @@
                       <div class="t-table align_center color-gray2 font14 color-gray2">
                         <div class="t-cell v_middle b_right_after">客户行为</div>
                         <div class="t-cell v_middle b_right_after">置顶</div>
-                        <div class="t-cell v_middle b_right_afte" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
@@ -241,7 +241,7 @@
                       <div class="t-table align_center color-gray2 font14 color-gray2">
                         <div class="t-cell v_middle b_right_after">客户行为</div>
                         <div class="t-cell v_middle b_right_after">置顶</div>
-                        <div class="t-cell v_middle b_right_afte" @click="toChat(item)">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
                         <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
