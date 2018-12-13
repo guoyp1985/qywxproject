@@ -26,31 +26,14 @@
                   @on-cancel="onCancel"
                   ref="search">
                 </search>
-                <!-- <div class="del bg-red color-white flex_center" @click="delKey"><i class="al al-guanbi font16"></i></div> -->
-                <!-- <checker
-                v-if="keywordsData.length > 0"
-                class="v-checker pt10 pl10 pr10"
-                type="radio"
-                v-model="keyword"
-                default-item-class="ck-item"
-                selected-item-class="ck-item-selected"
-                @on-change="searchEvent">
-                  <checker-item class="border1px color-gray" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
-                    <div class="clamp1" style="max-width:80px;">{{ kw }}</div>
-                  </checker-item>
-                </checker> -->
-                <div class="v-checker pt10 pl10 pr10" @on-change="searchEvent">
-                  <div class="border1px color-gray item" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
-                    <div class="clamp1 list" style="max-width:80px;">{{ kw }}</div>
-                    <div class="close">x</div>
+                <div class="item-list pt10">
+                  <div :class="`item ${kw.checked ? 'active' : ''}`" v-for="(kw, keyindex) in keywordsData" :key="keyindex">
+                    <div class="inner border1px color-gray" @click="clickKw(keyindex)">
+                      <div class="clamp1 list" style="max-width:80px;">{{ kw.title }}</div>
+                    </div>
+                    <div class="close" @click="deleteKw(keyindex)">x</div>
                   </div>
                 </div>
-                <!-- <div class="kw-list">
-                  <div class="item" v-for="(kw, keyindex) in keywordsData" :key="keyindex" :value="kw">
-                    <div class="inner">{{kw}}</div>
-                    <div class="del bg-red color-white flex_center" @click="delKey"><i class="al al-guanbi font16"></i></div>
-                  </div>
-                </div> -->
                 <div class="scroll_list pl10 pr10 mb12">
                   <div v-if="showSearchEmpty && (!searchdata || searchdata.length == 0)" class="scroll_item emptyitem">
                     <div class="t-table">
@@ -71,7 +54,7 @@
                 </div>
               </div>
             </div>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
+            <div v-if="(index == 1)" class="swiper-inner scroll-container2">
               <div class="pl10 pr10">
                 <div class="font15 pt15">文章链接采集文章</div>
                 <div class="font12 color-gray mt5">请从微信公众号中复制文章链接，粘贴在文本框内，点击“采集”按钮，采集成功后即可编辑分享</div>
@@ -235,7 +218,10 @@ export default {
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
-        self.keywordsData = data.data ? data.data : data
+        const retdata = data.data ? data.data : data
+        for (let i = 0; i < retdata.length; i++) {
+          self.keywordsData.push({title: retdata[i], checked: false})
+        }
       })
     },
     onChange (val) {
@@ -290,13 +276,46 @@ export default {
         self.showSearchEmpty = true
       })
     },
-    searchEvent (kw) {
+    clickKw (keyindex) {
       const self = this
+      const kw = self.keywordsData[keyindex].title
+      for (let i = 0; i < self.keywordsData.length; i++) {
+        if (self.keywordsData[i].checked) {
+          delete self.keywordsData[i].checked
+        }
+      }
+      self.keywordsData[keyindex].checked = true
       self.searchdata = []
       self.pagestart1 = 0
       if (self.$util.trim(kw) !== '') {
         self.searchFun(kw)
       }
+    },
+    deleteKw (keyindex) {
+      const self = this
+      const kw = self.keywordsData[keyindex].title
+      self.$vux.confirm.show({
+        content: '确定要删除吗？',
+        onConfirm () {
+          self.$http.post(`${ENV.BokaApi}/api/news/goodeazy?do=deletekeyword`, {keyword: kw}).then(function (res) {
+            let data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: self.$util.delay(data.error),
+              onHide: function () {
+                if (data.flag) {
+                  if (self.keywordsData[keyindex].checked) {
+                    self.showSearchEmpty = false
+                    self.searchdata = []
+                  }
+                  self.keywordsData.splice(keyindex, 1)
+                }
+              }
+            })
+          })
+        }
+      })
     },
     swiperChange (index) {
       if (index !== undefined) {
@@ -438,12 +457,6 @@ export default {
         curArea.updateAutosize()
       }
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         self.initContainer()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
@@ -472,7 +485,6 @@ export default {
             })
           }
         }
-        // }
       }
     }
   },
@@ -487,32 +499,41 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.rgoodeazy .v-checker{
-  position:relative;
-  .item{
-    font-size: 13px;
-    display: inline-block;
-    padding: 0 15px;
-    height: 30px;
-    line-height: 30px;
-    border: 0px;
-    text-align: center;
-    border-radius: 3px;
-    background-color: #fff;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
+.rgoodeazy{
+  .item-list{
+    .item{
+      position:relative;
+      font-size: 13px;
+      display: inline-block;
+      box-sizing: border-box;
+      padding-left:10px;padding-right:10px;padding-bottom:10px;
+      .inner{
+        position:relative;
+        padding: 0 15px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border-radius: 3px;
+        background-color: #fff;
+        box-sizing: border-box;
+      }
+    }
+    .item.active .inner{
+      background: #ffffff url("../assets/images/checker.png") no-repeat right bottom;
+    }
+    .item.active .border1px:after{
+      border-color: #ff4a00;
+    }
+    .close{
+      position:absolute;width:15px;height:15px;line-height:12px;text-align:center;border-radius:50%;
+      top:-6px;right:0px;font-weight:bold;background-color:#EC3E3F;color:#fff;z-index:10;
+    }
   }
-  .close{
-    position:absolute;width:15px;height:15px;line-height:12px;text-align:center;border-radius:50%;
-    top:-6px;right:-6px;font-weight:bold;background-color:#EC3E3F;color:#fff;z-index:10;
+  .textarea-outer .weui-cells{background-color:transparent;}
+  .x-textarea textarea{background-color:transparent;}
+  .del{
+    position:absolute;right:-10px;top:-10px;z-index:1;
+    width:20px;height:20px;border-radius:50%;font-size:12px;
   }
-}
-.rgoodeazy .textarea-outer .weui-cells{background-color:transparent;}
-.rgoodeazy .x-textarea textarea{background-color:transparent;}
-.rgoodeazy .del{
-  position:absolute;right:-10px;top:-10px;z-index:1;
-  width:20px;height:20px;border-radius:50%;font-size:12px;
 }
 </style>
