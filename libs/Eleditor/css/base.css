@@ -220,15 +220,15 @@ margin-right:10px;
   line-height:30px;
 }
 .Eleditor-textStyle{
-  width:100%;position:absolute;top:0;
   display:flex;
   display:-webkit-flex;
-  position:relative;
+  /* position:relative; */
   border-bottom:1px solid #eee;
   overflow-x:auto;
   overflow-y:hidden;
   box-shadow:0 0 10px rgba(0,0,0,.1);
   -webkit-box-shadow:0 0 10px rgba(0,0,0,.1);
+  width:100%;position:absolute;top:0;
 }
 .Eleditor-textStyle .Eleditor-textStyle-item{
   flex:1;
