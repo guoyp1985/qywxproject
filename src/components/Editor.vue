@@ -687,7 +687,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.Eleditor-inputarea .textarea{overflow-y:hidden !important;}
 .editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;width:60px;height:60px;}
 .edit-btn-box {
   position: absolute;

@@ -220,6 +220,7 @@ margin-right:10px;
   line-height:30px;
 }
 .Eleditor-textStyle{
+  width:100%;position:absolute;top:0;
   display:flex;
   display:-webkit-flex;
   position:relative;
@@ -358,9 +359,10 @@ margin-right:10px;
 }
 .Eleditor-inputarea{
   position:absolute;
-  top:45px;
-  bottom:40px;
+  /* top:45px;
+  bottom:40px; */
   width:100%;
+  top:85px;bottom:0px;
 }
 .Eleditor-textEditor[type=link] .Eleditor-inputarea{bottom:95px;}
 .Eleditor-inputarea .textarea{
@@ -401,7 +403,8 @@ margin-right:10px;
 .Eleditor-method{
   border-top:1px solid #eee;
   position:absolute;
-  bottom:0;
+  /* bottom:0; */
+  top:0;
   width:100%;
   box-shadow:0 0 10px rgba(0,0,0,.1);
   -webkit-box-shadow:0 0 10px rgba(0,0,0,.1);
