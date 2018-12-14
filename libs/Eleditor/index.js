@@ -287,11 +287,6 @@ var Eleditor = function(){
 
 	console.log('|--Eleditor Mounted To', _$wrap);
 
-	_$editorTextLinkArea.blur(function () {
-		alert(111)
-		document.body.scrollTop = document.body.scrollHeight
-	})
-
 	/*bindEvent*/
 	var _$selected = null,
 		_imageUploader = null;
