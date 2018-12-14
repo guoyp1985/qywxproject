@@ -282,7 +282,8 @@ var Eleditor = function(){
 	var _$editorDeleteLayer = _$editorWrap.find(".Eleditor-delete-layer");
 
 	_$wrap.addClass('Eleditor-area');
-	_$wrap.after(_$editorWrap);
+	// _$wrap.after(_$editorWrap);
+	$("#newspage-container").append(_$wrap)
 
 	console.log('|--Eleditor Mounted To', _$wrap);
 
