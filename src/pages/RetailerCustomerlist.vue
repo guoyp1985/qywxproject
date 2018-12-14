@@ -99,7 +99,7 @@
                     <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}"></router-link> -->
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <router-link class="t-cell v_middle b_right_after" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</router-link>
+                        <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
                         <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
                         <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
@@ -171,7 +171,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <router-link class="t-cell v_middle b_right_after" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</router-link>
+                        <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
                         <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
                         <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
@@ -242,7 +242,7 @@
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <router-link class="t-cell v_middle b_right_after" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</router-link>
+                        <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
                         <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
                         <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
@@ -447,6 +447,13 @@ export default {
         params.from = this.query.from
       }
       this.$router.push({path: '/chat', query: params})
+    },
+    toTimeline (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/timeline', query: params})
     },
     btnDetail (index) {
       for (var i = 0; i < this.tabdata1.length; i++) {
