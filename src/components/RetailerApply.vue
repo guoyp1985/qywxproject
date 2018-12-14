@@ -322,7 +322,7 @@ export default {
       VIP1: false,
       VIP2: true,
       feetype: 'oneyear',
-      AppName: '共销汇'
+      AppName: '共销客'
     }
   },
   watch: {
