@@ -478,11 +478,9 @@ export default {
     },
     confirmpopup () {
       const self = this
-      if (self.deliverdata.delivercompany.toString() !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入物流单号'
-        })
+      // if (self.deliverdata.delivercompany.toString() !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
+      if (self.deliverdata.delivercompany.toString() === '' || self.deliverdata.delivercompany.toString() === '-1' || !self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '') {
+        self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
       self.$vux.loading.show()
