@@ -260,7 +260,7 @@ export default {
     img{width:100px;object-fit:cover;display:block;}
     .txt{margin-top:10px;text-align:center;}
     .linek{
-      width:80px;height:80px;border:1px dashed #e5e5e5;text-align:center;color:#a5a5a5;
+      width:80px;border:1px dashed #e5e5e5;text-align:center;color:#a5a5a5;
     }
   }
   .message{text-align:right;font-size:10px;color:#a5a5a5;}
