@@ -363,8 +363,7 @@ margin-right:10px;
   /* top:45px;
   bottom:40px; */
   width:100%;
-  top:120px;bottom:0px;
-  background-color:#000;
+  top:90px;bottom:0px;
 }
 .Eleditor-textEditor[type=link] .Eleditor-inputarea{bottom:95px;}
 .Eleditor-inputarea .textarea{
