@@ -84,25 +84,24 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
-                      <div class="leftInfo">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="leftInfo" @click="toMembersView(item)">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{item.province}}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
-                        <div style="display:flex;">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人: <span>{{item.uploadname}}</span></div>
-                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
+                        <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                        <div @click="toMembersView(item)">推荐人: <span>{{item.uploadname}}</span></div>
+                        <div @click="toMembersView(item)">获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}"></router-link> -->
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <router-link :to="{path: '/timeline', query:{ uid: item.uid }}">
-                          <div class="t-cell v_middle b_right_after">客户行为</div>
-                        </router-link>
-                        <div class="t-cell v_middle b_right_after">置顶</div>
+                        <router-link class="t-cell v_middle b_right_after" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</router-link>
+                        <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
+                        <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
@@ -158,24 +157,23 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
-                      <div class="leftInfo">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="leftInfo" @click="toMembersView(item)">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{item.province}}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
-                        <div style="display:flex;">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人: <span>{{item.uploadname}}</span></div>
-                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
+                        <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                        <div @click="toMembersView(item)">推荐人: <span>{{item.uploadname}}</span></div>
+                        <div @click="toMembersView(item)">获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <router-link :to="{path: '/timeline', query:{ uid: item.uid }}">
-                          <div class="t-cell v_middle b_right_after">客户行为</div>
-                        </router-link>
-                        <div class="t-cell v_middle b_right_after">置顶</div>
+                        <router-link class="t-cell v_middle b_right_after" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</router-link>
+                        <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
+                        <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
@@ -230,24 +228,23 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="toMembersView(item)">
-                      <div class="leftInfo">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="leftInfo" @click="toMembersView(item)">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{item.province}}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
-                        <div style="display:flex;">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人: <span>{{item.uploadname}}</span></div>
-                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
+                        <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                        <div @click="toMembersView(item)">推荐人: <span>{{item.uploadname}}</span></div>
+                        <div @click="toMembersView(item)">获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
-                        <router-link :to="{path: '/timeline', query:{ uid: item.uid }}">
-                          <div class="t-cell v_middle b_right_after">客户行为</div>
-                        </router-link>
-                        <div class="t-cell v_middle b_right_after">置顶</div>
+                        <router-link class="t-cell v_middle b_right_after" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</router-link>
+                        <div class="t-cell v_middle b_right_after" v-if="item.priority" @click="priorityEvent(item,index)">取消置顶</div>
+                        <div class="t-cell v_middle b_right_after" v-else @click="priorityEvent(item,index)">置顶</div>
                         <div class="t-cell v_middle b_right_after" @click="toChat(item)">
                           <div>联系TA</div>
                         </div>
@@ -409,6 +406,34 @@ export default {
     }
   },
   methods: {
+    toPhone (item) {
+      location.href = `tel:${item.mobile}`
+    },
+    priorityEvent (item, index) {
+      const self = this
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
+        { action: 'stickcustomer', customeruid: item.uid }
+      ).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              if (self.selectedIndex === 0) {
+                self.tabdata1[index].priority = !self.tabdata1[index].priority
+              } else if (self.selectedIndex === 2) {
+                self.tabdata2[index].priority = !self.tabdata2[index].priority
+              } else if (self.selectedIndex === 1) {
+                self.tabdata3[index].priority = !self.tabdata3[index].priority
+              }
+            }
+          }
+        })
+      })
+    },
     toMembersView (item) {
       let params = {uid: item.uid}
       if (this.query.from) {
@@ -619,6 +644,7 @@ export default {
         }
         self.tabdata2 = self.tabdata2.concat(retdata)
         self.distabdata2 = true
+        console.log(self.tabdata2)
       })
     },
     getData3 () {
