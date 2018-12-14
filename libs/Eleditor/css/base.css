@@ -228,7 +228,7 @@ margin-right:10px;
   overflow-y:hidden;
   box-shadow:0 0 10px rgba(0,0,0,.1);
   -webkit-box-shadow:0 0 10px rgba(0,0,0,.1);
-  width:100%;position:absolute;top:0;
+  width:100%;position:absolute;top:40px;
 }
 .Eleditor-textStyle .Eleditor-textStyle-item{
   flex:1;
