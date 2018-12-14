@@ -95,6 +95,12 @@
           </div>
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
+              <div class="t-cell align_left w100">影响力</div>
+              <div class="t-cell align_right color-red">{{ viewuser.yingxiangli }}</div>
+            </div>
+          </div>
+          <div class="item padding10 b_bottom_after">
+            <div class="t-table">
               <div class="t-cell align_left w100">性别</div>
               <div class="t-cell align_right color-gray">{{ getsex }}</div>
             </div>
