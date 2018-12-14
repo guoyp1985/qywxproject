@@ -156,7 +156,7 @@ margin-right:10px;
   width:100%;
   height:100%;
   background:#fff;
-  z-index:1;
+  z-index:10;
 }
 .Eleditor-textEditor-modulePane{
   margin:10px 8px;
