@@ -139,11 +139,13 @@ margin-right:10px;
 .Eleditor-textEditor{
   display:none;
   width:100%;
-  height:100%;
+  /* height:100%; */
   background:#fff;
   position:fixed;
   left:0;
   top:0;
+  bottom:0;
+  overflow:hidden;
 }
 .Eleditor-textEditor-colors,
 .Eleditor-textEditor-fontsizes,
@@ -156,7 +158,7 @@ margin-right:10px;
   width:100%;
   height:100%;
   background:#fff;
-  z-index:1;
+  z-index:10;
 }
 .Eleditor-textEditor-modulePane{
   margin:10px 8px;
@@ -222,12 +224,13 @@ margin-right:10px;
 .Eleditor-textStyle{
   display:flex;
   display:-webkit-flex;
-  position:relative;
+  /* position:relative; */
   border-bottom:1px solid #eee;
   overflow-x:auto;
   overflow-y:hidden;
   box-shadow:0 0 10px rgba(0,0,0,.1);
   -webkit-box-shadow:0 0 10px rgba(0,0,0,.1);
+  width:100%;position:absolute;top:40px;z-index:10;background-color: #fff;
 }
 .Eleditor-textStyle .Eleditor-textStyle-item{
   flex:1;
@@ -358,9 +361,10 @@ margin-right:10px;
 }
 .Eleditor-inputarea{
   position:absolute;
-  top:45px;
-  bottom:40px;
+  /* top:45px;
+  bottom:40px; */
   width:100%;
+  top:90px;bottom:0px;
 }
 .Eleditor-textEditor[type=link] .Eleditor-inputarea{bottom:95px;}
 .Eleditor-inputarea .textarea{
@@ -401,10 +405,12 @@ margin-right:10px;
 .Eleditor-method{
   border-top:1px solid #eee;
   position:absolute;
-  bottom:0;
+  /* bottom:0; */
+  top:0;
   width:100%;
   box-shadow:0 0 10px rgba(0,0,0,.1);
   -webkit-box-shadow:0 0 10px rgba(0,0,0,.1);
+  z-index:10;background-color:#fff;
 }
 .Eleditor-method:after{
   content:'';

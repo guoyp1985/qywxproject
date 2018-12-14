@@ -5,7 +5,7 @@
         <input type='checkbox' id="sidemenu" @click="onlayer" />
         <div class="aside">
             <div class="sideul">
-                <div class="txtgxh active" @click="getTogxh">共销汇</div>
+                <div class="txtgxh active" @click="getTogxh">共销客</div>
                 <div class="txtgxk">共销客</div>
             </div>
         </div>

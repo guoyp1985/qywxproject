@@ -22,14 +22,16 @@
           <template v-else v-for="(item,index) in productdata">
             <!-- <router-link :to="{path:'/product',query:{id:item.id,wid:loginUser.uid}}" v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;"> -->
             <div v-if="item.moderate == 1" class="scroll_item mb5 font14 bg-white db" :key="item.id" style="color:inherit;">
-              <div class="t-table bg-white pt10 pb10" @click="onProduct(item)">
-          			<div class="t-cell pl10 v_middle" style="width:90px;">
+              <div class="t-table bg-white pt10 pb10">
+          			<div class="t-cell pl10 v_middle" style="width:90px;" @click="onProduct(item)">
                   <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" style="width:80px;height:80px;" />
           			</div>
           			<div class="t-cell v_middle">
-                  <div class="clamp2 font15 pr10">{{item.title}}</div>
-                  <div class="mt5 dishref db">
-                    <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+                  <div  @click="onProduct(item)">
+                    <div class="clamp2 font15 pr10">{{item.title}}</div>
+                    <div class="mt5 dishref db">
+                      <span class="color-red font15 middle-cell">{{ $t('RMB') }} {{ item.price }}</span>
+                    </div>
                   </div>
                   <div class="align_right pr10">
                     <div class="qbtn2" @click="showRolling(item,index)">{{ $t('Rolling show') }}</div>

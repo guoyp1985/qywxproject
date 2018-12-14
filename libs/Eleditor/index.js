@@ -283,6 +283,7 @@ var Eleditor = function(){
 
 	_$wrap.addClass('Eleditor-area');
 	_$wrap.after(_$editorWrap);
+	// $("#newspage-container").append(_$wrap)
 
 	console.log('|--Eleditor Mounted To', _$wrap);
 

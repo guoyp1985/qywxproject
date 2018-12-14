@@ -4,7 +4,7 @@
 * @created_date: 2018-4-20
 */
 <template>
-  <div class="containerarea font14 bg-white news notop nobottom">
+  <div id="newspage-container" class="containerarea font14 bg-white news notop nobottom">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
