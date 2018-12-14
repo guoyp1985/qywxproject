@@ -287,6 +287,10 @@ var Eleditor = function(){
 
 	console.log('|--Eleditor Mounted To', _$wrap);
 
+	_$editorTextLinkArea.blur(function () {
+		_$editorTextArea[0].scrollTop = _$editorTextArea[0].scrollHeight
+	})
+
 	/*bindEvent*/
 	var _$selected = null,
 		_imageUploader = null;
