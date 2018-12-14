@@ -144,6 +144,7 @@ margin-right:10px;
   position:fixed;
   left:0;
   top:0;
+  overflow:hidden;
 }
 .Eleditor-textEditor-colors,
 .Eleditor-textEditor-fontsizes,
