@@ -139,11 +139,12 @@ margin-right:10px;
 .Eleditor-textEditor{
   display:none;
   width:100%;
-  height:100%;
+  /* height:100%; */
   background:#fff;
   position:fixed;
   left:0;
   top:0;
+  bottom:0;
   overflow:hidden;
 }
 .Eleditor-textEditor-colors,
