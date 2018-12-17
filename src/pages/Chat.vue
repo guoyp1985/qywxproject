@@ -747,6 +747,7 @@ export default {
     },
     swiperChange (index) {
       const self = this
+      this.clearSelectData()
       if (index === 0 && self.newsData.length === 0) {
         self.$vux.loading.show()
         self.getNewsData()
