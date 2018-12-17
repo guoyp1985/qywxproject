@@ -245,6 +245,8 @@ export default {
         return false
       }
       if (self.$util.trim(kw) !== '') {
+        console.log(self.$refs.search[0])
+        self.$refs.search[0].setBlur()
         self.searchdata = []
         self.pagestart1 = 0
         self.searchFun(kw)
