@@ -247,8 +247,6 @@ export default {
           break
       }
     },
-    getData () {
-    },
     init () {
       const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
@@ -272,6 +270,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.query = this.$route.query
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         // if (self.loginUser.isretailer === 2) {
         //   self.initContainer()
