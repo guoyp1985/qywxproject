@@ -556,7 +556,8 @@ export default {
       VIP1: false,
       VIP2: true,
       feetype: 'oneyear',
-      platform: '聚客365'
+      platform: '聚客365',
+      applyMobile: null
     }
   },
   watch: {
@@ -613,6 +614,7 @@ export default {
           time: self.$util.delay(data.error)
         })
         if (data.flag === 1) {
+          self.applyMobile = self.submitdata.mobile
           self.classDataShow = true
           self.verifyCode = data.data
           self.showGetcode = false
@@ -624,6 +626,8 @@ export default {
               self.timenum = 60
             }
           }, 1000)
+        } else {
+          self.applyMobile = null
         }
       })
     },
@@ -677,6 +681,9 @@ export default {
             }
           }
         )
+        if (self.applyMobile !== self.submitdata.mobile) {
+          self.$vux.toast.text('请重新获取验证码', 'middle')
+        }
         if (!iscontinue) {
           return false
         }
