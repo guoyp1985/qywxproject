@@ -54,7 +54,14 @@
             </span>
           </div>
         </div>
-        <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
+        <div class="bg-page" style="height:10px;"></div>
+        <div class="b_top_after"></div>
+        <div class="padding10 b_bottom_after levelarea">
+          <div class="levelitem">
+            <div>销售分润: {{ productdata.factoryinfo.salesrate }}%</div>
+          </div>
+        </div>
+        <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
           <div class="bg-page" style="height:10px;"></div>
           <div class="b_top_after"></div>
           <div class="padding10 b_bottom_after levelarea">
@@ -63,7 +70,7 @@
               <div>佣金: {{ $t('RMB') }}{{ item }}</div>
             </div>
           </div>
-        </template>
+        </template> -->
         <template v-if="productdata.identity == 'retailer' && productdata.joinstatus == 1">
           <div class="bg-page" style="height:10px;"></div>
           <div class="b_top_after"></div>
