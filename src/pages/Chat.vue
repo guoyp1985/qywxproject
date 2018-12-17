@@ -1004,6 +1004,7 @@ export default {
     },
     refresh () {
       const self = this
+      self.retailerInfo = {}
       room = ''
       minIdFlag = 0
       this.message = ''

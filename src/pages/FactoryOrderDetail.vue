@@ -216,11 +216,8 @@ export default {
     },
     confirmpopup () {
       const self = this
-      if (self.deliverdata.delivercompany !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入物流单号'
-        })
+      if (self.deliverdata.delivercompany === '' || self.deliverdata.delivercompany === '-1' || !self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '') {
+        self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
       self.$vux.loading.show()
