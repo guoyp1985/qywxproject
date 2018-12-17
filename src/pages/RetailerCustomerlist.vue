@@ -25,19 +25,25 @@
               </search>
               <div v-if="disOrderArea" class="condition font14 pl12 pr12 bg-white border-box color-lightgray">
                 <div class="t-table w_100 orderbyarea">
-                  <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">时间<span class="ico"></span></div>
+                  <div :class="`t-cell v_middle orderbyitem ${dateClass}`" @click="dateOrder">
+                    时间
+                    <span v-if="`${dateClass}` === 'active'" class="ico"></span>
+                    <span v-else class="al al-paixu font14"></span>
+                  </div>
                   <div v-if="disAreaOrder" :class="`t-cell v_middle orderbyitem ${areaClass}`" @click="areaOrder">
                     <div class="clamp1">
                       <span class="v_middle">{{ $t('Region') }}</span>
                       <span class="v_middle font12" v-if="selectedArea">( {{selectedArea}} )</span>
-                      <span class="ico"></span>
+                      <span v-if="`${areaClass}` === 'active'" class="ico"></span>
+                      <span v-else class="al al-paixu font14"></span>
                     </div>
                   </div>
                   <div :class="`t-cell v_middle orderbyitem ${sexClass}`" @click="sexOrder">
                     <div class="clamp1">
                       <span class="v_middle">性别</span>
                       <span class="v_middle font12" v-if="selectedSex">( {{selectedSex}} )</span>
-                      <span class="ico"></span>
+                      <span v-if="`${sexClass}` === 'active'" class="ico"></span>
+                      <span v-else class="al al-paixu font14"></span>
                     </div>
                   </div>
                 </div>
