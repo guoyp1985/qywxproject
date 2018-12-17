@@ -238,14 +238,10 @@ export default {
       const self = this
       let kw = self.searchword
       if (!kw || self.$util.trim(kw) === '') {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入搜索内容'
-        })
+        self.$vux.toast.text('请输入搜索内容', 'middle')
         return false
       }
       if (self.$util.trim(kw) !== '') {
-        console.log(self.$refs.search[0])
         self.$refs.search[0].setBlur()
         self.searchdata = []
         self.pagestart1 = 0
@@ -395,10 +391,7 @@ export default {
         self.openVip()
       } else if (self.loginUser.isretailer === 1 || self.newsCount < 5) {
         if (!self.collecturl || self.$util.trim(self.collecturl) === '') {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入采集链接'
-          })
+          self.$vux.toast.text('请输入采集链接', 'middle')
           return false
         }
         if (self.collecturl.indexOf('mp.weixin.qq.com') < 0) {
@@ -422,6 +415,7 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
+                self.$refs.urlTextarea[0].setBlur()
                 self.collecturl = ''
                 let queryParmas = {id: data.data.id, control: 'edit'}
                 if (self.query.minibackurl) {
