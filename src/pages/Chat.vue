@@ -675,7 +675,7 @@ export default {
       const self = this
       if (self.selectNewsData) {
         for (let d of self.newsData) {
-          if (d.id !== self.selectNewsData.id) {
+          if (d.id === self.selectNewsData.id) {
             delete d.checked
             self.selectNewsData = null
             break
@@ -684,7 +684,7 @@ export default {
       }
       if (self.selectProductsData) {
         for (let d of self.productsData) {
-          if (d.id !== self.selectProductsData.id) {
+          if (d.id === self.selectProductsData.id) {
             delete d.checked
             self.selectProductsData = null
             break
