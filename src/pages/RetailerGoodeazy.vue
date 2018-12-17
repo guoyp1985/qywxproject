@@ -31,7 +31,9 @@
                     <div class="inner border1px color-gray" @click="clickKw(keyindex)">
                       <div class="clamp1 txt">{{ kw.title }}</div>
                     </div>
-                    <div class="close" @click="deleteKw(keyindex)">x</div>
+                    <div class="close" @click="deleteKw(keyindex)">
+                      <i class="al al-guanbi font12"></i>
+                    </div>
                   </div>
                 </div>
                 <div class="scroll_list pl10 pr10 mb12">
@@ -527,7 +529,7 @@ export default {
     }
     .close{
       position:absolute;top:-6px;right:0px;z-index:10;
-      width:20px;height:20px;border-radius:50%;background-color:#EC3E3F;color:#fff;
+      width:15px;height:15px;border-radius:50%;background-color:#EC3E3F;color:#fff;
     	display:flex;justify-content: center;align-items: center;
     }
   }
