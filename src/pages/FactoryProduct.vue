@@ -58,7 +58,7 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>销售分润: {{ productdata.factoryinfo.salesrate }}%</div>
+            <div>销售分润: {{ productdata.profit * productdata.factoryinfo.salesrate / 100 }}</div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
