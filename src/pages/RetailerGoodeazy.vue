@@ -29,7 +29,7 @@
                 <div class="item-list pt10">
                   <div :class="`item ${kw.checked ? 'active' : ''}`" v-for="(kw, keyindex) in keywordsData" :key="keyindex">
                     <div class="inner border1px color-gray" @click="clickKw(keyindex)">
-                      <div class="clamp1 list" style="max-width:80px;">{{ kw.title }}</div>
+                      <div class="clamp1 txt">{{ kw.title }}</div>
                     </div>
                     <div class="close" @click="deleteKw(keyindex)">x</div>
                   </div>
@@ -517,6 +517,7 @@ export default {
         background-color: #fff;
         box-sizing: border-box;
       }
+      .txt{max-width:80px;}
     }
     .item.active .inner{
       background: #ffffff url("../assets/images/checker.png") no-repeat right bottom;
@@ -525,8 +526,9 @@ export default {
       border-color: #ff4a00;
     }
     .close{
-      position:absolute;width:15px;height:15px;line-height:12px;text-align:center;border-radius:50%;
-      top:-6px;right:0px;font-weight:bold;background-color:#EC3E3F;color:#fff;z-index:10;
+      position:absolute;top:-6px;right:0px;z-index:10;
+      width:20px;height:20px;border-radius:50%;background-color:#EC3E3F;color:#fff;
+    	display:flex;justify-content: center;align-items: center;
     }
   }
   .textarea-outer .weui-cells{background-color:transparent;}

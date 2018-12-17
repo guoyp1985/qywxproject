@@ -69,9 +69,9 @@
               <div class="item">
                 <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'factoryproduct'}}">统计</router-link>
               </div>
-              <div class="item">
+              <!-- <div class="item">
                 <router-link class="inner" :to="{ path: '/factoryAgentFee', query: { id: clickdata.id, fid: query.fid } }">设置佣金</router-link>
-              </div>
+              </div> -->
               <div class="item close mt10" @click="clickpopup">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
