@@ -93,7 +93,7 @@
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                       <div class="leftInfo" @click="toMembersView(item)">
                         <div>性别: <span>{{item.sexname}}</span></div>
-                        <div>地区: <span>{{item.province}}</span></div>
+                        <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
@@ -166,7 +166,7 @@
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                       <div class="leftInfo" @click="toMembersView(item)">
                         <div>性别: <span>{{item.sexname}}</span></div>
-                        <div>地区: <span>{{item.province}}</span></div>
+                        <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
@@ -237,7 +237,7 @@
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                       <div class="leftInfo" @click="toMembersView(item)">
                         <div>性别: <span>{{item.sexname}}</span></div>
-                        <div>地区: <span>{{item.province}}</span></div>
+                        <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
@@ -848,7 +848,7 @@ export default {
 .rcustomerlist .detailInfo{
   background-color:#fff;display:flex;
   .leftInfo{
-    padding:0 80px 10px 20px;box-sizing:border-box;display:flex;flex-direction:column;
+    padding:0 50px 10px 10px;box-sizing:border-box;display:flex;flex-direction:column;
   }
   .rightInfo{
     .phone{
