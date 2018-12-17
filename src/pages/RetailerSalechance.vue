@@ -40,13 +40,13 @@
                     <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
                     <div class="color-999 font12 dtime">{{ item.dateline | dateformat1 }}</div>
                     <div class="t-table ml10">
-                      <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                      <div @click="toMembersView(item)" class="t-cell">
                         <div class="color-orange7 font14">{{ item.linkman }}</div>
                         <div class="color-gray font12 pr10">{{ item.content }}</div>
-                      </router-link>
-                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="t-cell w50 align_right v_middle">
+                      </div>
+                      <div @click="toChat(item)" class="t-cell w50 align_right v_middle">
                         <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
-                      </router-link>
+                      </div>
                     </div>
                   </timeline-item>
                 </timeline>
@@ -67,13 +67,13 @@
                     <div class="color-lightgray font14 ddate">{{ item.dateline | dateformat }}</div>
                     <div class="color-gray font12 dtime">{{ item.dateline | dateformat1 }}</div>
                     <div class="t-table ml10">
-                      <router-link :to="{path: '/membersView', query: { uid: item.uid }}" class="t-cell">
+                      <div @click="toMembersView(item)" class="t-cell">
                         <div class="color-orange7 font14">{{ item.linkman }}</div>
                         <div class="color-gray font12 pr10">{{ item.content }}</div>
-                      </router-link>
-                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="t-cell w50 align_right v_middle">
+                      </div>
+                      <div @click="toChat(item)" class="t-cell w50 align_right v_middle">
                         <div class="qbtn bg-red color-white">{{ $t('Contact') }}</div>
-                      </router-link>
+                      </div>
                     </div>
                   </timeline-item>
                 </timeline>
@@ -164,6 +164,20 @@ export default {
     }
   },
   methods: {
+    toMembersView (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/membersView', query: params})
+    },
+    toChat (item) {
+      let params = {uid: item.uid, fromModule: 'retailer'}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/chat', query: params})
+    },
     handleScroll: function (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
