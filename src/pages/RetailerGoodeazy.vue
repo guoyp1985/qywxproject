@@ -415,7 +415,6 @@ export default {
             time: self.$util.delay(data.error),
             onHide: function () {
               if (data.flag === 1) {
-                self.$refs.urlTextarea[0].setBlur()
                 self.collecturl = ''
                 let queryParmas = {id: data.data.id, control: 'edit'}
                 if (self.query.minibackurl) {
