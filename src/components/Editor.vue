@@ -381,7 +381,7 @@ export default {
         'insertText',
         'editText',
         'insertImage',
-        'insertLink',
+        // 'insertLink',
         'insertHr',
         'deleteThis',
         'undo',
