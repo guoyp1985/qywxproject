@@ -60,7 +60,7 @@ import { User } from '#/storage'
 
 const limit = 10
 let pageStart1 = 0
-
+let self = this
 export default {
   components: {
     Search, XImg, Sos
@@ -108,16 +108,15 @@ export default {
       console.log('in toModule')
       console.log(item)
       if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
-        this.$wechat.miniProgram.navigateTo({url: 'pages/index'})
+        self.$wechat.miniProgram.navigateTo({url: 'pages/index'})
       } else {
-        this.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
+        self.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
       }
     },
     onChange1 (val) {
       this.searchword1 = val
     },
     onCancel1 () {
-      const self = this
       self.searchword1 = ''
       self.$vux.loading.show()
       self.disdata = false
@@ -126,7 +125,6 @@ export default {
       self.getData1()
     },
     onSubmit1 () {
-      const self = this
       self.$vux.loading.show()
       self.disdata = false
       self.data = []
@@ -134,7 +132,6 @@ export default {
       self.getData1()
     },
     handleScroll () {
-      const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
@@ -147,7 +144,6 @@ export default {
       })
     },
     getData1 () {
-      const self = this
       const params = { params: { uid: self.query.uid, pagestart: pageStart1, limit: limit } }
       const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
@@ -174,7 +170,6 @@ export default {
       return ret
     },
     getData () {
-      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'sharelist' })
       .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
       .then(res => {
@@ -194,7 +189,6 @@ export default {
       })
     },
     openVip () {
-      const self = this
       self.$vux.confirm.show({
         content: ENV.vipMemberView,
         cancelText: ENV.giveUpVipText,
@@ -225,6 +219,7 @@ export default {
     }
   },
   activated () {
+    self = this
     this.refresh()
   }
 }
