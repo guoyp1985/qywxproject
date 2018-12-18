@@ -67,11 +67,11 @@
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10"  @click="btnDetail(index)">
-                    <div class="t-cell v_middle w70">
+                  <div class="t-table pb10">
+                    <div class="t-cell v_middle w70" @click="btnDetail(index)">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
-                    <div class="t-cell v_middle">
+                    <div class="t-cell v_middle" @click="btnDetail(index)">
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                     </div>
@@ -85,7 +85,7 @@
                       <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                     </router-link> -->
                     <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail(index)"></div>
                     </div>
                   </div>
                   <div v-if="item.checked">
@@ -154,9 +154,6 @@
                       <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                     </div>
                     <div class="t-cell v_middle w80 align_center color-orange">{{item.intentiondesc}}</div>
-                    <!-- <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
-                      <div class="qbtn bg-red color-white">联系</div>
-                    </div> -->
                     <div class="t-cell v_middle w60 align_right">
                       <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                     </div>
@@ -225,9 +222,6 @@
                       <div class="clamp1 font14 color-lightgray"><span v-if="item.priority" class="mr3"><i class="fa fa-arrow-circle-o-up color-orange" style="font-weight:bold;"></i></span><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.linkman}}</div>
                       <div class="clamp1 mt5 font14 color-gray">返点客：{{item.uploadname}}</div>
                     </div>
-                    <!-- <div @click="toChat(item)" class="t-cell v_middle w60 align_right">
-                      <div class="qbtn bg-red color-white">联系</div>
-                    </div> -->
                     <div class="t-cell v_middle w60 align_right">
                       <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                     </div>

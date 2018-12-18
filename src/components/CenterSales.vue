@@ -206,7 +206,7 @@
       </template>
     </group>
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
-      <img src="../assets/images/bottom_g01.png" width="100%" class="db"/>
+      <img src="../assets/images/business.png" width="100%" class="db"/>
     </router-link>
     <div class="modalarea modalarea1 flex_center store-modal" style="position:fixed;" v-if="showPopupStore">
       <div class="modal">

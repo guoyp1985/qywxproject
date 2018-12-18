@@ -22,18 +22,18 @@
         <div class="list-shadow">
           <div class="b_top_after flex_center bg-white h50">
             <div class="t-table align_center color-red4">
-              <router-link :to="{path: '/viewList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
+              <div @click="toViewList" class="t-cell v_middle b_right_after">
                 <div>{{ $t('Views') }}</div>
                 <div>{{viewuser.viewNumber}}</div>
-              </router-link>
-              <router-link :to="{path: '/shareList', query:{ uid: viewuser.uid }}" class="t-cell v_middle b_right_after">
+              </div>
+              <div @click="toShareList" class="t-cell v_middle b_right_after">
                 <div>{{ $t('Share') }}</div>
                 <div>{{viewuser.shareNumber}}</div>
-              </router-link>
-              <router-link v-if="viewuser.customerlevel >= 5000" :to="{path: '/salesList', query:{ uid: viewuser.uid }}" class="t-cell item v_middle">
+              </div>
+              <div @click="toSalesList" v-if="viewuser.customerlevel >= 5000" class="t-cell item v_middle">
                 <div>{{ $t('Orders') }}</div>
                 <div>{{viewuser.orderNumber}}</div>
-              </router-link>
+              </div>
             </div>
           </div>
           <div class="b_top_after flex_center bg-white h45">
@@ -254,6 +254,27 @@ export default {
     }
   },
   methods: {
+    toViewList () {
+      let params = {uid: this.viewuser.uid}
+      if (this.query.from === 'miniprogram') {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/viewList', query: params})
+    },
+    toShareList () {
+      let params = {uid: this.viewuser.uid}
+      if (this.query.from === 'miniprogram') {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/shareList', query: params})
+    },
+    toSalesList () {
+      let params = {uid: this.viewuser.uid}
+      if (this.query.from === 'miniprogram') {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/salesList', query: params})
+    },
     priorityevent () {
       const self = this
       self.$vux.loading.show()

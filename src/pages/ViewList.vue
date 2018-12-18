@@ -26,7 +26,7 @@
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无浏览数据</template>
           </div>
-          <router-link :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
+          <div @click="toModule(item)"v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
             <div class="flex_left">
               <img class="imgcover avatarimg2 radius0" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <div class="flex_cell pl10">
@@ -35,7 +35,7 @@
                 <div class="clamp1 color-gray font12">停留时间: {{ item.staytime | staytimeFormat }}</div>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </div>
     </template>
@@ -60,7 +60,7 @@ import { User } from '#/storage'
 
 const limit = 10
 let pageStart1 = 0
-
+let self = this
 export default {
   components: {
     Search, XImg, Sos
@@ -104,11 +104,21 @@ export default {
     }
   },
   methods: {
+    toModule (item) {
+      if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
+        if (this.query.from === 'from') {
+          this.$wechat.miniProgram.reLaunch({url: '/pages/index'})
+        } else {
+          this.$vux.toast.text('请在小程序内查看')
+        }
+      } else {
+        this.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
+      }
+    },
     onChange1 (val) {
       this.searchword1 = val
     },
     onCancel1 () {
-      const self = this
       self.searchword1 = ''
       self.$vux.loading.show()
       self.disdata = false
@@ -117,7 +127,6 @@ export default {
       self.getData1()
     },
     onSubmit1 () {
-      const self = this
       self.$vux.loading.show()
       self.disdata = false
       self.data = []
@@ -125,7 +134,6 @@ export default {
       self.getData1()
     },
     handleScroll () {
-      const self = this
       self.$util.scrollEvent({
         element: self.$refs.scrollContainer,
         callback: function () {
@@ -138,7 +146,6 @@ export default {
       })
     },
     getData1 () {
-      const self = this
       const params = { params: { uid: self.query.uid, pagestart: pageStart1, limit: limit } }
       const keyword = self.searchword1
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
@@ -165,7 +172,6 @@ export default {
       return ret
     },
     getData () {
-      const self = this
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, { module: 'retailer', action: 'sharelist' })
       .then(res => self.$http.get(`${ENV.BokaApi}/api/retailer/customerView`, { params: { customeruid: self.query.uid } }))
       .then(res => {
@@ -185,7 +191,6 @@ export default {
       })
     },
     openVip () {
-      const self = this
       self.$vux.confirm.show({
         content: ENV.vipMemberView,
         cancelText: ENV.giveUpVipText,
@@ -216,6 +221,7 @@ export default {
     }
   },
   activated () {
+    self = this
     this.refresh()
   }
 }
