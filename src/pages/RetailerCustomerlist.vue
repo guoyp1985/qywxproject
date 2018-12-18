@@ -90,16 +90,16 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="leftInfo" @click="toMembersView(item)">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="btnDetail(index)">
+                      <div class="leftInfo">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div @click="toMembersView(item)">推荐人: <span>{{item.uploadname}}</span></div>
-                        <div @click="toMembersView(item)">获客时间: <span>{{item.dateline_str}}</span></div>
+                        <div>推荐人: <span>{{item.uploadname}}</span></div>
+                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}"></router-link> -->
@@ -163,16 +163,16 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="leftInfo" @click="toMembersView(item)">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="btnDetail1(index)">
+                      <div class="leftInfo">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div @click="toMembersView(item)">推荐人: <span>{{item.uploadname}}</span></div>
-                        <div @click="toMembersView(item)">获客时间: <span>{{item.dateline_str}}</span></div>
+                        <div>推荐人: <span>{{item.uploadname}}</span></div>
+                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -234,16 +234,16 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="leftInfo" @click="toMembersView(item)">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="btnDetail2(index)">
+                      <div class="leftInfo">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
                         <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
                       </div>
                       <div class="rightInfo">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div @click="toMembersView(item)">推荐人: <span>{{item.uploadname}}</span></div>
-                        <div @click="toMembersView(item)">获客时间: <span>{{item.dateline_str}}</span></div>
+                        <div>推荐人: <span>{{item.uploadname}}</span></div>
+                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
                       </div>
                     </div>
                     <div class="flex_center bg-white h40">
