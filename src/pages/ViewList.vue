@@ -106,9 +106,9 @@ export default {
   methods: {
     toModule (item) {
       if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
-        this.$wechat.miniProgram.reLaunch({url: '/pages/index'})
+        self.$wechat.miniProgram.reLaunch({url: '/pages/index'})
       } else {
-        this.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
+        self.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
       }
     },
     onChange1 (val) {
