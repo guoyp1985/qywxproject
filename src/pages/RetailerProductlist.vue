@@ -70,7 +70,7 @@
       <div class="flex_cell flex_center">
         <div class="addproduct flex_center btn-bottom-red font14" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
       </div>
-      <div class="flex_cell flex_center">
+      <div class="flex_cell flex_center" v-if="loginUser.fid > 0">
         <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toUpdate">同步商品信息</div>
       </div>
     </div>
@@ -253,6 +253,23 @@ export default {
     }
   },
   methods: {
+    toUpdate () {
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryProduct`, {
+        fid: this.loginUser.fid
+      }).then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            this.refresh()
+          }
+        })
+      })
+    },
     openVip () {
       const self = this
       self.$vux.confirm.show({
@@ -277,8 +294,6 @@ export default {
       } else {
         this.$router.push('/addProduct')
       }
-    },
-    toUpdate () {
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
