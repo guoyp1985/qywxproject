@@ -475,7 +475,7 @@ export default {
       if (this.query.from) {
         params.from = this.query.from
       }
-      this.$ruter.push({path: '/membersView', query: params})
+      this.$router.push({path: '/membersView', query: params})
     },
     toChat (item) {
       let params = {uid: item.uid, fromModule: 'retailer'}
