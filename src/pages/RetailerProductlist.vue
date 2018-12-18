@@ -260,10 +260,11 @@ export default {
       }).then(res => {
         const data = res.data
         this.$vux.loading.hide()
+        let error = data.flag ? '同步成功' : data.error
         this.$vux.toast.show({
-          text: data.error,
+          text: error,
           type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(data.error),
+          time: self.$util.delay(error),
           onHide: () => {
             this.refresh()
           }
