@@ -108,7 +108,7 @@ export default {
       console.log('in toModule')
       console.log(item)
       if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
-        this.$wechat.miniProgram.navigateTo({url: '/pages/index'})
+        this.$wechat.miniProgram.navigateTo({url: 'pages/index'})
       } else {
         this.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
       }
