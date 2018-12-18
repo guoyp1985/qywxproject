@@ -71,7 +71,7 @@
         <div class="addproduct flex_center btn-bottom-red font14" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
       </div>
       <div class="flex_cell flex_center" v-if="loginUser.fid > 0">
-        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toUpdate">同步商品信息</div>
+        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toUpdate">同步商品</div>
       </div>
     </div>
     <div v-transfer-dom>
