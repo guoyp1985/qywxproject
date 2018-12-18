@@ -54,7 +54,6 @@
                   <div class="t-cell align_right w80">{{ $t('Percent') }}</div>
                   <div class="t-cell align_right w60">{{ $t('Contact customer') }}</div>
                 </div>
-
               </div>
               <div v-if="distabdata1" class="scroll_list">
                 <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
@@ -90,13 +89,16 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="btnDetail(index)">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                       <div class="leftInfo">
-                        <div>性别: <span>{{item.sexname}}</span></div>
-                        <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
+                        <div @click="btnDetail(index)">性别: <span>{{item.sexname}}</span></div>
+                        <div @click="btnDetail(index)">地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
+                        <div @click="influence">影响力:
+                          <span class="color-red4">{{item.yingxiangli}}</span>
+                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        </div>
                       </div>
-                      <div class="rightInfo">
+                      <div class="rightInfo" @click="btnDetail(index)">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人: <span>{{item.uploadname}}</span></div>
                         <div>获客时间: <span>{{item.dateline_str}}</span></div>
@@ -160,13 +162,16 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="btnDetail1(index)">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                       <div class="leftInfo">
-                        <div>性别: <span>{{item.sexname}}</span></div>
-                        <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
+                        <div @click="btnDetail1(index)">性别: <span>{{item.sexname}}</span></div>
+                        <div @click="btnDetail1(index)">地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
+                        <div @click="influence">影响力:
+                          <span class="color-red4">{{item.yingxiangli}}</span>
+                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        </div>
                       </div>
-                      <div class="rightInfo">
+                      <div class="rightInfo" @click="btnDetail1(index)">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人: <span>{{item.uploadname}}</span></div>
                         <div>获客时间: <span>{{item.dateline_str}}</span></div>
@@ -228,13 +233,16 @@
                     </div>
                   </div>
                   <div v-if="item.checked">
-                    <div class="detailInfo w_100 font14 color-gray b_bottom_after" @click="btnDetail2(index)">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
                       <div class="leftInfo">
-                        <div>性别: <span>{{item.sexname}}</span></div>
-                        <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
+                        <div @click="btnDetail2(index)">性别: <span>{{item.sexname}}</span></div>
+                        <div @click="btnDetail2(index)">地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
+                        <div @click="influence">影响力:
+                          <span class="color-red4">{{item.yingxiangli}}</span>
+                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        </div>
                       </div>
-                      <div class="rightInfo">
+                      <div class="rightInfo" @click="btnDetail2(index)">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
                         <div>推荐人: <span>{{item.uploadname}}</span></div>
                         <div>获客时间: <span>{{item.dateline_str}}</span></div>
@@ -257,6 +265,33 @@
             </div>
           </swiper-item>
         </swiper>
+      </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="isshowfluence" height="100%">
+          <div class="popup1 font14">
+            <div class="percentlayer">
+              <div class="bg"></div>
+              <div class="w_100 h_100 flex_center">
+                <div class="layerinner align_left probability">
+                  <div class="inner">
+                    <div class="pro" >
+                      <div class="pro-sucess">
+                        <div class="flex_left">
+                          <img class="v_middle" src="https://tossharingsales.boka.cn/images/infor.png"/>
+                          <div class="color-blue">什么是影响力</div>
+                        </div>
+                        <div class="font12" >影响力是指客户通过分享动作所带来的访问量，影响力数值越大，表示该客户越受朋友欢迎，所分享的内容打开率越高，可将影响力高的客户发展成代理，通过他的资源为你带来更多销量！</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pro-know">
+                    <span class="close" @click="closepopup">知道了</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </popup>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="isshowpopup" height="100%">
@@ -372,6 +407,7 @@ export default {
       tabdata2: [],
       tabdata3: [],
       isshowpopup: false,
+      isshowfluence: false,
       searchword1: '',
       searchword2: '',
       searchword3: '',
@@ -774,11 +810,15 @@ export default {
           break
       }
     },
+    influence () {
+      this.isshowfluence = true
+    },
     percentclick () {
       this.isshowpopup = true
     },
     closepopup () {
       this.isshowpopup = false
+      this.isshowfluence = false
     },
     getDateState (dt) {
       return this.$util.getDateState(dt)
