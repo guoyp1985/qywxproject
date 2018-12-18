@@ -743,7 +743,7 @@ export default {
 
 
 .news .insertproduct{
-  display:block;padding:5px !important;position:relative;text-indent: 0 !important;
+  display:block;padding:5px !important;position:relative;text-indent: 0 !important;text-align:center;
   color:inherit !important;border:#e3e3e3 1px solid !important;border-radius:5px !important;
 }
 .news .insertproduct img{vertical-align: middle !important;}

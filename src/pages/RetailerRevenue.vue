@@ -447,7 +447,13 @@ export default {
       if (!self.eventIng) {
         self.eventIng = true
         if (!self.loginUser.idcardno) {
-          self.$router.push({path: '/authPhoto', query: {fromPage: 'retailerRevenue'}})
+          let fromPage = ''
+          if (self.query.appid) {
+            fromPage = encodeURIComponent(`/retailerRevenue?appid=${self.query.appid}`)
+          } else {
+            fromPage = encodeURIComponent('/retailerRevenue')
+          }
+          self.$router.push({path: '/authPhoto', query: {fromPage: fromPage}})
         } else {
           self.$vux.confirm.show({
             content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
@@ -457,7 +463,7 @@ export default {
             onConfirm () {
               self.$vux.loading.show()
               let postData = {}
-              if (self.query.from === 'miniprogram') {
+              if (self.query.appid) {
                 postData.appid = self.query.appid
               }
               self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {

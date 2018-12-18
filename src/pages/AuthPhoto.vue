@@ -232,7 +232,7 @@ export default {
             self.loginUser = retdata.data
             User.set(retdata.data)
             if (self.query.fromPage) {
-              self.$router.push({path: `/${self.query.fromPage}`})
+              self.$router.push({path: decodeURIComponent(self.query.fromPage)})
             }
           }
         })
