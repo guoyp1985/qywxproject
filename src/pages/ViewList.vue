@@ -26,7 +26,7 @@
             <template v-if="searchresult1">暂无搜索结果</template>
             <template v-else>暂无浏览数据</template>
           </div>
-          <div @click="toModule(item)" :to="{path: `/${item.module}?id=${item.moduleid}&wid=${item.wid}`}" v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
+          <div @click="toModule(item)"v-else v-for="(item,index) in data" :key="item.id" class="scroll_item db padding10">
             <div class="flex_left">
               <img class="imgcover avatarimg2 radius0" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
               <div class="flex_cell pl10">
@@ -105,8 +105,10 @@ export default {
   },
   methods: {
     toModule (item) {
+      console.log('in toModule')
+      console.log(item)
       if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
-        this.$wechat.miniProgram.redirectTo({url: '/pages/index'})
+        this.$wechat.miniProgram.navigateTo({url: '/pages/index'})
       } else {
         this.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
       }

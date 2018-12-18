@@ -68,7 +68,7 @@
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10"  @click="btnDetail(index)">
+                  <div class="t-table pb10">
                     <div class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
@@ -86,7 +86,7 @@
                       <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
                     </router-link> -->
                     <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail(index)"></div>
                     </div>
                   </div>
                   <div v-if="item.checked">
@@ -146,7 +146,7 @@
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10" @click="btnDetail1(index)">
+                  <div class="t-table pb10">
                     <div class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
@@ -159,7 +159,7 @@
                       <div class="qbtn bg-red color-white">联系</div>
                     </div> -->
                     <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail1(index)"></div>
                     </div>
                   </div>
                   <div v-if="item.checked">
@@ -218,7 +218,7 @@
                   </template>
                 </div>
                 <div v-else v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item pt10 pl12 pr12 bg-white mb10 list-shadow">
-                  <div class="t-table pb10" @click="btnDetail2(index)">
+                  <div class="t-table pb10">
                     <div class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
@@ -230,7 +230,7 @@
                       <div class="qbtn bg-red color-white">联系</div>
                     </div> -->
                     <div class="t-cell v_middle w60 align_right">
-                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20"></div>
+                      <div class="qbtnInfo bg-red color-white al al-asmkticon0165 font20" @click="btnDetail2(index)"></div>
                     </div>
                   </div>
                   <div v-if="item.checked">
