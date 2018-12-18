@@ -105,12 +105,10 @@ export default {
   },
   methods: {
     toModule (item) {
-      console.log('in toModule')
-      console.log(item)
       if (item.module === 'courseclass' || item.module === 'lottery' || item.module === 'miniactivity') {
-        self.$wechat.miniProgram.navigateTo({url: 'pages/index'})
+        this.$wechat.miniProgram.reLaunch({url: '/pages/index'})
       } else {
-        self.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
+        this.$router.push({path: `/${item.module}`, query: {id: item.moduleid, wid: item.wid}})
       }
     },
     onChange1 (val) {
