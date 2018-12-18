@@ -671,8 +671,30 @@ export default {
         self.getNewsData()
       }
     },
+    clearSelectData () {
+      const self = this
+      if (self.selectNewsData) {
+        for (let d of self.newsData) {
+          if (d.id === self.selectNewsData.id) {
+            delete d.checked
+            self.selectNewsData = null
+            break
+          }
+        }
+      }
+      if (self.selectProductsData) {
+        for (let d of self.productsData) {
+          if (d.id === self.selectProductsData.id) {
+            delete d.checked
+            self.selectProductsData = null
+            break
+          }
+        }
+      }
+    },
     closeImgTxtPopup () {
       this.showImgTxt = false
+      this.clearSelectData()
     },
     sendImgTxt () {
       const self = this
@@ -689,6 +711,7 @@ export default {
       }
       self.sendData(postdata)
       self.showImgTxt = false
+      self.clearSelectData()
     },
     onSearchChange (val) {
       this.searchword = val
@@ -724,6 +747,7 @@ export default {
     },
     swiperChange (index) {
       const self = this
+      this.clearSelectData()
       if (index === 0 && self.newsData.length === 0) {
         self.$vux.loading.show()
         self.getNewsData()

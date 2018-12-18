@@ -29,9 +29,11 @@
                 <div class="item-list pt10">
                   <div :class="`item ${kw.checked ? 'active' : ''}`" v-for="(kw, keyindex) in keywordsData" :key="keyindex">
                     <div class="inner border1px color-gray" @click="clickKw(keyindex)">
-                      <div class="clamp1 list" style="max-width:80px;">{{ kw.title }}</div>
+                      <div class="clamp1 txt">{{ kw.title }}</div>
                     </div>
-                    <div class="close" @click="deleteKw(keyindex)">x</div>
+                    <div class="close" @click="deleteKw(keyindex)">
+                      <i class="al al-guanbi font12"></i>
+                    </div>
                   </div>
                 </div>
                 <div class="scroll_list pl10 pr10 mb12">
@@ -236,13 +238,11 @@ export default {
       const self = this
       let kw = self.searchword
       if (!kw || self.$util.trim(kw) === '') {
-        self.$vux.alert.show({
-          title: '',
-          content: '请输入搜索内容'
-        })
+        self.$vux.toast.text('请输入搜索内容', 'middle')
         return false
       }
       if (self.$util.trim(kw) !== '') {
+        self.$refs.search[0].setBlur()
         self.searchdata = []
         self.pagestart1 = 0
         self.searchFun(kw)
@@ -391,10 +391,7 @@ export default {
         self.openVip()
       } else if (self.loginUser.isretailer === 1 || self.newsCount < 5) {
         if (!self.collecturl || self.$util.trim(self.collecturl) === '') {
-          self.$vux.alert.show({
-            title: '',
-            content: '请输入采集链接'
-          })
+          self.$vux.toast.text('请输入采集链接', 'middle')
           return false
         }
         if (self.collecturl.indexOf('mp.weixin.qq.com') < 0) {
@@ -517,6 +514,7 @@ export default {
         background-color: #fff;
         box-sizing: border-box;
       }
+      .txt{max-width:80px;}
     }
     .item.active .inner{
       background: #ffffff url("../assets/images/checker.png") no-repeat right bottom;
@@ -525,8 +523,9 @@ export default {
       border-color: #ff4a00;
     }
     .close{
-      position:absolute;width:15px;height:15px;line-height:12px;text-align:center;border-radius:50%;
-      top:-6px;right:0px;font-weight:bold;background-color:#EC3E3F;color:#fff;z-index:10;
+      position:absolute;top:-6px;right:0px;z-index:10;
+      width:15px;height:15px;border-radius:50%;background-color:#EC3E3F;color:#fff;
+    	display:flex;justify-content: center;align-items: center;
     }
   }
   .textarea-outer .weui-cells{background-color:transparent;}
