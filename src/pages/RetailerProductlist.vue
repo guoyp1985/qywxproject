@@ -65,10 +65,13 @@
       </div>
     -->
       <div class="flex_cell flex_center">
-        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
+        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
       </div>
       <div class="flex_cell flex_center">
-        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+        <div class="addproduct flex_center btn-bottom-red font14" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+      </div>
+      <div class="flex_cell flex_center">
+        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toUpdate">同步商品信息</div>
       </div>
     </div>
     <div v-transfer-dom>
@@ -274,6 +277,8 @@ export default {
       } else {
         this.$router.push('/addProduct')
       }
+    },
+    toUpdate () {
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
