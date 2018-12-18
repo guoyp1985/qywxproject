@@ -93,7 +93,10 @@
                       <div class="leftInfo">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div style="display:flex;" @click="influence">影响力: <span class="color-red4 ml5">{{item.yingxiangli}}</span><span class="al al-wenhao font20 ml5" style="margin-top:-5px;"></span></div>
+                        <div @click="influence">影响力:
+                          <span class="color-red4">{{item.yingxiangli}}</span>
+                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        </div>
                       </div>
                       <div class="rightInfo">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
@@ -163,7 +166,10 @@
                       <div class="leftInfo">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
+                        <div @click="influence">影响力:
+                          <span class="color-red4">{{item.yingxiangli}}</span>
+                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        </div>
                       </div>
                       <div class="rightInfo">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
@@ -231,7 +237,10 @@
                       <div class="leftInfo">
                         <div>性别: <span>{{item.sexname}}</span></div>
                         <div>地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div>影响力: <span class="color-red4">{{item.yingxiangli}}</span></div>
+                        <div @click="influence">影响力:
+                          <span class="color-red4">{{item.yingxiangli}}</span>
+                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        </div>
                       </div>
                       <div class="rightInfo">
                         <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
