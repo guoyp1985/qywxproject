@@ -444,14 +444,16 @@ export default {
           })
           return false
         }
-        let minprice1 = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
-        if (minprice < minprice1) {
-          self.$vux.toast.show({
-            text: `活动价格不能低于${minprice1}`,
-            type: 'warn',
-            time: 1500
-          })
-          return false
+        if (self.selectproduct.fid > 0) {
+          let minprice1 = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
+          if (minprice < minprice1) {
+            self.$vux.toast.show({
+              text: `活动价格不能低于${minprice1}`,
+              type: 'warn',
+              time: 1500
+            })
+            return false
+          }
         }
         if (isNaN(self.submitdata.param_limitbuy) || limitbuy <= 0 || self.submitdata.param_limitbuy.indexOf('.') > -1) {
           self.$vux.toast.show({
@@ -515,14 +517,16 @@ export default {
           })
           return false
         }
-        let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
-        if (groupprice < minprice) {
-          self.$vux.toast.show({
-            text: `团购价不能低于${minprice}`,
-            type: 'warn',
-            time: 1500
-          })
-          return false
+        if (self.selectproduct.fid > 0) {
+          let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
+          if (groupprice < minprice) {
+            self.$vux.toast.show({
+              text: `团购价不能低于${minprice}`,
+              type: 'warn',
+              time: 1500
+            })
+            return false
+          }
         }
         if (isNaN(self.submitdata.param_numbers) || numbers <= 1 || self.submitdata.param_numbers.indexOf('.') > -1) {
           self.$vux.toast.show({
