@@ -59,7 +59,7 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center" v-if="loginUser.fid > 0">
+      <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
         <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toUpdate">同步商品</div>
       </div>
       <template v-else>
@@ -215,6 +215,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       query: {},
       productdata: [],
       controldata1: [
@@ -253,7 +254,7 @@ export default {
     toUpdate () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryProduct`, {
-        fid: this.loginUser.fid
+        fid: this.retailerInfo.fid
       }).then(res => {
         const data = res.data
         this.$vux.loading.hide()
@@ -520,6 +521,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.retailerInfo = this.loginUser.retailerinfo
       this.disproductdata = false
       this.productdata = []
       this.$vux.loading.show()
