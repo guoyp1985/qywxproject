@@ -13,7 +13,7 @@
         </div>
         <div class="flex_cell pl10 pr20 color-white">
           <div class="font16 clamp1">{{ viewuser.linkman }}</div>
-          <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div>
+          <!-- <div class="font13 clamp1" v-if="viewuser.uploadname && viewuser.uploadname != ''">返点客：{{ viewuser.uploadname }}</div> -->
         </div>
         <div v-if="loginUser.subscribe != 1 && query.from != 'miniprogram'" class="qbtn7 font14 bg-white color-red5" @click="toSubscribe">联系</div>
         <router-link v-else :to="{path: '/chat', query: {uid: query.uid, from: query.from}}" class="qbtn7 font14 bg-white color-red5">联系</router-link>
@@ -38,14 +38,14 @@
           </div>
           <div class="b_top_after flex_center bg-white h45">
             <div class="t-table align_center color-gray2">
-              <template v-if="viewuser.subscribe != 0">
+              <!-- <template v-if="viewuser.subscribe != 0">
                 <div v-if="!viewuser.isseller || viewuser.isseller == '0'" class="t-cell v_middle b_right_after" @click="inviteevent">
                   <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate customer') }}</span>
                 </div>
                 <router-link v-else :to="{path: '/retailerSaleview', query: {uid: query.uid}}" class="t-cell v_middle b_right_after color-gray2">
                   <i class="al al-account font16 mr5"></i><span style="vertical-align: 1px;">{{ $t('Rebate manage') }}</span>
                 </router-link>
-              </template>
+              </template> -->
               <div @click="priorityevent" :class="`t-cell v_middle b_right_after priority ${getprioritycss}`">
                 <i class="al al-zhidinge79b font16 mr5"></i><span class="txt" style="vertical-align: 1px;"></span>
               </div>
