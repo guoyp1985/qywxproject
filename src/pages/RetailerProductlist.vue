@@ -261,8 +261,8 @@ export default {
         let error = data.flag ? '同步成功' : data.error
         this.$vux.toast.show({
           text: error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(error),
+          type: (data.flag ? 'success' : 'warn'),
+          time: this.$util.delay(error),
           onHide: () => {
             this.refresh()
           }
