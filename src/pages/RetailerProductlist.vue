@@ -65,13 +65,13 @@
       </div>
     -->
       <div class="flex_cell flex_center">
-        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
-      </div>
-      <div class="flex_cell flex_center">
-        <div class="addproduct flex_center btn-bottom-red font14" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
       </div>
       <div class="flex_cell flex_center" v-if="loginUser.fid > 0">
-        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toUpdate">同步商品</div>
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toUpdate">同步商品</div>
+      </div>
+      <div class="flex_cell flex_center" v-else>
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
       </div>
     </div>
     <div v-transfer-dom>
