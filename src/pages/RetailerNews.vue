@@ -22,7 +22,7 @@
               <div class="t-cell v_middle">
                 <div><i class="al al-wushuju font60 pt20"></i></div>
                 <div class="mt5">空空如也~</div>
-                <div class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
+                <div v-if="!retailerInfo.fid" class="align_left mt5">可以根据自己的营销特色<router-link to="/addNews" class="color-blue">创建文章</router-link>，或通过<router-link to="/retailerGoodeazy" class="color-blue">【易采集】</router-link>搜索符合自己营销特色的文章进行修改并发布。</div>
               </div>
             </div>
           </template>
@@ -56,6 +56,20 @@
       <div class="flex_cell flex_center">
         <div class="collect bg-red flex_center h_100" style="width:85%;" @click="toAdd">{{ $t('Create news') }}</div>
       </div>
+    </div>
+
+    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="clickImport">导入文章</div>
+      </div>
+      <template v-else>
+        <div class="align_center flex_center flex_cell">
+          <div class="collect flex_center h_100 mauto" style="width:85%;" @click="toGoodeazy">{{ $t('Goodeazy') }}</div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="collect bg-red flex_center h_100" style="width:85%;" @click="toAdd">{{ $t('Create news') }}</div>
+        </div>
+      </template>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
@@ -124,6 +138,48 @@
         </div>
       </popup>
     </div>
+    <div v-transfer-dom class="x-popup popupImport">
+      <popup v-model="showImportPopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">导入文章</div>
+          <div class="popup-middle font14" ref="scrollContainerImport" @scroll="handleScroll('scrollContainerImport','import')">
+            <div class="padding10">
+              <div v-if="disNewsList" class="scroll_list">
+                <template v-if="!newsData.length">
+                  <div class="scroll_item emptyitem">
+          					<div class="t-table">
+          						<div class="t-cell" style="padding:10px;">暂无文章</div>
+          					</div>
+          				</div>
+                </template>
+                <div v-else v-for="(item,index) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+                  <div class="t-table">
+                    <router-link class="t-cell v_middle w70" :to="{path: '/news', query: {id: item.id}}">
+                      <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                    </router-link>
+                    <router-link class="t-cell v_middle" :to="{path: '/news', query: {id: item.id}}">
+                      <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                      <div class="clamp1 font14 color-gray v_middle mt5">
+                          <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
+                          <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                          <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                      </div>
+                    </router-link>
+                    <div class="align_right t-cell v_bottom w80 pb8">
+                        <div class="btnicon bg-red color-white font12" @click="importEvent(item)">导入</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  					</div>
+          </div>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeImport">{{ $t('Close') }}</div>
+            <div class="flex_cell h_100 flex_center bg-green color-white" @click="importEvent">导入全部</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -163,6 +219,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       autofixed: false,
       tabtxts: [ '我的文章', '采集记录' ],
       tabmodel: 0,
@@ -189,10 +246,76 @@ export default {
       searchword1: '',
       searchresult1: false,
       newsCount: 0,
-      isFirst: true
+      isFirst: true,
+      showImportPopup: false,
+      newsData: [],
+      disNewsList: false,
+      pageStartNews: 0
     }
   },
   methods: {
+    getNewsData () {
+      this.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
+        params: {pagestart: this.pageStartNews, limit: this.limit, fid: this.retailerInfo.fid}
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.newsData = this.newsData.concat(retdata)
+        this.disNewsList = true
+      })
+    },
+    clickImport () {
+      this.showImportPopup = true
+      if (!this.newsData.length) {
+        this.getNewsData()
+      }
+    },
+    importEvent (item) {
+      const self = this
+      if (item && item.id) {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, {id: item.id}).then(res => {
+          const data = res.data
+          self.$vux.loading.hide()
+          self.$vux.toast.show({
+            text: data.error,
+            type: (data.flag !== 1 ? 'warn' : 'success'),
+            time: self.$util.delay(data.error),
+            onHide: function () {
+              if (data.flag === 1) {
+                self.tabdata1 = self.tabdata1.concat(item)
+                self.pagestart1 = Math.floor(self.tabdata1.length / self.limit)
+              }
+            }
+          })
+        })
+      } else {
+        self.$vux.confirm.show({
+          content: '确定要导入全部文章吗?',
+          onConfirm () {
+            self.$vux.loading.show()
+            self.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryNews`, {fid: self.retailerInfo.fid}).then(res => {
+              const data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.showImportPopup = false
+                    self.refresh()
+                  }
+                }
+              })
+            })
+          }
+        })
+      }
+    },
+    closeImport () {
+      this.showImportPopup = false
+    },
     openVip () {
       const self = this
       self.$vux.confirm.show({
@@ -235,6 +358,12 @@ export default {
               self.customerPagestart++
               self.$vux.loading.show()
               self.getCustomerdata()
+            }
+          } else if (type === 'news') {
+            if (self.newsData.length === (self.pageStartNews + 1) * self.limit) {
+              self.pageStartNews++
+              self.$vux.loading.show()
+              self.getNewsData()
             }
           }
         }
@@ -375,13 +504,12 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      if (this.tabdata1.length < this.limit) {
-        self.pagestart1 = 0
-        this.distabdata1 = false
-        this.tabdata1 = []
-        this.$vux.loading.show()
-        this.getData1()
-      }
+      this.retailerInfo = this.loginUser.retailerinfo
+      self.pagestart1 = 0
+      this.distabdata1 = false
+      this.tabdata1 = []
+      this.$vux.loading.show()
+      this.getData1()
     }
   },
   created () {
@@ -409,7 +537,7 @@ export default {
 .rnews .s-bottom{
   height: 50px;
 }
-.rnews .btnicon{
+.rnews .btnicon,.popupImport .btnicon{
   display: inline-block;
   color: #ea3a3a;
   border: 1px solid #ea3a3a;
