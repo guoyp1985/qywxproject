@@ -444,7 +444,7 @@ export default {
           })
           return false
         }
-        let minprice1 = (priceval - parseFloat(self.selectproduct.rebatein)).toFix(2)
+        let minprice1 = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
         if (minprice < minprice1) {
           self.$vux.toast.show({
             text: `活动价格不能低于${minprice1}`,
@@ -515,7 +515,7 @@ export default {
           })
           return false
         }
-        let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFix(2)
+        let minprice = (priceval - parseFloat(self.selectproduct.rebatein)).toFixed(2)
         if (groupprice < minprice) {
           self.$vux.toast.show({
             text: `团购价不能低于${minprice}`,
