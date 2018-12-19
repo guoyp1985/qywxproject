@@ -59,20 +59,17 @@
       </template>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <!--
-      <div class="flex_cell flex_center" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
-        <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
+      <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toUpdate">同步商品</div>
       </div>
-    -->
-      <div class="flex_cell flex_center">
-        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
-      </div>
-      <div class="flex_cell flex_center">
-        <div class="addproduct flex_center btn-bottom-red font14" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
-      </div>
-      <div class="flex_cell flex_center" v-if="loginUser.fid > 0">
-        <div class="addproduct flex_center btn-bottom-orange font14" style="width:85%;" @click="toUpdate">同步商品</div>
-      </div>
+      <template v-else>
+        <div class="flex_cell flex_center">
+          <div class="addproduct flex_center btn-bottom-orange" style="width:85%;" @click="toRecommend">{{ $t('Source of goods') }}</div>
+        </div>
+        <div class="flex_cell flex_center">
+          <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="toAdd">{{ $t('Add product') }}</div>
+        </div>
+      </template>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup1">
@@ -218,6 +215,7 @@ export default {
   data () {
     return {
       loginUser: {},
+      retailerInfo: {},
       query: {},
       productdata: [],
       controldata1: [
@@ -256,15 +254,15 @@ export default {
     toUpdate () {
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/factory/fastImportFactoryProduct`, {
-        fid: this.loginUser.fid
+        fid: this.retailerInfo.fid
       }).then(res => {
         const data = res.data
         this.$vux.loading.hide()
         let error = data.flag ? '同步成功' : data.error
         this.$vux.toast.show({
           text: error,
-          type: (data.flag !== 1 ? 'warn' : 'success'),
-          time: self.$util.delay(error),
+          type: (data.flag ? 'success' : 'warn'),
+          time: this.$util.delay(error),
           onHide: () => {
             this.refresh()
           }
@@ -523,6 +521,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.retailerInfo = this.loginUser.retailerinfo
       this.disproductdata = false
       this.productdata = []
       this.$vux.loading.show()
