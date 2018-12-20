@@ -143,10 +143,10 @@
                 </template>
                 <div v-else v-for="(item,index) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
                   <div class="t-table">
-                    <router-link class="t-cell v_middle w70" :to="{path: '/news', query: {id: item.id}}">
+                    <router-link class="t-cell v_middle w70" :to="{path: '/factorynews', query: {id: item.id, fid: retailerInfo.fid}}">
                       <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                     </router-link>
-                    <router-link class="t-cell v_middle" :to="{path: '/news', query: {id: item.id}}">
+                    <router-link class="t-cell v_middle" :to="{path: '/factorynews', query: {id: item.id, fid: retailerInfo.fid}}">
                       <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
                       <div class="clamp1 font14 color-gray v_middle mt5">
                           <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
@@ -493,8 +493,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
-      console.log('当前的登录用户')
-      console.log(this.retailerInfo)
       self.pagestart1 = 0
       this.distabdata1 = false
       this.tabdata1 = []
