@@ -104,7 +104,7 @@
             <div class="item">
               <router-link class="inner" :to="{path: '/addNews', query: {id: query.id}}">更多设置</router-link>
             </div>
-            <div class="item">
+            <div class="item" v-if="query.from != 'miniprogram'">
               <router-link class="inner" :to="{path:'/poster',query:{id:query.id, module:'news'}}">生成海报</router-link>
             </div>
             <div class="item">
