@@ -50,26 +50,15 @@
       </div>
     </div>
     <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
+        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="clickImport">导入文章</div>
+      </div>
       <div class="align_center flex_center flex_cell">
         <div class="collect flex_center h_100 mauto" style="width:85%;" @click="toGoodeazy">{{ $t('Goodeazy') }}</div>
       </div>
       <div class="flex_cell flex_center">
         <div class="collect bg-red flex_center h_100" style="width:85%;" @click="toAdd">{{ $t('Create news') }}</div>
       </div>
-    </div>
-
-    <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
-      <div class="flex_cell flex_center" v-if="retailerInfo.fid > 0">
-        <div class="addproduct flex_center btn-bottom-red" style="width:85%;" @click="clickImport">导入文章</div>
-      </div>
-      <template v-else>
-        <div class="align_center flex_center flex_cell">
-          <div class="collect flex_center h_100 mauto" style="width:85%;" @click="toGoodeazy">{{ $t('Goodeazy') }}</div>
-        </div>
-        <div class="flex_cell flex_center">
-          <div class="collect bg-red flex_center h_100" style="width:85%;" @click="toAdd">{{ $t('Create news') }}</div>
-        </div>
-      </template>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showpopup">
@@ -498,13 +487,14 @@ export default {
     init () {
       this.$http.post(`${ENV.BokaApi}/api/retailer/logAction`, {
         module: 'retailer', action: 'news'
-      }).then(res => {
       })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.retailerInfo = this.loginUser.retailerinfo
+      console.log('当前的登录用户')
+      console.log(this.retailerInfo)
       self.pagestart1 = 0
       this.distabdata1 = false
       this.tabdata1 = []
