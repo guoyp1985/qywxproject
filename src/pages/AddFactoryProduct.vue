@@ -482,6 +482,13 @@ export default {
           })
           return false
         }
+        if (parseFloat(profit) > parseFloat(price)) {
+          self.$vux.alert.show({
+            title: '',
+            content: '商品利润不得大于商品现价'
+          })
+          return false
+        }
         if (self.$util.trim(postdata.content) === '' && self.$util.trim(postdata.contentphoto) === '') {
           self.$vux.alert.show({
             title: '',
