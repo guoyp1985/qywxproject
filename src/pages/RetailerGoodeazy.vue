@@ -44,10 +44,14 @@
                   </div>
                   <div v-else v-for="(item,index) in searchdata" :key="item.id" class="scroll_item pt10 pb10">
                     <div class="t-table">
-                      <a :href="item.url" class="t-cell v_middle">
+                      <a v-if="query.from != 'miniprogram'" :href="item.url" class="t-cell v_middle">
                         <div class="clamp1">{{ item.title }}</div>
                         <div class="clamp2 font12 color-gray mt5">{{ item.summary }}</div>
                       </a>
+                      <div v-else :href="item.url" class="t-cell v_middle">
+                        <div class="clamp1">{{ item.title }}</div>
+                        <div class="clamp2 font12 color-gray mt5">{{ item.summary }}</div>
+                      </div>
                       <div class="t-cell align_right v_middle w60">
                         <div class="qbtn bg-red color-white" @click="collect(item,index)">{{ $t('Collect') }}</div>
                       </div>
