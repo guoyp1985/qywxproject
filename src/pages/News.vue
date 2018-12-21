@@ -34,7 +34,7 @@
               <router-link v-else to="/subscribeInfo" class="article-ex color-blue">{{ WeixinName }}</router-link>
             </template>
             <router-link class="article-author" :to="{ name: '', params: {} }">{{article.author}}</router-link>
-            <div v-if="retailerInfo.uid" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
+            <div v-if="retailerInfo.uid && query.control != 'edit'" class="align_right" style="position:absolute;right:0;top:50%;margin-top:-12px;">
               <div @click="onStore" class="qbtn4 font12" style="padding:1px 8px;">{{ retailerInfo.title }}</div>
             </div>
           </div>
