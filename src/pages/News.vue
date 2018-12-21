@@ -82,7 +82,7 @@
             </div>
           </template>
         </div>
-        <div class="comment-area">
+        <div v-if="query.control != 'edit'" class="comment-area">
           <div class="comment-op font14">
             <a @click="onCommentShow"><span class="fa fa-edit"></span> {{$t('Comment')}}</a>
           </div>
