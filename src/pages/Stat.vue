@@ -113,9 +113,7 @@
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray"><span class="db-in mr10">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in">成交概率: {{ item.percent }}%</span></div>
                       <div class="color-gray">
-                        <div class="clamp1 w_100">
-                          <span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span>
-                        </div>
+                        <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
@@ -135,7 +133,7 @@
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray"><span class="db-in mr10">影响力: {{ item.yingxiangli }}</span><span v-if="item.percent" class="db-in">成交概率: {{ item.percent }}%</span></div>
-                      <div class="clamp1 color-gray"><span class="db-in">停留: {{ item.staytime | staytimeFormat }}</span><span class="db-in ml5">阅读: {{ item.number }}次</span></div>
+                      <div class="clamp1 color-gray">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                     </router-link>
                     <div @click="toChat(item)" class="qbtn9-contact">联系</div>
                   </div>
