@@ -100,7 +100,7 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom class="x-popup">
+    <div v-transfer-dom class="x-popup invite-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1 invitelayer" @click="closeinvite">
           <div class="iconarea" style="padding:15px 40px;"><i class="al al-feiji font60" style="color:rgba(255,255,255,0.9)"></i></div>
@@ -386,7 +386,8 @@ export default {
     margin-top: 10px;
     background-color: #E0E0E0;
 }
-.invitelayer{width:100%;height:100%;position:relative;background: rgba(0, 0, 0, 0.85);}
+.invite-popup .vux-popup-dialog{background-color:transparent;}
+.invitelayer{width:100%;height:100%;position:relative;background: rgba(0, 0, 0, 0.3);}
 .invitelayer .iconarea{text-align:right;padding:15px 40px;color:rgba(255,255,255,0.9);}
 .invitelayer .txtarea{
   text-align:center;color:#fff;font-size:16px;
