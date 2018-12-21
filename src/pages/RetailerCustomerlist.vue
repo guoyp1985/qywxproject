@@ -882,9 +882,10 @@ export default {
 .rcustomerlist .detailInfo{
   background-color:#fff;display:flex;
   .leftInfo{
-    padding:0 50px 10px 10px;box-sizing:border-box;display:flex;flex-direction:column;
+    flex:1;padding-right:10px;padding-bottom:10px;box-sizing:border-box;
   }
   .rightInfo{
+    flex:1;padding-left:10px;padding-bottom:10px;box-sizing:border-box;
     .phone{
       width:20px;height:20px;border-radius:5px;background-color:red;color:#fff;text-align:center;line-height:20px;
     }
