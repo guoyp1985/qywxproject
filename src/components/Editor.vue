@@ -241,13 +241,14 @@ export default {
       return this.selectproduct
     },
     showMenuArea (prop) {
-      if (this.showBtnArea) {
+      if (this.isEditMod) {
         this.showBtnArea = !prop
       }
     }
   },
   methods: {
     clickEditHandle () {
+      this.isEditMod = true
       this.showEditIcon = false
       this.showBtnArea = true
       // this.showMenuIcon = false
@@ -372,6 +373,7 @@ export default {
       })
     },
     onSave () {
+      this.isEditMod = false
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-save')
@@ -379,6 +381,7 @@ export default {
       // this.showMenuIcon = true
     },
     onCancel () {
+      this.isEditMod = false
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-cancel')
