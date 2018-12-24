@@ -10,9 +10,14 @@
     </form>
     <div :class="`outer-eidtor-tip ${editTipCss}`">点击【编辑】按钮可修改内容哦！</div>
     <div class="editor-icon">
-      <div class="edit-btn-box" v-show="showEditIcon">
+      <div class="edit-btn-box" v-if="showEditIcon">
         <div class="edit-btn" @click="clickEditHandle">
           <span class="color-white font16">{{$t('Edit')}}</span>
+        </div>
+      </div>
+      <div class="edit-btn-box" v-else>
+        <div class="edit-btn" @click="onSave">
+          <span class="color-white font16">{{$t('Save')}}</span>
         </div>
       </div>
       <div class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
@@ -239,7 +244,7 @@ export default {
   methods: {
     clickEditHandle () {
       this.showEditIcon = false
-      this.showMenuIcon = false
+      // this.showMenuIcon = false
       this.showMenuArea = false
       this.showBtnArea = true
       this.editTipCss = ''
@@ -250,7 +255,7 @@ export default {
     closeMenuPopup () {
       this.showMenuArea = false
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     pushEvent () {
       this.showMenuArea = false
@@ -262,7 +267,7 @@ export default {
     closepush () {
       self.showpush = false
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     submitpush () {
       if (self.pushdata.length === 0) {
@@ -283,7 +288,7 @@ export default {
             if (data.flag === 1) {
               self.showpush = false
               self.showEditIcon = true
-              self.showMenuIcon = true
+              // self.showMenuIcon = true
             }
           }
         })
@@ -366,14 +371,14 @@ export default {
       editor.destory()
       this.$emit('on-save')
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     onCancel () {
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-cancel')
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     createEditor () {
       let toolbars = [
