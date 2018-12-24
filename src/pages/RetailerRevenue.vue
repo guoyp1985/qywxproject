@@ -21,14 +21,14 @@
               </div>
               <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
             </div>
-            <div class="swiper-inner scroll-container1" style="top:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
+            <div class="swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
                   <div class="mt5">暂无待提现记录！</div>
                   <div>若客户已购买商品，需等待客户确认收货后，待提现金额方可显示在此处，可点击右上角【提现说明】了解更多提现问题！</div>
                 </div>
-                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
+                <div v-else v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white list-shadow">
                   <template v-if="item.content.indexOf('厂商佣金') > -1">
                     <div class="pl12 pr12 pt10 pb10">
                       <div class="t-table">
