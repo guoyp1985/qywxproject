@@ -241,7 +241,9 @@ export default {
       return this.selectproduct
     },
     showMenuArea (prop) {
-      this.showBtnArea = !prop
+      if (this.showBtnArea) {
+        this.showBtnArea = !prop
+      }
     }
   },
   methods: {
