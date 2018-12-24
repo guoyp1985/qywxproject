@@ -239,6 +239,9 @@ export default {
   watch: {
     selectproduct: function () {
       return this.selectproduct
+    },
+    showMenuArea (prop) {
+      this.showBtnArea = !prop
     }
   },
   methods: {
