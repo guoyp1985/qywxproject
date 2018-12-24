@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="edit-btn-box" v-else>
-        <div class="edit-btn" @click="onSave">
+        <div class="save-btn" @click="onSave">
           <span class="color-white font16">{{$t('Save')}}</span>
         </div>
       </div>
