@@ -623,7 +623,7 @@ export default {
       }
       if (this.query.type === 'kfaccount') {
         ajaxUrl = `${ENV.BokaApi}/api/message/sendkfmessage`
-        postData.token = Token.get().token
+        postData.token = this.query.token
       }
       this.$http.post(ajaxUrl, postData)
       .then(res => {
