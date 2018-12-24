@@ -15,7 +15,7 @@
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="bg-white flex_center" style="position:absolute;left:0;top:0;right:0;height:45px; ">
+            <div class="toolbar_bg bg-white flex_center" style="background-image:none;position:absolute;left:0;top:0;right:0;height:45px; ">
               <div class="flex_cell pl10 flex_left">
                 <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
               </div>
