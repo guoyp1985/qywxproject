@@ -249,9 +249,9 @@ export default {
   methods: {
     clickEditHandle () {
       this.showEditIcon = false
+      this.showBtnArea = true
       // this.showMenuIcon = false
       this.showMenuArea = false
-      this.showBtnArea = true
       this.editTipCss = ''
       this.createEditor()
       this.$vux.toast.text(this.$t('Entry Edit Mode'))
