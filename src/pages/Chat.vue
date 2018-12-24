@@ -622,7 +622,7 @@ export default {
         postData.frommoduleid = this.query.fromId
       }
       if (this.query.type === 'kfaccount') {
-        ajaxUrl = `${ENV.BokaApi}/api/weixin/wechatmessage`
+        ajaxUrl = `${ENV.BokaApi}/api/message/sendkfmessage`
         postData.token = Token.get().token
       }
       this.$http.post(ajaxUrl, postData)
