@@ -705,6 +705,7 @@ export default {
 }
 
 .edit-btn,
+.save-btn,
 .menu-btn {
   width: 40px;
   height: 40px;
