@@ -721,6 +721,9 @@ export default {
 .edit-btn{
   background-color: rgba(248, 100, 0, 1);
 }
+.save-btn {
+  background-color: #1AAD19;
+}
 .option-area {
   position: absolute;
   bottom: 0;
