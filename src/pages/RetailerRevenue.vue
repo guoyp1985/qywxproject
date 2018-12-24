@@ -15,7 +15,13 @@
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <template v-if="(index == 0)">
-            <div class="swiper-inner scroll-container1" style="bottom:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
+            <div class="bg-white flex_center" style="position:absolute;left:0;top:0;right:0;height:45px; ">
+              <div class="flex_cell pl10 flex_left">
+                <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
+              </div>
+              <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
+            </div>
+            <div class="swiper-inner scroll-container1" style="top:45px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
               <div v-if="disData1" class="scroll_list listarea">
                 <div v-if="!tabdata1 || tabdata1.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60" ></i></div>
@@ -106,12 +112,12 @@
                 </div>
               </div>
             </div>
-            <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
+            <!-- <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
               <div class="flex_cell pl10 flex_left">
                 <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
               </div>
               <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
-            </div>
+            </div> -->
           </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <div v-if="disData2" class="scroll_list listarea">
