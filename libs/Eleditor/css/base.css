@@ -327,7 +327,6 @@ margin-right:10px;
 }
 .Eleditor-textEditor-formats{
   position:absolute;
-  right:-60px;
   bottom:20%;
   border-radius:50%;
   -webkit-border-radius:50%;
@@ -337,8 +336,11 @@ margin-right:10px;
   background:#fff;
   z-index:1;
 }
+.Eleditor-textEditor-formats.formats-area{
+  left:-60px;
+}
 .Eleditor-textEditor-formats.btn-area{
-  bottom:40%;
+  right:-60px;
 }
 .Eleditor-textEditor-formats div{
   background-repeat:no-repeat;
@@ -347,6 +349,9 @@ margin-right:10px;
   background-position-x:12px;
   background-position-y:center;
   position:absolute;
+}
+.Eleditor-textEditor-formats.formats-area div{
+  background-position-x:65px;
 }
 .Eleditor-textEditor-formats .Eleditor-textEditor-format{
   background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAPFBMVEUAAACPj4+Li4uKioqKioqKioqKioqKioqHh4eJiYmJiYmJiYmKioqKioqJiYmKioqJiYmJiYmJiYmKiooOOgKOAAAAE3RSTlMAEEBggO/AoCDQ8N8w4LCQUHCP4ZsY5wAAAUlJREFUOMvFk92WgyAMhAUJ4U9E5/3fdStCaYtlvdmzuVGPH5kkE6Z/iD3d4xTmW5wgey8hI4zk2JQ3CTXgEkBKZGG/jMuS+kRXyFFZx9+MSqwDToLP5wLADIQtdNGbF/j5O2eVgza/ouzCJFaAxQsq+nwH9wjDINVQMp2uC7Ul3URnbB/9+sLVrm3p6t0esUO3YopoPETlW0Zpe1uFctjFA2z+GA0drqZ1dLXhuSOM5dtkTQRcOaVhK8bUozN0feFWAF+BW3M35NLJpSuzniWKFbTJnRBFyWy6W9N8gOM6hETcKbdPByXq4O3rpLwrOk3fp+OEf1/r1PsgLSL7trb+THi15Qog+bTEZrxLWAfpMznTCQh6rfCzKal8dT7i+6VhoNWJOLqveQ2PCJ1w1xSlXCDSNI5gEY2wZaLjpA4EPd0Is+q8I38XPwbTDcl2Nko+AAAAAElFTkSuQmCC);

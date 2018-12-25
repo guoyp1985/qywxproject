@@ -188,7 +188,7 @@ var _buildEditorModule = function(_toolbars, _uid){
 							<li style="text-decoration: underline">下划线修饰</li>\
 						</ul>\
 					</div>\
-					<div class="Eleditor-textEditor-formats">\
+					<div class="Eleditor-textEditor-formats formats-area">\
 						<div class="Eleditor-textEditor-format"></div>\
 						<div class="Eleditor-textEditor-clean"></div>\
 					</div>\
