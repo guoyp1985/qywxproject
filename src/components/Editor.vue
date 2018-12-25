@@ -704,7 +704,7 @@ export default {
 
 <style lang="less" scoped>
 .editor{position:absolute;left:0;bottom:0;right:0;}
-.editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;width:60px;height:60px;}
+.editor .editor-icon{position:absolute;bottom:70px;right:10px;width:60px;height:60px;}
 .edit-btn-box {
   position: absolute;
   bottom: 80px;
@@ -724,7 +724,6 @@ export default {
   display: block;
   text-align: center;
   line-height: 40px;
-  z-index: 100;
 }
 .menu-btn {background-color: rgba(0, 0, 0, 0.55);}
 .edit-btn{background-color: rgba(248, 100, 0, 1);}
