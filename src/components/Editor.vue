@@ -4,7 +4,7 @@
 * @created_date: 2018-5-3
 */
 <template>
-  <div class="editor" style="position:relative;">
+  <div class="editor" style="">
     <form class="editorImageForm hide" enctype="multipart/form-data">
       <input style="opacity:0;" type="file" name="files" />
     </form>
