@@ -10,9 +10,14 @@
     </form>
     <div :class="`outer-eidtor-tip ${editTipCss}`">点击【编辑】按钮可修改内容哦！</div>
     <div class="editor-icon">
-      <div class="edit-btn-box" v-show="showEditIcon">
+      <div class="edit-btn-box" v-if="showEditIcon">
         <div class="edit-btn" @click="clickEditHandle">
           <span class="color-white font16">{{$t('Edit')}}</span>
+        </div>
+      </div>
+      <div class="edit-btn-box" v-else>
+        <div class="save-btn" @click="onSave">
+          <span class="color-white font16">{{$t('Save')}}</span>
         </div>
       </div>
       <div class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
@@ -234,14 +239,20 @@ export default {
   watch: {
     selectproduct: function () {
       return this.selectproduct
+    },
+    showMenuArea (prop) {
+      if (this.isEditMod) {
+        this.showBtnArea = !prop
+      }
     }
   },
   methods: {
     clickEditHandle () {
+      this.isEditMod = true
       this.showEditIcon = false
-      this.showMenuIcon = false
-      this.showMenuArea = false
       this.showBtnArea = true
+      // this.showMenuIcon = false
+      this.showMenuArea = false
       this.editTipCss = ''
       this.createEditor()
       this.$vux.toast.text(this.$t('Entry Edit Mode'))
@@ -250,7 +261,7 @@ export default {
     closeMenuPopup () {
       this.showMenuArea = false
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     pushEvent () {
       this.showMenuArea = false
@@ -262,7 +273,7 @@ export default {
     closepush () {
       self.showpush = false
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     submitpush () {
       if (self.pushdata.length === 0) {
@@ -283,7 +294,7 @@ export default {
             if (data.flag === 1) {
               self.showpush = false
               self.showEditIcon = true
-              self.showMenuIcon = true
+              // self.showMenuIcon = true
             }
           }
         })
@@ -362,18 +373,20 @@ export default {
       })
     },
     onSave () {
+      this.isEditMod = false
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-save')
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     onCancel () {
+      this.isEditMod = false
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-cancel')
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     createEditor () {
       let toolbars = [
@@ -700,6 +713,7 @@ export default {
 }
 
 .edit-btn,
+.save-btn,
 .menu-btn {
   width: 40px;
   height: 40px;
@@ -715,6 +729,9 @@ export default {
 }
 .edit-btn{
   background-color: rgba(248, 100, 0, 1);
+}
+.save-btn {
+  background-color: #1AAD19;
 }
 .option-area {
   position: absolute;
