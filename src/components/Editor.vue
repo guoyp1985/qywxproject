@@ -16,6 +16,9 @@
         </div>
       </div>
       <div class="edit-btn-box" v-else>
+        <div class="cancel-btn" @click="onCancel">
+          <span class="color-white font16">{{$t('Cancel')}}</span>
+        </div>
         <div class="save-btn" @click="onSave">
           <span class="color-white font16">{{$t('Save')}}</span>
         </div>
@@ -40,14 +43,14 @@
       </div>
     </div>
   -->
-    <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
+    <!-- <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
       <flexbox-item>
         <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
       </flexbox-item>
       <flexbox-item>
         <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
       </flexbox-item>
-    </flexbox>
+    </flexbox> -->
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
@@ -712,9 +715,7 @@ export default {
   right: 0px;
 }
 
-.edit-btn,
-.save-btn,
-.menu-btn {
+.edit-btn,.save-btn,.cancel-btn,.menu-btn {
   width: 40px;
   height: 40px;
   padding: 10px;
@@ -724,15 +725,10 @@ export default {
   line-height: 40px;
   z-index: 100;
 }
-.menu-btn {
-  background-color: rgba(0, 0, 0, 0.55);
-}
-.edit-btn{
-  background-color: rgba(248, 100, 0, 1);
-}
-.save-btn {
-  background-color: #1AAD19;
-}
+.menu-btn {background-color: rgba(0, 0, 0, 0.55);}
+.edit-btn{background-color: rgba(248, 100, 0, 1);}
+.save-btn {background-color: #1AAD19;}
+.cancel-btn{background-color:#ccc;margin-bottom:20px;}
 .option-area {
   position: absolute;
   bottom: 0;
