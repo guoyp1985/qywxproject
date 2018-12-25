@@ -703,6 +703,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.Eleditor-scrollLocked .editor{display:none;}
 .editor{position:absolute;left:0;bottom:0;right:0;}
 .editor .editor-icon{position:absolute;bottom:70px;right:10px;width:60px;height:60px;}
 .edit-btn-box {

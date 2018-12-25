@@ -662,6 +662,7 @@ export default {
 }
 </script>
 <style lang="less">
+.Eleditor-scrollLocked .news #article-content{overflow-y:hidden;}
 #article-content .article-view {
   padding: 10px 15px;
   background: #ffffff;
