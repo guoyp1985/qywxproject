@@ -86,7 +86,7 @@
           </div>
         </cell>
       </group>
-      <group v-if="data.carddeduct > 0">
+      <group>
         <cell>
           <div>
             <span class="v_middle font12 color-orange">合计: </span><span class="v_middle font14 color-orange">{{ $t('RMB') }}{{data.paymoney}}</span>
