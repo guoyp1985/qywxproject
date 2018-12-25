@@ -337,6 +337,9 @@ margin-right:10px;
   background:#fff;
   z-index:1;
 }
+.Eleditor-textEditor-formats.btn-area{
+  bottom:40%;
+}
 .Eleditor-textEditor-formats div{
   background-repeat:no-repeat;
   width:100%;
@@ -356,6 +359,12 @@ margin-right:10px;
   background-size:20px;
   bottom:15px;
 }
+.Eleditor-textEditor-formats.btn-area .Eleditor-cancel,
+.Eleditor-textEditor-formats.btn-area .Eleditor-commit{
+  background-image:none;padding-left:12px;padding-top:3px;box-sizing: border-box;
+}
+.Eleditor-textEditor-formats.btn-area .Eleditor-commit{border-bottom:1px solid #F5F5F5;top:15px;}
+.Eleditor-textEditor-formats.btn-area .Eleditor-cancel{bottom:15px;}
 .Eleditor-inputarea{
   position:absolute;
   top:45px;

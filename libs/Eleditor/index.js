@@ -192,13 +192,13 @@ var _buildEditorModule = function(_toolbars, _uid){
 						<div class="Eleditor-textEditor-format"></div>\
 						<div class="Eleditor-textEditor-clean"></div>\
 					</div>\
+					<div class="Eleditor-textEditor-formats btn-area">\
+						<div class="Eleditor-cancel"><text class="font12 color-gray">取消</text></div>\
+						<div class="Eleditor-commit"><text class="font12 color-green">保存</text></div>\
+					</div>\
 					<div class="Eleditor-inputarea">\
 						<input placeholder="请输入超链接" type="text" />\
 						<div placeholder="点击输入内容" class="textarea needsclick" contenteditable="true"></div>\
-					</div>\
-					<div class="Eleditor-method">\
-						<button class="Eleditor-cancel color-white" style="background-color:#c5c5c5;">取消</button>\
-						<button class="Eleditor-commit bg-green color-white">提交</button>\
 					</div>\
 				</div>\
 				<div class="Eleditor-delete-layer">\
@@ -208,6 +208,10 @@ var _buildEditorModule = function(_toolbars, _uid){
 					<div class="Eleditor-delete-back">返回继续编辑</div>\
 				</div>\
 			</div>';
+			// <div class="Eleditor-method">\
+			// 	<button class="Eleditor-cancel color-white" style="background-color:#c5c5c5;">取消</button>\
+			// 	<button class="Eleditor-commit bg-green color-white">提交</button>\
+			// </div>\
 	return _html;
 };
 
