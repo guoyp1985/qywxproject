@@ -78,7 +78,7 @@
         <cell-form-preview v-if="priceInfos.length" :list="priceInfos"></cell-form-preview>
         <cell>
           <div class="color-orange">
-            <span class="v_middle font12">{{$t('Order price')}}: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
+            <span class="v_middle font12">商品: </span><span class="v_middle font14">{{ $t('RMB') }}{{data.special}}</span>
             <template v-if="data.postage && data.postage != ''">
               <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
               <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
