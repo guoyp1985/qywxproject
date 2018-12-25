@@ -224,7 +224,7 @@ import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom
 import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
-import { User, Token } from '#/storage'
+import {User} from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
@@ -623,8 +623,9 @@ export default {
       }
       if (this.query.type === 'kfaccount') {
         ajaxUrl = `${ENV.BokaApi}/api/message/sendkfmessage`
-        postData.token = this.query.token
+        postData.miniconfig = this.query.miniconfig
       }
+      console.log(postData)
       this.$http.post(ajaxUrl, postData)
       .then(res => {
         if (res.data.flag === 1) {
