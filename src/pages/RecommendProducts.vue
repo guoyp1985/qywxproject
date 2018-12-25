@@ -32,6 +32,7 @@
       			</div>
       		</div>
         </router-link>
+        <div class="font12 color-gray" style="text-align: center;width: 100%;margin-top:10px;" v-if="showTips">没有更多商品啦！</div>
       </div>
     </div>
   </div>
@@ -67,7 +68,8 @@ export default {
       disProductData: false,
       productData: [],
       classData: [],
-      selectedIndex: 0
+      selectedIndex: 0,
+      showTips: false
     }
   },
   watch: {
@@ -85,6 +87,8 @@ export default {
             pageStart++
             self.$vux.loading.show()
             self.getData1()
+          } else {
+            self.showTips = true
           }
         }
       })
