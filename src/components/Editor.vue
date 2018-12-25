@@ -258,7 +258,12 @@ export default {
       this.showMenuArea = false
       this.editTipCss = ''
       this.createEditor()
-      this.$vux.toast.text(this.$t('Entry Edit Mode'))
+      // this.$vux.toast.text(this.$t('Entry Edit Mode'))
+      this.$vux.toast.show({
+        text: this.$t('Entry Edit Mode'),
+        type: 'text',
+        time: 3000
+      })
       this.$emit('on-edit')
     },
     closeMenuPopup () {
