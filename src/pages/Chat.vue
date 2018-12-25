@@ -621,7 +621,11 @@ export default {
         postData.frommodule = this.query.fromModule
         postData.frommoduleid = this.query.fromId
       }
-      this.$http.post(`${ENV.BokaApi}/api/message/send`, postData)
+      if (this.query.type === 'kfaccount') {
+        ajaxUrl = `${ENV.BokaApi}/api/message/sendkfmessage`
+        postData.miniconfig = this.query.miniconfig
+      }
+      this.$http.post(ajaxUrl, postData)
       .then(res => {
         if (res.data.flag === 1) {
           const data = res.data.data
@@ -634,17 +638,11 @@ export default {
             room_id: room,
             ...data
           }
-          // console.log(sendData)
           Socket.send(sendData)
           self.message = ''
           self.isUserTouch = false
         }
       })
-      if (this.query.type === 'kfaccount') {
-        this.$http.post(`${ENV.BokaApi}/api/message/sendkfmessage`, {
-          ...postData, miniconfig: this.query.miniconfig
-        })
-      }
     },
     sendMessage () {
       let postData = {
