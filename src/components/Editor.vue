@@ -4,7 +4,7 @@
 * @created_date: 2018-5-3
 */
 <template>
-  <div class="editor" style="">
+  <div class="editor">
     <form class="editorImageForm hide" enctype="multipart/form-data">
       <input style="opacity:0;" type="file" name="files" />
     </form>
@@ -703,6 +703,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.editor{position:absolute;left:0;bottom:0;right:0;}
 .editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;width:60px;height:60px;}
 .edit-btn-box {
   position: absolute;
