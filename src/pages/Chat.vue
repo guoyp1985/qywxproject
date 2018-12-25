@@ -27,7 +27,7 @@
             <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
             <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
             <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
-            <div :class="`chatitem ${getItemClass(item)}`">
+            <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
               <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
                 <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
               </router-link>
@@ -70,8 +70,9 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div class="main message-text">
+                  <div class="main message-text" @click="copyTxt(item)">
                     <div v-html="filterEmot(item.content)"></div>
+                    <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.content }}</div>
                   </div>
                 </template>
               </div>
@@ -229,6 +230,7 @@ import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
 import Reg from '#/reg'
+import jQuery from 'jquery'
 
 const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
 let room = ''
@@ -302,6 +304,35 @@ export default {
     }
   },
   methods: {
+    copyTxt (item) {
+      const self = this
+      const className = `.chatlist .chatitem-${item.id} .copy_txt`
+      const eleobj = jQuery(className)[0]
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
