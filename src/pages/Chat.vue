@@ -6,6 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
+      <div style="opacity:0;position:absolute;" class="copy_txt" v-html="filterEmot(clickMsgItem.content)"></div>
       <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -79,7 +80,6 @@
           </template>
         </div>
       </scroller>
-      <div style="opacity:0;position:absolute;z-index:-1;width:0;overflow:hidden;" class="copy_txt" v-html="filterEmot(clickMsgItem.content)"></div>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
       <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1" :style="{'bottom': `${bottomPos}px`}">
         <div class="input-box">
