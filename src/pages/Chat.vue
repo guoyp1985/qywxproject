@@ -72,7 +72,6 @@
                 <template v-else>
                   <div class="main message-text" @click="copyTxt(item)">
                     <div v-html="filterEmot(item.content)"></div>
-                    <div class="copy_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ item.content }}</div>
                   </div>
                 </template>
               </div>
@@ -80,6 +79,7 @@
           </template>
         </div>
       </scroller>
+      <div style="opacity:0;position:absolute;z-index:-1;width:0;overflow:hidden;" class="copy_txt" v-html="filterEmot(clickMsgItem.content)"></div>
       <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
       <div class="bottom-area" ref="bottomArea" v-if="allowChat || loginUser.isretailer == 1" :style="{'bottom': `${bottomPos}px`}">
         <div class="input-box">
@@ -284,7 +284,8 @@ export default {
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
       allowChat: false,
       retailerInfo: {},
-      bottomPos: 0
+      bottomPos: 0,
+      clickMsgItem: {}
     }
   },
   filters: {
@@ -305,18 +306,25 @@ export default {
   },
   methods: {
     copyTxt (item) {
+      console.log('拷贝方法')
+      console.log(this)
       const self = this
-      const className = `.chatlist .chatitem-${item.id} .copy_txt`
+      self.clickMsgItem = item
+      const className = `#chat-room .copy_txt`
       const eleobj = jQuery(className)[0]
+      console.log(eleobj)
       let range = null
       let save = function (e) {
-        e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        // e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.clipboardData.setData('text/plain', item.content)
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
+        console.log('进入到了ios设备')
         window.getSelection().removeAllRanges()
         range = document.createRange()
         range.selectNode(eleobj)
+        console.log(range)
         window.getSelection().addRange(range)
         document.execCommand('copy')
         window.getSelection().removeAllRanges()
