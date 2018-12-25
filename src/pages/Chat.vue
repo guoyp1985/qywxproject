@@ -6,7 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
-      <div style="opacity:0;position:absolute;" class="copy_txt" v-html="filterEmot(clickMsgItem.content)"></div>
+      <div style="opacity:0;position:absolute;width:0;overflow:hidden;" class="copy_txt" v-html="filterEmot(item.content)"></div>
       <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -320,14 +320,16 @@ export default {
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
-        console.log('进入到了ios设备')
-        window.getSelection().removeAllRanges()
-        range = document.createRange()
-        range.selectNode(eleobj)
-        console.log(range)
-        window.getSelection().addRange(range)
-        document.execCommand('copy')
-        window.getSelection().removeAllRanges()
+        setTimeout(() => {
+          console.log('进入到了ios设备')
+          window.getSelection().removeAllRanges()
+          range = document.createRange()
+          range.selectNode(eleobj)
+          console.log(range)
+          window.getSelection().addRange(range)
+          document.execCommand('copy')
+          window.getSelection().removeAllRanges()
+        }, 100)
       } else { // 安卓设备
         console.log('in android')
         document.addEventListener('copy', save)
