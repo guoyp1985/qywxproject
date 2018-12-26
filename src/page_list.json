@@ -104,5 +104,8 @@
   "Payment",
   "test",
   "RetailerRecommands",
-  "Concession"
+  "Concession",
+  "FriendRecommend",
+  "NewestList",
+  "BindingBank"
 ]
