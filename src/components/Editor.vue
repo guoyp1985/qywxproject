@@ -23,7 +23,7 @@
           <span class="color-white font16">{{$t('Save')}}</span>
         </div>
       </div>
-      <div v-if="query.from != 'miniprogram'" class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
+      <div v-if="query.from != 'miniprogram' && showEditIcon" class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
         <div class="menu-btn" @click="clickMenuHandle">
           <span class="color-white font16">{{$t('Menu')}}</span>
         </div>
