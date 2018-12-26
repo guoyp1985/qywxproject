@@ -862,7 +862,7 @@ export default {
     getNewsData () {
       const self = this
       let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit1 }
-      let keyword = self.searchword1
+      let keyword = self.searchword
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.keyword = keyword
@@ -881,7 +881,7 @@ export default {
     },
     getProductData () {
       const self = this
-      let keyword = self.searchword2
+      let keyword = self.searchword
       let params = { pagestart: self.pagestart2, limit: self.limit1 }
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult2 = true
