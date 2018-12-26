@@ -29,8 +29,8 @@
                       ref="search">
                     </search>
                   </div>
-                  <div class="w100 flex_center">
-                    <div class="flex_center" style="height:35px;width:80px;background-color:#f0f0f0;" @click="onSubmit">搜索</div>
+                  <div class="font15 w100 flex_left" style="width:90px;">
+                    <div class="bg-red color-white flex_center w80" style="height:35px;" @click="onSubmit">搜索</div>
                   </div>
                 </div>
                 <div class="item-list pt10">
@@ -506,8 +506,10 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .rgoodeazy{
+  .v-search .weui-search-bar{padding:10px 0 10px 12px;}
+  .v-search .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{display:none;}
   .item-list{
     .item{
       position:relative;
