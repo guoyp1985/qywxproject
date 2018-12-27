@@ -8,7 +8,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">姓名</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.bindName" type="text" class="input priceInput" name="username" placeholder="收款人姓名" />
+            <input v-model="submitData.position" type="text" class="input priceInput" name="username" placeholder="收款人姓名" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">
             <span class="al al-kehu1 font18 color-gray2"></span>
@@ -19,7 +19,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">卡号</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitdata.bindCardId" type="text" class="input priceInput" name="card" placeholder="收款人储蓄卡号" maxlength="21" size="21" />
+            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="收款人储蓄卡号" maxlength="21" size="21" />
           </div>
         </div>
       </div>
@@ -27,9 +27,9 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">银行</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <select v-model="submitdata.classid" class="w_100" style="height:35px;">
+            <select v-model="submitData.bankcode" class="w_100" style="height:35px;" @change="changeEvent">
               <option value='0'>请选择银行</option>
-              <option v-for="(item,index) in classData" :value="item.id">{{ item.title }}</option>
+              <option v-for="(item,index) in cardList" :value="item.id">{{ item.name }}</option>
             </select>
           </div>
         </div>
@@ -66,6 +66,7 @@
 <script>
   import { TransferDom, Popup } from 'vux'
   import ENV from 'env'
+  import { User } from '#/storage'
   export default {
     directives: {
       TransferDom
@@ -76,8 +77,9 @@
     data () {
       return {
         query: {},
-        submitdata: {bindName: '', bindCardId: '', bindCardName: '', classid: '0'},
-        classData: [],
+        loginUser: {},
+        submitData: {position: '', bankuser: '', bankcardno: '', bankcode: 0},
+        cardList: [],
         showpopup: false,
         bindName: '',
         bindCardId: '',
@@ -92,41 +94,64 @@
       closepopup () {
         this.showpopup = false
       },
+      changeEvent (e) {
+        const srcElement = e.srcElement
+        const selectedIndex = srcElement.selectedIndex
+        console.log('进入到了change事件')
+        console.log(e)
+        console.log(selectedIndex)
+        if (selectedIndex > 0) {
+          this.submitData.bankuser = this.cardList[selectedIndex - 1].name
+        } else {
+          this.submitData.bankuser = ''
+        }
+      },
       bindEvent () {
         if (!this.submitIng) {
-          if (this.submitdata.bindName === '' || this.submitdata.bindCardId === '' || this.submitdata.bindCardName === '') {
+          if (this.submitData.position === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
             this.$vux.toast.show({
               text: '请完善信息',
               type: 'text'
             })
             return false
           }
-          this.submitIng = true
-          // this.$http.post(`${ENV.BokaApi}/api/classList/product`, this.submitdata).then(res => {
-              // this.submitIng = false
-          //   const data = res.data
-          //   const timeout = this.$util.delay(data.error)
-          //   self.$vux.toast.show({
-          //     text: data.error,
-          //     type: data.flag ? 'warn' : 'success',
-          //     time: timeout
-          //   })
-          //   if (data.flag) {
-          //     setTimeout(() => {
-          //       if (this.query.fromPage) {
-          //         this.$router.push({path: decodeURIComponent(this.query.fromPage)})
-          //       }
-          //     }, timeout)
-          //   }
-          // })
+          this.$vux.confirm.show({
+            content: '请确保信息填写无误，提交后将无法修改',
+            confirmText: '继续',
+            onConfirm: () => {
+              this.submitIng = true
+              this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, this.submitData).then(res => {
+                this.submitIng = false
+                const data = res.data
+                const timeout = this.$util.delay(data.error)
+                this.$vux.toast.show({
+                  text: data.error,
+                  type: data.flag ? 'success' : 'warn',
+                  time: timeout
+                })
+                if (data.flag) {
+                  for (let key in this.submitData) {
+                    this.loginUser[key] = this.submitData[key]
+                  }
+                  User.set(this.loginUser)
+                  setTimeout(() => {
+                    if (this.query.fromPage) {
+                      this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+                    }
+                  }, timeout)
+                }
+              })
+            }
+          })
         }
       },
       init () {
         const self = this
+        this.loginUser = User.get()
         this.query = this.$route.query
-        this.$http.get(`${ENV.BokaApi}/api/classList/product`).then(res => {
+        this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
           const data = res.data
-          self.classData = data.data ? data.data : data
+          self.cardList = data.data ? data.data : data
         })
       }
     },
