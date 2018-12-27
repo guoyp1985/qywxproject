@@ -332,26 +332,6 @@
         </div>
       </popup>
     </div>
-    <!-- <div v-transfer-dom class="x-popup">
-      <popup v-model="showMoneyPopup">
-        <div class="popup">
-          <div class="popup-top flex_center">提现</div>
-          <div class="popup-middle font14">
-            <div class="padding10">
-              <div>本次提现金额为<span class='color-orange'>{{summoney}}元</span></div>
-              <div class="mt20">
-                <check-icon class="red-check" :value.sync="wechatCash" @click.native.stop="setCashType()">提现到微信</check-icon>
-                <check-icon class="red-check" :value.sync="bankCash" @click.native.stop="setCashType('bank')">提现到银行卡</check-icon>
-              </div>
-            </div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeMoneyPopup">取消</div>
-            <div class="flex_cell bg-red color-white h_100 flex_center" @click="getcash">确认提现</div>
-          </div>
-        </div>
-      </popup>
-    </div> -->
     <div v-transfer-dom>
       <popup class="bg-white" v-model="showMoneyPopup" position="bottom">
         <div class="">

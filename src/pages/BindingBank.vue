@@ -36,6 +36,10 @@
       </div>
     </div>
     <div class="flex_center color-white btn-bottom-red mt20" @click="bindEvent">绑定</div>
+    <div class="mt20 padding20">
+      <div class="bold">*注意事项</div>
+      <div>确保姓名填写正确</div>
+    </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">

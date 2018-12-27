@@ -51,7 +51,7 @@
                   <span>总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></span>
                 </div>
               </div>
-              <div class="flex_center h_100 font16 bg-red color-white w100" @click="getCash">全部提现</div>
+              <div class="flex_center h_100 font16 bg-red color-white w100" @click="clickCash">全部提现</div>
             </div>
           </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
@@ -107,10 +107,25 @@
         </swiper-item>
       </swiper>
     </div>
+    <div v-transfer-dom>
+      <popup class="bg-white" v-model="showMoneyPopup" position="bottom">
+        <div class="">
+          <div class="padding10">本次提现金额为 <span class='color-red'>{{summoney}} 元</span></div>
+          <div class="pb20">
+            <check-icon class="red-check" :value.sync="wechatCash" @click.native.stop="setCashType()">提现到微信</check-icon>
+            <check-icon class="red-check" :value.sync="bankCash" @click.native.stop="setCashType('bank')">提现到银行卡</check-icon>
+          </div>
+        </div>
+        <div class="flex_center" style="width:100%;height:45px;">
+          <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeMoneyPopup">取消</div>
+          <div class="flex_cell bg-red color-white h_100 flex_center" @click="getCash">确认提现</div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 <script>
-import { ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton } from 'vux'
+import { TransferDom, ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton, Popup } from 'vux'
 import { User } from '#/storage'
 import ENV from 'env'
 import Time from '#/time'
@@ -121,8 +136,11 @@ let pageStart2 = 0
 let pageStart3 = 0
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton
+    ViewBox, Group, Cell, CellBox, Tab, TabItem, Swiper, SwiperItem, Sticky, XImg, CheckIcon, XButton, Popup
   },
   data () {
     return {
@@ -140,7 +158,10 @@ export default {
       tabdata2: [],
       tabdata3: [],
       eventIng: false,
-      summoney: '0.00'
+      summoney: '0.00',
+      showMoneyPopup: false,
+      wechatCash: true,
+      bankCash: false
     }
   },
   filters: {
@@ -149,6 +170,21 @@ export default {
     }
   },
   methods: {
+    clickCash () {
+      this.showMoneyPopup = true
+    },
+    closeMoneyPopup () {
+      this.showMoneyPopup = false
+    },
+    setCashType (type) {
+      if (type === 'bank') {
+        this.bankCash = true
+        this.wechatCash = false
+      } else {
+        this.bankCash = false
+        this.wechatCash = true
+      }
+    },
     handleScroll: function (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -289,11 +325,29 @@ export default {
       const self = this
       if (!self.eventIng) {
         self.eventIng = true
+        let fromPage = encodeURIComponent('/userRebateInfo')
         if (!self.loginUser.idcardno) {
-          self.$router.push({path: '/authPhoto', query: {fromPage: 'userRebateInfo'}})
+          self.eventIng = false
+          self.$router.push({path: '/authPhoto', query: {fromPage: fromPage}})
         } else {
+          this.showMoneyPopup = false
+          let cashstr = '微信'
+          if (this.bankCash) {
+            cashstr = '银行卡'
+          }
+          if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
+            self.eventIng = false
+            self.$vux.confirm.show({
+              content: `您还没有绑定银行卡`,
+              confirmText: '去绑定',
+              onConfirm: () => {
+                self.$router.push({path: '/bindingBank', query: {fromPage: fromPage}})
+              }
+            })
+            return false
+          }
           self.$vux.confirm.show({
-            content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
+            content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现到${cashstr}吗？`,
             onConfirm () {
               self.$vux.loading.show()
               let subdata = { identity: 'seller' }
