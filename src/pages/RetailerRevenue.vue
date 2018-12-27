@@ -490,7 +490,6 @@ export default {
     getcash () {
       const self = this
       if (!self.eventIng) {
-        self.eventIng = true
         let fromPage = ''
         if (self.query.appid) {
           fromPage = encodeURIComponent(`/retailerRevenue?appid=${self.query.appid}`)
@@ -517,10 +516,8 @@ export default {
           }
           self.$vux.confirm.show({
             content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现到${cashstr}吗？`,
-            onCancel () {
-              self.eventIng = false
-            },
-            onConfirm () {
+            onConfirm: () => {
+              self.eventIng = true
               self.$vux.loading.show()
               let postData = {}
               if (self.query.appid) {
@@ -594,6 +591,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.loginUser = User.get()
+      console.log(this.loginUser)
       this.eventIng = false
       this.swiperChange()
     }
