@@ -1,14 +1,14 @@
 <template>
   <div class="containerarea font14 bindingbank">
     <div class="bhead align_center font16 color-white">
-      <div class="">转到银行卡<span class="al al-wenhao problem" @click="popupexplain"></span></div>
+      <div class="">绑定银行卡<span class="al al-wenhao problem" @click="popupexplain"></span></div>
     </div>
     <div class="mt10">
       <div class="form-item required bg-white">
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">姓名</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input type="text" class="input priceInput" name="username" placeholder="收款人姓名" />
+            <input v-model="submitdata.bindName" type="text" class="input priceInput" name="username" placeholder="收款人姓名" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">
             <span class="al al-kehu1 font18 color-gray2"></span>
@@ -19,7 +19,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">卡号</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input type="text" class="input priceInput" name="card" placeholder="收款人储蓄卡号" />
+            <input v-model="submitdata.bindCardId" type="text" class="input priceInput" name="card" placeholder="收款人储蓄卡号" maxlength="21" size="21" />
           </div>
         </div>
       </div>
@@ -35,8 +35,8 @@
         </div>
       </div>
     </div>
-    <div class="flex_center color-white btn-bottom-red mt20">转出</div>
-    <!-- <div v-transfer-dom class="x-popup">
+    <div class="flex_center color-white btn-bottom-red mt20" @click="bindEvent">绑定</div>
+    <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
           <div class="popup-top flex_center">{{ $t('Get cash explain') }}</div>
@@ -60,22 +60,29 @@
           </div>
         </div>
       </popup>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
-  import { Popup } from 'vux'
+  import { TransferDom, Popup } from 'vux'
   import ENV from 'env'
   export default {
+    directives: {
+      TransferDom
+    },
     components: {
       Popup
     },
     data () {
       return {
-        money: null,
-        submitdata: {classid: '0'},
+        query: {},
+        submitdata: {bindName: '', bindCardId: '', bindCardName: '', classid: '0'},
         classData: [],
-        showpopup: false
+        showpopup: false,
+        bindName: '',
+        bindCardId: '',
+        bindCardName: '',
+        submitIng: false
       }
     },
     methods: {
@@ -85,8 +92,38 @@
       closepopup () {
         this.showpopup = false
       },
+      bindEvent () {
+        if (!this.submitIng) {
+          if (this.submitdata.bindName === '' || this.submitdata.bindCardId === '' || this.submitdata.bindCardName === '') {
+            this.$vux.toast.show({
+              text: '请完善信息',
+              type: 'text'
+            })
+            return false
+          }
+          this.submitIng = true
+          // this.$http.post(`${ENV.BokaApi}/api/classList/product`, this.submitdata).then(res => {
+              // this.submitIng = false
+          //   const data = res.data
+          //   const timeout = this.$util.delay(data.error)
+          //   self.$vux.toast.show({
+          //     text: data.error,
+          //     type: data.flag ? 'warn' : 'success',
+          //     time: timeout
+          //   })
+          //   if (data.flag) {
+          //     setTimeout(() => {
+          //       if (this.query.fromPage) {
+          //         this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+          //       }
+          //     }, timeout)
+          //   }
+          // })
+        }
+      },
       init () {
         const self = this
+        this.query = this.$route.query
         this.$http.get(`${ENV.BokaApi}/api/classList/product`).then(res => {
           const data = res.data
           self.classData = data.data ? data.data : data
