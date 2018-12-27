@@ -81,6 +81,7 @@
 <script>
   import { TransferDom, Popup } from 'vux'
   import ENV from 'env'
+  import Reg from '#/reg'
   import { User } from '#/storage'
   export default {
     directives: {
@@ -126,6 +127,13 @@
           if (this.submitData.position === '' || this.submitData.bankcardno === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
             this.$vux.toast.show({
               text: '请完善信息',
+              type: 'text'
+            })
+            return false
+          }
+          if (!Reg.rBankId.test(this.submitData.bankcardno)) {
+            this.$vux.toast.show({
+              text: '请输入正确的银行卡号',
               type: 'text'
             })
             return false
