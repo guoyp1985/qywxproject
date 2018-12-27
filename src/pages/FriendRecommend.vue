@@ -26,14 +26,15 @@
           </router-link>
         </div>
       </div>
-      <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15" v-for="(item, index) in articalData">
+      <div v-if="!articalData || articalData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无文章！</div>
+      <div v-else class="artical-item flex_left bg-white pt10 pb10 pr15 pl15" v-for="(item, index) in articalData">
         <div class="inner">
-          <img src="https://tossharingsales.boka.cn/images/user.jpg" />
+          <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
         <div class="flex_left flex_cell">
           <div class="">
-            <div class="font14 clamp1 wtitle">文章标题</div>
-            <div class="font12 color-gray2">2018-11-20</div>
+            <div class="font14 clamp1 wtitle">{{item.title}}</div>
+            <div class="font12 color-gray2">{{item.dateline_str}}</div>
           </div>
           <div class="t-right">
             <span class="btnicon">去分享</span>
@@ -51,13 +52,14 @@
           </router-link>
         </div>
       </div>
-      <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15" v-for="(item, index) in articalData">
+      <div v-if="!listActivity || listActivity.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无活动！</div>
+      <div v-else class="artical-item flex_left bg-white pt10 pb10 pr15 pl15" v-for="(item, index) in listActivity">
         <div class="inner">
-          <img src="https://tossharingsales.boka.cn/images/user.jpg" />
+          <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
         <div class="txt-cell flex_cell">
-          <div class="font14 clamp1 wtitle">活动标题</div>
-          <div class="font12 color-gray2">2018-11-20</div>
+          <div class="font14 clamp1 wtitle">{{item.title}}</div>
+          <div class="font12 color-gray2">{{item.dateline_str}}</div>
         </div>
         <div class="t-right">
           <span class="btnicon">去分享</span>
@@ -74,13 +76,14 @@
           </router-link>
         </div>
       </div>
-      <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15" v-for="(item, index) in articalData">
+      <div v-if="!productData || productData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无商品！</div>
+      <div v-else class="artical-item flex_left bg-white pt10 pb10 pr15 pl15" v-for="(item, index) in productData">
         <div class="inner">
-          <img src="https://tossharingsales.boka.cn/images/user.jpg" />
+          <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
         </div>
         <div class="txt-cell flex_cell">
-          <div class="font14 clamp1 wtitle">商品标题</div>
-          <div class="font12 color-gray2">2018-11-20</div>
+          <div class="font14 clamp1 wtitle">{{item.title}}</div>
+          <div class="font12 color-gray2">{{item.dateline_str}}</div>
         </div>
         <div class="t-right">
           <span class="btnicon">去分享</span>
@@ -90,13 +93,56 @@
   </div>
 </template>
 <script>
+  import ENV from 'env'
+  import Time from '../../libs/time'
   export default {
     data () {
       return {
         selectedIndex: 0,
-        item: {uid: 985},
-        articalData: [{id: 1}, {id: 2}, {id: 3}]
+        articalData: [],
+        listActivity: [],
+        productData: []
       }
+    },
+    methods: {
+      getData1 () {
+        const self = this
+        self.$http.post(`${ENV.BokaApi}/api/list/news?from=retailer&pagestart=0&limit=3`).then(res => {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          for (var i = 0; i < retdata.length; i++) {
+            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          }
+          self.articalData = retdata
+        })
+      },
+      getData2 () {
+        const self = this
+        self.$http.post(`${ENV.BokaApi}/api/retailer/listActivity?pagestart=0&limit=3`).then(res => {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          for (var i = 0; i < retdata.length; i++) {
+            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          }
+          self.listActivity = retdata
+        })
+      },
+      getData3 () {
+        const self = this
+        self.$http.post(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=3`).then(res => {
+          let data = res.data
+          let retdata = data.data ? data.data : data
+          for (var i = 0; i < retdata.length; i++) {
+            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+          }
+          self.productData = retdata
+        })
+      }
+    },
+    created () {
+      this.getData1()
+      this.getData2()
+      this.getData3()
     }
   }
 </script>
