@@ -73,7 +73,7 @@
     },
     methods: {
       init () {
-        console.log("页面参数名称：")
+        console.log('页面参数名称：')
         this.list = this.$route.query.list
         console.log(this.list)
       }
@@ -84,7 +84,7 @@
     watch: {
       $route (to, from) {
         this.list = this.$route.query.list
-        console.log("页面参数名称：")
+        console.log('页面参数名称：')
         console.log(this.list)
       }
     }
