@@ -34,7 +34,7 @@
         <div class="flex_left flex_cell">
           <div class="">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
-            <div class="font12 color-gray2">{{item.dateline_str}}</div>
+            <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
           <div class="t-right">
             <span class="btnicon">去分享</span>
@@ -59,7 +59,7 @@
         </div>
         <div class="txt-cell flex_cell">
           <div class="font14 clamp1 wtitle">{{item.title}}</div>
-          <div class="font12 color-gray2">{{item.dateline_str}}</div>
+          <div class="font12 color-gray">{{item.dateline_str}}</div>
         </div>
         <div class="t-right">
           <span class="btnicon">去分享</span>
@@ -83,7 +83,7 @@
         </div>
         <div class="txt-cell flex_cell">
           <div class="font14 clamp1 wtitle">{{item.title}}</div>
-          <div class="font12 color-gray2">{{item.dateline_str}}</div>
+          <div class="font12 color-gray">{{item.dateline_str}}</div>
         </div>
         <div class="t-right">
           <span class="btnicon">去分享</span>
@@ -111,7 +111,7 @@
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
-            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           }
           self.articalData = retdata
         })
@@ -122,7 +122,7 @@
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
-            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           }
           self.listActivity = retdata
         })
@@ -133,7 +133,7 @@
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
-            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd')
+            retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           }
           self.productData = retdata
         })
