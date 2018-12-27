@@ -112,7 +112,7 @@
       },
       bindEvent () {
         if (!this.submitIng) {
-          if (this.submitData.position === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
+          if (this.submitData.position === '' || this.submitData.bankcardno === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
             this.$vux.toast.show({
               text: '请完善信息',
               type: 'text'
