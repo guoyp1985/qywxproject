@@ -107,7 +107,7 @@
     methods: {
       getData1 () {
         const self = this
-        self.$http.post(`${ENV.BokaApi}/api/list/news?from=retailer&pagestart=0&limit=3`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer&pagestart=0&limit=3`).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
@@ -118,7 +118,7 @@
       },
       getData2 () {
         const self = this
-        self.$http.post(`${ENV.BokaApi}/api/retailer/listActivity?pagestart=0&limit=3`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity?pagestart=0&limit=3`).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
@@ -129,7 +129,7 @@
       },
       getData3 () {
         const self = this
-        self.$http.post(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=3`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=3`).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
