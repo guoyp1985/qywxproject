@@ -3,7 +3,10 @@
     <div class="s-topbanner bg-white">
       <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
         <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
-        <div class="align_right" style="width:150px;">
+        <div class="align_right" style="width:100px;">
+          <router-link to="/bindingBank" class="qbtn font12 color-white" style="border:#fff 1px solid;">我的银行卡</router-link>
+        </div>
+        <div class="align_right" style="width:100px;">
           <div class="qbtn font12 color-white" style="border:#fff 1px solid;" @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
