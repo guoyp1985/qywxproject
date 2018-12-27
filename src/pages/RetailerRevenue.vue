@@ -3,7 +3,10 @@
     <div class="s-topbanner bg-white">
       <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
         <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
-        <div class="align_right" style="width:150px;">
+        <div class="align_right" style="width:100px;">
+          <router-link to="/bindingBank" class="qbtn font12 color-white" style="border:#fff 1px solid;">我的银行卡</router-link>
+        </div>
+        <div class="align_right" style="width:100px;">
           <div class="qbtn font12 color-white" style="border:#fff 1px solid;" @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
@@ -19,7 +22,7 @@
               <div class="flex_cell pl10 flex_left">
                 <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
               </div>
-              <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
+              <div class="flex_center h_100 font16 bg-red color-white w100" @click="clickCash">全部提现</div>
             </div>
             <div class="swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
               <div v-if="disData1" class="scroll_list listarea">
@@ -311,24 +314,40 @@
           <div class="popup-middle font14">
             <div class="padding10">
               <div class="bold">第一条 手续费</div>
-              <div class="">聚客365卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+              <div>1. 交易手续费：聚客365卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+              <div>2. 提现手续费：</div>
+              <div>提现至微信零钱：无需支付手续费。</div>
+              <div>提现至银行卡：每笔提现扣除提现金额的0.1%，最低1元，最高25元。</div>
               <div class="bold mt5">第二条 提现规则</div>
-              <div>（1）线上交易的订单，需待买家确认收货后，才可以通过“我的收入”查看并提现收益。</div>
-              <div>（2）待提现金额不足1元时无法进行提现。</div>
-              <div>（3）微信规定每日提现到微信零钱的额度为5千元，每日提现到银行卡的额度为2万元。</div>
+              <div>1. 线上交易的订单，需待买家确认收货后，才可以通过“我的收入”查看并提现收益。</div>
+              <div>2. 待提现金额不足1元时无法进行提现。</div>
+              <div>3. 微信规定每日提现至微信零钱的额度为5千元，每日提现至银行卡的额度为2万元。</div>
+              <div>4. 提现至银行卡的到账时间为1-3日内，具体以银行到账时间为准。</div>
               <div class="bold mt5">第三条 退款订单处理规则</div>
-              <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
-              <div>（2）当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可与卖家互加好友，线下协商解决，手续费不予退还。</div>
+              <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
+              <div>2. 当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可与卖家互加好友，线下协商解决，手续费不予退还。</div>
               <div class="bold mt5">第四条 确认收货规则</div>
               <div>线上交易的订单，若买家没有主动确认收货，系统将在卖家发货后的第7天自动确认收货。</div>
-              <!-- <div class="bold mt5">第五条 奖励金规则</div>
-              <div>（1）线上交易的订单，卖家有机会获得平台奖励金，奖励金将在买家确认收货后，与订单金额一起提现。</div>
-              <div>（2）若买家对获得奖励金的订单进行了退款，该订单所获得的奖励金将失效。</div> -->
             </div>
           </div>
           <div class="popup-bottom flex_center">
             <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Know txt') }}</div>
           </div>
+        </div>
+      </popup>
+    </div>
+    <div v-transfer-dom>
+      <popup class="bg-white" v-model="showMoneyPopup" position="bottom">
+        <div class="">
+          <div class="padding10">本次提现金额为 <span class='color-red'>{{summoney}} 元</span></div>
+          <div class="pb20">
+            <check-icon class="red-check" :value.sync="wechatCash" @click.native.stop="setCashType()">提现到微信</check-icon>
+            <check-icon class="red-check" :value.sync="bankCash" @click.native.stop="setCashType('bank')">提现到银行卡</check-icon>
+          </div>
+        </div>
+        <div class="flex_center" style="width:100%;height:45px;">
+          <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeMoneyPopup">取消</div>
+          <div class="flex_cell bg-red color-white h_100 flex_center" @click="getcash">确认提现</div>
         </div>
       </popup>
     </div>
@@ -339,7 +358,7 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, XImg, CheckIcon } from 'vux'
 import { User } from '#/storage'
 import Time from '#/time'
 import ENV from 'env'
@@ -378,10 +397,28 @@ export default {
       checkedAll: true,
       showpopup: false,
       eventIng: false,
-      summoney: '0.00'
+      summoney: '0.00',
+      showMoneyPopup: false,
+      wechatCash: true,
+      bankCash: false
     }
   },
   methods: {
+    clickCash () {
+      this.showMoneyPopup = true
+    },
+    closeMoneyPopup () {
+      this.showMoneyPopup = false
+    },
+    setCashType (type) {
+      if (type === 'bank') {
+        this.bankCash = true
+        this.wechatCash = false
+      } else {
+        this.bankCash = false
+        this.wechatCash = true
+      }
+    },
     handleScroll (refname, index) {
       const self = this
       let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
@@ -453,22 +490,34 @@ export default {
     getcash () {
       const self = this
       if (!self.eventIng) {
-        self.eventIng = true
+        let fromPage = ''
+        if (self.query.appid) {
+          fromPage = encodeURIComponent(`/retailerRevenue?appid=${self.query.appid}`)
+        } else {
+          fromPage = encodeURIComponent('/retailerRevenue')
+        }
         if (!self.loginUser.idcardno) {
-          let fromPage = ''
-          if (self.query.appid) {
-            fromPage = encodeURIComponent(`/retailerRevenue?appid=${self.query.appid}`)
-          } else {
-            fromPage = encodeURIComponent('/retailerRevenue')
-          }
           self.$router.push({path: '/authPhoto', query: {fromPage: fromPage}})
         } else {
+          this.showMoneyPopup = false
+          let cashstr = '微信'
+          if (this.bankCash) {
+            cashstr = '银行卡'
+          }
+          if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
+            self.$vux.confirm.show({
+              content: `您还没有绑定银行卡`,
+              confirmText: '去绑定',
+              onConfirm: () => {
+                self.$router.push({path: '/bindingBank', query: {fromPage: fromPage}})
+              }
+            })
+            return false
+          }
           self.$vux.confirm.show({
-            content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
-            onCancel () {
-              self.eventIng = false
-            },
-            onConfirm () {
+            content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现到${cashstr}吗？`,
+            onConfirm: () => {
+              self.eventIng = true
               self.$vux.loading.show()
               let postData = {}
               if (self.query.appid) {
@@ -542,6 +591,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.loginUser = User.get()
+      console.log(this.loginUser)
       this.eventIng = false
       this.swiperChange()
     }
