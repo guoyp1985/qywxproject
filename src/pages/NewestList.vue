@@ -155,7 +155,7 @@
       },
       getData2 () {
         const self = this
-        const params ={params: {pagestart: pageStart2, limit: limit}}
+        const params = {params: {pagestart: pageStart2, limit: limit}}
         self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data

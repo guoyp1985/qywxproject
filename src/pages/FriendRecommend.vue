@@ -6,18 +6,12 @@
           <img :src="retailerInfo.avatar" />
         </div>
         <div class="txt-cell color-white flex_cell">
-          <div class="font16 clamp1">{{retailerInfo.username}}</div>
-          <div class="clamp1">店铺名称: {{retailerInfo.retailerinfo.title}}</div>
-        </div>
-        <div style="position: absolute; top: 30px; right: 14px; height: 35px;">
-          <router-link :to="{ path: '/chat', query: {uid: retailerInfo.uid, fromModule: 'retailer'} }">
-            <span class="al al-xiaoxi1 font24 color-white"></span>
-          </router-link>
+          <div class="font16 clamp1">{{retailerInfo.title}}</div>
         </div>
       </div>
     </div>
     <!-- 文章 -->
-    <div class="share-list mt10">
+    <div class="share-list mt10" v-if="disData1">
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新文章</div>
@@ -45,7 +39,7 @@
       </router-link>
     </div>
     <!-- 活动 -->
-    <div class="share-list mt10">
+    <div class="share-list mt10" v-if="disData2">
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新活动</div>
@@ -71,7 +65,7 @@
       </router-link>
     </div>
     <!-- 商品 -->
-    <div class="share-list mt10">
+    <div class="share-list mt10" v-if="disData3">
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新商品</div>
@@ -100,7 +94,8 @@
 </template>
 <script>
   import ENV from 'env'
-  import Time from '../../libs/time'
+  import Time from '#/time'
+  import { User } from '#/storage'
   export default {
     data () {
       return {
@@ -108,7 +103,11 @@
         articalData: [],
         listActivity: [],
         productData: [],
-        retailerInfo: {}
+        loginUser: {},
+        retailerInfo: {},
+        disData1: false,
+        disData2: false,
+        disData3: false
       }
     },
     methods: {
@@ -121,6 +120,7 @@
             retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           }
           self.articalData = retdata
+          this.disData1 = true
         })
       },
       getData2 () {
@@ -132,6 +132,7 @@
             retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           }
           self.listActivity = retdata
+          this.disData2 = true
         })
       },
       getData3 () {
@@ -143,24 +144,19 @@
             retdata[i].dateline_str = new Time(retdata[i].dateline * 1000).dateFormat('yyyy-MM-dd hh:mm')
           }
           self.productData = retdata
+          this.disData3 = true
         })
       },
-      userInfo () {
-        const self = this
-        self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          self.retailerInfo = retdata
-          console.log('用户信息')
-          console.log(self.retailerInfo)
-        })
+      refresh () {
+        this.loginUser = User.get()
+        this.retailerInfo = this.loginUser.retailerinfo
+        this.getData1()
+        this.getData2()
+        this.getData3()
       }
     },
     created () {
-      this.getData1()
-      this.getData2()
-      this.getData3()
-      this.userInfo()
+      this.refresh()
     }
   }
 </script>
