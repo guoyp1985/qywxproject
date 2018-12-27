@@ -8,7 +8,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">姓名</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitData.position" type="text" class="input priceInput" name="username" placeholder="收款人姓名" />
+            <input v-model="submitData.position" type="text" class="input priceInput" name="username" placeholder="持卡人姓名" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">
             <span class="al al-kehu1 font18 color-gray2"></span>
@@ -19,7 +19,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">卡号</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="收款人储蓄卡号" maxlength="21" size="21" />
+            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="持卡人银行卡号" maxlength="21" size="21" />
           </div>
         </div>
       </div>
