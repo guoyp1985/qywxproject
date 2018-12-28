@@ -64,17 +64,17 @@
           </div>
           <div class="align_right padding10 flex_right">
             <div>
-              <span class="v_middle">{{$t('Order price')}}: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.special }}</span>
+              <span class="v_middle">商品: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.special }}</span>
               <template v-if="data.postage && data.postage != ''">
                 <span class="v_middle font12 color-gray" v-if="data.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                 <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ data.postage }} )</span>
               </template>
             </div>
           </div>
-          <div class="align_right padding10 flex_right" v-if="data.carddeduct > 0">
+          <div class="align_right padding10 flex_right">
             <div>
-              <span class="v_middle">合计: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.paymoney }}</span>
-              <span class="v_middle font12 color-gray">( 优惠券抵扣: {{ $t('RMB') }} {{ data.carddeduct }} )</span>
+              <span class="v_middle">实际支付: {{ $t('RMB') }}</span><span class="font16 v_middle">{{ data.paymoney }}</span>
+              <span class="v_middle font12 color-gray" v-if="data.carddeduct > 0">( 优惠券抵扣: {{ $t('RMB') }} {{ data.carddeduct }} )</span>
             </div>
           </div>
         </div>
@@ -87,10 +87,10 @@
         <div class="align_right">
           <div v-if="!data.payorder && data.flag != 1" class="b_bottom_after pl10 pr10 pb10 bg-white">
             <div class="t-table">
-              <div class="t-cell v_middle align_right cancelarea">
+              <!-- <div class="t-cell v_middle align_right cancelarea">
                 <div v-if="data.flag == 0" class="color-red">交易已关闭</div>
                 <div v-else class="db-in color-blue" @click="cancelorder">关闭交易</div>
-              </div>
+              </div> -->
               <router-link v-if="data.flag != 0" class="t-cell w80 color-blue" :to="{path: '/retailerAddorder', query: {id: data.id}}" >修改订单</router-link>
             </div>
           </div>

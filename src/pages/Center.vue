@@ -67,11 +67,17 @@ import Reg from '#/reg'
 import { Token, User } from '#/storage'
 let self = {}
 let sellerBtn = [
+  // {
+  //   name: 'Seller center',
+  //   icon: 'al-fuwu',
+  //   color: 'rgba01',
+  //   link: '/centerSales'
+  // }
   {
-    name: 'Seller center',
+    name: 'Friend Recommend',
     icon: 'al-fuwu',
     color: 'rgba01',
-    link: '/centerSales'
+    link: '/friendRecommend'
   }
 ]
 let factoryBtn = [

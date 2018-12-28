@@ -17,15 +17,22 @@
               <div class="font15 pt15 pl10 pr10">搜索关键词采集文章</div>
               <div class="font12 color-gray mt5 pl10 pr10">在搜索框内输入文章关键词，点击“搜索”按钮搜索相关文章后，即可预览或采集文章素材。</div>
               <div class="mb15" style="position:relative;">
-                <search
-                  class="v-search bg-white"
-                  v-model="searchword"
-                  :auto-fixed="autofixed"
-                  @on-submit="onSubmit"
-                  @on-change="onChange"
-                  @on-cancel="onCancel"
-                  ref="search">
-                </search>
+                <div class="db-flex">
+                  <div class="flex_cell">
+                    <search
+                      class="v-search bg-white"
+                      v-model="searchword"
+                      :auto-fixed="autofixed"
+                      @on-submit="onSubmit"
+                      @on-change="onChange"
+                      @on-cancel="onCancel"
+                      ref="search">
+                    </search>
+                  </div>
+                  <div class="font15 w100 flex_left" style="width:90px;">
+                    <div class="bg-red color-white flex_center w80" style="height:35px;" @click="onSubmit">搜索</div>
+                  </div>
+                </div>
                 <div class="item-list pt10">
                   <div :class="`item ${kw.checked ? 'active' : ''}`" v-for="(kw, keyindex) in keywordsData" :key="keyindex">
                     <div class="inner border1px color-gray" @click="clickKw(keyindex)">
@@ -499,8 +506,10 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .rgoodeazy{
+  .v-search .weui-search-bar{padding:10px 0 10px 12px;}
+  .v-search .weui-search-bar.weui-search-bar_focusing .weui-search-bar__cancel-btn{display:none;}
   .item-list{
     .item{
       position:relative;

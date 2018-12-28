@@ -10,12 +10,20 @@
     </form>
     <div :class="`outer-eidtor-tip ${editTipCss}`">点击【编辑】按钮可修改内容哦！</div>
     <div class="editor-icon">
-      <div class="edit-btn-box" v-show="showEditIcon">
+      <div class="edit-btn-box" v-if="showEditIcon">
         <div class="edit-btn" @click="clickEditHandle">
           <span class="color-white font16">{{$t('Edit')}}</span>
         </div>
       </div>
-      <div class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
+      <div class="edit-btn-box" v-else>
+        <div class="cancel-btn" @click="onCancel">
+          <span class="color-white font16">{{$t('Cancel')}}</span>
+        </div>
+        <div class="save-btn" @click="onSave">
+          <span class="color-white font16">{{$t('Save')}}</span>
+        </div>
+      </div>
+      <div v-if="query.from != 'miniprogram' && showEditIcon" class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
         <div class="menu-btn" @click="clickMenuHandle">
           <span class="color-white font16">{{$t('Menu')}}</span>
         </div>
@@ -35,14 +43,14 @@
       </div>
     </div>
   -->
-    <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
+    <!-- <flexbox slot="bottom" class="option-area" v-if="showBtnArea && showBtnSave">
       <flexbox-item>
         <x-button @click.native="onCancel">{{$t('Cancel')}}</x-button>
       </flexbox-item>
       <flexbox-item>
         <x-button type="primary" @click.native="onSave">{{$t('Save')}}</x-button>
       </flexbox-item>
-    </flexbox>
+    </flexbox> -->
     <div v-transfer-dom class="x-popup">
       <popup v-model="showpopup" height="100%">
         <div class="popup1">
@@ -104,12 +112,12 @@
             <div class="item">
               <router-link class="inner" :to="{path: '/addNews', query: {id: query.id}}">更多设置</router-link>
             </div>
-            <div class="item" v-if="query.from != 'miniprogram'">
+            <!-- <div class="item" v-if="query.from != 'miniprogram'">
               <router-link class="inner" :to="{path:'/poster',query:{id:query.id, module:'news'}}">生成海报</router-link>
             </div>
             <div class="item">
               <div class="inner" @click="deleteNews">删除文章</div>
-            </div>
+            </div> -->
             <div class="item close mt10" @click="closeMenuPopup">
               <div class="inner">{{ $t('Cancel txt') }}</div>
             </div>
@@ -234,23 +242,34 @@ export default {
   watch: {
     selectproduct: function () {
       return this.selectproduct
+    },
+    showMenuArea (prop) {
+      if (this.isEditMod) {
+        this.showBtnArea = !prop
+      }
     }
   },
   methods: {
     clickEditHandle () {
+      this.isEditMod = true
       this.showEditIcon = false
-      this.showMenuIcon = false
-      this.showMenuArea = false
       this.showBtnArea = true
+      // this.showMenuIcon = false
+      this.showMenuArea = false
       this.editTipCss = ''
       this.createEditor()
-      this.$vux.toast.text(this.$t('Entry Edit Mode'))
+      // this.$vux.toast.text(this.$t('Entry Edit Mode'))
+      this.$vux.toast.show({
+        text: this.$t('Entry Edit Mode'),
+        type: 'text',
+        time: 3000
+      })
       this.$emit('on-edit')
     },
     closeMenuPopup () {
       this.showMenuArea = false
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     pushEvent () {
       this.showMenuArea = false
@@ -262,7 +281,7 @@ export default {
     closepush () {
       self.showpush = false
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     submitpush () {
       if (self.pushdata.length === 0) {
@@ -283,7 +302,7 @@ export default {
             if (data.flag === 1) {
               self.showpush = false
               self.showEditIcon = true
-              self.showMenuIcon = true
+              // self.showMenuIcon = true
             }
           }
         })
@@ -362,18 +381,20 @@ export default {
       })
     },
     onSave () {
+      this.isEditMod = false
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-save')
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     onCancel () {
+      this.isEditMod = false
       this.showBtnArea = false
       editor.destory()
       this.$emit('on-cancel')
       this.showEditIcon = true
-      this.showMenuIcon = true
+      // this.showMenuIcon = true
     },
     createEditor () {
       let toolbars = [
@@ -687,7 +708,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.editor .editor-icon{position:absolute;bottom:70px;right:10px;z-index:10;width:60px;height:60px;}
+.Eleditor-scrollLocked .editor{display:none;}
+/*
+.editor{position:absolute;left:0;bottom:0;right:0;}
+*/
+.editor .editor-icon{position:absolute;bottom:70px;right:10px;width:60px;height:60px;}
 .edit-btn-box {
   position: absolute;
   bottom: 80px;
@@ -699,8 +724,7 @@ export default {
   right: 0px;
 }
 
-.edit-btn,
-.menu-btn {
+.edit-btn,.save-btn,.cancel-btn,.menu-btn {
   width: 40px;
   height: 40px;
   padding: 10px;
@@ -708,14 +732,11 @@ export default {
   display: block;
   text-align: center;
   line-height: 40px;
-  z-index: 100;
 }
-.menu-btn {
-  background-color: rgba(0, 0, 0, 0.55);
-}
-.edit-btn{
-  background-color: rgba(248, 100, 0, 1);
-}
+.menu-btn {background-color: rgba(0, 0, 0, 0.55);}
+.edit-btn{background-color: rgba(248, 100, 0, 1);}
+.save-btn {background-color: #1AAD19;}
+.cancel-btn{background-color:#ccc;margin-bottom:20px;}
 .option-area {
   position: absolute;
   bottom: 0;

@@ -50,7 +50,7 @@
                       <template v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0">
                         <div class="t-cell v_middle align_left color-orange">
                           <div class="clamp1">
-                            <span class="v_middle">{{$t('Order price')}}: {{ $t('RMB') }}</span><span class="v_middle">{{ item.special }}</span>
+                            <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
                             <template v-if="item.postage && item.postage != ''">
                               <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                               <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>
@@ -99,7 +99,7 @@
                     <div v-if="item.flag == 1 && item.fid == 0 && item.crowdid == 0" class="t-table pt5 color-lightgray font13 deliverarea" >
                       <div class="t-cell v_middle align_left color-orange">
                         <div class="clamp1">
-                          <span class="v_middle">{{$t('Order price')}}: {{ $t('RMB') }}</span><span class="v_middle">{{ item.special }}</span>
+                          <span class="v_middle">待支付: {{ $t('RMB') }}</span><span class="v_middle">{{ item.paymoney }}</span>
                           <template v-if="item.postage && item.postage != ''">
                             <span class="v_middle font12 color-gray" v-if="item.postage == 0">( {{ $t('Postage') }}: 包邮 )</span>
                             <span class="v_middle font12 color-gray" v-else>( {{ $t('Postage') }}: {{ $t('RMB') }}{{ item.postage }} )</span>

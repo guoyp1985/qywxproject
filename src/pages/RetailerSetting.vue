@@ -12,7 +12,9 @@
         :submitdata="submitdata"
         :submitdata1="submitdata1"
         :class-data="classData"
-        :productClass="productClass">
+        :productClass="productClass"
+        :buyonline="buyonline"
+        :buyoffline="buyoffline">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -47,7 +49,9 @@ export default {
       photoarr: [],
       showphotoArr: [],
       classData: [],
-      productClass: []
+      productClass: [],
+      buyonline: true,
+      buyoffline: false
     }
   },
   methods: {
@@ -69,6 +73,13 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           for (let key in self.submitdata) {
             self.submitdata[key] = self.retailerInfo[key]
+          }
+          if (self.submitdata.buyonline) {
+            self.buyonline = true
+            self.buyoffline = false
+          } else {
+            self.buyonline = false
+            self.buyoffline = true
           }
           self.productClass = self.retailerInfo.productclass.split(',')
           for (let i = 0; i < self.productClass.length; i++) {

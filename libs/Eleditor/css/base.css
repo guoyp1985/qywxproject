@@ -144,6 +144,7 @@ margin-right:10px;
   position:fixed;
   left:0;
   top:0;
+  z-index:20;
 }
 .Eleditor-textEditor-colors,
 .Eleditor-textEditor-fontsizes,
@@ -327,7 +328,6 @@ margin-right:10px;
 }
 .Eleditor-textEditor-formats{
   position:absolute;
-  right:-60px;
   bottom:20%;
   border-radius:50%;
   -webkit-border-radius:50%;
@@ -337,6 +337,12 @@ margin-right:10px;
   background:#fff;
   z-index:1;
 }
+.Eleditor-textEditor-formats.formats-area{
+  left:-60px;
+}
+.Eleditor-textEditor-formats.btn-area{
+  right:-60px;
+}
 .Eleditor-textEditor-formats div{
   background-repeat:no-repeat;
   width:100%;
@@ -344,6 +350,9 @@ margin-right:10px;
   background-position-x:12px;
   background-position-y:center;
   position:absolute;
+}
+.Eleditor-textEditor-formats.formats-area div{
+  background-position-x:65px;
 }
 .Eleditor-textEditor-formats .Eleditor-textEditor-format{
   background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAAPFBMVEUAAACPj4+Li4uKioqKioqKioqKioqKioqHh4eJiYmJiYmJiYmKioqKioqJiYmKioqJiYmJiYmJiYmKiooOOgKOAAAAE3RSTlMAEEBggO/AoCDQ8N8w4LCQUHCP4ZsY5wAAAUlJREFUOMvFk92WgyAMhAUJ4U9E5/3fdStCaYtlvdmzuVGPH5kkE6Z/iD3d4xTmW5wgey8hI4zk2JQ3CTXgEkBKZGG/jMuS+kRXyFFZx9+MSqwDToLP5wLADIQtdNGbF/j5O2eVgza/ouzCJFaAxQsq+nwH9wjDINVQMp2uC7Ul3URnbB/9+sLVrm3p6t0esUO3YopoPETlW0Zpe1uFctjFA2z+GA0drqZ1dLXhuSOM5dtkTQRcOaVhK8bUozN0feFWAF+BW3M35NLJpSuzniWKFbTJnRBFyWy6W9N8gOM6hETcKbdPByXq4O3rpLwrOk3fp+OEf1/r1PsgLSL7trb+THi15Qog+bTEZrxLWAfpMznTCQh6rfCzKal8dT7i+6VhoNWJOLqveQ2PCJ1w1xSlXCDSNI5gEY2wZaLjpA4EPd0Is+q8I38XPwbTDcl2Nko+AAAAAElFTkSuQmCC);
@@ -356,6 +365,12 @@ margin-right:10px;
   background-size:20px;
   bottom:15px;
 }
+.Eleditor-textEditor-formats.btn-area .Eleditor-cancel,
+.Eleditor-textEditor-formats.btn-area .Eleditor-commit{
+  background-image:none;padding-left:12px;padding-top:3px;box-sizing: border-box;
+}
+.Eleditor-textEditor-formats.btn-area .Eleditor-commit{border-bottom:1px solid #F5F5F5;top:15px;}
+.Eleditor-textEditor-formats.btn-area .Eleditor-cancel{bottom:15px;}
 .Eleditor-inputarea{
   position:absolute;
   top:45px;

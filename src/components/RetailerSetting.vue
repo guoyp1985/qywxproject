@@ -64,8 +64,10 @@
               <forminputplate class="required" v-if="query.from != 'miniprogram'">
                 <span slot="title">{{ $t('Pay type') }}</span>
                 <div>
-                  <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
-                  <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
+                  <!-- <check-icon class="red-check" :value.sync="submitdata.buyonline === 1" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+                  <check-icon class="red-check" :value.sync="submitdata.buyonline !== 1" @click.native.stop="setbuyonline(0)">线下支付</check-icon> -->
+                  <check-icon class="red-check" :value.sync="online" @click.native.stop="setbuyonline(1)">在线支付</check-icon>
+                  <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
                 </div>
               </forminputplate>
               <div v-show="showmore">
@@ -347,6 +349,14 @@ export default {
     productClass: {
       type: Array,
       default: []
+    },
+    buyonline: {
+      type: Boolean,
+      default: true
+    },
+    buyoffline: {
+      type: Boolean,
+      default: false
     }
   },
   directives: {
@@ -367,7 +377,11 @@ export default {
       showqrcode: false,
       selectedIndex: 0,
       tabtxts: [ '基本设置', '卖家秀设置' ],
-      classDataShow: false
+      classDataShow: false,
+      online: true,
+      offline: false,
+      isFirst: true,
+      isFirst1: true
     }
   },
   watch: {
@@ -375,7 +389,31 @@ export default {
       return this.photoarr
     },
     submitdata: function () {
+      console.log('in watch sumitdata')
+      if (this.submitdata.buyonline) {
+        this.online = true
+        this.offline = false
+      } else {
+        this.online = false
+        this.offline = true
+      }
       return this.submitdata
+    },
+    buyonline: function () {
+      console.log('in watch bunonline')
+      if (this.isFirst) {
+        this.online = this.buyonline
+        this.isFirst = false
+      }
+      return this.buyonline
+    },
+    buyoffline: function () {
+      console.log('in watch buyoffline')
+      if (this.isFirst1) {
+        this.offline = this.buyoffline
+        this.isFirst1 = false
+      }
+      return this.buyoffline
     }
   },
   methods: {
@@ -454,10 +492,19 @@ export default {
     setbuyonline (val) {
       if (val === 1) {
         this.showonline = true
+        this.submitdata.buyonline = 1
+        // this.buyonline = true
+        // this.buyoffline = false
+        this.online = true
+        this.offline = false
       } else {
         this.showoffline = true
+        this.submitdata.buyonline = 0
+        // this.buyonline = false
+        // this.buyoffline = true
+        this.online = false
+        this.offline = true
       }
-      this.submitdata.buyonline = val
     },
     closeOnPopup () {
       this.showonline = false

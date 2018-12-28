@@ -6,6 +6,7 @@
 <template>
   <div id="chat-room" class="font14">
     <template v-if="allowChat || loginUser.isretailer === 1">
+      <div style="opacity:0;position:absolute;z-index:-1;" class="copy_txt">{{clickMsgItem.content}}</div>
       <div v-if="retailerInfo.uid && showTip" ref="topTipArea" class="db-flex w_100 border-box padding10 bg-white b_bottom_after font13 color-gray" @click="toStore" style="color:inherit;">
         <div class="flex_left" style="width:70px;">
           <img class="v_middle imgcover" style="width:60px;height:60px;" :src="retailerInfo.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -27,7 +28,7 @@
             <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
             <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
             <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
-            <div :class="`chatitem ${getItemClass(item)}`">
+            <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
               <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
                 <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
               </router-link>
@@ -70,7 +71,7 @@
                   </div>
                 </template>
                 <template v-else>
-                  <div class="main message-text">
+                  <div class="main message-text" @click="copyTxt(item)">
                     <div v-html="filterEmot(item.content)"></div>
                   </div>
                 </template>
@@ -224,11 +225,12 @@ import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom
 import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
-import { User } from '#/storage'
+import {User} from '#/storage'
 import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
 import Reg from '#/reg'
+import jQuery from 'jquery'
 
 const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
 let room = ''
@@ -282,7 +284,8 @@ export default {
       allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
       allowChat: false,
       retailerInfo: {},
-      bottomPos: 0
+      bottomPos: 0,
+      clickMsgItem: {}
     }
   },
   filters: {
@@ -302,6 +305,44 @@ export default {
     }
   },
   methods: {
+    copyTxt (item) {
+      console.log('拷贝方法')
+      console.log(this)
+      const self = this
+      self.clickMsgItem = item
+      const className = `#chat-room .copy_txt`
+      const eleobj = jQuery(className)[0]
+      console.log(eleobj)
+      let range = null
+      let save = function (e) {
+        // e.clipboardData.setData('text/plain', eleobj.innerHTML)
+        e.clipboardData.setData('text/plain', item.content)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        setTimeout(() => {
+          console.log('进入到了ios设备')
+          window.getSelection().removeAllRanges()
+          range = document.createRange()
+          range.selectNode(eleobj)
+          console.log(range)
+          window.getSelection().addRange(range)
+          document.execCommand('copy')
+          window.getSelection().removeAllRanges()
+        }, 100)
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
+    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -616,11 +657,16 @@ export default {
     },
     sendData (postData) {
       const self = this
+      let ajaxUrl = `${ENV.BokaApi}/api/message/send`
       if (this.query.fromModule) {
         postData.frommodule = this.query.fromModule
         postData.frommoduleid = this.query.fromId
       }
-      this.$http.post(`${ENV.BokaApi}/api/message/send`, postData)
+      if (this.query.type === 'kfaccount') {
+        ajaxUrl = `${ENV.BokaApi}/api/message/sendkfmessage`
+        postData.miniconfig = this.query.miniconfig
+      }
+      this.$http.post(ajaxUrl, postData)
       .then(res => {
         if (res.data.flag === 1) {
           const data = res.data.data
@@ -633,7 +679,6 @@ export default {
             room_id: room,
             ...data
           }
-          // console.log(sendData)
           Socket.send(sendData)
           self.message = ''
           self.isUserTouch = false
@@ -817,7 +862,7 @@ export default {
     getNewsData () {
       const self = this
       let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit1 }
-      let keyword = self.searchword1
+      let keyword = self.searchword
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult1 = true
         params.keyword = keyword
@@ -836,7 +881,7 @@ export default {
     },
     getProductData () {
       const self = this
-      let keyword = self.searchword2
+      let keyword = self.searchword
       let params = { pagestart: self.pagestart2, limit: self.limit1 }
       if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
         self.searchresult2 = true

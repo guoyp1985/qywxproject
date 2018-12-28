@@ -122,9 +122,11 @@ export default {
         e.preventDefault()
       }
       if (self.$util.isIOS()) { // ios设备
+        console.log('进入到了ios设备')
         window.getSelection().removeAllRanges()
         range = document.createRange()
         range.selectNode(eleobj)
+        console.log(range)
         window.getSelection().addRange(range)
         document.execCommand('copy')
         window.getSelection().removeAllRanges()

@@ -55,7 +55,9 @@ Util.install = function (Vue, options) {
       let re = null
       let stop = null
       reg = typeof reg === 'string' ? new RegExp(reg) : reg
-      if (reg && model) {
+      if (!model.value || model.value == undefined || model.value == null) {
+        re = false
+      } else if (reg && model) {
         re = reg.test(model.value)
       }
       return re ? re : (stop = failHandle(model))

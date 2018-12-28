@@ -17,7 +17,8 @@ const Reg = {
   rSplitAllTags: /(?:<[^>]+?>|[^<>]+(?=<[^>]+>))/ig,
   rTestSelfCloseTag: /^<(?:img|br|hr|input)[^>]*>$/i,
   rTestSelfCloseOKTag: /^(<[^\/][^>]+?)(\/>)$/i,
-  rInsertSlash: /^(<[^\/][^>]+?)(>)$/i
+  rInsertSlash: /^(<[^\/][^>]+?)(>)$/i,
+  rBankId: /^([1-9]{1})(\d{14}|\d{18})$/
 }
 
 Reg.filterSpecAttr = (attr) => new RegExp(`^(<[^>]+\\s)(${attr}=["'])([^"']*)(["'])([^>]*>)$`, "i");
