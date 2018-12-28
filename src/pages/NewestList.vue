@@ -15,7 +15,7 @@
       <!-- 最新文章 -->
         <template v-if="disproductdata">
         <div v-if="module == 'artical'">
-          <div v-if="!articalData || articalData.length == 0" class="flex_center font16 mt10">暂无文章数据！</div>
+          <div v-if="!articalData || articalData.length == 0" class="flex_center font16 mt10">暂无文章数据</div>
           <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in articalData" :to="{path: '/news',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -33,7 +33,7 @@
         </div>
         <!-- 最新活动 -->
         <div v-if="module == 'activity'">
-          <div v-if="!activityData || activityData.length == 0" class="flex_center font16 mt10">抱歉！暂无活动</div>
+          <div v-if="!activityData || activityData.length == 0" class="flex_center font16 mt10">暂无活动数据</div>
           <div class="artical-item" v-for="(item, index) in activityData">
             <template v-if="item.type=='groupbuy'">
               <router-link class="inner_item flex_left bg-white pt20 pb20 pr15 pl15" :to="{path: '/product',query: {id:item.productid,wid:item.uploader}}">
@@ -71,7 +71,7 @@
         </div>
         <!-- 最新商品 -->
         <div v-if="module == 'product'" class="scroll_list">
-          <div v-if="!productData || productData.length == 0" class="flex_center font16 mt10">暂无商品！</div>
+          <div v-if="!productData || productData.length == 0" class="flex_center font16 mt10">暂无商品数据</div>
           <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData" :to="{path: '/product',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -94,10 +94,12 @@
 <script>
   import ENV from 'env'
   import Time from '#/time'
+  import { User } from '#/storage'
 
   export default {
     data () {
       return {
+        loginUser: {},
         articalData: [],
         activityData: [],
         productData: [],
@@ -155,7 +157,7 @@
       getData2 () {
         const self = this
         const params = {params: {pagestart: self.pageStart, limit: self.limit}}
-        self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity?do=store`, params).then(res => {
           self.$vux.loading.hide()
           let data = res.data
           let retdata = data.data ? data.data : data
@@ -168,8 +170,8 @@
       },
       getData3 () {
         const self = this
-        const params = {params: {pagestart: self.pageStart, limit: self.limit}}
-        self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params).then(res => {
+        const params = {params: {pagestart: self.pageStart, limit: self.limit, uploader: self.loginUser.uid}}
+        self.$http.get(`${ENV.BokaApi}/api/list/product`, params).then(res => {
           self.$vux.loading.hide()
           let data = res.data
           let retdata = data.data ? data.data : data
@@ -178,14 +180,6 @@
           }
           self.productData = self.productData.concat(retdata)
           self.disproductdata = true
-        })
-      },
-      userInfo () {
-        const self = this
-        self.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
-          let data = res.data
-          let retdata = data.data ? data.data : data
-          self.retailerInfo = retdata
         })
       },
       moduleShow () {
@@ -206,6 +200,7 @@
       }
     },
     created () {
+      this.loginUser = User.get()
       this.init()
       this.moduleShow()
     },

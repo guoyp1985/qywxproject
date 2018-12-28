@@ -15,12 +15,12 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新文章</div>
-          <router-link :to="{ path: '/NewestList', query: {module: 'artical'} }" class="t-cell middle-cell align_right font14">
+          <router-link v-if="articalData.length" :to="{ path: '/NewestList', query: {module: 'artical'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
       </div>
-      <div v-if="!articalData || articalData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无文章！</div>
+      <div v-if="!articalData || articalData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无文章</div>
       <router-link :to="{ path: '/news', query: {id: item.id} }" v-else v-for="(item, index) in articalData" :key="item.id">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
@@ -43,12 +43,12 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新活动</div>
-          <router-link :to="{ path: '/NewestList', query: {module: 'activity'} }" class="t-cell middle-cell align_right font14">
+          <router-link v-if="listActivity.length" :to="{ path: '/NewestList', query: {module: 'activity'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
       </div>
-      <div v-if="!listActivity || listActivity.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无活动！</div>
+      <div v-if="!listActivity || listActivity.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无活动</div>
       <router-link :to="{ path: '/product', query: {wid: item.uploader, id: item.productid} }" v-else v-for="(item, index) in listActivity" :key="item.id">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
@@ -69,12 +69,12 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新商品</div>
-          <router-link :to="{ path: '/NewestList', query: {module: 'product'} }" class="t-cell middle-cell align_right font14">
+          <router-link v-if="productData.length" :to="{ path: '/NewestList', query: {module: 'product'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
       </div>
-      <div v-if="!productData || productData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无商品！</div>
+      <div v-if="!productData || productData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无商品</div>
       <router-link :to="{ path: '/product', query: {id: item.id, wid: item.uploader} }" v-else v-for="(item, index) in productData" :key="item.id">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
@@ -125,7 +125,7 @@
       },
       getData2 () {
         const self = this
-        self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity?pagestart=0&limit=3`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity?do=store&pagestart=0&limit=3&wid=${this.loginUser.uid}`).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
@@ -137,7 +137,7 @@
       },
       getData3 () {
         const self = this
-        self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer&pagestart=0&limit=3`).then(res => {
+        self.$http.get(`${ENV.BokaApi}/api/list/product?pagestart=0&limit=3&uploader=${this.loginUser.uid}`).then(res => {
           let data = res.data
           let retdata = data.data ? data.data : data
           for (var i = 0; i < retdata.length; i++) {
