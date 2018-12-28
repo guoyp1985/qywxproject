@@ -15,7 +15,7 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新文章</div>
-          <router-link :to="{ path: '/NewestList', query: {list: 'artical'} }" class="t-cell middle-cell align_right font14">
+          <router-link :to="{ path: '/NewestList', query: {module: 'artical'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
@@ -43,7 +43,7 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新活动</div>
-          <router-link :to="{ path: '/NewestList', query: {list: 'activity'} }" class="t-cell middle-cell align_right font14">
+          <router-link :to="{ path: '/NewestList', query: {module: 'activity'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
@@ -69,7 +69,7 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新商品</div>
-          <router-link :to="{ path: '/NewestList', query: {list: 'product'} }" class="t-cell middle-cell align_right font14">
+          <router-link :to="{ path: '/NewestList', query: {module: 'product'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
