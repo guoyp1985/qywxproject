@@ -34,7 +34,7 @@
       <template v-if="loginUser.whoseseller && loginUser.whoseseller.length > 0">
         <group class="list-shadow radius5 no-after">
           <cell :link="{path:'/recommend'}" class="pl12 pr12 pt10 pb10 border-box t-table bg-white list-shadow">
-            <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金11</span></div>
+            <div slot="inline-desc" class="color-orange2"><span>推荐购买赚佣金</span></div>
           </cell>
         </group>
       </template>
