@@ -16,7 +16,7 @@
         <template v-if="disproductdata">
         <div v-if="module == 'artical'">
           <div v-if="!articalData || articalData.length == 0" class="flex_center font16 mt10">暂无文章数据！</div>
-          <div class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in articalData">
+          <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in articalData" :to="{path: '/news',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
             </div>
@@ -29,30 +29,50 @@
                 <span class="btnicon">分享</span>
               </div>
             </div>
-          </div>
+          </router-link>
         </div>
         <!-- 最新活动 -->
         <div v-if="module == 'activity'">
           <div v-if="!activityData || activityData.length == 0" class="flex_center font16 mt10">抱歉！暂无活动</div>
-          <div class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in activityData">
-            <div class="inner">
-              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-            </div>
-            <div class="flex_left flex_cell">
-              <div class="">
-                <div class="font14 clamp1 wtitle">{{item.title}}</div>
-                <div class="font12 color-gray">{{item.dateline_str}}</div>
-              </div>
-              <div class="t-right">
-                <span class="btnicon">分享</span>
-              </div>
-            </div>
+          <div class="artical-item" v-for="(item, index) in activityData">
+            <template v-if="item.type=='groupbuy'">
+              <router-link class="inner_item flex_left bg-white pt20 pb20 pr15 pl15" :to="{path: '/product',query: {id:item.productid,wid:item.uploader}}">
+                <div class="inner">
+                  <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_left flex_cell">
+                  <div class="">
+                    <div class="font14 clamp1 wtitle">{{item.title}}</div>
+                    <div class="font12 color-gray">{{item.dateline_str}}</div>
+                  </div>
+                  <div class="t-right">
+                    <span class="btnicon">分享</span>
+                  </div>
+                </div>
+              </router-link>
+            </template>
+            <template v-else>
+              <router-link class="inner_item flex_left bg-white pt20 pb20 pr15 pl15" :to="{path: '/activity',query: {id:item.id,wid:item.uploader}}">
+                <div class="inner">
+                  <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                </div>
+                <div class="flex_left flex_cell">
+                  <div class="">
+                    <div class="font14 clamp1 wtitle">{{item.title}}</div>
+                    <div class="font12 color-gray">{{item.dateline_str}}</div>
+                  </div>
+                  <div class="t-right">
+                    <span class="btnicon">分享</span>
+                  </div>
+                </div>
+              </router-link>
+            </template>
           </div>
         </div>
         <!-- 最新商品 -->
         <div v-if="module == 'product'" class="scroll_list">
           <div v-if="!productData || productData.length == 0" class="flex_center font16 mt10">暂无商品！</div>
-          <div class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData">
+          <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData" :to="{path: '/product',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
             </div>
@@ -65,7 +85,7 @@
                 <span class="btnicon">分享</span>
               </div>
             </div>
-          </div>
+          </router-link>
         </div>
       </template>
     </div>
@@ -202,9 +222,10 @@
     .wtitle{width:200px;}
     .shead{width:100%;padding:10px 10px;box-sizing:border-box;background: linear-gradient(#ff6a61, #f63f3d);position:fixed;top:0;z-index:999;}
     .artical-item{
-      border-bottom:1px solid #e5e5e5;
+      border-bottom:1px solid #e5e5e5;box-sizing:border-box;
       .t-right{margin-left:auto;}
       .btnicon{border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 5px;font-size:12px;display:inline-block;}
+      .inner_item{width:100%;box-sizing:border-box;}
     }
     .artical-item .inner{
       width:50px;height:40px;
