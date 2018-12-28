@@ -74,7 +74,7 @@ let sellerBtn = [
   //   link: '/centerSales'
   // }
   {
-    name: 'Friend Recommend',
+    name: 'Friend Customer',
     icon: 'al-fuwu',
     color: 'rgba01',
     link: '/friendRecommend'
