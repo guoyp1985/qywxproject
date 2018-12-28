@@ -16,7 +16,7 @@
         <template v-if="disproductdata">
         <div v-if="module == 'artical'">
           <div v-if="!articalData || articalData.length == 0" class="flex_center font16 mt10">暂无文章数据</div>
-          <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in articalData" :to="{path: '/news',query: {id:item.id,wid:item.uploader}}">
+          <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in articalData" :key="index" :to="{path: '/news',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
             </div>
@@ -34,7 +34,7 @@
         <!-- 最新活动 -->
         <div v-if="module == 'activity'">
           <div v-if="!activityData || activityData.length == 0" class="flex_center font16 mt10">暂无活动数据</div>
-          <div class="artical-item" v-for="(item, index) in activityData">
+          <div class="artical-item" v-for="(item, index) in activityData" :key="index">
             <template v-if="item.type=='groupbuy'">
               <router-link class="inner_item flex_left bg-white pt20 pb20 pr15 pl15" :to="{path: '/product',query: {id:item.productid,wid:item.uploader}}">
                 <div class="inner">
@@ -72,7 +72,7 @@
         <!-- 最新商品 -->
         <div v-if="module == 'product'" class="scroll_list">
           <div v-if="!productData || productData.length == 0" class="flex_center font16 mt10">暂无商品数据</div>
-          <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData" :to="{path: '/product',query: {id:item.id,wid:item.uploader}}">
+          <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData" :key="index" :to="{path: '/product',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
             </div>
