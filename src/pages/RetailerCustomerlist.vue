@@ -90,21 +90,17 @@
                   </div>
                   <div v-if="item.checked">
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="leftInfo">
-                        <div @click="btnDetail(index)">性别: <span>{{item.sexname}}</span></div>
-                        <div @click="btnDetail(index)">地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div @click="influence">影响力:
-                          <span class="color-red4">{{item.yingxiangli}}</span>
-                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
-                        </div>
+                      <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                      <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{item.yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
-                      <div class="rightInfo" @click="btnDetail(index)">
-                        <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人: <span>{{item.uploadname}}</span></div>
-                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
-                      </div>
+                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
+                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
-                    <!-- <router-link :to="{path: '/timeline', query:{ uid: viewuser.uid }}"></router-link> -->
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
                         <div class="t-cell v_middle b_right_after" @click="toTimeline(item)" :to="{path: '/timeline', query:{ uid: item.uid }}">客户行为</div>
@@ -163,19 +159,16 @@
                   </div>
                   <div v-if="item.checked">
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="leftInfo">
-                        <div @click="btnDetail1(index)">性别: <span>{{item.sexname}}</span></div>
-                        <div @click="btnDetail1(index)">地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div @click="influence">影响力:
-                          <span class="color-red4">{{item.yingxiangli}}</span>
-                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
-                        </div>
+                      <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                      <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{item.yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
-                      <div class="rightInfo" @click="btnDetail1(index)">
-                        <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人: <span>{{item.uploadname}}</span></div>
-                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
-                      </div>
+                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
+                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
@@ -234,19 +227,16 @@
                   </div>
                   <div v-if="item.checked">
                     <div class="detailInfo w_100 font14 color-gray b_bottom_after">
-                      <div class="leftInfo">
-                        <div @click="btnDetail2(index)">性别: <span>{{item.sexname}}</span></div>
-                        <div @click="btnDetail2(index)">地区: <span>{{ item.country }} {{ item.province }} {{ item.city }}</span></div>
-                        <div @click="influence">影响力:
-                          <span class="color-red4">{{item.yingxiangli}}</span>
-                          <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
-                        </div>
+                      <div class="txt-item" @click="btnDetail(index)">性别: {{item.sexname}}</div>
+                      <div class="txt-item db-flex" v-if="item.mobile && item.mobile != ''" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="btnDetail(index)">地区: {{ item.country }} {{ item.province }} {{ item.city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{item.yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
-                      <div class="rightInfo" @click="btnDetail2(index)">
-                        <div v-if="item.mobile" style="display:flex;" @click="toPhone(item)">手机: <span>{{item.mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
-                        <div>推荐人: <span>{{item.uploadname}}</span></div>
-                        <div>获客时间: <span>{{item.dateline_str}}</span></div>
-                      </div>
+                      <div class="txt-item">推荐人: {{item.uploadname}}</div>
+                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
                       <div class="t-table align_center color-gray2 font14 color-gray2">
@@ -878,17 +868,13 @@ export default {
 }
 </script>
 
-<style lang="less" >
-.rcustomerlist .detailInfo{
-  background-color:#fff;display:flex;
-  .leftInfo{
-    flex:1;padding-right:10px;padding-bottom:10px;box-sizing:border-box;
-  }
-  .rightInfo{
-    flex:1;padding-left:10px;padding-bottom:10px;box-sizing:border-box;
-    .phone{
-      width:20px;height:20px;border-radius:5px;background-color:red;color:#fff;text-align:center;line-height:20px;
-    }
+<style lang="less">
+.rcustomerlist{
+  .detailInfo{
+    background-color:#fff;display:flex;padding:10px;box-sizing:border-box;flex-wrap: wrap;
+    .txt-item{width:50%;box-sizing:border-box;line-height:25px;position:relative;}
+    .txt-item:nth-child(odd){padding-right:5px;}
+    .txt-item:nth-child(even){padding-left:5px;}
   }
 }
 .rcustomerlist .qbtnInfo{

@@ -33,8 +33,8 @@
   </div>
 </template>
 
-<script type="text/javascript">
-import getTeamInfo from '@/api/getTeamInfo.js'
+<script>
+import ENV from 'env'
 export default {
   created () {
     this.id = this.$route.query.id
@@ -57,8 +57,10 @@ export default {
   },
   methods: {
     _getTeamInfo () {
-      getTeamInfo(this.id).then(res => {
-        console.log(res)
+      // getTeamInfo(this.id).then(res => {
+      //   console.log(res)
+      // })
+      this.$http.post(`${ENV.BokaApi}/api/team/info`, {id: this.id}).then(res => {
       })
     },
     changeTab (index) {

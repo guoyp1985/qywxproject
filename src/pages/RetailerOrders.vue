@@ -15,7 +15,7 @@
             ref="search">
           </search>
           <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
           </tab>
         </div>
       </div>
@@ -559,12 +559,6 @@ export default {
       this.$vux.loading.show()
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
@@ -574,9 +568,19 @@ export default {
           this.$vux.loading.hide()
           this.showContainer = true
           this.query = this.$route.query
-          this.swiperChange()
+          if (this.query.flag === '1') {
+            this.selectedIndex = 1
+          } else if (this.query.flag === '2') {
+            this.selectedIndex = 2
+          } else if (this.query.flag === '3') {
+            this.selectedIndex = 3
+          } else {
+            this.selectedIndex = 0
+          }
+          if (this.selectedIndex === 0) {
+            this.swiperChange()
+          }
         }
-        // }
       }
     }
   },
