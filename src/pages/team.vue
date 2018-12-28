@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import getTeamInfo from '@/api/getTeamInfo.js'
 import ENV from 'env'
 export default {
   created () {
