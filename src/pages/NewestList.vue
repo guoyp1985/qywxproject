@@ -73,10 +73,8 @@
 </template>
 <script>
   import ENV from 'env'
-  import Time from '../../libs/time'
+  import Time from '#/time'
 
-  let pageStart1 = 0
-  const limit = 10
   export default {
     data () {
       return {
@@ -86,7 +84,8 @@
         titleData: {artical: '最新文章', activity: '最新活动', product: '最新商品'},
         module: '',
         retailerInfo: {},
-        limit: 10,
+        pageStart: 0,
+        limit: 20,
         disproductdata: false
       }
     },
@@ -101,18 +100,18 @@
         self.$util.scrollEvent({
           element: scrollarea,
           callback: function () {
-            if (self.module === 'artical' && self.articalData.length === (pageStart1 + 1) * self.limit) {
-              pageStart1++
+            if (self.module === 'artical' && self.articalData.length === (self.pageStart + 1) * self.limit) {
+              self.pageStart++
               self.$vux.loading.show()
               self.getData1()
             }
-            if (self.module === 'activity' && self.activityData.length === (pageStart1 + 1) * self.limit) {
-              pageStart1++
+            if (self.module === 'activity' && self.activityData.length === (self.pageStart + 1) * self.limit) {
+              self.pageStart++
               self.$vux.loading.show()
               self.getData2()
             }
-            if (self.module === 'product' && self.productData.length === (pageStart1 + 1) * self.limit) {
-              pageStart1++
+            if (self.module === 'product' && self.productData.length === (self.pageStart + 1) * self.limit) {
+              self.pageStart++
               self.$vux.loading.show()
               self.getData3()
             }
@@ -149,7 +148,7 @@
       // },
       getData1 () {
         const self = this
-        const params = {params: {pagestart: pageStart1, limit: limit}}
+        const params = {params: {pagestart: self.pageStart, limit: self.limit}}
         self.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer`, params).then(res => {
           self.$vux.loading.hide()
           let data = res.data
@@ -163,7 +162,7 @@
       },
       getData2 () {
         const self = this
-        const params = {params: {pagestart: pageStart1, limit: limit}}
+        const params = {params: {pagestart: self.pageStart, limit: self.limit}}
         self.$http.get(`${ENV.BokaApi}/api/retailer/listActivity`, params).then(res => {
           self.$vux.loading.hide()
           let data = res.data
@@ -177,7 +176,7 @@
       },
       getData3 () {
         const self = this
-        const params = {params: {pagestart: pageStart1, limit: limit}}
+        const params = {params: {pagestart: self.pageStart, limit: self.limit}}
         self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, params).then(res => {
           self.$vux.loading.hide()
           let data = res.data
@@ -205,11 +204,11 @@
           this.getData1()
         }
         if (this.module === 'activity') {
-          pageStart1 = 0
+          self.pageStart = 0
           this.getData2()
         }
         if (this.module === 'product') {
-          pageStart1 = 0
+          self.pageStart = 0
           this.getData3()
         }
       }
