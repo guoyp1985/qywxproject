@@ -118,34 +118,6 @@
           }
         })
       },
-      // handleScroll1: function (refname) {
-      //   const self = this
-      //   const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      //   self.$util.scrollEvent({
-      //     element: scrollarea,
-      //     callback: function () {
-      //       if (self.productData.length === (pageStart2 + 1) * limit) {
-      //         pageStart2++
-      //         self.$vux.loading.show()
-      //         self.getData3()
-      //       }
-      //     }
-      //   })
-      // },
-      // handleScroll2: function (refname) {
-      //   const self = this
-      //   const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      //   self.$util.scrollEvent({
-      //     element: scrollarea,
-      //     callback: function () {
-      //       if (self.productData.length === (pageStart3 + 1) * limit) {
-      //         pageStart3++
-      //         self.$vux.loading.show()
-      //         self.getData3()
-      //       }
-      //     }
-      //   })
-      // },
       getData1 () {
         const self = this
         const params = {params: {pagestart: self.pageStart, limit: self.limit}}
