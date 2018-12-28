@@ -496,7 +496,7 @@ export default {
         } else {
           fromPage = encodeURIComponent('/retailerRevenue')
         }
-        if (!self.loginUser.idcardno) {
+        if (!self.loginUser.idcardno || self.loginUser.idcardno === '') {
           self.$router.push({path: '/authPhoto', query: {fromPage: fromPage}})
         } else {
           this.showMoneyPopup = false
