@@ -12,8 +12,8 @@
       <div class="align_center color-gray pt10 pb10">可提现金额（元）</div>
       <div class="align_center pb10 font30 bold" style="color:#FF6B63;">1000.5</div>
       <div class="flex_center pt20">
-        <div class="item mr10" @click="clickWechat">提现至零钱</div>
-        <div class="item ml10" @click="clickBank">提现至银行卡</div>
+        <div class="item mr10" @click="clickwechat">提现至零钱</div>
+        <div class="item ml10" @click="clickbank">提现至银行卡</div>
       </div>
     </div>
     <div class="btom-content">
@@ -43,7 +43,7 @@
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
-              <input class="font20 color-gray pb10 pl10 w_100" type="number" name="money" placeholder="输入提现金额"/>
+              <input class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="color-gray mt5">可提现金额￥996.50</div>
             <div class="btnSubmit">确认提现</div>
@@ -70,7 +70,7 @@
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
-              <input class="font20 color-gray pb10 pl10 w_100" type="number" name="money" placeholder="输入提现金额"/>
+              <input class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="color-gray mt5">可提现金额￥996.50</div>
             <div class="btnSubmit">确认提现</div>
@@ -113,37 +113,40 @@
   </div>
 </template>
 <script>
-import { Popup } from 'vux'
-  export default {
-    components: {
-      Popup
+import { Popup, TransferDom } from 'vux'
+export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup
+  },
+  data () {
+    return {
+      wechatShow: false,
+      bankShow: false,
+      showpopup: false
+    }
+  },
+  methods: {
+    clickwechat () {
+      this.wechatShow = true
     },
-    data () {
-      return {
-        wechatShow: false,
-        bankShow: false,
-        showpopup: false
-      }
+    clickbank () {
+      this.bankShow = true
     },
-    methods: {
-      clickWechat () {
-        this.wechatShow = true
-      },
-      clickBank () {
-        this.bankShow = true
-      },
-      popupexplain () {
-        this.showpopup = !this.showpopup
-      },
-      closepopup () {
-        this.showpopup = false
-      },
-      closeWechat () {
-        this.wechatShow = false
-        this.bankShow = false
-      }
+    popupexplain () {
+      this.showpopup = !this.showpopup
+    },
+    closepopup () {
+      this.showpopup = false
+    },
+    closeWechat () {
+      this.wechatShow = false
+      this.bankShow = false
     }
   }
+}
 </script>
 <style lang="less">
   .income{
@@ -166,6 +169,7 @@ import { Popup } from 'vux'
     .mceng{position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0, 0, 0, 0.3);overflow:hidden;z-index:0;}
     .wechatShow{
       width:75%;padding:10px 0;background-color:#fff;border-radius:10px;margin:0 auto;box-sizing:border-box;margin-top:40%;
+      input {color:#FF6B63;}
     }
     .btnSubmit{
       width:90%;padding:10px 0;background-color:#FF6B63;color:#fff;text-align:center;
