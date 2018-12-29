@@ -111,7 +111,7 @@
         module: '',
         retailerInfo: {},
         pageStart: 0,
-        limit: 10,
+        limit: 20,
         disproductdata: false
       }
     },
