@@ -125,50 +125,63 @@ export default {
     bindEvent () {
       if (!this.submitIng) {
         let postData = this.submitData
-        if (postData.position === '' || postData.bankcardno === '' || postData.bankcode === '' || postData.bankuser === '') {
+        if (postData.position === this.loginUser.position && postData.bankuser === this.loginUser.bankuser && postData.bankcardno === this.loginUser.bankcardno && postData.bankcode === this.loginUser.bankcode) {
           this.$vux.toast.show({
-            text: '请完善信息',
-            type: 'text'
+            text: '绑定成功',
+            type: 'success',
+            time: 1500
           })
-          return false
-        }
-        postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
-        if (!Reg.rBankId.test(postData.bankcardno)) {
-          this.$vux.toast.show({
-            text: '请输入正确的银行卡号',
-            width: '200px',
-            type: 'text'
-          })
-          return false
-        }
-        this.$vux.confirm.show({
-          content: '请确保信息填写无误',
-          confirmText: '确定',
-          onConfirm: () => {
-            this.submitIng = true
-            this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, postData).then(res => {
-              this.submitIng = false
-              const data = res.data
-              const timeout = this.$util.delay(data.error)
-              this.$vux.toast.show({
-                text: data.error,
-                type: data.flag ? 'success' : 'warn',
-                time: timeout
-              })
-              if (data.flag) {
-                for (let key in postData) {
-                  this.loginUser[key] = postData[key]
-                }
-                User.set(this.loginUser)
-                setTimeout(() => {
-                  if (this.query.fromPage) {
-                    this.$router.push({path: decodeURIComponent(this.query.fromPage)})
-                  }
-                }, timeout)
-              }
+          setTimeout(() => {
+            if (this.query.fromPage) {
+              this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+            }
+          }, 1000)
+        } else {
+          if (postData.position === '' || postData.bankcardno === '' || postData.bankcode === '' || postData.bankuser === '') {
+            this.$vux.toast.show({
+              text: '请完善信息',
+              type: 'text'
             })
+            return false
           }
-        })
+          postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
+          if (!Reg.rBankId.test(postData.bankcardno)) {
+            this.$vux.toast.show({
+              text: '请输入正确的银行卡号',
+              width: '200px',
+              type: 'text'
+            })
+            return false
+          }
+          this.$vux.confirm.show({
+            content: '请确保信息填写无误',
+            confirmText: '确定',
+            onConfirm: () => {
+              this.submitIng = true
+              this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, postData).then(res => {
+                this.submitIng = false
+                const data = res.data
+                const timeout = this.$util.delay(data.error)
+                this.$vux.toast.show({
+                  text: data.error,
+                  type: data.flag ? 'success' : 'warn',
+                  time: timeout
+                })
+                if (data.flag) {
+                  for (let key in postData) {
+                    this.loginUser[key] = postData[key]
+                  }
+                  User.set(this.loginUser)
+                  setTimeout(() => {
+                    if (this.query.fromPage) {
+                      this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+                    }
+                  }, timeout)
+                }
+              })
+            }
+          })
+        }
       }
     },
     init () {
@@ -187,7 +200,7 @@ export default {
       })
     }
   },
-  created () {
+  activated () {
     this.init()
   }
 }

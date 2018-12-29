@@ -184,6 +184,8 @@ export default {
     closeWechat () {
       this.wechatShow = false
       this.bankShow = false
+      this.cashMoney = ''
+      this.cashBankMoney = ''
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
