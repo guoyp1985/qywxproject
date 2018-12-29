@@ -420,15 +420,6 @@ export default {
         changeTxt: function() {
           self.$emit('on-auto-save')
         },
-        insertLink: function() {
-          self.$emit('on-auto-save')
-        },
-        insertHr: function() {
-          self.$emit('on-auto-save')
-        },
-        "delete": function() {
-          self.$emit('on-auto-save')
-        },
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')

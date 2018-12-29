@@ -579,6 +579,7 @@ var Eleditor = function(){
 		insertLink: function(){
 			_showEditorWrapMask();
 			_$editorTextModule.attr({'role': 'insert', 'type': 'link'}).show();
+			_args.changeTxt && _args.changeTxt(_content)
 		},
 		insertImage: function(){
 			/*
@@ -612,6 +613,7 @@ var Eleditor = function(){
 
 			_hideEditorControllerLayer();
 			_args.cancelControler && _args.cancelControler();
+			_args.changeTxt && _args.changeTxt(_content)
 		},
 		editText: function(){
 			if( _inArray(_$selected[0].tagName, _notctname) ){
@@ -631,6 +633,7 @@ var Eleditor = function(){
 			_hideEditorControllerLayer();
 			_correctHtmlStructure(_$wrap, _placeHolder);
 			_args.cancelControler && _args.cancelControler();
+			_args.changeTxt && _args.changeTxt(_content)
 		},
     deleteThis: function(){
             _appendHistory({ m: 'deleteNode', node: _$selected, pnode: _$selected.prev() });
