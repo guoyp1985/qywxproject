@@ -487,9 +487,9 @@ export default {
             if (!self.showBtnArea) {
               console.log('in editor.vue 459')
               // self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
-              self.$emit('on-auto-save')
             }
           })
+          self.$emit('on-auto-save')
         },
         buildControler: function () {
           self.showBtnSave = false
