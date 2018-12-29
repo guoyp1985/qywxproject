@@ -186,6 +186,7 @@ export default {
       this.bankShow = false
       this.cashMoney = ''
       this.cashBankMoney = ''
+      this.clearValue()
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
@@ -234,8 +235,7 @@ export default {
             this.loginUser.retailerinfo = this.retailerInfo
             User.set(this.loginUser)
           }
-          this.wechatShow = false
-          this.bankShow = false
+          this.closeWechat()
         })
       }
     },
