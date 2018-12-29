@@ -15,13 +15,13 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新文章</div>
-          <router-link v-if="articalData.length" :to="{ path: '/NewestList', query: {module: 'artical'} }" class="t-cell middle-cell align_right font14">
+          <router-link v-if="articalData.length" :to="{ path: '/NewestList', query: {module: 'news'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
       </div>
       <div v-if="!articalData || articalData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无文章</div>
-      <router-link :to="{ path: '/news', query: {id: item.id} }" v-else v-for="(item, index) in articalData" :key="item.id">
+      <router-link :to="{ path: '/news', query: {id: item.id, wid:item.uploader} }" v-else v-for="(item, index) in articalData" :key="item.id">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div v-if="!listActivity || listActivity.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无活动</div>
-      <router-link :to="{ path: '/product', query: {wid: item.uploader, id: item.productid} }" v-else v-for="(item, index) in listActivity" :key="item.id">
+      <div  v-else v-for="(item, index) in listActivity" :key="item.id" @click="toActivity(item)">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -62,7 +62,7 @@
             <span class="btnicon">去分享</span>
           </div>
         </div>
-      </router-link>
+      </div>
     </div>
     <!-- 商品 -->
     <div class="share-list mt10" v-if="disData3">
@@ -111,6 +111,18 @@
       }
     },
     methods: {
+      toActivity (item) {
+        const type = item.type
+        console.log(type)
+        console.log(item.uploader)
+        let params = {id: item.productid, wid: item.uploader}
+        let params1 = {id: item.id, wid: item.uploader}
+        if (type === 'groupbuy') {
+          this.$router.push({path: '/product', query: params})
+        } else {
+          this.$router.push({path: '/activity', query: params1})
+        }
+      },
       getData1 () {
         const self = this
         self.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer&pagestart=0&limit=3`).then(res => {
