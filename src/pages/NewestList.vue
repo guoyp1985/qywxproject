@@ -2,8 +2,8 @@
   <div class="containerarea font14 newestList">
     <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer')">
         <div style="width:100%;height:45px">
-          <div v-if="module == 'artical'" class="shead flex_left font16 color-white">
-            {{titleData.artical}}
+          <div v-if="module == 'news'" class="shead flex_left font16 color-white">
+            {{titleData.news}}
           </div>
           <div v-if="module == 'activity'" class="shead flex_left font16 color-white">
             {{titleData.activity}}
@@ -14,11 +14,11 @@
         </div>
       <!-- 最新文章 -->
         <template v-if="disproductdata">
-        <div v-if="module == 'artical'">
+        <div v-if="module == 'news'">
           <div v-if="!articalData || articalData.length == 0" class="flex_center font16 mt10">暂无文章数据</div>
           <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in articalData" :key="index" :to="{path: '/news',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
-              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="flex_left flex_cell">
               <div class="">
@@ -26,7 +26,7 @@
                 <div class="font12 color-gray">{{item.dateline_str}}</div>
               </div>
               <div class="t-right">
-                <span class="btnicon">分享</span>
+                <span class="btnicon">去分享</span>
               </div>
             </div>
           </router-link>
@@ -38,7 +38,7 @@
             <template v-if="item.type=='groupbuy'">
               <router-link class="inner_item flex_left bg-white pt20 pb20 pr15 pl15" :to="{path: '/product',query: {id:item.productid,wid:item.uploader}}">
                 <div class="inner">
-                  <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
                 <div class="flex_left flex_cell">
                   <div class="">
@@ -46,7 +46,7 @@
                     <div class="font12 color-gray">{{item.dateline_str}}</div>
                   </div>
                   <div class="t-right">
-                    <span class="btnicon">分享</span>
+                    <span class="btnicon">去分享</span>
                   </div>
                 </div>
               </router-link>
@@ -54,7 +54,7 @@
             <template v-else>
               <router-link class="inner_item flex_left bg-white pt20 pb20 pr15 pl15" :to="{path: '/activity',query: {id:item.id,wid:item.uploader}}">
                 <div class="inner">
-                  <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                  <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
                 <div class="flex_left flex_cell">
                   <div class="">
@@ -62,7 +62,7 @@
                     <div class="font12 color-gray">{{item.dateline_str}}</div>
                   </div>
                   <div class="t-right">
-                    <span class="btnicon">分享</span>
+                    <span class="btnicon">去分享</span>
                   </div>
                 </div>
               </router-link>
@@ -74,7 +74,7 @@
           <div v-if="!productData || productData.length == 0" class="flex_center font16 mt10">暂无商品数据</div>
           <router-link class="artical-item flex_left bg-white pt20 pb20 pr15 pl15" v-for="(item, index) in productData" :key="index" :to="{path: '/product',query: {id:item.id,wid:item.uploader}}">
             <div class="inner">
-              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+              <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="flex_left flex_cell">
               <div class="">
@@ -82,7 +82,7 @@
                 <div class="font12 color-gray">{{item.dateline_str}}</div>
               </div>
               <div class="t-right">
-                <span class="btnicon">分享</span>
+                <span class="btnicon">去分享</span>
               </div>
             </div>
           </router-link>
@@ -103,7 +103,7 @@
         articalData: [],
         activityData: [],
         productData: [],
-        titleData: {artical: '最新文章', activity: '最新活动', product: '最新商品'},
+        titleData: {news: '最新文章', activity: '最新活动', product: '最新商品'},
         module: '',
         retailerInfo: {},
         pageStart: 0,
@@ -122,7 +122,7 @@
         self.$util.scrollEvent({
           element: scrollarea,
           callback: function () {
-            if (self.module === 'artical' && self.articalData.length === (self.pageStart + 1) * self.limit) {
+            if (self.module === 'news' && self.articalData.length === (self.pageStart + 1) * self.limit) {
               self.pageStart++
               self.$vux.loading.show()
               self.getData1()
@@ -186,15 +186,12 @@
         this.articalData = []
         this.activityData = []
         this.productData = []
-        if (this.module === 'artical') {
+        self.pageStart = 0
+        if (this.module === 'news') {
           this.getData1()
-        }
-        if (this.module === 'activity') {
-          self.pageStart = 0
+        } else if (this.module === 'activity') {
           this.getData2()
-        }
-        if (this.module === 'product') {
-          self.pageStart = 0
+        } else if (this.module === 'product') {
           this.getData3()
         }
       }

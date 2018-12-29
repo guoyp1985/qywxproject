@@ -15,21 +15,25 @@
       <div class="border-t12 border pt10 pb10 pr15 pl15 bg-white b_bottom_after">
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新文章</div>
-          <router-link v-if="articalData.length" :to="{ path: '/NewestList', query: {module: 'artical'} }" class="t-cell middle-cell align_right font14">
+          <router-link v-if="articalData.length" :to="{ path: '/NewestList', query: {module: 'news'} }" class="t-cell middle-cell align_right font14">
             <div style="color:#40aadd;">更多>></div>
           </router-link>
         </div>
       </div>
       <div v-if="!articalData || articalData.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无文章</div>
-      <router-link :to="{ path: '/news', query: {id: item.id} }" v-else v-for="(item, index) in articalData" :key="item.id">
+      <router-link :to="{ path: '/news', query: {id: item.id, wid:item.uploader} }" v-else v-for="(item, index) in articalData" :key="item.id">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="flex_left flex_cell">
-            <div class="">
+            <div class="clamp1">
               <div class="font14 clamp1 wtitle">{{item.title}}</div>
-              <div class="font12 color-gray">{{item.dateline_str}}</div>
+              <div class="clamp1 font12 color-gray v_middle mt5">
+                  <span class="v_middle color-999">{{ item.dateline_str }}</span>
+                  <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                  <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+              </div>
             </div>
             <div class="t-right">
               <span class="btnicon">去分享</span>
@@ -49,7 +53,7 @@
         </div>
       </div>
       <div v-if="!listActivity || listActivity.length == 0" class="flex_center font16 bg-white pt10 pb10 pr15 pl15">暂无活动</div>
-      <router-link :to="{ path: '/product', query: {wid: item.uploader, id: item.productid} }" v-else v-for="(item, index) in listActivity" :key="item.id">
+      <div  v-else v-for="(item, index) in listActivity" :key="item.id" @click="toActivity(item)">
         <div class="artical-item flex_left bg-white pt10 pb10 pr15 pl15">
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -62,7 +66,7 @@
             <span class="btnicon">去分享</span>
           </div>
         </div>
-      </router-link>
+      </div>
     </div>
     <!-- 商品 -->
     <div class="share-list mt10" v-if="disData3">
@@ -111,6 +115,18 @@
       }
     },
     methods: {
+      toActivity (item) {
+        const type = item.type
+        console.log(type)
+        console.log(item.uploader)
+        let params = {id: item.productid, wid: item.uploader}
+        let params1 = {id: item.id, wid: item.uploader}
+        if (type === 'groupbuy') {
+          this.$router.push({path: '/product', query: params})
+        } else {
+          this.$router.push({path: '/activity', query: params1})
+        }
+      },
       getData1 () {
         const self = this
         self.$http.get(`${ENV.BokaApi}/api/list/news?from=retailer&pagestart=0&limit=3`).then(res => {
@@ -175,7 +191,7 @@
       border-bottom:1px solid #e5e5e5;
       .wtitle{width:200px;}
       .t-right{margin-left:auto;width:50px;}
-      .btnicon{border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 5px;font-size:12px;display:inline-block;}
+      .btnicon{border-radius:4px;background-color:#4cd964;color:#fff;font-size:12px;display:inline-block;padding:2px 5px;box-sizing:border-box;}
     }
     .artical-item .inner{
       width:50px;height:40px;
