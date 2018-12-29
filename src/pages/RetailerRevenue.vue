@@ -211,13 +211,20 @@ export default {
         if (this.query.appid) {
           postData.appid = this.query.appid
         }
+        this.$vux.showLoading()
         this.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(res => {
+          this.$vux.hideLoading()
           const data = res.data
           this.$vux.toast.show({
             text: data.error,
             type: data.flag ? 'success' : 'warn',
             time: this.$util.delay(data.error)
           })
+          if (data.flag) {
+            this.retailerInfo.waitcash = data.waitcash
+            this.loginUser.retailerinfo = this.retailerInfo
+            User.set(this.loginUser)
+          }
           this.wechatShow = false
           this.bankShow = false
         })
