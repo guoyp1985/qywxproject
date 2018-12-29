@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 income">
+  <div class="containerarea font14 income" ref="revenueContainer">
     <div class="inhead">
       <div class="in-item flex_center pr20 pl20 pt20">
         <div class="item mr20 flex_center" @click="toBank">我的银行卡</div>
@@ -136,8 +136,10 @@ export default {
   },
   methods: {
     onBlur () {
+      let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
       setTimeout(() => {
         document.body.scrollTop = document.body.scrollHeight
+        revenueContainer.scrollTop = revenueContainer.scrollHeight
       }, 100)
     },
     toBank () {
