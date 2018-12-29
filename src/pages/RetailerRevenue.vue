@@ -2,16 +2,16 @@
   <div class="containerarea font14 income" ref="revenueContainer">
     <div class="inhead">
       <div class="in-item flex_center pr20 pl20 pt20">
-        <div class="item mr20 flex_center" @click="toBank">我的银行卡</div>
-        <div class="item flex_center" @click="popupexplain">提现说明</div>
+        <div class="item mr10 flex_center" @click="toBank">我的银行卡</div>
+        <div class="item ml10 flex_center" @click="popupexplain">提现说明</div>
       </div>
     </div>
     <div class="middle-content">
       <div class="align_center color-gray pt10 pb10">可提现金额（元）</div>
       <div class="align_center pb10 font30 bold" style="color:#FF6B63;">{{retailerInfo.waitcash}}</div>
       <div class="flex_center pt20">
-        <div class="item mr10" @click="clickwechat">提现至零钱</div>
-        <div class="item ml10" @click="clickbank">提现至银行卡</div>
+        <div class="item flex_center mr10" @click="clickwechat">提现至零钱</div>
+        <div class="item flex_center ml10" @click="clickbank">提现至银行卡</div>
       </div>
     </div>
     <div class="btom-content">
@@ -37,7 +37,7 @@
             </div>
             <div class="flex_table mt10">
               <div class="align_left color-gray2">提现金额</div>
-              <div class="pl10">(最低提现一元)</div>
+              <div class="pl10">(最低提现1元)</div>
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
@@ -64,7 +64,7 @@
             </div>
             <div class="flex_table mt10">
               <div class="align_left color-gray2">提现金额</div>
-              <div class="pl10">(最低提现一元)</div>
+              <div class="pl10">(最低提现1元)</div>
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
@@ -275,7 +275,7 @@ export default {
     }
     .middle-content{
       width:90%;height:180px;background-color:#fff;border-radius:10px;border:1px solid #e5e5e5;margin: 0 auto;margin-top:-30px;
-      .item{padding:5px 15px;background-color:#fff;border-radius:20px;border:1px solid #FF6B63;font-size:12px;color:#FF6B63;box-sizing:border-box;}
+      .item{width:100px;height:25px;background-color:#fff;border-radius:20px;border:1px solid #FF6B63;font-size:12px;color:#FF6B63;box-sizing:border-box;}
     }
     .btom-content{
       .list{
