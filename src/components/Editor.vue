@@ -418,7 +418,6 @@ export default {
         el: this.elem,
         toolbars: toolbars,
         changeTxt: function() {
-          console.log('change text')
           self.$emit('on-auto-save')
         },
         deleteThis: function() {
@@ -491,7 +490,6 @@ export default {
         },
         cancelControler: function () {
           self.showBtnSave = true
-          // self.$emit('on-auto-save')
         }
       })
     },
