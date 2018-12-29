@@ -518,6 +518,7 @@ export default {
       } else if (this.query.flag === '2') {
         this.selectedIndex = 2
       } else {
+        this.selectedIndex = 0
         this.swiperChange()
       }
     }
