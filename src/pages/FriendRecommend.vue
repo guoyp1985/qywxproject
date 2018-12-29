@@ -29,7 +29,7 @@
           <div class="flex_left flex_cell">
             <div class="clamp1">
               <div class="font14 clamp1 wtitle">{{item.title}}</div>
-              <div class="clamp1 font12 color-gray v_middle mt5">
+              <div class="clamp1 font12 color-gray v_middle">
                   <span class="v_middle color-999">{{ item.dateline_str }}</span>
                   <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
                   <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
