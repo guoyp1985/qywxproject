@@ -605,7 +605,7 @@ var Eleditor = function(){
       });
 		},
 		insertHr: function(){
-
+			console.log('insertHr')
 			_appendHistory();
 
 			var _$hr = $('<div class="horizontal-line" style="padding: 10px 0;border-bottom: 1px solid #aaa;margin-bottom: 20px;"></div>');
