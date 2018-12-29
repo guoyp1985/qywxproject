@@ -134,6 +134,7 @@ export default {
         if (!Reg.rBankId.test(this.submitData.bankcardno)) {
           this.$vux.toast.show({
             text: '请输入正确的银行卡号',
+            width: '200px',
             type: 'text'
           })
           return false
@@ -172,6 +173,12 @@ export default {
       const self = this
       this.loginUser = User.get()
       this.query = this.$route.query
+      console.log('当前登录用户')
+      console.log(this.loginUser)
+      this.submitData.position = this.loginUser.position
+      this.submitData.bankuser = this.loginUser.bankuser
+      this.submitData.bankcardno = this.loginUser.bankcardno
+      this.submitData.bankcode = this.loginUser.bankcode
       this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
         const data = res.data
         self.cardList = data.data ? data.data : data

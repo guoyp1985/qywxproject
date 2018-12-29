@@ -420,13 +420,7 @@ export default {
         changeTxt: function() {
           self.$emit('on-auto-save')
         },
-        insertLink: function() {
-          self.$emit('on-auto-save')
-        },
-        insertHr: function() {
-          self.$emit('on-auto-save')
-        },
-        "delete": function() {
+        deleteThis: function() {
           self.$emit('on-auto-save')
         },
         insertImageCallback: function (callback) {
@@ -480,7 +474,6 @@ export default {
           if (self.productdata.length === 0) {
             self.getProductData()
           }
-          self.$emit('on-auto-save')
           self.showBtnSave = true
         },
         clickInsertProduct: function (area, d) {
@@ -490,13 +483,13 @@ export default {
               // self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
             }
           })
+          self.$emit('on-auto-save')
         },
         buildControler: function () {
           self.showBtnSave = false
         },
         cancelControler: function () {
           self.showBtnSave = true
-          self.$emit('on-auto-save')
         }
       })
     },

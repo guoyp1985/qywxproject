@@ -101,11 +101,15 @@ export default {
             self.$vux.toast.text('未填必选项', 'middle')
         }
       })) {
-        this.$http.post(`${ENV.BokaApi}/api/user/update/0`, this.getProfile)
+        this.$http.post(`${ENV.BokaApi}/api/user/update/0`, {
+          linkman: this.getProfile.linkman,
+          mobile: this.getProfile.mobile,
+          sex: this.getProfile.sex,
+          company: this.getProfile.company
+        })
         .then(res => {
           const user = User.get()
           User.set({
-            ...user,
             ...self.getProfile
           })
           self.$vux.toast.text(res.data.error, 'middle')
