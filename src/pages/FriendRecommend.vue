@@ -1,13 +1,13 @@
 <template>
   <div class="containerarea font14 friendRecommend">
-    <div style="width:100%;height:150px;">
-      <div class="flex_left bg-white font18 align_right b_bottom_after pl20 headtit">我的店铺</div>
+    <div style="width:100%;height:145px;">
+      <div class="flex_left bg-white font16 align_right b_bottom_after pl20 headtit">我的店铺</div>
       <div class="rhead t-table flex_left">
         <div class="inner">
           <img :src="retailerInfo.avatar" />
         </div>
         <div class="txt-cell flex_cell w_100">
-          <div class="font16 clamp1">{{retailerInfo.linkman}}</div>
+          <div class="font16 clamp1">{{retailerInfo.title}}</div>
           <!-- <div class="font14 clamp1 color-gray mt5">全部宝贝：{{retailerInfo.views}}件</div> -->
         </div>
         <div class="t-right">
@@ -186,9 +186,9 @@
 <style lang="less">
   .friendRecommend{
     background-color:#EFEEF3;
-    .headtit{width:100%;height:50px;line-height:50px;position:fixed;top:0px;z-index:999;}
+    .headtit{width:100%;height:45px;line-height:45px;position:fixed;top:0px;z-index:999;}
     .rhead{
-      padding:20px 15px;box-sizing:border-box;background:#fff;position:fixed;top:50px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
+      padding:20px 15px;box-sizing:border-box;background:#fff;position:fixed;top:45px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
       .inner{
         width:80px;height:60px;
         img{width:60px;height:60px;}
