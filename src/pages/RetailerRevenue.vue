@@ -186,6 +186,7 @@ export default {
       this.bankShow = false
       this.cashMoney = ''
       this.cashBankMoney = ''
+      this.submitIng = false
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
