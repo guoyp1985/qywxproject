@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 train notop">
-    <div class="w_100" style="height:375px;">
+    <div class="w_100">
       <template>
         <div v-if="playVideo" class="videoarea">
           <video

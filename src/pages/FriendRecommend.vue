@@ -201,7 +201,7 @@
     .t-right{margin-left:auto;}
     .btnicon{
       background-color:#4cd964;color:#fff;font-size:12px;border-radius:20px;
-      display:inline-block;width:50px;text-align: center;
+      display:inline-block;width:50px;text-align:center;
     }
     .artical-item{
       border-bottom:1px solid #e5e5e5;
