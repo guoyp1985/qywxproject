@@ -210,8 +210,8 @@
                   <div class="db-flex">
                     <div class="flex_cell flex_left">
                       <div class="w_100">
-                        <div><span>提现至银行卡</span><span class="color-theme">【提现中，预计1-3天】</span></div>
-                        <div class="color-theme">原因：银行卡账号与收款人姓名不匹配</div>
+                        <div><span>{{item.cashtypetext}}</span><span v-if="item.statustext == 1" class="color-green">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
+                        <div class="color-theme" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
                         <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       </div>
                     </div>
@@ -389,8 +389,8 @@ export default {
     getData3 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart3, limit: limit, cashed: 1 } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
+      const params = { pagestart: pageStart3, limit: limit }
+      self.$http.post(`${ENV.BokaApi}/api/accounting/cashList`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
