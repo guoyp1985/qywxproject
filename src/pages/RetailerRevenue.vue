@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="btom-content">
-      <div class="list flex_table mt20">
+      <div class="list flex_table mt20" @click="toIncome">
         <div class="align_left">待结算金额</div>
         <div class="moneyNum">{{retailerInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
       </div>
@@ -137,6 +137,13 @@ export default {
   methods: {
     toBank () {
       this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+    },
+    toIncome () {
+      let params = {}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      this.$router.push({path: '/income', query: params})
     },
     toDetail () {
       let params = {flag: 2}
