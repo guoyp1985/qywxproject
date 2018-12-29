@@ -871,7 +871,7 @@ var Eleditor = function(){
 		_hideEditorWrapMask();
 		_$editorTextModule.hide();
 		_hideEditorControllerLayer();
-		_args.cancelControler && _args.cancelControler();
+		// _args.cancelControler && _args.cancelControler();
 	});
 
 	_$editorColorModule.on('click', 'ul li span', function() {
