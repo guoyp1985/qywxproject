@@ -200,7 +200,7 @@ export default {
       })
     }
   },
-  created () {
+  activated () {
     this.init()
   }
 }
