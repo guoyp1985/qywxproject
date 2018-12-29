@@ -124,14 +124,16 @@ export default {
     },
     bindEvent () {
       if (!this.submitIng) {
-        if (this.submitData.position === '' || this.submitData.bankcardno === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
+        let postData = this.submitData
+        if (postData.position === '' || postData.bankcardno === '' || postData.bankcode === '' || postData.bankuser === '') {
           this.$vux.toast.show({
             text: '请完善信息',
             type: 'text'
           })
           return false
         }
-        if (!Reg.rBankId.test(this.submitData.bankcardno)) {
+        postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
+        if (!Reg.rBankId.test(postData.bankcardno)) {
           this.$vux.toast.show({
             text: '请输入正确的银行卡号',
             width: '200px',
@@ -140,11 +142,11 @@ export default {
           return false
         }
         this.$vux.confirm.show({
-          content: '请确保信息填写无误，提交后将无法修改',
-          confirmText: '继续',
+          content: '请确保信息填写无误',
+          confirmText: '确定',
           onConfirm: () => {
             this.submitIng = true
-            this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, this.submitData).then(res => {
+            this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, postData).then(res => {
               this.submitIng = false
               const data = res.data
               const timeout = this.$util.delay(data.error)
@@ -154,8 +156,8 @@ export default {
                 time: timeout
               })
               if (data.flag) {
-                for (let key in this.submitData) {
-                  this.loginUser[key] = this.submitData[key]
+                for (let key in postData) {
+                  this.loginUser[key] = postData[key]
                 }
                 User.set(this.loginUser)
                 setTimeout(() => {

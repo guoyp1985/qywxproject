@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="btom-content">
-      <div class="list flex_table mt20">
+      <div class="list flex_table mt20" @click="toIncome">
         <div class="align_left">待结算金额</div>
         <div class="moneyNum">{{retailerInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
       </div>
@@ -138,6 +138,13 @@ export default {
     toBank () {
       this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
     },
+    toIncome () {
+      let params = {}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      this.$router.push({path: '/income', query: params})
+    },
     toDetail () {
       let params = {flag: 2}
       if (this.query.appid) {
@@ -204,13 +211,20 @@ export default {
         if (this.query.appid) {
           postData.appid = this.query.appid
         }
+        this.$vux.showLoading()
         this.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(res => {
+          this.$vux.hideLoading()
           const data = res.data
           this.$vux.toast.show({
             text: data.error,
             type: data.flag ? 'success' : 'warn',
             time: this.$util.delay(data.error)
           })
+          if (data.flag) {
+            this.retailerInfo.waitcash = data.waitcash
+            this.loginUser.retailerinfo = this.retailerInfo
+            User.set(this.loginUser)
+          }
           this.wechatShow = false
           this.bankShow = false
         })
