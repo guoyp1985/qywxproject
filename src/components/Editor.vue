@@ -421,8 +421,8 @@ export default {
           console.log('change text')
           self.$emit('on-auto-save')
         },
-        insertHr: function() {
-          console.log('change hr')
+        deleteThis: function() {
+          self.$emit('on-auto-save')
         },
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
