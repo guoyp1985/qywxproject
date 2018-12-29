@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea font14 friendRecommend">
-    <div style="width:100%;height:145px;">
+    <div style="width:100%;height:125px;">
       <div class="flex_left bg-white font16 align_right b_bottom_after pl20 headtit">我的店铺</div>
       <div class="rhead t-table flex_left" @click="toStore">
         <div class="inner">
@@ -32,7 +32,7 @@
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="flex_left flex_cell">
-            <div class="clamp1">
+            <div class="clamp1 w_100">
               <div class="font14 clamp1 wtitle">{{item.title}}</div>
               <div class="clamp1 font12 color-gray v_middle">
                   <span class="v_middle color-999">{{ item.dateline_str }}</span>
@@ -63,7 +63,7 @@
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
-          <div class="txt-cell flex_cell">
+          <div class="txt-cell flex_cell w_100">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
             <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
@@ -89,7 +89,7 @@
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
-          <div class="txt-cell flex_cell">
+          <div class="txt-cell flex_cell w_100">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
             <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
@@ -192,20 +192,19 @@
     background-color:#EFEEF3;
     .headtit{width:100%;height:45px;line-height:45px;position:fixed;top:0px;z-index:999;}
     .rhead{
-      padding:20px 15px;box-sizing:border-box;background:#fff;position:fixed;top:45px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
+      padding:10px 15px;box-sizing:border-box;background:#fff;position:fixed;top:45px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
       .inner{
         width:80px;height:60px;
         img{width:60px;height:60px;object-fit:cover;}
       }
     }
-    .t-right{margin-left:auto;width:50px;}
+    .t-right{margin-left:auto;}
     .btnicon{
-      border-radius:4px;background-color:#4cd964;color:#fff;font-size:12px;border-radius:20px;
-      display:inline-block;padding:2px 7px;box-sizing:border-box;
+      background-color:#4cd964;color:#fff;font-size:12px;border-radius:20px;
+      display:inline-block;width:50px;text-align: center;
     }
     .artical-item{
       border-bottom:1px solid #e5e5e5;
-      .wtitle{width:200px;}
     }
     .artical-item .inner{
       width:50px;height:40px;
