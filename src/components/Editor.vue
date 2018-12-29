@@ -490,6 +490,7 @@ export default {
           self.showBtnSave = false
         },
         cancelControler: function () {
+          console.log('cancel')
           self.showBtnSave = true
           self.$emit('on-auto-save')
         }
