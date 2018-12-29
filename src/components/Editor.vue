@@ -491,7 +491,7 @@ export default {
         },
         cancelControler: function () {
           self.showBtnSave = true
-          self.$emit('on-auto-save')
+          // self.$emit('on-auto-save')
         }
       })
     },
