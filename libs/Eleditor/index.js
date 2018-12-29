@@ -860,6 +860,7 @@ var Eleditor = function(){
 					_$selected.remove();
 				}
 			}
+			_args.changeTxt && _args.changeTxt(_content)
 			_flushEditorControllerLayerPosi();
 		}
 
