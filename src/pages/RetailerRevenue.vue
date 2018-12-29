@@ -220,9 +220,9 @@ export default {
         if (this.query.appid) {
           postData.appid = this.query.appid
         }
-        this.$vux.showLoading()
+        this.$vux.loading.show()
         this.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(res => {
-          this.$vux.hideLoading()
+          this.$vux.loading.hide()
           const data = res.data
           this.$vux.toast.show({
             text: data.error,
