@@ -228,7 +228,7 @@
     }
     .artical-item .inner{
       width:50px;height:40px;
-      img{width:40px;height:40px;}
+      img{width:40px;height:40px;object-fit:cover;}
     }
     .s-container{bottom:0px;}
   }

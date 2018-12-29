@@ -195,7 +195,7 @@
       padding:20px 15px;box-sizing:border-box;background:#fff;position:fixed;top:45px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
       .inner{
         width:80px;height:60px;
-        img{width:60px;height:60px;}
+        img{width:60px;height:60px;object-fit:cover;}
       }
     }
     .t-right{margin-left:auto;width:50px;}
@@ -209,7 +209,7 @@
     }
     .artical-item .inner{
       width:50px;height:40px;
-      img{width:40px;height:40px;}
+      img{width:40px;height:40px;object-fit:cover;}
     }
   }
 </style>
