@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 income">
+  <div class="containerarea font14 income" ref="revenueContainer">
     <div class="inhead">
       <div class="in-item flex_center pr20 pl20 pt20">
         <div class="item mr20 flex_center" @click="toBank">我的银行卡</div>
@@ -41,7 +41,7 @@
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
-              <input v-model="cashMoney" class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
+              <input v-model="cashMoney" class="font20 pb10 pl10 w_100" @on-blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
             <div class="btnSubmit" @click="getWechatCash">确认提现</div>
@@ -68,7 +68,7 @@
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
-              <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
+              <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" @on-blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
             <div class="btnSubmit" @click="getBankCash">确认提现</div>
@@ -135,6 +135,13 @@ export default {
     }
   },
   methods: {
+    onBlur () {
+      let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
+      setTimeout(() => {
+        document.body.scrollTop = document.body.scrollHeight
+        revenueContainer.scrollTop = revenueContainer.scrollHeight
+      }, 100)
+    },
     toBank () {
       this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
     },
