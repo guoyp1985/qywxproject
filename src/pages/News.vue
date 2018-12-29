@@ -100,7 +100,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-auto-save="editSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-auto-save="autoSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">
@@ -489,7 +489,7 @@ export default {
     },
     onShare () {
     },
-    editSave () {
+    save (callback) {
       let editorContent = document.querySelector('#editor-content')
       self.$vux.loading.show()
       self.$http.post(`${ENV.BokaApi}/api/editContent/news`, {
@@ -506,24 +506,32 @@ export default {
           onHide: function () {
             if (data.flag === 1) {
               self.handleImg()
-              if (self.query.minibackurl) {
-                let minibackurl = decodeURIComponent(self.query.minibackurl)
-                if (minibackurl.indexOf('?') > -1) {
-                  minibackurl = `${minibackurl}&id=${self.query.id}`
-                } else {
-                  minibackurl = `${minibackurl}?id=${self.query.id}`
-                }
-                if (self.query.backtype === 'relaunch') {
-                  self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                } else if (self.query.backtype === 'redirect') {
-                  self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                } else {
-                  self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                }
-              }
+              callback && callback()
             }
           }
         })
+      })
+    },
+    autoSave () {
+      this.save()
+    },
+    editSave () {
+      this.save(function() {
+        if (self.query.minibackurl) {
+          let minibackurl = decodeURIComponent(self.query.minibackurl)
+          if (minibackurl.indexOf('?') > -1) {
+            minibackurl = `${minibackurl}&id=${self.query.id}`
+          } else {
+            minibackurl = `${minibackurl}?id=${self.query.id}`
+          }
+          if (self.query.backtype === 'relaunch') {
+            self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+          } else if (self.query.backtype === 'redirect') {
+            self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+          } else {
+            self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+          }
+        }
       })
     },
     editSetting () {
