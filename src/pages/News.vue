@@ -100,7 +100,7 @@
         :module="module"
         :on-close="closeShareSuccess">
       </share-success>
-      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
+      <editor v-if="reward.uid == article.uploader && showEditor && !(article.fid > 0)" elem="#editor-content" :query="query" @on-auto-save="editSave" @on-save="editSave" @on-setting="editSetting" @on-delete="editDelete"></editor>
       <comment-popup :show="commentPopupShow" :title="article.title" @on-submit="commentSubmit" @on-cancel="commentPopupCancel"></comment-popup>
       <comment-popup :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit"  @on-cancel="replyPopupCancel"></comment-popup>
       <div v-transfer-dom class="x-popup">

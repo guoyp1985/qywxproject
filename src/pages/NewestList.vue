@@ -23,7 +23,11 @@
             <div class="flex_left flex_cell">
               <div class="">
                 <div class="font14 clamp1 wtitle">{{item.title}}</div>
-                <div class="font12 color-gray">{{item.dateline_str}}</div>
+                <div class="clamp1 font12 color-gray v_middle">
+                    <span class="v_middle color-999">{{ item.dateline_str }}</span>
+                    <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                    <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                </div>
               </div>
               <div class="t-right">
                 <span class="btnicon">去分享</span>
@@ -186,7 +190,7 @@
         this.articalData = []
         this.activityData = []
         this.productData = []
-        self.pageStart = 0
+        this.pageStart = 0
         if (this.module === 'news') {
           this.getData1()
         } else if (this.module === 'activity') {
@@ -216,7 +220,10 @@
     .artical-item{
       border-bottom:1px solid #e5e5e5;box-sizing:border-box;
       .t-right{margin-left:auto;}
-      .btnicon{border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 5px;font-size:12px;display:inline-block;}
+      .btnicon{
+        border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 7px;font-size:12px;display:inline-block;
+        box-sizing:border-box;border-radius:20px;
+      }
       .inner_item{width:100%;box-sizing:border-box;}
     }
     .artical-item .inner{

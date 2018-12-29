@@ -417,6 +417,18 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         toolbars: toolbars,
+        changeTxt: function() {
+          self.$emit('on-auto-save')
+        },
+        insertLink: function() {
+          self.$emit('on-auto-save')
+        },
+        insertHr: function() {
+          self.$emit('on-auto-save')
+        },
+        "delete": function() {
+          self.$emit('on-auto-save')
+        },
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')
@@ -432,6 +444,7 @@ export default {
                   self.$vux.loading.hide()
                   if (data.flag === 1 && data.data) {
                     callback && callback(data.data)
+                    self.$emit('on-auto-save')
                   } else if (data.error) {
                     self.$vux.toast.show({
                       text: data.error,
@@ -447,6 +460,7 @@ export default {
                 maxnum: 1,
                 handleCallback: function (data) {
                   if (data.flag === 1 && data.data) {
+                    self.$emit('on-auto-save')
                     callback && callback(data.data)
                   } else if (data.error) {
                     self.$vux.toast.show({
@@ -466,6 +480,7 @@ export default {
           if (self.productdata.length === 0) {
             self.getProductData()
           }
+          self.$emit('on-auto-save')
           self.showBtnSave = true
         },
         clickInsertProduct: function (area, d) {
@@ -481,6 +496,7 @@ export default {
         },
         cancelControler: function () {
           self.showBtnSave = true
+          self.$emit('on-auto-save')
         }
       })
     },
