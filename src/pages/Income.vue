@@ -515,13 +515,10 @@ export default {
       }
       this.eventIng = false
       if (this.query.flag === '1' || this.query.flag === 1) {
-        console.log(1)
         this.selectedIndex = 1
       } else if (this.query.flag === '2' || this.query.flag === 2) {
-        console.log(2)
         this.selectedIndex = 2
       } else {
-        console.log(3)
         this.selectedIndex = 0
         this.swiperChange()
       }
