@@ -380,7 +380,7 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart3, limit: limit, cashed: 1 } }
+      const params = { params: { from: 'retailerrevenue', pagestart: pageStart3, limit: limit, cashed: 0 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
