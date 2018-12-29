@@ -210,8 +210,9 @@
                   <div class="db-flex">
                     <div class="flex_cell flex_left">
                       <div class="w_100">
-                        <div><span>{{item.cashtypetext}}</span><span v-if="item.statustext == 1" class="color-green">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
-                        <div class="color-theme" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
+                        <div><span>{{item.cashtypetext}}</span><span v-if="item.status == 1" class="color-green2">【{{item.statustext}}】</span><span v-else class="color-theme">【{{item.statustext}}】</span></div>
+                        <div class="mt5 color-gray" v-if="item.cmms && item.cmms > 0">手续费: {{ $t('RMB') }}{{item.cmms}}</div>
+                        <div class="color-theme mt5" v-if="item.reason && item.reason != ''">{{item.reason}}</div>
                         <div class="mt5 font12 clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       </div>
                     </div>
