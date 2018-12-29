@@ -2,7 +2,7 @@
   <div class="containerarea font14 income">
     <div class="inhead">
       <div class="in-item flex_center pr20 pl20 pt20">
-        <router-link class="item mr20 flex_center" to="/bindingBank">我的银行卡</router-link>
+        <div class="item mr20 flex_center" @click="toBank">我的银行卡</div>
         <div class="item flex_center" @click="popupexplain">提现说明</div>
       </div>
     </div>
@@ -130,7 +130,8 @@ export default {
       bankShow: false,
       showpopup: false,
       cashMoney: '',
-      cashBankMoney: ''
+      cashBankMoney: '',
+      fromPage: ''
     }
   },
   methods: {
@@ -138,6 +139,16 @@ export default {
       this.wechatShow = true
     },
     clickbank () {
+      if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '') {
+        self.$vux.confirm.show({
+          content: `您还没有绑定银行卡`,
+          confirmText: '去绑定',
+          onConfirm: () => {
+            this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+          }
+        })
+        return false
+      }
       this.bankShow = true
     },
     popupexplain () {
@@ -149,6 +160,9 @@ export default {
     closeWechat () {
       this.wechatShow = false
       this.bankShow = false
+    },
+    toBank () {
+      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
@@ -205,6 +219,11 @@ export default {
   activated () {
     this.loginUser = User.get()
     this.query = this.$route.query
+    if (this.query.appid) {
+      this.fromPage = encodeURIComponent(`/retailerRevenue?appid=${this.query.appid}`)
+    } else {
+      this.fromPage = encodeURIComponent('/retailerRevenue')
+    }
     this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
       const data = res.data
       if (data.flag) {
