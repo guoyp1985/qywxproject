@@ -579,7 +579,6 @@ var Eleditor = function(){
 		insertLink: function(){
 			_showEditorWrapMask();
 			_$editorTextModule.attr({'role': 'insert', 'type': 'link'}).show();
-			_args.changeTxt && _args.changeTxt()
 		},
 		insertImage: function(){
 			/*
