@@ -79,109 +79,109 @@
   </div>
 </template>
 <script>
-  import { TransferDom, Popup } from 'vux'
-  import ENV from 'env'
-  import Reg from '#/reg'
-  import { User } from '#/storage'
-  export default {
-    directives: {
-      TransferDom
+import { TransferDom, Popup } from 'vux'
+import ENV from 'env'
+import Reg from '#/reg'
+import { User } from '#/storage'
+export default {
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup
+  },
+  data () {
+    return {
+      query: {},
+      loginUser: {},
+      submitData: {position: '', bankuser: '', bankcardno: '', bankcode: 0},
+      cardList: [],
+      showpopup: false,
+      bindName: '',
+      bindCardId: '',
+      bindCardName: '',
+      submitIng: false
+    }
+  },
+  methods: {
+    popupexplain () {
+      this.showpopup = !this.showpopup
     },
-    components: {
-      Popup
+    closepopup () {
+      this.showpopup = false
     },
-    data () {
-      return {
-        query: {},
-        loginUser: {},
-        submitData: {position: '', bankuser: '', bankcardno: '', bankcode: 0},
-        cardList: [],
-        showpopup: false,
-        bindName: '',
-        bindCardId: '',
-        bindCardName: '',
-        submitIng: false
+    changeEvent (e) {
+      const srcElement = e.srcElement
+      const selectedIndex = srcElement.selectedIndex
+      console.log('进入到了change事件')
+      console.log(e)
+      console.log(selectedIndex)
+      if (selectedIndex > 0) {
+        this.submitData.bankuser = this.cardList[selectedIndex - 1].name
+      } else {
+        this.submitData.bankuser = ''
       }
     },
-    methods: {
-      popupexplain () {
-        this.showpopup = !this.showpopup
-      },
-      closepopup () {
-        this.showpopup = false
-      },
-      changeEvent (e) {
-        const srcElement = e.srcElement
-        const selectedIndex = srcElement.selectedIndex
-        console.log('进入到了change事件')
-        console.log(e)
-        console.log(selectedIndex)
-        if (selectedIndex > 0) {
-          this.submitData.bankuser = this.cardList[selectedIndex - 1].name
-        } else {
-          this.submitData.bankuser = ''
-        }
-      },
-      bindEvent () {
-        if (!this.submitIng) {
-          if (this.submitData.position === '' || this.submitData.bankcardno === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
-            this.$vux.toast.show({
-              text: '请完善信息',
-              type: 'text'
-            })
-            return false
-          }
-          if (!Reg.rBankId.test(this.submitData.bankcardno)) {
-            this.$vux.toast.show({
-              text: '请输入正确的银行卡号',
-              type: 'text'
-            })
-            return false
-          }
-          this.$vux.confirm.show({
-            content: '请确保信息填写无误，提交后将无法修改',
-            confirmText: '继续',
-            onConfirm: () => {
-              this.submitIng = true
-              this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, this.submitData).then(res => {
-                this.submitIng = false
-                const data = res.data
-                const timeout = this.$util.delay(data.error)
-                this.$vux.toast.show({
-                  text: data.error,
-                  type: data.flag ? 'success' : 'warn',
-                  time: timeout
-                })
-                if (data.flag) {
-                  for (let key in this.submitData) {
-                    this.loginUser[key] = this.submitData[key]
-                  }
-                  User.set(this.loginUser)
-                  setTimeout(() => {
-                    if (this.query.fromPage) {
-                      this.$router.push({path: decodeURIComponent(this.query.fromPage)})
-                    }
-                  }, timeout)
-                }
-              })
-            }
+    bindEvent () {
+      if (!this.submitIng) {
+        if (this.submitData.position === '' || this.submitData.bankcardno === '' || this.submitData.bankcode === '' || this.submitData.bankuser === '') {
+          this.$vux.toast.show({
+            text: '请完善信息',
+            type: 'text'
           })
+          return false
         }
-      },
-      init () {
-        const self = this
-        this.loginUser = User.get()
-        this.query = this.$route.query
-        this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
-          const data = res.data
-          self.cardList = data.data ? data.data : data
+        if (!Reg.rBankId.test(this.submitData.bankcardno)) {
+          this.$vux.toast.show({
+            text: '请输入正确的银行卡号',
+            type: 'text'
+          })
+          return false
+        }
+        this.$vux.confirm.show({
+          content: '请确保信息填写无误，提交后将无法修改',
+          confirmText: '继续',
+          onConfirm: () => {
+            this.submitIng = true
+            this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, this.submitData).then(res => {
+              this.submitIng = false
+              const data = res.data
+              const timeout = this.$util.delay(data.error)
+              this.$vux.toast.show({
+                text: data.error,
+                type: data.flag ? 'success' : 'warn',
+                time: timeout
+              })
+              if (data.flag) {
+                for (let key in this.submitData) {
+                  this.loginUser[key] = this.submitData[key]
+                }
+                User.set(this.loginUser)
+                setTimeout(() => {
+                  if (this.query.fromPage) {
+                    this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+                  }
+                }, timeout)
+              }
+            })
+          }
         })
       }
     },
-    created () {
-      this.init()
+    init () {
+      const self = this
+      this.loginUser = User.get()
+      this.query = this.$route.query
+      this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
+        const data = res.data
+        self.cardList = data.data ? data.data : data
+      })
     }
+  },
+  created () {
+    this.init()
   }
+}
 </script>
 <style lang="less">
   .bindingbank{
