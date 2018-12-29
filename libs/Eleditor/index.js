@@ -611,7 +611,7 @@ var Eleditor = function(){
 
 			_hideEditorControllerLayer();
 			_args.cancelControler && _args.cancelControler();
-			_args.changeTxt && _args.changeTxt()
+			_args.changeTxt && _args.changeTxt();
 		},
 		editText: function(){
 			if( _inArray(_$selected[0].tagName, _notctname) ){
@@ -631,6 +631,7 @@ var Eleditor = function(){
 			_hideEditorControllerLayer();
 			_correctHtmlStructure(_$wrap, _placeHolder);
 			_args.cancelControler && _args.cancelControler();
+			_args.changeTxt && _args.changeTxt();
 		},
     deleteThis: function(){
             _appendHistory({ m: 'deleteNode', node: _$selected, pnode: _$selected.prev() });
@@ -639,7 +640,7 @@ var Eleditor = function(){
             _hideEditorControllerLayer();
             _correctHtmlStructure(_$wrap, _placeHolder);
 						_args.cancelControler && _args.cancelControler();
-						_args.changeTxt && _args.changeTxt()
+						_args.changeTxt && _args.changeTxt();
     },
     deleteBefore: function(){
             var _$prev = _$selected.prev();
@@ -861,7 +862,7 @@ var Eleditor = function(){
 					_$selected.remove();
 				}
 			}
-			_args.changeTxt && _args.changeTxt(_content)
+			_args.changeTxt && _args.changeTxt(_content);
 			_flushEditorControllerLayerPosi();
 		}
 
