@@ -4,14 +4,14 @@
       <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
         <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
         <div class="align_right" style="width:100px;">
-          <router-link to="/bindingBank" class="qbtn font12 color-white" style="border:#fff 1px solid;">我的银行卡</router-link>
+          <div @click="toBank"  class="qbtn font12 color-white" style="border:#fff 1px solid;">我的银行卡</div>
         </div>
         <div class="align_right" style="width:100px;">
           <div class="qbtn font12 color-white" style="border:#fff 1px solid;" @click="popupexplain">{{$t('Get cash explain')}}</div>
         </div>
       </div>
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container" style="top:88px;">
@@ -319,10 +319,14 @@ export default {
       summoney: '0.00',
       showMoneyPopup: false,
       wechatCash: true,
-      bankCash: false
+      bankCash: false,
+      fromPage: ''
     }
   },
   methods: {
+    toBank () {
+      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+    },
     clickCash () {
       this.showMoneyPopup = true
     },
@@ -503,9 +507,19 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       this.loginUser = User.get()
-      console.log(this.loginUser)
+      if (this.query.appid) {
+        this.fromPage = encodeURIComponent(`/income?appid=${this.query.appid}`)
+      } else {
+        this.fromPage = encodeURIComponent('/income')
+      }
       this.eventIng = false
-      this.swiperChange()
+      if (this.query.flag === '1') {
+        this.selectedIndex = 1
+      } else if (this.query.flag === '2') {
+        this.selectedIndex = 2
+      } else {
+        this.swiperChange()
+      }
     }
   },
   created () {

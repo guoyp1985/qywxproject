@@ -20,10 +20,10 @@
         <div class="moneyNum">{{retailerInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
       </div>
       <div class="pl20 pt10 pb10 color-gray font12">等待订单确认收货后方可结算并提现</div>
-      <router-link class="list flex_table" to="/income">
+      <div class="list flex_table" @click="toDetail">
         <div class="align_left">提现明细</div>
         <div class="moneyNum"><span class="color-gray pl10">></span></div>
-      </router-link>
+      </div>
     </div>
     <!-- 提现至微信零钱 -->
     <div class="mceng" v-if="wechatShow">
@@ -135,6 +135,16 @@ export default {
     }
   },
   methods: {
+    toBank () {
+      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+    },
+    toDetail () {
+      let params = {flag: 2}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      this.$router.push({path: '/income', query: params})
+    },
     clickwechat () {
       this.wechatShow = true
     },
@@ -160,9 +170,6 @@ export default {
     closeWechat () {
       this.wechatShow = false
       this.bankShow = false
-    },
-    toBank () {
-      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
