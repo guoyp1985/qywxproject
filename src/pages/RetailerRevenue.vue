@@ -41,10 +41,10 @@
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
-              <input class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
+              <input v-model="cashMoney" class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
             </div>
-            <div class="color-gray mt5">可提现金额￥996.50</div>
-            <div class="btnSubmit">确认提现</div>
+            <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
+            <div class="btnSubmit" @click="getWechatCash">确认提现</div>
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
     <div class="mceng" v-if="bankShow">
       <div class="flex_center">
         <div class="wechatShow" v-if="bankShow">
-          <div class="align_center b_bottom_after pb10">提现至微信零钱</div>
+          <div class="align_center b_bottom_after pb10">提现至银行卡</div>
           <div class="pt10 pb10 pr10 pl10">
             <div class="flex_table">
               <div class="align_left color-gray2">到账时间</div>
@@ -68,10 +68,10 @@
             </div>
             <div class="flex_table mt10 b_bottom_after">
               <div class="align_left font24 pb10 bold">￥</div>
-              <input class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
+              <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" type="text" placeholder="输入提现金额"/>
             </div>
-            <div class="color-gray mt5">可提现金额￥996.50</div>
-            <div class="btnSubmit">确认提现</div>
+            <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
+            <div class="btnSubmit" @click="getBankCash">确认提现</div>
           </div>
         </div>
       </div>
@@ -124,10 +124,13 @@ export default {
   data () {
     return {
       loginUser: {},
+      query: {},
       retailerInfo: {waitcash: '0.00'},
       wechatShow: false,
       bankShow: false,
-      showpopup: false
+      showpopup: false,
+      cashMoney: '',
+      cashBankMoney: ''
     }
   },
   methods: {
@@ -146,14 +149,68 @@ export default {
     closeWechat () {
       this.wechatShow = false
       this.bankShow = false
+    },
+    cashEvent (inputMoney, type) {
+      if (!this.submitIng) {
+        if (!inputMoney || inputMoney === '' || isNaN(inputMoney)) {
+          this.$vux.toast.show({
+            text: '请输入正确的提现金额',
+            width: '200px',
+            type: 'text'
+          })
+          return false
+        }
+        let money = parseFloat(inputMoney)
+        let waitcash = parseFloat(this.retailerInfo.waitcash)
+        if (money > waitcash) {
+          this.$vux.toast.show({
+            text: '提现金额不能超过可提现金额',
+            width: '220px',
+            type: 'text'
+          })
+          return false
+        }
+        if (money < 1) {
+          this.$vux.toast.show({
+            text: '提现金额最低为1元',
+            width: '200px',
+            type: 'text'
+          })
+          return false
+        }
+        this.submitIng = true
+        let postData = {money: inputMoney, type: type}
+        if (this.query.appid) {
+          postData.appid = this.query.appid
+        }
+        this.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(res => {
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: data.flag ? 'success' : 'warn',
+            time: this.$util.delay(data.error)
+          })
+          this.wechatShow = false
+          this.bankShow = false
+        })
+      }
+    },
+    getWechatCash () {
+      this.cashEvent(this.cashMoney, 'lingqian')
+    },
+    getBankCash () {
+      this.cashEvent(this.cashBankMoney, 'yinhang')
     }
   },
   activated () {
     this.loginUser = User.get()
+    this.query = this.$route.query
     this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
       const data = res.data
       if (data.flag) {
         this.retailerInfo = data.data
+        this.loginUser.retailerinfo = this.retailerInfo
+        User.set(this.loginUser)
       }
     })
   }
