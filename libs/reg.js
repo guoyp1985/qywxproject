@@ -18,7 +18,7 @@ const Reg = {
   rTestSelfCloseTag: /^<(?:img|br|hr|input)[^>]*>$/i,
   rTestSelfCloseOKTag: /^(<[^\/][^>]+?)(\/>)$/i,
   rInsertSlash: /^(<[^\/][^>]+?)(>)$/i,
-  rBankId: /^([1-9]{1})(\d{14}|\d{18})$/
+  rBankId: /^([1-9]{1})(\d{14}|\d{15}|\d{16}|\d{17}|\d{18})$/
 }
 
 Reg.filterSpecAttr = (attr) => new RegExp(`^(<[^>]+\\s)(${attr}=["'])([^"']*)(["'])([^>]*>)$`, "i");
