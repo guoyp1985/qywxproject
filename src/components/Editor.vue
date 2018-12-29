@@ -480,7 +480,6 @@ export default {
           if (self.productdata.length === 0) {
             self.getProductData()
           }
-          self.$emit('on-auto-save')
           self.showBtnSave = true
         },
         clickInsertProduct: function (area, d) {
@@ -488,6 +487,7 @@ export default {
             if (!self.showBtnArea) {
               console.log('in editor.vue 459')
               // self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
+              self.$emit('on-auto-save')
             }
           })
         },
