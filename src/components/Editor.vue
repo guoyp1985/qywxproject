@@ -421,6 +421,9 @@ export default {
           console.log('change text')
           self.$emit('on-auto-save')
         },
+        insertHr: function() {
+          console.log('change hr')
+        },
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')
