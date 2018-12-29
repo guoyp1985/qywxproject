@@ -631,7 +631,6 @@ var Eleditor = function(){
 			_hideEditorControllerLayer();
 			_correctHtmlStructure(_$wrap, _placeHolder);
 			_args.cancelControler && _args.cancelControler();
-			_args.changeTxt && _args.changeTxt()
 		},
     deleteThis: function(){
             _appendHistory({ m: 'deleteNode', node: _$selected, pnode: _$selected.prev() });
@@ -640,6 +639,7 @@ var Eleditor = function(){
             _hideEditorControllerLayer();
             _correctHtmlStructure(_$wrap, _placeHolder);
 						_args.cancelControler && _args.cancelControler();
+						_args.changeTxt && _args.changeTxt()
     },
     deleteBefore: function(){
             var _$prev = _$selected.prev();
