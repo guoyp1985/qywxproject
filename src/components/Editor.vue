@@ -418,6 +418,7 @@ export default {
         el: this.elem,
         toolbars: toolbars,
         changeTxt: function() {
+          console.log('change text')
           self.$emit('on-auto-save')
         },
         insertImageCallback: function (callback) {
