@@ -26,7 +26,7 @@
       -->
       </div>
       <div id="scroll-container" class="pagemiddle scroll-container">
-        <!-- <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip> -->
+        <title-tip scroll-box="scroll-container" @access="access" :user="loginUser" :messages="messages" :avatar-href="loginUser.avatar" :user-name="loginUser.linkman" :user-credit="loginUser.credit"></title-tip>
         <template v-if="showFlash">
           <div :class="`fixed-top flex_center btnfavorite ${favoritecss} ${startcss}`" @click="favoriteevent"><i class="al font18" style="margin-top:-2px;margin-right:3px;"></i></div>
           <swiper
@@ -440,7 +440,7 @@ import Bargainbuyitemplate from '@/components/Bargainbuyitemplate'
 import ShareSuccess from '@/components/ShareSuccess'
 import CommentPopup from '@/components/CommentPopup'
 import Sos from '@/components/Sos'
-// import TitleTip from '@/components/TitleTip'
+import TitleTip from '@/components/TitleTip'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -454,7 +454,7 @@ export default {
     TransferDom
   },
   components: {
-    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg
+    Previewer, Swiper, SwiperItem, Popup, Marquee, MarqueeItem, Groupbuyitemplate, Bargainbuyitemplate, ShareSuccess, CommentPopup, Sos, XImg, TitleTip
   },
   filters: {
     dateformat: function (value) {

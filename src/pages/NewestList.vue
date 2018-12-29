@@ -26,7 +26,7 @@
                 <div class="font12 color-gray">{{item.dateline_str}}</div>
               </div>
               <div class="t-right">
-                <span class="btnicon">分享</span>
+                <span class="btnicon">去分享</span>
               </div>
             </div>
           </router-link>
@@ -46,7 +46,7 @@
                     <div class="font12 color-gray">{{item.dateline_str}}</div>
                   </div>
                   <div class="t-right">
-                    <span class="btnicon">分享</span>
+                    <span class="btnicon">去分享</span>
                   </div>
                 </div>
               </router-link>
@@ -62,7 +62,7 @@
                     <div class="font12 color-gray">{{item.dateline_str}}</div>
                   </div>
                   <div class="t-right">
-                    <span class="btnicon">分享</span>
+                    <span class="btnicon">去分享</span>
                   </div>
                 </div>
               </router-link>
@@ -82,7 +82,7 @@
                 <div class="font12 color-gray">{{item.dateline_str}}</div>
               </div>
               <div class="t-right">
-                <span class="btnicon">分享</span>
+                <span class="btnicon">去分享</span>
               </div>
             </div>
           </router-link>
