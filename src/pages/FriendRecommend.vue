@@ -1,12 +1,17 @@
 <template>
   <div class="containerarea font14 friendRecommend">
-    <div style="width:100%;height:110px;">
-      <div class="rhead flex_left t-table">
+    <div style="width:100%;height:150px;">
+      <div class="flex_left bg-white font18 align_right b_bottom_after pl20 headtit">我的店铺</div>
+      <div class="rhead t-table flex_left">
         <div class="inner">
           <img :src="retailerInfo.avatar" />
         </div>
-        <div class="txt-cell color-white flex_cell">
-          <div class="font16 clamp1">{{retailerInfo.title}}</div>
+        <div class="txt-cell flex_cell w_100">
+          <div class="font16 clamp1">{{retailerInfo.linkman}}</div>
+          <!-- <div class="font14 clamp1 color-gray mt5">全部宝贝：{{retailerInfo.views}}件</div> -->
+        </div>
+        <div class="t-right">
+          <span class="btnicon">去分享</span>
         </div>
       </div>
     </div>
@@ -16,7 +21,7 @@
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新文章</div>
           <router-link v-if="articalData.length" :to="{ path: '/NewestList', query: {module: 'news'} }" class="t-cell middle-cell align_right font14">
-            <div style="color:#40aadd;">更多>></div>
+            <div style="color:rgb(255, 68, 0);">更多>></div>
           </router-link>
         </div>
       </div>
@@ -48,7 +53,7 @@
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新活动</div>
           <router-link v-if="listActivity.length" :to="{ path: '/NewestList', query: {module: 'activity'} }" class="t-cell middle-cell align_right font14">
-            <div style="color:#40aadd;">更多>></div>
+            <div style="color:rgb(255, 68, 0);">更多>></div>
           </router-link>
         </div>
       </div>
@@ -74,7 +79,7 @@
         <div class="t-table">
           <div class="t-cell middle-cell align_left font16">最新商品</div>
           <router-link v-if="productData.length" :to="{ path: '/NewestList', query: {module: 'product'} }" class="t-cell middle-cell align_right font14">
-            <div style="color:#40aadd;">更多>></div>
+            <div style="color:rgb(255, 68, 0);">更多>></div>
           </router-link>
         </div>
       </div>
@@ -166,6 +171,8 @@
       refresh () {
         this.loginUser = User.get()
         this.retailerInfo = this.loginUser.retailerinfo
+        console.log('用户信息')
+        console.log(this.retailerInfo)
         this.getData1()
         this.getData2()
         this.getData3()
@@ -179,19 +186,22 @@
 <style lang="less">
   .friendRecommend{
     background-color:#EFEEF3;
+    .headtit{width:100%;height:50px;line-height:50px;position:fixed;top:0px;z-index:999;}
     .rhead{
-      padding:20px 10px;box-sizing:border-box;background: linear-gradient(#ff6a61, #f63f3d);position:fixed;top:0;z-index:999;
+      padding:20px 15px;box-sizing:border-box;background:#fff;position:fixed;top:50px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
       .inner{
-        width:80px;height:70px;
-        img{width:70px;height:70px;border-radius:50%;}
+        width:80px;height:60px;
+        img{width:60px;height:60px;}
       }
     }
-    .share-list{}
+    .t-right{margin-left:auto;width:50px;}
+    .btnicon{
+      border-radius:4px;background-color:#4cd964;color:#fff;font-size:12px;border-radius:20px;
+      display:inline-block;padding:2px 7px;box-sizing:border-box;
+    }
     .artical-item{
       border-bottom:1px solid #e5e5e5;
       .wtitle{width:200px;}
-      .t-right{margin-left:auto;width:50px;}
-      .btnicon{border-radius:4px;background-color:#4cd964;color:#fff;font-size:12px;display:inline-block;padding:2px 5px;box-sizing:border-box;}
     }
     .artical-item .inner{
       width:50px;height:40px;
