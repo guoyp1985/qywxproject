@@ -21,7 +21,7 @@
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="flex_left flex_cell">
-              <div class="">
+              <div class="clamp1 w_100">
                 <div class="font14 clamp1 wtitle">{{item.title}}</div>
                 <div class="clamp1 font12 color-gray v_middle">
                     <span class="v_middle color-999">{{ item.dateline_str }}</span>
@@ -215,14 +215,13 @@
 </script>
 <style lang="less">
   .newestList{
-    .wtitle{width:200px;}
     .shead{width:100%;padding:10px 10px;box-sizing:border-box;background: linear-gradient(#ff6a61, #f63f3d);position:fixed;top:0;z-index:999;}
     .artical-item{
       border-bottom:1px solid #e5e5e5;box-sizing:border-box;
       .t-right{margin-left:auto;}
       .btnicon{
-        border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 7px;font-size:12px;display:inline-block;
-        box-sizing:border-box;border-radius:20px;
+        background-color:#4cd964;color:#fff;font-size:12px;border-radius:20px;
+        display:inline-block;width:50px;text-align: center;
       }
       .inner_item{width:100%;box-sizing:border-box;}
     }

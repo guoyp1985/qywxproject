@@ -88,8 +88,6 @@ export default {
 .train .pic-swiper .vux-swiper{
   position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
 }
-.train .vux-swiper-item {}
-.train .vux-swiper-item img{}
 .train .vux-swiper-desc{display:none !important;}
 
 .train .title{padding:10px 10px;box-sizing:border-box;}
