@@ -220,7 +220,10 @@
     .artical-item{
       border-bottom:1px solid #e5e5e5;box-sizing:border-box;
       .t-right{margin-left:auto;}
-      .btnicon{border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 5px;font-size:12px;display:inline-block;}
+      .btnicon{
+        border-radius:4px;background-color:#4cd964;color:#fff;padding:2px 7px;font-size:12px;display:inline-block;
+        box-sizing:border-box;border-radius:20px;
+      }
       .inner_item{width:100%;box-sizing:border-box;}
     }
     .artical-item .inner{
