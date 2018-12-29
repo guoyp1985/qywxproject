@@ -2,7 +2,7 @@
   <div class="containerarea font14 friendRecommend">
     <div style="width:100%;height:145px;">
       <div class="flex_left bg-white font16 align_right b_bottom_after pl20 headtit">我的店铺</div>
-      <div class="rhead t-table flex_left">
+      <div class="rhead t-table flex_left" @click="toStore">
         <div class="inner">
           <img :src="retailerInfo.avatar" />
         </div>
@@ -120,6 +120,10 @@
       }
     },
     methods: {
+      toStore () {
+        const params = {wid: this.retailerInfo.uid}
+        this.$router.push({path: '/store', query: params})
+      },
       toActivity (item) {
         const type = item.type
         console.log(type)
