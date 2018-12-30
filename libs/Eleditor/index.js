@@ -101,7 +101,7 @@ var _correctHtmlStructure = function(){
 
 var _buildEditorModule = function(_toolbars, _uid){
 
-	var _html = '<a href="#"><div class="Eleditor-wrap" style="z-index:'+_getLayerMaxZIndex()+'" id="'+_uid+'">\
+	var _html = '<div class="Eleditor-wrap" style="z-index:'+_getLayerMaxZIndex()+'" id="'+_uid+'">\
 					<div class="Eleditor-controller">\
 					<ul>';
 	for (var i = 0; i < _toolbars.length; i++) {
@@ -207,7 +207,7 @@ var _buildEditorModule = function(_toolbars, _uid){
 					<div class="Eleditor-delete-clear"></div>\
 					<div class="Eleditor-delete-back">返回继续编辑</div>\
 				</div>\
-			</div></a>';
+			</div>';
 			// <div class="Eleditor-method">\
 			// 	<button class="Eleditor-cancel color-white" style="background-color:#c5c5c5;">取消</button>\
 			// 	<button class="Eleditor-commit bg-green color-white">提交</button>\
