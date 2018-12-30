@@ -711,6 +711,10 @@ var Eleditor = function(){
 		_flushEditorControllerLayerPosi();
 	});
 
+	_$editorTextArea.on('blur', function(){
+		document.body.scrollTop = 0;
+	})
+
 	_$editorController.on('click', 'ul li', function() {
 		var _$this = $(this),
 			_event = _$this.attr('event');
