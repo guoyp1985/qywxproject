@@ -16,9 +16,7 @@
           </span>
         </template>
       </x-address>
-      <a href="#">
-        <x-input :title="$t('Detailed Address')" required :placeholder="`${$t('Necessary')}${$t('Detailed Address')}`" v-model="item.address"></x-input>
-      </a>
+      <x-input :title="$t('Detailed Address')" required :placeholder="`${$t('Necessary')}${$t('Detailed Address')}`" v-model="item.address"></x-input>
       <x-switch :title="$t('Default Address')" v-model="getSwitcher"></x-switch>
     </group>
     <box gap="20px 10px">
