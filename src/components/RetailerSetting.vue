@@ -74,7 +74,7 @@
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
                   <group class="textarea-outer" style="padding:0;">
-                    <a>
+                    <a href="#">
                       <x-textarea
                         ref="contentTextarea"
                         v-model="submitdata.content"
