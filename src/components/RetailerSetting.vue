@@ -74,18 +74,20 @@
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
                   <group class="textarea-outer" style="padding:0;">
-                    <x-textarea
-                      ref="contentTextarea"
-                      v-model="submitdata.content"
-                      style="padding:5px;"
-                      class="x-textarea noborder"
-                      :placeholder="$t('Shop description')"
-                      :show-counter="false"
-                      :rows="1"
-                      @on-change="textareaChange('contentTextarea')"
-                      @on-focus="textareaFocus('contentTextarea')"
-                      autosize>
-                    </x-textarea>
+                    <a>
+                      <x-textarea
+                        ref="contentTextarea"
+                        v-model="submitdata.content"
+                        style="padding:5px;"
+                        class="x-textarea noborder"
+                        :placeholder="$t('Shop description')"
+                        :show-counter="false"
+                        :rows="1"
+                        @on-change="textareaChange('contentTextarea')"
+                        @on-focus="textareaFocus('contentTextarea')"
+                        autosize>
+                      </x-textarea>
+                    </a>
                   </group>
                 </forminputplate>
                 <forminputplate v-if="query.from != 'miniprogram'">
