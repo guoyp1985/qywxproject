@@ -417,10 +417,10 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         toolbars: toolbars,
-        changeTxt: function() {
+        changeTxt: function () {
           self.$emit('on-auto-save')
         },
-        deleteThis: function() {
+        deleteThis: function () {
           self.$emit('on-auto-save')
         },
         insertImageCallback: function (callback) {
