@@ -516,7 +516,7 @@ export default {
       this.save()
     },
     editSave () {
-      this.save(function() {
+      this.save(function () {
         if (self.query.minibackurl) {
           let minibackurl = decodeURIComponent(self.query.minibackurl)
           if (minibackurl.indexOf('?') > -1) {
