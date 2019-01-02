@@ -63,7 +63,7 @@
   </scroll-view>
 </template>
 
-<script>
+<script type="text/javascript">
 import Env from 'env'
 import ScrollView from '@/components/ScrollView'
 import ListTags from '@/components/ListTags'
