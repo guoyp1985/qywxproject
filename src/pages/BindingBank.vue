@@ -19,7 +19,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">卡号</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="持卡人银行卡号" maxlength="21" size="21" />
+            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="持卡人银行卡号" maxlength="23" size="23" />
           </div>
         </div>
       </div>
