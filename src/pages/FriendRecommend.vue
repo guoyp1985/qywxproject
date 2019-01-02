@@ -63,7 +63,7 @@
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
-          <div class="txt-cell flex_cell w_100 pr10">
+          <div class="txt-cell flex_cell clamp1 w_100 pr10">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
             <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
@@ -89,7 +89,7 @@
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
-          <div class="txt-cell flex_cell w_100 pr10">
+          <div class="txt-cell flex_cell clamp1 w_100 pr10">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
             <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
