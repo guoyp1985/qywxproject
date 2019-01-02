@@ -190,9 +190,9 @@
 <style lang="less">
   .friendRecommend{
     background-color:#EFEEF3;
-    .headtit{width:100%;height:45px;line-height:45px;position:fixed;top:0px;z-index:999;}
+    .headtit{width:100%;height:45px;line-height:45px;}
     .rhead{
-      padding:10px 15px;box-sizing:border-box;background:#fff;position:fixed;top:45px;z-index:999;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
+      padding:10px 15px;box-sizing:border-box;background:#fff;box-shadow:0 2px 4px 0 rgba(0, 0, 0, 0.07);
       .inner{
         width:80px;height:60px;
         img{width:60px;height:60px;object-fit:cover;}
