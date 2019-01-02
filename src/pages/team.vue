@@ -1,11 +1,11 @@
 <template>
-  <scroll-view ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
+  <div>
+  </div>
+  <!-- <scroll-view ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
     <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
 
-      <!-- 背景图 -->
       <div class="team-bg"><img src="../assets/images/team.png" ref="teamBg"></div>
 
-      <!-- 团队信息 -->
       <div class="team-info" ref="teamInfo">
         <div class="team-info-inner">
           <div class="inner-item inner-item-left">
@@ -25,10 +25,8 @@
         </div>
       </div>
 
-      <!-- 团队内容 -->
       <div class="team-content">
 
-        <!-- 导航 -->
         <div class="team-content-nav" v-if="!fixedTop">
           <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
               <span>{{nav}}</span>
@@ -37,11 +35,9 @@
 
         <div class="content-list">
 
-          <!-- 素材 -->
           <list-tags :id="id" v-if="currentTab === 0"></list-tags>
 
-          <!-- 商品、活动、文章、培训 -->
-            <list-others :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else ref="list"></list-others>
+          <list-others :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else ref="list"></list-others>
 
         </div>
 
@@ -60,7 +56,7 @@
         <button>导入全部{{moduleTransfer}}</button>
       </div>
     </div>
-  </scroll-view>
+  </scroll-view> -->
 </template>
 
 <script type="text/javascript">
