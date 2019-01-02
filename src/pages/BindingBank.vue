@@ -146,7 +146,9 @@ export default {
             return false
           }
           postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
-          if (!Reg.rBankId.test(postData.bankcardno)) {
+          if (postData.bankcardno === this.loginUser.bankcardno) {
+            delete postData.bankcardno
+          } else if (!Reg.rBankId.test(postData.bankcardno)) {
             this.$vux.toast.show({
               text: '请输入正确的银行卡号',
               width: '200px',
