@@ -19,7 +19,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">卡号</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="持卡人银行卡号" maxlength="21" size="21" />
+            <input v-model="submitData.bankcardno" type="text" class="input priceInput" name="card" placeholder="持卡人银行卡号" maxlength="23" size="23" />
           </div>
         </div>
       </div>
@@ -116,15 +116,16 @@ export default {
       console.log('进入到了change事件')
       console.log(e)
       console.log(selectedIndex)
-      if (selectedIndex > 0) {
-        this.submitData.bankuser = this.cardList[selectedIndex - 1].name
-      } else {
-        this.submitData.bankuser = ''
-      }
+      // if (selectedIndex > 0) {
+      //   this.submitData.bankuser = this.cardList[selectedIndex - 1].name
+      // } else {
+      //   this.submitData.bankuser = ''
+      // }
     },
     bindEvent () {
       if (!this.submitIng) {
         let postData = this.submitData
+        postData.bankuser = postData.position
         if (postData.position === this.loginUser.position && postData.bankuser === this.loginUser.bankuser && postData.bankcardno === this.loginUser.bankcardno && postData.bankcode === this.loginUser.bankcode) {
           this.$vux.toast.show({
             text: '绑定成功',
@@ -145,7 +146,9 @@ export default {
             return false
           }
           postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
-          if (!Reg.rBankId.test(postData.bankcardno)) {
+          if (postData.bankcardno === this.loginUser.bankcardno) {
+            delete postData.bankcardno
+          } else if (!Reg.rBankId.test(postData.bankcardno)) {
             this.$vux.toast.show({
               text: '请输入正确的银行卡号',
               width: '200px',

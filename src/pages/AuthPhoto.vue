@@ -1,7 +1,7 @@
 <template>
-  <div class="containerarea font14 columnarea authentication">
+  <div class="containerarea font14 authentication">
     <div class="header">根据电子商务法律规定，请先进行实名认证</div>
-    <div class="column-content" style="overflow-y:auto;">
+    <div>
       <form enctype="multipart/form-data">
         <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange1" />
       </form>
@@ -72,7 +72,7 @@
     -->
       <div class="message mt5"><span>* </span>拍摄二代身份证原件，确保图片清晰，四角完整。</div>
     </div>
-    <div class="btn flex_center">
+    <div class="btn flex_center mt20">
       <div class="btnbom btn-bottom-red" @click="submitEvent">立即认证</div>
     </div>
   </div>
