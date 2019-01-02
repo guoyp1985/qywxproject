@@ -63,7 +63,7 @@
   </scroll-view>
 </template>
 
-<script type="text/javascript">
+<script>
 import Env from 'env'
 import ScrollView from '@/components/ScrollView'
 import ListTags from '@/components/ListTags'
@@ -191,7 +191,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped="">
+<style lang="less">
   .team{
     display: flex;
     flex-direction: column;
