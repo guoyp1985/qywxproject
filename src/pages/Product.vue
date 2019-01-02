@@ -1185,7 +1185,8 @@ export default {
     min-width: 18px;
     text-align: center;
 }
-.product .pic-swiper{padding-bottom:100%;box-sizing: border-box;}
+.product .pic-swiper{box-sizing: border-box;width:100%;max-height:375px;}
+.product .pic-swiper:after{content:"";padding-top:100%;display:block;}
 .product .pic-swiper .vux-swiper{
   position:absolute !important;left:0;top:0;right:0;bottom:0;height:100% !important;
 }
