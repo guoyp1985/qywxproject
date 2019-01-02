@@ -56,7 +56,6 @@
 
 <script>
 import { Swiper, SwiperItem, TransferDom } from 'vux'
-
 export default {
   directives: {
     TransferDom

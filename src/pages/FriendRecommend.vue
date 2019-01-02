@@ -32,7 +32,7 @@
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
           <div class="flex_left flex_cell">
-            <div class="clamp1 w_100">
+            <div class="clamp1 w_100 pr10">
               <div class="font14 clamp1 wtitle">{{item.title}}</div>
               <div class="clamp1 font12 color-gray v_middle">
                   <span class="v_middle color-999">{{ item.dateline_str }}</span>
@@ -63,7 +63,7 @@
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
-          <div class="txt-cell flex_cell w_100">
+          <div class="txt-cell flex_cell w_100 pr10">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
             <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
@@ -89,7 +89,7 @@
           <div class="inner">
             <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
           </div>
-          <div class="txt-cell flex_cell w_100">
+          <div class="txt-cell flex_cell w_100 pr10">
             <div class="font14 clamp1 wtitle">{{item.title}}</div>
             <div class="font12 color-gray">{{item.dateline_str}}</div>
           </div>
@@ -201,7 +201,7 @@
     .t-right{margin-left:auto;}
     .btnicon{
       background-color:#4cd964;color:#fff;font-size:12px;border-radius:20px;
-      display:inline-block;width:50px;text-align:center;
+      display:inline-block;width:50px;text-align: center;
     }
     .artical-item{
       border-bottom:1px solid #e5e5e5;

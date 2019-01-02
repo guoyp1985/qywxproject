@@ -21,7 +21,7 @@
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
             <div class="flex_left flex_cell">
-              <div class="clamp1 w_100">
+              <div class="clamp1 w_100 pr10">
                 <div class="font14 clamp1 wtitle">{{item.title}}</div>
                 <div class="clamp1 font12 color-gray v_middle">
                     <span class="v_middle color-999">{{ item.dateline_str }}</span>
@@ -44,14 +44,12 @@
                 <div class="inner">
                   <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
-                <div class="flex_left flex_cell">
-                  <div class="">
-                    <div class="font14 clamp1 wtitle">{{item.title}}</div>
-                    <div class="font12 color-gray">{{item.dateline_str}}</div>
-                  </div>
-                  <div class="t-right">
-                    <span class="btnicon">去分享</span>
-                  </div>
+                <div class="txt-cell flex_cell w_100 clamp1 pr10">
+                  <div class="font14 clamp1 wtitle">{{item.title}}</div>
+                  <div class="font12 color-gray">{{item.dateline_str}}</div>
+                </div>
+                <div class="t-right">
+                  <span class="btnicon">去分享</span>
                 </div>
               </router-link>
             </template>
@@ -60,14 +58,12 @@
                 <div class="inner">
                   <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
-                <div class="flex_left flex_cell">
-                  <div class="">
-                    <div class="font14 clamp1 wtitle">{{item.title}}</div>
-                    <div class="font12 color-gray">{{item.dateline_str}}</div>
-                  </div>
-                  <div class="t-right">
-                    <span class="btnicon">去分享</span>
-                  </div>
+                <div class="txt-cell flex_cell w_100 clamp1 pr10">
+                  <div class="font14 clamp1 wtitle">{{item.title}}</div>
+                  <div class="font12 color-gray">{{item.dateline_str}}</div>
+                </div>
+                <div class="t-right">
+                  <span class="btnicon">去分享</span>
                 </div>
               </router-link>
             </template>
@@ -80,14 +76,12 @@
             <div class="inner">
               <img :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
             </div>
-            <div class="flex_left flex_cell">
-              <div class="">
-                <div class="font14 clamp1 wtitle">{{item.title}}</div>
-                <div class="font12 color-gray">{{item.dateline_str}}</div>
-              </div>
-              <div class="t-right">
-                <span class="btnicon">去分享</span>
-              </div>
+            <div class="txt-cell flex_cell w_100 clamp1 pr10">
+              <div class="font14 clamp1 wtitle">{{item.title}}</div>
+              <div class="font12 color-gray">{{item.dateline_str}}</div>
+            </div>
+            <div class="t-right">
+              <span class="btnicon">去分享</span>
             </div>
           </router-link>
         </div>
