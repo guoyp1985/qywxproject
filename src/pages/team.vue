@@ -65,126 +65,126 @@ import ScrollView from '@/components/ScrollView'
 import ListTags from '@/components/ListTags'
 import ListOthers from '@/components/ListOthers'
 import { User } from '#/storage'
-export default {
-  created () {
-    this.userInfo = User.get()
-    this.id = this.$route.query.id
-    this.getTeamInfo(this.id).then(res => {
-      console.log(res)
-      this.teamInfo = res.data.data
-    })
-  },
-  data () {
-    return {
-      navs: ['素材', '商品', '活动', '文章', '培训'],
-      teamInfo: {},
-      currentTab: 0,
-      id: null,
-      userInfo: {},
-      module: '',
-      fixedTop: false
-    }
-  },
-  computed: {
-    moduleTransfer () {
-      let ret = ''
-      switch (this.module) {
-        case 'product':
-          ret = '商品'
-          break
-        case 'activity':
-          ret = '活动'
-          break
-        case 'news':
-          ret = '文章'
-          break
-        case 'courseclass':
-          ret = '培训'
-          break
-        default:
-          ret = '素材'
-      }
-      return ret
-    }
-  },
-  components: {
-    ScrollView,
-    ListTags,
-    ListOthers
-  },
-  methods: {
-    getTeamInfo (id) {
-      return this.$http({
-        url: `${Env.BokaApi}/api/team/info`,
-        method: 'post',
-        data: {
-          id: id
-        }
-      })
-    },
-    changeTab (index) {
-      this.currentTab = index
-      this.$refs.wraper.refresh()
-      if (index) {
-        switch (index) {
-          case 1:
-            this.module = 'product'
-            break
-          case 2:
-            this.module = 'activity'
-            break
-          case 3:
-            this.module = 'news'
-            break
-          case 4:
-            this.module = 'courseclass'
-            break
-        }
-      }
-    },
-    scrollEnd (y) {
-      const wraperHeight = this.$refs.wraper.$el.offsetHeight
-      const contentHeight = this.$refs.content.offsetHeight
-      let height = contentHeight - wraperHeight
-      console.log(wraperHeight)
-      console.log(contentHeight)
-      console.log(height)
-      console.log(-y)
-      if (Math.abs(y) >= height) {
-        console.log('滑动到底部了！')
-        this.$refs.list.getData()
-      }
-    },
-    scroll (y) {
-      // console.log('scroll被触发了！')
-      const wraperHeight = this.$refs.wraper.$el.offsetHeight
-      const teamBgHeight = this.$refs.teamBg.offsetHeight
-      const teamInfoHeight = this.$refs.teamInfo.offsetHeight
-      const height = wraperHeight - (teamBgHeight + teamInfoHeight)
-      // console.log('wraperHeight是：' + wraperHeight)
-      // console.log('teamBgHeight是：' + teamBgHeight)
-      // console.log('teamInfoHeight是：' + teamInfoHeight)
-      // console.log('height是：' + height)
-      // console.log('y是：' + y)
-      if (Math.abs(y) >= height) {
-        this.fixedTop = true
-      } else {
-        this.fixedTop = false
-      }
-      console.log(this.fixedTop)
-    },
-    onAddOthers () {
-      if (this.currentTab) {
-        this.$router.push({
-          path: '/addOthers',
-          query: {
-            module: this.module
-          }
-        })
-      }
-    }
-  }
-};
+// export default {
+//   created () {
+//     this.userInfo = User.get()
+//     this.id = this.$route.query.id
+//     this.getTeamInfo(this.id).then(res => {
+//       console.log(res)
+//       this.teamInfo = res.data.data
+//     })
+//   },
+//   data () {
+//     return {
+//       navs: ['素材', '商品', '活动', '文章', '培训'],
+//       teamInfo: {},
+//       currentTab: 0,
+//       id: null,
+//       userInfo: {},
+//       module: '',
+//       fixedTop: false
+//     }
+//   },
+//   computed: {
+//     moduleTransfer () {
+//       let ret = ''
+//       switch (this.module) {
+//         case 'product':
+//           ret = '商品'
+//           break
+//         case 'activity':
+//           ret = '活动'
+//           break
+//         case 'news':
+//           ret = '文章'
+//           break
+//         case 'courseclass':
+//           ret = '培训'
+//           break
+//         default:
+//           ret = '素材'
+//       }
+//       return ret
+//     }
+//   },
+//   components: {
+//     ScrollView,
+//     ListTags,
+//     ListOthers
+//   },
+//   methods: {
+//     getTeamInfo (id) {
+//       return this.$http({
+//         url: `${Env.BokaApi}/api/team/info`,
+//         method: 'post',
+//         data: {
+//           id: id
+//         }
+//       })
+//     },
+//     changeTab (index) {
+//       this.currentTab = index
+//       this.$refs.wraper.refresh()
+//       if (index) {
+//         switch (index) {
+//           case 1:
+//             this.module = 'product'
+//             break
+//           case 2:
+//             this.module = 'activity'
+//             break
+//           case 3:
+//             this.module = 'news'
+//             break
+//           case 4:
+//             this.module = 'courseclass'
+//             break
+//         }
+//       }
+//     },
+//     scrollEnd (y) {
+//       const wraperHeight = this.$refs.wraper.$el.offsetHeight
+//       const contentHeight = this.$refs.content.offsetHeight
+//       let height = contentHeight - wraperHeight
+//       console.log(wraperHeight)
+//       console.log(contentHeight)
+//       console.log(height)
+//       console.log(-y)
+//       if (Math.abs(y) >= height) {
+//         console.log('滑动到底部了！')
+//         this.$refs.list.getData()
+//       }
+//     },
+//     scroll (y) {
+//       // console.log('scroll被触发了！')
+//       const wraperHeight = this.$refs.wraper.$el.offsetHeight
+//       const teamBgHeight = this.$refs.teamBg.offsetHeight
+//       const teamInfoHeight = this.$refs.teamInfo.offsetHeight
+//       const height = wraperHeight - (teamBgHeight + teamInfoHeight)
+//       // console.log('wraperHeight是：' + wraperHeight)
+//       // console.log('teamBgHeight是：' + teamBgHeight)
+//       // console.log('teamInfoHeight是：' + teamInfoHeight)
+//       // console.log('height是：' + height)
+//       // console.log('y是：' + y)
+//       if (Math.abs(y) >= height) {
+//         this.fixedTop = true
+//       } else {
+//         this.fixedTop = false
+//       }
+//       console.log(this.fixedTop)
+//     },
+//     onAddOthers () {
+//       if (this.currentTab) {
+//         this.$router.push({
+//           path: '/addOthers',
+//           query: {
+//             module: this.module
+//           }
+//         })
+//       }
+//     }
+//   }
+// };
 </script>
 
 <style lang="less">
