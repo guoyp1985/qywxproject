@@ -417,6 +417,12 @@ export default {
       editor = new Eleditor({
         el: this.elem,
         toolbars: toolbars,
+        changeTxt: function () {
+          self.$emit('on-auto-save')
+        },
+        deleteThis: function () {
+          self.$emit('on-auto-save')
+        },
         insertImageCallback: function (callback) {
           if (!window.WeixinJSBridge) {
             let fileForm = document.querySelector('.editorImageForm')
@@ -432,6 +438,7 @@ export default {
                   self.$vux.loading.hide()
                   if (data.flag === 1 && data.data) {
                     callback && callback(data.data)
+                    self.$emit('on-auto-save')
                   } else if (data.error) {
                     self.$vux.toast.show({
                       text: data.error,
@@ -447,6 +454,7 @@ export default {
                 maxnum: 1,
                 handleCallback: function (data) {
                   if (data.flag === 1 && data.data) {
+                    self.$emit('on-auto-save')
                     callback && callback(data.data)
                   } else if (data.error) {
                     self.$vux.toast.show({
@@ -475,6 +483,7 @@ export default {
               // self.$router.push({path: '/product', query: {id: d.id, wid: d.uploader}})
             }
           })
+          self.$emit('on-auto-save')
         },
         buildControler: function () {
           self.showBtnSave = false
@@ -709,9 +718,6 @@ export default {
 
 <style lang="less" scoped>
 .Eleditor-scrollLocked .editor{display:none;}
-/*
-.editor{position:absolute;left:0;bottom:0;right:0;}
-*/
 .editor .editor-icon{position:absolute;bottom:70px;right:10px;width:60px;height:60px;}
 .edit-btn-box {
   position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea font14 notop nobottom">
+  <div class="containerarea font14 notop nobottom stat-page">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
@@ -30,15 +30,39 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -48,16 +72,40 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">订单金额：{{$t('RMB')}}{{ item.special }}</div>
                       <div class="clamp1 color-gray">购买时间：{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -67,16 +115,40 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">传播级别: {{ item.level }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -86,16 +158,40 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1">{{ item.content }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -105,18 +201,42 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.username }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="color-gray">
                         <div class="clamp1 w_100">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
                       </div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -126,16 +246,40 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                       <div class="clamp1 color-gray">停留: {{ item.staytime | staytimeFormat }}  阅读: {{ item.number }}次</div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -145,16 +289,40 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="flex_left"><span class="clamp1 color-gray2 pr5" style="max-width:60%;">{{ item.linkman }}</span><span class="clamp1 color-orange">{{ item.isfull }}</span></div>
                       <div class="color-gray">团员: {{ item.otherusers }}</div>
                       <div class="clamp1 color-gray">开团时间: {{ item.dateline }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -164,15 +332,39 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -182,10 +374,10 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray">
                         <span class="db-in">已砍到: <span class="color-orange">{{ $t('RMB') }}{{ item.currentprice }}</span></span>
@@ -193,8 +385,32 @@
                       </div>
                       <div class="clamp1 color-gray">{{ item.dateline }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -204,15 +420,39 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}">
+                    <div class="pic" @click="toMembersView(item)">
                       <img class="avatarimg2 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
-                    </router-link>
-                    <router-link :to="{path: '/membersView', query: {uid: item.uid}}" class="flex_cell pl10 pr20">
+                    </div>
+                    <div class="flex_cell pl10 pr20" @click="toMembersView(item)">
                       <div class="clamp1 color-gray2">{{ item.linkman }}</div>
                       <div class="clamp1 color-gray" v-if="query.module != 'factoryproduct'">{{ item.dateline | dateformat }}</div>
                       <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
-                    </router-link>
-                    <div @click="toChat(item)" class="qbtn9-contact">联系</div>
+                    </div>
+                    <div class="w60 flex_right">
+                      <div class="qbtnInfo bg-red color-white" @click="toChat(item)">联系</div>
+                    </div>
+                  </div>
+                  <div v-if="item.checked" class="detail_card">
+                    <div class="detailInfo w_100 font14 color-gray b_bottom_after">
+                      <div class="txt-item" @click="expandEvent(item, index1)">性别: {{userData[item.uid].sexname}}</div>
+                      <div class="txt-item db-flex" v-if="userData[item.uid].mobile && userData[item.uid].mobile != ''" @click="toPhone(item)">手机: <span>{{userData[item.uid].mobile}}</span><div class="phone bg-red1 ml5"><span class="al al-dianhua font14"></span></div></div>
+                      <div class="txt-item" @click="expandEvent(item, index1)">地区: {{ userData[item.uid].country }} {{ userData[item.uid].province }} {{ userData[item.uid].city }}</div>
+                      <div class="txt-item flex_left" @click="influence">影响力:
+                        <span class="color-red4">{{userData[item.uid].yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
+                      </div>
+                      <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
+                    </div>
+                    <div class="flex_center bg-white h40">
+                      <div class="t-table align_center color-gray2 font14 color-gray2">
+                        <div class="t-cell v_middle b_right_after" @click="toChat(item)">
+                          <div>联系TA</div>
+                        </div>
+                        <div class="t-cell v_middle" @click="toMembersView(item)">更多</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </template>
@@ -241,7 +481,6 @@
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">分享次数: {{ item.shares }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </div>
                   </div>
                 </router-link>
@@ -258,7 +497,6 @@
                     <router-link :to="{path: '/factoryproduct', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </router-link>
                   </div>
                 </div>
@@ -269,13 +507,12 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/factorynews', query: {id:item.id,fid: item.uploader}}">
+                    <router-link :to="{path: '/factorynews', query: {id:item.id,fid: item.uploader}}" class="pic">
                       <img class="imgcover" :src="item.photo" style="width:50px;height:50px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/factorynews', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </router-link>
                   </div>
                 </div>
@@ -286,13 +523,12 @@
                 <div v-if="!arrData || arrData.length == 0" class="emptyitem flex_center">暂无数据</div>
                 <div v-else v-for="(item,index1) in arrData" :key="item.id" class="scroll_item padding10">
                   <div class="flex_left">
-                    <router-link :to="{path: '/academic', query: {id:item.id,fid: item.uploader}}">
+                    <router-link class="pic" :to="{path: '/academic', query: {id:item.id,fid: item.uploader}}">
                       <img class="imgcover" :src="item.photo" style="width:50px;height:50px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                     </router-link>
                     <router-link :to="{path: '/academic', query: {id:item.id,fid: item.uploader}}" class="flex_cell pl10 pr20">
                       <div class="clamp1 color-gray2">{{ item.title }}</div>
                       <div class="clamp1 color-gray">{{ item.dateline | dateformat }}</div>
-                      <div class="clamp1 color-gray">影响力: {{ item.yingxiangli }}<template v-if="item.percent">  成交概率: {{ item.percent }}%</template></div>
                     </router-link>
                   </div>
                 </div>
@@ -366,12 +602,23 @@ export default {
       datalist: [],
       isFirst: true,
       clickTabitem: null,
-      clickTabIndex: 0
+      clickTabIndex: 0,
+      userData: {}
     }
   },
   watch: {
-    datalist: function () {
+    datalist () {
       return this.datalist
+    },
+    // arrData () {
+    //   console.log('监控到数据变化')
+    //   console.log(this.arrData)
+    //   return this.arrData
+    // },
+    arrData: {
+      handler: function (newVal, oldVal) {
+      },
+      deep: true
     }
   },
   methods: {
@@ -385,6 +632,38 @@ export default {
       this.tabsdata = []
       this.scrollData = []
       this.isFirst = true
+    },
+    expandEvent (item, index) {
+      let curDataList = this.arrData
+      if (item.checked) {
+        this.arrData[index].checked = false
+      } else {
+        for (let i = 0; i < curDataList.length; i++) {
+          if (i !== index && curDataList[i].checked) {
+            this.arrData[i].checked = false
+            break
+          }
+        }
+        if (this.userData[item.uid]) {
+          this.arrData[index].checked = true
+        } else {
+          this.$http.get(`${ENV.BokaApi}/api/retailer/customerView?customeruid=${item.uid}`).then(res => {
+            const data = res.data
+            const retdata = data.data ? data.data : data
+            retdata.dateline_str = new Time(retdata.dateline * 1000).dateFormat('yyyy-MM-dd')
+            let sex = '未知'
+            if (retdata.sex === 1) {
+              sex = '男'
+            } else if (retdata.sex === 2) {
+              sex = '女'
+            }
+            retdata.sex_str = sex
+            this.userData[item.uid] = retdata
+            this.arrData[index].checked = true
+            console.log(this.arrData)
+          })
+        }
+      }
     },
     handleScroll (refname) {
       const self = this
@@ -467,6 +746,13 @@ export default {
         }
       })
     },
+    toMembersView (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/membersView', query: params})
+    },
     toChat (item) {
       let params = {uid: item.uid}
       if (this.query.from) {
@@ -542,4 +828,14 @@ export default {
 .radiusarea .item:nth-child(3) .radius{background-color:#aed370;}
 .radiusarea .item:nth-child(4) .radius{background-color:#ffb22d;}
 .radiusarea .item:nth-child(5) .radius{background-color:#ea8482;}
+.stat-page{
+  .detail_card{background-color:#fff;}
+  .detailInfo{
+    display:flex;padding:10px;box-sizing:border-box;flex-wrap: wrap;
+    .txt-item{width:50%;box-sizing:border-box;line-height:25px;}
+    .txt-item:nth-child(odd){padding-right:5px;}
+    .txt-item:nth-child(even){padding-left:5px;}
+  }
+  .qbtnInfo{width:50px;text-align:center;border-radius: 50px;}
+}
 </style>

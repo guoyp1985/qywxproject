@@ -875,8 +875,11 @@ zh-CN:
   Admin Manage: 管理后台
   tConcession: 优惠码
   tAuthPhoto: 实名认证
-  tFriendRecommend: 朋友圈推荐
-  Friend Recommend: 朋友圈推荐
+  tFriendRecommend: 朋友圈获客
+  Friend Recommend: 朋友圈获客
+  Friend Customer: 朋友圈获客
   tNewestList: 列表
-  NtNewestList: 列表
+  NtEwestList: 列表
   tBindingBank: 绑定银行卡
+  tIncome: 收入
+  tTrain: 培训

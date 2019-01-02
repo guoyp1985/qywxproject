@@ -14,6 +14,7 @@
   "AddOrder",
   "Auth",
   "AuthPhoto",
+  "BindingBank",
   "BringCustomer",
   "BusinessSchool",
   "CardList",
@@ -42,6 +43,7 @@
   "FactoryReport",
   "FactoryRevenue",
   "Favorite",
+  "FriendRecommend",
   "KnowledgeClass",
   "Knowledge",
   "Academic",
@@ -51,6 +53,7 @@
   "MiniStart",
   "MpSetting",
   "NewAddress",
+  "NewestList",
   "News",
   "Open",
   "OrderSearch",
@@ -96,6 +99,7 @@
   "SellerList",
   "SubscribeInfo",
   "Timeline",
+  "Train",
   "Userproducts",
   "UserRebateInfo",
   "UserStory",
@@ -103,8 +107,8 @@
   "wxOpen",
   "Payment",
   "test",
-  "RetailerRecommands",
   "Concession",
   "Team",
-  "AddOthers"
+  "AddOthers",
+  "Income"
 ]

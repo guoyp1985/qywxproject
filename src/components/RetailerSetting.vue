@@ -75,6 +75,7 @@
                   <span slot="title">{{ $t('Shop description') }}</span>
                   <group class="textarea-outer" style="padding:0;">
                     <x-textarea
+                      name="text1"
                       ref="contentTextarea"
                       v-model="submitdata.content"
                       style="padding:5px;"
@@ -92,6 +93,7 @@
                   <span slot="title">{{ $t('Auto reply') }}</span>
                   <group class="textarea-outer" style="padding:0;">
                     <x-textarea
+                      name="text2"
                       ref="fastreplyTextarea"
                       v-model="submitdata.fastreply"
                       style="padding:5px;"

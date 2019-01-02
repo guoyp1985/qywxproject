@@ -111,7 +111,7 @@ var _buildEditorModule = function(_toolbars, _uid){
 			_name = typeof _it === 'object' ? _it.name : _toolnames[_it];
 		_html += '<li event="'+_id+'" '+(_tag ? 'bind-tags="'+_tag+'"' : '')+' class="Eleditor-'+_id+'">'+_name+'</li>';
 	}
-	_html += '		</ul>\
+	_html += '</ul>\
 				</div>\
 				<div class="Eleditor-loading"><p></p></div>\
 				<div class="Eleditor-textEditor">\
@@ -588,11 +588,12 @@ var Eleditor = function(){
 			*/
 			_args.insertImageCallback && _args.insertImageCallback(function(returl){
 				console.log('in insertimg callback')
+				_appendHistory();
+        // _appendHistory({ m: 'insertNode', node: _buildWordHtml });
         var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
 
         _$selected && _$selected.after(_buildWordHtml);
         _flushEditorControllerLayerPosi();
-        _appendHistory({ m: 'insertNode', node: _buildWordHtml });
 
         _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
         _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
@@ -604,7 +605,6 @@ var Eleditor = function(){
       });
 		},
 		insertHr: function(){
-
 			_appendHistory();
 
 			var _$hr = $('<div class="horizontal-line" style="padding: 10px 0;border-bottom: 1px solid #aaa;margin-bottom: 20px;"></div>');
@@ -612,6 +612,7 @@ var Eleditor = function(){
 
 			_hideEditorControllerLayer();
 			_args.cancelControler && _args.cancelControler();
+			_args.changeTxt && _args.changeTxt();
 		},
 		editText: function(){
 			if( _inArray(_$selected[0].tagName, _notctname) ){
@@ -631,6 +632,7 @@ var Eleditor = function(){
 			_hideEditorControllerLayer();
 			_correctHtmlStructure(_$wrap, _placeHolder);
 			_args.cancelControler && _args.cancelControler();
+			_args.changeTxt && _args.changeTxt();
 		},
     deleteThis: function(){
             _appendHistory({ m: 'deleteNode', node: _$selected, pnode: _$selected.prev() });
@@ -639,6 +641,7 @@ var Eleditor = function(){
             _hideEditorControllerLayer();
             _correctHtmlStructure(_$wrap, _placeHolder);
 						_args.cancelControler && _args.cancelControler();
+						_args.changeTxt && _args.changeTxt();
     },
     deleteBefore: function(){
             var _$prev = _$selected.prev();
@@ -708,6 +711,10 @@ var Eleditor = function(){
 	_$window.on('resize', function(){
 		_flushEditorControllerLayerPosi();
 	});
+
+	_$editorTextArea.on('blur', function(){
+		document.body.scrollTop = 0;
+	})
 
 	_$editorController.on('click', 'ul li', function() {
 		var _$this = $(this),
@@ -860,6 +867,7 @@ var Eleditor = function(){
 					_$selected.remove();
 				}
 			}
+			_args.changeTxt && _args.changeTxt(_content);
 			_flushEditorControllerLayerPosi();
 		}
 

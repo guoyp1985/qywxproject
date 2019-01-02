@@ -299,7 +299,7 @@ export default {
             for (let key in self.submitdata) {
               self.submitdata[key] = retdata[key]
             }
-            if (self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
+            if (!self.photoarr.length && self.submitdata.photo && self.$util.trim(self.submitdata.photo) !== '') {
               const parr = self.submitdata.photo.split(',')
               for (let i = 0; i < parr.length; i++) {
                 self.photoarr.push(self.$util.getPhoto(parr[i]))
@@ -322,12 +322,6 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         self.initContainer()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
