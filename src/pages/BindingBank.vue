@@ -116,15 +116,16 @@ export default {
       console.log('进入到了change事件')
       console.log(e)
       console.log(selectedIndex)
-      if (selectedIndex > 0) {
-        this.submitData.bankuser = this.cardList[selectedIndex - 1].name
-      } else {
-        this.submitData.bankuser = ''
-      }
+      // if (selectedIndex > 0) {
+      //   this.submitData.bankuser = this.cardList[selectedIndex - 1].name
+      // } else {
+      //   this.submitData.bankuser = ''
+      // }
     },
     bindEvent () {
       if (!this.submitIng) {
         let postData = this.submitData
+        postData.bankuser = postData.position
         if (postData.position === this.loginUser.position && postData.bankuser === this.loginUser.bankuser && postData.bankcardno === this.loginUser.bankcardno && postData.bankcode === this.loginUser.bankcode) {
           this.$vux.toast.show({
             text: '绑定成功',
