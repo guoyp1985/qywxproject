@@ -60,11 +60,11 @@
 </template>
 
 <script type="text/javascript">
-import Env from 'env'
-import ScrollView from '@/components/ScrollView'
-import ListTags from '@/components/ListTags'
-import ListOthers from '@/components/ListOthers'
-import { User } from '#/storage'
+// import Env from 'env'
+// import ScrollView from '@/components/ScrollView'
+// import ListTags from '@/components/ListTags'
+// import ListOthers from '@/components/ListOthers'
+// import { User } from '#/storage'
 // export default {
 //   created () {
 //     this.userInfo = User.get()
