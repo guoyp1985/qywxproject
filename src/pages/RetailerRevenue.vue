@@ -140,7 +140,8 @@ export default {
       let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
       setTimeout(() => {
         document.body.scrollTop = document.body.scrollHeight
-        revenueContainer.scrollTop = 0
+        // revenueContainer.scrollTop = 0
+        revenueContainer.scrollTop = revenueContainer.scrollHeight
       }, 100)
     },
     toBank () {
