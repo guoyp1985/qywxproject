@@ -588,11 +588,12 @@ var Eleditor = function(){
 			*/
 			_args.insertImageCallback && _args.insertImageCallback(function(returl){
 				console.log('in insertimg callback')
+				_appendHistory();
+        // _appendHistory({ m: 'insertNode', node: _buildWordHtml });
         var _buildWordHtml = $('<img src="'+returl+'" style="display:block;margin:2px auto;" />');
 
         _$selected && _$selected.after(_buildWordHtml);
         _flushEditorControllerLayerPosi();
-        _appendHistory({ m: 'insertNode', node: _buildWordHtml });
 
         _$editorTextModule.find('.Eleditor-active').removeClass('Eleditor-active');
         _$editorTextModule.find('.Eleditor-textStyle-color span').removeAttr('style');
