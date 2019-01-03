@@ -2,7 +2,9 @@
   <scroll-view ref="wraper" @scrollEnd="scrollEnd">
     <div slot="content" ref="content" class="data">
         <div v-for="item in data" :key="item.id" class="item" @click="onCheck(item)">
-          <!-- <check-icon :value.sync="item.isChecked"></check-icon> -->
+          <div :class="{'selected' : item.isChecked}" class="icon">
+            <span class="al al-gou" v-if="item.isChecked"></span>
+          </div>
           <img class="avatar" :src="item.photo"/>
           <div class="info">
             <span class="title">{{item.title}}</span>
@@ -21,11 +23,11 @@
 import ScrollView from '@/components/ScrollView'
 import Env from 'env'
 import { User } from '#/storage'
-import { CheckIcon } from 'vux'
 export default {
   activated () {
     console.log(this.$route.query)
     this.module = this.$route.query.module
+    this.id = this.$route.query.id
     this.userInfo = User.get()
     this.data = []
     this.pagestart = 0
@@ -37,7 +39,8 @@ export default {
       data: [],
       pagestart: 0,
       limit: 10,
-      selectedItem: []
+      selectedItemId: [],
+      id: null
     }
   },
   computed: {
@@ -61,8 +64,7 @@ export default {
     }
   },
   components: {
-    ScrollView,
-    CheckIcon
+    ScrollView
   },
   methods: {
     scrollEnd (y) {
@@ -78,11 +80,12 @@ export default {
       if (this.data.length === this.pagestart * this.limit) {
         let url = ''
         let method = ''
-        let params = null
+        let params = {teamid: this.id}
         if (module === 'activity') {
           url = `${Env.BokaApi}/api/retailer/listActivity`
           method = 'GET'
           params = {
+            ...params,
             do: 'store',
             wid: this.userInfo.uid
           }
@@ -90,6 +93,7 @@ export default {
           url = `${Env.BokaApi}/api/list/${module}`
           method = 'POST'
           params = {
+            ...params,
             uploader: this.userInfo.uid
           }
         }
@@ -110,14 +114,16 @@ export default {
           } else {
             data = res.data
           }
+          console.log(data)
           for (let i = 0; i < data.length; i++) {
-            data.isChecked = false
+            data[i].isChecked = false
           }
           if (!this.pagestart) {
             this.data = data
           } else {
             this.data.push(...data)
           }
+          console.log(data)
           this.pagestart++
           this.$refs.wraper.bscroll.refresh()
         })
@@ -126,26 +132,43 @@ export default {
       }
     },
     onCheck (item) {
-      console.log(item)
       if (!item.isChecked) {
         item.isChecked = true
-        this.selectedItem.push(item)
+        this.selectedItemId.push(item.id)
       } else {
         item.isChecked = false
-        this.selectedItem.splice(this.selectedItem.indexOf(item), 1)
+        this.selectedItemId.splice(this.selectedItemId.indexOf(item.id), 1)
       }
     },
     onCancel () {
       this.$router.back()
     },
     onConfirm () {
-      if (!this.selectedItem.length) {
+      if (!this.selectedItemId.length) {
         this.$vux.toast.show({
-          text: `请选择${this.moduleTransfer}！`
+          text: `请选择${this.moduleTransfer}！`,
+          type: 'warn'
         })
         return
       }
-      console.log('in AddOthers onConfirm')
+      console.log(this.selectedItemId.join())
+      this.$http({
+        url: `${Env.BokaApi}/api/team/band`,
+        method: 'POST',
+        data: {
+          type: 'add',
+          module: this.module,
+          id: this.id,
+          moduleid: this.selectedItemId.join()
+        }
+      }).then(res => {
+        if (res.data.flag) {
+          this.selectedItemId = []
+          this.$vux.toast.show({
+            text: `添加${this.moduleTransfer}成功！`
+          })
+        }
+      })
     }
   }
 };
@@ -164,12 +187,35 @@ export default {
       justify-content: flex-start;
       background-color: #fff;
       margin-bottom: 10px;
+      .icon{
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        color: #1fb922;
+        border: 1px solid #c9c9c9;
+        color: #c9c9c9;
+        span{
+          display: inline-block;
+          width: 100%;
+          height: 100%;
+          line-height: 20px;
+          text-align: center;
+          vertical-align: top;
+        }
+        .al{
+          font-size: 12px;
+        }
+      }
+      .selected{
+        background-color: #1fb922;
+        color: #fff;
+      }
       .avatar{
         flex: 0 0 50px;
         width: 50px;
         height: 50px;
         object-fit: cover;
-        margin-left: 10px;
+        margin-left: 20px;
         margin-right: 20px;
       }
       .info{

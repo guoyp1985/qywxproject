@@ -41,7 +41,7 @@
           <list-tags :id="id" v-if="currentTab === 0"></list-tags>
 
           <!-- 商品、活动、文章、培训 -->
-            <list-others :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else ref="list"></list-others>
+            <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
 
         </div>
 
@@ -77,6 +77,13 @@ export default {
       console.log(res)
       this.teamInfo = res.data.data
     })
+  },
+  activated () {
+    if (this.$refs.listOthers) {
+      this.$refs.listOthers.data = []
+      this.$refs.listOthers.pagestart = 0
+      this.$refs.listOthers.getData()
+    }
   },
   data () {
     return {
@@ -156,7 +163,7 @@ export default {
       console.log(-y)
       if (Math.abs(y) >= height) {
         console.log('滑动到底部了！')
-        this.$refs.list.getData()
+        this.$refs.listOthers.getData()
       }
     },
     scroll (y) {
@@ -182,7 +189,15 @@ export default {
         this.$router.push({
           path: '/addOthers',
           query: {
-            module: this.module
+            module: this.module,
+            id: this.id
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/addTags',
+          query: {
+            id: this.id
           }
         })
       }
@@ -298,10 +313,10 @@ export default {
     .import{
       width: 100%;
       height: 100%;
-      background-color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
+      background-color: #fff;
       button{
         width: 80%;
         color: #fff;
