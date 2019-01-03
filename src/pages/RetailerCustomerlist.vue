@@ -98,7 +98,7 @@
                         <span class="al al-wenhao font20 ml5"></span>
                       </div>
                       <div class="txt-item">推荐人: {{item.uploadname}}</div>
-                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.intentiondesc}}</div>
+                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
                       <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -167,7 +167,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{item.uploadname}}</div>
-                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.intentiondesc}}</div>
+                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
                       <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -235,7 +235,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{item.uploadname}}</div>
-                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.intentiondesc}}</div>
+                      <div class="txt-item" v-if="item.uid != loginUser.uid">客户类型: {{item.customertype}}</div>
                       <div class="txt-item">获客时间: {{item.dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">

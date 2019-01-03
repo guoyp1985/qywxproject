@@ -140,7 +140,6 @@ export default {
       let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
       setTimeout(() => {
         document.body.scrollTop = document.body.scrollHeight
-        // revenueContainer.scrollTop = 0
         revenueContainer.scrollTop = revenueContainer.scrollHeight
       }, 100)
     },
@@ -162,20 +161,28 @@ export default {
       this.$router.push({path: '/income', query: params})
     },
     clickwechat () {
-      this.wechatShow = true
+      if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
+        this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
+      } else {
+        this.wechatShow = true
+      }
     },
     clickbank () {
-      if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '') {
-        self.$vux.confirm.show({
-          content: `您还没有绑定银行卡`,
-          confirmText: '去绑定',
-          onConfirm: () => {
-            this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
-          }
-        })
-        return false
+      if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
+        this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
+      } else {
+        if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '') {
+          this.$vux.confirm.show({
+            content: `您还没有绑定银行卡`,
+            confirmText: '去绑定',
+            onConfirm: () => {
+              this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+            }
+          })
+          return false
+        }
+        this.bankShow = true
       }
-      this.bankShow = true
     },
     popupexplain () {
       this.showpopup = !this.showpopup

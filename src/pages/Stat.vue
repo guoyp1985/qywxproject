@@ -52,7 +52,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -95,7 +95,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -138,7 +138,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -181,7 +181,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -226,7 +226,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -269,7 +269,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -312,7 +312,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -354,7 +354,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -400,7 +400,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">
@@ -442,7 +442,7 @@
                         <span class="al al-wenhao font20 ml5" style="margin-top:-2px;"></span>
                       </div>
                       <div class="txt-item">推荐人: {{userData[item.uid].uploadname}}</div>
-                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].intentiondesc}}</div>
+                      <div class="txt-item" v-if="userData[item.uid].uid != loginUser.uid">客户类型: {{userData[item.uid].customertype}}</div>
                       <div class="txt-item">获客时间: {{userData[item.uid].dateline_str}}</div>
                     </div>
                     <div class="flex_center bg-white h40">

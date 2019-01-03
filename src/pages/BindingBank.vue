@@ -196,7 +196,9 @@ export default {
       this.submitData.position = this.loginUser.position
       this.submitData.bankuser = this.loginUser.bankuser
       this.submitData.bankcardno = this.loginUser.bankcardno
-      this.submitData.bankcode = this.loginUser.bankcode
+      if (this.loginUser.bankcode && this.loginUser.bankcode !== '') {
+        this.submitData.bankcode = this.loginUser.bankcode
+      }
       this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
         const data = res.data
         self.cardList = data.data ? data.data : data
