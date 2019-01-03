@@ -206,7 +206,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped="">
+<style lang="less">
   .team{
     display: flex;
     flex-direction: column;
