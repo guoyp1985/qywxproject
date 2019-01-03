@@ -8,7 +8,7 @@
         <div class="t-table">
           <div class="t-cell title-cell w40 font14 v_middle">姓名</div>
           <div class="t-cell input-cell v_middle" style="position:relative;">
-            <input v-model="submitData.position" type="text" class="input priceInput" name="username" placeholder="持卡人姓名" />
+            <input v-model="submitData.bankuser" type="text" class="input priceInput" name="username" placeholder="持卡人姓名" />
           </div>
           <div class="t-cell v_middle align_right font12" style="width:20px;">
             <span class="al al-kehu1 font18 color-gray2"></span>
@@ -125,8 +125,7 @@ export default {
     bindEvent () {
       if (!this.submitIng) {
         let postData = this.submitData
-        postData.bankuser = postData.position
-        if (postData.position === this.loginUser.position && postData.bankuser === this.loginUser.bankuser && postData.bankcardno === this.loginUser.bankcardno && postData.bankcode === this.loginUser.bankcode) {
+        if (postData.bankuser === this.loginUser.bankuser && postData.bankcardno === this.loginUser.bankcardno && postData.bankcode === this.loginUser.bankcode) {
           this.$vux.toast.show({
             text: '绑定成功',
             type: 'success',
@@ -138,7 +137,7 @@ export default {
             }
           }, 1000)
         } else {
-          if (postData.position === '' || postData.bankcardno === '' || !postData.bankcode || postData.bankcode === '0' || postData.bankuser === '') {
+          if (postData.bankuser === '' || postData.bankcardno === '' || !postData.bankcode || postData.bankcode === '0') {
             this.$vux.toast.show({
               text: '请完善信息',
               type: 'text'
@@ -193,7 +192,6 @@ export default {
       this.query = this.$route.query
       console.log('当前登录用户')
       console.log(this.loginUser)
-      this.submitData.position = this.loginUser.position
       this.submitData.bankuser = this.loginUser.bankuser
       this.submitData.bankcardno = this.loginUser.bankcardno
       if (this.loginUser.bankcode && this.loginUser.bankcode !== '') {
