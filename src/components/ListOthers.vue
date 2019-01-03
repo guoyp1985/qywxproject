@@ -15,7 +15,7 @@
 <script type="text/javascript">
 import Env from 'env'
 export default {
-  mounted () {
+  created () {
     this.getData()
   },
   data () {
