@@ -138,7 +138,7 @@ export default {
             }
           }, 1000)
         } else {
-          if (postData.position === '' || postData.bankcardno === '' || postData.bankcode === '' || postData.bankuser === '') {
+          if (postData.position === '' || postData.bankcardno === '' || !postData.bankcode || postData.bankuser === '') {
             this.$vux.toast.show({
               text: '请完善信息',
               type: 'text'
