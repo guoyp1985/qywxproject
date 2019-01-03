@@ -166,7 +166,7 @@ export default {
     },
     clickbank () {
       if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '') {
-        self.$vux.confirm.show({
+        this.$vux.confirm.show({
           content: `您还没有绑定银行卡`,
           confirmText: '去绑定',
           onConfirm: () => {
