@@ -20,7 +20,7 @@
           <span class="color-white font16">{{$t('Cancel')}}</span>
         </div> -->
         <div class="save-btn" @click="onSave">
-          <span class="color-white font16">完成编辑</span>
+          <span class="color-white font16">完成</span>
         </div>
       </div>
       <div v-if="query.from != 'miniprogram' && showEditIcon" class="menu-btn-box" v-show="showMenuIcon && module == 'news'">

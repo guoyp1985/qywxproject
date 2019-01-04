@@ -22,6 +22,7 @@ var ENV = {
   ],
   MiniRouter: {
     contentsNews: '/pages/contentsNews',
+    knowledgeList: '/pages/contentsKnowledge',
     news: '/packageB/pages/news',
     pay: '/packageB/pages/pay',
     product: '/packageB/pages/product',
