@@ -166,6 +166,16 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom>
+        <confirm v-model="showConfirm"
+        :title="confirmTitle"
+        @on-cancel="onCancel"
+        @on-confirm="onConfirm">
+          <slot name="content">
+            <x-input v-model="confirmData" type="text" class="input" style="border:#ccc 1px solid;" :placeholder="confirmTitle"></x-input>
+          </slot>
+        </confirm>
+      </div>
     </template>
   </div>
 </template>
@@ -176,7 +186,7 @@ Behavior:
 </i18n>
 
 <script>
-import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group, XImg } from 'vux'
+import { Popup, Previewer, TransferDom, PopupHeader, Radio, Group, XImg, XInput, Confirm } from 'vux'
 import Sos from '@/components/Sos'
 import Time from '#/time'
 import ENV from 'env'
@@ -189,7 +199,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip
+    Popup, Previewer, Sos, PopupHeader, Radio, Group, XImg, Subscribe, ApplyTip, XInput, Confirm
   },
   filters: {
     dateformat: function (value) {
@@ -225,7 +235,11 @@ export default {
         { key: 2, value: '中' },
         { key: 3, value: '高' }
       ],
-      showSubscribe: false
+      showSubscribe: false,
+      showConfirm: false,
+      confirmTitle: '',
+      confirmData: '',
+      charName: ''
     }
   },
   watch: {
@@ -321,54 +335,58 @@ export default {
     },
     updatechar (char) {
       const self = this
-      let showtitle = ''
       let inputval = ''
+      this.confirmTitle = ''
+      this.confirmData = ''
+      this.charName = char
       if (char === 'position') {
-        showtitle = '请输入真实姓名'
+        this.confirmTitle = '请输入真实姓名'
         inputval = self.viewuser.position
       } else if (char === 'mobile') {
-        showtitle = '请输入手机号'
+        this.confirmTitle = '请输入手机号'
         inputval = self.viewuser.mobile
       }
-      self.$vux.confirm.prompt(inputval, {
-        title: showtitle,
-        onShow () {
-          self.$vux.confirm.setInputValue(inputval)
-        },
-        onConfirm (val) {
-          document.body.scrollTop = document.body.scrollHeight
-          let iscontinue = true
-          if (char === 'mobile' && self.$util.trim(val) !== '') {
-            iscontinue = self.$util.validateQueue([{ telephone: val, r: 'Phone' }],
-              model => {
-                switch (model.key) {
-                  case 'telephone':
-                    self.$vux.toast.text('请输入正确的手机号', 'middle')
-                    break
-                }
-              }
-            )
+      self.showConfirm = true
+      self.confirmData = inputval
+    },
+    onCancel () {
+      this.showConfirm = false
+    },
+    onConfirm () {
+      const self = this
+      let iscontinue = true
+      let char = this.charName
+      let val = this.confirmData
+      if (char === 'mobile' && self.$util.trim(val) !== '') {
+        iscontinue = self.$util.validateQueue([{ telephone: val, r: 'Phone' }],
+          model => {
+            switch (model.key) {
+              case 'telephone':
+                self.$vux.toast.text('请输入正确的手机号', 'middle')
+                break
+            }
           }
-          if (!iscontinue) {
-            return false
+        )
+      }
+      if (!iscontinue) {
+        return false
+      }
+      self.showConfirm = false
+      self.$vux.loading.show()
+      self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
+        { action: 'update', customeruid: self.query.uid, char: char, value: val }
+      ).then(res => {
+        const data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              self.viewuser[char] = val
+            }
           }
-          self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/sellerAction`,
-            { action: 'update', customeruid: self.query.uid, char: char, value: val }
-          ).then(res => {
-            const data = res.data
-            self.$vux.loading.hide()
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error),
-              onHide: () => {
-                if (data.flag === 1) {
-                  self.viewuser[char] = val
-                }
-              }
-            })
-          })
-        }
+        })
       })
     },
     showBigimg (index) {
