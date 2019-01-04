@@ -223,7 +223,9 @@ export default {
         if (this.loginUser.fid > 0) {
           this.btns1 = factoryBtn.concat(this.btns1)
         }
-        this.btns1 = sellerBtn.concat(this.btns1)
+        if (this.loginUser.isretailer) {
+          this.btns1 = sellerBtn.concat(this.btns1)
+        }
         this.showBtn1 = true
       }
       this.$http.get(`${ENV.BokaApi}/api/message/newMessages`).then(function (res) {
