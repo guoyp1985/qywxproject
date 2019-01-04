@@ -336,6 +336,7 @@ export default {
           self.$vux.confirm.setInputValue(inputval)
         },
         onConfirm (val) {
+          document.body.scrollTop = document.body.scrollHeight
           let iscontinue = true
           if (char === 'mobile' && self.$util.trim(val) !== '') {
             iscontinue = self.$util.validateQueue([{ telephone: val, r: 'Phone' }],
