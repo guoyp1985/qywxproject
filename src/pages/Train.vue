@@ -45,6 +45,9 @@
         <div class="font14 color-gray2 bg-white mt10 details">
           <div v-html="viewData.content"></div>
         </div>
+        <div class="padding20 mt12 flex_center">
+          <div class="more-btn flex_center bg-theme color-white" @click="toMore">查看更多帮助 ></div>
+        </div>
       </div>
     </template>
   </div>
@@ -94,6 +97,9 @@ export default {
       this.sosTitle = '内容不存在'
       this.showContainer = false
       this.photoarr = []
+    },
+    toMore () {
+      this.$wechat.miniProgram.redirectTo({url: `${ENV.MiniRouter.knowledgeList}`})
     },
     clickPlay (refname) {
       const self = this
@@ -190,5 +196,6 @@ export default {
     width:200px;height:40px;box-sizing:border-box;background-color:#FF6B63;border-radius:20px;margin:0 auto;
     text-align:center;color:#fff;margin-top:50px;line-height:40px;
   }
+  .more-btn{width:150px;height:35px;border-radius:40px;}
 }
 </style>
