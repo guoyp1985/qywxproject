@@ -181,10 +181,16 @@ export default {
           onConfirm: () => {
             this.submitIng = true
             if (!this.showRepeat && postData.bankuser === this.loginUser.bankuser && postData.bankcardno === this.loginUser.bankcardno && postData.bankcode === this.loginUser.bankcode) {
+              this.submitIng = false
               this.$vux.toast.show({
                 text: '绑定成功',
                 type: 'success'
               })
+              setTimeout(() => {
+                if (this.query.fromPage) {
+                  this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+                }
+              }, 1000)
             } else {
               this.$http.post(`${ENV.BokaApi}/api/user/update/${this.loginUser.uid}`, postData).then(res => {
                 this.submitIng = false
