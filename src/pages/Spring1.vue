@@ -18,7 +18,7 @@
       <input type="hidden" id="retailerinfouid" value="$retailerinfo[uid]" />
       <input type="hidden" id="module" value="activity"/>
       <input type="hidden" id="socket" value="-views-$user['uid']-activity-$id"/>
-      <input type="hidden" id="musicfile" value="http://{$domain}/mobile/../assets/images/springcard/7/1.mp3" />
+      <input type="hidden" id="musicfile" value="../assets/images/springcard/7/1.mp3" />
       <div class="audiobtn on">
               <!-- <audio></audio> -->
       </div>
@@ -52,11 +52,11 @@
             <div class="toparea">
               <div class="card_head">
                 <div class="avatararea">
-                  <img class="avatarpic disavatar" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='$DEFAULT_AVATAR';" />
+                  <img class="avatarpic" src="https://tossharingsales.boka.cn/images/nopic.jpg" />
                 </div>
                 <div class="namearea">
                   <div>
-                    <div><span></span>祝您：</div>
+                    <div><span>123</span>祝您：</div>
                   </div>
                 </div>
               </div>
@@ -205,7 +205,7 @@
           border-radius:4px;
   }
   .springcard .poptiplayer .tipbtn.hide{}
-  .springcard .poptiplayer.active{
+  .springcard .poptiplayer{
           -webkit-animation-name: bounceInDown;
           animation-name: bounceInDown;
           -webkit-animation-duration: 0s;
@@ -233,12 +233,18 @@
           background-repeat:no-repeat;background-position:bottom center;background-size:100%;
   }
   .springcard.springcard7 .cardpage .pageinner{width:100%;padding-top:177.5%;}
-  .springcard.springcard7 .toparea{height: 40%;width: 100%;position: relative;}
+  .springcard.springcard7 .toparea{height: 40%;width: 100%;}
   .springcard7 .page1_pic1{position: absolute;left: 0px;top: 0px;width: 30%;text-align:left;}
   .springcard7 .page1_pic1 img{max-width:100%;max-height:100%;vertical-align:middle;}
   .springcard7 .page1_pic2{position: absolute;right: 0px;top: 0px;width: 30%;text-align:right;}
   .springcard7 .page1_pic2 img{max-width:100%;max-height:100%;vertical-align:middle;}
-  .springcard7 .card_head{display:none;width:100%;margin: 0 auto;text-align: center;position: relative;}
+  .springcard7 .card_head{
+    display:none;width:100%;margin: 0 auto;text-align: center;position: relative;
+    -webkit-animation-duration:0.5s;
+    -webkit-animation-iteration-count:1;
+    -webkit-animation-timing-function:linear;
+    -webkit-animation-name:animate7;
+  }
   .springcard7 .card_head .avatararea{position:absolute;left:0;right:0;top:0;width:160px;margin:0 auto;}
   .springcard7 .card_head .avatararea img{width:160px;height:160px;border-radius:50%;display:block;}
   .springcard7 .card_head .namearea{height:160px;text-align: center;color: #ffff00;font-size: 2em;padding-top:175px;}
@@ -250,31 +256,33 @@
   }
   @-webkit-keyframes animate7 {
           0% {
-                  -webkit-transform: scale3d(1, 1, 1);
-                  transform: scale3d(1, 1, 1);
+              -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
           }
-
           10%, 20% {
-                  -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
-                  transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+              -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
+              transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -3deg);
           }
-
           30%, 50%, 70%, 90% {
-                  -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
-                  transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+              -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+              transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
           }
-
           40%, 60%, 80% {
-                  -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
-                  transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+              -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+              transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
           }
-
           100% {
-                  -webkit-transform: scale3d(1, 1, 1);
-                  transform: scale3d(1, 1, 1);
+              -webkit-transform: scale3d(1, 1, 1);
+              transform: scale3d(1, 1, 1);
           }
   }
-  .springcard7 .page1_pic3{display:none;position: absolute;width: 40%;right: 10%;top: 70%;z-index:10;}
+  .springcard7 .page1_pic3{
+    position: absolute;width: 40%;right: 10%;top:25%;z-index:10;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-name: gong;
+  }
   .springcard7 .page1_pic3 img{max-width:100%;max-height:100%;}
   .springcard7 .page1_pic3.animate {
           -webkit-animation-duration: 2s;
@@ -305,14 +313,14 @@
           background: url(../assets/images/springcard/7/bg1.png) no-repeat left;
   }
   .springcard7 .page1_bg1.animate{
-          -webkit-animation-duration:1.0s;
-          -webkit-animation-iteration-count:infinite;
-          -webkit-animation-timing-function:linear;
-          -webkit-animation-name:two;
+    -webkit-animation-duration:1.0s;
+    -webkit-animation-iteration-count:infinite;
+    -webkit-animation-timing-function:linear;
+    -webkit-animation-name:two;
   }
   @-webkit-keyframes two {
-          from{background:url(../assets/images/springcard/7/bg1.png) no-repeat center;background-size:100%;opacity: 0.3}
-          to{ background:url(../assets/images/springcard/7/bg2.png) no-repeat center;background-size:100%;}
+    from{background:url(../assets/images/springcard/7/bg1.png) no-repeat center;background-size:100%;opacity: 0.3}
+    to{background:url(../assets/images/springcard/7/bg2.png) no-repeat center;background-size:100%;}
   }
   .springcard7 .page1_pic7{display:none;width:100%;text-align:center;margin-top:15px;}
   .springcard7 .page1_pic7 img{height:100%;max-width:100%;max-height:100%;vertical-align:middle;}
@@ -327,7 +335,13 @@
             to{-webkit-transform:scale(1)}
     }
   }
-  .springcard7 .page1_pic4 .pic{width: 50%;margin: 0 auto;text-align:center;}
+  .springcard7 .page1_pic4.animated{
+    -webkit-animation-duration:1.5s;
+    -webkit-animation-iteration-count:1;
+    -webkit-animation-timing-function:linear;
+    -webkit-animation-name:cc;
+  }
+  .springcard7 .page1_pic4 .pic{width:80%;margin: 0 auto;text-align:center;}
   .springcard7 .page1_pic4 img{max-width:100%;max-height:100%;vertical-align:middle;}
 
   .springcard7 .page1_pic5{position: absolute;width:70%;left:0;bottom:0;}
@@ -365,12 +379,12 @@
   .springcard7 .icolist .icoitem:nth-child(6){left:40%;}
   .springcard7 .icolist .icoitem:nth-child(7){left:65%;}
 
-  .springcard7 .icolist .icoitem.animate:nth-child(1){-webkit-animation-delay:0.4s;}
-  .springcard7 .icolist .icoitem.animate:nth-child(2){-webkit-animation-delay:0.6s;}
-  .springcard7 .icolist .icoitem.animate:nth-child(3){-webkit-animation-delay:0.8s;}
-  .springcard7 .icolist .icoitem.animate:nth-child(4){-webkit-animation-delay:1s;}
-  .springcard7 .icolist .icoitem.animate:nth-child(5){-webkit-animation-delay:0.4s;}
-  .springcard7 .icolist .icoitem.animate:nth-child(6){-webkit-animation-delay:0.7s;}
+  .springcard7 .icolist .icoitem:nth-child(1){-webkit-animation-delay:0.4s;}
+  .springcard7 .icolist .icoitem:nth-child(2){-webkit-animation-delay:0.6s;}
+  .springcard7 .icolist .icoitem:nth-child(3){-webkit-animation-delay:0.8s;}
+  .springcard7 .icolist .icoitem:nth-child(4){-webkit-animation-delay:1s;}
+  .springcard7 .icolist .icoitem:nth-child(5){-webkit-animation-delay:0.4s;}
+  .springcard7 .icolist .icoitem:nth-child(6){-webkit-animation-delay:0.7s;}
 
   .springcard7 .icolist .icoitem:nth-child(1) img{width:50px;}
   .springcard7 .icolist .icoitem:nth-child(2) img{width:80px;}

@@ -136,9 +136,7 @@
               </div>
               <div class="list scroll_list" dolist="false" scrollarea=".listarea" ajaxurl="ajax/activity.php?action=hongbaousers&id=$id" template=".template"></div>
             </div>
-                  <!--
-                  <div class="listtxt">查看红包记录</div>
-                  -->
+            <!-- <div class="listtxt">查看红包记录</div> -->
             <div class="card_middle">
               <div class="page1_pic1">
                 <img src="../assets/images/springcard/11/page1_img1.png" />
@@ -166,23 +164,22 @@
 </script>
 <style lang="less">
   .rotate-css{
-          -webkit-animation: rotate 2s linear 1;
-          animation: rotate 2s linear 1;
+    -webkit-animation: rotate 2s linear 1;
+    animation: rotate 2s linear 1;
   }
   @-webkit-keyframes rotate{
-          from{-webkit-transform: rotate(0deg)}
-          to{-webkit-transform: rotate(180deg)}
+    from{-webkit-transform: rotate(0deg)}
+    to{-webkit-transform: rotate(180deg)}
   }
 
   @-webkit-keyframes fanZ{
-          from{opcity:0;
-                  -webkit-transform:rotateY(270deg)
-          }
-          to{opcity:1;
-                  -webkit-transform:rotateY(360deg)
-          }
+    from{opcity:0;
+      -webkit-transform:rotateY(270deg)
+    }
+    to{opcity:1;
+      -webkit-transform:rotateY(360deg)
+    }
   }
-
   .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
   .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
   .springcard .poptiplayer .inner{
@@ -194,81 +191,82 @@
   .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
   .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
   .springcard .poptiplayer .tipbtn{
-          display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
-          border-radius:4px;
+    display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
+    border-radius:4px;
   }
   .springcard .poptiplayer .tipbtn.hide{}
   .springcard .poptiplayer.active{
-          -webkit-animation-name: bounceInDown;
-          animation-name: bounceInDown;
-          -webkit-animation-duration: 0s;
-          animation-duration: 0s;
-          -webkit-animation-fill-mode: both;
-          animation-fill-mode: both;
+    -webkit-animation-name: bounceInDown;
+    animation-name:bounceInDown;
+    -webkit-animation-duration:0s;
+    animation-duration:0s;
+    -webkit-animation-fill-mode:both;
+    animation-fill-mode:both;
   }
   .springcard .cardpage{
-          max-width:640px;margin:0 auto;
-          transform: translateY(100%);
-          -webkit-transition: -webkit-transform 0.8s;
-          -moz-transition: -moz-transform 0.8s;
-          transition: transform 0.8s;
-          width:100%;position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;
-          background-size:100%;background-repeat:no-repeat;background-position:top center;
+    max-width:640px;margin:0 auto;
+    transform: translateY(100%);
+    -webkit-transition: -webkit-transform 0.8s;
+    -moz-transition: -moz-transform 0.8s;
+    transition: transform 0.8s;
+    width:100%;position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;
+    background-size:100%;background-repeat:no-repeat;background-position:top center;
   }
   .springcard .cardpage.active{transform: translateY(0%);z-index:5;}
   .springcard .cardpage.prev{transform: translateY(-100%);z-index:1;}
   .springcard11 .cardpage{background:url(../assets/images/springcard/11/bg.jpg) no-repeat top center;background-size:100% 100%;}
   .springcard .cardpage .bottom_bg{
-          position: absolute;bottom: 0px;left:0;right:0;height:5%;z-index:1;
-          background-repeat:no-repeat;background-position:bottom center;background-size:100%;
+    position: absolute;bottom: 0px;left:0;right:0;height:5%;z-index:1;
+    background-repeat:no-repeat;background-position:bottom center;background-size:100%;
   }
   .springcard.springcard11 .cardpage .pageinner{width:100%;padding-top:40px;}
   .springcard11 .cardpage1 .card_head{height:50%;width:100%;margin: 0 auto;text-align: center;position: relative;}
   .springcard11 .cardpage2 .card_head{
-          height:25%;width:100%;margin: 0 auto;
-          text-align: center;position: relative;
+    height:25%;width:100%;margin: 0 auto;
+    text-align: center;position: relative;
   }
-  .springcard11 .cardpage2 .card_content{height:36%;width:100%;margin: 0 auto;
-          text-align: center;position: relative;overflow-y: auto;}
+  .springcard11 .cardpage2 .card_content{
+    height:36%;width:100%;margin: 0 auto;text-align: center;position: relative;overflow-y: auto;
+  }
   .springcard11 .avatararea{
-          width:158px;height:158px;overflow:hidden;
-          position:relative;text-align:center;margin: 0 auto;border-radius:50%;z-index: 11;
-          -webkit-animation-duration: 4s;
-          -webkit-animation-iteration-count: infinite;
-          -webkit-animation-delay: 0.7s;
-          -webkit-animation-timing-function: ease;
-          -webkit-animation-name: fanZright;
-          @-webkit-keyframes fanZright{
-                  from{opcity:0;
-                          width:100%;
-                          -webkit-transform:rotateY(0deg)
-                  }
-                  to{opcity:1;
-                          width:100%;
-                          -webkit-transform:rotateY(360deg)
-                  }
-          }
+    width:158px;height:158px;overflow:hidden;
+    position:relative;text-align:center;margin: 0 auto;border-radius:50%;z-index: 11;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-delay: 0.7s;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-name: fanZright;
+    @-webkit-keyframes fanZright{
+      from{opcity:0;
+        width:100%;
+        -webkit-transform:rotateY(0deg)
+      }
+      to{opcity:1;
+        width:100%;
+        -webkit-transform:rotateY(360deg)
+      }
+    }
   }
   .springcard11 .avatarouter.animated {
-          -webkit-animation-duration: 4s;
-          -webkit-animation-iteration-count: infinite;
-          -webkit-animation-delay: 0.7s;
-          -webkit-animation-timing-function: ease;
-          -webkit-animation-name: fanZright;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-delay: 0.7s;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-name: fanZright;
   }
   @-webkit-keyframes fanZright{
-          from{opcity:0;
-                  width:100%;
-                  -webkit-transform:rotateY(0deg)
-          }
-          to{opcity:1;
-                  width:100%;
-                  -webkit-transform:rotateY(360deg)
-          }
+    from{opcity:0;
+      width:100%;
+      -webkit-transform:rotateY(0deg)
+    }
+    to{opcity:1;
+      width:100%;
+      -webkit-transform:rotateY(360deg)
+    }
   }
   .springcard11 .avatarouter{
-          position: absolute;top: 0px;left: 0px;z-index: 12;
-          width:100%;height:100%;border:#fff 4px solid;border-radius:50%;text-align:center;
+    position: absolute;top: 0px;left: 0px;z-index: 12;
+    width:100%;height:100%;border:#fff 4px solid;border-radius:50%;text-align:center;
   }
   .springcard11 .avatarpic{width:150px;height:150px;border-radius: 50%;}
   .springcard11 .avatartxt{display:none;font-size: 3em;color: #fef4e8;text-align:center;line-height:70px;}
@@ -276,7 +274,7 @@
   .springcard11 .card_middle{position:relative;height:25%;}
   .springcard11 .page1_pic1{width:20%;position: absolute;right: 28%;text-align: right;top:-80px;}
   .springcard11 .page1_pic1 img{max-width:100%;max-height:100%;vertical-align:middle;}
-  .springcard11 .page1_pic2{width:13%;position: absolute;right:15%;text-align: right;top:20px;}
+  .springcard11 .page1_pic2{width:13%;position: absolute;right:12%;text-align: right;top:-50px;}
   .springcard11 .page1_pic2 img{max-width:100%;max-height:100%;vertical-align:middle;}
   .springcard11 .page1_pic3{width:72%;position: absolute;text-align: right;}
   .springcard11 .page1_pic3 img{max-width:100%;max-height:100%;vertical-align:middle;}
