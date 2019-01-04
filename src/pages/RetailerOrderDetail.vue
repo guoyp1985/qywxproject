@@ -35,7 +35,12 @@
           <div class="color-red mt5 align_right">
             <div class="qbtn color-orange5" @click="copyTxt(data)" style="position:relative;">
               <span>复制</span>
-              <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+              <template v-if="data.flag != 0 && data.flag != 1 && data.flag != 2">
+                <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.delivercompanyname }} {{ data.delivercode }} {{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+              </template>
+              <template v-else>
+                <div class="deliver_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{ data.linkman ? data.linkman + ', ' : '' }}{{ data.telephone ? data.telephone + ', ' : '' }}{{ data.address ? data.address : '' }}</div>
+              </template>
             </div>
           </div>
         </div>
