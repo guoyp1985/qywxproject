@@ -16,11 +16,11 @@
         </div>
       </div>
       <div class="edit-btn-box" v-else>
-        <div class="cancel-btn" @click="onCancel">
+        <!-- <div class="cancel-btn" @click="onCancel">
           <span class="color-white font16">{{$t('Cancel')}}</span>
-        </div>
+        </div> -->
         <div class="save-btn" @click="onSave">
-          <span class="color-white font16">{{$t('Save')}}</span>
+          <span class="color-white font16">完成编辑</span>
         </div>
       </div>
       <div v-if="query.from != 'miniprogram' && showEditIcon" class="menu-btn-box" v-show="showMenuIcon && module == 'news'">
