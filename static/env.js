@@ -54,7 +54,8 @@ var ENV = {
   vipChat: '免费版不支持与客户联系，开通vip即可立即与客户联系哦！',
   openVipText: '立即开通',
   giveUpVipText: '放弃=错失良机',
-  allowVipFee: true
+  allowVipFee: true,
+  UidArr: [1, 2, 9]
 }
 
 ENV.NoAccessUrls = [

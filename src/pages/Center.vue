@@ -224,6 +224,19 @@ export default {
           this.btns1 = factoryBtn.concat(this.btns1)
         }
         if (this.loginUser.isretailer) {
+          for (let i = 0; i < ENV.UidArr.length; i++) {
+            if (ENV.UidArr[i] === this.loginUser.uid) {
+              let arr = [
+                {
+                  name: 'Seller center',
+                  icon: 'al-fuwu',
+                  color: 'rgba01',
+                  link: '/centerSales'
+                }
+              ]
+              this.btns1 = arr.concat(this.btns1)
+            }
+          }
           this.btns1 = sellerBtn.concat(this.btns1)
         }
         this.showBtn1 = true
