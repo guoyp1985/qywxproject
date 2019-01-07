@@ -1,46 +1,7 @@
 <template>
-  <div data-page="springcard7" class="page no-navbar bg-white border-box springcard springcard7">
-    <div class="page-content">
-      <input type="hidden" id="token" value="$authtoken" />
-      <input type="hidden" id="ticket" value="$ticket" />
-      <input type="hidden" id="ipjudge" value="$ipjudge" />
-      <input type="hidden" id="webtitle" value="$title" />
-      <input type="hidden" id="share_title" value="财神大步到门来，打开贺卡发大财" />
-      <input type="hidden" id="share_desc" value="发点儿红包意思意思，祝你新年发大财" />
-      <input type="hidden" id="share_photo" value="$sharephoto" />
-      <input type="hidden" id="share_url" value="$shareurl" />
-      <input type="hidden" id="share_timeline_title" value="财神大步到门来，打开贺卡发大财" />
-      <input type="hidden" id="share_type" value="" />
-      <input type="hidden" id="share_dataUrl" value="" />
-      <input type="hidden" id="viewport" value="springcard" />
-      <input type="hidden" id="randomkey" value="$randomkey" />
-      <input type="hidden" id="curticket" value="" />
-      <input type="hidden" id="retailerinfouid" value="$retailerinfo[uid]" />
-      <input type="hidden" id="module" value="activity"/>
-      <input type="hidden" id="socket" value="-views-$user['uid']-activity-$id"/>
-      <input type="hidden" id="musicfile" value="../assets/images/springcard/7/1.mp3" />
-      <div class="audiobtn on">
-              <!-- <audio></audio> -->
-      </div>
-      <div class="containerarea1">
-        <div class="poptiplayer">
-          <div class="overlay"></div>
-            <div class="inner">
-              <div class="innerarea">
-                <div class="tipbg">
-                  <div class="tiptxt"></div>
-                  <div class="tipbtnouter">
-                    <a class="hide tosubscribe external tipbtn">去关注</a>
-                  </div>
-                </div>
-                <div style="margin-top:30px;">
-                  <div class="close db-in">
-                    <i class="al al-close color-white font50 closelayer"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-        </div>
+  <div class="containerarea bg-page font14 springcard7">
+    <swiper class="x-swiper no-indicator" @on-index-change="swiperChange" direction="vertical">
+      <swiper-item>
         <div class="cardpage cardpage1 active">
           <div class="pageinner">
             <div class="page1_pic1">
@@ -109,6 +70,8 @@
             </div>
           </div>
         </div>
+      </swiper-item>
+      <swiper-item>
         <div class="cardpage cardpage2">
           <div class="bottom_bg"></div>
           <div class="pageinner">
@@ -133,13 +96,12 @@
             <img src="../assets/images/springcard/7/icon_up.png" />
           </div>
         </div>
+      </swiper-item>
+      <swiper-item>
         <div class="cardpage cardpage3 recordpage">
           <div class="pageinner">
             <div class="toparea3">
               <div class="txt1">看看大家手气如何</div>
-              <!--
-              <div class="txt2">20个红包，1分20秒被抢光</div>
-              -->
             </div>
             <div class="listarea">
               <div class="template">
@@ -164,13 +126,65 @@
             </div>
           </div>
         </div>
+      </swiper-item>
+    </swiper>
+    <!-- <div class="page-content">
+      <input type="hidden" id="token" value="$authtoken" />
+      <input type="hidden" id="ticket" value="$ticket" />
+      <input type="hidden" id="ipjudge" value="$ipjudge" />
+      <input type="hidden" id="webtitle" value="$title" />
+      <input type="hidden" id="share_title" value="财神大步到门来，打开贺卡发大财" />
+      <input type="hidden" id="share_desc" value="发点儿红包意思意思，祝你新年发大财" />
+      <input type="hidden" id="share_photo" value="$sharephoto" />
+      <input type="hidden" id="share_url" value="$shareurl" />
+      <input type="hidden" id="share_timeline_title" value="财神大步到门来，打开贺卡发大财" />
+      <input type="hidden" id="share_type" value="" />
+      <input type="hidden" id="share_dataUrl" value="" />
+      <input type="hidden" id="viewport" value="springcard" />
+      <input type="hidden" id="randomkey" value="$randomkey" />
+      <input type="hidden" id="curticket" value="" />
+      <input type="hidden" id="retailerinfouid" value="$retailerinfo[uid]" />
+      <input type="hidden" id="module" value="activity"/>
+      <input type="hidden" id="socket" value="-views-$user['uid']-activity-$id"/>
+      <input type="hidden" id="musicfile" value="../assets/images/springcard/7/1.mp3" />
+      <div class="audiobtn on">
       </div>
-    </div>
+      <div class="containerarea1">
+        <div class="poptiplayer">
+          <div class="overlay"></div>
+            <div class="inner">
+              <div class="innerarea">
+                <div class="tipbg">
+                  <div class="tiptxt"></div>
+                  <div class="tipbtnouter">
+                    <a class="hide tosubscribe external tipbtn">去关注</a>
+                  </div>
+                </div>
+                <div style="margin-top:30px;">
+                  <div class="close db-in">
+                    <i class="al al-close color-white font50 closelayer"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div> -->
   </div>
 </template>
 <script>
-  export default {
+import { Swiper, SwiperItem } from 'vux'
+export default {
+  components: {
+    Swiper, SwiperItem
+  },
+  data () {
+    return {}
+  },
+  methods: {
+    swiperChange () {}
   }
+}
 </script>
 <style lang="less">
   .rotate-css{

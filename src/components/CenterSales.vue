@@ -203,6 +203,12 @@
           </div>
         </cell>
       -->
+        <!-- <cell style="position:relative" @click.native.stop="downPhoto">
+          <div slot="icon" class="pr10"><i class="al al-zan7 color-red4 db-in font14"></i></div>
+          <div slot="inline-desc">
+            <span class="font15">开店证明</span>
+          </div>
+        </cell> -->
       </template>
     </group>
     <router-link class="bottom_propaganda db" to="/retailerAcademic" v-if="loginUser.whoseagent && loginUser.whoseagent.length > 0">
@@ -280,6 +286,7 @@ With the customer rebate money together!:
 <script>
 import { Previewer, TransferDom, Group, GroupTitle, Cell, XButton, Box, Card, Grid, GridItem, Marquee, MarqueeItem, CellBox, XImg } from 'vux'
 import Time from '#/time'
+import ENV from 'env'
 
 export default {
   name: 'CenterSales',
@@ -395,6 +402,9 @@ export default {
     },
     closeGxk () {
       this.showGxk = false
+    },
+    downPhoto () {
+      this.$http.post(`${ENV.BokaApi}/api/retailer/createProof`, {from: 'gxk'})
     }
   }
 }
