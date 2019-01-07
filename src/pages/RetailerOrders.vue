@@ -58,7 +58,7 @@
                           </div>
                         </div>
                         <div class="t-cell v_middle appendcontrol align_right w80">
-                          <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
+                          <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index1)">{{ $t('Change price') }}</div>
                         </div>
                       </template>
                       <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
@@ -107,7 +107,7 @@
                         </div>
                       </div>
                       <div class="t-cell v_middle appendcontrol align_right w80">
-                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index)">{{ $t('Change price') }}</div>
+                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="changePrice(item,index1)">{{ $t('Change price') }}</div>
                       </div>
                     </div>
                   </div>
@@ -428,18 +428,19 @@ export default {
       event.preventDefault()
       const self = this
       let showtitle = '修改价格'
-      let inputval = item.special
+      let inputval = item.paymoney.replace(/,/g, '')
       self.$vux.confirm.prompt(inputval, {
         title: showtitle,
-        onShow () {
+        onShow: () => {
           self.$vux.confirm.setInputValue(inputval)
         },
-        onConfirm (val) {
+        onConfirm: (val) => {
           if (val === undefined || self.$util.trim(val) === '' || isNaN(val) || parseFloat(val) < 0) {
             self.$vux.toast.text('请输入正确的价格', 'middle')
             return false
           }
           self.$vux.loading.show()
+          val = val.replace(/,/g, '')
           self.$http.post(`${ENV.BokaApi}/api/order/changePrice`,
             { id: item.id, price: val }
           ).then(res => {
@@ -450,7 +451,11 @@ export default {
               time: self.$util.delay(data.error),
               onHide: () => {
                 if (data.flag === 1) {
-                  item.special = parseFloat(val).toFixed(2)
+                  if (this.selectedIndex === 0) {
+                    this.tabdata1[index].paymoney = parseFloat(val).toFixed(2)
+                  } else if (this.selectedIndex === 1) {
+                    this.tabdata2[index].paymoney = parseFloat(val).toFixed(2)
+                  }
                 }
               }
             })

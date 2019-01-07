@@ -208,7 +208,7 @@ export default {
           return false
         }
         let money = parseFloat(inputMoney)
-        let waitcash = parseFloat(this.retailerInfo.waitcash)
+        let waitcash = parseFloat(this.retailerInfo.waitcash.replace(/,/g, ''))
         if (money > waitcash) {
           this.$vux.toast.show({
             text: '提现金额不能超过可提现金额',
