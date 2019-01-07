@@ -1,27 +1,8 @@
 <template>
-  <div data-page="springcard10" class="page no-navbar bg-white border-box springcard springcard10">
-    <div class="page-content">
-      <input type="hidden" id="token" value="$authtoken" />
-      <input type="hidden" id="ticket" value="$ticket" />
-      <input type="hidden" id="ipjudge" value="$ipjudge" />
-      <input type="hidden" id="webtitle" value="$title" />
-      <input type="hidden" id="share_title" value="为你剪出新春的祝福" />
-      <input type="hidden" id="share_desc" value="新春祝福满天飞，贺卡红包抢不停！" />
-      <input type="hidden" id="share_photo" value="$sharephoto" />
-      <input type="hidden" id="share_url" value="$shareurl" />
-      <input type="hidden" id="share_timeline_title" value="新春祝福满天飞，贺卡红包抢不停！" />
-      <input type="hidden" id="share_type" value="" />
-      <input type="hidden" id="share_dataUrl" value="" />
-      <input type="hidden" id="viewport" value="springcard" />
-      <input type="hidden" id="randomkey" value="$randomkey" />
-      <input type="hidden" id="curticket" value="" />
-      <input type="hidden" id="retailerinfouid" value="$retailerinfo[uid]" />
-      <input type="hidden" id="module" value="activity"/>
-      <input type="hidden" id="socket" value="-views-$user['uid']-activity-$id"/>
-      <input type="hidden" id="musicfile" value="http://{$domain}/mobile/data/images/springcard/10/1.mp3" />
-      <!-- <div class="audiobtn on"><audio></audio></div> -->
-      <div class="containerarea1">
-        <div class="poptiplayer">
+  <div class="containerarea bg-page font14 springcard springcard10">
+    <swiper class="x-swiper no-indicator" @on-index-change="swiperChange" direction="vertical">
+      <swiper-item>
+        <!-- <div class="poptiplayer">
           <div class="overlay"></div>
           <div class="inner">
             <div class="innerarea">
@@ -38,7 +19,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="cardpage cardpage1 active">
           <div class="bottom_bg"></div>
           <div class="pageinner">
@@ -71,6 +52,8 @@
             </div>
           </div>
         </div>
+      </swiper-item>
+      <swiper-item>
         <div class="cardpage cardpage2">
           <div class="bottom_bg"></div>
           <div class="pageinner">
@@ -100,6 +83,8 @@
             </div>
           </div>
         </div>
+      </swiper-item>
+      <swiper-item>
         <div class="cardpage cardpage3 recordpage">
           <div class="pageinner">
             <div class="page1_pic1">
@@ -145,64 +130,91 @@
             </div>
           </div>
         </div>
+      </swiper-item>
+    </swiper>
+  </div>
+  <!-- <div data-page="springcard10" class="page no-navbar bg-white border-box springcard springcard10">
+    <div class="page-content">
+      <input type="hidden" id="token" value="$authtoken" />
+      <input type="hidden" id="ticket" value="$ticket" />
+      <input type="hidden" id="ipjudge" value="$ipjudge" />
+      <input type="hidden" id="webtitle" value="$title" />
+      <input type="hidden" id="share_title" value="为你剪出新春的祝福" />
+      <input type="hidden" id="share_desc" value="新春祝福满天飞，贺卡红包抢不停！" />
+      <input type="hidden" id="share_photo" value="$sharephoto" />
+      <input type="hidden" id="share_url" value="$shareurl" />
+      <input type="hidden" id="share_timeline_title" value="新春祝福满天飞，贺卡红包抢不停！" />
+      <input type="hidden" id="share_type" value="" />
+      <input type="hidden" id="share_dataUrl" value="" />
+      <input type="hidden" id="viewport" value="springcard" />
+      <input type="hidden" id="randomkey" value="$randomkey" />
+      <input type="hidden" id="curticket" value="" />
+      <input type="hidden" id="retailerinfouid" value="$retailerinfo[uid]" />
+      <input type="hidden" id="module" value="activity"/>
+      <input type="hidden" id="socket" value="-views-$user['uid']-activity-$id"/>
+      <input type="hidden" id="musicfile" value="http://{$domain}/mobile/data/images/springcard/10/1.mp3" />
+      <!-- <div class="audiobtn on"><audio></audio></div> -->
+      <!-- <div class="containerarea1">
+
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 <script>
-  export default {
-
+import { Swiper, SwiperItem } from 'vux'
+export default {
+  components: {
+    Swiper, SwiperItem
+  },
+  data () {
+    return {}
+  },
+  methods: {
+    swiperChange () {}
   }
+}
 </script>
 <style lang="less">
-  .rotate-css{
-    -webkit-animation: rotate 2s linear 1;
-    animation: rotate 2s linear 1;
-  }
-  @-webkit-keyframes rotate{
-    from{-webkit-transform: rotate(0deg)}
-    to{-webkit-transform: rotate(180deg)}
-  }
-  @-webkit-keyframes fanZ{
-    from{opcity:0;
-      -webkit-transform:rotateY(270deg)
-    }
-    to{opcity:1;
-      -webkit-transform:rotateY(360deg)
-    }
-  }
-  .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
-  .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
-  .springcard .poptiplayer .inner{
-    z-index:1;position:absolute;bottom:0;top:0;left:50%;width:640px;margin-left:-320px;
-    display:flex;justify-content:center; align-items: center;text-align:center;
-  }
-  .springcard .poptiplayer .innerarea{height:35%;width:90%;}
-  .springcard .poptiplayer .tipbg{width:100%;height:100%;position:relative;font-size:1.7em;color:#fff;background:url(../assets/images/springcard/t-open.png) no-repeat center center;background-size:100%;}
-  .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
-  .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
-  .springcard .poptiplayer .tipbtn{
-    display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
-    border-radius:4px;
-  }
-  .springcard .poptiplayer .tipbtn.hide{}
-  .springcard .poptiplayer.active{
-    -webkit-animation-name: bounceInDown;
-    animation-name: bounceInDown;
-    -webkit-animation-duration: 0s;
-    animation-duration: 0s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-  }
-  .springcard .cardpage{
-    max-width:640px;margin:0 auto;
-    transform: translateY(100%);
-    -webkit-transition: -webkit-transform 0.8s;
-    -moz-transition: -moz-transform 0.8s;
-    transition: transform 0.8s;
-    width:100%;position:absolute;left:0;right:0;top:0;bottom:0;
-    background-size:100%;background-repeat:no-repeat;background-position:top center;
-  }
+  // .rotate-css{
+  //   -webkit-animation: rotate 2s linear 1;
+  //   animation: rotate 2s linear 1;
+  // }
+  // @-webkit-keyframes rotate{
+  //   from{-webkit-transform: rotate(0deg)}
+  //   to{-webkit-transform: rotate(180deg)}
+  // }
+  // @-webkit-keyframes fanZ{
+  //   from{opcity:0;
+  //     -webkit-transform:rotateY(270deg)
+  //   }
+  //   to{opcity:1;
+  //     -webkit-transform:rotateY(360deg)
+  //   }
+  // }
+  // .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
+  // .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
+  // .springcard .poptiplayer .inner{
+  //   z-index:1;position:absolute;bottom:0;top:0;left:50%;width:640px;margin-left:-320px;
+  //   display:flex;justify-content:center; align-items: center;text-align:center;
+  // }
+  // .springcard .poptiplayer .innerarea{height:35%;width:90%;}
+  // .springcard .poptiplayer .tipbg{width:100%;height:100%;position:relative;font-size:1.7em;color:#fff;background:url(../assets/images/springcard/t-open.png) no-repeat center center;background-size:100%;}
+  // .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
+  // .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
+  // .springcard .poptiplayer .tipbtn{
+  //   display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
+  //   border-radius:4px;
+  // }
+  // .springcard .poptiplayer .tipbtn.hide{}
+  // .springcard .poptiplayer.active{
+  //   -webkit-animation-name: bounceInDown;
+  //   animation-name: bounceInDown;
+  //   -webkit-animation-duration: 0s;
+  //   animation-duration: 0s;
+  //   -webkit-animation-fill-mode: both;
+  //   animation-fill-mode: both;
+  // }
+  .springcard .cardpage{max-width:640px;width:100%;height:100%;}
   .springcard .cardpage.active{transform: translateY(0%);z-index:5;}
   .springcard .cardpage.prev{transform: translateY(-100%);z-index:1;}
   .springcard .cardpage .bottom_bg{
@@ -213,9 +225,9 @@
   .springcard10 .cardpage1 .bottom_bg{background-image:url(../assets/images/springcard/10/bottom_bg.png);}
   .springcard10 .cardpage2 .bottom_bg{background-image:url(../assets/images/springcard/10/bottom_bg2.png);}
   .springcard .cardpage .pageinner{width:94.5%;height:100%;margin:0 auto;position:relative;padding-top:30px;}
-  .springcard10 .page1_pic1{position:absolute;left:0;top:0;text-align:left;width:30%;}
+  .springcard10 .page1_pic1{position:absolute;left:0;top:15px;text-align:left;width:30%;}
   .springcard10 .page1_pic1 img{max-width:100%;vertical-align:middle;}
-  .springcard10 .page1_pic2{position:absolute;right:0;top:0;text-align:right;width:30%;}
+  .springcard10 .page1_pic2{position:absolute;right:0;top:15px;text-align:right;width:30%;}
   .springcard10 .page1_pic2 img{max-width:100%;vertical-align:middle;}
   .springcard10 .card_head{
     height:24%;width:100%;margin: 0 auto;
@@ -261,7 +273,7 @@
   .springcard10 .cardpage3 .page1_pic2{width:20%;}
   .springcard10 .cardpage3 .pageinner{padding-top:15%;}
   .springcard10 .txtline{height:100px;}
-  .springcard10 .txtline .txtinner{font-size:1.7em;color:#d7000f;font-weight:bold;line-height:30px;text-align:center;}
+  .springcard10 .txtline .txtinner{font-size:1.7em;color:#d7000f;font-weight:bold;line-height:110px;text-align:center;}
   .springcard10 .listarea {
     width: 75%;height:55%;margin: 0 auto;border: 1px solid #edc23d;
     padding: 15px;padding-bottom: 0px;

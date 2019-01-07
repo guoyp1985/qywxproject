@@ -1,7 +1,25 @@
 <template>
   <div class="containerarea bg-page font14 springcard springcard11">
-    <swiper direction="vertical">
+    <swiper class="x-swiper no-indicator" @on-index-change="swiperChange" direction="vertical">
       <swiper-item>
+        <!-- <div class="poptiplayer">
+          <div class="overlay"></div>
+          <div class="inner">
+            <div class="innerarea">
+              <div class="tipbg">
+                <div class="tiptxt"></div>
+                <div class="tipbtnouter">
+                  <a class="hide tosubscribe external tipbtn" href="subscribe.php">去关注</a>
+                </div>
+              </div>
+              <div style="margin-top:30px;">
+                <div class="close db-in">
+                  <i class="al al-close color-white font50 closelayer"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> -->
         <div class="cardpage cardpage1 active">
           <div class="pageinner">
             <div class="card_head">
@@ -24,7 +42,7 @@
                 <img src="../assets/images/springcard/10/page3_img2.png" />
               </div>
             </div>
-            <div class="card_middle" style="margin-top:200px;">
+            <div class="card_middle">
               <div class="page1_pic1">
                 <img src="../assets/images/springcard/11/page1_img1.png" />
               </div>
@@ -162,70 +180,65 @@
           </div>
         </div>
       </div>
-      </div> -->
+    </div> -->
   </div>
 </template>
 <script>
-import { Swiper, SwiperItem, TransferDom } from 'vux'
+import { Swiper, SwiperItem } from 'vux'
 export default {
-  directives: {
-    TransferDom
-  },
   components: {
     Swiper, SwiperItem
+  },
+  data () {
+    return {}
+  },
+  methods: {
+    swiperChange () {}
   }
 }
 </script>
 <style lang="less">
-  .rotate-css{
-    -webkit-animation: rotate 2s linear 1;
-    animation: rotate 2s linear 1;
-  }
-  @-webkit-keyframes rotate{
-    from{-webkit-transform: rotate(0deg)}
-    to{-webkit-transform: rotate(180deg)}
-  }
-
-  @-webkit-keyframes fanZ{
-    from{opcity:0;
-      -webkit-transform:rotateY(270deg)
-    }
-    to{opcity:1;
-      -webkit-transform:rotateY(360deg)
-    }
-  }
-  .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
-  .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
-  .springcard .poptiplayer .inner{
-          z-index:1;position:absolute;bottom:0;top:0;left:50%;width:640px;margin-left:-320px;
-          display:flex;justify-content:center; align-items: center;text-align:center;
-  }
-  .springcard .poptiplayer .innerarea{height:35%;width:90%;}
-  .springcard .poptiplayer .tipbg{width:100%;height:100%;position:relative;font-size:1.7em;color:#fff;background:url(../assets/images/springcard/t-open.png) no-repeat center center;background-size:100%;}
-  .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
-  .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
-  .springcard .poptiplayer .tipbtn{
-    display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
-    border-radius:4px;
-  }
-  .springcard .poptiplayer .tipbtn.hide{}
-  .springcard .poptiplayer.active{
-    -webkit-animation-name: bounceInDown;
-    animation-name:bounceInDown;
-    -webkit-animation-duration:0s;
-    animation-duration:0s;
-    -webkit-animation-fill-mode:both;
-    animation-fill-mode:both;
-  }
-  .springcard .cardpage{
-    max-width:640px;margin:0 auto;
-    transform: translateY(100%);
-    -webkit-transition: -webkit-transform 0.8s;
-    -moz-transition: -moz-transform 0.8s;
-    transition: transform 0.8s;
-    width:100%;position:absolute;left:0;right:0;top:0;bottom:0;overflow:hidden;
-    background-size:100%;background-repeat:no-repeat;background-position:top center;
-  }
+  // .rotate-css{
+  //   -webkit-animation: rotate 2s linear 1;
+  //   animation: rotate 2s linear 1;
+  // }
+  // @-webkit-keyframes rotate{
+  //   from{-webkit-transform: rotate(0deg)}
+  //   to{-webkit-transform: rotate(180deg)}
+  // }
+  //
+  // @-webkit-keyframes fanZ{
+  //   from{opcity:0;
+  //     -webkit-transform:rotateY(270deg)
+  //   }
+  //   to{opcity:1;
+  //     -webkit-transform:rotateY(360deg)
+  //   }
+  // }
+  // .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
+  // .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
+  // .springcard .poptiplayer .inner{
+  //         z-index:1;position:absolute;bottom:0;top:0;left:50%;width:640px;margin-left:-320px;
+  //         display:flex;justify-content:center; align-items: center;text-align:center;
+  // }
+  // .springcard .poptiplayer .innerarea{height:35%;width:90%;}
+  // .springcard .poptiplayer .tipbg{width:100%;height:100%;position:relative;font-size:1.7em;color:#fff;background:url(../assets/images/springcard/t-open.png) no-repeat center center;background-size:100%;}
+  // .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
+  // .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
+  // .springcard .poptiplayer .tipbtn{
+  //   display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
+  //   border-radius:4px;
+  // }
+  // .springcard .poptiplayer .tipbtn.hide{}
+  // .springcard .poptiplayer.active{
+  //   -webkit-animation-name: bounceInDown;
+  //   animation-name:bounceInDown;
+  //   -webkit-animation-duration:0s;
+  //   animation-duration:0s;
+  //   -webkit-animation-fill-mode:both;
+  //   animation-fill-mode:both;
+  // }
+  .springcard .cardpage{max-width:640px;width:100%;height:100%;}
   .springcard .cardpage.active{transform: translateY(0%);z-index:5;}
   .springcard .cardpage.prev{transform: translateY(-100%);z-index:1;}
   .springcard11 .cardpage{background:url(../assets/images/springcard/11/bg.jpg) no-repeat top center;background-size:100% 100%;}
@@ -286,13 +299,13 @@ export default {
   .springcard11 .avatartxt{display:none;font-size: 3em;color: #fef4e8;text-align:center;line-height:70px;}
   .springcard11 .audiopic{width:100%;text-align:center;}
   .springcard11 .card_middle{position:relative;height:25%;}
-  .springcard11 .page1_pic1{width:20%;position: absolute;right: 28%;text-align: right;top:-80px;}
+  .springcard11 .page1_pic1{display:none;width:20%;position: absolute;right: 28%;text-align: right;top: 0px;}
   .springcard11 .page1_pic1 img{max-width:100%;max-height:100%;vertical-align:middle;}
-  .springcard11 .page1_pic2{width:13%;position: absolute;right:12%;text-align: right;top:-50px;}
+  .springcard11 .page1_pic2{display:none;width:13%;position: absolute;right:15%;text-align: right;top:20px;}
   .springcard11 .page1_pic2 img{max-width:100%;max-height:100%;vertical-align:middle;}
-  .springcard11 .page1_pic3{width:72%;position: absolute;text-align: right;}
+  .springcard11 .page1_pic3{display:none;width:72%;position: absolute;bottom:0;text-align: right;}
   .springcard11 .page1_pic3 img{max-width:100%;max-height:100%;vertical-align:middle;}
-  .springcard11 .page1_pic4{width:100%;height:7%;text-align:center;position:absolute;bottom:0;}
+  .springcard11 .page1_pic4{display:none;width:100%;height:7%;text-align:center;position:absolute;bottom:0;}
   .springcard11 .page1_pic4 img{max-width:100%;max-height:100%;vertical-align:middle;}
 
   .springcard11 .cardpage1 .toparea{width:100%;height:15%;margin:0 auto;text-align:center;}

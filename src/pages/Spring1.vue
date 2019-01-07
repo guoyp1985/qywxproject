@@ -1,7 +1,27 @@
 <template>
-  <div class="containerarea bg-page font14 springcard7">
+  <div class="containerarea bg-page font14 springcard springcard7">
     <swiper class="x-swiper no-indicator" @on-index-change="swiperChange" direction="vertical">
       <swiper-item>
+        <!-- <div class="containerarea1">
+          <div class="poptiplayer">
+            <div class="overlay"></div>
+              <div class="inner">
+                <div class="innerarea">
+                  <div class="tipbg">
+                    <div class="tiptxt"></div>
+                    <div class="tipbtnouter">
+                      <a class="hide tosubscribe external tipbtn">去关注</a>
+                    </div>
+                  </div>
+                  <div style="margin-top:30px;">
+                    <div class="close db-in">
+                      <i class="al al-close color-white font50 closelayer"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div> -->
         <div class="cardpage cardpage1 active">
           <div class="pageinner">
             <div class="page1_pic1">
@@ -187,55 +207,47 @@ export default {
 }
 </script>
 <style lang="less">
-  .rotate-css{
-          -webkit-animation: rotate 2s linear 1;
-          animation: rotate 2s linear 1;
-  }
-  @-webkit-keyframes rotate{
-          from{-webkit-transform: rotate(0deg)}
-          to{-webkit-transform: rotate(180deg)}
-  }
-
-  @-webkit-keyframes fanZ{
-          from{opcity:0;
-                  -webkit-transform:rotateY(270deg)
-          }
-          to{opcity:1;
-                  -webkit-transform:rotateY(360deg)
-          }
-  }
-  .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
-  .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
-  .springcard .poptiplayer .inner{
-          z-index:1;position:absolute;bottom:0;top:0;left:50%;width:640px;margin-left:-320px;
-          display:flex;justify-content:center; align-items: center;text-align:center;
-  }
-  .springcard .poptiplayer .innerarea{height:35%;width:90%;}
-  .springcard .poptiplayer .tipbg{width:100%;height:100%;position:relative;font-size:1.7em;color:#fff;background:url(../assets/images/springcard/t-open.png) no-repeat center center;background-size:100%;}
-  .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
-  .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
-  .springcard .poptiplayer .tipbtn{
-          display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
-          border-radius:4px;
-  }
-  .springcard .poptiplayer .tipbtn.hide{}
-  .springcard .poptiplayer{
-          -webkit-animation-name: bounceInDown;
-          animation-name: bounceInDown;
-          -webkit-animation-duration: 0s;
-          animation-duration: 0s;
-          -webkit-animation-fill-mode: both;
-          animation-fill-mode: both;
-  }
-  .springcard .cardpage{
-          max-width:640px;margin:0 auto;
-          transform: translateY(100%);
-          -webkit-transition: -webkit-transform 0.8s;
-          -moz-transition: -moz-transform 0.8s;
-          transition: transform 0.8s;
-          width:100%;position:absolute;left:0;right:0;top:0;bottom:0;
-          background-size:100%;background-repeat:no-repeat;background-position:top center;
-  }
+  // .rotate-css{
+  //         -webkit-animation: rotate 2s linear 1;
+  //         animation: rotate 2s linear 1;
+  // }
+  // @-webkit-keyframes rotate{
+  //         from{-webkit-transform: rotate(0deg)}
+  //         to{-webkit-transform: rotate(180deg)}
+  // }
+  //
+  // @-webkit-keyframes fanZ{
+  //         from{opcity:0;
+  //                 -webkit-transform:rotateY(270deg)
+  //         }
+  //         to{opcity:1;
+  //                 -webkit-transform:rotateY(360deg)
+  //         }
+  // }
+  // .springcard .poptiplayer{z-index:10;display:none;position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
+  // .springcard .poptiplayer .overlay{position:absolute;left:0;top:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);}
+  // .springcard .poptiplayer .inner{
+  //         z-index:1;position:absolute;bottom:0;top:0;left:50%;width:640px;margin-left:-320px;
+  //         display:flex;justify-content:center; align-items: center;text-align:center;
+  // }
+  // .springcard .poptiplayer .innerarea{height:35%;width:90%;}
+  // .springcard .poptiplayer .tipbg{width:100%;height:100%;position:relative;font-size:1.7em;color:#fff;background:url(../assets/images/springcard/t-open.png) no-repeat center center;background-size:100%;}
+  // .springcard .poptiplayer .tiptxt{width: 43%;position: absolute;left: 21%;top: 57%;color:#eb1a2f;}
+  // .springcard .poptiplayer .tipbtnouter{width: 43%;position: absolute;left: 21%;top: 69%;}
+  // .springcard .poptiplayer .tipbtn{
+  //         display:inline-block;color:#eb1a2f;border:1px solid #eb1a2f;padding:0px 8px;
+  //         border-radius:4px;
+  // }
+  // .springcard .poptiplayer .tipbtn.hide{}
+  // .springcard .poptiplayer{
+  //         -webkit-animation-name: bounceInDown;
+  //         animation-name: bounceInDown;
+  //         -webkit-animation-duration: 0s;
+  //         animation-duration: 0s;
+  //         -webkit-animation-fill-mode: both;
+  //         animation-fill-mode: both;
+  // }
+  .springcard .cardpage{max-width:640px;width:100%;height:100%;}
   .springcard .cardpage.active{transform: translateY(0%);z-index:5;}
   .springcard .cardpage.prev{transform: translateY(-100%);z-index:1;}
   .springcard7 .cardpage{background:url(../assets/images/springcard/7/bg.jpg) no-repeat top center;background-size:100% 100%;}
@@ -246,7 +258,7 @@ export default {
           position: absolute;bottom: 0px;left:0;right:0;height:5%;z-index:1;
           background-repeat:no-repeat;background-position:bottom center;background-size:100%;
   }
-  .springcard.springcard7 .cardpage .pageinner{width:100%;padding-top:177.5%;}
+  .springcard.springcard7 .cardpage .pageinner{width:100%;padding-top:55%;}
   .springcard.springcard7 .toparea{height: 40%;width: 100%;}
   .springcard7 .page1_pic1{position: absolute;left: 0px;top: 0px;width: 30%;text-align:left;}
   .springcard7 .page1_pic1 img{max-width:100%;max-height:100%;vertical-align:middle;}
@@ -321,10 +333,10 @@ export default {
                   animation-timing-function: cubic-bezier(0.175, 0.885, 0.320, 1);
           }
   }
-  .springcard7 .cardpage1 .bottomarea{height: 60%;width: 100%;position: relative;}
+  .springcard7 .cardpage1 .bottomarea{height: 60%;width: 100%;}
   .springcard7 .page1_bg1{
-          width:100%;height: 100%;position: absolute;left: 0;right: 0;
-          background: url(../assets/images/springcard/7/bg1.png) no-repeat left;
+          width:100%;height: 65%;position: absolute;left: 0;right: 0;
+          background: url(../assets/images/springcard/7/bg1.png) no-repeat;
   }
   .springcard7 .page1_bg1.animate{
     -webkit-animation-duration:1.0s;
@@ -355,7 +367,7 @@ export default {
     -webkit-animation-timing-function:linear;
     -webkit-animation-name:cc;
   }
-  .springcard7 .page1_pic4 .pic{width:80%;margin: 0 auto;text-align:center;}
+  .springcard7 .page1_pic4 .pic{width:70%;margin: 0 auto;text-align:center;}
   .springcard7 .page1_pic4 img{max-width:100%;max-height:100%;vertical-align:middle;}
 
   .springcard7 .page1_pic5{position: absolute;width:70%;left:0;bottom:0;}
@@ -423,7 +435,7 @@ export default {
   .springcard7 .toparea2 .avatararea{width:150px;margin:0 auto;}
   .springcard7 .toparea2 .avatararea img{width:150px;height:150px;border-radius:50%;}
   .springcard7 .toparea2 .avatartxt{margin-top: 15px;text-align: center;color: #ffff00;font-size: 2em;line-height: 0.5em;}
-  .springcard7 .middlearea2{position:absolute;left: 0;right: 0;top: 33%;bottom: 20%;}
+  .springcard7 .middlearea2{position:absolute;left: 0;right: 0;top:40%;bottom: 20%;}
   .springcard7 .middlearea2 .bg{
           width: 80%;height: 100%;margin: 0 auto;padding: 15px;
           background: url(../assets/images/springcard/7/bg4.png) no-repeat center;
