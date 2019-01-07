@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14 prove">
+  <div class="bg-page font14 prove">
     <div class="content">
       <div>按《电商法》第十条规定，电子商务经营者应当依法办理市场主体登记。如贵店铺想<span class="bold">办理个体工商户主体登记</span>的，有两种方法：</div>
       <div class="bold mt10">A. 有实体经营地址</div>
@@ -19,7 +19,7 @@
     </div>
     <div v-if="showModal">
       <div class="mceng">
-        <div style="margin-top:80px;">
+        <div class="w_100 flex_center" style="margin-top:50px;">
           <div class="modal">
             <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
             <div class="align_center">（长按保存图片）</div>
@@ -61,6 +61,7 @@ export default {
 </script>
 <style lang="less">
   .prove{
+    width:100%;height:100%;
     .content{padding:20px 10px;box-sizing:border-box;}
     .btnClick{
       padding:10px 20px;box-sizing:border-box;background-color:#f63f3d;color:#fff;font-size:16px;font-weight:bold;
@@ -68,10 +69,9 @@ export default {
     }
     .modal{
       width:80%;padding:15px 10px;border:1px solid #e5e5e5;margin:0 auto;background-color:#fff;text-align:center;
-      z-index:1;border-radius:10px;
+      z-index:1;border-radius:10px;position:relative;
       img{width:100%;height:400px;}
     }
-    .mceng{position:absolute;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);overflow: hidden;}
-    .al{z-index: 999;}
+    .mceng{position:fixed;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);overflow: hidden;}
   }
 </style>

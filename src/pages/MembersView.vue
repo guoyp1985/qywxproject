@@ -59,7 +59,7 @@
         <div class="mt12 bg-white itemlist list-shadow font14">
           <div class="item padding10 b_bottom_after">
             <div class="t-table">
-              <div class="t-cell align_left w100">真实姓名</div>
+              <div class="t-cell align_left w100">备注名</div>
               <div class="t-cell align_right color-gray">{{ viewuser.position }}</div>
               <div class="t-cell align_right w50">
                 <span class="qbtn8 bg-orange7 color-white" @click="updatechar('position')">更新</span>
@@ -340,7 +340,7 @@ export default {
       this.confirmData = ''
       this.charName = char
       if (char === 'position') {
-        this.confirmTitle = '请输入真实姓名'
+        this.confirmTitle = '请输入备注名'
         inputval = self.viewuser.position
       } else if (char === 'mobile') {
         this.confirmTitle = '请输入手机号'
