@@ -79,9 +79,9 @@ export default {
             this.$vux.loading.hide()
             const data = res.data
             if (data.flag === 1) {
-              this.photo = data.data
+              this.photo = `${data.data}?_dt=${new Date().getTime()}`
               this.showModal = true
-            } else if (data.flag === 2 ) {
+            } else if (data.flag === 2) {
               this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
             } else {
               this.$vux.toast.show({
