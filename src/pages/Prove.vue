@@ -65,6 +65,7 @@ export default {
     cliDownload () {
       console.log('cliDownload')
       const self = this
+      console.log(this.loginUser)
       if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
         this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
       } else {
@@ -80,6 +81,8 @@ export default {
             if (data.flag === 1) {
               this.photo = data.data
               this.showModal = true
+            } else if (data.flag === 2 ) {
+              this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
             } else {
               this.$vux.toast.show({
                 text: data.error,
