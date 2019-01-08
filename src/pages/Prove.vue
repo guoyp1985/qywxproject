@@ -56,6 +56,7 @@ export default {
       showModal: false,
       query: {},
       loginUser: {},
+      appName: {'gxk': '共销客', 'jk365': '聚客365', 'qxb': '群销宝'},
       fromAppName: '',
       photo: '',
       fromPage: ''
@@ -101,7 +102,7 @@ export default {
   activated () {
     this.loginUser = User.get()
     this.query = this.$route.query
-    this.fromAppName = this.query.comefrom ? this.query.comefrom : '共销客'
+    this.fromAppName = this.query.log ? this.appName[this.query.log] : '共销客'
     let queryarr = []
     for (let key in this.query) {
       queryarr.push(`${key}=${this.query[key]}`)
