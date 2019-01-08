@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import ENV from 'env'
+// import ENV from 'env'
 export default {
   data () {
     return {
@@ -38,8 +38,7 @@ export default {
   methods: {
     cliDownload () {
       console.log('cliDownload')
-      const self = this
-      self.showModal = true
+      // const self = this
       // self.$http.post(`${ENV.BokaApi}/api/retailer/createProof`).then(res => {
       //   const data = res.data
       //   if (data.flag === 1) {
