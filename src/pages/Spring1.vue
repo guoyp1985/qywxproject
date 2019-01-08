@@ -233,7 +233,7 @@ export default {
   }
   .springcard7 .cardpage1 .bottomarea{height: 60%;width: 100%;}
   .springcard7 .page1_bg1{
-          width:100%;height: 65%;position: absolute;left: 0;right: 0;
+          width:100%;height:100%;position: absolute;left:0;right:0;bottom:0;
           background: url(../assets/images/springcard/7/bg1.png) no-repeat;
   }
   .springcard7 .page1_bg1.animate{

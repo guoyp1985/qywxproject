@@ -79,7 +79,7 @@
                     <div class="txtinner">看看大家手气如何</div>
             </div>
             <div class="listarea">
-              <div class="template" style="display:none;">
+              <div class="template">
                 <div class="scroll_item">
                   <div class="pic">
                     <img class="disavatar" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='$DEFAULT_AVATAR';">
@@ -167,7 +167,7 @@ export default {
   .springcard10 .page1_pic4{height: 33%;position: absolute;top:54%;left: 0;right: 0;text-align:center;}
   .springcard10 .page1_pic4 img{max-width:100%;height:100%;vertical-align:middle;}
   .springcard10 .conarea{
-    display:none;width: 70%;height: 45%;margin: 0 auto;text-align: left;  color: #df0005;font-size:1.7em;line-height: 1.5em;
+    width: 70%;height: 45%;margin: 0 auto;text-align: left;  color: #df0005;font-size:1.7em;line-height: 1.5em;
     overflow-y: auto;-webkit-animation-delay:0.5s;
     -webkit-animation-duration:1.1s;
     -webkit-animation-iteration-count:1;
@@ -233,7 +233,7 @@ export default {
     background-repeat:no-repeat;background-position:bottom center;background-size:100%;
     background-image:url(../assets/images/springcard/10/bottom_bg3.png);
   }
-  .springcard10 .page3_pic4{display:none;position: absolute;top: 40%;padding-left: 5%;z-index: 3;}
+  .springcard10 .page3_pic4{position: absolute;top: 40%;padding-left: 5%;z-index: 3;}
   .springcard10 .page3_pic4 img{max-width:100%;max-height:100%;vertical-align:middle;}
   .springcard10 .page3_pic5{position: absolute;left: 0;bottom: 0;height: 52px;width: 88px;}
   .springcard10 .page3_pic5 img{max-width:100%;max-height:100%;vertical-align:middle;}

@@ -17,16 +17,12 @@
       <div>第3步：带上①身份证件、②《{{shopName.gxk}}开店证明》，前往当地工商行政管理部门，现场填写《开户申请表》，即可申请办理。</div>
       <div class="btnClick" @click="cliDownload">点击下载《{{shopName.gxk}}开店证明》</div>
     </div>
-    <div v-if="showModal">
-      <div class="mceng">
-        <div class="w_100 flex_center" style="margin-top:50px;">
-          <div class="modal">
-            <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
-            <div class="align_center">（长按保存图片）</div>
-          </div>
-        </div>
-        <div @click="closeModal" class="al al-close font34 color-white align_center"></div>
+    <div class="modalarea flex_cloum" v-if="showModal">
+      <div class="modal1">
+        <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
+        <div class="align_center mt5">（长按保存图片）</div>
       </div>
+      <div @click="closeModal" class="al al-close font34 color-white align_center"></div>
     </div>
   </div>
 </template>
@@ -67,11 +63,12 @@ export default {
       padding:10px 20px;box-sizing:border-box;background-color:#f63f3d;color:#fff;font-size:16px;font-weight:bold;
       text-align:center;border-radius:5px;margin-top:50px;
     }
-    .modal{
+    .modal1{
       width:80%;padding:15px 10px;border:1px solid #e5e5e5;margin:0 auto;background-color:#fff;text-align:center;
-      z-index:1;border-radius:10px;position:relative;
+      z-index:1;border-radius:10px;position:relative;margin-top:60px;
       img{width:100%;height:400px;}
     }
     .mceng{position:fixed;top:0;bottom:0;left:0;right:0;background-color: rgba(0, 0, 0, 0.6);overflow: hidden;}
+    .flex_cloum{display:flex;flex-direction:column;}
   }
 </style>
