@@ -72,7 +72,9 @@ export default {
           this.showModal = true
         } else {
           this.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/retailer/createProof`).then(res => {
+          self.$http.post(`${ENV.BokaApi}/api/retailer/createProof`, {
+            from: this.query.logo
+          }).then(res => {
             this.$vux.loading.hide()
             const data = res.data
             if (data.flag === 1) {
