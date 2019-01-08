@@ -102,7 +102,7 @@ export default {
   activated () {
     this.loginUser = User.get()
     this.query = this.$route.query
-    this.fromAppName = this.query.log ? this.appName[this.query.log] : '共销客'
+    this.fromAppName = this.query.logo ? this.appName[this.query.logo] : '共销客'
     let queryarr = []
     for (let key in this.query) {
       queryarr.push(`${key}=${this.query[key]}`)
