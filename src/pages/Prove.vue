@@ -40,7 +40,7 @@
       <div class="inner">
         <div class="modal1">
           <img :src="photo" />
-          <div class="align_center mt5">（长按保存图片）</div>
+          <div class="align_center mt20 font18">（长按保存图片）</div>
         </div>
         <div @click="closeModal" class="al al-close font34 color-white align_center"></div>
       </div>
