@@ -87,7 +87,7 @@ export default{
           type: 'add',
           content: this.content,
           teamid: this.id,
-          photo: ''
+          photo: this.photos.split(',') ? this.photos.split(',') : ''
         }
       }).then(res => {
         console.log(res)
