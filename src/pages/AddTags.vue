@@ -25,16 +25,15 @@
 <script type="text/javascript">
 import { Group, XTextarea } from 'vux'
 export default{
+  components: {
+    Group, XTextarea
+  },
   data () {
     return {
       max: 200,
       id: null,
       photos: []
     }
-  },
-  components: {
-    Group,
-    XTextarea
   },
   methods: {
     onChooseImage () {
