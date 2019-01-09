@@ -10,7 +10,7 @@
         <div class="team-info-inner">
           <div class="inner-item inner-item-left">
             <img class="avatar" :src="teamInfo.avatar"/>
-            <button class="btn" v-if="userInfo.uid === teamInfo.uploader">管理团队</button>
+            <button class="btn" v-if="userInfo.uid === teamInfo.uploader" @click="manageTeam">管理团队</button>
             <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && !teamInfo.join" @click="joinTeam">加入团队</button>
             <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="outTeam">退出团队</button>
           </div>
@@ -202,6 +202,14 @@ export default {
           }
         })
       }
+    },
+    manageTeam () {
+      this.$router.push({
+        path: '/manageTeam',
+        query: {
+          id: this.id
+        }
+      })
     },
     joinTeam () {
       let _this = this
