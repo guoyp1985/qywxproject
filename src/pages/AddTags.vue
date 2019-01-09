@@ -70,7 +70,7 @@ export default{
     flex-wrap: wrap;
     padding: 20px;
     box-sizing: border-box;
-    justify-content: space-between;
+    justify-content: flex-start;
     .photo-wraper{
       width: 30%;
       height: 0;
