@@ -47,9 +47,9 @@ export default{
             maxnum: 9 - this.photos.length,
             handleCallback: function (data) {
               if (data.flag === 1) {
-                self.photos.push(data.data)
+                this.photos.push(data.data)
               } else if (data.error) {
-                self.$vux.toast.show({
+                this.$vux.toast.show({
                   text: data.error
                 })
               }
