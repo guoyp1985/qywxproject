@@ -7,7 +7,7 @@
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
       <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click="onDelete(item.id)">删除</button>
-      <button class="ope-btn" v-else @click="onImport(item.id)">导入</button>
+      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="onImport(item.id)">导入</button>
     </div>
   </div>
 </template>
