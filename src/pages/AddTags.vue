@@ -85,6 +85,7 @@ export default{
         img{
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
         .al-guanbi{
           position: absolute;
@@ -105,7 +106,7 @@ export default{
         }
       }
     }
-    .photo-wraper:nth-child(2n+2) {
+    .photo-wraper:nth-child(3n+2) {
       margin-left: 5%;
       margin-right: 5%;
     }
