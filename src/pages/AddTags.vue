@@ -25,6 +25,9 @@
 <script type="text/javascript">
 import { Group, XTextarea } from 'vux'
 export default{
+  components: {
+    Group, XTextarea
+  },
   data () {
     return {
       max: 200,
@@ -32,19 +35,19 @@ export default{
       photos: []
     }
   },
-  components: {
-    Group,
-    XTextarea
-  },
   methods: {
     onChooseImage () {
       if (this.$util.isPC()) {
+        alert(1)
         console.log('现在是pc端')
       } else {
-        this.$wechat.ready(function () {
+        alert(2)
+        this.$wechat.ready(() => {
+          alert(3)
           this.$util.wxUploadImage({
             maxnum: 9 - this.photos.length,
-            handleCallback: function (data) {
+            handleCallback: (data) => {
+              alert(4)
               if (data.flag === 1) {
                 this.photos.push(data.data)
               } else if (data.error) {
