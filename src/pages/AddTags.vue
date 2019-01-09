@@ -105,6 +105,10 @@ export default{
         }
       }
     }
+    .photo-wraper:nth-child(2n+2) {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
   }
 }
 </style>
