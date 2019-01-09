@@ -3,7 +3,7 @@
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="pagemiddle">
+      <div class="">
         <group label-width="5em">
           <group class="textarea-outer">
             <x-textarea
@@ -76,7 +76,7 @@
           </x-textarea>
         </group>
       </div>
-      <div class="pagebottom flex_center pl12 pr12 list-shadow02 bg-white">
+      <div class="mt20 flex_center pl12 pr12">
         <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>

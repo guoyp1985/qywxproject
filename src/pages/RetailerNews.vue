@@ -35,9 +35,9 @@
             <div class="t-cell v_middle">
               <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
               <div class="clamp1 font14 color-gray v_middle mt5">
-                  <span class="v_middle color-999">{{ item.dateline | dateformat }}</span>
-                  <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                  <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                  <span class="v_middle"><i class="al al-chakan font18 middle-cell" style="color: #bbbbbb"></i>{{item.views}}</span>
+                  <span class="v_middle ml5"><i class="al al-ai-share font14 middle-cell" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                  <span class="v_middle color-999 ml5">{{ item.dateline | dateformat }}</span>
               </div>
             </div>
             <div class="align_right t-cell v_bottom w80 pb8">
