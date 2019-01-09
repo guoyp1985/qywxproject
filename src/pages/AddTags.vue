@@ -42,7 +42,7 @@ export default{
         console.log('现在是pc端')
       } else {
         alert(2)
-        this.$wechat.ready(function () {
+        this.$wechat.ready(() => {
           alert(3)
           this.$util.wxUploadImage({
             maxnum: 9 - this.photos.length,
