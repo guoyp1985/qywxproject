@@ -38,6 +38,7 @@ export default{
   },
   methods: {
     onChooseImage () {
+      const self = this
       if (this.$util.isPC()) {
         console.log('现在是pc端')
       } else {
