@@ -2,7 +2,7 @@
   <div class="add-tags">
     <div class="input-box">
       <group>
-        <x-textarea placeholder="说点什么吧..." :max="max"></x-textarea>
+        <x-textarea placeholder="说点什么吧..." :max="max" v-model="content"></x-textarea>
       </group>
     </div>
     <div class="photos">
@@ -18,6 +18,9 @@
           <span class="count">{{photos.length}} / 9</span>
         </div>
       </div>
+    </div>
+    <div class="submit-btn">
+      <button>发布</button>
     </div>
   </div>
 </template>
@@ -62,8 +65,12 @@ export default{
 
 <style lang="less" scoped="">
 .add-tags{
+  position: relative;
   width: 100vw;
   height: 100vh;
+  .weui-cells,.vux-no-group-title{
+    margin-top: 0 !important;
+  }
   .photos{
     width: 100vw;
     display: flex;
@@ -76,6 +83,7 @@ export default{
       height: 0;
       padding-top: 30%;
       position: relative;
+      margin-bottom: 10px;
       .photo{
         position: absolute;
         left: 0;
@@ -109,6 +117,26 @@ export default{
     .photo-wraper:nth-child(3n+2) {
       margin-left: 5%;
       margin-right: 5%;
+    }
+  }
+  .submit-btn{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    button{
+      width: 80%;
+      color: #fff;
+      border-radius: 10px;
+      background-color: #ff6a61;
+      border: none;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }
