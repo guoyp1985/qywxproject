@@ -1,9 +1,11 @@
 <template>
   <div class="add-tags">
     <div class="input-box">
-      <group>
+      <!-- <group>
         <x-textarea placeholder="说点什么吧..." :max="max" v-model="content"></x-textarea>
-      </group>
+      </group> -->
+      <textarea placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
+      <span class="count">{{count}} / 200</span>
     </div>
     <div class="photos">
       <div class="photo-wraper" v-for="photo in photos" :key="photo.id">
@@ -20,22 +22,33 @@
       </div>
     </div>
     <div class="submit-btn">
-      <button>发布</button>
+      <button @click="submit">发布</button>
     </div>
   </div>
 </template>
 
 <script type="text/javascript">
-import { Group, XTextarea } from 'vux'
+import Env from 'env'
 export default{
-  components: {
-    Group, XTextarea
+  created () {
+    this.id = this.$route.query.id
+  },
+  activated () {
+    this.content = ''
   },
   data () {
     return {
       max: 200,
       id: null,
-      photos: []
+      photos: [],
+      content: '',
+      count: 0
+    }
+  },
+  watch: {
+    content (newValue) {
+      console.log(newValue)
+      this.count = newValue.length
     }
   },
   methods: {
@@ -58,6 +71,30 @@ export default{
           })
         })
       }
+    },
+    submit () {
+      if (!this.content.length && !this.photos.length) {
+        this.$vux.toast.show({
+          text: '请输入内容!',
+          type: 'warn'
+        })
+        return
+      }
+      this.$http({
+        url: `${Env.BokaApi}/api/team/source`,
+        method: 'post',
+        data: {
+          type: 'add',
+          content: this.content,
+          teamid: this.id,
+          photo: ''
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$router.back()
+        }
+      })
     }
   }
 };
@@ -68,8 +105,20 @@ export default{
   position: relative;
   width: 100vw;
   height: 100vh;
-  .weui-cells,.vux-no-group-title{
-    margin-top: 0 !important;
+  .input-box{
+    position: relative;
+    textarea{
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .count{
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      color: #c9c9c9;
+    }
   }
   .photos{
     width: 100vw;

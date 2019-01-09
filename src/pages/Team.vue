@@ -39,7 +39,7 @@
         <div class="content-list">
 
           <!-- 素材 -->
-          <list-tags :id="id" v-if="currentTab === 0"></list-tags>
+          <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
 
           <!-- 商品、活动、文章、培训 -->
             <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
@@ -80,7 +80,12 @@ export default {
     })
   },
   activated () {
-    if (this.$refs.listOthers) {
+    console.log('in team activated')
+    if (!this.currentTab) {
+      this.$refs.listTags.tags = []
+      this.$refs.listTags.pagestart = 0
+      this.$refs.listTags.getTags()
+    } else {
       this.$refs.listOthers.data = []
       this.$refs.listOthers.pagestart = 0
       this.$refs.listOthers.getData()
@@ -135,23 +140,29 @@ export default {
       })
     },
     changeTab (index) {
+      console.log(index)
       this.currentTab = index
       this.$refs.wraper.refresh()
-      if (index) {
-        switch (index) {
-          case 1:
-            this.module = 'product'
-            break
-          case 2:
-            this.module = 'activity'
-            break
-          case 3:
-            this.module = 'news'
-            break
-          case 4:
-            this.module = 'courseclass'
-            break
-        }
+      switch (index) {
+        case 0:
+          this.$nextTick(() => {
+            this.$refs.listTags.tags = []
+            this.$refs.listTags.pagestart = 0
+            this.$refs.listTags.getTags()
+          })
+          break
+        case 1:
+          this.module = 'product'
+          break
+        case 2:
+          this.module = 'activity'
+          break
+        case 3:
+          this.module = 'news'
+          break
+        case 4:
+          this.module = 'courseclass'
+          break
       }
     },
     scrollEnd (y) {
@@ -164,7 +175,11 @@ export default {
       console.log(-y)
       if (Math.abs(y) >= height) {
         console.log('滑动到底部了！')
-        this.$refs.listOthers.getData()
+        if (!this.currentTab) {
+          this.$refs.listTags.getTags()
+        } else {
+          this.$refs.listOthers.getData()
+        }
       }
     },
     scroll (y) {
