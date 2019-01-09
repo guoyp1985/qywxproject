@@ -35,6 +35,7 @@ export default{
   },
   activated () {
     this.content = ''
+    this.photos = []
   },
   data () {
     return {
@@ -87,7 +88,7 @@ export default{
           type: 'add',
           content: this.content,
           teamid: this.id,
-          photo: this.photos.length > 0 ? this.photos.split(',') : ''
+          photo: this.photos.length > 0 ? this.photos.join(',') : ''
         }
       }).then(res => {
         console.log(res)
