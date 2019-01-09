@@ -38,14 +38,17 @@ export default{
   },
   methods: {
     onChooseImage () {
-      const self = this
       if (this.$util.isPC()) {
+        alert(1)
         console.log('现在是pc端')
       } else {
+        alert(2)
         this.$wechat.ready(function () {
+          alert(3)
           this.$util.wxUploadImage({
             maxnum: 9 - this.photos.length,
-            handleCallback: function (data) {
+            handleCallback: (data) => {
+              alert(4)
               if (data.flag === 1) {
                 this.photos.push(data.data)
               } else if (data.error) {
