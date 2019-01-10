@@ -147,7 +147,7 @@ export default{
         }
         .al-guanbi{
           position: absolute;
-          top: -30px;
+          top: -20px;
           right: -15px;
           font-weight: 700;
           color: #ff6a61;
