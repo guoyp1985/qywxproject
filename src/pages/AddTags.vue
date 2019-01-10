@@ -144,8 +144,9 @@ export default{
         }
         .al-guanbi{
           position: absolute;
-          top: -5px;
-          right: -5px;
+          top: 0px;
+          right: 0px;
+          font-weight: 700;
         }
       }
       .count-tip{

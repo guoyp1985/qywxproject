@@ -91,7 +91,7 @@ export default {
     deleteTag (moduleid, index) {
       let _this = this
       _this.$vux.confirm.show({
-        title: `确定删除该${this.moduleTransfer}吗？`,
+        title: `确定删除该素材吗？`,
         onConfirm () {
           _this.$http({
             url: `${Env.BokaApi}/api/team/band`,
@@ -211,7 +211,7 @@ export default {
           display: flex;
           flex-direction: row;
           flex-wrap: wrap;
-          justify-content: space-between;
+          justify-content: flex-start;
           margin-bottom: 10px;
           width: 100%;
           .photo-wraper{
