@@ -5,9 +5,9 @@
       <span class="count">{{count}} / 200</span>
     </div>
     <div class="photos">
-      <div class="photo-wraper" v-for="photo in photos" :key="photo.id">
+      <div class="photo-wraper" v-for="(photo, index) in photos" :key="photo.id">
         <div class="photo">
-          <span class="al al-guanbi"></span>
+          <span class="al al-guanbi" @click="delPhoto(index)"></span>
           <img :src="photo">
         </div>
       </div>
@@ -93,6 +93,9 @@ export default{
           this.$router.back()
         }
       })
+    },
+    delPhoto (index) {
+      this.photos.splice(index, 1)
     }
   }
 };
@@ -144,8 +147,8 @@ export default{
         }
         .al-guanbi{
           position: absolute;
-          top: 0px;
-          right: 0px;
+          top: -10px;
+          right: -10px;
           font-weight: 700;
         }
       }
