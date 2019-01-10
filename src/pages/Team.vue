@@ -183,16 +183,10 @@ export default {
       }
     },
     scroll (y) {
-      // console.log('scroll被触发了！')
       const wraperHeight = this.$refs.wraper.$el.offsetHeight
       const teamBgHeight = this.$refs.teamBg.offsetHeight
       const teamInfoHeight = this.$refs.teamInfo.offsetHeight
       const height = wraperHeight - (teamBgHeight + teamInfoHeight)
-      // console.log('wraperHeight是：' + wraperHeight)
-      // console.log('teamBgHeight是：' + teamBgHeight)
-      // console.log('teamInfoHeight是：' + teamInfoHeight)
-      // console.log('height是：' + height)
-      // console.log('y是：' + y)
       if (Math.abs(y) >= height) {
         this.fixedTop = true
       } else {

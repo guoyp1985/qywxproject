@@ -6,13 +6,17 @@
         <div class="info-top">
           <span class="username">{{tag.username}}</span>
           <div class="ope-btns">
-            <div class="btn copy-btn"><span class="al"></span>复制</div>
+            <div class="btn copy-btn" @click="copyTxt"><span class="al"></span>复制</div>
             <div class="btn"><span class="al"></span>保存图片</div>
           </div>
         </div>
         <span class="content">{{tag.content}}</span>
-        <div class="photos">
-          <img class="photo" v-for="photo in tag.photosSplited" :key="photo.id"/>
+        <div class="photos" v-if="tag.photo !== ''">
+          <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
+            <div class="photo">
+              <img :src="photo"/>
+            </div>
+          </div>
         </div>
         <div class="info-bottom">
           <span class="time">{{tag.time}}</span>
@@ -79,6 +83,7 @@ export default {
             } else {
               this.tags.push(...data.data)
             }
+            this.pagestart++
           }
         })
       }
@@ -105,6 +110,43 @@ export default {
           })
         }
       })
+    },
+    copyTxt (e) {
+      const self = this
+      let eleobj = null
+      let elem = e.target.parentNode.parentNode
+      while ((elem = elem.nextSibling)) {
+        if (elem.nodeType === 1) {
+          eleobj = elem
+          break
+        }
+      }
+      if (eleobj.innerHTML.length > 0) {
+        let range = null
+        let save = function (e) {
+          e.clipboardData.setData('text/plain', eleobj.innerHTML)
+          e.preventDefault()
+        }
+        if (self.$util.isIOS()) { // ios设备
+          window.getSelection().removeAllRanges()
+          range = document.createRange()
+          range.selectNode(eleobj)
+          window.getSelection().addRange(range)
+          document.execCommand('copy')
+          window.getSelection().removeAllRanges()
+        } else { // 安卓设备
+          console.log('in android')
+          document.addEventListener('copy', save)
+          document.execCommand('copy')
+          document.removeEventListener('copy', save)
+        }
+        setTimeout(function () {
+          self.$vux.toast.show({
+            text: '复制成功',
+            time: 1500
+          })
+        }, 200)
+      }
     }
   }
 };
@@ -167,9 +209,36 @@ export default {
         }
         .photos{
           display: flex;
+          flex-direction: row;
           flex-wrap: wrap;
           justify-content: space-between;
           margin-bottom: 10px;
+          width: 100%;
+          .photo-wraper{
+            position: relative;
+            width: 30%;
+            padding-top: 30%;
+            height: 0;
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            .photo{
+              position: absolute;
+              left: 0;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              img{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              }
+            }
+          }
+          .photo-wraper:nth-child(3n + 2){
+            margin-left: 5%;
+            margin-right: 5%;
+          }
         }
         .info-bottom{
           display: flex;

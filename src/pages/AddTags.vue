@@ -1,9 +1,6 @@
 <template>
   <div class="add-tags">
     <div class="input-box">
-      <!-- <group>
-        <x-textarea placeholder="说点什么吧..." :max="max" v-model="content"></x-textarea>
-      </group> -->
       <textarea placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
       <span class="count">{{count}} / 200</span>
     </div>
