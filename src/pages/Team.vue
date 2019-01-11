@@ -221,7 +221,7 @@ export default {
       })
     },
     joinTeam () {
-      let _this = this
+      // let _this = this
       this.$http({
         url: `${Env.BokaApi}/api/team/teamset`,
         method: 'post',
@@ -235,14 +235,16 @@ export default {
           this.$vux.toast.show({
             text: '加入团队成功!',
             onHide () {
-              _this.$router.go(0)
+              // _this.$router.go(0)
+              alert('已加入团队')
+              window.location.reload()
             }
           })
         }
       })
     },
     outTeam () {
-      let _this = this
+      // let _this = this
       this.$http({
         url: `${Env.BokaApi}/api/team/teamset`,
         method: 'post',
@@ -256,7 +258,9 @@ export default {
           this.$vux.toast.show({
             text: '退出团队成功!',
             onHide () {
-              _this.$router.go(0)
+              // _this.$router.go(0)
+              alert('已退出团队')
+              window.location.reload()
             }
           })
         }
