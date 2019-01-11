@@ -89,7 +89,7 @@
           <!-- 分润比例设置 -->
           <div class="form-item bg-white">
             <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
-            <div class="profit-level">
+            <div class="profit-level b_bottom_after">
               <span>上级分润</span>
               <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" ></x-input>
             </div>
@@ -402,7 +402,6 @@ export default {
 .profit-level{
   box-sizing: border-box;
   padding: 20px 0 20px 10px;
-  border-bottom: 1px solid #eaeaea;
   display: flex;
   span{
     flex: 0 0 60px;
