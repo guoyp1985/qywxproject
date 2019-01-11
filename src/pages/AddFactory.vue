@@ -13,7 +13,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" />
+                <x-input v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input type="tel" class="input" placeholder="卖家名额" />
+                <x-input type="tel" class="input" placeholder="卖家名额" ></x-input>
               </div>
             </div>
           </div>
@@ -91,11 +91,11 @@
             <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
             <div class="profit-level">
               <span>上级分润</span>
-              <input type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" />
+              <x-input type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" ></x-input>
             </div>
             <div class="profit-level">
               <span>销售分润</span>
-              <input type="tel" v-model="submitData.salesrate" placeholder="输入分润比例" />
+              <x-input type="tel" v-model="submitData.salesrate" placeholder="输入分润比例" ></x-input>
             </div>
           </div>
 
