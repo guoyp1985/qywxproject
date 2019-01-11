@@ -242,7 +242,7 @@ export default {
       })
     },
     outTeam () {
-      // let _this = this
+      let _this = this
       this.$http({
         url: `${Env.BokaApi}/api/team/teamset`,
         method: 'post',
