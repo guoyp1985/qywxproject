@@ -41,10 +41,10 @@
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle w80" style="position:relative;">
+              <div class="t-cell input-cell v_middle" style="position:relative;">
                 <x-input v-model="submitData.shortcode" type="text" class="input" :max="3"></x-input>
               </div>
-              <div class="t-cell title-cell color-red v_middle font12">(必须为三位大写字母)</div>
+              <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div>
             </div>
           </div>
           <!--
