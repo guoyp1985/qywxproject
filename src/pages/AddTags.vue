@@ -1,14 +1,13 @@
 <template>
   <div class="add-tags">
     <div class="input-box">
-      <group>
-        <x-textarea placeholder="说点什么吧..." :max="max"></x-textarea>
-      </group>
+      <textarea placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
+      <span class="count">{{count}} / 200</span>
     </div>
     <div class="photos">
-      <div class="photo-wraper" v-for="photo in photos" :key="photo.id">
+      <div class="photo-wraper" v-for="(photo, index) in photos" :key="photo.id">
         <div class="photo">
-          <span class="al al-guanbi"></span>
+          <span class="al al-guanbi" @click="delPhoto(index)"></span>
           <img :src="photo">
         </div>
       </div>
@@ -19,20 +18,35 @@
         </div>
       </div>
     </div>
+    <div class="submit-btn">
+      <button @click="submit">发布</button>
+    </div>
   </div>
 </template>
 
 <script type="text/javascript">
-import { Group, XTextarea } from 'vux'
+import Env from 'env'
 export default{
-  components: {
-    Group, XTextarea
+  created () {
+    this.id = this.$route.query.id
+  },
+  activated () {
+    this.content = ''
+    this.photos = []
   },
   data () {
     return {
       max: 200,
       id: null,
-      photos: []
+      photos: [],
+      content: '',
+      count: 0
+    }
+  },
+  watch: {
+    content (newValue) {
+      console.log(newValue)
+      this.count = newValue.length
     }
   },
   methods: {
@@ -55,6 +69,33 @@ export default{
           })
         })
       }
+    },
+    submit () {
+      if (!this.content.length && !this.photos.length) {
+        this.$vux.toast.show({
+          text: '请输入内容!',
+          type: 'warn'
+        })
+        return
+      }
+      this.$http({
+        url: `${Env.BokaApi}/api/team/source`,
+        method: 'post',
+        data: {
+          type: 'add',
+          content: this.content,
+          teamid: this.id,
+          photo: this.photos.length > 0 ? this.photos.join(',') : ''
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$router.back()
+        }
+      })
+    },
+    delPhoto (index) {
+      this.photos.splice(index, 1)
     }
   }
 };
@@ -62,20 +103,37 @@ export default{
 
 <style lang="less" scoped="">
 .add-tags{
+  position: relative;
   width: 100vw;
   height: 100vh;
+  .input-box{
+    position: relative;
+    textarea{
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      box-sizing: border-box;
+    }
+    .count{
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      color: #c9c9c9;
+    }
+  }
   .photos{
     width: 100vw;
     display: flex;
     flex-wrap: wrap;
     padding: 20px;
     box-sizing: border-box;
-    justify-content: space-between;
+    justify-content: flex-start;
     .photo-wraper{
       width: 30%;
       height: 0;
       padding-top: 30%;
       position: relative;
+      margin-bottom: 10px;
       .photo{
         position: absolute;
         left: 0;
@@ -85,11 +143,14 @@ export default{
         img{
           width: 100%;
           height: 100%;
+          object-fit: cover;
         }
         .al-guanbi{
           position: absolute;
-          top: -5px;
-          right: -5px;
+          top: -20px;
+          right: -10px;
+          font-weight: 700;
+          color: #ff6a61;
         }
       }
       .count-tip{
@@ -104,6 +165,30 @@ export default{
           margin-bottom: 5px;
         }
       }
+    }
+    .photo-wraper:nth-child(3n+2) {
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+  }
+  .submit-btn{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    button{
+      width: 80%;
+      color: #fff;
+      border-radius: 10px;
+      background-color: #ff6a61;
+      border: none;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }

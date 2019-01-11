@@ -143,9 +143,9 @@ export default {
   .springcard10 .cardpage2 .bottom_bg{background-image:url(../assets/images/springcard/10/bottom_bg2.png);}
   .springcard .cardpage .pageinner{width:94.5%;height:100%;margin:0 auto;position:relative;}
   .springcard .cardpage3 .pageinner{width:94.5%;height:92%;margin:0 auto;position:relative;}
-  .springcard10 .page1_pic1{position:absolute;left:0;top:15px;text-align:left;width:30%;}
+  .springcard10 .page1_pic1{position:absolute;left:0;top:0;text-align:left;width:30%;}
   .springcard10 .page1_pic1 img{max-width:100%;vertical-align:middle;}
-  .springcard10 .page1_pic2{position:absolute;right:0;top:15px;text-align:right;width:30%;}
+  .springcard10 .page1_pic2{position:absolute;right:0;top:0;text-align:right;width:30%;}
   .springcard10 .page1_pic2 img{max-width:100%;vertical-align:middle;}
   .springcard10 .card_head{
     height:24%;width:100%;margin: 0 auto;
@@ -234,7 +234,7 @@ export default {
     background-repeat:no-repeat;background-position:bottom center;background-size:100%;
     background-image:url(../assets/images/springcard/10/bottom_bg3.png);
   }
-  .springcard10 .page3_pic4{position: absolute;top:28%;padding-left: 5%;z-index: 3;}
+  .springcard10 .page3_pic4{position: absolute;top:25%;padding-left: 5%;z-index: 3;}
   .springcard10 .page3_pic4 img{max-width:100%;max-height:100%;vertical-align:middle;}
   .springcard10 .page3_pic5{position: absolute;left: 0;bottom: 0;height: 52px;width: 88px;}
   .springcard10 .page3_pic5 img{max-width:100%;max-height:100%;vertical-align:middle;}
