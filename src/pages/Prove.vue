@@ -40,7 +40,7 @@
       <div class="inner">
         <div class="modal1">
           <img :src="photo" />
-          <div class="align_center mt5">（长按保存图片）</div>
+          <div class="align_center mt20 font18">（长按保存图片）</div>
         </div>
         <div @click="closeModal" class="al al-close font34 color-white align_center"></div>
       </div>
@@ -56,6 +56,7 @@ export default {
       showModal: false,
       query: {},
       loginUser: {},
+      appName: {'gxk': '共销客', 'jk365': '聚客365', 'qxb': '群销宝'},
       fromAppName: '',
       photo: '',
       fromPage: ''
@@ -79,7 +80,7 @@ export default {
             this.$vux.loading.hide()
             const data = res.data
             if (data.flag === 1) {
-              this.photo = data.data
+              this.photo = `${data.data}?_dt=${new Date().getTime()}`
               this.showModal = true
             } else if (data.flag === 2) {
               this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
@@ -101,7 +102,7 @@ export default {
   activated () {
     this.loginUser = User.get()
     this.query = this.$route.query
-    this.fromAppName = this.query.comefrom ? this.query.comefrom : '共销客'
+    this.fromAppName = this.query.logo ? this.appName[this.query.logo] : '共销客'
     let queryarr = []
     for (let key in this.query) {
       queryarr.push(`${key}=${this.query[key]}`)

@@ -112,7 +112,9 @@
   "Payment",
   "test",
   "Concession",
+  "Team",
   "AddTags",
+  "ManageTeam",
   "AddOthers",
   "Income"
 ]
