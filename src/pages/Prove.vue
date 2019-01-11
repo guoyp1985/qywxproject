@@ -81,7 +81,7 @@ export default {
             if (data.flag === 1) {
               this.photo = data.data
               this.showModal = true
-            } else if (data.flag === 2 ) {
+            } else if (data.flag === 2) {
               this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
             } else {
               this.$vux.toast.show({
