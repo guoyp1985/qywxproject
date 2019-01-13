@@ -108,7 +108,16 @@
   "Payment",
   "test",
   "Concession",
+  "Team",
   "AddTags",
   "AddOthers",
-  "Income"
+  "Income",
+  "Rooms",
+  "RoomDetails",
+  "RoomList",
+  "RoomApply",
+  "RoomOrderConsumer",
+  "RoomOrderBusiness",
+  "RoomOrderDeal",
+  "RoomOrders"
 ]
