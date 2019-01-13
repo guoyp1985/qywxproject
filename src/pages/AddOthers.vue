@@ -77,56 +77,60 @@ export default {
       }
     },
     getData (module) {
+      console.log(module)
       if (this.data.length === this.pagestart * this.limit) {
         let url = ''
-        let method = ''
-        let params = {teamid: this.id}
+        let params = {teamid: this.id, pagestart: this.pagestart, limit: this.limit}
         if (module === 'activity') {
           url = `${Env.BokaApi}/api/retailer/listActivity`
-          method = 'GET'
           params = {
             ...params,
             do: 'store',
             wid: this.userInfo.uid
           }
+          this.$http.get(url, {
+            params: params
+          }).then(res => {
+            console.log(res)
+            const data = res.data.data
+            for (let i = 0; i < data.length; i++) {
+              data[i].isChecked = false
+            }
+            if (!this.pagestart) {
+              this.data = data
+            } else {
+              this.data.push(...data)
+            }
+            console.log(data)
+            this.pagestart++
+            this.$refs.wraper.bscroll.refresh()
+          })
         } else {
           url = `${Env.BokaApi}/api/list/${module}`
-          method = 'POST'
           params = {
             ...params,
             uploader: this.userInfo.uid
           }
+          this.$http({
+            url: url,
+            method: 'POST',
+            data: params
+          }).then(res => {
+            console.log(res)
+            const data = res.data
+            for (let i = 0; i < data.length; i++) {
+              data[i].isChecked = false
+            }
+            if (!this.pagestart) {
+              this.data = data
+            } else {
+              this.data.push(...data)
+            }
+            console.log(data)
+            this.pagestart++
+            this.$refs.wraper.bscroll.refresh()
+          })
         }
-        params = {
-          ...params,
-          pagestart: this.pagestart,
-          limit: this.limit
-        }
-        this.$http({
-          url: url,
-          method: method,
-          data: params
-        }).then(res => {
-          console.log(res)
-          let data = []
-          if (this.module === 'activity') {
-            data = res.data.data
-          } else {
-            data = res.data
-          }
-          console.log(data)
-          for (let i = 0; i < data.length; i++) {
-            data[i].isChecked = false
-          }
-          if (!this.pagestart) {
-            this.data = data
-          } else {
-            this.data.push(...data)
-          }
-          console.log(data)
-          this.pagestart++
-          this.$refs.wraper.bscroll.refresh()
-        })
       } else {
         console.log('没有更多数据了！')
       }
@@ -144,6 +148,7 @@ export default {
       this.$router.back()
     },
     onConfirm () {
+      let _this = this
       if (!this.selectedItemId.length) {
         this.$vux.toast.show({
           text: `请选择${this.moduleTransfer}！`,
@@ -165,7 +170,8 @@ export default {
         if (res.data.flag) {
           this.selectedItemId = []
           this.$vux.toast.show({
-            text: `添加${this.moduleTransfer}成功！`
+            text: `添加${this.moduleTransfer}成功！`,
+            onHide: _this.$router.back()
           })
         }
       })

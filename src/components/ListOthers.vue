@@ -1,13 +1,13 @@
 <template>
   <div class="data">
-    <div v-for="item in data" :key="item.id" class="item">
+    <div v-for="(item, index) in data" :key="item.id" class="item">
       <img class="avatar" :src="item.photo"/>
       <div class="info">
         <span class="title">{{item.title}}</span>
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
-      <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click="onDelete(item.id)">删除</button>
-      <button class="ope-btn" v-else @click="onImport(item.id)">导入</button>
+      <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click="onDelete(item.id, index)">删除</button>
+      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="onImport(item.id)">导入</button>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@
 import Env from 'env'
 export default {
   created () {
+    console.log('in listothers activated')
     this.getData()
   },
   data () {
@@ -97,7 +98,7 @@ export default {
         console.log('没有数据了！')
       }
     },
-    onDelete (moduleid) {
+    onDelete (moduleid, index) {
       const _this = this
       this.$vux.confirm.show({
         title: `确定删除该${this.moduleTransfer}吗？`,
@@ -115,9 +116,7 @@ export default {
           }).then(res => {
             console.log(res)
             if (res.data.flag) {
-              _this.pagestart = 0
-              _this.data = []
-              _this.getData()
+              _this.data.splice(index, 1)
             }
           })
         }

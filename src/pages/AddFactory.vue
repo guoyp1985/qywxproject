@@ -13,7 +13,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" />
+                <x-input v-model="submitData.title" type="text" class="input" :placeholder="$t('Fatory name')" ></x-input>
               </div>
             </div>
           </div>
@@ -41,10 +41,10 @@
           <div class="form-item">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
-              <div class="t-cell input-cell v_middle w80" style="position:relative;">
+              <div class="t-cell input-cell v_middle" style="position:relative;">
                 <x-input v-model="submitData.shortcode" type="text" class="input" :max="3"></x-input>
               </div>
-              <div class="t-cell title-cell color-red v_middle font12">(必须为三位大写字母)</div>
+              <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div>
             </div>
           </div>
           <!--
@@ -52,7 +52,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">卖家名额</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input type="tel" class="input" placeholder="卖家名额" />
+                <x-input class="input" type="tel" class="input" placeholder="卖家名额" ></x-input>
               </div>
             </div>
           </div>
@@ -89,13 +89,13 @@
           <!-- 分润比例设置 -->
           <div class="form-item bg-white">
             <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
-            <div class="profit-level">
+            <div class="profit-level b_bottom_after">
               <span>上级分润</span>
-              <input type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" />
+              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" ></x-input>
             </div>
             <div class="profit-level">
               <span>销售分润</span>
-              <input type="tel" v-model="submitData.salesrate" placeholder="输入分润比例" />
+              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入分润比例" ></x-input>
             </div>
           </div>
 
@@ -402,7 +402,6 @@ export default {
 .profit-level{
   box-sizing: border-box;
   padding: 20px 0 20px 10px;
-  border-bottom: 1px solid #eaeaea;
   display: flex;
   span{
     flex: 0 0 60px;
@@ -411,6 +410,7 @@ export default {
     padding-left: 10px;
     flex: 1;
   }
+  .weui-cell:before{display:none;}
 }
 .addFactory .x-checker .ck-item{
   font-size:13px;

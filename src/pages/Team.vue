@@ -10,8 +10,14 @@
         <div class="team-info-inner">
           <div class="inner-item inner-item-left">
             <img class="avatar" :src="teamInfo.avatar"/>
+<<<<<<< HEAD
             <button class="btn" v-if="userInfo.uid === teamInfo.uploader">管理团队</button>
             <button class="btn" v-else>加入团队</button>
+=======
+            <button class="btn" v-if="userInfo.uid === teamInfo.uploader" @click="manageTeam">管理团队</button>
+            <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && !teamInfo.join" @click="joinTeam">加入团队</button>
+            <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="outTeam">退出团队</button>
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
           </div>
           <div class="inner-item inner-item-right">
             <div class="leader">{{teamInfo.username}}的团队</div>
@@ -38,7 +44,11 @@
         <div class="content-list">
 
           <!-- 素材 -->
+<<<<<<< HEAD
           <list-tags :id="id" v-if="currentTab === 0"></list-tags>
+=======
+          <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
 
           <!-- 商品、活动、文章、培训 -->
             <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
@@ -55,9 +65,15 @@
     </div>
 
     <div class="add-import" slot="ope-btns">
+<<<<<<< HEAD
       <span class="add al al-add" v-if="userInfo.uid === teamInfo.uploader" @click="onAddOthers"></span>
       <div class="import" v-else>
         <button>导入全部{{moduleTransfer}}</button>
+=======
+      <span class="add al al-add" v-if="userInfo.uid === teamInfo.uploader" @click="onAdd"></span>
+      <div class="import" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join && currentTab !== 0">
+        <button @click="importAll">导入全部{{moduleTransfer}}</button>
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
       </div>
     </div>
   </scroll-view>
@@ -79,7 +95,16 @@ export default {
     })
   },
   activated () {
+<<<<<<< HEAD
     if (this.$refs.listOthers) {
+=======
+    console.log('in team activated')
+    if (!this.currentTab) {
+      this.$refs.listTags.tags = []
+      this.$refs.listTags.pagestart = 0
+      this.$refs.listTags.getTags()
+    } else {
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
       this.$refs.listOthers.data = []
       this.$refs.listOthers.pagestart = 0
       this.$refs.listOthers.getData()
@@ -134,6 +159,7 @@ export default {
       })
     },
     changeTab (index) {
+<<<<<<< HEAD
       this.currentTab = index
       this.$refs.wraper.refresh()
       if (index) {
@@ -151,6 +177,31 @@ export default {
             this.module = 'courseclass'
             break
         }
+=======
+      console.log(index)
+      this.currentTab = index
+      this.$refs.wraper.refresh()
+      switch (index) {
+        case 0:
+          this.$nextTick(() => {
+            this.$refs.listTags.tags = []
+            this.$refs.listTags.pagestart = 0
+            this.$refs.listTags.getTags()
+          })
+          break
+        case 1:
+          this.module = 'product'
+          break
+        case 2:
+          this.module = 'activity'
+          break
+        case 3:
+          this.module = 'news'
+          break
+        case 4:
+          this.module = 'courseclass'
+          break
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
       }
     },
     scrollEnd (y) {
@@ -163,20 +214,34 @@ export default {
       console.log(-y)
       if (Math.abs(y) >= height) {
         console.log('滑动到底部了！')
+<<<<<<< HEAD
         this.$refs.listOthers.getData()
       }
     },
     scroll (y) {
       // console.log('scroll被触发了！')
+=======
+        if (!this.currentTab) {
+          this.$refs.listTags.getTags()
+        } else {
+          this.$refs.listOthers.getData()
+        }
+      }
+    },
+    scroll (y) {
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
       const wraperHeight = this.$refs.wraper.$el.offsetHeight
       const teamBgHeight = this.$refs.teamBg.offsetHeight
       const teamInfoHeight = this.$refs.teamInfo.offsetHeight
       const height = wraperHeight - (teamBgHeight + teamInfoHeight)
+<<<<<<< HEAD
       // console.log('wraperHeight是：' + wraperHeight)
       // console.log('teamBgHeight是：' + teamBgHeight)
       // console.log('teamInfoHeight是：' + teamInfoHeight)
       // console.log('height是：' + height)
       // console.log('y是：' + y)
+=======
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
       if (Math.abs(y) >= height) {
         this.fixedTop = true
       } else {
@@ -184,7 +249,11 @@ export default {
       }
       console.log(this.fixedTop)
     },
+<<<<<<< HEAD
     onAddOthers () {
+=======
+    onAdd () {
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
       if (this.currentTab) {
         this.$router.push({
           path: '/addOthers',
@@ -201,6 +270,77 @@ export default {
           }
         })
       }
+<<<<<<< HEAD
+=======
+    },
+    manageTeam () {
+      this.$router.push({
+        path: '/manageTeam',
+        query: {
+          id: this.id
+        }
+      })
+    },
+    joinTeam () {
+      let _this = this
+      this.$http({
+        url: `${Env.BokaApi}/api/team/teamset`,
+        method: 'post',
+        data: {
+          id: this.id,
+          type: 'addMember'
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$vux.toast.show({
+            text: '加入团队成功!',
+            onHide () {
+              _this.teamInfo.join = 1
+            }
+          })
+        }
+      })
+    },
+    outTeam () {
+      let _this = this
+      this.$http({
+        url: `${Env.BokaApi}/api/team/teamset`,
+        method: 'post',
+        data: {
+          id: this.id,
+          type: 'exitTeam'
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$vux.toast.show({
+            text: '退出团队成功!',
+            onHide () {
+              _this.teamInfo.join = 0
+            }
+          })
+        }
+      })
+    },
+    importAll () {
+      this.$http({
+        url: `${Env.BokaApi}/api/team/copy`,
+        method: 'post',
+        data: {
+          teamid: this.id,
+          type: 'all',
+          module: this.module
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$vux.toast.show({
+            text: `导入全部${this.moduleTransfer}成功!`
+          })
+        }
+      })
+>>>>>>> 547ab6a535dae54639cb02ea494466c76106c891
     }
   }
 };
