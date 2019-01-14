@@ -5,8 +5,8 @@
       <div class="tag-info">
         <div class="info-top">
           <span class="username">{{tag.username}}</span>
-          <div class="ope-btns">
-            <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制</div>
+          <div class="ope-btns" v-if="tag.content.length > 0">
+            <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制文本</div>
             <!-- <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div> -->
           </div>
         </div>
