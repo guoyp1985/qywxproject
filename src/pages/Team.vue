@@ -16,7 +16,7 @@
           </div>
           <div class="inner-item inner-item-right">
             <div class="leader">
-              {{teamInfo.username}}的团队
+              {{teamInfo.title}}
               <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
             </div>
             <div class="counts">
@@ -27,7 +27,7 @@
             <div class="title">{{teamInfo.content}}</div>
           </div>
         </div>
-        <div class="modalshow" v-if="showModal">
+        <div class="modalshow" v-if="showModal" @click="closeShow">
           <div class="modaInfo">
             <div class="al al-feiji color-white"></div>
             <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
@@ -312,10 +312,10 @@ export default {
     flex-direction: column;
     min-height: 100vh;
     padding-bottom: 70px;
-    .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.6);box-sizing: border-box;}
+    .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.8);box-sizing: border-box;}
     .modaInfo{
       display:flex;flex-direction:column;margin-top: 60px;
-      .al{font-size:80px;margin-left:auto;margin-right: 60px;}
+      .al{font-size:80px;margin-left:auto;margin-right: 100px;}
     }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
     .team-bg{
