@@ -10,7 +10,7 @@
             <!-- <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div> -->
           </div>
         </div>
-        <span class="content clamp1 w_100">{{tag.content}}</span>
+        <div class="content">{{tag.content}}</div>
         <div class="photos" v-if="tag.photo !== ''">
           <viewer :images="tag.photosSplited" style="width:100%;display:flex;flex-wrap: wrap;">
             <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
