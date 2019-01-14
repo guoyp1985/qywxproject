@@ -1,13 +1,13 @@
 <template>
   <div class="data">
-    <div v-for="(item, index) in data" :key="item.id" class="item">
+    <div v-for="(item, index) in data" :key="item.id" class="item" @click="toItem(item)">
       <img class="avatar" :src="item.photo"/>
       <div class="info">
         <span class="title">{{item.title}}</span>
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
-      <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click="onDelete(item.id, index)">删除</button>
-      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="onImport(item.id)">导入</button>
+      <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click.stop="onDelete(item.id, index)">删除</button>
+      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
     </div>
   </div>
 </template>
@@ -75,6 +75,7 @@ export default {
   },
   methods: {
     getData () {
+      console.log('in getData')
       if (this.data.length === this.pagestart * this.limit) {
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
@@ -91,6 +92,9 @@ export default {
           } else {
             this.data.push(...res.data.data)
           }
+          this.$nextTick(() => {
+            this.$parent.refresh()
+          })
           this.pagestart++
           console.log(this.data)
         })
@@ -137,6 +141,45 @@ export default {
             text: `导入${this.moduleTransfer}成功！`
           })
         }
+      })
+    },
+    toItem (item) {
+      console.log('toItem')
+      if (this.module === 'courseclass') {
+        console.log('培训没办法跳转！')
+        return
+      }
+      let path = ''
+      let query = null
+      switch (this.module) {
+        case 'product':
+          path = '/product'
+          query = {
+            id: item.id,
+            wid: this.teamInfo.uid
+          }
+          break
+        case 'activity':
+          console.log(item)
+          if (item.type === 'bargainbuy') {
+            path = '/activity'
+          } else {
+            path = '/product'
+          }
+          query = {
+            id: item.id
+          }
+          break
+        case 'news':
+          path = '/news'
+          query = {
+            id: item.id
+          }
+          break
+      }
+      this.$router.push({
+        path: path,
+        query: query
       })
     }
   }

@@ -15,13 +15,23 @@
             <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="outTeam">退出团队</button>
           </div>
           <div class="inner-item inner-item-right">
-            <div class="leader">{{teamInfo.username}}的团队</div>
+            <div class="leader">
+              {{teamInfo.title}}
+              <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
+            </div>
             <div class="counts">
               <span>商品 {{teamInfo.product}}</span>
               <span>文章 {{teamInfo.news}}</span>
               <span>活动 {{teamInfo.activity}}</span>
             </div>
-            <div class="title">{{teamInfo.title}}</div>
+            <div class="title">{{teamInfo.content}}</div>
+          </div>
+        </div>
+        <div class="modalshow" v-if="showModal" @click="closeShow">
+          <div class="modaInfo">
+            <div class="al al-feiji color-white"></div>
+            <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
+            <div class="btnknow" @click="closeShow">知道了</div>
           </div>
         </div>
       </div>
@@ -99,7 +109,8 @@ export default {
       id: null,
       userInfo: {},
       module: '',
-      fixedTop: false
+      fixedTop: false,
+      showModal: false
     }
   },
   computed: {
@@ -130,6 +141,12 @@ export default {
     ListOthers
   },
   methods: {
+    tabModal () {
+      this.showModal = true
+    },
+    closeShow () {
+      this.showModal = false
+    },
     getTeamInfo (id) {
       return this.$http({
         url: `${Env.BokaApi}/api/team/info`,
@@ -243,20 +260,25 @@ export default {
     },
     outTeam () {
       let _this = this
-      this.$http({
-        url: `${Env.BokaApi}/api/team/teamset`,
-        method: 'post',
-        data: {
-          id: this.id,
-          type: 'exitTeam'
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$vux.toast.show({
-            text: '退出团队成功!',
-            onHide () {
-              _this.teamInfo.join = 0
+      this.$vux.confirm.show({
+        title: `确定删除该${this.moduleTransfer}吗？`,
+        onConfirm () {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/teamset`,
+            method: 'post',
+            data: {
+              id: _this.id,
+              type: 'exitTeam'
+            }
+          }).then(res => {
+            console.log(res)
+            if (res.data.flag) {
+              _this.$vux.toast.show({
+                text: '退出团队成功!',
+                onHide () {
+                  _this.teamInfo.join = 0
+                }
+              })
             }
           })
         }
@@ -290,6 +312,12 @@ export default {
     flex-direction: column;
     min-height: 100vh;
     padding-bottom: 70px;
+    .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.8);box-sizing: border-box;}
+    .modaInfo{
+      display:flex;flex-direction:column;margin-top: 60px;
+      .al{font-size:80px;margin-left:auto;margin-right: 100px;}
+    }
+    .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
     .team-bg{
       flex: 0 0 30%;
       overflow: hidden;
