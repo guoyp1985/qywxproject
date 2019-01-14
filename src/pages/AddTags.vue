@@ -152,13 +152,13 @@ export default{
           height: 100%;
           object-fit: cover;
         }
-        .al-guanbi{
-          position: absolute;
-          top: -20px;
-          right: -10px;
-          font-weight: 700;
-          color: #ff6a61;
-        }
+        // .al-guanbi{
+        //   position: absolute;
+        //   top: -20px;
+        //   right: -10px;
+        //   font-weight: 700;
+        //   color: #ff6a61;
+        // }
       }
       .count-tip{
         display: flex;
