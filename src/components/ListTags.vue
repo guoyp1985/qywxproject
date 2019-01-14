@@ -26,6 +26,7 @@
         </div>
       </div>
     </div>
+    <div class="tip-message" v-if="!tags.length && loaded"><span>暂无素材</span></div>
   </div>
 </template>
 
@@ -40,7 +41,8 @@ export default {
       module: '',
       pagestart: 0,
       limit: 5,
-      currentPhotos: []
+      currentPhotos: [],
+      loaded: false
     }
   },
   props: {
@@ -83,6 +85,7 @@ export default {
           if (data.flag) {
             if (this.pagestart === 0) {
               this.tags = data.data
+              this.loaded = true
             } else {
               this.tags.push(...data.data)
             }
@@ -261,6 +264,11 @@ export default {
     }
     .tag:last-child{
       margin-bottom: 0;
+    }
+    .tip-message{
+      text-align: center;
+      color: #c9c9c9;
+      margin-top: 30px;
     }
   }
 </style>
