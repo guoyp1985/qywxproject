@@ -120,6 +120,12 @@ let featureBtns = [
     icon: 'al-tubiaozhizuomoban',
     color: 'rgba07',
     link: '/cardList'
+  },
+  {
+    name: 'Qun Qun Tui',
+    icon: 'al-tubiaozhizuomoban',
+    color: 'rgba07',
+    link: '/roomList'
   }
 ]
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {

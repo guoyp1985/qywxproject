@@ -116,5 +116,13 @@
   "AddTags",
   "ManageTeam",
   "AddOthers",
-  "Income"
+  "Income",
+  "Rooms",
+  "RoomDetails",
+  "RoomList",
+  "RoomApply",
+  "RoomOrderConsumer",
+  "RoomOrderBusiness",
+  "RoomOrderDeal",
+  "RoomOrders"
 ]
