@@ -89,6 +89,9 @@ export default {
             } else {
               this.tags.push(...data.data)
             }
+            this.$nextTick(() => {
+              this.$parent.refresh()
+            })
             this.pagestart++
           }
         })
