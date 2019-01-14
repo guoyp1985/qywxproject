@@ -8,7 +8,7 @@
       <div class="photo-wraper" v-for="(photo, index) in photos" :key="photo.id">
         <div class="photo">
           <div class="close" @click="delPhoto(index)">
-            <i class="al al-guanbi font12"></i>
+            <i class="al al-guanbi font16"></i>
           </div>
           <img :src="photo">
         </div>
@@ -110,7 +110,7 @@ export default{
   height: 100vh;
   .close{
     position:absolute;top:-7px;right:-2px;z-index:10;
-    width:15px;height:15px;border-radius:50%;background-color:#EC3E3F;color:#fff;
+    width:30px;height:30px;border-radius:50%;background-color:#EC3E3F;color:#fff;
     display:flex;justify-content: center;align-items: center;
   }
   .input-box{
