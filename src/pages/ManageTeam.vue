@@ -148,7 +148,8 @@ export default {
       this.$router.push({
         path: '/chat',
         query: {
-          uid: uid
+          uid: uid,
+          from: 'miniprogram'
         }
       })
     }
