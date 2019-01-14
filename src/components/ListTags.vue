@@ -6,8 +6,8 @@
         <div class="info-top">
           <span class="username">{{tag.username}}</span>
           <div class="ope-btns">
-            <div class="btn copy-btn" @click="copyTxt"><span class="al"></span>复制</div>
-            <div class="btn"><span class="al"></span>保存图片</div>
+            <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制</div>
+            <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div>
           </div>
         </div>
         <span class="content">{{tag.content}}</span>
@@ -180,7 +180,7 @@ export default {
         color: #000;
         .info-top{
           display: flex;
-          margin-bottom: 10px;
+          margin-bottom:6px;
           align-items: center;
           .username{
             margin-right: 20px;
@@ -190,11 +190,11 @@ export default {
             font-size: 14px;
             display: flex;
             .btn{
-              color: #8F8F8F;
+              color:#7d7979;
               border-radius: 5px;
               background-color: transparent;
-              border: 1px solid #8F8F8F;
-              padding: 5px 8px;
+              border: 1px solid #cfcfcf;
+              padding: 3px 8px;
               height: 16px;
               line-height: 16px;
               .al{
