@@ -51,7 +51,8 @@ export default {
     return {
       submitRoom: {},
       isAccept: false,
-      roomCategory: [1, 2],
+      isSubmitIng: false,
+      roomCategory: [1],
       roomCategories: [
         {id: 1, title: '夜跑群'},
         {id: 2, title: '养生群'},
@@ -61,7 +62,31 @@ export default {
   },
   methods: {
     submitHandle () {
-      this.$router.back()
+      if (!this.isSubmitIng) {
+        const self = this
+        const room = {
+          title: '',
+          ownerid: '',
+          tags: roomCategory.join(',')
+        }
+        if (this.$util.validateQueue(
+          [
+            {title: room.title},
+            {ownerid: room.ownerid},
+          ],
+          model => {
+            self.$vux.toast.text('未填必选项', 'middle')
+          }
+        )) {
+          this.isSubmitIng = true
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, room)
+          .then(res => {
+            this.$vux.loading.hide()
+            this.$router.back()
+          })
+        }
+      }
     }
   }
 }
