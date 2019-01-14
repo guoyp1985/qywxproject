@@ -10,10 +10,21 @@
           </div>
         </div>
       </div>
-      <div class="manage-item">
+      <!-- <div class="manage-item">
         <div class="item-title"><span class="members-count">团队管理员（{{countManager}}）人</span></div>
+        <div class="member" v-for="(manager, index) in managers" :key="manager.id">
+          <div class="member-info">
+            <img class="avatar" :src="manager.avatar"/>
+            <span class="username">{{manager.username}}</span>
+            <div class="ope-btn" @click="toggleOpePanel">...</div>
+          </div>
+          <div class="member-ope" hidden="0">
+            <span class="del-member" @click="delManager(manager.uid, index)">取消管理员</span>
+            <span class="con-member" @click="toChat(manager.uid)">联系TA</span>
+          </div>
+        </div>
         <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
-      </div>
+      </div> -->
       <div class="manage-item">
         <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
         <div class="member" v-for="(member, index) in members" :key="member.id">
@@ -46,6 +57,7 @@ export default {
     return {
       id: null,
       uploader: null,
+      managers: [],
       members: [],
       pagestart: 0,
       limit: 10,
@@ -88,6 +100,7 @@ export default {
               }
               this.creater = res.data.data.create[0]
               this.members = res.data.data.normal
+              this.managers = res.data.data.manager
             } else {
               this.members.push(...res.data.data.normal)
             }
@@ -104,6 +117,9 @@ export default {
       } else {
         el.setAttribute('style', 'display: none;')
       }
+    },
+    delManager () {
+      console.log('in delManager')
     },
     delMember (deluid, index) {
       let _this = this
