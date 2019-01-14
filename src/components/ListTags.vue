@@ -12,11 +12,13 @@
         </div>
         <span class="content clamp1 w_100">{{tag.content}}</span>
         <div class="photos" v-if="tag.photo !== ''">
-          <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
-            <div class="photo">
-              <img :src="photo"/>
+          <viewer :images="tag.photosSplited" style="width:100%;display:flex;flex-wrap: wrap;">
+            <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
+              <div class="photo">
+                  <img :src="photo"/>
+              </div>
             </div>
-          </div>
+          </viewer>
         </div>
         <div class="info-bottom">
           <span class="time">{{tag.time}}</span>
@@ -37,7 +39,8 @@ export default {
       tags: [],
       module: '',
       pagestart: 0,
-      limit: 5
+      limit: 5,
+      currentPhotos: []
     }
   },
   props: {
