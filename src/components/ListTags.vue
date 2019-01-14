@@ -7,10 +7,10 @@
           <span class="username">{{tag.username}}</span>
           <div class="ope-btns">
             <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制</div>
-            <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div>
+            <!-- <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div> -->
           </div>
         </div>
-        <span class="content">{{tag.content}}</span>
+        <span class="content clamp1 w_100">{{tag.content}}</span>
         <div class="photos" v-if="tag.photo !== ''">
           <viewer :images="tag.photosSplited" style="width:100%;display:flex;flex-wrap: wrap;">
             <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
