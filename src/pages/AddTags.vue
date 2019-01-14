@@ -109,7 +109,7 @@ export default{
   width: 100vw;
   height: 100vh;
   .close{
-    position:absolute;top:-5px;right:-2px;z-index:10;
+    position:absolute;top:-7px;right:-2px;z-index:10;
     width:15px;height:15px;border-radius:50%;background-color:#EC3E3F;color:#fff;
     display:flex;justify-content: center;align-items: center;
   }
