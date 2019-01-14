@@ -103,7 +103,9 @@ export default {
             }
             console.log(data)
             this.pagestart++
-            this.$refs.wraper.bscroll.refresh()
+            this.$nextTick(() => {
+              this.$refs.wraper.bscroll.refresh()
+            })
           })
         } else {
           url = `${Env.BokaApi}/api/list/${module}`
@@ -129,7 +131,9 @@ export default {
             console.log(data)
             console.log(this)
             this.pagestart++
-            this.$refs.wraper.bscroll.refresh()
+            this.$nextTick(() => {
+              this.$refs.wraper.bscroll.refresh()
+            })
           })
         }
       } else {
