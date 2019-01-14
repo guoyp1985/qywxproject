@@ -243,20 +243,25 @@ export default {
     },
     outTeam () {
       let _this = this
-      this.$http({
-        url: `${Env.BokaApi}/api/team/teamset`,
-        method: 'post',
-        data: {
-          id: this.id,
-          type: 'exitTeam'
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$vux.toast.show({
-            text: '退出团队成功!',
-            onHide () {
-              _this.teamInfo.join = 0
+      this.$vux.confirm.show({
+        title: `确定删除该${this.moduleTransfer}吗？`,
+        onConfirm () {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/teamset`,
+            method: 'post',
+            data: {
+              id: _this.id,
+              type: 'exitTeam'
+            }
+          }).then(res => {
+            console.log(res)
+            if (res.data.flag) {
+              _this.$vux.toast.show({
+                text: '退出团队成功!',
+                onHide () {
+                  _this.teamInfo.join = 0
+                }
+              })
             }
           })
         }

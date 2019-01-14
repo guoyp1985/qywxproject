@@ -127,6 +127,7 @@ export default {
               this.data.push(...data)
             }
             console.log(data)
+            console.log(this)
             this.pagestart++
             this.$refs.wraper.bscroll.refresh()
           })
