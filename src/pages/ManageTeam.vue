@@ -2,7 +2,20 @@
   <scroll-view ref="wraper" @scrollEnd="scrollEnd">
     <div class="manage-team" slot="content" ref="content">
       <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队成员（{{count}}人）</span></div>
+        <div class="item-title"><span class="members-count">团队长</span></div>
+        <div class="member">
+          <div class="member-info">
+            <img class="avatar" :src="creater.avatar"/>
+            <span class="username">{{creater.username}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="manage-item">
+        <div class="item-title"><span class="members-count">团队管理员（{{countManager}}）人</span></div>
+        <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
+      </div>
+      <div class="manage-item">
+        <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
         <div class="member" v-for="(member, index) in members" :key="member.id">
           <div class="member-info">
             <img class="avatar" :src="member.avatar"/>
@@ -14,7 +27,7 @@
             <span class="con-member" @click="toChat(member.uid)">联系TA</span>
           </div>
         </div>
-        <div class="tip-message" v-if="tipMessageShow"><span>该团目前无团员</span></div>
+        <div class="tip-message" v-if="tipMessageShow2"><span>该团目前无团员</span></div>
       </div>
     </div>
   </scroll-view>
@@ -36,8 +49,11 @@ export default {
       members: [],
       pagestart: 0,
       limit: 10,
-      count: null,
-      tipMessageShow: true
+      creater: {},
+      countManager: null,
+      countNormal: null,
+      tipMessageShow1: true,
+      tipMessageShow2: true
     }
   },
   components: {
@@ -60,12 +76,17 @@ export default {
           method: 'get'
         }).then(res => {
           console.log(res)
-          this.count = res.data.count.normal
-          if (this.count) {
-            this.tipMessageShow = false
-          }
           if (res.data.flag) {
             if (!this.pagestart) {
+              this.countManager = res.data.count.manager
+              this.countNormal = res.data.count.normal
+              if (this.countManager) {
+                this.tipMessageShow1 = false
+              }
+              if (this.countNormal) {
+                this.tipMessageShow2 = false
+              }
+              this.creater = res.data.data.create[0]
               this.members = res.data.data.normal
             } else {
               this.members.push(...res.data.data.normal)
@@ -192,7 +213,7 @@ export default {
         width: 100vw;
         text-align: center;
         color: #c9c9c9;
-        margin-top: 200px;
+        margin: 30px auto;
       }
     }
   }
