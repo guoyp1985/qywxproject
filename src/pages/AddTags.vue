@@ -1,7 +1,7 @@
 <template>
   <div class="add-tags">
     <div class="input-box">
-      <textarea placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
+      <textarea class="font14" placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
       <span class="count">{{count}} / 200</span>
     </div>
     <div class="photos">
