@@ -187,10 +187,10 @@ export default {
             font-size: 14px;
             display: flex;
             .btn{
-              color: #cfcfcf;
+              color: #8F8F8F;
               border-radius: 5px;
               background-color: transparent;
-              border: 1px solid #cfcfcf;
+              border: 1px solid #8F8F8F;
               padding: 5px 8px;
               height: 16px;
               line-height: 16px;

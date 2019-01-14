@@ -15,13 +15,13 @@
             <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="outTeam">退出团队</button>
           </div>
           <div class="inner-item inner-item-right">
-            <div class="leader">{{teamInfo.username}}的团队</div>
+            <div class="leader">{{teamInfo.title}}</div>
             <div class="counts">
               <span>商品 {{teamInfo.product}}</span>
               <span>文章 {{teamInfo.news}}</span>
               <span>活动 {{teamInfo.activity}}</span>
             </div>
-            <div class="title">{{teamInfo.title}}</div>
+            <div class="title">{{teamInfo.content}}</div>
           </div>
         </div>
       </div>
