@@ -14,6 +14,7 @@
             <span class="con-member" @click="toChat(member.uid)">联系TA</span>
           </div>
         </div>
+        <div class="tip-message" v-if="tipMessageShow"><span>该团目前无团员</span></div>
       </div>
     </div>
   </scroll-view>
@@ -35,7 +36,8 @@ export default {
       members: [],
       pagestart: 0,
       limit: 10,
-      count: null
+      count: null,
+      tipMessageShow: true
     }
   },
   components: {
@@ -59,6 +61,9 @@ export default {
         }).then(res => {
           console.log(res)
           this.count = res.data.count.normal
+          if (this.count) {
+            this.tipMessageShow = false
+          }
           if (res.data.flag) {
             if (!this.pagestart) {
               this.members = res.data.data.normal
@@ -182,6 +187,12 @@ export default {
       }
       .member:last-child{
         margin-bottom: 0;
+      }
+      .tip-message{
+        width: 100vw;
+        text-align: center;
+        color: #c9c9c9;
+        margin-top: 200px;
       }
     }
   }
