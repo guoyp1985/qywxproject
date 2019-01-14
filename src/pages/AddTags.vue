@@ -109,8 +109,8 @@ export default{
   width: 100vw;
   height: 100vh;
   .close{
-    position:absolute;top:-7px;right:-2px;z-index:10;
-    width:30px;height:30px;border-radius:50%;background-color:#EC3E3F;color:#fff;
+    position:absolute;top:-9px;right:-4px;z-index:10;
+    width:25px;height:25px;border-radius:50%;background-color:#EC3E3F;color:#fff;
     display:flex;justify-content: center;align-items: center;
   }
   .input-box{
