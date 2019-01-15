@@ -132,7 +132,7 @@ export default{
     width: 100vw;
     display: flex;
     flex-wrap: wrap;
-    padding: 20px;
+    padding:40px 20px;
     box-sizing: border-box;
     justify-content: flex-start;
     .photo-wraper{
