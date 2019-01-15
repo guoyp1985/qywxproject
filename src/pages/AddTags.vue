@@ -129,12 +129,13 @@ export default{
     }
   }
   .photos{
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    padding:40px 20px;
+    padding:10px 20px;
     box-sizing: border-box;
     justify-content: flex-start;
+    margin-bottom:20px;
     .photo-wraper{
       width: 30%;
       height: 0;
