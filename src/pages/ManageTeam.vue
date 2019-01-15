@@ -28,10 +28,10 @@
       <div class="manage-item">
         <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
         <div class="member" v-for="(member, index) in members" :key="member.id">
-          <div class="member-info">
+          <div class="member-info" @click="toggleOpePanel">
             <img class="avatar" :src="member.avatar"/>
             <span class="username">{{member.username}}</span>
-            <div class="ope-btn" @click="toggleOpePanel">...</div>
+            <div class="ope-btn">...</div>
           </div>
           <div class="member-ope" hidden="0">
             <span class="del-member" @click="delMember(member.uid, index)">从团队中移除</span>
