@@ -4,7 +4,7 @@
       <img class="avatar" :src="tag.avatar"/>
       <div class="tag-info">
         <div class="info-top">
-          <span class="username">{{tag.username}}</span>
+          <span class="username clamp1">{{tag.username}}</span>
           <div class="ope-btns" v-if="tag.content.length > 0">
             <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制文本</div>
             <!-- <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div> -->
@@ -189,7 +189,7 @@ export default {
           margin-bottom:6px;
           align-items: center;
           .username{
-            margin-right: 20px;
+            width:70px;
             font-size: 16px;
           }
           .ope-btns{
