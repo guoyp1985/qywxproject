@@ -20,7 +20,8 @@
         </div>
       </div>
     </div>
-    <div class="submit-btn">
+    <div style="height:70px;"></div>
+    <div class="submit-btn flex_center">
       <button @click="submit">发布</button>
     </div>
   </div>
@@ -180,14 +181,10 @@ export default{
     }
   }
   .submit-btn{
-    position: absolute;
-    left: 0;
+    position:fixed;
     bottom: 0;
     width: 100%;
     height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #fff;
     button{
       width: 80%;
