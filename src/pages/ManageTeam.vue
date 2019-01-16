@@ -28,14 +28,18 @@
       <div class="manage-item">
         <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
         <div class="member" v-for="(member, index) in members" :key="member.id">
-          <div class="member-info" @click="toggleOpePanel">
+          <div class="member-info" @click="toggleOpePanel(index)">
             <img class="avatar" :src="member.avatar"/>
             <span class="username">{{member.username}}</span>
             <div class="ope-btn">...</div>
           </div>
-          <div class="member-ope" hidden="0">
-            <span class="del-member" @click="delMember(member.uid, index)">从团队中移除</span>
-            <span class="con-member" @click="toChat(member.uid)">联系TA</span>
+          <div v-if="member.checked">
+            <div class="flex_center bg-white h40">
+              <div class="t-table align_center color-gray2 font14">
+                <div class="t-cell v_middle b_right_after" @click="delMember(member.uid, index)">从团队中移除</div>
+                <div class="t-cell v_middle" @click="toChat(member.uid)">联系TA</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="tip-message" v-if="tipMessageShow2"><span>该团目前无团员</span></div>
@@ -113,21 +117,22 @@ export default {
         })
       }
     },
-    toggleOpePanel (e) {
-      let el = e.target.parentNode.parentNode.lastElementChild
-      let style = window.getComputedStyle(el)
-      if (style.display === 'none') {
-        el.setAttribute('style', 'display: flex;')
-      } else {
-        el.setAttribute('style', 'display: none;')
-      }
-      // for (var i = 0; i < this.members.length; i++) {
-      //   if (i !== index && this.members[i].checked) {
-      //     this.members[i].checked = false
-      //     break
-      //   }
+    toggleOpePanel (index) {
+      // let el = e.target.parentNode.parentNode.lastElementChild
+      // let style = window.getComputedStyle(el)
+      // if (style.display === 'none') {
+      //   el.setAttribute('style', 'display: flex;')
+      // } else {
+      //   el.setAttribute('style', 'display: none;')
       // }
-      // this.members[index].checked = !this.members[index].checked
+      for (var i = 0; i < this.members.length; i++) {
+        if (i !== index && this.members[i].checked) {
+          this.members[i].checked = false
+          break
+        }
+      }
+      console.log(index)
+      this.members[index].checked = !this.members[index].checked
     },
     delManager () {
       console.log('in delManager')
@@ -219,16 +224,6 @@ export default {
         }
         .member-ope{
           width: 100%;
-          display: none;
-          height: 45px;
-          align-items: center;
-          span{
-            flex: 1;
-            text-align: center;
-            height: 30px;
-            line-height: 30px;
-            color: #6b6b6b;
-          }
           .del-member{
             border-right: 1px solid #f2f2f2;
           }
