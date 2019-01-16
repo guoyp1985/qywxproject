@@ -139,6 +139,7 @@ export default {
             if (res.data.flag) {
               _this.members.splice(index, 1)
               _this.count--
+              _this.countNormal--
             }
           })
         }
