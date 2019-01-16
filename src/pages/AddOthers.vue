@@ -25,15 +25,6 @@ import ScrollView from '@/components/ScrollView'
 import Env from 'env'
 import { User } from '#/storage'
 export default {
-  activated () {
-    console.log(this.$route.query)
-    this.module = this.$route.query.module
-    this.id = this.$route.query.id
-    this.userInfo = User.get()
-    this.data = []
-    this.pagestart = 0
-    this.getData(this.module)
-  },
   data () {
     return {
       module: '',
@@ -187,6 +178,25 @@ export default {
           })
         }
       })
+    }
+  },
+  activated () {
+    console.log('addothers输出的信息：')
+    console.log(this.$route.query)
+    this.module = this.$route.query.module
+    this.id = this.$route.query.id
+    this.userInfo = User.get()
+    this.data = []
+    this.pagestart = 0
+    this.getData(this.module)
+    if (this.module === 'product') {
+      document.title = '添加商品'
+    } else if (this.module === 'activity') {
+      document.title = '添加活动'
+    } else if (this.module === 'news') {
+      document.title = '添加文章'
+    } else if (this.module === 'courseclass') {
+      document.title = '添加培训'
     }
   }
 };
