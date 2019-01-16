@@ -52,11 +52,6 @@
 import Env from 'env'
 import ScrollView from '@/components/ScrollView'
 export default {
-  created () {
-    console.log(this.$route)
-    this.id = this.$route.query.id
-    this.getMembers()
-  },
   data () {
     return {
       id: null,
@@ -118,20 +113,12 @@ export default {
       }
     },
     toggleOpePanel (index) {
-      // let el = e.target.parentNode.parentNode.lastElementChild
-      // let style = window.getComputedStyle(el)
-      // if (style.display === 'none') {
-      //   el.setAttribute('style', 'display: flex;')
-      // } else {
-      //   el.setAttribute('style', 'display: none;')
-      // }
       for (var i = 0; i < this.members.length; i++) {
         if (i !== index && this.members[i].checked) {
           this.members[i].checked = false
           break
         }
       }
-      console.log(index)
       this.members[index].checked = !this.members[index].checked
     },
     delManager () {
@@ -169,6 +156,11 @@ export default {
         }
       })
     }
+  },
+  created () {
+    console.log(this.$route)
+    this.id = this.$route.query.id
+    this.getMembers()
   }
 };
 </script>
