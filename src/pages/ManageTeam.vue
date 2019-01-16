@@ -99,7 +99,11 @@ export default {
                 this.tipMessageShow2 = false
               }
               this.creater = res.data.data.create[0]
-              this.members = res.data.data.normal
+              const retdata = res.data.data.normal
+              for (var i = 0; i < retdata.length; i++) {
+                retdata[i].checked = false
+              }
+              this.members = retdata
               this.managers = res.data.data.manager
             } else {
               this.members.push(...res.data.data.normal)
@@ -117,6 +121,13 @@ export default {
       } else {
         el.setAttribute('style', 'display: none;')
       }
+      // for (var i = 0; i < this.members.length; i++) {
+      //   if (i !== index && this.members[i].checked) {
+      //     this.members[i].checked = false
+      //     break
+      //   }
+      // }
+      // this.members[index].checked = !this.members[index].checked
     },
     delManager () {
       console.log('in delManager')
