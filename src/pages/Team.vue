@@ -22,9 +22,11 @@
             <div class="counts">
               <span>商品 {{teamInfo.product}}</span>
               <span>文章 {{teamInfo.news}}</span>
-              <span>活动 {{teamInfo.activity}}</span>
-              <span>素材 {{teamInfo.teamsource}}</span>
-              <span>培训 {{teamInfo.courseclass}}</span>
+              <div>
+                <span>活动 {{teamInfo.activity}}</span>
+                <span>素材 {{teamInfo.teamsource}}</span>
+                <span>培训 {{teamInfo.courseclass}}</span>
+              </div>
             </div>
             <div class="title">{{teamInfo.content}}</div>
           </div>
