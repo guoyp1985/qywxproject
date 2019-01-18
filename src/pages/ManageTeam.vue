@@ -10,21 +10,36 @@
           </div>
         </div>
       </div>
-      <div class="manage-item">
+      <!-- <div class="manage-item">
         <div class="item-title"><span class="members-count">团队管理员（{{countManager}}）人</span></div>
-        <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
-      </div>
-      <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
-        <div class="member" v-for="(member, index) in members" :key="member.id">
+        <div class="member" v-for="(manager, index) in managers" :key="manager.id">
           <div class="member-info">
-            <img class="avatar" :src="member.avatar"/>
-            <span class="username">{{member.username}}</span>
+            <img class="avatar" :src="manager.avatar"/>
+            <span class="username">{{manager.username}}</span>
             <div class="ope-btn" @click="toggleOpePanel">...</div>
           </div>
           <div class="member-ope" hidden="0">
-            <span class="del-member" @click="delMember(member.uid, index)">从团队中移除</span>
-            <span class="con-member" @click="toChat(member.uid)">联系TA</span>
+            <span class="del-member" @click="delManager(manager.uid, index)">取消管理员</span>
+            <span class="con-member" @click="toChat(manager.uid)">联系TA</span>
+          </div>
+        </div>
+        <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
+      </div> -->
+      <div class="manage-item">
+        <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
+        <div class="member" v-for="(member, index) in members" :key="member.id">
+          <div class="member-info" @click="toggleOpePanel(index)">
+            <img class="avatar" :src="member.avatar"/>
+            <span class="username">{{member.username}}</span>
+            <div class="ope-btn">...</div>
+          </div>
+          <div v-if="member.checked">
+            <div class="flex_center bg-white h40">
+              <div class="t-table align_center color-gray2 font14">
+                <div class="t-cell v_middle b_right_after" @click="delMember(member.uid, index)">从团队中移除</div>
+                <div class="t-cell v_middle" @click="toChat(member.uid)">联系TA</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="tip-message" v-if="tipMessageShow2"><span>该团目前无团员</span></div>
@@ -37,15 +52,11 @@
 import Env from 'env'
 import ScrollView from '@/components/ScrollView'
 export default {
-  created () {
-    console.log(this.$route)
-    this.id = this.$route.query.id
-    this.getMembers()
-  },
   data () {
     return {
       id: null,
       uploader: null,
+      managers: [],
       members: [],
       pagestart: 0,
       limit: 10,
@@ -87,7 +98,12 @@ export default {
                 this.tipMessageShow2 = false
               }
               this.creater = res.data.data.create[0]
-              this.members = res.data.data.normal
+              const retdata = res.data.data.normal
+              for (var i = 0; i < retdata.length; i++) {
+                retdata[i].checked = false
+              }
+              this.members = retdata
+              this.managers = res.data.data.manager
             } else {
               this.members.push(...res.data.data.normal)
             }
@@ -96,14 +112,17 @@ export default {
         })
       }
     },
-    toggleOpePanel (e) {
-      let el = e.target.parentNode.parentNode.lastElementChild
-      let style = window.getComputedStyle(el)
-      if (style.display === 'none') {
-        el.setAttribute('style', 'display: flex;')
-      } else {
-        el.setAttribute('style', 'display: none;')
+    toggleOpePanel (index) {
+      for (var i = 0; i < this.members.length; i++) {
+        if (i !== index && this.members[i].checked) {
+          this.members[i].checked = false
+          break
+        }
       }
+      this.members[index].checked = !this.members[index].checked
+    },
+    delManager () {
+      console.log('in delManager')
     },
     delMember (deluid, index) {
       let _this = this
@@ -123,6 +142,7 @@ export default {
             if (res.data.flag) {
               _this.members.splice(index, 1)
               _this.count--
+              _this.countNormal--
             }
           })
         }
@@ -132,10 +152,16 @@ export default {
       this.$router.push({
         path: '/chat',
         query: {
-          uid: uid
+          uid: uid,
+          from: 'miniprogram'
         }
       })
     }
+  },
+  created () {
+    console.log(this.$route)
+    this.id = this.$route.query.id
+    this.getMembers()
   }
 };
 </script>
@@ -191,16 +217,6 @@ export default {
         }
         .member-ope{
           width: 100%;
-          display: none;
-          height: 45px;
-          align-items: center;
-          span{
-            flex: 1;
-            text-align: center;
-            height: 30px;
-            line-height: 30px;
-            color: #6b6b6b;
-          }
           .del-member{
             border-right: 1px solid #f2f2f2;
           }

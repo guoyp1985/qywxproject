@@ -22,7 +22,11 @@
             <div class="counts">
               <span>商品 {{teamInfo.product}}</span>
               <span>文章 {{teamInfo.news}}</span>
-              <span>活动 {{teamInfo.activity}}</span>
+              <div>
+                <span>活动 {{teamInfo.activity}}</span>
+                <span>素材 {{teamInfo.teamsource}}</span>
+                <span>培训 {{teamInfo.courseclass}}</span>
+              </div>
             </div>
             <div class="title">{{teamInfo.content}}</div>
           </div>
@@ -285,19 +289,25 @@ export default {
       })
     },
     importAll () {
-      this.$http({
-        url: `${Env.BokaApi}/api/team/copy`,
-        method: 'post',
-        data: {
-          teamid: this.id,
-          type: 'all',
-          module: this.module
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$vux.toast.show({
-            text: `导入全部${this.moduleTransfer}成功!`
+      let _this = this
+      this.$vux.confirm.show({
+        title: `确定要导入全部${this.moduleTransfer}吗？`,
+        onConfirm () {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/copy`,
+            method: 'post',
+            data: {
+              teamid: _this.id,
+              type: 'all',
+              module: _this.module
+            }
+          }).then(res => {
+            console.log(res)
+            if (res.data.flag) {
+              _this.$vux.toast.show({
+                text: `导入全部${_this.moduleTransfer}成功!`
+              })
+            }
           })
         }
       })

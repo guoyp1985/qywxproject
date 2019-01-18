@@ -4,13 +4,13 @@
       <img class="avatar" :src="tag.avatar"/>
       <div class="tag-info">
         <div class="info-top">
-          <span class="username">{{tag.username}}</span>
-          <div class="ope-btns">
-            <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制</div>
+          <span class="username clamp1">{{tag.username}}</span>
+          <div class="ope-btns" v-if="tag.content.length > 0">
+            <div class="btn copy-btn" @click="copyTxt"><span class="al al-copy mr3"></span>复制文本</div>
             <!-- <div class="btn"><span class="al al-xiazai mr3"></span>保存图片</div> -->
           </div>
         </div>
-        <span class="content clamp1 w_100">{{tag.content}}</span>
+        <div class="content">{{tag.content}}</div>
         <div class="photos" v-if="tag.photo !== ''">
           <viewer :images="tag.photosSplited" style="width:100%;display:flex;flex-wrap: wrap;">
             <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
@@ -26,6 +26,7 @@
         </div>
       </div>
     </div>
+    <div class="tip-message" v-if="!tags.length && loaded"><span>暂无素材</span></div>
   </div>
 </template>
 
@@ -40,7 +41,8 @@ export default {
       module: '',
       pagestart: 0,
       limit: 5,
-      currentPhotos: []
+      currentPhotos: [],
+      loaded: false
     }
   },
   props: {
@@ -83,9 +85,13 @@ export default {
           if (data.flag) {
             if (this.pagestart === 0) {
               this.tags = data.data
+              this.loaded = true
             } else {
               this.tags.push(...data.data)
             }
+            this.$nextTick(() => {
+              this.$parent.refresh()
+            })
             this.pagestart++
           }
         })
@@ -183,7 +189,7 @@ export default {
           margin-bottom:6px;
           align-items: center;
           .username{
-            margin-right: 20px;
+            width:70px;
             font-size: 16px;
           }
           .ope-btns{
@@ -261,6 +267,11 @@ export default {
     }
     .tag:last-child{
       margin-bottom: 0;
+    }
+    .tip-message{
+      text-align: center;
+      color: #c9c9c9;
+      margin-top: 30px;
     }
   }
 </style>

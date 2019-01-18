@@ -1,7 +1,7 @@
 <template>
   <div class="add-tags">
     <div class="input-box">
-      <textarea placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
+      <textarea class="font14" placeholder="说点什么吧..." maxlength="200" v-model="content"></textarea>
       <span class="count">{{count}} / 200</span>
     </div>
     <div class="photos">
@@ -20,7 +20,8 @@
         </div>
       </div>
     </div>
-    <div class="submit-btn">
+    <div style="height:70px;"></div>
+    <div class="submit-btn flex_center">
       <button @click="submit">发布</button>
     </div>
   </div>
@@ -106,8 +107,8 @@ export default{
 <style lang="less" scoped="">
 .add-tags{
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 110%;
   .close{
     position:absolute;top:-9px;right:-4px;z-index:10;
     width:25px;height:25px;border-radius:50%;background-color:#EC3E3F;color:#fff;
@@ -129,12 +130,13 @@ export default{
     }
   }
   .photos{
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
-    padding: 20px;
+    padding:10px 20px;
     box-sizing: border-box;
     justify-content: flex-start;
+    margin-bottom:20px;
     .photo-wraper{
       width: 30%;
       height: 0;
@@ -179,14 +181,10 @@ export default{
     }
   }
   .submit-btn{
-    position: absolute;
-    left: 0;
+    position:fixed;
     bottom: 0;
     width: 100%;
     height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #fff;
     button{
       width: 80%;

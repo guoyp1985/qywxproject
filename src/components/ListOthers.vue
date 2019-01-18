@@ -9,6 +9,7 @@
       <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click.stop="onDelete(item.id, index)">删除</button>
       <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
     </div>
+    <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
   </div>
 </template>
 
@@ -23,7 +24,8 @@ export default {
     return {
       data: [],
       pagestart: 0,
-      limit: 5
+      limit: 5,
+      loaded: false
     }
   },
   props: {
@@ -76,6 +78,9 @@ export default {
   methods: {
     getData () {
       console.log('in getData')
+      if (this.loaded) {
+        this.loaded = false
+      }
       if (this.data.length === this.pagestart * this.limit) {
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
@@ -89,6 +94,7 @@ export default {
         }).then(res => {
           if (!this.pagestart) {
             this.data = res.data.data
+            this.loaded = true
           } else {
             this.data.push(...res.data.data)
           }
@@ -238,6 +244,11 @@ export default {
     }
     .item:last-child{
       margin-bottom: 0;
+    }
+    .tip-message{
+      text-align: center;
+      color: #c9c9c9;
+      margin-top: 30px;
     }
   }
 </style>

@@ -11,6 +11,7 @@
             <span class="price" v-if="module === 'product'">{{item.price}}</span>
           </div>
         </div>
+        <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
     </div>
     <div slot="ope-btns" class="ope-btns">
       <button class="cancel-btn" @click="onCancel">取消</button>
@@ -40,7 +41,8 @@ export default {
       pagestart: 0,
       limit: 10,
       selectedItemId: [],
-      id: null
+      id: null,
+      loaded: false
     }
   },
   computed: {
@@ -77,6 +79,9 @@ export default {
       }
     },
     getData (module) {
+      if (this.loaded) {
+        this.loaded = false
+      }
       console.log(module)
       if (this.data.length === this.pagestart * this.limit) {
         let url = ''
@@ -103,7 +108,10 @@ export default {
             }
             console.log(data)
             this.pagestart++
-            this.$refs.wraper.bscroll.refresh()
+            this.loaded = true
+            this.$nextTick(() => {
+              this.$refs.wraper.bscroll.refresh()
+            })
           })
         } else {
           url = `${Env.BokaApi}/api/list/${module}`
@@ -129,7 +137,10 @@ export default {
             console.log(data)
             console.log(this)
             this.pagestart++
-            this.$refs.wraper.bscroll.refresh()
+            this.loaded = true
+            this.$nextTick(() => {
+              this.$refs.wraper.bscroll.refresh()
+            })
           })
         }
       } else {
@@ -243,6 +254,11 @@ export default {
         }
       }
     }
+  }
+  .tip-message{
+    text-align: center;
+    color: #c9c9c9;
+    margin-top: 30px;
   }
   .ope-btns{
     position: fixed;
