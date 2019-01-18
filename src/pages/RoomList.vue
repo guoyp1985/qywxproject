@@ -38,7 +38,7 @@
       </div>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
-      <span>提交群申请</span>
+      <span>申请群验证</span>
     </router-link>
     <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
       <div class="flex_cell income-info">

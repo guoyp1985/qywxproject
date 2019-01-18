@@ -13,7 +13,7 @@
         </div>
         <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
     </div>
-    <div slot="ope-btns" class="ope-btns" v-if="data.length && loaded">
+    <div slot="ope-btns" class="ope-btns">
       <button class="cancel-btn" @click="onCancel">取消</button>
       <button class="confirm-btn" @click="onConfirm">确定</button>
     </div>
@@ -25,6 +25,15 @@ import ScrollView from '@/components/ScrollView'
 import Env from 'env'
 import { User } from '#/storage'
 export default {
+  activated () {
+    console.log(this.$route.query)
+    this.module = this.$route.query.module
+    this.id = this.$route.query.id
+    this.userInfo = User.get()
+    this.data = []
+    this.pagestart = 0
+    this.getData(this.module)
+  },
   data () {
     return {
       module: '',
@@ -178,25 +187,6 @@ export default {
           })
         }
       })
-    }
-  },
-  activated () {
-    console.log('addothers输出的信息：')
-    console.log(this.$route.query)
-    this.module = this.$route.query.module
-    this.id = this.$route.query.id
-    this.userInfo = User.get()
-    this.data = []
-    this.pagestart = 0
-    this.getData(this.module)
-    if (this.module === 'product') {
-      document.title = '添加商品'
-    } else if (this.module === 'activity') {
-      document.title = '添加活动'
-    } else if (this.module === 'news') {
-      document.title = '添加文章'
-    } else if (this.module === 'courseclass') {
-      document.title = '添加培训'
     }
   }
 };
