@@ -14,8 +14,6 @@ import { User, Version, Token, Access } from '#/storage'
 import ENV from 'env'
 import Util from '#/util'
 import { AjaxPlugin, WechatPlugin, BusPlugin, LoadingPlugin, ToastPlugin, AlertPlugin, ConfirmPlugin } from 'vux'
-import Viewer from 'v-viewer'
-import 'viewerjs/dist/viewer.css'
 
 Vue.use(VueRouter)
 Vue.use(Util)
@@ -26,10 +24,6 @@ Vue.use(LoadingPlugin)
 Vue.use(ToastPlugin)
 Vue.use(AlertPlugin)
 Vue.use(ConfirmPlugin)
-Vue.use(Viewer)
-Viewer.setDefaults({
-  Options: { 'inline': true, 'button': true, 'navbar': true, 'title': true, 'toolbar': true, 'tooltip': true, 'movable': true, 'zoomable': true, 'rotatable': true, 'scalable': true, 'transition': true, 'fullscreen': true, 'keyboard': true, 'url': 'data-source' }
-})
 console.log(Vue.wechat)
 require('es6-promise').polyfill()
 

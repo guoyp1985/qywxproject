@@ -1,5 +1,5 @@
 /*
-* @description: 群群推页面
+* @description: 群群推验证页面
 * @auther: simon
 * @created_date: 2019-1-5
 */
@@ -7,83 +7,103 @@
   <div id="room-apply" class="containerarea font14 s-havebottom">
     <form>
       <forminputplate class="required">
-        <span slot="title">群名称</span>
-        <input v-model="submitRoom.topic" type="text" name="topic" class="input border-box" placeholder="请输入微信群名称" />
+        <span slot="title">验证密钥</span>
+        <input v-model="key" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
       </forminputplate>
-      <forminputplate class="required">
-        <span slot="title">群主号</span>
-        <input v-model="submitRoom.owner" type="text" name="topic" class="input border-box" placeholder="请输入微信群名称" />
-      </forminputplate>
-      <div class="form-item required padding10" v-if="roomCategories.length > 0">
-        <input v-model="roomCategory" type="hidden" name="productclass" />
-        <div class="pb10">
-          <span>选择群属性</span>
-          <span class="color-gray">(最多选两项)</span>
-          <span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span>
-        </div>
-        <checker
-        class="x-checker"
-        type="checkbox"
-        v-model="roomCategory"
-        :max="2"
-        default-item-class="ck-item"
-        selected-item-class="ck-item-selected">
-          <checker-item class="border1px color-gray" v-for="(item, index) in roomCategories" :key="index" :value="item.id">{{ item.title }}</checker-item>
-        </checker>
-      </div>
       <div class="protocal-area">
         <check-icon :value.sync="isAccept" type="plain"><a>同意群群推协议</a></check-icon>
       </div>
     </form>
     <div class="s-bottom submit-button color-white" @click="submitHandle">
-      <span>提交评估</span>
+      <span>提交验证</span>
+    </div>
+    <div class="step">
+      <div class="step-item">
+        <div class="step-item-info db-flex">
+          <div class="step-item-title">第一步:</div>
+          <div class="flex_cell color-gray">
+            <span>添加官方客服微信</span>
+            <span class="color-red"> 马上添加 ></span>
+          </div>
+        </div>
+        <div class="step-item-tail"></div>
+      </div>
+      <div class="step-item">
+        <div class="step-item-info db-flex">
+          <div class="step-item-title">第二步:</div>
+          <div class="flex_cell color-gray">
+            <span>拉官方客服进入微信群</span>
+          </div>
+        </div>
+        <div class="step-item-tail"></div>
+      </div>
+      <div class="step-item">
+        <div class="step-item-info db-flex">
+          <div class="step-item-title">第三步:</div>
+          <div class="flex_cell color-gray">
+            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息，请在群内发任意信息后再试。</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import { Checker, CheckerItem, CheckIcon, XButton } from 'vux'
+import { CheckIcon, XButton } from 'vux'
+import ENV from 'env'
 import forminputplate from '@/components/Forminputplate'
 export default {
   components: {
-    Checker, CheckerItem, CheckIcon, XButton, forminputplate
+    CheckIcon, XButton, forminputplate
   },
   data () {
     return {
-      submitRoom: {},
+      key: '',
       isAccept: false,
-      isSubmitIng: false,
-      roomCategory: [1],
-      roomCategories: [
-        {id: 1, title: '夜跑群'},
-        {id: 2, title: '养生群'},
-        {id: 3, title: '追星群'}
-      ]
+      isSubmitIng: false
+      // roomCategory: [1],
+      // roomCategories: [
+      //   {id: 1, title: '夜跑群'},
+      //   {id: 2, title: '养生群'},
+      //   {id: 3, title: '追星群'}
+      // ]
     }
   },
   methods: {
     submitHandle () {
       if (!this.isSubmitIng) {
-        const self = this
+        // const self = this
         const room = {
-          title: '',
-          ownerid: '',
-          tags: roomCategory.join(',')
+          key: this.key
         }
+        console.log(room)
         if (this.$util.validateQueue(
           [
-            {title: room.title},
-            {ownerid: room.ownerid},
+            {key: room.key}
           ],
           model => {
-            self.$vux.toast.text('未填必选项', 'middle')
+            this.$vux.toast.text('未填必选项', 'middle')
           }
         )) {
+          if (!this.isAccept) {
+            this.$vux.toast.text('提交评估需同意协议', 'middle')
+            return
+          }
           this.isSubmitIng = true
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, room)
           .then(res => {
-            this.$vux.loading.hide()
-            this.$router.back()
+            const data = res.data
+            if (data.flag === 1) {
+              this.$vux.loading.hide()
+              setTimeout(() => {
+                this.$router.back()
+                this.isSubmitIng = false
+              }, 1000)
+            } else {
+              this.isSubmitIng = false
+            }
+            this.$vux.toast.text(res.data.error, 'middle')
           })
         }
       }
@@ -103,5 +123,24 @@ export default {
   background-color: @boka-red;
   line-height: 45px;
   text-align: center;
+}
+#room-apply .step {
+  padding: 20px 40px;
+}
+#room-apply .step .step-item {
+  position: relative;
+  height: 70px;
+}
+#room-apply .step .step-item .step-item-tail {
+  position: absolute;
+  left: 20px;
+  top: 30px;
+  width: 1px;
+  height: 30px;
+  background-color: @boka-red;
+}
+#room-apply .step-item-title {
+  color: @boka-red;
+  width: 60px;
 }
 </style>
