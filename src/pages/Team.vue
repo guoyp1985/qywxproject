@@ -290,31 +290,38 @@ export default {
     },
     importAll () {
       let _this = this
-      this.$vux.confirm.show({
-        title: `确定要导入全部${this.moduleTransfer}吗？`,
-        onConfirm () {
-          _this.$http({
-            url: `${Env.BokaApi}/api/team/copy`,
-            method: 'post',
-            data: {
-              teamid: _this.id,
-              type: 'all',
-              module: _this.module
-            }
-          }).then(res => {
-            console.log(res)
-            if (res.data.flag === 1) {
-              _this.$vux.toast.show({
-                text: `导入全部${_this.moduleTransfer}成功!`
-              })
-            } else if (res.data.flag === 3) {
-              _this.$vux.toast.show({
-                text: `没有内容可导入!`
-              })
-            }
-          })
-        }
-      })
+      console.log(this.teamInfo[this.module])
+      if (this.teamInfo[this.module] > 0) {
+        this.$vux.confirm.show({
+          title: `确定要导入全部${this.moduleTransfer}吗？`,
+          onConfirm () {
+            _this.$http({
+              url: `${Env.BokaApi}/api/team/copy`,
+              method: 'post',
+              data: {
+                teamid: _this.id,
+                type: 'all',
+                module: _this.module
+              }
+            }).then(res => {
+              console.log(res)
+              if (res.data.flag === 1) {
+                _this.$vux.toast.show({
+                  text: `导入全部${_this.moduleTransfer}成功!`
+                })
+              } else if (res.data.flag === 3) {
+                _this.$vux.toast.show({
+                  text: `没有内容可导入!`
+                })
+              }
+            })
+          }
+        })
+      } else {
+        this.$vux.toast.show({
+          text: `没有内容可导入!`
+        })
+      }
     }
   }
 };
