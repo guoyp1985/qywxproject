@@ -265,7 +265,7 @@ export default {
     outTeam () {
       let _this = this
       this.$vux.confirm.show({
-        title: `确定删除该${this.moduleTransfer}吗？`,
+        title: `确定退出该团队吗？`,
         onConfirm () {
           _this.$http({
             url: `${Env.BokaApi}/api/team/teamset`,
