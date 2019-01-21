@@ -30,7 +30,7 @@
         <cell title="预计点击收入" :value="preTrafficIncome"></cell>
         <cell title="预计佣金收入" :value="preRetailIncome"></cell>
         <cell title="据人数推算总额" primary="content">
-          <range v-model="rangeData" :max="500"></range>
+          <range v-model="rangeData" :min="1" :max="500"></range>
         </cell>
       </group>
       <div class="button-area">
@@ -98,7 +98,7 @@ export default {
   },
   data () {
     return {
-      rangeData: 0
+      rangeData: 1
     }
   },
   computed: {
