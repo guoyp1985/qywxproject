@@ -127,6 +127,10 @@ export default {
             console.log(res)
             if (res.data.flag) {
               _this.data.splice(index, 1)
+              if (_this.data.length === 0) {
+                _this.pagestart = 0
+                _this.getData()
+              }
             }
           })
         }

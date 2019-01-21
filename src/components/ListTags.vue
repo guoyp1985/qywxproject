@@ -12,13 +12,13 @@
         </div>
         <div class="content">{{tag.content}}</div>
         <div class="photos" v-if="tag.photo !== ''">
-          <viewer :images="tag.photosSplited" style="width:100%;display:flex;flex-wrap: wrap;">
-            <div class="photo-wraper" v-for="photo in tag.photosSplited" :key="photo.id">
+          <div :images="tag.photosSplited" style="width:100%;display:flex;flex-wrap: wrap;">
+            <div class="photo-wraper" v-for="(photo,pindex) in tag.photosSplited" :key="pindex">
               <div class="photo">
-                  <img :src="photo"/>
+                  <img :src="photo" @click="showBigimg(pindex,index)" />
               </div>
             </div>
-          </viewer>
+          </div>
         </div>
         <div class="info-bottom">
           <span class="time">{{tag.time}}</span>
@@ -80,7 +80,7 @@ export default {
           let data = res.data
           for (let i = 0; i < data.data.length; i++) {
             data.data[i].photosSplited = data.data[i].photo.split(',')
-            data.data[i].time = new Time(data.data[i].datelime * 1000).format()
+            data.data[i].time = new Time(data.data[i].dateline * 1000).format()
           }
           if (data.flag) {
             if (this.pagestart === 0) {
@@ -95,6 +95,26 @@ export default {
             this.pagestart++
           }
         })
+      }
+    },
+    showBigimg (pindex, index) {
+      const self = this
+      console.log(pindex)
+      console.log(index)
+      // if (self.$util.isPC()) {
+      //   self.$refs.tags[pindex][photosSplited].show(index)
+      // } else {
+      var imgList = self.tags[index].photosSplited
+      if (imgList.length > 0) {
+        var src = imgList[pindex]
+        console.log(imgList)
+        console.log(src)
+        if (window.WeixinJSBridge) {
+          window.WeixinJSBridge.invoke('imagePreview', {
+            current: imgList[pindex],
+            urls: imgList
+          })
+        }
       }
     },
     deleteTag (moduleid, index) {
@@ -112,9 +132,12 @@ export default {
               moduleid: moduleid
             }
           }).then(res => {
-            console.log(res)
             if (res.data.flag) {
               _this.tags.splice(index, 1)
+              if (_this.tags.length === 0) {
+                _this.pagestart = 0
+                _this.getTags()
+              }
             }
           })
         }
@@ -213,6 +236,7 @@ export default {
           }
         }
         .content{
+          white-space: pre-wrap;
           font-size: 14px;
           margin-bottom: 10px;
         }

@@ -8,7 +8,7 @@
     <form>
       <forminputplate class="required">
         <span slot="title">验证密钥</span>
-        <input v-model="key" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
+        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
       </forminputplate>
       <div class="protocal-area">
         <check-icon :value.sync="isAccept" type="plain"><a>同意群群推协议</a></check-icon>
@@ -58,7 +58,7 @@ export default {
   },
   data () {
     return {
-      key: '',
+      crypto: '',
       isAccept: false,
       isSubmitIng: false
       // roomCategory: [1],
@@ -73,16 +73,16 @@ export default {
     submitHandle () {
       if (!this.isSubmitIng) {
         // const self = this
-        const room = {
-          key: this.key
+        const data = {
+          crypto: this.crypto
         }
-        console.log(room)
+        console.log(data)
         if (this.$util.validateQueue(
           [
-            {key: room.key}
+            {crypto: data.crypto}
           ],
           model => {
-            this.$vux.toast.text('未填必选项', 'middle')
+            this.$vux.toast.text('请填写验证密钥', 'middle')
           }
         )) {
           if (!this.isAccept) {
@@ -91,7 +91,7 @@ export default {
           }
           this.isSubmitIng = true
           this.$vux.loading.show()
-          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, room)
+          this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data)
           .then(res => {
             const data = res.data
             if (data.flag === 1) {
