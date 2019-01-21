@@ -55,6 +55,8 @@
 import { Tab, TabItem, XButton } from 'vux'
 import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
+import ENV from 'env'
+
 export default {
   components: {
     Tab, TabItem, XButton, Room, RoomOrderConsumer
@@ -96,7 +98,15 @@ export default {
       }
     },
     scrollHandle () {
+    },
+    refresh () {
+      this.$http.get(`${ENV.BokaApi}/api/groups/myGroups`).then(res => {
+        console.log(res)
+      })
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

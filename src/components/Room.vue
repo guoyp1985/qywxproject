@@ -32,7 +32,7 @@
           </div>
           <div>
             <span>地域分析:</span>
-            <span>{{item.locationStats}}</span>
+            <span>取不到</span>
           </div>
         </div>
         <div class="flex_cell">
