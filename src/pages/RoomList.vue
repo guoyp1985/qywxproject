@@ -12,7 +12,7 @@
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
-      <div v-show="selectedIndex===0">
+      <div v-if="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="rooms.length">
             <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
@@ -24,7 +24,7 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===1">
+      <div v-if="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="roomOrders.length">
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
