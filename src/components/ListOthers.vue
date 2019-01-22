@@ -78,9 +78,9 @@ export default {
   methods: {
     getData () {
       console.log('in getData')
-      if (this.loaded) {
-        this.loaded = false
-      }
+      // if (this.loaded) {
+      //   this.loaded = false
+      // }
       if (this.data.length === this.pagestart * this.limit) {
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
