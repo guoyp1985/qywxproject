@@ -24,16 +24,16 @@
         <room-view v-for="(item, index) in rooms" :key="index" :item="item">
           <div slot="sort-key">
             <span v-if="selectIndex === 0">综合评分: {{item.score}}</span>
-            <span v-if="selectIndex === 1">更新时间: {{item.updatedTime}}</span>
-            <span v-if="selectIndex === 2">销量: {{item.salesVolume}}</span>
-            <span v-if="selectIndex === 3">单人点击: ￥{{item.statsResult}}</span>
+            <span v-if="selectIndex === 1">更新时间: {{item.dateline | formatDate}}</span>
+            <span v-if="selectIndex === 2">销量: {{item.sales}}</span>
+            <span v-if="selectIndex === 3">单人点击: ￥{{item.viewmoney}}</span>
           </div>
           <div slot="operation-area" class="room-operate-area db-flex">
             <div class="flex_cell font13 button" @click="kownMore">
-              <router-link :to="{ name: 'tRoomDetails' }">了解更多</router-link>
+              <router-link :to="{ name: 'tRoomDetails', query: {id: item.id} }">了解更多</router-link>
             </div>
             <div class="flex_cell font13 button" @click="makeDeal">
-              <router-link :to="{ name: 'tRoomOrderDeal' }">与TA交易</router-link>
+              <router-link :to="{ name: 'tRoomOrderDeal', query: {id: item.id} }">与TA交易</router-link>
             </div>
           </div>
         </room-view>
@@ -49,6 +49,8 @@
 <script>
 import { XButton } from 'vux'
 import RoomView from '@/components/RoomView'
+import Time from '#/time'
+import ENV from 'env'
 export default {
   components: {
     XButton, RoomView
@@ -61,9 +63,17 @@ export default {
       sortSales: null,
       sortPrice: null,
       loadCompleted: true,
+      limit: 10,
+      pagestart1: 1,
+      pagestart2: 1,
       rooms: [
         {id: 1, topic: 'baba', avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'}
       ]
+    }
+  },
+  filters: {
+    formatDate (seconds) {
+      return new Time(seconds * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
@@ -75,24 +85,28 @@ export default {
           this.sortTime = null
           this.sortSales = null
           this.sortPrice = null
+          this.loadData('score', this.sortTotal)
           break
         case 1:
           this.sortTotal = null
           this.sortTime = !this.sortTime
           this.sortSales = null
           this.sortPrice = null
+          this.loadData('dateline', this.sortTime)
           break
         case 2:
           this.sortTotal = null
           this.sortTime = null
           this.sortSales = !this.sortSales
           this.sortPrice = null
+          this.loadData('sales', this.sortSales)
           break
         case 3:
           this.sortTotal = null
           this.sortTime = null
           this.sortSales = null
           this.sortPrice = !this.sortPrice
+          this.loadData('viewmoney', this.sortPrice)
           break
       }
     },
@@ -101,7 +115,40 @@ export default {
     makeDeal () {
     },
     scrollHandle () {
+      const _this = this
+      this.$util.scrollEvent({
+        element: this.$refs.scrollContainer,
+        callback: () => {
+          switch (_this.selectedIndex) {
+            case 0:
+              if (_this.tabdata1.length === _this.pagestart1 * _this.limit) {
+                _this.getPageData(0, _this.pagestart1)
+              }
+              break
+            case 1:
+              if (_this.tabdata2.length === _this.pagestart2 * _this.limit) {
+                _this.getPageData(2, _this.pagestart2)
+              }
+              break
+          }
+        }
+      })
+    },
+    refresh () {
+      this.loadData()
+    },
+    loadData (sortKey, isAsc) {
+      const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: 10, pagestart: 0}
+      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
+      .then(res => {
+        if (res.data.flag === 1) {
+          this.rooms = res.data.data
+        }
+      })
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>
