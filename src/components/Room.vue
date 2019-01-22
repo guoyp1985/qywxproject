@@ -7,7 +7,7 @@
   <div class="room">
     <div class="room-info">
       <div class="room-desc db-flex">
-        <div class="room-avatar flex_cell">
+        <div class="room-avatar flex_cell flex-3">
           <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           <div class="room-topic">
             <div class="font16">{{item.title}}</div>
