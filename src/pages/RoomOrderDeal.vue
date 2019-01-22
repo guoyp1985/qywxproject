@@ -113,7 +113,7 @@ export default {
             this.$vux.toast.text(data.error, 'middle')
             if (data.flag === 1) {
               setTimeout(() => {
-                this.$router.push({path: '/pay', query: {id: data.data, ordermodule: data.ordermodule}})
+                this.$router.push({path: '/pay', query: {id: data.data, module: data.ordermodule}})
               }, 1000)
             }
           })
