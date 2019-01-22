@@ -177,10 +177,6 @@ export default {
             this.$refs.listTags.tags = []
             this.$refs.listTags.pagestart = 0
             this.$refs.listTags.getTags()
-            this.getTeamInfo(this.id).then(res => {
-              console.log(res)
-              this.teamInfo = res.data.data
-            })
           })
           break
         case 1:
@@ -196,6 +192,12 @@ export default {
           this.module = 'courseclass'
           break
       }
+      console.log('11111111')
+      console.log(this.id)
+      this.getTeamInfo(this.id).then(res => {
+        console.log(res)
+        this.teamInfo = res.data.data
+      })
     },
     scrollEnd (y) {
       const wraperHeight = this.$refs.wraper.$el.offsetHeight
