@@ -94,7 +94,6 @@ export default {
         }).then(res => {
           if (!this.pagestart) {
             this.data = res.data.data
-            this.loaded = true
           } else {
             this.data.push(...res.data.data)
           }
@@ -103,6 +102,7 @@ export default {
           })
           this.pagestart++
           console.log(this.data)
+          this.loaded = true
         })
       } else {
         console.log('没有数据了！')
