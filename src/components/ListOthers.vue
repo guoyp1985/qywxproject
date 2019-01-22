@@ -1,5 +1,5 @@
 <template>
-  <div class="data" style="border:red 1px solid;">
+  <div class="data">
     <div v-for="(item, index) in data" :key="item.id" class="item" @click="toItem(item)">
       <img class="avatar" :src="item.photo"/>
       <div class="info">
