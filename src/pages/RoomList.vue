@@ -12,10 +12,10 @@
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
-      <div v-show="selectedIndex===0">
+      <div v-if="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="rooms.length">
-            <room v-for="(item, index) in rooms" :key="index" :item="item"></room>
+            <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
@@ -24,7 +24,7 @@
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===1">
+      <div v-if="selectedIndex===1">
         <template v-if="distabdata2">
           <template v-if="roomOrders.length">
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
@@ -55,6 +55,8 @@
 import { Tab, TabItem, XButton } from 'vux'
 import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
+import ENV from 'env'
+
 export default {
   components: {
     Tab, TabItem, XButton, Room, RoomOrderConsumer
@@ -96,7 +98,53 @@ export default {
       }
     },
     scrollHandle () {
+    },
+    handleAction (room, status) {
+      const _this = this
+      let confirmTitle = ''
+      switch (status) {
+        case 0:
+          confirmTitle = '是否重新评估?'
+          break
+        case 2:
+          confirmTitle = '确认开放?'
+          break
+        case 3:
+          confirmTitle = '确认关闭?'
+          break
+      }
+      this.$vux.confirm.show({
+        title: confirmTitle,
+        onConfirm () {
+          _this.actionData(room.id, status)
+        }
+      })
+    },
+    actionData (id, status) {
+      this.$http.post(`${ENV.BokaApi}/api/groups/moderate`, {id: id, moderate: status})
+      .then(res => {
+        if (res.data.flag === 1) {
+          const moderate = res.data.moderate
+          this.rooms = this.$util.changeItem(this.rooms, id, room => {
+            room.moderate = moderate
+            return room
+          })
+          // console.log(this.$util.changeItem)
+        }
+      })
+    },
+    refresh () {
+      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`)
+      .then(res => {
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          this.rooms = data
+        }
+      })
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

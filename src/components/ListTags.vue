@@ -85,7 +85,6 @@ export default {
           if (data.flag) {
             if (this.pagestart === 0) {
               this.tags = data.data
-              this.loaded = true
             } else {
               this.tags.push(...data.data)
             }
@@ -94,6 +93,7 @@ export default {
             })
             this.pagestart++
           }
+          this.loaded = true
         })
       }
     },
