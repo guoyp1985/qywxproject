@@ -78,9 +78,9 @@ export default {
   methods: {
     getData () {
       console.log('in getData')
-      if (this.loaded) {
-        this.loaded = false
-      }
+      // if (this.loaded) {
+      //   this.loaded = false
+      // }
       if (this.data.length === this.pagestart * this.limit) {
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
@@ -94,7 +94,6 @@ export default {
         }).then(res => {
           if (!this.pagestart) {
             this.data = res.data.data
-            this.loaded = true
           } else {
             this.data.push(...res.data.data)
           }
@@ -103,6 +102,7 @@ export default {
           })
           this.pagestart++
           console.log(this.data)
+          this.loaded = true
         })
       } else {
         console.log('没有数据了！')
