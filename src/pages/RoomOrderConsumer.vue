@@ -7,8 +7,7 @@
   <div id="room-order-consumer">
     <div class="order-title db-flex font14">
       <div class="flex_cell flex_left">
-        <span>客户:</span>
-        <span>{{item.retailer}}</span>
+        <span class="font14 clamp1" style="width:220px">客户: {{item.retailer}}</span>
       </div>
       <div class="flex_cell flex_right color-red">
         <span>{{statusName}}</span>
@@ -18,7 +17,7 @@
       <div class="flex_cell">
         <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         <div class="order-info">
-          <div class="font14">{{item.product_title}}</div>
+          <div class="font14 clamp1" style="width:220px">{{item.product_title}}</div>
           <div class="font14">
             <span>售价: ￥{{item.product_price}}</span>
           </div>

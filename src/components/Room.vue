@@ -1,5 +1,5 @@
 /*
-* @description: 群群推群列表组件(群主)
+* @description: 群群推群列表组件(接单方)
 * @auther: simon
 * @created_date: 2019-1-4
 */
@@ -10,7 +10,7 @@
         <div class="room-avatar flex_cell flex-3">
           <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           <div class="room-topic">
-            <div class="font16">{{item.title}}</div>
+            <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
             <div class="font13">单数: {{item.sales}}</div>
           </div>
         </div>
@@ -104,10 +104,21 @@ export default {
 <style lang="less">
 .room {
   background-color: #ffffff;
-}
-.room .room-info, .room-stats {
-  padding: 10px;
   border-bottom: 1px solid #f0f0f0;
+}
+.room .room-info, .room .room-stats {
+  padding: 10px;
+  position: relative;
+}
+.room .room-info:after,
+.room .room-stats:after {
+  content: ' ';
+  position: absolute;
+  height: 1px;
+  left: 10px;
+  right: 10px;
+  bottom: 0px;
+  background-color: #f0f0f0;
 }
 .room .room-info .room-avatar img{
   width: 64px;
@@ -139,8 +150,5 @@ export default {
   border-left: 1px solid #f0f0f0;
   position: absolute;
   right: 0;
-}
-.room .room-operate-area {
-  border-bottom: 1px solid #f0f0f0;
 }
 </style>

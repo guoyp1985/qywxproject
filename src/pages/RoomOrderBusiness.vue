@@ -7,18 +7,17 @@
   <div id="room-order-business">
     <div class="order-title db-flex font14">
       <div class="flex_cell flex_left">
-        <span>群名称:</span>
-        <span>{{item.grouptitle}}</span>
+        <span class="font14 clamp1" style="width:220px">群名称: {{item.grouptitle}}</span>
       </div>
       <div class="flex_cell flex_right color-red">
         <span>{{statusName}}</span>
       </div>
     </div>
-    <router-link class="order-desc db-flex" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid, wechatorderid: item.id} }">
+    <router-link class="order-desc db-flex" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid} }">
       <div class="flex_cell">
         <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         <div class="order-info">
-          <div class="font14">{{item.product_title}}</div>
+          <div class="font14 clamp1" style="width:220px">{{item.product_title}}</div>
           <div class="font14">
             <span>售价: ￥{{item.product_price}}</span>
           </div>

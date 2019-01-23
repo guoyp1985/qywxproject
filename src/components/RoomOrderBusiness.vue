@@ -11,7 +11,7 @@
           <div class="order-avatar flex_cell">
             <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             <div class="order-details">
-              <div class="font14">{{item.product_title}}</div>
+              <div class="font14 clamp1" style="width:180px">{{item.product_title}}</div>
               <div class="font14">
                 <span>售价: ￥{{item.product_price}}</span>
                 <span>佣金: ￥{{item.product_rebate}}/件</span>
@@ -25,7 +25,7 @@
         </div>
       </router-link>
     </div>
-    <div v-if="item.flag === -1" class="stats-area flex-db font14">
+    <div v-if="item.flag === -1" class="stats-area font14">
       <div class="info-area align_right">
         <span>保证金:</span>
         <span class="color-red">￥{{item.deposit}}</span>
@@ -34,7 +34,7 @@
         <x-button mini class="btn">退款</x-button>
       </div>
     </div>
-    <div v-if="item.flag === 0" class="stats-area flex-db font14">
+    <div v-if="item.flag === 0" class="stats-area font14">
       <div class="info-area align_right">
         <span>保证金:</span>
         <span class="color-red">￥{{item.deposit}}</span>
@@ -117,6 +117,15 @@ export default {
   position: relative;
   padding: 10px;
 }
+.room-order-business-info:after {
+  content: ' ';
+  position: absolute;
+  height: 1px;
+  left: 10px;
+  right: 10px;
+  bottom: 0px;
+  background-color: #f0f0f0;
+}
 .room-order-business .weui-cells {
   margin-top: 0;
   font-size: 13px;
@@ -153,9 +162,6 @@ export default {
   margin-right: 10px;
 }
 .room-order-business .info-area {
-  padding: 5px 10px;
-}
-.room-order-business .info-area:first-child {
-  border-top: 1px solid #f0f0f0;
+  padding: 10px;
 }
 </style>
