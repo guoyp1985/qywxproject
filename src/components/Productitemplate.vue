@@ -8,12 +8,13 @@
 				</div>
 			</div>
 			<div class="desbox" style="overflow:hidden;">
-				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;"><slot name="title"></slot></div>
-				<div class="clamp1">
+				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">
+          <span class="jsxuan" v-if="data.priority">精选</span>
+          <slot name="title"></slot>
+        </div>
+        <div class="clamp1">
 					<div class="flex_table padding5 pro-desc">
-						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;">{{ $t('RMB') }} <slot name="price"></slot></span>
+						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <slot name="price"></slot></span>
             <!-- <span v-if="data.allowcard" class="color-red" style="margin-right: 10px">优惠券<span class="al al-gou" style="font-size:12px;"></span></span> -->
 						<span class="color-gray">{{ $t('Saled txt') }}:<slot name="saled"></slot></span>
 					</div>
@@ -37,6 +38,7 @@ export default {
 </script>
 
 <style lang="less">
+  .jsxuan{padding:2px 5px;box-sizing:border-box;text-align:center;line-height:20px;background-color:#fd8c2c;color:#fff;border-radius:2px;}
   .pro-desc{
     display: flex;
     flex-direction: row;

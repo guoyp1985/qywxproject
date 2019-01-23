@@ -80,7 +80,7 @@
           <div v-if="productdata.length == 0" class="emptyitem flex_center">暂无商品</div>
           <productitemplate v-else :data="item" v-for="(item,index) in productdata" :key="item.id">
             <img slot="photo" class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-            <span slot="title">{{ item.title }}</span>
+            <span slot="title" style="word-break:break-all;">{{ item.title }}</span>
             <span slot="price" style="margin-left:1px;">{{ item.price }}</span>
             <span slot="saled" style="margin-left:1px;">{{ item.saled }}</span>
           </productitemplate>
