@@ -17,7 +17,7 @@
     				<img src="https://tossharingsales.boka.cn/images/share1.jpg" />
     			</div>
     		</div>
-        <template v-if="!query.from">
+        <template v-if="!query.from && !query.control">
           <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
         </template>
         <div class="article-view">
