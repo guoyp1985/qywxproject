@@ -43,8 +43,10 @@
               <div class="align_left font24 pb10 bold">￥</div>
               <input v-model="cashMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
-            <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
-            <div class="color-theme mt5" @click="clickAll">全部提现</div>
+            <div class="mt5 db-flex">
+              <div class="flex_cell color-gray">可提现金额￥{{retailerInfo.waitcash}}</div>
+              <div class="flex_right w80 color-theme" @click="clickAll">全部提现</div>
+            </div>
             <div class="btnSubmit" @click="getWechatCash">确认提现</div>
           </div>
         </div>
@@ -71,8 +73,10 @@
               <div class="align_left font24 pb10 bold">￥</div>
               <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
-            <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
-            <div class="color-theme mt5" @click="clickAll('bank')">全部提现</div>
+            <div class="mt5 db-flex">
+              <div class="flex_cell color-gray">可提现金额￥{{retailerInfo.waitcash}}</div>
+              <div class="flex_right w80 color-theme" @click="clickAll('bank')">全部提现</div>
+            </div>
             <div class="btnSubmit" @click="getBankCash">确认提现</div>
           </div>
         </div>
