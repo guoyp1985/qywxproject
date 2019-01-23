@@ -192,12 +192,6 @@ export default {
           this.module = 'courseclass'
           break
       }
-      console.log('11111111')
-      console.log(this.id)
-      this.getTeamInfo(this.id).then(res => {
-        console.log(res)
-        this.teamInfo = res.data.data
-      })
     },
     scrollEnd (y) {
       const wraperHeight = this.$refs.wraper.$el.offsetHeight
@@ -229,6 +223,13 @@ export default {
       console.log(this.fixedTop)
     },
     onAdd () {
+      if (this.module === 'courseclass') {
+        this.$vux.toast.show({
+          text: `培训暂不支持预览哦^_^`,
+          type: 'warn'
+        })
+        return
+      }
       if (this.currentTab) {
         this.$router.push({
           path: '/addOthers',
