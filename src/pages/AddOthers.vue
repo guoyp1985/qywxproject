@@ -168,7 +168,6 @@ export default {
         })
         return
       }
-      console.log(this.selectedItemId.join())
       this.$http({
         url: `${Env.BokaApi}/api/team/band`,
         method: 'POST',
