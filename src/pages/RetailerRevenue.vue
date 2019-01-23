@@ -33,7 +33,7 @@
           <div class="pt10 pb10 pr10 pl10">
             <div class="flex_table">
               <div class="align_left color-gray2">到账时间</div>
-              <div class="pl10" style="color:#FF6B63">实时到账 (无手续费)</div>
+              <div class="pl10">实时到账 (无手续费)</div>
             </div>
             <div class="flex_table mt10">
               <div class="align_left color-gray2">提现金额</div>
@@ -44,6 +44,7 @@
               <input v-model="cashMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
+            <div class="color-theme mt5" @click="clickAll">全部提现</div>
             <div class="btnSubmit" @click="getWechatCash">确认提现</div>
           </div>
         </div>
@@ -60,7 +61,7 @@
           <div class="pt10 pb10 pr10 pl10">
             <div class="flex_table">
               <div class="align_left color-gray2">到账时间</div>
-              <div class="pl10" style="color:#FF6B63"> 1-3天(1%手续费)</div>
+              <div class="pl10"> 1-3天(1%手续费)</div>
             </div>
             <div class="flex_table mt10">
               <div class="align_left color-gray2">提现金额</div>
@@ -71,6 +72,7 @@
               <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="color-gray mt5">可提现金额￥{{retailerInfo.waitcash}}</div>
+            <div class="color-theme mt5" @click="clickAll('bank')">全部提现</div>
             <div class="btnSubmit" @click="getBankCash">确认提现</div>
           </div>
         </div>
@@ -253,6 +255,13 @@ export default {
     },
     getBankCash () {
       this.cashEvent(this.cashBankMoney, 'yinhang')
+    },
+    clickAll (type) {
+      if (type === 'bank') {
+        this.cashBankMoney = this.retailerInfo.waitcash
+      } else {
+        this.cashMoney = this.retailerInfo.waitcash
+      }
     }
   },
   activated () {
