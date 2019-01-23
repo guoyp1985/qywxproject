@@ -11,7 +11,7 @@
           <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           <div class="room-topic">
             <div class="font16">{{item.title}}</div>
-            <div class="font13">接单数</div>
+            <div class="font13">单数: {{item.sales}}</div>
           </div>
         </div>
         <div class="room-status flex_cell flex_right">
