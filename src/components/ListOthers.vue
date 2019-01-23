@@ -156,7 +156,10 @@ export default {
     toItem (item) {
       console.log('toItem')
       if (this.module === 'courseclass') {
-        console.log('培训没办法跳转！')
+        this.$vux.toast.show({
+          text: `培训暂不支持预览哦^_^`,
+          type: 'warn'
+        })
         return
       }
       let path = ''
