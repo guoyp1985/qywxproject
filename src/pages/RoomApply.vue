@@ -60,7 +60,7 @@ export default {
     return {
       crypto: '',
       isAccept: false,
-      isSubmitIng: false
+      isSubmiting: false
       // roomCategory: [1],
       // roomCategories: [
       //   {id: 1, title: '夜跑群'},
@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     submitHandle () {
-      if (!this.isSubmitIng) {
+      if (!this.isSubmiting) {
         // const self = this
         const data = {
           crypto: this.crypto
@@ -89,24 +89,24 @@ export default {
             this.$vux.toast.text('提交评估需同意协议', 'middle')
             return
           }
-          this.isSubmitIng = true
+          this.isSubmiting = true
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data)
           .then(res => {
-            const data = res.data
-            if (data.flag === 1) {
-              this.$vux.loading.hide()
-              setTimeout(() => {
-                this.$router.back()
-                this.isSubmitIng = false
-              }, 1000)
-            } else {
-              this.isSubmitIng = false
-            }
+            this.$vux.loading.hide()
             this.$vux.toast.text(res.data.error, 'middle')
+            setTimeout(() => {
+              this.reset()
+              this.$router.back()
+              this.isSubmiting = false
+            }, 1000)
           })
         }
       }
+    },
+    reset () {
+      this.crypto = ''
+      this.isAccept = false
     }
   }
 }

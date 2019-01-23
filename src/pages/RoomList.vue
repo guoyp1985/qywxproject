@@ -129,7 +129,6 @@ export default {
             room.moderate = moderate
             return room
           })
-          // console.log(this.$util.changeItem)
         }
       })
     },

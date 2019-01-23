@@ -35,7 +35,7 @@
                   <img class="imgcover v_middle" :src="getPhoto(item.photo)" style="width:100px;height:100px;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 </div>
           			<div class="t-cell v_middle">
-                  <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                  <div class="clamp1 font16 pr10 color-lightgray"><span v-if="item.priority == 1" style="color:#fd8c2c;">【精选】</span>{{item.title}}</div>
                   <div class="t-table pr12 border-box mt15">
                     <div class="t-cell color-999 font14">
                       <div class="clamp1">售价:<span class="color-red"> {{ $t('RMB') }}{{ item.price }}</span></div>
@@ -84,6 +84,12 @@
             </div>
             <div class="item" v-else-if="clickdata.moderate == 1">
               <div class="inner" @click="clickpopup('down')">下架</div>
+            </div>
+            <div class="item" v-if="clickdata.priority == 0">
+              <div class="inner" @click="clickpopup('top')">设置为精选</div>
+            </div>
+            <div class="item" v-else-if="clickdata.priority == 1">
+              <div class="inner" @click="clickpopup('bottom')">取消精选</div>
             </div>
             <div class="item">
               <router-link class="inner" :to="{path: '/stat', query: {id: clickdata.id, module: 'product'}}">统计</router-link>
@@ -374,6 +380,54 @@ export default {
                   if (data.flag === 1) {
                     self.clickdata.moderate = 0
                     self.productdata[self.clickindex].moderate = 0
+                    self.showpopup1 = false
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else if (key === 'top') {
+        self.$vux.confirm.show({
+          title: '确定要设置为精选吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, module: 'product', param: 'priority', paramvalue: 1 }
+            self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, params).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.priority = 1
+                    self.productdata[self.clickindex].priority = 1
+                    self.showpopup1 = false
+                  }
+                }
+              })
+            })
+          }
+        })
+      } else if (key === 'bottom') {
+        self.$vux.confirm.show({
+          title: '确定要取消精选吗？',
+          onConfirm () {
+            self.$vux.loading.show()
+            let params = { id: self.clickdata.id, module: 'product', param: 'priority', paramvalue: 0 }
+            self.$http.post(`${ENV.BokaApi}/api/setModulePara/product`, params).then(function (res) {
+              let data = res.data
+              self.$vux.loading.hide()
+              self.$vux.toast.show({
+                text: data.error,
+                type: (data.flag !== 1 ? 'warn' : 'success'),
+                time: self.$util.delay(data.error),
+                onHide: function () {
+                  if (data.flag === 1) {
+                    self.clickdata.priority = 0
+                    self.productdata[self.clickindex].priority = 0
                     self.showpopup1 = false
                   }
                 }

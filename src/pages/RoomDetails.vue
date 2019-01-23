@@ -6,45 +6,63 @@
 <template>
   <div id="room-details">
     <div class="room-profile db-flex">
-      <div class="room-avatar flex_cell color-white">
-        <img class="v_middle imgcover" :src="roomAvatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+      <div class="room-avatar flex_cell flex-3 color-white">
+        <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         <div class="room-topic">
-          <div class="font16">{{roomTopic}}</div>
-          <div class="font13">综合评分: {{roomScore}}分</div>
+          <div class="font16">{{room.title}}</div>
+          <div class="font13">综合评分: {{room.score}}分</div>
         </div>
       </div>
       <div class="operation-area flex_cell flex_right">
-        <router-link :to="{ name: 'tRoomOrderDeal', params: {id: roomId} }">
+        <router-link :to="{ name: 'tRoomOrderDeal', params: {id: room.id} }">
           <span class="font13">交易</span>
         </router-link>
       </div>
     </div>
     <group>
-      <cell title="群人数" value="value"></cell>
-      <cell title="男女比例" value="value"></cell>
-      <cell title="地域分析" value="value"></cell>
-      <cell title="销量" value="value"></cell>
-      <cell title="群信用度" value="value"></cell>
-      <cell title="群属性" value="value"></cell>
-      <cell title="群活跃度" value="value"></cell>
-      <cell title="单次点击价格" value="value"></cell>
-      <cell title="更新时间" value="value"></cell>
+      <cell title="群人数" :value="room.members"></cell>
+      <cell title="男/女/未知" :value="room.sexrate"></cell>
+      <cell title="地域分析" value="无"></cell>
+      <cell title="销量" :value="room.sales"></cell>
+      <cell title="群信用度" value="无"></cell>
+      <cell title="群属性" value="无"></cell>
+      <cell title="群活跃度" :value="room.liveness"></cell>
+      <cell title="单次点击价格" :value="room.viewmoney"></cell>
+      <cell title="更新时间" :value="room.dateline | formatDate"></cell>
     </group>
   </div>
 </template>
 <script>
 import { Group, Cell } from 'vux'
+import Time from '#/time'
+import ENV from 'env'
 export default {
   components: {
     Group, Cell
   },
   data () {
     return {
-      roomId: 1,
-      roomTopic: 'unkown',
-      roomScore: 100,
-      roomAvatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'
+      room: {}
     }
+  },
+  filters: {
+    formatDate (seconds) {
+      return new Time(seconds * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
+  },
+  methods: {
+    loadData () {
+      const id = this.$route.query.id
+      this.$http.post(`${ENV.BokaApi}/api/groups/groupInfo`, {id: id})
+      .then(res => {
+        if (res.data.flag === 1) {
+          this.room = res.data.data
+        }
+      })
+    }
+  },
+  activated () {
+    this.loadData()
   }
 }
 </script>
