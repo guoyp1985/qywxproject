@@ -223,13 +223,6 @@ export default {
       console.log(this.fixedTop)
     },
     onAdd () {
-      if (this.module === 'courseclass') {
-        this.$vux.toast.show({
-          text: `培训暂不支持预览哦^_^`,
-          type: 'warn'
-        })
-        return
-      }
       if (this.currentTab) {
         this.$router.push({
           path: '/addOthers',
