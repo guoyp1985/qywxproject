@@ -6,7 +6,7 @@
 <template>
   <div class="room-order-consumer">
     <div class="room-order-consumer-info">
-      <router-link :to="{ name: 'tRoomOrderConsumer', params: {id: item.id} }">
+      <router-link :to="{ name: 'tRoomOrderConsumer', query: {id: item.id} }">
         <div class="db-flex">
           <div class="order-avatar flex_cell">
             <img class="v_middle imgcover" :src="item.productAvatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>

@@ -919,6 +919,9 @@ export default {
       if (this.query.from === 'poster') {
         infoparams.from = 'poster'
       }
+      if (this.query.wechatorderid) {
+        infoparams.wechatorderid = this.query.wechatorderid
+      }
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: infoparams
       }).then(function (res) {

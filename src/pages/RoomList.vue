@@ -11,7 +11,7 @@
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">我的群订单</tab-item>
       </tab>
     </div>
-    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
+    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
       <div v-if="selectedIndex===0">
         <template v-if="distabdata1">
           <template v-if="rooms.length">
@@ -19,7 +19,7 @@
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>还没有提交群信息</span>
+              <span>还没有群信息，点击底部按钮前去验证</span>
             </div>
           </template>
         </template>
@@ -38,9 +38,9 @@
       </div>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
-      <span>申请群验证</span>
+      <span>群密钥验证</span>
     </router-link>
-    <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
+    <!-- <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
       <div class="flex_cell income-info">
         <span>待提现收入: </span>
         <span class="color-red">￥{{income}}</span>
@@ -48,7 +48,7 @@
       <div class="cashed-btn">
         <span class="color-white">提现</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -67,37 +67,43 @@ export default {
       distabdata1: true,
       distabdata2: true,
       income: 0,
-      rooms: [
-        {id: 1, topic: 'baba', status: 1, avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'}
-      ],
-      roomOrders: [
-        {
-          productName: 'unkown',
-          status: 0,
-          productAvatar: 'https://tossharingsales.boka.cn/images/nopic.jpg',
-          retailerTitle: 'retailerTitle',
-          productPrice: 'productPrice',
-          retailPrice: 1,
-          trafficCharge: 1,
-          currentTrafficIncome: 0,
-          currentRetailIncome: 0,
-          trafficIncome: 0,
-          retailIncome: 0
-        }
-      ]
+      rooms: [],
+      roomOrders: [],
+      limit: 10,
+      pageStart1: 0,
+      pageStart2: 0
     }
   },
   methods: {
     toggleTab () {
-      console.log(this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
+          !this.rooms.length && this.loadRooms()
           break
         case 1:
+          !this.roomOrders.length && this.loadOrders()
           break
       }
     },
-    scrollHandle () {
+    handleScroll () {
+      const _this = this
+      this.$util.scrollEvent({
+        element: this.$refs.scrollContainer,
+        callback: () => {
+          switch (_this.selectedIndex) {
+            case 0:
+              if (_this.rooms.length === _this.pageStart1 * _this.limit) {
+                _this.loadRooms(_this.pageStart1)
+              }
+              break
+            case 1:
+              if (_this.roomOrders.length === _this.pageStart2 * _this.limit) {
+                _this.loadOrders(_this.pageStart2)
+              }
+              break
+          }
+        }
+      })
     },
     handleAction (room, status) {
       const _this = this
@@ -132,14 +138,33 @@ export default {
         }
       })
     },
-    refresh () {
-      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`)
+    loadRooms (page) {
+      page = page || 0
+      this.$vux.loading.show()
+      let params = { pagestart: page, limit: this.limit }
+      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag === 1) {
           const data = res.data.data
-          this.rooms = data
+          this.rooms = this.rooms.concat(data)
         }
       })
+    },
+    loadOrders (page) {
+      page = page || 0
+      const params = {from: 'groupowner', pagestart: page, limit: this.limit}
+      this.$http.post(`${ENV.BokaApi}/api/groups/orderList`, params)
+      .then(res => {
+        this.$vux.loading.hide()
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          this.roomOrders = this.roomOrders.concat(data)
+        }
+      })
+    },
+    refresh () {
+      this.toggleTab()
     }
   },
   activated () {
