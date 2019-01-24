@@ -77,6 +77,7 @@ export default {
   methods: {
     sortHandle (i) {
       this.selectIndex = i
+      this.loadCompleted = false
       this.pageStart = 0
       this.rooms = []
       switch (i) {
