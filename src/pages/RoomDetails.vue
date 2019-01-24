@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="operation-area flex_cell flex_right">
-        <router-link :to="{ name: 'tRoomOrderDeal', params: {id: room.id} }">
+        <router-link :to="{ name: 'tRoomOrderDeal', query: {id: room.id} }">
           <span class="font13">交易</span>
         </router-link>
       </div>
