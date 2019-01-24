@@ -11,7 +11,10 @@
           <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           <div class="room-topic">
             <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
-            <div class="font13">单数: {{item.sales}}</div>
+            <div class="font13">
+              <span v-if="item.moderate === 1">单数: {{item.sales}}</span>
+              <span v-if="item.moderate === 2" class="color-orange">正在接单中，请注意手机通知</span>
+            </div>
           </div>
         </div>
         <div class="room-status flex_cell flex_right">
@@ -74,7 +77,7 @@
   </div>
 </template>
 <script>
-const STATUS_NAME = ['待评估', '已评估', '开放', '关闭']
+const STATUS_NAME = ['待评估', '已评估', '已开放', '关闭']
 export default {
   name: 'Room',
   props: {
