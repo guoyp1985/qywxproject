@@ -62,8 +62,10 @@ export default {
   methods: {
     loadData () {
       const id = this.$route.query.id
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/groupInfo`, {id: id})
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag === 1) {
           this.room = res.data.data
         }
@@ -109,7 +111,6 @@ export default {
           this.$http.post(`${ENV.BokaApi}/api/groups/addOrder`, data)
           .then(res => {
             const data = res.data
-            console.log(data)
             this.$vux.toast.text(data.error, 'middle')
             if (data.flag === 1) {
               setTimeout(() => {
