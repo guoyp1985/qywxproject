@@ -77,6 +77,8 @@ export default {
   methods: {
     sortHandle (i) {
       this.selectIndex = i
+      this.pageStart = 0
+      this.rooms = []
       switch (i) {
         case 0:
           this.sortTotal = !this.sortTotal
