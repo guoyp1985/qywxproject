@@ -48,7 +48,7 @@
     </div>
     <div v-transfer-dom>
       <x-dialog v-model="showDialog" hide-on-blur :dialog-style="{width: '100%', height: '50%', 'background-color': '#ffffff'}">
-        <div style="text-align:center;" @click="showDialog = false">
+        <div style="text-align:center;padding-top:10px;" @click="showDialog = false">
           <div style="font-size:14px;text-align:left;padding:10px 20px;overflow-y: scroll;height:400px;">
             <h4 style="text-align:center;">群群推服务协议</h4>
             <p style="text-indent:28px;">通过使用群群推服务，您明确同意使用群群推服务协议，由您自行承担全部风险。共销客不保证您在群群推上看到内容的准确性、真实性或完整性。</p>

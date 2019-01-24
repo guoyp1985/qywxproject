@@ -40,8 +40,8 @@
     <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop"></append-product>
     <div v-transfer-dom>
       <x-dialog v-model="showDialog" hide-on-blur :dialog-style="{width: '100%', height: '50%', 'background-color': '#ffffff'}">
-        <div style="text-align:center;" @click="showDialog = false">
-          <div style="font-size:14px;text-align:left;padding:10px 20px;overflow-y: scroll;height:400px;">
+        <div style="text-align:center;padding-top:10px;" @click="showDialog = false">
+          <div style="font-size:14px;text-align:left;padding:10px 20px;overflow-y:scroll;height:400px;">
             <h4 style="text-align:center;">群群推服务协议</h4>
             <p style="text-indent:28px;">通过使用群群推服务，您明确同意使用群群推服务协议，由您自行承担全部风险。共销客不保证您在群群推上看到内容的准确性、真实性或完整性。</p>
             <p style="text-indent:28px;">您特此确认已知晓本协议适用于群群推提供的所有内容和服务。在任何情况下，共销客不对您因使用或无法使用群群推服务而导致的任何直接或间接损害承担责任，包括但不限于您对群群推服务获得的任何信息产生依赖导致的错误、删除、服务延迟或任何其他故障。虽然群群推已竭尽全力确保平台显示的内容是正确的，但共销客对信息准确性作出保证，并“原样”提供所有信息。在法律允许的最大范围内，共销客的合作伙伴和关联公司，相关第三方，员工，承包商以及参与群群推运营的人员，对您或任何第三方因群群推上销售的产品而导致的任何损失或损害，不承担任何责任和义务。这包括（但不限于）因疏忽而导致的任何损失或损害。</p>
