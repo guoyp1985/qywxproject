@@ -238,6 +238,7 @@ export default {
         }
       }
       .ope-btn{
+        margin-right: 5px;
         padding: 5px 8px;
         border-radius: 10px;
         background-color: #ff6a61;
