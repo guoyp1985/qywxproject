@@ -11,18 +11,18 @@
         </div>
       </div>
       <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队管理员（{{countManager}}）人</span></div>
+        <div class="item-title"><span class="members-count">团队管理员（{{countManager}}人）</span></div>
         <div class="member" v-for="(manager, index) in managers" :key="manager.uid">
-          <div class="member-info">
+          <div class="member-info" @click="toggleOpeManger(index)">
             <img class="avatar" :src="manager.avatar"/>
             <span class="username">{{manager.username}}</span>
-            <div class="ope-btn" v-if="ismanager === 1" @click="toggleOpeManger(index)">...</div>
+            <div class="ope-btn">...</div>
           </div>
           <div v-if="manager.checked">
             <div class="flex_center bg-white h40">
               <div class="t-table align_center color-gray2 font14">
-                <div class="t-cell v_middle b_right_after" @click="delMember(manager.uid, index)">从团队中移除</div>
-                <div class="t-cell v_middle b_right_after" @click="disManger(manager.uid, index)">取消管理员</div>
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delMember(manager.uid, index)">从团队中移除</div>
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="disManger(manager.uid, index)">取消管理员</div>
                 <div class="t-cell v_middle" @click="toChat(manager.uid)">联系TA</div>
               </div>
             </div>

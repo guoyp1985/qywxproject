@@ -11,8 +11,8 @@
           <div class="inner-item inner-item-left">
             <img class="avatar" :src="teamInfo.avatar"/>
             <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
-            <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && !teamInfo.join" @click="joinTeam">加入团队</button>
-            <button class="btn" v-if="teamInfo.manager === 0" @click="outTeam">退出团队</button>
+            <button class="btn" v-if="!teamInfo.join" @click="joinTeam">加入团队</button>
+            <button class="btn" v-if="teamInfo.join && teamInfo.manager === 0" @click="outTeam">退出团队</button>
           </div>
           <div class="inner-item inner-item-right">
             <div class="leader">
