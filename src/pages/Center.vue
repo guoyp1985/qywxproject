@@ -126,6 +126,12 @@ let featureBtns = [
     icon: 'al-banjiqunliao',
     color: 'rgba08',
     link: '/roomList'
+  },
+  {
+    name: 'Qun Tui Guang',
+    icon: 'al-tubiaozhizuomoban',
+    color: 'rgba07',
+    link: '/rooms'
   }
 ]
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {
