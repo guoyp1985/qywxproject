@@ -75,7 +75,7 @@ let sellerBtn = [
   // }
   {
     name: 'Friend Customer',
-    icon: 'al-fuwu',
+    icon: 'al-pengyouquan',
     color: 'rgba01',
     link: '/friendRecommend'
   }
@@ -123,8 +123,8 @@ let featureBtns = [
   },
   {
     name: 'Qun Qun Tui',
-    icon: 'al-tubiaozhizuomoban',
-    color: 'rgba07',
+    icon: 'al-banjiqunliao',
+    color: 'rgba08',
     link: '/roomList'
   }
 ]
