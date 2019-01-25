@@ -66,7 +66,7 @@ export default {
       distabdata2: true,
       income: 0,
       rooms: [
-        {id: 1, topic: 'baba', status: 1, avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'}
+        {id: 1, topic: 'baba', status: 0, avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'}
       ],
       roomOrders: [
         {
