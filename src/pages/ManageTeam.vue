@@ -16,7 +16,7 @@
           <div class="member-info">
             <img class="avatar" :src="manager.avatar"/>
             <span class="username">{{manager.username}}</span>
-            <div class="ope-btn" @click="toggleOpeManger(index)">...</div>
+            <div class="ope-btn" v-if="ismanager === 1" @click="toggleOpeManger(index)">...</div>
           </div>
           <div v-if="manager.checked">
             <div class="flex_center bg-white h40">
@@ -36,13 +36,13 @@
           <div class="member-info" @click="toggleOpePanel(index)">
             <img class="avatar" :src="member.avatar"/>
             <span class="username">{{member.username}}</span>
-            <div class="ope-btn">...</div>
+            <div class="ope-btn" v-if="ismanager > 0">...</div>
           </div>
           <div v-if="member.checked">
             <div class="flex_center bg-white h40">
               <div class="t-table align_center color-gray2 font14">
                 <div class="t-cell v_middle b_right_after" @click="delMember(member.uid, index)">从团队中移除</div>
-                <div class="t-cell v_middle b_right_after" @click="setManger(member.uid, index)">设置为管理员</div>
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="setManger(member.uid, index)">设置为管理员</div>
                 <div class="t-cell v_middle" @click="toChat(member.uid)">联系TA</div>
               </div>
             </div>
@@ -70,7 +70,8 @@ export default {
       countManager: null,
       countNormal: null,
       tipMessageShow1: true,
-      tipMessageShow2: true
+      tipMessageShow2: true,
+      ismanager: 0
     }
   },
   components: {
@@ -97,6 +98,7 @@ export default {
             if (!this.pagestart) {
               this.countManager = res.data.count.manager
               this.countNormal = res.data.count.normal
+              this.ismanager = res.data.data.ismanager
               if (this.countManager) {
                 this.tipMessageShow1 = false
               }

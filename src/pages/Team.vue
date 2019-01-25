@@ -10,9 +10,9 @@
         <div class="team-info-inner">
           <div class="inner-item inner-item-left">
             <img class="avatar" :src="teamInfo.avatar"/>
-            <button class="btn" v-if="userInfo.uid === teamInfo.uploader" @click="manageTeam">管理团队</button>
+            <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
             <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && !teamInfo.join" @click="joinTeam">加入团队</button>
-            <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="outTeam">退出团队</button>
+            <button class="btn" v-if="teamInfo.manager === 0" @click="outTeam">退出团队</button>
           </div>
           <div class="inner-item inner-item-right">
             <div class="leader">
@@ -70,8 +70,8 @@
     </div>
 
     <div class="add-import" slot="ope-btns">
-      <span class="add al al-add" v-if="userInfo.uid === teamInfo.uploader" @click="onAdd"></span>
-      <div class="import" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join && currentTab !== 0">
+      <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
+      <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
         <button @click="importAll">导入全部{{moduleTransfer}}</button>
       </div>
     </div>
