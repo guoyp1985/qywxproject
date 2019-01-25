@@ -120,8 +120,10 @@ export default {
   methods: {
     loadData () {
       const id = this.$route.query.id
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/orderDetail`, {id: id, from: 'groupowner'})
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag === 1) {
           const data = res.data.data
           this.item = data

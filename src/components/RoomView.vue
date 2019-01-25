@@ -5,7 +5,7 @@
 */
 <template>
   <div class="room-view">
-    <div class="room-info">
+    <div class="room-info" @click="toggleDetails">
       <div class="room-desc db-flex">
         <div class="room-avatar flex_cell flex-3">
           <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="more-area flex_cell flex_right">
-          <span class="more-btn font13 color-white" @click="toggleDetails">
+          <span class="more-btn font13 color-white" @click.stop="toggleDetails">
             <template v-if="openDetails">
               简约
             </template>

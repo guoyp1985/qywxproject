@@ -14,7 +14,7 @@
         </div>
       </div>
       <div class="operation-area flex_cell flex_right">
-        <router-link :to="{ name: 'tRoomOrderDeal', params: {id: room.id} }">
+        <router-link :to="{ name: 'tRoomOrderDeal', query: {id: room.id} }">
           <span class="font13">交易</span>
         </router-link>
       </div>
@@ -53,8 +53,10 @@ export default {
   methods: {
     loadData () {
       const id = this.$route.query.id
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/groupInfo`, {id: id})
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag === 1) {
           this.room = res.data.data
         }

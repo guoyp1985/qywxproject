@@ -63,7 +63,7 @@ export default {
       sortTime: null,
       sortSales: null,
       sortPrice: null,
-      loadCompleted: true,
+      loadCompleted: false,
       limit: 10,
       pageStart: 0,
       rooms: []
@@ -77,6 +77,9 @@ export default {
   methods: {
     sortHandle (i) {
       this.selectIndex = i
+      this.loadCompleted = false
+      this.pageStart = 0
+      this.rooms = []
       switch (i) {
         case 0:
           this.sortTotal = !this.sortTotal
@@ -126,12 +129,15 @@ export default {
     },
     loadData (sortKey, isAsc) {
       const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: this.limit, pagestart: this.pageStart}
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
       .then(res => {
+        this.$vux.loading.hide()
         if (res.data.flag === 1) {
           const data = res.data.data
           data.length && this.pageStart++
           this.rooms = this.rooms.concat(data)
+          this.loadCompleted = true
         }
       })
     }

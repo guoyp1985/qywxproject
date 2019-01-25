@@ -94,6 +94,7 @@ export default {
       flag = flag || 0
       page = page || 0
       const params = {from: 'sellers', pagestart: page, limit: this.limit, flag: flag}
+      this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/orderList`, params)
       .then(res => {
         this.$vux.loading.hide()

@@ -13,7 +13,7 @@
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
       <div v-if="selectedIndex===0">
-        <template v-if="distabdata1">
+        <template v-if="showTab1">
           <template v-if="rooms.length">
             <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
           </template>
@@ -25,7 +25,7 @@
         </template>
       </div>
       <div v-if="selectedIndex===1">
-        <template v-if="distabdata2">
+        <template v-if="showTab2">
           <template v-if="roomOrders.length">
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
           </template>
@@ -64,8 +64,8 @@ export default {
   data () {
     return {
       selectedIndex: 0,
-      distabdata1: true,
-      distabdata2: true,
+      showTab1: false,
+      showTab2: false,
       income: 0,
       rooms: [],
       roomOrders: [],
@@ -148,11 +148,13 @@ export default {
         if (res.data.flag === 1) {
           const data = res.data.data
           this.rooms = this.rooms.concat(data)
+          this.showTab1 = true
         }
       })
     },
     loadOrders (page) {
       page = page || 0
+      this.$vux.loading.show()
       const params = {from: 'groupowner', pagestart: page, limit: this.limit}
       this.$http.post(`${ENV.BokaApi}/api/groups/orderList`, params)
       .then(res => {
@@ -160,6 +162,7 @@ export default {
         if (res.data.flag === 1) {
           const data = res.data.data
           this.roomOrders = this.roomOrders.concat(data)
+          this.showTab2 = true
         }
       })
     },
