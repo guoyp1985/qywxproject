@@ -129,7 +129,7 @@ let featureBtns = [
   },
   {
     name: 'Qun Tui Guang',
-    icon: 'al-tubiaozhizuomoban',
+    icon: 'al-shouhouwuyou',
     color: 'rgba07',
     link: '/rooms'
   }
