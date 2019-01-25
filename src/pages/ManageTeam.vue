@@ -10,33 +10,39 @@
           </div>
         </div>
       </div>
-      <!-- <div class="manage-item">
-        <div class="item-title"><span class="members-count">团队管理员（{{countManager}}）人</span></div>
-        <div class="member" v-for="(manager, index) in managers" :key="manager.id">
-          <div class="member-info">
+      <div class="manage-item">
+        <div class="item-title"><span class="members-count">团队管理员（{{countManager}}人）</span></div>
+        <div class="member" v-for="(manager, index) in managers" :key="manager.uid">
+          <div class="member-info" @click="toggleOpeManger(index)">
             <img class="avatar" :src="manager.avatar"/>
             <span class="username">{{manager.username}}</span>
-            <div class="ope-btn" @click="toggleOpePanel">...</div>
+            <div class="ope-btn">...</div>
           </div>
-          <div class="member-ope" hidden="0">
-            <span class="del-member" @click="delManager(manager.uid, index)">取消管理员</span>
-            <span class="con-member" @click="toChat(manager.uid)">联系TA</span>
+          <div v-if="manager.checked">
+            <div class="flex_center bg-white h40">
+              <div class="t-table align_center color-gray2 font14">
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delMember(manager.uid, index)">从团队中移除</div>
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="disManger(manager.uid, index)">取消管理员</div>
+                <div class="t-cell v_middle" @click="toChat(manager.uid)">联系TA</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="tip-message" v-if="tipMessageShow1"><span>该团目前无管理员</span></div>
-      </div> -->
+      </div>
       <div class="manage-item">
         <div class="item-title"><span class="members-count">团队成员（{{countNormal}}人）</span></div>
-        <div class="member" v-for="(member, index) in members" :key="member.id">
+        <div class="member" v-for="(member, index) in members" :key="member.uid">
           <div class="member-info" @click="toggleOpePanel(index)">
             <img class="avatar" :src="member.avatar"/>
             <span class="username">{{member.username}}</span>
-            <div class="ope-btn">...</div>
+            <div class="ope-btn" v-if="ismanager > 0">...</div>
           </div>
           <div v-if="member.checked">
             <div class="flex_center bg-white h40">
               <div class="t-table align_center color-gray2 font14">
                 <div class="t-cell v_middle b_right_after" @click="delMember(member.uid, index)">从团队中移除</div>
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="setManger(member.uid, index)">设置为管理员</div>
                 <div class="t-cell v_middle" @click="toChat(member.uid)">联系TA</div>
               </div>
             </div>
@@ -64,7 +70,8 @@ export default {
       countManager: null,
       countNormal: null,
       tipMessageShow1: true,
-      tipMessageShow2: true
+      tipMessageShow2: true,
+      ismanager: 0
     }
   },
   components: {
@@ -91,6 +98,7 @@ export default {
             if (!this.pagestart) {
               this.countManager = res.data.count.manager
               this.countNormal = res.data.count.normal
+              this.ismanager = res.data.data.ismanager
               if (this.countManager) {
                 this.tipMessageShow1 = false
               }
@@ -102,10 +110,21 @@ export default {
               for (var i = 0; i < retdata.length; i++) {
                 retdata[i].checked = false
               }
+              const retdatamanager = res.data.data.manager
+              for (var m = 0; m < retdatamanager.length; m++) {
+                retdatamanager[m].checked = false
+              }
               this.members = retdata
-              this.managers = res.data.data.manager
+              this.managers = retdatamanager
             } else {
               this.members.push(...res.data.data.normal)
+              this.managers.push(...res.data.data.managers)
+              for (var n = 0; n < this.managers.length; n++) {
+                this.managers[n].checked = false
+              }
+              for (var k = 0; i < this.members.length; k++) {
+                this.members[k].checked = false
+              }
             }
             this.pagestart++
           }
@@ -121,8 +140,56 @@ export default {
       }
       this.members[index].checked = !this.members[index].checked
     },
-    delManager () {
-      console.log('in delManager')
+    toggleOpeManger (index) {
+      for (var i = 0; i < this.managers.length; i++) {
+        if (i !== index && this.managers[i].checked) {
+          this.managers[i].checked = false
+          break
+        }
+      }
+      this.managers[index].checked = !this.managers[index].checked
+    },
+    disManger (setuid, index) {
+      let _this = this
+      _this.$vux.confirm.show({
+        title: `确定设置为管理员吗？`,
+        onConfirm: () => {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/teamset`,
+            method: 'post',
+            data: {
+              type: 'dismanager',
+              id: _this.id,
+              uploade: setuid
+            }
+          }).then(res => {
+            this.pagestart = 0
+            this.members = []
+            this.getMembers()
+          })
+        }
+      })
+    },
+    setManger (setuid, index) {
+      let _this = this
+      _this.$vux.confirm.show({
+        title: `确定设置为管理员吗？`,
+        onConfirm: () => {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/teamset`,
+            method: 'post',
+            data: {
+              type: 'manager',
+              id: _this.id,
+              uploade: setuid
+            }
+          }).then(res => {
+            this.pagestart = 0
+            this.members = []
+            this.getMembers()
+          })
+        }
+      })
     },
     delMember (deluid, index) {
       let _this = this

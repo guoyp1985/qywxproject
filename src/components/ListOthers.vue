@@ -6,7 +6,7 @@
         <span class="title">{{item.title}}</span>
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
-      <button class="ope-btn" v-if="userInfo.uid === teamInfo.uploader" @click.stop="onDelete(item.id, index)">删除</button>
+      <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
       <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
     </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
@@ -78,9 +78,9 @@ export default {
   methods: {
     getData () {
       console.log('in getData')
-      if (this.loaded) {
-        this.loaded = false
-      }
+      // if (this.loaded) {
+      //   this.loaded = false
+      // }
       if (this.data.length === this.pagestart * this.limit) {
         this.$http({
           url: `${Env.BokaApi}/api/team/link`,
@@ -94,7 +94,6 @@ export default {
         }).then(res => {
           if (!this.pagestart) {
             this.data = res.data.data
-            this.loaded = true
           } else {
             this.data.push(...res.data.data)
           }
@@ -103,6 +102,7 @@ export default {
           })
           this.pagestart++
           console.log(this.data)
+          this.loaded = true
         })
       } else {
         console.log('没有数据了！')
@@ -127,6 +127,10 @@ export default {
             console.log(res)
             if (res.data.flag) {
               _this.data.splice(index, 1)
+              if (_this.data.length === 0) {
+                _this.pagestart = 0
+                _this.getData()
+              }
             }
           })
         }
@@ -152,7 +156,10 @@ export default {
     toItem (item) {
       console.log('toItem')
       if (this.module === 'courseclass') {
-        console.log('培训没办法跳转！')
+        this.$vux.toast.show({
+          text: `培训暂不支持预览哦^_^`,
+          type: 'warn'
+        })
         return
       }
       let path = ''
@@ -231,6 +238,7 @@ export default {
         }
       }
       .ope-btn{
+        margin-right: 5px;
         padding: 5px 8px;
         border-radius: 10px;
         background-color: #ff6a61;

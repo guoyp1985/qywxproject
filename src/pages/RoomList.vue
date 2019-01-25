@@ -11,21 +11,21 @@
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">我的群订单</tab-item>
       </tab>
     </div>
-    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
-      <div v-show="selectedIndex===0">
-        <template v-if="distabdata1">
+    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
+      <div v-if="selectedIndex===0">
+        <template v-if="showTab1">
           <template v-if="rooms.length">
-            <room v-for="(item, index) in rooms" :key="index" :item="item"></room>
+            <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
           </template>
           <template v-else>
             <div class="no-related-x color-gray">
-              <span>还没有提交群信息</span>
+              <span>还没有群信息，点击底部按钮前去验证</span>
             </div>
           </template>
         </template>
       </div>
-      <div v-show="selectedIndex===1">
-        <template v-if="distabdata2">
+      <div v-if="selectedIndex===1">
+        <template v-if="showTab2">
           <template v-if="roomOrders.length">
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
           </template>
@@ -38,9 +38,9 @@
       </div>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
-      <span>申请群验证</span>
+      <span>群密钥验证</span>
     </router-link>
-    <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
+    <!-- <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
       <div class="flex_cell income-info">
         <span>待提现收入: </span>
         <span class="color-red">￥{{income}}</span>
@@ -48,13 +48,15 @@
       <div class="cashed-btn">
         <span class="color-white">提现</span>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
 import { Tab, TabItem, XButton } from 'vux'
 import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
+import ENV from 'env'
+
 export default {
   components: {
     Tab, TabItem, XButton, Room, RoomOrderConsumer
@@ -62,41 +64,114 @@ export default {
   data () {
     return {
       selectedIndex: 0,
-      distabdata1: true,
-      distabdata2: true,
+      showTab1: false,
+      showTab2: false,
       income: 0,
-      rooms: [
-        {id: 1, topic: 'baba', status: 0, avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'}
-      ],
-      roomOrders: [
-        {
-          productName: 'unkown',
-          status: 0,
-          productAvatar: 'https://tossharingsales.boka.cn/images/nopic.jpg',
-          retailerTitle: 'retailerTitle',
-          productPrice: 'productPrice',
-          retailPrice: 1,
-          trafficCharge: 1,
-          currentTrafficIncome: 0,
-          currentRetailIncome: 0,
-          trafficIncome: 0,
-          retailIncome: 0
-        }
-      ]
+      rooms: [],
+      roomOrders: [],
+      limit: 10,
+      pageStart1: 0,
+      pageStart2: 0
     }
   },
   methods: {
     toggleTab () {
-      console.log(this.selectedIndex)
       switch (this.selectedIndex) {
         case 0:
+          !this.rooms.length && this.loadRooms()
           break
         case 1:
+          !this.roomOrders.length && this.loadOrders()
           break
       }
     },
-    scrollHandle () {
+    handleScroll () {
+      const _this = this
+      this.$util.scrollEvent({
+        element: this.$refs.scrollContainer,
+        callback: () => {
+          switch (_this.selectedIndex) {
+            case 0:
+              if (_this.rooms.length === _this.pageStart1 * _this.limit) {
+                _this.loadRooms(_this.pageStart1)
+              }
+              break
+            case 1:
+              if (_this.roomOrders.length === _this.pageStart2 * _this.limit) {
+                _this.loadOrders(_this.pageStart2)
+              }
+              break
+          }
+        }
+      })
+    },
+    handleAction (room, status) {
+      const _this = this
+      let confirmTitle = ''
+      switch (status) {
+        case 0:
+          confirmTitle = '是否重新评估?'
+          break
+        case 2:
+          confirmTitle = '确认开放?'
+          break
+        case 3:
+          confirmTitle = '确认关闭?'
+          break
+      }
+      this.$vux.confirm.show({
+        title: confirmTitle,
+        onConfirm () {
+          _this.actionData(room.id, status)
+        }
+      })
+    },
+    actionData (id, status) {
+      this.$http.post(`${ENV.BokaApi}/api/groups/moderate`, {id: id, moderate: status})
+      .then(res => {
+        if (res.data.flag === 1) {
+          const moderate = res.data.moderate
+          this.rooms = this.$util.changeItem(this.rooms, id, room => {
+            room.moderate = moderate
+            return room
+          })
+        }
+      })
+    },
+    loadRooms (page) {
+      page = page || 0
+      this.$vux.loading.show()
+      let params = { pagestart: page, limit: this.limit }
+      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
+      .then(res => {
+        this.$vux.loading.hide()
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          this.rooms = this.rooms.concat(data)
+          this.showTab1 = true
+        }
+      })
+    },
+    loadOrders (page) {
+      page = page || 0
+      this.$vux.loading.show()
+      const params = {from: 'groupowner', pagestart: page, limit: this.limit}
+      this.$http.post(`${ENV.BokaApi}/api/groups/orderList`, params)
+      .then(res => {
+        this.$vux.loading.hide()
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          this.roomOrders = this.roomOrders.concat(data)
+          this.showTab2 = true
+        }
+      })
+    },
+    refresh () {
+      this.toggleTab()
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>

@@ -17,7 +17,9 @@
     				<img src="https://tossharingsales.boka.cn/images/share1.jpg" />
     			</div>
     		</div>
-        <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        <template v-if="!query.from && !query.control">
+          <title-tip scroll-box="article-content" @access="access" :user="reward" :messages="messages" :avatar-href="reward.avatar" :user-name="reward.linkman" :user-credit="reward.credit"></title-tip>
+        </template>
         <div class="article-view">
           <div class="article-title">
             <h2>{{article.title}}</h2>

@@ -10,9 +10,9 @@
         <div class="team-info-inner">
           <div class="inner-item inner-item-left">
             <img class="avatar" :src="teamInfo.avatar"/>
-            <button class="btn" v-if="userInfo.uid === teamInfo.uploader" @click="manageTeam">管理团队</button>
-            <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && !teamInfo.join" @click="joinTeam">加入团队</button>
-            <button class="btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click="outTeam">退出团队</button>
+            <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
+            <button class="btn" v-if="!teamInfo.join" @click="joinTeam">加入团队</button>
+            <button class="btn" v-if="teamInfo.join && teamInfo.manager === 0" @click="outTeam">退出团队</button>
           </div>
           <div class="inner-item inner-item-right">
             <div class="leader">
@@ -56,7 +56,7 @@
           <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
 
           <!-- 商品、活动、文章、培训 -->
-            <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
+          <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
 
         </div>
 
@@ -70,8 +70,8 @@
     </div>
 
     <div class="add-import" slot="ope-btns">
-      <span class="add al al-add" v-if="userInfo.uid === teamInfo.uploader" @click="onAdd"></span>
-      <div class="import" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join && currentTab !== 0">
+      <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
+      <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
         <button @click="importAll">导入全部{{moduleTransfer}}</button>
       </div>
     </div>
@@ -99,10 +99,17 @@ export default {
       this.$refs.listTags.tags = []
       this.$refs.listTags.pagestart = 0
       this.$refs.listTags.getTags()
+      this.getTeamInfo(this.id).then(res => {
+        this.teamInfo = res.data.data
+      })
     } else {
       this.$refs.listOthers.data = []
       this.$refs.listOthers.pagestart = 0
       this.$refs.listOthers.getData()
+      this.getTeamInfo(this.id).then(res => {
+        console.log(res)
+        this.teamInfo = res.data.data
+      })
     }
   },
   data () {
@@ -265,7 +272,7 @@ export default {
     outTeam () {
       let _this = this
       this.$vux.confirm.show({
-        title: `确定删除该${this.moduleTransfer}吗？`,
+        title: `确定退出该团队吗？`,
         onConfirm () {
           _this.$http({
             url: `${Env.BokaApi}/api/team/teamset`,
@@ -290,27 +297,38 @@ export default {
     },
     importAll () {
       let _this = this
-      this.$vux.confirm.show({
-        title: `确定要导入全部${this.moduleTransfer}吗？`,
-        onConfirm () {
-          _this.$http({
-            url: `${Env.BokaApi}/api/team/copy`,
-            method: 'post',
-            data: {
-              teamid: _this.id,
-              type: 'all',
-              module: _this.module
-            }
-          }).then(res => {
-            console.log(res)
-            if (res.data.flag) {
-              _this.$vux.toast.show({
-                text: `导入全部${_this.moduleTransfer}成功!`
-              })
-            }
-          })
-        }
-      })
+      console.log(this.teamInfo[this.module])
+      if (this.teamInfo[this.module] > 0) {
+        this.$vux.confirm.show({
+          title: `确定要导入全部${this.moduleTransfer}吗？`,
+          onConfirm () {
+            _this.$http({
+              url: `${Env.BokaApi}/api/team/copy`,
+              method: 'post',
+              data: {
+                teamid: _this.id,
+                type: 'all',
+                module: _this.module
+              }
+            }).then(res => {
+              console.log(res)
+              if (res.data.flag === 1) {
+                _this.$vux.toast.show({
+                  text: `导入全部${_this.moduleTransfer}成功!`
+                })
+              } else if (res.data.flag === 3) {
+                _this.$vux.toast.show({
+                  text: `没有内容可导入!`
+                })
+              }
+            })
+          }
+        })
+      } else {
+        this.$vux.toast.show({
+          text: `没有内容可导入!`
+        })
+      }
     }
   }
 };

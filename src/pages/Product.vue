@@ -803,7 +803,7 @@ export default {
       let shareData = {
         module: self.module,
         moduleid: self.productid,
-        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}&wechatorderid=${this.query.wechatorderid}`,
         successCallback: function () {
           self.showShareSuccess = true
           self.showVideo = false
@@ -918,6 +918,9 @@ export default {
       }
       if (this.query.from === 'poster') {
         infoparams.from = 'poster'
+      }
+      if (this.query.wechatorderid) {
+        infoparams.wechatorderid = this.query.wechatorderid
       }
       this.$http.get(`${ENV.BokaApi}/api/moduleInfo`, {
         params: infoparams

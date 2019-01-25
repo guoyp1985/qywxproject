@@ -13,42 +13,45 @@
         <span :class="{'asc': sortTime === true, 'desc': sortTime === false}">时间</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 2}" @click="sortHandle(2)">
-        <span :class="{'asc': sortSales === true, 'desc': sortSales === false}">销量</span>
+        <span :class="{'asc': sortSales === true, 'desc': sortSales === false}">单数</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 3}" @click="sortHandle(3)">
         <span :class="{'asc': sortPrice === true, 'desc': sortPrice === false}">价格</span>
       </div>
     </div>
-    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="scrollHandle">
+    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
       <template v-if="loadCompleted">
-        <room-view v-for="(item, index) in rooms" :key="index" :item="item">
-          <div slot="sort-key">
-            <span v-if="selectIndex === 0">综合评分: {{item.score}}</span>
-            <span v-if="selectIndex === 1">更新时间: {{item.updatedTime}}</span>
-            <span v-if="selectIndex === 2">销量: {{item.salesVolume}}</span>
-            <span v-if="selectIndex === 3">单人点击: ￥{{item.statsResult}}</span>
-          </div>
-          <div slot="operation-area" class="room-operate-area db-flex">
-            <div class="flex_cell font13 button" @click="kownMore">
-              <router-link :to="{ name: 'tRoomDetails' }">了解更多</router-link>
+        <template v-if="rooms.length">
+          <room-view v-for="(item, index) in rooms" :key="index" :item="item">
+            <div class="font13" slot="sort-key">
+              <span v-if="selectIndex === 0">评分: {{item.score}}</span>
+              <span v-if="selectIndex === 1">时间: {{item.dateline | formatDate}}</span>
+              <span v-if="selectIndex === 2">单数: {{item.sales}}</span>
+              <span v-if="selectIndex === 3">价格: ￥{{item.viewmoney}}/人点击</span>
             </div>
-            <div class="flex_cell font13 button" @click="makeDeal">
-              <router-link :to="{ name: 'tRoomOrderDeal' }">与TA交易</router-link>
+            <div slot="operation-area" class="room-operate-area db-flex">
+              <router-link class="flex_cell font13 button" :to="{ name: 'tRoomDetails', query: {id: item.id} }">了解更多</router-link>
+              <router-link class="flex_cell font13 button" :to="{ name: 'tRoomOrderDeal', query: {id: item.id} }">与TA交易</router-link>
             </div>
+          </room-view>
+        </template>
+        <template v-else>
+          <div class="no-related-x color-gray">
+            <span>还没有群信息</span>
           </div>
-        </room-view>
+        </template>
       </template>
     </div>
-    <div class="s-bottom submit-button color-white">
-      <router-link :to="{ name: 'tRoomOrders' }">
-        <span>订单列表</span>
-      </router-link>
-    </div>
+    <router-link class="s-bottom submit-button color-white" :to="{ name: 'tRoomOrders' }">
+      <span>订单列表</span>
+    </router-link>
   </div>
 </template>
 <script>
 import { XButton } from 'vux'
 import RoomView from '@/components/RoomView'
+import Time from '#/time'
+import ENV from 'env'
 export default {
   components: {
     XButton, RoomView
@@ -60,39 +63,51 @@ export default {
       sortTime: null,
       sortSales: null,
       sortPrice: null,
-      loadCompleted: true,
-      rooms: [
-        {id: 1, topic: 'baba', avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'}
-      ]
+      loadCompleted: false,
+      limit: 10,
+      pageStart: 0,
+      rooms: []
+    }
+  },
+  filters: {
+    formatDate (seconds) {
+      return new Time(seconds * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   methods: {
     sortHandle (i) {
       this.selectIndex = i
+      this.loadCompleted = false
+      this.pageStart = 0
+      this.rooms = []
       switch (i) {
         case 0:
           this.sortTotal = !this.sortTotal
           this.sortTime = null
           this.sortSales = null
           this.sortPrice = null
+          this.loadData('score', this.sortTotal)
           break
         case 1:
           this.sortTotal = null
           this.sortTime = !this.sortTime
           this.sortSales = null
           this.sortPrice = null
+          this.loadData('dateline', this.sortTime)
           break
         case 2:
           this.sortTotal = null
           this.sortTime = null
           this.sortSales = !this.sortSales
           this.sortPrice = null
+          this.loadData('sales', this.sortSales)
           break
         case 3:
           this.sortTotal = null
           this.sortTime = null
           this.sortSales = null
           this.sortPrice = !this.sortPrice
+          this.loadData('viewmoney', this.sortPrice)
           break
       }
     },
@@ -100,15 +115,39 @@ export default {
     },
     makeDeal () {
     },
-    scrollHandle () {
+    handleScroll () {
+      const _this = this
+      this.$util.scrollEvent({
+        element: this.$refs.scrollContainer,
+        callback: () => {
+          _this.loadData()
+        }
+      })
+    },
+    refresh () {
+      this.loadData()
+    },
+    loadData (sortKey, isAsc) {
+      const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: this.limit, pagestart: this.pageStart}
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
+      .then(res => {
+        this.$vux.loading.hide()
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          data.length && this.pageStart++
+          this.rooms = this.rooms.concat(data)
+          this.loadCompleted = true
+        }
+      })
     }
+  },
+  activated () {
+    this.refresh()
   }
 }
 </script>
 <style lang="less">
-#rooms {
-  background-color: #ffffff;
-}
 #rooms .sort-header {
   border-bottom: 1px solid #f0f0f0;
   text-align: center;
@@ -159,7 +198,7 @@ export default {
   position: absolute;
   right: 0;
 }
-#rooms .room-operate-area {
-  border-bottom: 1px solid #f0f0f0;
-}
+// #rooms .room-operate-area {
+//   border-bottom: 1px solid #f0f0f0;
+// }
 </style>

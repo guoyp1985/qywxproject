@@ -75,8 +75,8 @@ let sellerBtn = [
   // }
   {
     name: 'Friend Customer',
-    icon: 'al-fuwu',
-    color: 'rgba01',
+    icon: 'al-pengyouquan',
+    color: 'rgba09',
     link: '/friendRecommend'
   }
 ]
@@ -123,9 +123,15 @@ let featureBtns = [
   },
   {
     name: 'Qun Qun Tui',
-    icon: 'al-tubiaozhizuomoban',
-    color: 'rgba07',
+    icon: 'al-banjiqunliao',
+    color: 'rgba08',
     link: '/roomList'
+  },
+  {
+    name: 'Qun Tui Guang',
+    icon: 'al-shouhouwuyou',
+    color: 'rgba07',
+    link: '/rooms'
   }
 ]
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {

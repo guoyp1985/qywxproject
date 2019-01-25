@@ -6,17 +6,17 @@
 <template>
   <div class="room-order-business">
     <div class="room-order-business-info">
-      <router-link :to="{ name: 'tRoomOrderBusiness', params: {id: item.id} }">
+      <router-link :to="{ name: 'tRoomOrderBusiness', query: {id: item.id} }">
         <div class="db-flex">
           <div class="order-avatar flex_cell">
-            <img class="v_middle imgcover" :src="item.productAvatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+            <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             <div class="order-details">
-              <div class="font14">{{item.productName}}</div>
+              <div class="font14 clamp1" style="width:180px">{{item.product_title}}</div>
               <div class="font14">
-                <span>售价: ￥{{item.productPrice}}</span>
-                <span>佣金: ￥{{item.retailerPrice}}/件</span>
+                <span>售价: ￥{{item.product_price}}</span>
+                <span>佣金: ￥{{item.product_rebate}}/件</span>
               </div>
-              <div class="font14 color-red">点击价格: ￥{{item.retailerTitle}}/人点击</div>
+              <div class="font14 color-red">点击价格: ￥{{item.viewmoney}}/人点击</div>
             </div>
           </div>
         </div>
@@ -25,45 +25,52 @@
         </div>
       </router-link>
     </div>
-    <div v-if="item.status === 0" class="pre-stats-area font14">
+    <div v-if="item.flag === -1" class="stats-area font14">
+      <div class="info-area align_right">
+        <span>保证金:</span>
+        <span class="color-red">￥{{item.deposit}}</span>
+      </div>
+      <div class="button-area">
+        <x-button mini class="btn">退款</x-button>
+      </div>
+    </div>
+    <div v-if="item.flag === 0" class="stats-area font14">
+      <div class="info-area align_right">
+        <span>保证金:</span>
+        <span class="color-red">￥{{item.deposit}}</span>
+      </div>
+      <div class="button-area">
+        <router-link :to="{ name: 'tPay', query: {id: item.orderid, module: 'payorders'} }">
+          <x-button mini type="warn" class="btn">支付</x-button>
+        </router-link>
+      </div>
+    </div>
+    <div v-if="item.flag === 1" class="pre-stats-area font14">
       <div class="db-flex info-area">
         <div class="flex_cell flex_left">
           <span>当前点击支出:</span>
-          <span>{{item.currentTrafficFee}}</span>
+          <span>￥{{item.viewtotal}}</span>
         </div>
         <div class="flex_cell flex_right">
           <span>当前佣金支出:</span>
-          <span>{{item.currentRetailFee}}</span>
+          <span>￥{{item.buytotal}}</span>
         </div>
       </div>
       <div class="info-area align_right">
         <span>当前总支出:</span>
-        <span class="color-red">￥{{item.currentFee}}</span>
-      </div>
-    </div>
-    <div v-if="item.status === 1" class="stats-area flex-db font14">
-      <div class="info-area align_right">
-        <span>保证金:</span>
-        <span class="color-red">￥{{item.bond}}</span>
-      </div>
-      <div class="button-area">
-        <x-button mini type="warn" class="btn">支付</x-button>
-      </div>
-    </div>
-    <div v-if="item.status === 2" class="stats-area flex-db font14">
-      <div class="info-area align_right">
-        <span>保证金:</span>
-        <span class="color-red">￥{{item.bond}}</span>
-      </div>
-      <div class="button-area">
-        <x-button mini class="btn">退款</x-button>
+        <span class="color-red">￥{{item.alltotal}}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { Group, Cell, XButton } from 'vux'
-const STATUS_NAME = ['交易中', '待支付', '待确认', '已取消', '已完成']
+const STATUS_NAME = {
+  '-1': '已取消',
+  '0': '待支付',
+  '1': '交易中',
+  '100': '已完成'
+}
 export default {
   name: 'RoomOrderBusiness',
   components: {
@@ -75,7 +82,7 @@ export default {
       default: () => {
         return {
           productName: 'unkown',
-          status: 0,
+          flag: 0,
           productAvatar: 'https://tossharingsales.boka.cn/images/nopic.jpg',
           retailerTitle: 'retailerTitle',
           productPrice: 'productPrice',
@@ -96,7 +103,7 @@ export default {
   },
   computed: {
     statusName () {
-      return STATUS_NAME[this.item.status]
+      return STATUS_NAME[this.item.flag]
     }
   }
 }
@@ -109,6 +116,15 @@ export default {
 .room-order-business-info {
   position: relative;
   padding: 10px;
+}
+.room-order-business-info:after {
+  content: ' ';
+  position: absolute;
+  height: 1px;
+  left: 10px;
+  right: 10px;
+  bottom: 0px;
+  background-color: #f0f0f0;
 }
 .room-order-business .weui-cells {
   margin-top: 0;
@@ -146,9 +162,6 @@ export default {
   margin-right: 10px;
 }
 .room-order-business .info-area {
-  padding: 5px 10px;
-}
-.room-order-business .info-area:first-child {
-  border-top: 1px solid #f0f0f0;
+  padding: 10px;
 }
 </style>

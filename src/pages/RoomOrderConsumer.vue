@@ -7,34 +7,33 @@
   <div id="room-order-consumer">
     <div class="order-title db-flex font14">
       <div class="flex_cell flex_left">
-        <span>客户:</span>
-        <span>{{customer}}</span>
+        <span class="font14 clamp1" style="width:220px">客户: {{item.retailer}}</span>
       </div>
       <div class="flex_cell flex_right color-red">
         <span>{{statusName}}</span>
       </div>
     </div>
-    <div class="order-desc db-flex">
+    <router-link class="order-desc db-flex" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid, wechatorderid: item.id} }">
       <div class="flex_cell">
-        <img class="v_middle imgcover" :src="productAvatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+        <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         <div class="order-info">
-          <div class="font14">{{productName}}</div>
+          <div class="font14 clamp1" style="width:220px">{{item.product_title}}</div>
           <div class="font14">
-            <span>售价: ￥{{productPrice}}</span>
+            <span>售价: ￥{{item.product_price}}</span>
           </div>
           <div class="font14">
-            <span>佣金: ￥{{retailPrice}}/件</span>
+            <span>佣金: ￥{{item.product_rebate}}/件</span>
           </div>
         </div>
       </div>
-    </div>
-    <template v-if="status === 1 || status === 2">
+    </router-link>
+    <template v-if="item.flag === 1 || item.flag === 100">
       <div class="traffic-price db-flex font14">
         <div class="flex_cell flex_left">
           <span>点击次数</span>
         </div>
         <div class="flex_cell flex_right">
-          <span>{{trafficCounts}}次</span>
+          <span>{{item.views}}次</span>
         </div>
       </div>
       <div class="traffic-price db-flex font14">
@@ -42,17 +41,17 @@
           <span>共购买</span>
         </div>
         <div class="flex_cell flex_right">
-          <span>{{amount}}件</span>
+          <span>{{item.saled}}件</span>
         </div>
       </div>
     </template>
-    <template v-if="status < 3">
+    <template v-if="item.flag > -1">
       <div class="traffic-price db-flex font14">
         <div class="flex_cell flex_left">
           <span>点击价格</span>
         </div>
         <div class="flex_cell flex_right">
-          <span>￥{{trafficPrice}}/人点击</span>
+          <span>￥{{item.viewmoney}}/人点击</span>
         </div>
       </div>
       <div class="order-id db-flex font14">
@@ -60,7 +59,7 @@
           <span>订单编号</span>
         </div>
         <div class="flex_cell flex_right">
-          <span>{{orderId}}</span>
+          <span>{{item.orderno}}</span>
         </div>
       </div>
     </template>
@@ -69,58 +68,71 @@
         <span>创建时间</span>
       </div>
       <div class="flex_cell flex_right">
-        <span>{{createTime}}</span>
+        <span>{{item.dateline | formatDate}}</span>
       </div>
     </div>
-    <template v-if="status === 2">
+    <template v-if="item.flag === 100">
       <div class="create-time db-flex font14">
         <div class="flex_cell flex_left">
           <span>结束时间</span>
         </div>
         <div class="flex_cell flex_right">
-          <span>{{endTime}}</span>
+          <span>{{item.endtime | formatDate}}</span>
         </div>
       </div>
     </template>
     <div class="operation-area">
-      <x-button v-if="status === 0" mini>接收订单</x-button>
-      <span v-if="status === 1">当前总收入: <span class="color-red">￥{{currentIncome}}</span></span>
-      <span v-if="status === 2">实际收入: <span class="color-red">￥{{income}}</span></span>
-      <span v-if="status === 3" class="color-red">对方已取消订单</span>
+      <!-- <x-button v-if="item.flag === 0" mini>接收订单</x-button> -->
+      <span v-if="item.flag === 1">当前总收入: <span class="color-red">￥{{item.alltotal}}</span></span>
+      <span v-if="item.flag === 100">实际收入: <span class="color-red">￥{{item.alltotal}}</span></span>
+      <span v-if="item.flag === -1" class="color-red">对方已取消订单</span>
     </div>
   </div>
 </template>
 <script>
 import { XButton } from 'vux'
-const STATUS_NAME = ['待接收', '交易中', '已完成', '已取消']
+import Time from '#/time'
+import ENV from 'env'
+const STATUS_NAME = {
+  '-1': '已取消',
+  '1': '交易中',
+  '100': '已完成'
+}
 export default {
   components: {
     XButton
   },
   data () {
     return {
-      customer: 'xyz',
-      productAvatar: 'https://tossharingsales.boka.cn/images/nopic.jpg',
-      productName: 'unkown',
-      productPrice: '0.0',
-      retailPrice: '0.0',
-      trafficPrice: '0.0',
-      trafficCounts: 100,
-      amount: 20,
-      currentIncome: 500,
-      income: 1000,
-      orderId: '00000000000001',
-      createTime: '2019-1-1 0:0:1',
-      endTime: '2019-1-2 0:0:1',
-      status: 0
+      item: {}
+    }
+  },
+  filters: {
+    formatDate (seconds) {
+      return new Time(seconds * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
   computed: {
     statusName () {
-      return STATUS_NAME[this.status]
+      return STATUS_NAME[this.item.flag]
     }
   },
   methods: {
+    loadData () {
+      const id = this.$route.query.id
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/groups/orderDetail`, {id: id, from: 'groupowner'})
+      .then(res => {
+        this.$vux.loading.hide()
+        if (res.data.flag === 1) {
+          const data = res.data.data
+          this.item = data
+        }
+      })
+    }
+  },
+  activated () {
+    this.loadData()
   }
 }
 </script>
