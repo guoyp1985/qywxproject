@@ -108,7 +108,7 @@ export default {
     }
   },
   methods: {
-    toPay (item) {
+    toPay () {
       location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
     }
   }
