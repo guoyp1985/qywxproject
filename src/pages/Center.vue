@@ -76,7 +76,7 @@ let sellerBtn = [
   {
     name: 'Friend Customer',
     icon: 'al-pengyouquan',
-    color: 'rgba01',
+    color: 'rgba09',
     link: '/friendRecommend'
   }
 ]
