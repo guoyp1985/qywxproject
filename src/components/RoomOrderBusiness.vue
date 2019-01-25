@@ -41,7 +41,7 @@
       </div>
       <div class="button-area">
         <!-- <router-link :to="{ name: 'tPay', query: {id: item.orderid, module: 'payorders'} }"> -->
-        <x-button mini type="warn" class="btn" @click="toPay(item)">支付</x-button>
+        <x-button mini type="warn" class="btn" @click="toPay">支付</x-button>
         <!-- </router-link> -->
       </div>
     </div>
@@ -109,7 +109,7 @@ export default {
   },
   methods: {
     toPay (item) {
-      location.replace(`${ENV.Host}/#/pay?id=${item.orderid}&module=payorders`)
+      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
     }
   }
 }
