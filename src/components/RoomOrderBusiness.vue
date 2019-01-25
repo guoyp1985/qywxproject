@@ -41,7 +41,7 @@
       </div>
       <div class="button-area">
         <!-- <router-link :to="{ name: 'tPay', query: {id: item.orderid, module: 'payorders'} }"> -->
-        <x-button mini type="warn" class="btn" @on-click="toPay">支付</x-button>
+        <x-button mini type="warn" class="btn" @click.native="toPay">支付</x-button>
         <!-- </router-link> -->
       </div>
     </div>
