@@ -25,7 +25,7 @@
                     </div>
                     <div class="db-flex flex_cell font14">
                       <div>
-                        <div class="clamp1">{{item.username}}</div>
+                        <div class="clamp1">{{item.username}} {{item.dateline}}</div>
                         <div class="clamp1">店铺: {{item.title}}</div>
                         <div class="clamp1 font12 color-gray">{{item.dateline | dateFormat}}</div>
                       </div>
