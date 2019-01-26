@@ -12,30 +12,30 @@
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
-      <div v-if="selectedIndex===0">
+      <template v-if="selectedIndex===0">
         <template v-if="showTab1">
           <template v-if="rooms.length">
             <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
           </template>
           <template v-else>
-            <div class="no-related-x color-gray">
+            <div class="flex_empty">
               <span>还没有群信息，点击底部按钮前去验证</span>
             </div>
           </template>
         </template>
-      </div>
-      <div v-if="selectedIndex===1">
+      </template>
+      <template v-if="selectedIndex===1">
         <template v-if="showTab2">
           <template v-if="roomOrders.length">
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
           </template>
           <template v-else>
-            <div class="no-related-x color-gray">
+            <div class="flex_empty">
               <span>还没有群订单信息</span>
             </div>
           </template>
         </template>
-      </div>
+      </template>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
       <span>群密钥验证</span>
