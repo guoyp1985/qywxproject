@@ -91,11 +91,18 @@ export default {
         this.$http.post(`${ENV.BokaApi}/api/setModulePara/wechatgroups`, {
           id: this.clickItem.id, param: 'photo', paramvalue: data.data
         }).then((res) => {
-          let data = res.data
           this.$vux.loading.hide()
-          this.showTab1 = false
-          this.rooms = []
-          this.loadRooms()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: (data.flag !== 1 ? 'warn' : 'success'),
+            time: this.$util.delay(data.error)
+          })
+          if (data.flag === 1) {
+            this.showTab1 = false
+            this.rooms = []
+            this.loadRooms()
+          }
         })
       } else if (data.error) {
         this.$vux.toast.show({
