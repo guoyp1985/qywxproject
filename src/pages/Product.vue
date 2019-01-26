@@ -415,7 +415,7 @@
       </template>
       <comment-popup style="z-index:600;" :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit" @on-cancel="replyPopupCancel"></comment-popup>
     </template>
-    <div class="modalshow" v-if="showShareLayer" @click="closeShareLayer">
+    <div class="modalshow" v-if="showShareLayer && !query.share_uid" @click="closeShareLayer">
       <div class="modaInfo">
         <div class="al al-feiji color-white"></div>
         <div class="align_center color-white bold">
@@ -822,7 +822,7 @@ export default {
       let shareData = {
         module: self.module,
         moduleid: self.productid,
-        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}`,
+        link: `${ENV.Host}/#/product?id=${self.productid}&wid=${self.productdata.uploader}&share_uid=${self.loginUser.uid}&wechatorderid=${this.query.wechatorderid}`,
         successCallback: function () {
           self.showShareSuccess = true
           self.showVideo = false
