@@ -40,9 +40,9 @@
         <span class="color-red">￥{{item.deposit}}</span>
       </div>
       <div class="button-area">
-        <router-link :to="{ name: 'tPay', query: {id: item.orderid, module: 'payorders'} }">
-          <x-button mini type="warn" class="btn">支付</x-button>
-        </router-link>
+        <!-- <router-link :to="{ name: 'tPay', query: {id: item.orderid, module: 'payorders'} }"> -->
+        <x-button mini type="warn" class="btn" @click.native="toPay">支付</x-button>
+        <!-- </router-link> -->
       </div>
     </div>
     <div v-if="item.flag === 1" class="pre-stats-area font14">
@@ -65,6 +65,7 @@
 </template>
 <script>
 import { Group, Cell, XButton } from 'vux'
+import ENV from 'env'
 const STATUS_NAME = {
   '-1': '已取消',
   '0': '待支付',
@@ -104,6 +105,11 @@ export default {
   computed: {
     statusName () {
       return STATUS_NAME[this.item.flag]
+    }
+  },
+  methods: {
+    toPay () {
+      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
     }
   }
 }
