@@ -11,7 +11,7 @@
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">我的群订单</tab-item>
       </tab>
     </div>
-    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
+    <div ref="scrollContainer" class="s-container s-container1 scroll-container list-area" @scroll="handleScroll">
       <form enctype="multipart/form-data">
         <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
       </form>
@@ -246,6 +246,11 @@ export default {
 }
 </script>
 <style lang="less">
+#room-list{
+  .list-area{
+    .room:not(:last-child){margin-bottom:10px;}
+  }
+}
 #room-list .income-area {
   background-color: #ffffff;
 }
