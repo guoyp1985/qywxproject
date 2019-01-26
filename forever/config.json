@@ -4,7 +4,7 @@
   "watch": true,
   "script": "node_modules/webpack-dev-server/bin/webpack-dev-server.js",
   "sourceDir": "/www/gxb/",
-  "watchDirectory": "/www/gxb/src",
+  "watchDirectory": "/src",
   "logFile": "/www/gxb/forever/logs/forever.log",
   "outFile": "/www/gxb/forever/logs/out.log",
   "errFile": "/www/gxb/forever/logs/error.log",
