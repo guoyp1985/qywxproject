@@ -58,7 +58,7 @@
             </div>
             <div>
               <span>综合评分:</span>
-              <span>{{item.score}}</span>
+              <span>{{item.score}}分</span>
             </div>
             <div>
               <span>更新时间:</span>
