@@ -8,6 +8,7 @@
     <div class="room-details">
       <room-view :item="room" :show-details="true"></room-view>
     </div>
+    <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，出售商品会向群主支付返点佣金</div>
     <div class="operation-area">
       <form>
         <forminputplate class="required">
