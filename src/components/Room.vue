@@ -61,7 +61,7 @@
           </div>
         </div>
       </div>
-      <div class="stats-result">
+      <div class="stats-result" wx:if="item.viewmoney > 0">
         <span>评估结果: ￥</span>
         <span>{{item.viewmoney}}/人点击</span>
       </div>
