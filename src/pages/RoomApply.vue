@@ -62,7 +62,7 @@
     <div v-transfer-dom class="qrcode-dialog">
       <x-dialog v-model="wxCardShow" class="dialog-demo">
         <div class="img-box">
-          <img src="https://tossharingsales.boka.cn/images/nopic.jpg" style="max-width:100%;max-height:100%;">
+          <img src="../assets/images/qqt_kefu.jpg" style="max-width:100%;max-height:100%;">
         </div>
         <div>
           <span>长按识别二维码添加官方客服微信</span>
