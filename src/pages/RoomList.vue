@@ -12,10 +12,13 @@
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
+      <form enctype="multipart/form-data">
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+      </form>
       <template v-if="selectedIndex===0">
         <template v-if="showTab1">
           <template v-if="rooms.length">
-            <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
+            <room v-for="(item, index) in rooms" :key="index" :item="item" :index="index" @action="handleAction" @click-photo="clickPhoto"></room>
           </template>
           <template v-else>
             <div class="flex_empty">
@@ -71,10 +74,70 @@ export default {
       roomOrders: [],
       limit: 10,
       pageStart1: 0,
-      pageStart2: 0
+      pageStart2: 0,
+      clickItem: null,
+      clickIndex: 0
+    }
+  },
+  watch: {
+    rooms () {
+      return this.rooms
     }
   },
   methods: {
+    photoCallback (data) {
+      if (data.flag === 1) {
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/setModulePara/wechatgroups`, {
+          id: this.clickItem.id, param: 'photo', paramvalue: data.data
+        }).then((res) => {
+          let data = res.data
+          this.$vux.loading.hide()
+          this.showTab1 = false
+          this.rooms = []
+          this.loadRooms()
+        })
+      } else if (data.error) {
+        this.$vux.toast.show({
+          text: data.error,
+          time: this.$util.delay(data.error)
+        })
+      }
+    },
+    fileChange () {
+      const self = this
+      const target = event.target
+      let files = target.files
+      if (files.length > 0) {
+        const fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.photoCallback(data)
+        })
+      }
+    },
+    clickPhoto (item, index) {
+      const self = this
+      const refname = 'fileInput'
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      this.clickItem = item
+      this.clickIndex = index
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
     toggleTab () {
       switch (this.selectedIndex) {
         case 0:
