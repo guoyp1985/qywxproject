@@ -249,6 +249,7 @@ export default {
 #room-list{
   .list-area{
     .room:not(:last-child){margin-bottom:10px;}
+    .room-order-consumer:not(:last-child){margin-bottom:10px;}
   }
 }
 #room-list .income-area {

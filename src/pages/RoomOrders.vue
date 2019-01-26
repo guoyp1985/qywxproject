@@ -137,6 +137,9 @@ export default {
 }
 </script>
 <style lang="less">
+#room-orders{
+  .room-order-business:not(:last-child){margin-bottom:10px;}
+}
 #room-orders .b-tab .vux-tab .vux-tab-item.vux-tab-selected {
   color: @boka-red;
   border-bottom: 3px solid @boka-red;
