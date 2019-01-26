@@ -43,6 +43,9 @@
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
       <span>群密钥验证</span>
     </router-link>
+    <router-link v-if="selectedIndex===1" :to="{ name: 'tUserRebateInfo'}" class="s-bottom submit-button color-white">
+      <span>我的收入</span>
+    </router-link>
     <!-- <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
       <div class="flex_cell income-info">
         <span>待提现收入: </span>
