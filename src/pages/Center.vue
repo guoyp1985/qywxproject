@@ -132,6 +132,12 @@ let featureBtns = [
     icon: 'al-shouhouwuyou',
     color: 'rgba07',
     link: '/rooms'
+  },
+  {
+    name: 'Qun Tui Guang',
+    icon: 'al-shouhouwuyou',
+    color: 'rgba07',
+    link: '/rooms'
   }
 ]
 if (!Reg.rPlatfrom.test(navigator.userAgent)) {
