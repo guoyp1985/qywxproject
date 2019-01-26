@@ -415,6 +415,16 @@
       </template>
       <comment-popup style="z-index:600;" :show="replyPopupShow" :title="$t('Reply Discussion')" @on-submit="replySubmit" @on-cancel="replyPopupCancel"></comment-popup>
     </template>
+    <div class="modalshow" v-if="showShareLayer" @click="closeShareLayer">
+      <div class="modaInfo">
+        <div class="al al-feiji color-white"></div>
+        <div class="align_center color-white bold">
+          <div>1. 点击右上角" ··· "分享到微信群</div>
+          <div class="mt5">2. 群成员点击查看或购买都可获得收入</div>
+        </div>
+        <div class="btnknow" @click="closeShareLayer">知道了</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -507,7 +517,8 @@ export default {
       friendsData: [],
       pageStart2: 0,
       showMoreFriends: false,
-      startcss: 'start'
+      startcss: 'start',
+      showShareLayer: false
     }
   },
   watch: {
@@ -608,9 +619,13 @@ export default {
       this.disMore = false
       this.playVideo = false
       this.startcss = 'start'
+      this.showShareLayer = false
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    closeShareLayer () {
+      this.showShareLayer = false
     },
     clickPlay (refname) {
       const self = this
@@ -1098,6 +1113,9 @@ export default {
         this.showShareSuccess = false
         this.showVideo = true
         this.query = this.$route.query
+        if (this.query.wechatorderid) {
+          this.showShareLayer = true
+        }
         this.$vux.loading.show()
         this.getData()
         this.createSocket()
@@ -1252,4 +1270,14 @@ export default {
 .product .buylist img{width:38px;height:38px;vertical-align:middle;object-fit: cover;border-radius:50%;}
 .product .buylist .txt{padding-left:10px;width:38px;}
 .product .moreicon{width:48px;}
+.product{
+  .modalshow{
+    position:absolute;left:0;right:0;bottom:0;top:0;z-index:1000;background-color:rgba(0,0,0,0.8);box-sizing: border-box;
+    .modaInfo{
+      display:flex;flex-direction:column;margin-top: 60px;
+      .al{font-size:80px;margin-left:auto;margin-right: 100px;}
+    }
+    .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
+  }
+}
 </style>

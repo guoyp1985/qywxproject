@@ -13,11 +13,13 @@
         <span>{{statusName}}</span>
       </div>
     </div>
-    <router-link class="order-desc db-flex" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid, wechatorderid: item.id} }">
-      <div class="flex_cell">
+    <router-link class="order-desc db-flex w_100" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid, wechatorderid: item.id} }">
+      <div class="pic flex_left">
         <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-        <div class="order-info">
-          <div class="font14 clamp1" style="width:220px">{{item.product_title}}</div>
+      </div>
+      <div class="flex_cell flex_left">
+        <div class="order-info w_100">
+          <div class="font14 clamp1">{{item.product_title}}</div>
           <div class="font14">
             <span>售价: ￥{{item.product_price}}</span>
           </div>
@@ -25,6 +27,9 @@
             <span>佣金: ￥{{item.product_rebate}}/件</span>
           </div>
         </div>
+      </div>
+      <div class="w100 flex_center">
+        <div class="qbtn bg-theme color-white font12">分享到群</div>
       </div>
     </router-link>
     <template v-if="item.flag === 1 || item.flag === 100">
@@ -152,14 +157,11 @@ export default {
 #room-order-consumer .order-desc {
   background-color: @page-bg-color;
 }
-#room-order-consumer .order-desc img {
-  width: 64px;
-  height: 64px;
-}
-#room-order-consumer .order-info {
-  margin-left: 10px;
-  display: inline-block;
-  vertical-align: middle;
+#room-order-consumer .order-desc {
+  .pic{
+    width: 74px;
+    img{width: 64px;height: 64px;}
+  }
 }
 #room-order-consumer .operation-area {
   text-align: right;
