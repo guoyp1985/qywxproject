@@ -759,7 +759,11 @@ export default {
       }
       self.submitdata.id = self.productdata.id
       self.submitdata.wid = self.retailerInfo.uid
-      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, self.submitdata).then(function (res) {
+      let postData = self.submitdata
+      if (self.query.wechatorderid) {
+        postData.wechatorderid = self.query.wechatorderid
+      }
+      self.$http.post(`${ENV.BokaApi}/api/order/addShop`, postData).then(function (res) {
         let data = res.data
         self.$vux.loading.hide()
         if (data.flag === 1) {
