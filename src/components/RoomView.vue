@@ -50,7 +50,7 @@
           <div class="flex_cell">
             <div>
               <span>群活跃度:</span>
-              <span>{{item.liveness}}</span>
+              <span>{{item.liveness}}%</span>
             </div>
             <div>
               <span>鉴定类型:</span>
