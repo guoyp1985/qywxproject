@@ -23,7 +23,7 @@
           <div class="step-item-title">第一步:</div>
           <div class="flex_cell color-gray">
             <span>添加官方客服微信</span>
-            <span class="color-red"> 马上添加 ></span>
+            <span class="color-red" @click="wxContact"> 马上添加 ></span>
           </div>
         </div>
         <div class="step-item-tail"></div>
@@ -59,6 +59,19 @@
         </div>
       </x-dialog>
     </div>
+    <div v-transfer-dom class="qrcode-dialog">
+      <x-dialog v-model="wxCardShow" class="dialog-demo">
+        <div class="img-box">
+          <img src="https://tossharingsales.boka.cn/images/nopic.jpg" style="max-width:100%;max-height:100%;">
+        </div>
+        <div>
+          <span>长按识别二维码添加官方客服微信</span>
+        </div>
+        <div @click="wxCardShow=false">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -77,7 +90,9 @@ export default {
       crypto: '',
       isAccept: false,
       isSubmiting: false,
-      showDialog: false
+      showDialog: false,
+      wxCardShow: false,
+      qrcode: ''
       // roomCategory: [1],
       // roomCategories: [
       //   {id: 1, title: '夜跑群'},
@@ -87,6 +102,9 @@ export default {
     }
   },
   methods: {
+    wxContact () {
+      this.wxCardShow = true
+    },
     showProtocol () {
       this.showDialog = true
     },
@@ -162,5 +180,9 @@ export default {
 #room-apply .step-item-title {
   color: @boka-red;
   width: 60px;
+}
+.qrcode-dialog{
+  .img-box {height: 350px;overflow: hidden;}
+  .vux-close {margin-top: 8px;margin-bottom: 8px;}
 }
 </style>
