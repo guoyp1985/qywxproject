@@ -8,7 +8,7 @@
     <div class="room-info" @click="toggleDetails">
       <div class="room-desc db-flex">
         <div class="room-avatar flex_cell flex-3">
-          <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           <div class="room-topic">
             <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
             <slot name="sort-key"></slot>
