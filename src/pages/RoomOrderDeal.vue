@@ -135,7 +135,8 @@ export default {
             if (data.flag === 1) {
               setTimeout(() => {
                 // this.$router.push({path: '/pay', query: {id: data.data, module: data.ordermodule}})
-                location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}`)
+                let backurl = encodeURIComponent(`/roomOrderDeal?id=${this.query.id}`)
+                location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
               }, 1000)
             }
           })
