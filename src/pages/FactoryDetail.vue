@@ -272,7 +272,7 @@ export default {
         this.fid = this.loginUser.fid
       }
       this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: {id: this.fid}
+        params: {fid: this.fid}
       }).then(res => {
         const data = res.data
         this.factoryInfo = data.data
