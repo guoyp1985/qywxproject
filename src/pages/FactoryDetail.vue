@@ -83,7 +83,7 @@
         </tab>
       </div>
     </div>
-    <router-link :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
   </div>
 </template>
 <script>
@@ -114,7 +114,8 @@ export default {
       productData: [],
       disNewsData: false,
       newsData: [],
-      fid: 0
+      fid: 0,
+      showEdit: false
     }
   },
   filters: {
@@ -261,15 +262,19 @@ export default {
     },
     init () {
       this.loginUser = User.get()
-      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
       if (this.query.fid) {
-        this.fid = this.query.fid
+        this.fid = parseInt(this.query.fid)
       } else {
         this.fid = this.loginUser.fid
+      }
+      if (this.loginUser.fid === this.fid || this.loginUser.ismanager) {
+        this.showEdit = true
+      } else {
+        this.showEdit = false
       }
       this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
         params: {fid: this.fid}
