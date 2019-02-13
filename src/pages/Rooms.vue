@@ -125,7 +125,8 @@ export default {
       })
     },
     refresh () {
-      this.loadData()
+      // this.loadData()
+      this.sortHandle(0)
     },
     loadData (sortKey, isAsc) {
       const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: this.limit, pagestart: this.pageStart}
