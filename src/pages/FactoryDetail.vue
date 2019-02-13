@@ -276,6 +276,17 @@ export default {
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
         }
+        let shareParams = {
+          data: this.factoryInfo.title,
+          module: 'factory',
+          moduleid: this.query.fid,
+          link: `${ENV.Host}/#/factoryDetail?fid=${this.query.fid}&wid=${this.query.fid}&share_uid=${this.loginUser.uid}`
+        }
+        if (this.query.share_uid) {
+          shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
+          shareParams.lastshareuid = this.query.share_uid
+        }
+        this.$util.handleWxShare(shareParams)
       })
     }
   },
