@@ -166,7 +166,7 @@ export default {
       if (data.flag === 1) {
         if (type === 'logo') {
           self.photoarr.push(data.data)
-          self.submitdata.logo = self.photoarr.join(',')
+          self.submitdata.photo = self.photoarr[0]
         } else if (type === 'contentphoto') {
           console.log('进入')
           this.contentArr[this.clickIndex].photoarr.push(data.data)
@@ -232,7 +232,7 @@ export default {
       }
       if (type === 'logo') {
         this.photoarr.splice(index, 1)
-        this.submitdata.logo = this.photoarr.join(',')
+        this.submitdata.photo = ''
       } else {
         this.contentArr[this.clickIndex].photoarr.splice(index, 1)
         this.contentArr[this.clickIndex].photo = this.contentArr[this.clickIndex].photoarr.join(',')
