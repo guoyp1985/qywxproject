@@ -121,30 +121,30 @@ export default {
     }
   },
   methods: {
-  toChat () {
-    const self = this
-    let params = { uid: self.query.fid }
-    if (!self.query.fid) {
-      params.uid = self.loginUser.uid
-    }
-    if (parseInt(params.uid) === self.loginUser.uid) {
-      self.$vux.toast.text('不能和自己聊天哦', 'middle')
-    } else {
-      if (self.loginUser.subscribe === 0) {
-        const originHref = encodeURIComponent(`${ENV.Host}/#/store?wid=${params.uid}&fromModule=store&fromId=${params.uid}`)
-        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
-        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
-      } else {
-        params.fromModule = 'store'
-        params.fromId = params.uid
-        params.wid = params.uid
-        if (self.query.from) {
-          params.from = self.query.from
-        }
-        self.$router.push({path: '/chat', query: params})
+    toChat () {
+      const self = this
+      let params = { uid: self.query.fid }
+      if (!self.query.fid) {
+        params.uid = self.loginUser.uid
       }
-    }
-  },
+      if (parseInt(params.uid) === self.loginUser.uid) {
+        self.$vux.toast.text('不能和自己聊天哦', 'middle')
+      } else {
+        if (self.loginUser.subscribe === 0) {
+          const originHref = encodeURIComponent(`${ENV.Host}/#/store?wid=${params.uid}&fromModule=store&fromId=${params.uid}`)
+          const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+          location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+        } else {
+          params.fromModule = 'store'
+          params.fromId = params.uid
+          params.wid = params.uid
+          if (self.query.from) {
+            params.from = self.query.from
+          }
+          self.$router.push({path: '/chat', query: params})
+        }
+      }
+    },
     handleScroll (refname, index) {
       const self = this
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]

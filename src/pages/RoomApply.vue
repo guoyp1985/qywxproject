@@ -157,12 +157,12 @@ export default {
 </script>
 <style lang="less">
 .rgba09red{background-color:#FB5657 !important;}
-.inputs{
-  border:1px solid #C3C3C3;padding:8px;
-}
 .btnin{
+  .inputs{
+    border:1px solid #C3C3C3;padding:8px;
+  }
   button{
-    padding:8px 15px;color:#fff;background-color:#C3C3C3;border:0;
+    width:90px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
     border-top-right-radius:5px;border-bottom-right-radius:5px;
   }
 }
