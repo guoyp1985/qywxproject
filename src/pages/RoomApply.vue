@@ -144,7 +144,7 @@ export default {
             // this.$vux.toast.text(res.data.error, 'middle')
             this.$vux.toast.show({
               text: data.error,
-              type: data.flag !== 1 ? 'warn' : 'success',
+              type: 'text',
               time: this.$util.delay(data.error),
               onHide: () => {
                 this.isSubmiting = false
