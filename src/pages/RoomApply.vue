@@ -141,15 +141,28 @@ export default {
           .then(res => {
             const data = res.data
             this.$vux.loading.hide()
-            this.$vux.toast.text(res.data.error, 'middle')
-            setTimeout(() => {
-              this.isSubmiting = false
-              if (data.flag) {
-                this.$router.push('/roomList')
-              } else {
-                this.reset()
+            // this.$vux.toast.text(res.data.error, 'middle')
+            this.$vux.toast.show({
+              text: data.error,
+              type: data.flag !== 1 ? 'warn' : 'success',
+              time: this.$util.delay(data.error),
+              onHide: () => {
+                this.isSubmiting = false
+                if (data.flag) {
+                  this.$router.push('/roomList')
+                } else {
+                  this.reset()
+                }
               }
-            }, 1000)
+            })
+            // setTimeout(() => {
+            //   this.isSubmiting = false
+            //   if (data.flag) {
+            //     this.$router.push('/roomList')
+            //   } else {
+            //     this.reset()
+            //   }
+            // }, 1000)
           })
         }
       }
