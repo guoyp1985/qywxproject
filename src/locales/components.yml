@@ -296,6 +296,7 @@ en:
   Product summary: Product summary
   Add factory: Add factory
   Apply join: Apply join
+  Factory name: Factory name
 zh-CN:
   Today: 今天
   This Week: 本周
@@ -671,7 +672,7 @@ zh-CN:
   Delete Article Confirm: 是否确认删除？
   Apply: 申请
   Submit: 提交
-  tIndex: '加载中'
+  tIndex: 加载中
   tLogin: 扫码登录
   tCenter: 个人中心
   tCenterSales: 卖家中心
@@ -901,3 +902,5 @@ zh-CN:
   tRoomOrderBusiness: 群群推订单详情
   Factory introduction: 厂家介绍
   tFactoryDetail: 厂家介绍
+  tFactorySetting: 厂家设置
+  Factory name: 厂家名称

@@ -7,7 +7,7 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center">
       <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn">申请加盟</div>
+        <div class="flex_cell flex_center btn" @click="toJoin">申请加盟</div>
         <div class="flex_cell flex_center btn" @click="toChat">联系客服</div>
       </div>
     </div>
@@ -15,10 +15,12 @@
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
-            <div class="flex_center">
-              <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
+            <div v-for="(item,index1) in contentArr" :key="index1">
+              <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
+                <img :src="photo" />
+              </div>
+              <div class="padding10">{{item.content}}</div>
             </div>
-            <div class="padding10">厂家的介绍内容</div>
           </div>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <div v-if="disProductData" :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
@@ -60,7 +62,6 @@
                   <div class="t-cell v_middle">
                     <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
                     <div class="clamp1 font14 color-gray v_middle mt5">
-                        <span class="v_middle color-999">{{ item.dateline | dateFormat }}</span>
                         <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
                         <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
                     </div>
@@ -74,7 +75,7 @@
     </div>
     <div class="pagebottom db-flex bg-page">
       <div class="flex_center f_logo">
-        <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
+        <img :src="factoryInfo.photo" />
       </div>
       <div class="flex_cell">
         <tab v-model="selectedIndex" class="v-tab">
@@ -82,6 +83,7 @@
         </tab>
       </div>
     </div>
+    <router-link :to="{path: '/factorySetting', query: {fid: query.fid}}" class="fixed-layer flex_center">编辑</router-link>
   </div>
 </template>
 <script>
@@ -99,6 +101,8 @@ export default {
     return {
       loginUser: {},
       query: {},
+      factoryInfo: {photo: 'https://tossharingsales.boka.cn/images/nopic.jpg'},
+      contentArr: [],
       selectedIndex: 0,
       tabtxts: [ '品牌简介', '全部商品', '品牌资讯' ],
       disList: false,
@@ -121,6 +125,23 @@ export default {
     }
   },
   methods: {
+    toJoin () {
+      const self = this
+      this.$vux.confirm.show({
+        content: '确定要加盟吗？',
+        onConfirm: () => {
+          self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
+            fid: self.query.fid
+          }).then(function (res) {
+            const data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
     toChat () {
       const self = this
       let params = { uid: self.query.fid }
@@ -246,6 +267,16 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+        params: {id: this.query.fid}
+      }).then(res => {
+        const data = res.data
+        this.factoryInfo = data.data
+        let content = this.factoryInfo.content
+        if (content && content !== '') {
+          this.contentArr = JSON.parse(content)
+        }
+      })
     }
   },
   created () {
@@ -276,5 +307,10 @@ export default {
   }
   .v-tab .vux-tab .vux-tab-item{background:#f5f9fa;}
   .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
+  .fixed-layer{
+    position:absolute;right:10px;bottom:80px;
+    width:60px;height:60px;border-radius:50%;
+    background-color:rgba(0,0,0,0.6);color:#fff;
+  }
 }
 </style>
