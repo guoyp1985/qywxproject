@@ -281,6 +281,7 @@ export default {
       }).then(res => {
         const data = res.data
         this.factoryInfo = data.data
+        document.title = this.factoryInfo.title
         let content = this.factoryInfo.content
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
