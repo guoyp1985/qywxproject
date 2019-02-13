@@ -27,7 +27,7 @@
                   </div>
             			<div class="t-cell v_middle">
                     <div class="clamp1 font16 pr10">{{item.title}}</div>
-                    <div class="clamp1 pr10 color-lightgray">代理级别: {{ levelName[item.level]}}</div>
+                    <div class="clamp1 pr10 color-lightgray">推荐人: {{item.uploadname}}</div>
                     <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
             			</div>
                   <div class="align_right t-cell v_bottom w80">
