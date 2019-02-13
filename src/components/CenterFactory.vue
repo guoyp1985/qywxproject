@@ -106,6 +106,12 @@
           <div class="numicon" v-if="factoryInfo.neworders >= 100">···</div>
         </div>
       </cell>
+      <cell :link="{path:'/factoryDetail'}" style="position:relative">
+        <div slot="icon" class="pr10"><i class="al al-shouye1 color-red db-in font18"></i></div>
+        <div slot="inline-desc">
+          <span class="font15">{{$t('Factory introduction')}}</span>
+        </div>
+      </cell>
       <cell :link="{path:'/factoryReport', query:{fid: factoryInfo.id}}" style="position:relative">
         <div slot="icon" class="pr10"><i class="al al-zongshuju db-in font18" style="color:#efa42e;"></i></div>
         <div slot="inline-desc">

@@ -1,0 +1,280 @@
+/*
+* @description: 厂商介绍页
+* @auther: gyp
+* @created_date: 2019-02-12
+*/
+<template>
+  <div class="containerarea font14 fd-page bg-white">
+    <div class="pagetop flex_center">
+      <div class="box-area bg-theme flex_center">
+        <div class="flex_cell flex_center btn">申请加盟</div>
+        <div class="flex_cell flex_center btn" @click="toChat">联系客服</div>
+      </div>
+    </div>
+    <div class="pagemiddle">
+      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
+            <div class="flex_center">
+              <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
+            </div>
+            <div class="padding10">厂家的介绍内容</div>
+          </div>
+          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
+            <div v-if="disProductData" :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
+              <div v-if="productData.length == 0" class="emptyitem flex_center">暂无商品</div>
+              <router-link v-else :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.fid}}" class="bk-productitem scroll_item font14">
+            		<div class="inner list-shadow">
+            			<div class="picarea">
+            				<div class="pic">
+                      <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                      <div class="t-icon color-theme">佣金: {{item.levelagent}}</div>
+            				</div>
+            			</div>
+            			<div class="desbox" style="overflow:hidden;">
+            				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">
+                      <span style="word-break:break-all;">{{ item.title }}</span>
+                    </div>
+                    <div class="clamp1">
+            					<div class="flex_table padding5 pro-desc">
+            						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+                      </div>
+            				</div>
+            			</div>
+            		</div>
+              </router-link>
+            </div>
+          </div>
+          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
+            <div v-if="disNewsData" class="scroll_list ">
+              <div v-if="!newsData.length" class="scroll_item padding10 color-gray align_center">
+                  <div class="t-table">
+                    <div class="t-cell v_middle">暂无数据</div>
+                  </div>
+              </div>
+              <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+                <div class="t-table">
+                  <div class="t-cell v_middle w70">
+                    <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                  </div>
+                  <div class="t-cell v_middle">
+                    <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                    <div class="clamp1 font14 color-gray v_middle mt5">
+                        <span class="v_middle color-999">{{ item.dateline | dateFormat }}</span>
+                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                        <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                    </div>
+                  </div>
+                </div>
+              </router-link>
+            </div>
+          </div>
+        </swiper-item>
+      </swiper>
+    </div>
+    <div class="pagebottom db-flex bg-page">
+      <div class="flex_center f_logo">
+        <img src="https://tossharingsales.boka.cn/images/nopic.jpg" />
+      </div>
+      <div class="flex_cell">
+        <tab v-model="selectedIndex" class="v-tab">
+          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+        </tab>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+import { Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg } from 'vux'
+import Productitemplate from '@/components/Productitemplate'
+import Time from '#/time'
+import ENV from 'env'
+import { User } from '#/storage'
+
+export default {
+  components: {
+    Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg, Productitemplate
+  },
+  data () {
+    return {
+      loginUser: {},
+      query: {},
+      selectedIndex: 0,
+      tabtxts: [ '品牌简介', '全部商品', '品牌资讯' ],
+      disList: false,
+      list: [],
+      pagestart1: 0,
+      pagestart2: 0,
+      limit: 10,
+      disProductData: false,
+      productData: [],
+      disNewsData: false,
+      newsData: []
+    }
+  },
+  filters: {
+    dateFormat: function (isoDate) {
+      return new Time(isoDate).dateFormat('yyyy-MM-dd hh:mm')
+    },
+    valueFormat: function (value) {
+      return Number(value) < 0 ? `${value}` : `+${value}`
+    }
+  },
+  methods: {
+  toChat () {
+    const self = this
+    let params = { uid: self.query.fid }
+    if (!self.query.fid) {
+      params.uid = self.loginUser.uid
+    }
+    if (parseInt(params.uid) === self.loginUser.uid) {
+      self.$vux.toast.text('不能和自己聊天哦', 'middle')
+    } else {
+      if (self.loginUser.subscribe === 0) {
+        const originHref = encodeURIComponent(`${ENV.Host}/#/store?wid=${params.uid}&fromModule=store&fromId=${params.uid}`)
+        const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
+        location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
+      } else {
+        params.fromModule = 'store'
+        params.fromId = params.uid
+        params.wid = params.uid
+        if (self.query.from) {
+          params.from = self.query.from
+        }
+        self.$router.push({path: '/chat', query: params})
+      }
+    }
+  },
+    handleScroll (refname, index) {
+      const self = this
+      const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      self.$util.scrollEvent({
+        element: scrollarea,
+        callback: function () {
+          if (index === 0) {
+          } else if (index === 1) {
+            if (self.productData.length === (self.pagestart1 + 1) * self.limit) {
+              self.pagestart1++
+              self.$vux.loading.show()
+              self.getProduct()
+            }
+          } else if (index === 2) {
+            if (self.newsData.length === (self.pagestart2 + 1) * self.limit) {
+              self.pagestart2++
+              self.$vux.loading.show()
+              self.getNews()
+            }
+          }
+        }
+      })
+    },
+    getProduct () {
+      const self = this
+      const params = { fid: self.query.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
+      this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.productData = self.productData.concat(retdata)
+        self.disProductData = true
+      })
+    },
+    getNews () {
+      const self = this
+      const params = { fid: self.query.fid, pagestart: self.pagestart2, limit: self.limit }
+      self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
+        params: params
+      }).then(function (res) {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.newsData = self.newsData.concat(retdata)
+        self.disNewsData = true
+      })
+    },
+    swiperChange () {
+      const self = this
+      switch (this.selectedIndex) {
+        case 0:
+          break
+        case 1:
+          if (this.productData.length < this.limit) {
+            self.pagestart1 = 0
+            self.disProductData = false
+            this.productData = []
+            self.getProduct()
+          }
+          break
+        case 2:
+          if (this.newsData.length < this.limit) {
+            self.pagestart2 = 0
+            self.disNewsData = false
+            this.newsData = []
+            self.getNews()
+          }
+          break
+      }
+    },
+    getDateState (dt) {
+      return this.$util.getDateState(dt)
+    },
+    getDateClass (dt) {
+      let ret = this.$util.getDateClass(dt)
+      ret = `${ret} mr5`
+      return ret
+    },
+    getData () {
+      const self = this
+      const params = { pagestart: this.pagestart, limit: this.limit }
+      this.$http.get(`${ENV.BokaApi}/api/user/creditsList`, {
+        params: params
+      })
+      .then(res => {
+        self.$vux.loading.hide()
+        let data = res.data
+        let retdata = data.data ? data.data : data
+        self.list = self.list.concat(retdata)
+        self.disList = true
+      })
+    },
+    init () {
+      this.loginUser = User.get()
+    },
+    refresh () {
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
+    }
+  },
+  created () {
+    this.init()
+  },
+  activated () {
+    this.refresh()
+  }
+}
+</script>
+
+<style lang="less">
+.fd-page{
+  .pagetop{
+    height:60px;
+    .box-area{
+      width:200px;border-radius:30px;height:40px;
+      .btn{color:#fff;position:relative;}
+      .btn:nth-child(1):after{
+        content:"";position:absolute;top:0px;bottom:0px;right:0;width:1px;background-color:#fff;
+      }
+    }
+  }
+  .pagemiddle{top:60px;}
+  .f_logo{
+    width:60px;
+    img{width:30px;height:30px;border-radius:50%;object-fit:cover;}
+  }
+  .v-tab .vux-tab .vux-tab-item{background:#f5f9fa;}
+  .t-icon{position:absolute;left:0;top:10px;border-top-right-radius:20px;border-bottom-right-radius:20px;background-color:#fff;padding:5px 10px 5px 5px;font-size:12px;}
+}
+</style>
