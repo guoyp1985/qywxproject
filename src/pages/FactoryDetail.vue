@@ -7,7 +7,7 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center">
       <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn" @click="toJoin">申请加盟{{loginUser.isretailer}}</div>
+        <div class="flex_cell flex_center btn" @click="toJoin">申请加盟</div>
         <div class="flex_cell flex_center btn" @click="toChat">联系客服</div>
       </div>
     </div>
@@ -271,7 +271,6 @@ export default {
     },
     init () {
       this.loginUser = User.get()
-      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
