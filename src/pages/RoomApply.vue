@@ -68,9 +68,11 @@
         <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
       </div>
       <div class="flex_center btnin">
-        <input type="text" v-model="crypto" class="inputs ml20" placeholder="请输入密钥"></input>
+        <div class="inputs ml20">
+          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
+        </div>
         <button v-if="isAccept == true" @click="submitHandle" :class="`${rgbred}`">验证</button>
-        <button v-else @click="submitHandle" disabled = "true">验证</button>
+        <button v-else disabled="true">验证</button>
       </div>
       <!-- <forminputplate class="required">
         <span slot="title">验证密钥</span>
@@ -159,11 +161,12 @@ export default {
 .rgba09red{background-color:#FB5657 !important;}
 .btnin{
   .inputs{
-    border:1px solid #C3C3C3;padding:8px;
+    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;
   }
+  input{outline:none;margin-top:9px;width:120px;}
   button{
     width:90px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
-    border-top-right-radius:5px;border-bottom-right-radius:5px;
+    border-top-right-radius:5px;border-bottom-right-radius:5px;margin-left: -1px;
   }
 }
 #room-apply {
