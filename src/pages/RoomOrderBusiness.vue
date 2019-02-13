@@ -71,9 +71,9 @@
     </div>
     <div class="operation-area">
       <span v-if="item.flag === 1">当前总支出: <span class="color-red">￥{{item.alltotal}}</span></span>
-      <router-link v-if="item.flag === 0" :to="{ name: 'tPay', query: {id: item.orderid, module: 'payorders'} }">
+      <div v-if="item.flag === 0" @click="toPay">
         <x-button type="warn" mini>支付</x-button>
-      </router-link>
+      </div>
       <!-- <x-button v-if="item.flag === 2" mini>退款</x-button> -->
       <span v-if="item.flag === -1" class="color-red">保证金已退还至支付账户</span>
     </div>
@@ -109,6 +109,10 @@ export default {
     }
   },
   methods: {
+    toPay () {
+      console.log('fjty')
+      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
+    },
     loadData () {
       const id = this.$route.query.id
       this.$vux.loading.show()

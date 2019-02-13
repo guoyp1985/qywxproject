@@ -5,25 +5,16 @@
 */
 <template>
   <div id="room-apply" class="containerarea font14 s-havebottom">
-    <form>
-      <forminputplate class="required">
-        <span slot="title">验证密钥</span>
-        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
-      </forminputplate>
-      <div class="protocal-area">
-        <check-icon :value.sync="isAccept" type="plain">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
-      </div>
-    </form>
-    <div class="s-bottom submit-button color-white" @click="submitHandle">
+    <!-- <div class="s-bottom submit-button color-white" @click="submitHandle">
       <span>提交验证</span>
-    </div>
+    </div> -->
     <div class="step">
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第一步:</div>
           <div class="flex_cell color-gray">
             <span>添加官方客服微信</span>
-            <span class="color-red"> 马上添加 ></span>
+            <span class="color-red" @click="wxContact"> 马上添加 ></span>
           </div>
         </div>
         <div class="step-item-tail"></div>
@@ -59,6 +50,35 @@
         </div>
       </x-dialog>
     </div>
+    <div v-transfer-dom class="qrcode-dialog">
+      <x-dialog v-model="wxCardShow" class="dialog-demo">
+        <div class="img-box">
+          <img src="../assets/images/qqt_kefu.jpg" style="max-width:100%;max-height:100%;">
+        </div>
+        <div>
+          <span>长按识别二维码添加官方客服微信</span>
+        </div>
+        <div @click="wxCardShow=false">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
+    <form>
+      <div class="protocal-area">
+        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+      </div>
+      <div class="flex_center btnin">
+        <div class="inputs ml20">
+          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
+        </div>
+        <button v-if="isAccept == true" @click="submitHandle" :class="`${rgbred}`">验证</button>
+        <button v-else disabled="true">验证</button>
+      </div>
+      <!-- <forminputplate class="required">
+        <span slot="title">验证密钥</span>
+        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
+      </forminputplate> -->
+    </form>
   </div>
 </template>
 <script>
@@ -74,10 +94,13 @@ export default {
   },
   data () {
     return {
+      rgbred: 'rgba09red',
       crypto: '',
       isAccept: false,
       isSubmiting: false,
-      showDialog: false
+      showDialog: false,
+      wxCardShow: false,
+      qrcode: ''
       // roomCategory: [1],
       // roomCategories: [
       //   {id: 1, title: '夜跑群'},
@@ -87,6 +110,9 @@ export default {
     }
   },
   methods: {
+    wxContact () {
+      this.wxCardShow = true
+    },
     showProtocol () {
       this.showDialog = true
     },
@@ -132,6 +158,17 @@ export default {
 }
 </script>
 <style lang="less">
+.rgba09red{background-color:#FB5657 !important;}
+.btnin{
+  .inputs{
+    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;
+  }
+  input{outline:none;margin-top:9px;width:120px;}
+  button{
+    width:90px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
+    border-top-right-radius:5px;border-bottom-right-radius:5px;margin-left: -1px;
+  }
+}
 #room-apply {
   background-color: #ffffff;
 }
@@ -162,5 +199,9 @@ export default {
 #room-apply .step-item-title {
   color: @boka-red;
   width: 60px;
+}
+.qrcode-dialog{
+  .img-box {height: 350px;overflow: hidden;}
+  .vux-close {margin-top: 8px;margin-bottom: 8px;}
 }
 </style>

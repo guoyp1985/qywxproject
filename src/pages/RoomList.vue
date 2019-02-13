@@ -11,34 +11,40 @@
         <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">我的群订单</tab-item>
       </tab>
     </div>
-    <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
-      <div v-if="selectedIndex===0">
+    <div ref="scrollContainer" class="s-container s-container1 scroll-container list-area" @scroll="handleScroll">
+      <form enctype="multipart/form-data">
+        <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
+      </form>
+      <template v-if="selectedIndex===0">
         <template v-if="showTab1">
           <template v-if="rooms.length">
-            <room v-for="(item, index) in rooms" :key="index" :item="item" @action="handleAction"></room>
+            <room v-for="(item, index) in rooms" :key="index" :item="item" :index="index" @action="handleAction" @click-photo="clickPhoto"></room>
           </template>
           <template v-else>
-            <div class="no-related-x color-gray">
+            <div class="flex_empty">
               <span>还没有群信息，点击底部按钮前去验证</span>
             </div>
           </template>
         </template>
-      </div>
-      <div v-if="selectedIndex===1">
+      </template>
+      <template v-if="selectedIndex===1">
         <template v-if="showTab2">
           <template v-if="roomOrders.length">
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
           </template>
           <template v-else>
-            <div class="no-related-x color-gray">
+            <div class="flex_empty">
               <span>还没有群订单信息</span>
             </div>
           </template>
         </template>
-      </div>
+      </template>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
       <span>群密钥验证</span>
+    </router-link>
+    <router-link v-if="selectedIndex===1" :to="{ name: 'tUserRebateInfo'}" class="s-bottom submit-button color-white">
+      <span>我的收入</span>
     </router-link>
     <!-- <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
       <div class="flex_cell income-info">
@@ -71,10 +77,77 @@ export default {
       roomOrders: [],
       limit: 10,
       pageStart1: 0,
-      pageStart2: 0
+      pageStart2: 0,
+      clickItem: null,
+      clickIndex: 0
+    }
+  },
+  watch: {
+    rooms () {
+      return this.rooms
     }
   },
   methods: {
+    photoCallback (data) {
+      if (data.flag === 1) {
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/setModulePara/wechatgroups`, {
+          id: this.clickItem.id, param: 'photo', paramvalue: data.data
+        }).then((res) => {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: (data.flag !== 1 ? 'warn' : 'success'),
+            time: this.$util.delay(data.error)
+          })
+          if (data.flag === 1) {
+            this.showTab1 = false
+            this.rooms = []
+            this.loadRooms()
+          }
+        })
+      } else if (data.error) {
+        this.$vux.toast.show({
+          text: data.error,
+          time: this.$util.delay(data.error)
+        })
+      }
+    },
+    fileChange () {
+      const self = this
+      const target = event.target
+      let files = target.files
+      if (files.length > 0) {
+        const fileForm = target.parentNode
+        const filedata = new FormData(fileForm)
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/upload/files`, filedata).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          self.photoCallback(data)
+        })
+      }
+    },
+    clickPhoto (item, index) {
+      const self = this
+      const refname = 'fileInput'
+      const fileInput = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
+      this.clickItem = item
+      this.clickIndex = index
+      if (self.$util.isPC()) {
+        fileInput.click()
+      } else {
+        self.$wechat.ready(function () {
+          self.$util.wxUploadImage({
+            maxnum: 1,
+            handleCallback: function (data) {
+              self.photoCallback(data)
+            }
+          })
+        })
+      }
+    },
     toggleTab () {
       switch (this.selectedIndex) {
         case 0:
@@ -176,6 +249,12 @@ export default {
 }
 </script>
 <style lang="less">
+#room-list{
+  .list-area{
+    .room:not(:last-child){margin-bottom:10px;}
+    .room-order-consumer:not(:last-child){margin-bottom:10px;}
+  }
+}
 #room-list .income-area {
   background-color: #ffffff;
 }

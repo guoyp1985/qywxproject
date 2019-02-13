@@ -8,7 +8,7 @@
     <div class="room-info" @click="toggleDetails">
       <div class="room-desc db-flex">
         <div class="room-avatar flex_cell flex-3">
-          <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <img class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           <div class="room-topic">
             <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
             <slot name="sort-key"></slot>
@@ -43,14 +43,14 @@
               <span>无</span>
             </div>
             <div>
-              <span>销量:</span>
+              <span>接单数:</span>
               <span>{{item.sales}}</span>
             </div>
           </div>
           <div class="flex_cell">
             <div>
               <span>群活跃度:</span>
-              <span>{{item.liveness}}</span>
+              <span>{{item.liveness}}%</span>
             </div>
             <div>
               <span>鉴定类型:</span>
@@ -58,7 +58,7 @@
             </div>
             <div>
               <span>综合评分:</span>
-              <span>{{item.score}}</span>
+              <span>{{item.score}}分</span>
             </div>
             <div>
               <span>更新时间:</span>

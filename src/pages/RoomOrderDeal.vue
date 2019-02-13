@@ -8,6 +8,7 @@
     <div class="room-details">
       <room-view :item="room" :show-details="true"></room-view>
     </div>
+    <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金</div>
     <div class="operation-area">
       <form>
         <forminputplate class="required">
@@ -37,7 +38,7 @@
     <div class="s-bottom submit-button color-white" @click="makeDeal">
       <span>支付保证金 ￥{{room.deposit}}</span>
     </div>
-    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop"></append-product>
+    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" rebate="1"></append-product>
     <div v-transfer-dom>
       <x-dialog v-model="showDialog" hide-on-blur :dialog-style="{width: '100%', height: '50%', 'background-color': '#ffffff'}">
         <div style="text-align:center;padding-top:10px;" @click="showDialog = false">
@@ -134,7 +135,9 @@ export default {
             this.$vux.toast.text(data.error, 'middle')
             if (data.flag === 1) {
               setTimeout(() => {
-                this.$router.push({path: '/pay', query: {id: data.data, module: data.ordermodule}})
+                // this.$router.push({path: '/pay', query: {id: data.data, module: data.ordermodule}})
+                let backurl = encodeURIComponent(`/roomOrders`)
+                location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
               }, 1000)
             }
           })

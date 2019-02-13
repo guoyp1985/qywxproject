@@ -52,7 +52,7 @@
         </div>
       </div>
     </div>
-    <div v-if="item.flag === 100" class="stats-area flex-db font14">
+    <div v-if="item.flag === 100" class="stats-area db-flex font14">
       <div class="flex_cell">
         <div>
           <span>订单点击收入:</span>

@@ -8,7 +8,15 @@
     <div class="room-info">
       <div class="room-desc db-flex">
         <div class="room-avatar flex_cell flex-3">
-          <img class="v_middle imgcover" src="https://tossharingsales.boka.cn/images/nopic.jpg" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          <div class="pic" @click="clickPhoto">
+            <div v-if="!item.photo || item.photo == ''" class="w_100 h_100 flex_center color-gray" style="border:#ccc 1px solid;box-sizing:border-box;">
+              <div>
+                <div class="align_center">设置</div>
+                <div class="align_center">封面图</div>
+              </div>
+            </div>
+            <img v-else class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+          </div>
           <div class="room-topic">
             <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
             <div class="font13">
@@ -41,7 +49,7 @@
         <div class="flex_cell">
           <div>
             <span>群活跃度:</span>
-            <span>{{item.liveness}}</span>
+            <span>{{item.liveness}}%</span>
           </div>
           <div>
             <span>鉴定类型:</span>
@@ -49,17 +57,17 @@
           </div>
           <div>
             <span>综合评分:</span>
-            <span>{{item.score}}</span>
+            <span>{{item.score}}分</span>
           </div>
         </div>
       </div>
-      <div class="stats-result">
+      <div class="stats-result" v-if="item.viewmoney > 0">
         <span>评估结果: ￥</span>
         <span>{{item.viewmoney}}/人点击</span>
       </div>
     </div>
     <div v-if="item.moderate === 0" class="room-operate-area db-flex">
-      <div class="flex_cell font13 button color-red">正在评估</div>
+      <div class="flex_cell font13 button color-red">正在评估（预计24小时）</div>
       <div class="flex_cell font13 button" @click="action(3)">关闭</div>
     </div>
     <div v-if="item.moderate === 1" class="room-operate-area db-flex">
@@ -77,7 +85,7 @@
   </div>
 </template>
 <script>
-const STATUS_NAME = ['待评估', '已评估', '已开放', '关闭']
+const STATUS_NAME = ['正在评估', '已评估', '已开放', '关闭']
 export default {
   name: 'Room',
   props: {
@@ -90,6 +98,10 @@ export default {
           avatar: 'https://tossharingsales.boka.cn/images/nopic.jpg'
         }
       }
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
   computed: {
@@ -97,9 +109,17 @@ export default {
       return STATUS_NAME[this.item.moderate]
     }
   },
+  watch: {
+    item () {
+      return this.item
+    }
+  },
   methods: {
     action (status) {
       this.$emit('action', this.item, status)
+    },
+    clickPhoto () {
+      this.$emit('click-photo', this.item, this.index)
     }
   }
 }
@@ -123,9 +143,11 @@ export default {
   bottom: 0px;
   background-color: #f0f0f0;
 }
-.room .room-info .room-avatar img{
-  width: 64px;
-  height: 64px;
+.room .room-info .room-avatar{
+  .pic{
+    width:64px;height:64px;display:inline-block;
+    img{width:64px;height:64px;}
+  }
 }
 .room .room-info .room-topic {
   margin-left: 10px;
