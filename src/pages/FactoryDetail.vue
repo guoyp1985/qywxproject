@@ -25,7 +25,7 @@
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <div v-if="disProductData" :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
               <div v-if="productData.length == 0" class="emptyitem flex_center">暂无商品</div>
-              <router-link v-else :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.fid}}" class="bk-productitem scroll_item font14">
+              <router-link v-else :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: fid}}" class="bk-productitem scroll_item font14">
             		<div class="inner list-shadow">
             			<div class="picarea">
             				<div class="pic">
@@ -54,7 +54,7 @@
                     <div class="t-cell v_middle">暂无数据</div>
                   </div>
               </div>
-              <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+              <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w70">
                     <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -83,7 +83,7 @@
         </tab>
       </div>
     </div>
-    <router-link :to="{path: '/factorySetting', query: {fid: query.fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <router-link :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
   </div>
 </template>
 <script>
@@ -113,7 +113,8 @@ export default {
       disProductData: false,
       productData: [],
       disNewsData: false,
-      newsData: []
+      newsData: [],
+      fid: 0
     }
   },
   filters: {
@@ -131,7 +132,7 @@ export default {
         content: '确定要加盟吗？',
         onConfirm: () => {
           self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
-            fid: self.query.fid
+            fid: self.fid
           }).then(function (res) {
             const data = res.data
             self.$vux.toast.show({
@@ -144,10 +145,7 @@ export default {
     },
     toChat () {
       const self = this
-      let params = { uid: self.query.fid }
-      if (!self.query.fid) {
-        params.uid = self.loginUser.uid
-      }
+      let params = { uid: self.fid }
       if (parseInt(params.uid) === self.loginUser.uid) {
         self.$vux.toast.text('不能和自己聊天哦', 'middle')
       } else {
@@ -191,7 +189,7 @@ export default {
     },
     getProduct () {
       const self = this
-      const params = { fid: self.query.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
@@ -205,7 +203,7 @@ export default {
     },
     getNews () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart2, limit: self.limit }
+      const params = { fid: self.fid, pagestart: self.pagestart2, limit: self.limit }
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
         params: params
       }).then(function (res) {
@@ -263,12 +261,18 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.query.fid) {
+        this.fid = this.query.fid
+      } else {
+        this.fid = this.loginUser.fid
+      }
       this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: {id: this.query.fid}
+        params: {id: this.fid}
       }).then(res => {
         const data = res.data
         this.factoryInfo = data.data
@@ -279,8 +283,8 @@ export default {
         let shareParams = {
           data: this.factoryInfo,
           module: 'factory',
-          moduleid: this.query.fid,
-          link: `${ENV.Host}/#/factoryDetail?fid=${this.query.fid}&wid=${this.query.fid}&share_uid=${this.loginUser.uid}`
+          moduleid: this.fid,
+          link: `${ENV.Host}/#/factoryDetail?fid=${this.fid}&wid=${this.fid}&share_uid=${this.loginUser.uid}`
         }
         if (this.query.share_uid) {
           shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
