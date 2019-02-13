@@ -277,7 +277,7 @@ export default {
           this.contentArr = JSON.parse(content)
         }
         let shareParams = {
-          data: this.factoryInfo.title,
+          data: this.factoryInfo,
           module: 'factory',
           moduleid: this.query.fid,
           link: `${ENV.Host}/#/factoryDetail?fid=${this.query.fid}&wid=${this.query.fid}&share_uid=${this.loginUser.uid}`
