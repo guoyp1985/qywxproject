@@ -273,6 +273,7 @@ export default {
             con.photoarr = curcon.photo.split(',')
           } else {
             con.photo = ''
+            con.photoarr = []
           }
           conArr.push(con)
         }

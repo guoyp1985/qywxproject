@@ -7,7 +7,7 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center">
       <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn">申请加盟</div>
+        <div class="flex_cell flex_center btn" @click="toJoin">申请加盟</div>
         <div class="flex_cell flex_center btn" @click="toChat">联系客服</div>
       </div>
     </div>
@@ -125,6 +125,23 @@ export default {
     }
   },
   methods: {
+    toJoin () {
+      const self = this
+      this.$vux.confirm.show({
+        content: '确定要加盟吗？',
+        onConfirm: () => {
+          self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
+            fid: self.query.fid
+          }).then(function (res) {
+            const data = res.data
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          })
+        }
+      })
+    },
     toChat () {
       const self = this
       let params = { uid: self.query.fid }
