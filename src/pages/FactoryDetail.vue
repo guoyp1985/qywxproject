@@ -129,20 +129,29 @@ export default {
   methods: {
     toJoin () {
       const self = this
-      this.$vux.confirm.show({
-        content: '确定要加盟吗？',
-        onConfirm: () => {
-          self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
-            fid: self.fid
-          }).then(function (res) {
-            const data = res.data
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
+      if (!this.loginUser.isretailer) {
+        this.$vux.confirm.show({
+          content: '您还不是卖家，要申请成为卖家吗？',
+          onConfirm: () => {
+            self.$router.push('/centerSales')
+          }
+        })
+      } else {
+        this.$vux.confirm.show({
+          content: '确定要加盟吗？',
+          onConfirm: () => {
+            self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
+              fid: self.fid
+            }).then(function (res) {
+              const data = res.data
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
             })
-          })
-        }
-      })
+          }
+        })
+      }
     },
     toChat () {
       const self = this
