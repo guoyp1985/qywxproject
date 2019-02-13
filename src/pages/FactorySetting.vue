@@ -257,11 +257,13 @@ export default {
       if (!iscontinue) {
         return false
       }
-      self.$vux.loading.show()
       let conArr = []
       for (let i = 0; i < this.contentArr.length; i++) {
         let curcon = this.contentArr[i]
-        if (curcon.content !== '' || curcon.photo !== '') {
+        if (curcon.content === '' && curcon.photo === '') {
+          self.$vux.toast.text('请完善厂家介绍或者内容图片', 'middle')
+          return false
+        } else {
           let con = {}
           if (curcon.content !== '') {
             con.content = curcon.content
@@ -278,6 +280,7 @@ export default {
           conArr.push(con)
         }
       }
+      self.$vux.loading.show()
       if (conArr.length > 0) {
         this.submitdata.content = JSON.stringify(conArr)
       } else {
