@@ -7,7 +7,8 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center">
       <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn" @click="toJoin">申请加盟</div>
+        <div class="flex_cell flex_center btn" v-if="isJoin">已加盟</div>
+        <div class="flex_cell flex_center btn" @click="toJoin" v-else>申请加盟</div>
         <div class="flex_cell flex_center btn" @click="toChat">联系客服</div>
       </div>
     </div>
@@ -115,7 +116,8 @@ export default {
       disNewsData: false,
       newsData: [],
       fid: 0,
-      showEdit: false
+      showEdit: false,
+      isJoin: false
     }
   },
   filters: {
@@ -133,7 +135,7 @@ export default {
         this.$vux.confirm.show({
           content: '您还不是卖家，要申请成为卖家吗？',
           onConfirm: () => {
-            self.$router.push('/centerSales')
+            self.$router.push({path: '/centerSales', query: {fid: self.fid}})
           }
         })
       } else {
@@ -271,6 +273,7 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
@@ -284,6 +287,13 @@ export default {
         this.showEdit = true
       } else {
         this.showEdit = false
+      }
+      this.isJoin = false
+      for (let i = 0; i < this.loginUser.whoseagent.length; i++) {
+        if (this.loginUser.whoseagent[i] === this.fid) {
+          this.isJoin = true
+          break
+        }
       }
       this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
         params: {fid: this.fid}
