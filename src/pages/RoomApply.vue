@@ -5,18 +5,9 @@
 */
 <template>
   <div id="room-apply" class="containerarea font14 s-havebottom">
-    <form>
-      <forminputplate class="required">
-        <span slot="title">验证密钥</span>
-        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
-      </forminputplate>
-      <div class="protocal-area">
-        <check-icon :value.sync="isAccept" type="plain">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
-      </div>
-    </form>
-    <div class="s-bottom submit-button color-white" @click="submitHandle">
+    <!-- <div class="s-bottom submit-button color-white" @click="submitHandle">
       <span>提交验证</span>
-    </div>
+    </div> -->
     <div class="step">
       <div class="step-item">
         <div class="step-item-info db-flex">
@@ -72,6 +63,20 @@
         </div>
       </x-dialog>
     </div>
+    <form>
+      <div class="protocal-area">
+        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+      </div>
+      <div class="flex_center btnin">
+        <input type="text" v-model="crypto" class="inputs ml20" placeholder="请输入密钥"></input>
+        <button v-if="isAccept == true" @click="submitHandle" :class="`${rgbred}`">验证</button>
+        <button v-else @click="submitHandle" disabled = "true">验证</button>
+      </div>
+      <!-- <forminputplate class="required">
+        <span slot="title">验证密钥</span>
+        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
+      </forminputplate> -->
+    </form>
   </div>
 </template>
 <script>
@@ -87,6 +92,7 @@ export default {
   },
   data () {
     return {
+      rgbred: 'rgba09red',
       crypto: '',
       isAccept: false,
       isSubmiting: false,
@@ -150,6 +156,16 @@ export default {
 }
 </script>
 <style lang="less">
+.rgba09red{background-color:#FB5657 !important;}
+.inputs{
+  border:1px solid #C3C3C3;padding:8px;
+}
+.btnin{
+  button{
+    padding:8px 15px;color:#fff;background-color:#C3C3C3;border:0;
+    border-top-right-radius:5px;border-bottom-right-radius:5px;
+  }
+}
 #room-apply {
   background-color: #ffffff;
 }
