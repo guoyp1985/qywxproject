@@ -49,7 +49,7 @@
                       </div>
                       <div class="t-cell v_middle">
                         <div class="clamp1 font16 pr10">{{item.title}}</div>
-                        <div class="clamp1 pr10 color-lightgray">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
                       <div class="align_right t-cell v_bottom w80">
@@ -90,7 +90,7 @@
                           </div>
                     			<div class="t-cell v_middle">
                             <div class="clamp1 font16 pr10">{{item.title}}</div>
-                            <div class="clamp1 pr10 color-lightgray">推荐人: {{item.uploadname}}</div>
+                            <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                             <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                     			</div>
                           <div class="align_right t-cell v_bottom w80">
@@ -127,7 +127,7 @@
                           </div>
                     			<div class="t-cell v_middle">
                             <div class="clamp1 font16 pr10">{{item.title}}</div>
-                            <div class="clamp1 pr10 color-lightgray">推荐人: {{item.uploadname}}</div>
+                            <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                             <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                     			</div>
                           <div class="align_right t-cell v_bottom w80">
@@ -151,6 +151,9 @@
             <div class="list" v-if="clickData">
               <div class="item">
                 <div class="inner" @click="clickPopup('level')">设置代理级别</div>
+              </div>
+              <div class="item" v-if="clickData.fulltime === 1">
+                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
               <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
                 <div class="inner">进入店铺</div>
@@ -209,6 +212,51 @@
           </div>
         </popup>
       </div>
+      <div v-transfer-dom class="x-popup">
+        <popup v-model="showUploaderPopup" height="100%">
+          <div class="popup1">
+            <div class="popup-top flex_center">更改推荐人</div>
+            <div style="position:absolute;top:46px;width:100%;box-sizing:border-box;height:55px;">
+              <search
+                class="v-search bg-white"
+                v-model='searchword2'
+                :auto-fixed="autofixed"
+                @on-submit="onSubmit2"
+                @on-change="onChange2"
+                @on-cancel="onCancel2"
+                ref="search">
+              </search>
+            </div>
+            <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;">
+              <template v-if="disUserData">
+                <template v-if="!userData.length">
+                  <div v-if="searchword2 != ''">暂无搜索结果</div>
+                  <div v-else>请搜索用户</div>
+                </template>
+                <div v-else class="scroll_list">
+                  <div v-for="(item,index) in userData" :key="index" class="scroll_item">
+                    <check-icon class="x-check-icon pl12 pr12 pt10 pb10" :value.sync="item.checked" @click.native.stop="uploaderClick(item,index)">
+                      <div class="t-table">
+                        <div class="t-cell v_middle w60">
+                          <img :src="item.avatar" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                        </div>
+                        <div class="t-cell v_middle" style="color:inherit;">
+                          <div class="clamp1 font14">{{item.linkman}}</div>
+                          <div class="clamp1 font12 mt5 color-999">店铺名称: {{item.title}}</div>
+                        </div>
+                      </div>
+                    </check-icon>
+                  </div>
+      					</div>
+              </template>
+            </div>
+            <div class="popup-bottom flex_center">
+              <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeUploaderPopup">{{ $t('Close') }}</div>
+              <div class="flex_cell h_100 flex_center bg-green color-white" @click="submitUploader">提交</div>
+            </div>
+          </div>
+        </popup>
+      </div>
     </template>
   </div>
 </template>
@@ -241,6 +289,7 @@ export default {
       tabtxts: [ '全职卖家', '兼职卖家' ],
       selectedIndex: 0,
       searchword1: '',
+      searchword2: '',
       autofixed: false,
       tabData1: [],
       tabData2: [],
@@ -251,6 +300,7 @@ export default {
       pageStart1: 0,
       pageStart2: 0,
       pageStart3: 0,
+      pageStart4: 0,
       limit: 10,
       showPopup1: false,
       clickData: {},
@@ -260,7 +310,11 @@ export default {
       levelData: [],
       levelName: {},
       selectLevel: null,
-      disSearchData: false
+      disSearchData: false,
+      showUploaderPopup: false,
+      selectUploader: null,
+      userData: [],
+      disUserData: false
     }
   },
   methods: {
@@ -284,6 +338,18 @@ export default {
         this.pageStart3 = 0
         this.getData3()
       }
+    },
+    onChange2 (val) {
+      this.searchword2 = val
+    },
+    onCancel2 () {
+      this.searchword2 = ''
+    },
+    onSubmit2 () {
+      this.disUserData = false
+      this.userData = []
+      this.pageStart4 = 0
+      this.searchUser()
     },
     getPhoto (src) {
       return this.$util.getPhoto(src)
@@ -382,12 +448,22 @@ export default {
             delete self.levelData[i].checked
           }
         }
+      } else if (key === 'uploader') {
+        self.showUploaderPopup = true
+        if (!self.userData.length) {
+          self.searchword2 = ''
+          self.searchUser()
+        }
+        self.showPopup1 = false
       } else {
         self.showPopup1 = false
       }
     },
     closeLevelPopup () {
       this.showLevelPopup = false
+    },
+    closeUploaderPopup () {
+      this.showUploaderPopup = false
     },
     radioclick (data, index) {
       const self = this
@@ -420,8 +496,65 @@ export default {
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
-              self.Data[self.clickIndex].level = self.selectLevel.id
+              if (self.disSearchData) {
+                self.tabData3[self.clickIndex].level = self.selectLevel.id
+              } else {
+                if (self.selectedIndex === 0) {
+                  self.tabData1[self.clickIndex].level = self.selectLevel.id
+                } else {
+                  self.tabData2[self.clickIndex].level = self.selectLevel.id
+                }
+              }
               self.showLevelPopup = false
+            }
+          }
+        })
+      })
+    },
+    uploaderClick (data, index) {
+      const self = this
+      if (data.checked) {
+        self.selectUploader = data
+      } else {
+        self.selectUploader = null
+      }
+      for (let i = 0; i < this.userData.length; i++) {
+        let curd = this.userData[i]
+        if (data.uid !== curd.uid && curd.checked) {
+          delete this.userData[i].checked
+        }
+      }
+    },
+    submitUploader () {
+      const self = this
+      if (!self.selectUploader) {
+        self.$vux.toast.text('请选择推荐人', 'middle')
+        return false
+      }
+      self.$vux.loading.show()
+      const params = {uploader: self.selectUploader.wid, wid: self.clickData.wid}
+      this.$http.post(`${ENV.BokaApi}/api/factory/changeUploader`, params)
+      .then(res => {
+        let data = res.data
+        self.$vux.loading.hide()
+        self.$vux.toast.show({
+          text: data.error,
+          time: self.$util.delay(data.error),
+          onHide: function () {
+            if (data.flag === 1) {
+              if (self.disSearchData) {
+                self.tabData3[self.clickIndex].uploader = self.selectUploader.wid
+                self.tabData3[self.clickIndex].uploadname = self.selectUploader.linkman
+              } else {
+                if (self.selectedIndex === 0) {
+                  self.tabData1[self.clickIndex].uploader = self.selectUploader.wid
+                  self.tabData1[self.clickIndex].uploadname = self.selectUploader.linkman
+                } else {
+                  self.tabData2[self.clickIndex].uploader = self.selectUploader.wid
+                  self.tabData2[self.clickIndex].uploadname = self.selectUploader.linkman
+                }
+              }
+              self.showUploaderPopup = false
             }
           }
         })
@@ -470,6 +603,23 @@ export default {
         const retdata = data.data ? data.data : data
         self.tabData3 = self.tabData3.concat(retdata)
         self.disTabData3 = true
+      })
+    },
+    searchUser () {
+      const self = this
+      const params = {fid: self.query.id, pagestart: self.pageStart4, limit: self.limit}
+      let keyword = self.searchword2
+      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
+        params.keyword = keyword
+      }
+      self.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
+        params: params
+      }).then(function (res) {
+        const data = res.data
+        self.$vux.loading.hide()
+        const retdata = data.data ? data.data : data
+        self.userData = self.userData.concat(retdata)
+        self.disUserData = true
       })
     },
     init () {
