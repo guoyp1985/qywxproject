@@ -11,7 +11,7 @@
             <span class="price" v-if="module === 'product'">{{item.price}}</span>
           </div>
         </div>
-        <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
+        <div class="tip-message" v-if="!data.length"><span>暂无{{moduleTransfer}}</span></div>
     </div>
     <div slot="ope-btns" class="ope-btns">
       <button class="cancel-btn" @click="onCancel">取消</button>

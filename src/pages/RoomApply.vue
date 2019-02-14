@@ -139,13 +139,30 @@ export default {
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data)
           .then(res => {
+            const data = res.data
             this.$vux.loading.hide()
-            this.$vux.toast.text(res.data.error, 'middle')
-            setTimeout(() => {
-              this.reset()
-              this.$router.back()
-              this.isSubmiting = false
-            }, 1000)
+            // this.$vux.toast.text(res.data.error, 'middle')
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'text',
+              time: this.$util.delay(data.error),
+              onHide: () => {
+                this.isSubmiting = false
+                if (data.flag) {
+                  this.$router.push('/roomList')
+                } else {
+                  this.reset()
+                }
+              }
+            })
+            // setTimeout(() => {
+            //   this.isSubmiting = false
+            //   if (data.flag) {
+            //     this.$router.push('/roomList')
+            //   } else {
+            //     this.reset()
+            //   }
+            // }, 1000)
           })
         }
       }
@@ -154,6 +171,9 @@ export default {
       this.crypto = ''
       this.isAccept = false
     }
+  },
+  activated () {
+    console.log(this.$router)
   }
 }
 </script>

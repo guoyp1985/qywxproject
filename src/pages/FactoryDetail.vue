@@ -7,8 +7,9 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center">
       <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn" @click="toJoin">申请加盟</div>
-        <div class="flex_cell flex_center btn" @click="toChat">联系客服</div>
+        <div class="flex_cell flex_center btn" v-if="isJoin">已加盟</div>
+        <div class="flex_cell flex_center btn" @click="toJoin" v-else>申请加盟</div>
+        <!-- <div class="flex_cell flex_center btn" @click="toChat">联系客服</div> -->
       </div>
     </div>
     <div class="pagemiddle">
@@ -25,7 +26,7 @@
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
             <div v-if="disProductData" :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
               <div v-if="productData.length == 0" class="emptyitem flex_center">暂无商品</div>
-              <router-link v-else :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.fid}}" class="bk-productitem scroll_item font14">
+              <router-link v-else :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: fid}}" class="bk-productitem scroll_item font14">
             		<div class="inner list-shadow">
             			<div class="picarea">
             				<div class="pic">
@@ -54,7 +55,7 @@
                     <div class="t-cell v_middle">暂无数据</div>
                   </div>
               </div>
-              <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: query.fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+              <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
                 <div class="t-table">
                   <div class="t-cell v_middle w70">
                     <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -83,7 +84,7 @@
         </tab>
       </div>
     </div>
-    <router-link :to="{path: '/factorySetting', query: {fid: query.fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
   </div>
 </template>
 <script>
@@ -113,7 +114,10 @@ export default {
       disProductData: false,
       productData: [],
       disNewsData: false,
-      newsData: []
+      newsData: [],
+      fid: 0,
+      showEdit: false,
+      isJoin: false
     }
   },
   filters: {
@@ -127,42 +131,45 @@ export default {
   methods: {
     toJoin () {
       const self = this
-      this.$vux.confirm.show({
-        content: '确定要加盟吗？',
-        onConfirm: () => {
-          self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
-            fid: self.query.fid
-          }).then(function (res) {
-            const data = res.data
-            self.$vux.toast.show({
-              text: data.error,
-              time: self.$util.delay(data.error)
+      if (!this.loginUser.isretailer) {
+        this.$vux.confirm.show({
+          content: '您还不是卖家，要申请成为卖家吗？',
+          onConfirm: () => {
+            self.$router.push({path: '/centerSales', query: {fid: self.fid}})
+          }
+        })
+      } else {
+        this.$vux.confirm.show({
+          content: '确定要加盟吗？',
+          onConfirm: () => {
+            self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
+              fid: self.fid
+            }).then(function (res) {
+              const data = res.data
+              self.$vux.toast.show({
+                text: data.error,
+                time: self.$util.delay(data.error)
+              })
             })
-          })
-        }
-      })
+          }
+        })
+      }
     },
     toChat () {
       const self = this
-      let params = { uid: self.query.fid }
-      if (!self.query.fid) {
-        params.uid = self.loginUser.uid
-      }
-      if (parseInt(params.uid) === self.loginUser.uid) {
-        self.$vux.toast.text('不能和自己聊天哦', 'middle')
+      if (this.fid === self.loginUser.uid) {
+        this.$vux.toast.text('不能和自己聊天哦', 'middle')
       } else {
-        if (self.loginUser.subscribe === 0) {
-          const originHref = encodeURIComponent(`${ENV.Host}/#/store?wid=${params.uid}&fromModule=store&fromId=${params.uid}`)
+        if (this.loginUser.subscribe === 0) {
+          const originHref = encodeURIComponent(`${ENV.Host}/#/chat?uid=${this.fid}&fromModule=factory&fromId=${this.fid}`)
           const callbackHref = encodeURIComponent(`${ENV.Host}/#/redirect`)
           location.replace(`${ENV.WxAuthUrl}appid=${ENV.AppId}&redirect_uri=${callbackHref}&response_type=code&scope=snsapi_userinfo&state=${originHref}#wechat_redirect`)
         } else {
-          params.fromModule = 'store'
-          params.fromId = params.uid
-          params.wid = params.uid
-          if (self.query.from) {
-            params.from = self.query.from
+          let params = {uid: this.fid, fromModule: 'factory', fromId: this.fid}
+          if (this.query.from) {
+            params.from = this.query.from
           }
-          self.$router.push({path: '/chat', query: params})
+          this.$router.push({path: '/chat', query: params})
         }
       }
     },
@@ -191,7 +198,7 @@ export default {
     },
     getProduct () {
       const self = this
-      const params = { fid: self.query.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
@@ -205,7 +212,7 @@ export default {
     },
     getNews () {
       const self = this
-      const params = { fid: self.query.fid, pagestart: self.pagestart2, limit: self.limit }
+      const params = { fid: self.fid, pagestart: self.pagestart2, limit: self.limit }
       self.$http.get(`${ENV.BokaApi}/api/list/factorynews`, {
         params: params
       }).then(function (res) {
@@ -263,19 +270,49 @@ export default {
     },
     init () {
       this.loginUser = User.get()
+      console.log(this.loginUser)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
+      if (this.query.fid) {
+        this.fid = parseInt(this.query.fid)
+      } else {
+        this.fid = this.loginUser.fid
+      }
+      if (this.loginUser.fid === this.fid) {
+        this.showEdit = true
+      } else {
+        this.showEdit = false
+      }
+      this.isJoin = false
+      for (let i = 0; i < this.loginUser.whoseagent.length; i++) {
+        if (this.loginUser.whoseagent[i] === this.fid) {
+          this.isJoin = true
+          break
+        }
+      }
       this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: {id: this.query.fid}
+        params: {fid: this.fid}
       }).then(res => {
         const data = res.data
         this.factoryInfo = data.data
+        document.title = this.factoryInfo.title
         let content = this.factoryInfo.content
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
         }
+        let shareParams = {
+          data: this.factoryInfo,
+          module: 'factory',
+          moduleid: this.fid,
+          link: `${ENV.Host}/#/factoryDetail?fid=${this.fid}&wid=${this.fid}&share_uid=${this.loginUser.uid}`
+        }
+        if (this.query.share_uid) {
+          shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
+          shareParams.lastshareuid = this.query.share_uid
+        }
+        this.$util.handleWxShare(shareParams)
       })
     }
   },

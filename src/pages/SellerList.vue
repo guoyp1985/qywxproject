@@ -1,45 +1,104 @@
 <template>
-  <div class="containerarea bg-page font14 rproductlist">
+  <div class="containerarea bg-page font14 sellerlist-page">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
     <template v-if="showContainer">
-      <div class="s-container scroll-container" style="top:0px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
-        <template v-if="disList">
-          <template v-if="!Data || Data.length == 0">
-            <div class="scroll_list">
-              <div class="emptyitem">
-                <div class="t-table" style="padding-top:20%;">
-                  <div class="t-cell padding10">
-                    <div>分享加盟二维码给卖家，卖家扫码即可帮你销售商品</div>
-                    <div class="color-blue"><span @click="disJoinQrcode">点击此处分享加盟二维码</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <div class="scroll_list ">
-              <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in Data" :key="item.id" style="color:inherit;">
-                <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
-                  <div class="t-cell v_middle w70">
-                    <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                  </div>
-            			<div class="t-cell v_middle">
-                    <div class="clamp1 font16 pr10">{{item.title}}</div>
-                    <div class="clamp1 pr10 color-lightgray">代理级别: {{ levelName[item.level]}}</div>
-                    <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-            			</div>
-                  <div class="align_right t-cell v_bottom w80">
-                    <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
-                      <i class="al al-asmkticon0165 v_middle"></i>
+      <div class="s-topbanner s-topbanner1" style="height:99px;">
+        <div class="row">
+          <search
+            class="v-search bg-white"
+            v-model='searchword1'
+            :auto-fixed="autofixed"
+            @on-submit="onSubmit1"
+            @on-change="onChange1"
+            @on-cancel="onCancel1"
+            ref="search">
+          </search>
+          <tab v-model="selectedIndex" class="" active-color="#ea3a3a" default-color="#666666">
+            <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
+          </tab>
+        </div>
+      </div>
+      <div class="s-container scroll-container" style="top:99px;" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 'product')">
+        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
+            <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+              <template v-if="disTabData1">
+                <template v-if="!tabData1 || tabData1.length == 0">
+                  <div class="scroll_list">
+                    <div class="emptyitem">
+                      <div class="t-table" style="padding-top:20%;">
+                        <div class="t-cell padding10">
+                          <div>分享加盟二维码给卖家，卖家扫码即可帮你销售商品</div>
+                          <div class="color-blue"><span @click="disJoinQrcode">点击此处分享加盟二维码</span></div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-            		</div>
-              </div>
+                </template>
+                <template v-else>
+                  <div class="scroll_list ">
+                    <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="item.id" style="color:inherit;">
+                      <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                        <div class="t-cell v_middle w70">
+                          <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                        </div>
+                  			<div class="t-cell v_middle">
+                          <div class="clamp1 font16 pr10">{{item.title}}</div>
+                          <div class="clamp1 pr10 color-lightgray">推荐人: {{item.uploadname}}</div>
+                          <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                  			</div>
+                        <div class="align_right t-cell v_bottom w80">
+                          <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                            <i class="al al-asmkticon0165 v_middle"></i>
+                          </div>
+                        </div>
+                  		</div>
+                    </div>
+                  </div>
+                </template>
+              </template>
             </div>
-          </template>
-        </template>
+            <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+              <template v-if="disTabData2">
+                <template v-if="!tabData2 || tabData2.length == 0">
+                  <div class="scroll_list">
+                    <div class="emptyitem">
+                      <div class="t-table" style="padding-top:20%;">
+                        <div class="t-cell padding10">
+                          <div>分享加盟二维码给卖家，卖家扫码即可帮你销售商品</div>
+                          <div class="color-blue"><span @click="disJoinQrcode">点击此处分享加盟二维码</span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="scroll_list ">
+                    <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="item.id" style="color:inherit;">
+                      <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
+                        <div class="t-cell v_middle w70">
+                          <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                        </div>
+                  			<div class="t-cell v_middle">
+                          <div class="clamp1 font16 pr10">{{item.title}}</div>
+                          <div class="clamp1 pr10 color-lightgray">推荐人: {{item.uploadname}}</div>
+                          <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                  			</div>
+                        <div class="align_right t-cell v_bottom w80">
+                          <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
+                            <i class="al al-asmkticon0165 v_middle"></i>
+                          </div>
+                        </div>
+                  		</div>
+                    </div>
+                  </div>
+                </template>
+              </template>
+            </div>
+          </swiper-item>
+        </swiper>
       </div>
       <div v-transfer-dom>
         <popup class="menuwrap" v-model="showPopup1">
@@ -115,19 +174,17 @@ Add factory:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, Confirm, CheckIcon, XImg, Search } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 import Sos from '@/components/Sos'
 
-let pageStart1 = 0
-const limit = 10
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Sos
+    Tab, TabItem, Swiper, SwiperItem, Popup, Confirm, CheckIcon, XImg, Sos, Search
   },
   data () {
     return {
@@ -136,12 +193,21 @@ export default {
       showContainer: false,
       query: {},
       loginUser: {},
-      Data: [],
+      tabtxts: [ '全职卖家', '兼职卖家' ],
+      selectedIndex: 0,
+      searchword1: '',
+      autofixed: false,
+      tabData1: [],
+      tabData2: [],
+      disTabData1: false,
+      disTabData2: false,
+      pageStart1: 0,
+      pageStart2: 0,
+      limit: 10,
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
       showQrcode: false,
-      disList: false,
       showLevelPopup: false,
       levelData: [],
       levelName: {},
@@ -149,6 +215,17 @@ export default {
     }
   },
   methods: {
+    onChange1 (val) {
+      this.searchword1 = val
+    },
+    onCancel1 () {
+      this.searchword1 = ''
+    },
+    onSubmit1 () {
+      const kw = this.searchword1
+      this.searchword1 = ''
+      this.$router.push({path: '/SellerSearch', query: {fid: this.query.id, keyword: kw}})
+    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -180,14 +257,46 @@ export default {
       const scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
       self.$util.scrollEvent({
         element: scrollarea,
-        callback: function () {
-          if (self.Data.length === (pageStart1 + 1) * limit) {
-            pageStart1++
-            self.$vux.loading.show()
-            self.getData1()
+        callback: () => {
+          if (index === 0) {
+            if (self.tabData1.length === (self.pageStart1 + 1) * self.limit) {
+              self.pageStart1++
+              self.$vux.loading.show()
+              self.getData1()
+            }
+          } else {
+            if (self.tabData2.length === (self.pageStart2 + 1) * self.limit) {
+              self.pageStart2++
+              self.$vux.loading.show()
+              self.getData2()
+            }
           }
         }
       })
+    },
+    swiperChange (index) {
+      const self = this
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
+      switch (this.selectedIndex) {
+        case 0:
+          if (this.tabData1.length < this.limit) {
+            self.pageStart1 = 0
+            self.disTabData1 = false
+            this.tabData1 = []
+            self.getData1()
+          }
+          break
+        case 1:
+          if (this.tabData2.length < this.limit) {
+            self.pageStart2 = 0
+            self.disTabData2 = false
+            this.tabData2 = []
+            self.getData2()
+          }
+          break
+      }
     },
     controlPopup1 (item, index) {
       event.preventDefault()
@@ -255,14 +364,26 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { params: { fid: self.query.id, pagestart: pageStart1, limit: limit } }
+      const params = { params: { fid: self.query.id, pagestart: self.pageStart1, limit: self.limit } }
       this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
-        self.Data = self.Data.concat(retdata)
-        self.disList = true
+        self.tabData1 = self.tabData1.concat(retdata)
+        self.disTabData1 = true
+      })
+    },
+    getData2 () {
+      const self = this
+      const params = { params: { fid: self.query.id, pagestart: self.pageStart2, limit: self.limit } }
+      this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, params)
+      .then(res => {
+        self.$vux.loading.hide()
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        self.tabData2 = self.tabData2.concat(retdata)
+        self.disTabData2 = true
       })
     },
     init () {
@@ -305,11 +426,11 @@ export default {
             for (let key in levelpolicy) {
               self.levelData.push({id: key, money: levelpolicy[key], levelname: self.levelName[key]})
             }
-            if (self.Data.length < limit) {
-              self.disList = false
-              self.Data = []
+            if (self.tabData1.length < self.limit) {
+              self.disTabData1 = false
+              self.tabData1 = []
               self.$vux.loading.show()
-              pageStart1 = 0
+              self.pageStart1 = 0
               self.getData1()
             }
           })
@@ -327,21 +448,18 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .btnicon{
-  display: inline-block;
-  color: #ea3a3a;
-  border: 1px solid #ea3a3a;
-  text-align: center;
-  border-radius: 30px;
-  letter-spacing: 0px;
-  height: 21px;
-  width: 41px;
-  line-height: 21px;
-}
-.rproductlist .l-line{
-  width:100%;
-  height:8px;
-  background:#fff;
+.sellerlist-page{
+  .scroll_item{overflow:hidden;position:relative;}
+  .btnicon{
+    display: inline-block;
+    color: #ea3a3a;
+    border: 1px solid #ea3a3a;
+    text-align: center;
+    border-radius: 30px;
+    letter-spacing: 0px;
+    height: 21px;
+    width: 41px;
+    line-height: 21px;
+  }
 }
 </style>
