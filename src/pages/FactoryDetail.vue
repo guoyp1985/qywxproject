@@ -227,7 +227,7 @@ export default {
     },
     getProduct () {
       const self = this
-      const params = { fid: self.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.fid, pagestart: self.pagestart1, limit: self.limit }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
