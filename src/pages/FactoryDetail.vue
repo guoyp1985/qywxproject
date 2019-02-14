@@ -286,14 +286,19 @@ export default {
         this.showEdit = false
       }
       this.isJoin = false
-      for (let i = 0; i < this.loginUser.whoseagent.length; i++) {
-        if (this.loginUser.whoseagent[i] === this.fid) {
-          this.isJoin = true
-          break
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        for (let i = 0; i < this.loginUser.whoseagent.length; i++) {
+          if (this.loginUser.whoseagent[i] === this.fid) {
+            this.isJoin = true
+            break
+          }
         }
-      }
-      this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: {fid: this.fid}
+        return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+          params: {fid: this.fid}
+        })
       }).then(res => {
         const data = res.data
         this.factoryInfo = data.data
