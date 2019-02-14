@@ -48,7 +48,8 @@
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
                       <div class="t-cell v_middle">
-                        <div class="clamp1 font16 pr10">{{item.title}}</div>
+                        <div class="clamp1 font16 pr10">{{item.linkman}}</div>
+                        <div class="clamp1 pr10 color-lightgray">店铺: {{item.title}}</div>
                         <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
@@ -89,7 +90,8 @@
                             <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                           </div>
                     			<div class="t-cell v_middle">
-                            <div class="clamp1 font16 pr10">{{item.title}}</div>
+                            <div class="clamp1 font16 pr10">{{item.linkman}}</div>
+                            <div class="clamp1 pr10 color-lightgray">店铺: {{item.title}}</div>
                             <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                             <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                     			</div>
@@ -126,7 +128,8 @@
                             <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                           </div>
                     			<div class="t-cell v_middle">
-                            <div class="clamp1 font16 pr10">{{item.title}}</div>
+                            <div class="clamp1 font16 pr10">{{item.linkman}}</div>
+                            <div class="clamp1 pr10 color-lightgray">店铺: {{item.title}}</div>
                             <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                             <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                     			</div>
