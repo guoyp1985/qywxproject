@@ -112,10 +112,7 @@
                     <div class="scroll_list">
                       <div class="emptyitem">
                         <div class="t-table" style="padding-top:20%;">
-                          <div class="t-cell padding10">
-                            <div>分享加盟二维码给卖家，卖家扫码即可帮你销售商品</div>
-                            <div class="color-blue"><span @click="disJoinQrcode">点击此处分享加盟二维码</span></div>
-                          </div>
+                          <div class="t-cell padding10">暂无数据</div>
                         </div>
                       </div>
                     </div>
