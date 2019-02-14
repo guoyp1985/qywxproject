@@ -155,6 +155,9 @@
               <div class="item" v-if="clickData.fulltime === 1">
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
+              <!-- <div class="item" >
+                <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
+              </div> -->
               <router-link class="item" :to="{path:'/store',query:{wid:clickData.wid}}">
                 <div class="inner">进入店铺</div>
               </router-link>
@@ -230,8 +233,8 @@
             <div class="popup-middle font14 padding10" style="top:101px;box-sizing:border-box;">
               <template v-if="disUserData">
                 <template v-if="!userData.length">
-                  <div v-if="searchword2 != ''">暂无搜索结果</div>
-                  <div v-else>请搜索用户</div>
+                  <div class="padding10 align_center color-gray" v-if="searchword2 != ''">暂无搜索结果</div>
+                  <div class="padding10 align_center color-gray" v-else>请搜索用户</div>
                 </template>
                 <div v-else class="scroll_list">
                   <div v-for="(item,index) in userData" :key="index" class="scroll_item">
@@ -539,6 +542,7 @@ export default {
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
+          type: 'text',
           time: self.$util.delay(data.error),
           onHide: function () {
             if (data.flag === 1) {
