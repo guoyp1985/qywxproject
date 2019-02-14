@@ -18,7 +18,7 @@
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
             <div v-for="(item,index1) in contentArr" :key="index1">
               <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
-                <img :src="photo" />
+                <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
               </div>
               <div class="padding10">{{item.content}}</div>
             </div>
@@ -85,18 +85,24 @@
       </div>
     </div>
     <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+    </div>
   </div>
 </template>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg } from 'vux'
+import { Previewer, TransferDom, Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg } from 'vux'
 import Productitemplate from '@/components/Productitemplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg, Productitemplate
+    Previewer, Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg, Productitemplate
   },
   data () {
     return {
@@ -117,7 +123,9 @@ export default {
       newsData: [],
       fid: 0,
       showEdit: false,
-      isJoin: false
+      isJoin: false,
+      previewerPhotoarr: [],
+      wxPhotoArr: []
     }
   },
   filters: {
@@ -129,6 +137,27 @@ export default {
     }
   },
   methods: {
+    viewBigImg (index2, index1) {
+      const self = this
+      let index = -1
+      for (let i = 0; i < this.contentArr.length; i++) {
+        let cur = this.contentArr[i]
+        if (index1 === i) {
+          index = index + index2 + 1
+          break
+        } else if (cur.photoarr.length) {
+          index = index + cur.photoarr.length
+        }
+      }
+      if (self.$util.isPC()) {
+        self.$refs.previewer.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.wxPhotoArr[index],
+          urls: self.wxPhotoArr
+        })
+      }
+    },
     toJoin () {
       const self = this
       if (!this.loginUser.isretailer) {
@@ -306,6 +335,16 @@ export default {
         let content = this.factoryInfo.content
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
+        }
+        for (let i = 0; i < this.contentArr.length; i++) {
+          let cur = this.contentArr[i]
+          if (cur.photoarr.length) {
+            this.previewerPhotoarr = this.previewerPhotoarr.concat(cur.photoarr)
+            this.wxPhotoArr = this.wxPhotoArr.concat(cur.photoarr)
+          }
+        }
+        if (this.previewerPhotoarr.length) {
+          this.previewerPhotoarr = this.$util.previewerImgdata(this.previewerPhotoarr)
         }
         let shareParams = {
           data: this.factoryInfo,
