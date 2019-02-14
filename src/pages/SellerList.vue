@@ -47,11 +47,11 @@
                       <div class="t-cell v_middle w70">
                         <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                       </div>
-                      <div class="t-cell v_middle">
-                        <div class="clamp1 font16 pr10">{{item.linkman}}</div>
-                        <div class="clamp1 pr10 color-lightgray">店铺: {{item.title}}</div>
-                        <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                        <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                      <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                        <div class="clamp1 font16">{{item.linkman}}</div>
+                        <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                        <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                        <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
                       <div class="align_right t-cell v_bottom w80">
                         <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
@@ -89,12 +89,12 @@
                           <div class="t-cell v_middle w70">
                             <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                           </div>
-                    			<div class="t-cell v_middle">
-                            <div class="clamp1 font16 pr10">{{item.linkman}}</div>
-                            <div class="clamp1 pr10 color-lightgray">店铺: {{item.title}}</div>
-                            <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                            <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-                    			</div>
+                          <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                            <div class="clamp1 font16">{{item.linkman}}</div>
+                            <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                            <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                            <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                          </div>
                           <div class="align_right t-cell v_bottom w80">
                             <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                               <i class="al al-asmkticon0165 v_middle"></i>
@@ -127,12 +127,12 @@
                           <div class="t-cell v_middle w70">
                             <img class="avatarimg3 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                           </div>
-                    			<div class="t-cell v_middle">
-                            <div class="clamp1 font16 pr10">{{item.linkman}}</div>
-                            <div class="clamp1 pr10 color-lightgray">店铺: {{item.title}}</div>
-                            <div class="clamp1 pr10 color-lightgray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
-                            <div class="clamp1 pr10 color-lightgray">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
-                    			</div>
+                          <div class="t-cell v_middle pr10" style="box-sizing:border-box;">
+                            <div class="clamp1 font16">{{item.linkman}}</div>
+                            <div class="clamp1 font12 color-gray">店铺: {{item.title}}</div>
+                            <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
+                            <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
+                          </div>
                           <div class="align_right t-cell v_bottom w80">
                             <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                               <i class="al al-asmkticon0165 v_middle"></i>
