@@ -252,8 +252,11 @@ export default {
         self.disNewsData = true
       })
     },
-    swiperChange () {
+    swiperChange (index) {
       const self = this
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           break
