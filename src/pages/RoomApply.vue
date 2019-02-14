@@ -186,7 +186,7 @@ export default {
   input{outline:none;margin-top:9px;width:120px;}
   button{
     width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
-    border-top-right-radius:5px;border-bottom-right-radius:5px;margin-left: -1px;
+    margin-left:-1px;
   }
 }
 .weui-icon-circle{font-size:16px !important;}
