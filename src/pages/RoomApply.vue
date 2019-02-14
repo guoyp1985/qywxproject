@@ -185,15 +185,17 @@ export default {
   }
   input{outline:none;margin-top:9px;width:120px;}
   button{
-    width:90px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
-    border-top-right-radius:5px;border-bottom-right-radius:5px;margin-left: -1px;
+    width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
+    margin-left:-1px;
   }
 }
+.weui-icon-circle{font-size:16px !important;}
+.weui-icon-success{font-size:16px !important;}
 #room-apply {
   background-color: #ffffff;
 }
 #room-apply .protocal-area {
-  padding: 20px 0;
+  padding: 20px 0 16px 0;
   text-align: center;
 }
 #room-apply .submit-button {
@@ -202,7 +204,7 @@ export default {
   text-align: center;
 }
 #room-apply .step {
-  padding: 20px 40px;
+  padding: 0 40px;margin-top:120px;
 }
 #room-apply .step .step-item {
   position: relative;
