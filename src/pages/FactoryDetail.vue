@@ -280,7 +280,7 @@ export default {
       } else {
         this.fid = this.loginUser.fid
       }
-      if (this.loginUser.fid === this.fid || this.loginUser.ismanager) {
+      if (this.loginUser.fid === this.fid) {
         this.showEdit = true
       } else {
         this.showEdit = false
