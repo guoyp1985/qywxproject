@@ -181,9 +181,11 @@ export default {
     handleAction (room, status) {
       const _this = this
       let confirmTitle = ''
+      let conCon = ''
       switch (status) {
         case 0:
           confirmTitle = '是否重新评估?'
+          conCon = '<div style="font-size:12px;text-align:center;">重新评估过程中，正常接单</div><div style="font-size:12px;text-align:center;margin-top:5px;">如不需要，请手动关闭</div>'
           break
         case 2:
           confirmTitle = '确认开放?'
@@ -194,6 +196,7 @@ export default {
       }
       this.$vux.confirm.show({
         title: confirmTitle,
+        content: conCon,
         onConfirm () {
           _this.actionData(room.id, status)
         }
