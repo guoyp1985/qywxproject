@@ -7,11 +7,11 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center b_bottom_after">
       <div class="flex_cell flex_left">
-        <div class="flex_left" style="width:40px;">
-          <img :src="factoryInfo.photo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+        <div class="flex_left" style="width:45px;">
+          <img :src="factoryInfo.photo" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         </div>
         <div class="flex_cell flex_left">
-          <div class="w_100 clamp1">{{factoryInfo.title}}</div>
+          <div class="w_100 clamp1 font16">{{factoryInfo.title}}</div>
         </div>
       </div>
       <div class="w100 flex_center">
@@ -410,7 +410,7 @@ export default {
   .pagetop{
     height:60px;padding-left:10px;box-sizing: border-box;
     .box-area{
-      width:80px;border-radius:30px;height:30px;
+      width:80px;border-radius:30px;height:30px;box-shadow: 0 1px 5px 0px #e4e4e4;
     }
   }
   .pagemiddle{top:60px;}
