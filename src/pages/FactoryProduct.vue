@@ -58,12 +58,12 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>上级分润: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
+            <div>推荐人佣金: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>销售分润: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div>销售佣金: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
