@@ -149,9 +149,9 @@
         <popup class="menuwrap" v-model="showPopup1">
           <div class="popup0">
             <div class="list" v-if="clickData">
-              <div class="item">
+              <!-- <div class="item">
                 <div class="inner" @click="clickPopup('level')">设置代理级别</div>
-              </div>
+              </div> -->
               <div class="item" v-if="clickData.fulltime === 1">
                 <div class="inner" @click="clickPopup('uploader')">更改推荐人</div>
               </div>
