@@ -17,10 +17,10 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
             <div v-for="(item,index1) in contentArr" :key="index1">
+              <div class="padding10">{{item.content}}</div>
               <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
                 <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
               </div>
-              <div class="padding10">{{item.content}}</div>
             </div>
           </div>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
