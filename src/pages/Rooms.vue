@@ -120,7 +120,10 @@ export default {
       this.$util.scrollEvent({
         element: this.$refs.scrollContainer,
         callback: () => {
-          _this.loadData()
+          if (_this.rooms.length === (_this.pageStart + 1) * _this.limit) {
+            _this.pageStart++
+            _this.loadData()
+          }
         }
       })
     },
