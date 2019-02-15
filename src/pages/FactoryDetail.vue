@@ -5,11 +5,18 @@
 */
 <template>
   <div class="containerarea font14 fd-page bg-white">
-    <div class="pagetop flex_center">
-      <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn" v-if="isJoin">已加盟</div>
-        <div class="flex_cell flex_center btn" @click="toJoin" v-else>申请加盟</div>
-        <!-- <div class="flex_cell flex_center btn" @click="toChat">联系客服</div> -->
+    <div class="pagetop flex_center b_bottom_after">
+      <div class="flex_cell flex_left">
+        <div class="flex_left" style="width:40px;">
+          <img :src="factoryInfo.photo" style="width:30px;height:30px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+        </div>
+        <div class="flex_cell flex_left">
+          <div class="w_100 clamp1">{{factoryInfo.title}}</div>
+        </div>
+      </div>
+      <div class="w100 flex_center">
+        <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已加盟</div>
+        <div class="box-area bg-theme color-white flex_center" @click="toJoin" v-else>申请加盟</div>
       </div>
     </div>
     <div class="pagemiddle">
@@ -98,9 +105,6 @@
       </swiper>
     </div>
     <div class="pagebottom db-flex bg-page">
-      <div class="flex_center f_logo">
-        <img :src="factoryInfo.photo" />
-      </div>
       <div class="flex_cell">
         <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
@@ -404,13 +408,9 @@ export default {
 <style lang="less">
 .fd-page{
   .pagetop{
-    height:60px;
+    height:60px;padding-left:10px;box-sizing: border-box;
     .box-area{
-      width:200px;border-radius:30px;height:40px;
-      .btn{color:#fff;position:relative;}
-      .btn:nth-child(1):after{
-        content:"";position:absolute;top:0px;bottom:0px;right:0;width:1px;background-color:#fff;
-      }
+      width:80px;border-radius:30px;height:30px;
     }
   }
   .pagemiddle{top:60px;}
