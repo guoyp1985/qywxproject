@@ -117,6 +117,7 @@ export default {
       this.showDialog = true
     },
     submitHandle () {
+      const _this = this
       if (!this.isSubmiting) {
         // const self = this
         const data = {
@@ -141,28 +142,19 @@ export default {
           .then(res => {
             const data = res.data
             this.$vux.loading.hide()
-            // this.$vux.toast.text(res.data.error, 'middle')
             this.$vux.toast.show({
               text: data.error,
               type: 'text',
-              time: this.$util.delay(data.error),
+              time: _this.$util.delay(data.error),
               onHide: () => {
-                this.isSubmiting = false
+                _this.isSubmiting = false
                 if (data.flag) {
-                  this.$router.push('/roomList')
+                  _this.$router.push('/roomList')
                 } else {
-                  this.reset()
+                  _this.reset()
                 }
               }
             })
-            // setTimeout(() => {
-            //   this.isSubmiting = false
-            //   if (data.flag) {
-            //     this.$router.push('/roomList')
-            //   } else {
-            //     this.reset()
-            //   }
-            // }, 1000)
           })
         }
       }
