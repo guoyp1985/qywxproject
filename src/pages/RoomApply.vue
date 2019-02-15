@@ -71,8 +71,8 @@
         <div class="inputs">
           <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
         </div>
-        <button v-if="isAccept == true" @click="submitHandle" :class="`${rgbred}`">验证</button>
-        <button v-else disabled="true">验证</button>
+        <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
+        <div v-else disabled="true" class="btn">验证</div>
       </div>
       <!-- <forminputplate class="required">
         <span slot="title">验证密钥</span>
@@ -176,7 +176,7 @@ export default {
     border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:50px;
   }
   input{outline:none;margin-top:9px;width:120px;}
-  button{
+  .btn{
     width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
     margin-left:-1px;
   }
