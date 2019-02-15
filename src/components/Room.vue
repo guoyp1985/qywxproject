@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-const STATUS_NAME = ['正在评估', '已评估', '已开放', '已关闭']
+const STATUS_NAME = ['正在评估', '已评估', '已开放', '已暂停']
 export default {
   name: 'Room',
   props: {
