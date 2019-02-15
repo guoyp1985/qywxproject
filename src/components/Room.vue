@@ -68,7 +68,7 @@
     </div>
     <div v-if="item.moderate === 0" class="room-operate-area db-flex">
       <div class="flex_cell font13 button color-red">正在评估（预计24小时）</div>
-      <!-- <div class="flex_cell font13 button" @click="action(3)">关闭</div> -->
+      <!-- <div class="flex_cell font13 button" @click="action(3)">暂停接单</div> -->
     </div>
     <div v-if="item.moderate === 1" class="room-operate-area db-flex">
       <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
@@ -76,7 +76,7 @@
     </div>
     <div v-if="item.moderate === 2" class="room-operate-area db-flex">
       <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
-      <div class="flex_cell font13 button" @click="action(3)">关闭</div>
+      <div class="flex_cell font13 button" @click="action(3)">暂停接单</div>
     </div>
     <div v-if="item.moderate === 3" class="room-operate-area db-flex">
       <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-const STATUS_NAME = ['正在评估', '已评估', '已开放', '关闭']
+const STATUS_NAME = ['正在评估', '已评估', '已开放', '已关闭']
 export default {
   name: 'Room',
   props: {
