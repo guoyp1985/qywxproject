@@ -63,22 +63,20 @@
         </div>
       </x-dialog>
     </div>
-    <form>
-      <div class="protocal-area">
-        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+    <div class="protocal-area">
+      <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+    </div>
+    <div class="flex_center btnin">
+      <div class="inputs">
+        <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
       </div>
-      <div class="flex_center btnin">
-        <div class="inputs">
-          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
-        </div>
-        <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
-        <div v-else disabled="true" class="btn">验证</div>
-      </div>
-      <!-- <forminputplate class="required">
-        <span slot="title">验证密钥</span>
-        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
-      </forminputplate> -->
-    </form>
+      <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
+      <div v-else disabled="true" class="btn">验证</div>
+    </div>
+    <!-- <forminputplate class="required">
+      <span slot="title">验证密钥</span>
+      <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
+    </forminputplate> -->
   </div>
 </template>
 <script>

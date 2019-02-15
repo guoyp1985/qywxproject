@@ -408,9 +408,9 @@ export default {
 <style lang="less">
 .fd-page{
   .pagetop{
-    height:60px;padding-left:10px;box-sizing: border-box;
+    height:60px;padding-left:10px;box-sizing: border-box;box-shadow: 0 1px 5px 0px #e4e4e4;
     .box-area{
-      width:80px;border-radius:30px;height:30px;box-shadow: 0 1px 5px 0px #e4e4e4;
+      width:80px;border-radius:30px;height:30px;
     }
   }
   .pagemiddle{top:60px;}
