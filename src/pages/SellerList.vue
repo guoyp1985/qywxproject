@@ -580,7 +580,7 @@ export default {
     },
     getData2 () {
       const self = this
-      const params = {fid: self.query.id, fulltime: 0, pagestart: self.pageStart2, limit: self.limit}
+      const params = {fid: self.query.id, fulltime: 2, pagestart: self.pageStart2, limit: self.limit}
       this.$http.get(`${ENV.BokaApi}/api/factory/retailerList`, {
         params: params
       })
