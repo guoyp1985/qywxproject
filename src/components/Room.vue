@@ -76,7 +76,7 @@
     </div>
     <div v-if="item.moderate === 2" class="room-operate-area db-flex">
       <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
-      <!-- <div class="flex_cell font13 button" @click="action(3)">关闭</div> -->
+      <div class="flex_cell font13 button" @click="action(3)">关闭</div>
     </div>
     <div v-if="item.moderate === 3" class="room-operate-area db-flex">
       <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
