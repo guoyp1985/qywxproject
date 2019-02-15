@@ -53,7 +53,7 @@
                         <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                         <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                       </div>
-                      <div class="align_right t-cell v_bottom w80">
+                      <div class="align_right t-cell v_middle w80">
                         <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                           <i class="al al-asmkticon0165 v_middle"></i>
                         </div>
@@ -95,7 +95,7 @@
                             <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                             <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                           </div>
-                          <div class="align_right t-cell v_bottom w80">
+                          <div class="align_right t-cell v_middle w80">
                             <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                               <i class="al al-asmkticon0165 v_middle"></i>
                             </div>
@@ -130,7 +130,7 @@
                             <div class="clamp1 font12 color-gray" v-if="item.uploader > 0">推荐人: {{item.uploadname}}</div>
                             <div class="clamp1 font12 color-orange">销售额: {{ $t('RMB') }}{{item.salesmoney}}</div>
                           </div>
-                          <div class="align_right t-cell v_bottom w80">
+                          <div class="align_right t-cell v_middle w80">
                             <div class="btnicon bg-red color-white font12" @click="controlPopup1(item,index)">
                               <i class="al al-asmkticon0165 v_middle"></i>
                             </div>
