@@ -64,9 +64,14 @@
     </div>
     <template v-if="showBottom">
       <div v-if="loginUser.isretailer" class="s-bottom list-shadow flex_center bg-white pl12 pr12">
-        <div v-if="tabData1 && tabData1.length > 0 && selectedIndex == 0" class="align_center flex_center flex_cell">
-          <div class="flex_center btn-bottom-orange" style="width:85%;" @click="upAll('product')">一键上架商品</div>
-        </div>
+        <template v-if="selectedIndex == 0">
+          <div v-if="tabData1 && tabData1.length > 0" class="align_center flex_center flex_cell">
+            <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
+          </div>
+          <div class="align_center flex_center flex_cell">
+            <router-link :to="{path: '/store', query:{wid: loginUser.uid}}" class="flex_center btn-bottom-orange" style="width:85%;">我的店铺</router-link>
+          </div>
+        </template>
         <div v-if="tabData2 && tabData2.length > 0 && selectedIndex == 1" class="align_center flex_center flex_cell">
           <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('factorynews')">导入文章</div>
         </div>
