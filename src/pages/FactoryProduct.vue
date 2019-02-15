@@ -106,7 +106,8 @@
       </div>
       <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="btn-bottom-red flex_center" style="width:80%;" @click="importEvent">上架到店铺</div>
+          <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
+          <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
         </div>
         <div class="align_center flex_center flex_cell" v-if="loginUser.isretailer">
           <router-link :to="{path: '/store', query:{wid: loginUser.uid}}" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</router-link>
@@ -338,6 +339,7 @@ export default {
             let error = data.error
             if (data.flag === 1) {
               error = '上架成功！该商品已显示在你的店铺中！'
+              self.productdata.haveimport = 1
             }
             self.$vux.toast.show({
               text: error,
