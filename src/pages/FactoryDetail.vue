@@ -177,7 +177,13 @@ export default {
               const data = res.data
               self.$vux.toast.show({
                 text: data.error,
-                time: self.$util.delay(data.error)
+                type: data.flag === 1 ? 'success' : 'warn',
+                time: self.$util.delay(data.error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    self.$router.push({path: '/factory', query: {id: self.fid}})
+                  }
+                }
               })
             })
           }
