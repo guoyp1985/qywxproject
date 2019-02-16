@@ -120,12 +120,16 @@ export default {
       this.$util.scrollEvent({
         element: this.$refs.scrollContainer,
         callback: () => {
-          _this.loadData()
+          if (_this.rooms.length === (_this.pageStart + 1) * _this.limit) {
+            _this.pageStart++
+            _this.loadData()
+          }
         }
       })
     },
     refresh () {
-      this.loadData()
+      // this.loadData()
+      this.sortHandle(0)
     },
     loadData (sortKey, isAsc) {
       const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: this.limit, pagestart: this.pageStart}

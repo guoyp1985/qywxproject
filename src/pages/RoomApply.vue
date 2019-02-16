@@ -63,22 +63,20 @@
         </div>
       </x-dialog>
     </div>
-    <form>
-      <div class="protocal-area">
-        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+    <div class="protocal-area">
+      <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+    </div>
+    <div class="flex_center btnin">
+      <div class="inputs">
+        <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
       </div>
-      <div class="flex_center btnin">
-        <div class="inputs ml20">
-          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
-        </div>
-        <button v-if="isAccept == true" @click="submitHandle" :class="`${rgbred}`">验证</button>
-        <button v-else disabled="true">验证</button>
-      </div>
-      <!-- <forminputplate class="required">
-        <span slot="title">验证密钥</span>
-        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
-      </forminputplate> -->
-    </form>
+      <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
+      <div v-else disabled="true" class="btn">验证</div>
+    </div>
+    <!-- <forminputplate class="required">
+      <span slot="title">验证密钥</span>
+      <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
+    </forminputplate> -->
   </div>
 </template>
 <script>
@@ -117,6 +115,7 @@ export default {
       this.showDialog = true
     },
     submitHandle () {
+      const _this = this
       if (!this.isSubmiting) {
         // const self = this
         const data = {
@@ -139,13 +138,21 @@ export default {
           this.$vux.loading.show()
           this.$http.post(`${ENV.BokaApi}/api/groups/addGroup`, data)
           .then(res => {
+            const data = res.data
             this.$vux.loading.hide()
-            this.$vux.toast.text(res.data.error, 'middle')
-            setTimeout(() => {
-              this.reset()
-              this.$router.back()
-              this.isSubmiting = false
-            }, 1000)
+            this.$vux.toast.show({
+              text: data.error,
+              type: 'text',
+              time: _this.$util.delay(data.error),
+              onHide: () => {
+                _this.isSubmiting = false
+                if (data.flag) {
+                  _this.$router.push('/roomList')
+                } else {
+                  _this.reset()
+                }
+              }
+            })
           })
         }
       }
@@ -154,6 +161,9 @@ export default {
       this.crypto = ''
       this.isAccept = false
     }
+  },
+  activated () {
+    console.log(this.$router)
   }
 }
 </script>
@@ -161,19 +171,21 @@ export default {
 .rgba09red{background-color:#FB5657 !important;}
 .btnin{
   .inputs{
-    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;
+    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:50px;
   }
   input{outline:none;margin-top:9px;width:120px;}
-  button{
-    width:90px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
-    border-top-right-radius:5px;border-bottom-right-radius:5px;margin-left: -1px;
+  .btn{
+    width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
+    margin-left:-1px;
   }
 }
+.weui-icon-circle{font-size:16px !important;}
+.weui-icon-success{font-size:16px !important;}
 #room-apply {
   background-color: #ffffff;
 }
 #room-apply .protocal-area {
-  padding: 20px 0;
+  padding: 20px 0 16px 0;
   text-align: center;
 }
 #room-apply .submit-button {
@@ -182,7 +194,7 @@ export default {
   text-align: center;
 }
 #room-apply .step {
-  padding: 20px 40px;
+  padding: 0 40px;margin-top:120px;
 }
 #room-apply .step .step-item {
   position: relative;

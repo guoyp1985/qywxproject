@@ -17,7 +17,7 @@
                 </div>
           			<div class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
+                  <!-- <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div> -->
           			</div>
           		</div>
             </router-link>

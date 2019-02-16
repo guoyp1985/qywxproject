@@ -281,7 +281,7 @@ export default {
       fromProduct: {},
       showTip: true,
       recordCheck: false,
-      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order'],
+      allowChatModule: ['news', 'product', 'store', 'messagelist', 'retailer', 'order', 'factory'],
       allowChat: false,
       retailerInfo: {},
       bottomPos: 0,

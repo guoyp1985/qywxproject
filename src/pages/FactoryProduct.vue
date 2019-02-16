@@ -58,12 +58,12 @@
         <div class="b_top_after"></div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>上级分润: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
+            <div>推荐人佣金: {{ $t('RMB') }}{{ productdata.superiorrebate }}</div>
           </div>
         </div>
         <div class="padding10 b_bottom_after levelarea">
           <div class="levelitem">
-            <div>销售分润: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
+            <div>销售佣金: {{ $t('RMB') }}{{ productdata.salesrebate }}</div>
           </div>
         </div>
         <!-- <template v-if="feeData.length != 0 && (productdata.identity == 'factory' || productdata.joinstatus == 0)">
@@ -106,7 +106,11 @@
       </div>
       <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
-          <div class="flex_cell flex_center btn-bottom-red" @click="importEvent">我要代理</div>
+          <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
+          <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
+        </div>
+        <div class="align_center flex_center flex_cell" v-if="loginUser.isretailer">
+          <router-link :to="{path: '/store', query:{wid: loginUser.uid}}" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</router-link>
         </div>
       </div>
       <div v-transfer-dom>
@@ -324,7 +328,7 @@ export default {
     importProduct () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要代理该商品吗？',
+        content: '确定将该商品上架到店铺并进行出售吗？',
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
@@ -332,10 +336,15 @@ export default {
           }).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
+            let error = data.error
+            if (data.flag === 1) {
+              error = '上架成功！该商品已显示在你的店铺中！'
+              self.productdata.haveimport = 1
+            }
             self.$vux.toast.show({
-              text: data.error,
+              text: error,
               type: data.flag === 1 ? 'success' : 'warn',
-              time: self.$util.delay(data.error)
+              time: self.$util.delay(error)
             })
           })
         }
