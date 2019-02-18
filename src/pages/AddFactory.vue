@@ -88,7 +88,7 @@
 
           <!-- 分润比例设置 -->
           <div class="form-item bg-white">
-            <div><span>分润比例设置（输入百分比，例如10%则填写10）</span></div>
+            <div class=""><span>分润比例设置（输入百分比，例如10%则填写10）</span><span @click="clickTip"><i class="al al-wenhao color-red" style="vertical-align:-4px;"></i></span></div>
             <div class="profit-level b_bottom_after">
               <span>推荐人佣金</span>
               <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" ></x-input>
@@ -118,6 +118,20 @@
       <div class="s-bottom flex_center bg-orange color-white" @click="saveEvent">{{ $t('Submit') }}</div>
       <div class="s-bottom flex_center pl12 pr12 list-shadow02 bg-white">
         <div class="flex_cell flex_center btn-bottom-red" @click="saveEvent">{{ $t('Submit') }}</div>
+      </div>
+      <div v-if="showTip" class="auto-modal flex_center">
+        <div class="modal-inner border-box" style="width:80%;">
+          <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">分润比例设置</div>
+          <div class="align_left txt padding10">
+            <div>销售佣金：是指销售该商品的卖家所得佣金。</div>
+            <div class="mt10">推荐人佣金：是指销售该商品的上级推荐人所得佣金。</div>
+            <div class="mt10">佣金比例根据商品所设置的商品利润进行计算，例如商品利润为<span class="color-red">20元</span>，销售佣金比例为<span class="color-red">20%</span>，则销售该商品的卖家可得佣金为<span class="color-red">20 x 20%=4元</span>，推荐人佣金比例计算方式同理。</div>
+            <div class="mt10">注意：销售佣金比例+推荐人佣金比例需小于100%，否则厂家将没有收入。</div>
+          </div>
+          <div class="close-area flex_center" @click="closeTip">
+            <i class="al al-close"></i>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -154,7 +168,8 @@ export default {
       productClass: [],
       disClassData: false,
       photoarr: [],
-      maxnum: 1
+      maxnum: 1,
+      showTip: false
     }
   },
   watch: {
@@ -172,6 +187,12 @@ export default {
     }
   },
   methods: {
+    clickTip () {
+      this.showTip = true
+    },
+    closeTip () {
+      this.showTip = false
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()

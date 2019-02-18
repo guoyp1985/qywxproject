@@ -252,7 +252,7 @@
       <div class="s-bottom flex_center color-white list-shadow02">
         <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
       </div>
-      <div v-if="showTip" class="auto-modal flex_center tip-modal">
+      <div v-if="showTip" class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
           <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">商品利润</div>
           <div class="align_left txt padding10">
