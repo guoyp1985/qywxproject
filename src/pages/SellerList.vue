@@ -29,7 +29,7 @@
         <template v-if="disSearchData">
           <div class="swiper-inner" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
             <template v-if="disTabData3">
-              <template v-if="!tabData3 || tabData3.length == 0">
+              <template v-if="!tabData3.length">
                 <div class="scroll_list">
                   <div class="emptyitem">
                     <div class="t-table" style="padding-top:20%;">
@@ -70,13 +70,13 @@
             <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
               <div v-if="(index == 0)" class="swiper-inner" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
                 <template v-if="disTabData1">
-                  <template v-if="!tabData1 || tabData1.length == 0">
+                  <template v-if="!tabData1.length">
                     <div class="scroll_list">
                       <div class="emptyitem">
                         <div class="t-table" style="padding-top:20%;">
                           <div class="t-cell padding10">
-                            <div>分享加盟二维码给卖家，卖家扫码即可帮你销售商品</div>
-                            <div class="color-blue"><span @click="disJoinQrcode">点击此处分享加盟二维码</span></div>
+                            <div>分享【加盟二维码】给好友，好友扫码即可成为全职卖家帮你销售商品</div>
+                            <div class="color-blue"><span @click="disJoinQrcode">分享加盟二维码</span></div>
                           </div>
                         </div>
                       </div>
@@ -108,11 +108,14 @@
               </div>
               <div v-if="(index == 1)" class="swiper-inner" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
                 <template v-if="disTabData2">
-                  <template v-if="!tabData2 || tabData2.length == 0">
+                  <template v-if="!tabData2.length">
                     <div class="scroll_list">
                       <div class="emptyitem">
                         <div class="t-table" style="padding-top:20%;">
-                          <div class="t-cell padding10">暂无数据</div>
+                          <div class="t-cell padding10">
+                            <div>分享【厂家介绍】给好友，好友申请加盟即可成为兼职卖家帮你销售商品</div>
+                            <div class="color-blue"><router-link :to="{path: '/factoryDetail',query:{fid:fid}}">分享厂家介绍</router-link></div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -266,7 +269,7 @@
 
 <i18n>
 Add factory:
-  zh-CN: 添加厂商
+  zh-CN: 添加厂家
 </i18n>
 
 <script>
@@ -288,6 +291,7 @@ export default {
       sosTitle: '抱歉，您暂无权限访问此页面！',
       showContainer: false,
       query: {},
+      fid: 0,
       loginUser: {},
       tabtxts: [ '全职卖家', '兼职卖家' ],
       selectedIndex: 0,
@@ -654,8 +658,12 @@ export default {
           self.showContainer = true
           this.$vux.loading.hide()
           this.query = this.$route.query
+          this.fid = this.query.id
+          if (!this.query.id) {
+            this.fid = this.loginUser.fid
+          }
           self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-            params: { fid: self.query.id }
+            params: { fid: this.fid }
           }).then(function (res) {
             self.$vux.loading.hide()
             let data = res.data

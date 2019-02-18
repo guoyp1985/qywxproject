@@ -109,7 +109,8 @@ export default {
   },
   methods: {
     toPay () {
-      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
+      let backurl = encodeURIComponent('/roomOrders')
+      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders&backurl=${backurl}`)
     }
   }
 }

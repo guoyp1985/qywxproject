@@ -702,6 +702,9 @@ export default {
         if (self.query.comefrom) {
           postData.comefrom = self.query.comefrom
         }
+        if (self.query.fulltime) {
+          postData.fulltime = self.query.fulltime
+        }
         self.$http.post(`${ENV.BokaApi}/api/retailer/apply`, postData).then(function (res) {
           applydata = res.data
           return self.$http.get(`${ENV.BokaApi}/api/user/show`)

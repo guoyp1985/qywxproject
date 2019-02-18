@@ -788,19 +788,19 @@ zh-CN:
   No relevant data: 暂无相关数据
   Business tool: 社交销售工具
   tRedirect: 授权中...
-  tAddFactory: 添加厂商
-  Fatory name: 厂商名称
+  tAddFactory: 添加厂家
+  Fatory name: 厂家名称
   Fatory manager: 管理员
-  Product summary: 厂商简介
-  tFactoryList: 厂商列表
-  tFactoryManage: 厂商管理
-  Add factory: 添加厂商
-  tFactory: 厂商
+  Product summary: 厂家简介
+  tFactoryList: 厂家列表
+  tFactoryManage: 厂家管理
+  Add factory: 添加厂家
+  tFactory: 厂家
   Time of admission: 入驻时间
   Apply join: 申请加入
-  tCenterFactory: 厂商中心
-  Factory center: 厂商中心
-  tFactoryLevel: 厂商等级管理
+  tCenterFactory: 厂家中心
+  Factory center: 厂家中心
+  tFactoryLevel: 厂家等级管理
   tSellerList: 卖家列表
   Seller: 卖家
   Level: 等级
@@ -823,7 +823,7 @@ zh-CN:
   Create training academics: 创建培训素材
   tAddAcademic: 创建素材
   tAcademic: 素材
-  Contact factory: 联系厂商
+  Contact factory: 联系厂家
   Source of goods: 货源
   tRecommendProducts: 货源
   tFactoryOrderDetail: 订单详情
