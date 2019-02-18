@@ -17,7 +17,13 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" style="bottom:50px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="distabdata1">
-              <template v-if="tabdata1.length">
+              <div v-if="!tabdata1.length" class="flex_empty">
+                <div>
+                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5 align_center">暂无待提现记录！</div>
+                </div>
+              </div>
+              <template v-else>
                 <group>
                   <cell-box class="income-cell" v-for="(item, index) in tabdata1" :key="index" @click.native="itemClick(item)">
                     <div class="avatar-cell w50">
@@ -37,11 +43,6 @@
                   </cell-box>
                 </group>
               </template>
-              <template v-else>
-                <div class="no-related-x color-gray">
-                  <span>{{$t('No Related Orders')}}</span>
-                </div>
-              </template>
             </template>
           </div>
           <template v-if="(index == 0)">
@@ -56,7 +57,13 @@
           </template>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="distabdata2">
-              <template v-if="tabdata2.length">
+              <div v-if="!tabdata2.length" class="flex_empty">
+                <div>
+                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5 align_center">暂无待返点记录！</div>
+                </div>
+              </div>
+              <template v-else>
                 <group>
                   <cell class="wait-cell font14" v-for="(item, index) in tabdata2" :key="index">
                     <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -72,16 +79,17 @@
                   </cell>
                 </group>
               </template>
-              <template v-else>
-                <div class="no-related-x color-gray">
-                  <span>{{$t('No Related Orders')}}</span>
-                </div>
-              </template>
             </template>
           </div>
           <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
             <template v-if="distabdata3">
-              <template v-if="tabdata3.length">
+              <div v-if="!tabdata3.length" class="flex_empty">
+                <div>
+                  <div class="align_center"><i class="al al-wushuju font60" ></i></div>
+                  <div class="mt5 align_center">暂无已提现记录！</div>
+                </div>
+              </div>
+              <template v-else>
                 <group>
                   <cell class="wait-cell font14" v-for="(item, index) in tabdata3" :key="index">
                     <img slot="icon" class="imgcover v_middle" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
@@ -96,11 +104,6 @@
                     </div>
                   </cell>
                 </group>
-              </template>
-              <template v-else>
-                <div class="no-related-x color-gray">
-                  <span>{{$t('No Related Orders')}}</span>
-                </div>
               </template>
             </template>
           </div>
