@@ -88,9 +88,6 @@ export default {
     return {
       loginUser: {},
       query: {},
-      showApply: false,
-      showContainer: false,
-      retailerInfo: {},
       tabtxts: [ '有效码', '已使用' ],
       selectedIndex: 0,
       disList1: false,
@@ -247,18 +244,13 @@ export default {
         }
       })
     },
-    initContainer () {
-      self.showApply = false
-      self.showContainer = false
-    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       if (this.loginUser) {
         this.query = this.$route.query
-        console.log(this.tabdata1.length)
         if (this.tabdata1.length < limit || this.query.from === 'add') {
-          self.initContainer()
+          this.disList1 = false
           pageStart1 = 0
           this.tabdata1 = []
           this.getData1()

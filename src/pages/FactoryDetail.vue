@@ -7,7 +7,7 @@
   <div class="containerarea font14 fd-page bg-white">
     <div class="pagetop flex_center b_bottom_after">
       <div class="flex_cell flex_left">
-        <div class="flex_left" style="width:45px;">
+        <div class="flex_left" style="width:45px;" v-if="factoryInfo.photo && factoryInfo.photo != ''">
           <img :src="factoryInfo.photo" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         </div>
         <div class="flex_cell flex_left">
