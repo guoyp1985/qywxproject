@@ -83,6 +83,16 @@
                     </div>
                   </template>
                   <template v-else>
+                    <div class="pro_box bg-page list_shadow pl12 pr12 pb15  border-box">
+                      <div class="pro_list_top"></div>
+                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+                        <div>什么是全职卖家？</div>
+                        <div>指公司内部的销售员或只允许销售本厂家商品的卖家。</div>
+                        <div>如何发展全职卖家？</div>
+                        <div>1、扫描【加盟二维码】申请加盟的卖家即可成为全职卖家。</div>
+                        <div>2、通过【优惠码】申请的卖家即可成为全职卖家。</div>
+                      </div>
+                    </div>
                     <div class="scroll_list ">
                       <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData1" :key="item.id" style="color:inherit;">
                         <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
@@ -121,6 +131,16 @@
                     </div>
                   </template>
                   <template v-else>
+                    <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+                      <div class="pro_list_top"></div>
+                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+                        <div>什么是兼职卖家？</div>
+                        <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
+                        <div>如何发展兼职卖家？</div>
+                        <div>1、通过厂家介绍界面申请加盟的卖家即可成为兼职卖家。</div>
+                        <div>2、卖家通过渠道列表选择并加盟厂家商品时，即可成为兼职卖家。</div>
+                      </div>
+                    </div>
                     <div class="scroll_list ">
                       <div class="scroll_item mb10 font14 bg-white db list-shadow " v-for="(item,index) in tabData2" :key="item.id" style="color:inherit;">
                         <div class="t-table bg-white pl10 pr10 pt10 pb10 border-box">
@@ -708,6 +728,13 @@ export default {
     height: 21px;
     width: 41px;
     line-height: 21px;
+  }
+  .pro_list_top{
+    width:100%;padding-bottom:9%;
+    background: url(../assets/images/product_list_top.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
   }
 }
 </style>
