@@ -45,7 +45,7 @@
               autosize>
             </x-textarea>
           </div>
-          <div class="mt5">
+          <div class="padding10">
             <div class="q_photolist align_left">
               <template v-if="item.photoarr.length > 0">
                 <div v-for="(photo,index1) in item.photoarr" :key="index1" class="photoitem">
@@ -357,7 +357,7 @@ export default {
     padding-left:10px;padding-right:10px;padding-bottom:10px;box-sizing: border-box;
     .item{
       position:relative;width:100%;padding:10px;box-sizing: border-box;
-      margin-top:5px;border:#ccc 1px solid;background-color:#fff;
+      margin-top:5px;background-color:#fff;box-shadow:0px 0px 3px 1px #e4e4e4;
       .icon{color:red;font-size:12px;margin-top:-3px;margin-left:3px;}
       .input{
         width:100%;padding:0 5px;text-align:right;box-sizing: border-box;
