@@ -323,7 +323,7 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      if (self.query.id) {
+      if (self.fid) {
         self.$http.get(`${ENV.BokaApi}/api/factory/info`,
           { params: { fid: self.fid } }
         ).then(function (res) {
@@ -391,14 +391,15 @@ export default {
         self.disClassData = true
         self.requireddata.productclass = ''
       }
-      if (this.loginUser.ismanager || this.loginUser.fid === parseInt(this.query.id) || this.loginUser.fid === parseInt(this.query.fid)) {
-        if (this.query.id) {
-          this.fid = parseInt(this.query.id)
-        } else if (this.query.fid) {
-          this.fid = parseInt(this.query.fid)
-        } else {
-          this.fid = this.loginUser.fid
-        }
+      let isEdit = false
+      if (this.query.id) {
+        isEdit = true
+        this.fid = parseInt(this.query.id)
+      } else if (this.query.fid) {
+        isEdit = true
+        this.fid = parseInt(this.query.fid)
+      }
+      if (this.loginUser.ismanager || (isEdit && this.fid === this.loginUser.fid)) {
         self.showSos = false
         self.showContainer = true
         this.$vux.loading.hide()
