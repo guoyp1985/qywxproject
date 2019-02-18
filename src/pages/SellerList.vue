@@ -85,7 +85,7 @@
                   <template v-else>
                     <div class="pro_box bg-page list_shadow pl12 pr12 pb15  border-box">
                       <div class="pro_list_top"></div>
-                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
                         <div>什么是全职卖家？</div>
                         <div>指公司内部的销售员或只允许销售本厂家商品的卖家。</div>
                         <div>如何发展全职卖家？</div>
@@ -133,7 +133,7 @@
                   <template v-else>
                     <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
                       <div class="pro_list_top"></div>
-                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+                      <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
                         <div>什么是兼职卖家？</div>
                         <div>指拥有自己的店铺，利用自己的客户群体兼职销售本厂家商品的卖家。</div>
                         <div>如何发展兼职卖家？</div>

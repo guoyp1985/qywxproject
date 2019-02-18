@@ -20,7 +20,7 @@
         <template v-else>
           <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
             <div class="pro_list_top"></div>
-            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
+            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
               <div>悄悄告诉你，立即分享新发布的商品可以：</div>
               <div>1. 接收好友查看商品的通知；</div>
               <div>2. 监控谁看过、分享过以及多次浏览过你的商品；</div>
