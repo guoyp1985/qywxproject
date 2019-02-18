@@ -1065,5 +1065,15 @@ textarea:-ms-input-placeholder { /* Internet Explorer 10+ */
 	color:#9a9a9a;
 }
 
+.auto-modal{
+  position:absolute;left:0;right:0;bottom:0;top:0;z-index:1000;background-color:rgba(0,0,0,0.6);
+  .modal-inner{
+    width:70%;position:relative;display:block;background-color:#fff;border-radius:10px;
+    .title{height:50px;}
+  }
+  .close-area{position:absolute;left:0;bottom:-60px;right:0;height:50px;}
+  .close-area .al{font-weight:bold;font-size:35px;color:#fff;}
+}
+
 .columnarea{display: flex;flex-direction: column;justify-content: flex-start;align-items: center;}
 .columnarea .column-content{flex:1;width:100%;overflow:hidden;height:100%;}

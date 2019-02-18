@@ -105,6 +105,9 @@
               <div class="t-cell input-cell v_middle" style="position:relative;">
                 <input v-model="submitdata.profit" @keyup="priceChange('profit')" type="text" class="input priceInput" name="profit" :placeholder="$t('Saled profit')" />
               </div>
+              <div class="t-cell v_middle align_center" style="width:30px;" @click="clickTip">
+                <i class="al al-wenhao color-red"></i>
+              </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
           </div>
@@ -122,8 +125,8 @@
               <div style="width:30%;">
                 <div class="t-table">
                   <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
-                  <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="submitdata.unit" type="text" class="input align_center" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
+                  <div class="t-cell input-cell v_middle align_right" style="position:relative;">
+                    <input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
                   </div>
                 </div>
               </div>
@@ -249,6 +252,22 @@
       <div class="s-bottom flex_center color-white list-shadow02">
         <div class="flex_cell flex_center color-white btn-bottom-red" @click="saveupevent">{{ $t('Shelf sale') }}</div>
       </div>
+      <div v-if="showTip" class="auto-modal flex_center tip-modal">
+        <div class="modal-inner border-box" style="width:80%;">
+          <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">商品利润</div>
+          <div class="align_left txt padding10">
+            <div>商品利润是指销售该商品可获得的利润。</div>
+            <div class="mt10">例如：</div>
+            <div class="mt10">商品现价为<span class="color-red">100元</span></div>
+            <div class="mt10">商品的成本是<span class="color-red">80元</span></div>
+            <div class="mt10">该商品利润为<span class="color-red">100-80=20元</span></div>
+            <div class="mt10">设置商品利润是为了计算销售佣金以及推荐人佣金。</div>
+          </div>
+          <div class="close-area flex_center" @click="closeTip">
+            <i class="al al-close"></i>
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -304,7 +323,8 @@ export default {
       requireddata: { title: '', 'price': '', 'storage': '', 'unit': '', 'postage': '', 'photo': '', 'profit': '' },
       levels: [],
       classData: [],
-      submitIng: false
+      submitIng: false,
+      showTip: false
     }
   },
   watch: {
@@ -349,6 +369,12 @@ export default {
       }
       this.photoarr = []
       this.photoarr1 = []
+    },
+    clickTip () {
+      this.showTip = true
+    },
+    closeTip () {
+      this.showTip = false
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
