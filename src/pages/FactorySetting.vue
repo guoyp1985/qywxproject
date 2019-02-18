@@ -75,7 +75,7 @@
         <div class="w100 bg-white color-theme align_center padding5" style="border:#ccc 1px solid;border-radius:5px;" @click="addContent">添加一项</div>
       </div>
     </div>
-    <div class="pagebottom flex_center bg-theme color-white" @click="submitevent">{{ $t('Save') }}</div>
+    <div class="pagebottom flex_center bg-theme color-white" @click="submitevent">保存并预览</div>
   </div>
 </template>
 
