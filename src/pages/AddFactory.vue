@@ -169,7 +169,8 @@ export default {
       disClassData: false,
       photoarr: [],
       maxnum: 1,
-      showTip: false
+      showTip: false,
+      fid: 0
     }
   },
   watch: {
@@ -324,7 +325,7 @@ export default {
       self.$vux.loading.show()
       if (self.query.id) {
         self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.query.id } }
+          { params: { fid: self.fid } }
         ).then(function (res) {
           self.$vux.loading.hide()
           let data = res.data
@@ -386,15 +387,18 @@ export default {
       this.loginUser = User.get()
       self.query = self.$route.query
       self.initData()
-      let isAdmin = false
       if (this.loginUser.ismanager) {
-        isAdmin = true
-      }
-      if (isAdmin) {
         self.disClassData = true
         self.requireddata.productclass = ''
       }
-      if (this.loginUser.ismanager || this.loginUser.fid === parseInt(this.$route.query.id) || this.loginUser.fid === parseInt(this.$route.query.fid)) {
+      if (this.loginUser.ismanager || this.loginUser.fid === parseInt(this.query.id) || this.loginUser.fid === parseInt(this.query.fid)) {
+        if (this.query.id) {
+          this.fid = parseInt(this.query.id)
+        } else if (this.query.fid) {
+          this.fid = parseInt(this.query.fid)
+        } else {
+          this.fid = this.loginUser.fid
+        }
         self.showSos = false
         self.showContainer = true
         this.$vux.loading.hide()
