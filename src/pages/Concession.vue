@@ -12,7 +12,7 @@
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="index === 0" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
             <template v-if="disList1">
-              <div v-if="!tabdata1 || tabdata1.length === 0" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
+              <div v-if="!tabdata1.length" class="w_100 h_100 flex_center color-gray">暂无有效的优惠码</div>
               <div v-else class="scroll_list">
                 <div v-for="(item,index1) in tabdata1" :key="index1" :class="`scroll_item bg-white flex_left item-${item.id}`">
                   <div class="flex_cell padding10">
@@ -30,10 +30,10 @@
           </div>
           <div v-if="index === 1" class="swiper-inner scroll-container1" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
             <template v-if="disList2">
-              <div v-if="!tabdata2 || tabdata2.length === 0" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
+              <div v-if="!tabdata2.length" class="w_100 h_100 flex_center color-gray">暂无已使用的优惠码</div>
               <div v-else class="scroll_list">
                 <div v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white flex_left">
-                  <div class="pic flex_center" style="width:70px;">
+                  <div class="pic flex_center" style="width:70px;" v-if="item.avatar && item.avatar != ''">
                     <img class="v_middle imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" style="width:50px;height:50px;" />
                   </div>
                   <div class="flex_cell padding10">
@@ -253,24 +253,16 @@ export default {
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        if (!this.loginUser.isretailer) {
-          this.$vux.loading.hide()
+      if (this.loginUser) {
+        this.query = this.$route.query
+        console.log(this.tabdata1.length)
+        if (this.tabdata1.length < limit || this.query.from === 'add') {
           self.initContainer()
-          this.showApply = true
-        } else {
-          this.$vux.loading.hide()
-          this.query = this.$route.query
-          if (this.tabdata1.length < limit || this.query.from === 'add') {
-            self.initContainer()
-            pageStart1 = 0
-            this.tabdata1 = []
-            this.getData1()
-          }
+          pageStart1 = 0
+          this.tabdata1 = []
+          this.getData1()
         }
-        // }
       }
     }
   },
