@@ -10,7 +10,7 @@
             <div class="scroll_list">
               <div class="emptyitem">
                 <div class="t-table" style="padding-top:20%;">
-                  <div class="t-cell padding10">暂无厂商数据</div>
+                  <div class="t-cell padding10">暂无厂家数据</div>
                 </div>
               </div>
             </div>
@@ -121,7 +121,7 @@
 
 <i18n>
 Add factory:
-  zh-CN: 添加厂商
+  zh-CN: 添加厂家
 </i18n>
 
 <script>

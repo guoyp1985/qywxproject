@@ -1,5 +1,5 @@
 /*
-* @description: 厂商经营报告
+* @description: 厂家经营报告
 * @auther: gyp
 * @created_date: 2018-08-06
 */

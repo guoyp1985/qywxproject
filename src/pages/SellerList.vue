@@ -269,7 +269,7 @@
 
 <i18n>
 Add factory:
-  zh-CN: 添加厂商
+  zh-CN: 添加厂家
 </i18n>
 
 <script>

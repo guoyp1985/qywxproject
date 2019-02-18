@@ -294,9 +294,9 @@ export default {
       if (!iscontinue) {
         return false
       }
-      let con = '确认添加该厂商吗？'
+      let con = '确认添加该厂家吗？'
       if (self.query.id) {
-        con = '确认更新该厂商信息吗？'
+        con = '确认更新该厂家信息吗？'
         postData.id = self.query.id
       }
       self.$vux.confirm.show({

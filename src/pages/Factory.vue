@@ -146,7 +146,7 @@ export default {
     joinEvent () {
       const self = this
       self.$vux.confirm.show({
-        content: '确定要申请加入该厂商吗？',
+        content: '确定要申请加入该厂家吗？',
         onConfirm () {
           self.$vux.loading.show()
           self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
@@ -168,10 +168,10 @@ export default {
       let con = ''
       let ajaxUrl = ''
       if (type === 'product') {
-        con = '确定要上架该厂商的所有商品？'
+        con = '确定要上架该厂家的所有商品？'
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryProduct`
       } else if (type === 'factorynews') {
-        con = '确定要导入该厂商的所有文章？'
+        con = '确定要导入该厂家的所有文章？'
         ajaxUrl = `${ENV.BokaApi}/api/factory/fastImportFactoryNews`
       }
       self.$vux.confirm.show({

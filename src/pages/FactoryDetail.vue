@@ -1,5 +1,5 @@
 /*
-* @description: 厂商介绍页
+* @description: 厂家介绍页
 * @auther: gyp
 * @created_date: 2019-02-12
 */
