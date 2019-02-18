@@ -257,10 +257,7 @@
           <div class="align_center font18 bold pb10 b_bottom_after color-theme pt20">商品利润</div>
           <div class="align_left txt padding10">
             <div>商品利润是指销售该商品可获得的利润。</div>
-            <div class="mt10">例如：</div>
-            <div class="mt10">商品现价为<span class="color-red">100元</span></div>
-            <div class="mt10">商品的成本是<span class="color-red">80元</span></div>
-            <div class="mt10">该商品利润为<span class="color-red">100-80=20元</span></div>
+            <div class="mt10">例如：商品现价为<span class="color-red">100元</span>，商品的成本是<span class="color-red">80元</span>，该商品利润为<span class="color-red">100-80=20元</span>。</div>
             <div class="mt10">设置商品利润是为了计算销售佣金以及推荐人佣金。</div>
           </div>
           <div class="close-area flex_center" @click="closeTip">
