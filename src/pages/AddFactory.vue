@@ -384,16 +384,28 @@ export default {
       const self = this
       this.$vux.loading.show()
       this.loginUser = User.get()
+      self.query = self.$route.query
+      console.log(this.loginUser)
       if (this.loginUser) {
         self.initData()
         let isAdmin = false
         for (let i = 0; i < self.loginUser.usergroup.length; i++) {
           if (self.loginUser.usergroup[i] === 1) {
             isAdmin = true
-            self.disClassData = true
-            self.requireddata.productclass = ''
             break
           }
+        }
+        if (self.query.id) {
+          for (let i = 0; i < self.loginUser.whoseagent.length; i++) {
+            if (self.loginUser.whoseagent[i] === self.query.id) {
+              isAdmin = true
+              break
+            }
+          }
+        }
+        if (isAdmin) {
+          self.disClassData = true
+          self.requireddata.productclass = ''
         }
         if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin) {
           this.$vux.loading.hide()
@@ -403,7 +415,6 @@ export default {
           self.showSos = false
           self.showContainer = true
           this.$vux.loading.hide()
-          self.query = self.$route.query
           self.getData()
         }
       }
