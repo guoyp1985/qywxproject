@@ -18,8 +18,8 @@
           </div>
         </template>
         <template v-else>
-          <div class="pro_box bg-page list_shadow pl12 pr12 pb15">
-            <div class="pro_list_top bg-page color-lightgray pt10 pb10 pl12 pr12"></div>
+          <div class="pro_box bg-page list_shadow pl12 pr12 pb15 border-box">
+            <div class="pro_list_top"></div>
             <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white" style="margin-top: -4px;">
               <div>悄悄告诉你，立即分享新发布的商品可以：</div>
               <div>1. 接收好友查看商品的通知；</div>
@@ -623,13 +623,12 @@ export default {
 .rproductlist .s-container{bottom:50px;}
 .rproductlist .s-bottom{height: 50px;}
 .rproductlist .addproduct{border-radius: 50px;height: 36px;width: 100%;}
-.rproductlist .pro_list_top{
+.pro_list_top{
+  width:100%;padding-bottom:9%;
   background: url(../assets/images/product_list_top.png);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: cover;
   background-size: 100%;
-  height: 20px;
 }
 
 </style>
