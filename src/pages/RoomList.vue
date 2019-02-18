@@ -243,7 +243,10 @@ export default {
       })
     },
     refresh () {
-      this.toggleTab()
+      this.selectedIndex = 0
+      this.showTab1 = false
+      this.rooms = []
+      this.loadRooms()
     }
   },
   activated () {
