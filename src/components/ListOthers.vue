@@ -208,14 +208,14 @@ export default {
       justify-content: space-between;
       padding: 20px;
       background-color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
       box-sizing: border-box;
       .avatar{
         width: 50px;
         height: 50px;
-        border-radius: 10px;
+        border-radius: 6px;
         margin-right: 20px;
         object-fit: cover;
       }
