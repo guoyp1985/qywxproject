@@ -400,6 +400,7 @@ export default {
             font-size: 16px;
           }
           .counts, .title{
+            white-space: pre-wrap;
             color: #7a7a7a;
             font-size: 14px;
           }
