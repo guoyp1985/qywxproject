@@ -226,21 +226,29 @@ export default {
             onHide: function () {
               self.submitIng = false
               if (data.flag === 1) {
-                if (self.query.minibackurl) {
-                  let minibackurl = decodeURIComponent(self.query.minibackurl)
-                  if (self.query.backtype === 'relaunch') {
-                    self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
-                  } else if (self.query.backtype === 'redirect') {
-                    self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
-                  } else {
-                    self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
-                  }
-                } else {
-                  let params = { id: data.data }
-                  if (self.query.id) {
-                    params.newadd = 1
+                if (self.query.callback === 'edit') {
+                  let params = {id: data.data, control: 'edit'}
+                  if (self.query.minibackurl) {
+                    params.minibackurl = self.query.minibackurl
                   }
                   self.$router.push({ path: '/news', query: params })
+                } else {
+                  if (self.query.minibackurl) {
+                    let minibackurl = decodeURIComponent(self.query.minibackurl)
+                    if (self.query.backtype === 'relaunch') {
+                      self.$wechat.miniProgram.reLaunch({url: `${minibackurl}`})
+                    } else if (self.query.backtype === 'redirect') {
+                      self.$wechat.miniProgram.redirectTo({url: `${minibackurl}`})
+                    } else {
+                      self.$wechat.miniProgram.navigateTo({url: `${minibackurl}`})
+                    }
+                  } else {
+                    let params = { id: data.data }
+                    if (self.query.id) {
+                      params.newadd = 1
+                    }
+                    self.$router.push({ path: '/news', query: params })
+                  }
                 }
               }
             }
