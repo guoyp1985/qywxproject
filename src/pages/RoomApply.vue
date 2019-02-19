@@ -11,7 +11,7 @@
     <div class="top-content">
       <div class="color-red font16 align_center">微信群变现技巧</div>
       <div class="font14 mt10 color-gray2" style="line-height:25px;">将你的微信群按照以下提示添加到群群推，待系统评估完成后等待接单就好啦，有订单时系统会通知你哦^_^</div>
-      <div class="color-red font14 align_center mt10" style="text-decoration:underline;">了解更多技巧</div>
+      <div class="color-red font14 align_center mt10" style="text-decoration:underline;" @click="toStart">了解更多技巧</div>
     </div>
     <div class="flex_center" style="position:relative;width:85%;margin:0 auto;">
       <div class="litem" style="left:50px;"></div>
@@ -41,7 +41,7 @@
         <div class="step-item-info db-flex">
           <div class="step-item-title">第三步:</div>
           <div class="flex_cell color-gray2">
-            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息请在群内发任意信息后再试</span>
+            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息请在群内发任意信息后再试。</span>
           </div>
         </div>
       </div>
@@ -117,6 +117,9 @@ export default {
     }
   },
   methods: {
+    toStart () {
+      this.$router.push('/RoomStart')
+    },
     wxContact () {
       this.wxCardShow = true
     },
