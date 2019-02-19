@@ -8,11 +8,20 @@
     <!-- <div class="s-bottom submit-button color-white" @click="submitHandle">
       <span>提交验证</span>
     </div> -->
-    <div class="step">
+    <div class="top-content">
+      <div class="color-red font16 align_center">微信群变现技巧</div>
+      <div class="font14 mt10 color-gray2" style="line-height:25px;">将你的微信群按照以下提示添加到群群推，待系统评估完成后等待接单就好啦，有订单时系统会通知你哦^_^</div>
+      <div class="color-red font14 align_center mt10" style="text-decoration:underline;" @click="toStart">了解更多技巧</div>
+    </div>
+    <div class="flex_center" style="position:relative;width:85%;margin:0 auto;">
+      <div class="litem" style="left:50px;"></div>
+      <div class="litem" style="right:50px;"></div>
+    </div>
+    <div class="step top-content">
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第一步:</div>
-          <div class="flex_cell color-gray">
+          <div class="flex_cell color-gray2">
             <span>添加官方客服微信</span>
             <span class="color-red" @click="wxContact"> 马上添加 ></span>
           </div>
@@ -22,7 +31,7 @@
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第二步:</div>
-          <div class="flex_cell color-gray">
+          <div class="flex_cell color-gray2">
             <span>拉官方客服进入微信群</span>
           </div>
         </div>
@@ -31,10 +40,20 @@
       <div class="step-item">
         <div class="step-item-info db-flex">
           <div class="step-item-title">第三步:</div>
-          <div class="flex_cell color-gray">
-            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息，请在群内发任意信息后再试。</span>
+          <div class="flex_cell color-gray2">
+            <span>客服向你发送密钥后，返回此页面输入验证密钥。如未收到任何信息请在群内发任意信息后再试。</span>
           </div>
         </div>
+      </div>
+      <div class="protocal-area">
+        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+      </div>
+      <div class="flex_center btnin">
+        <div class="inputs">
+          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
+        </div>
+        <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
+        <div v-else disabled="true" class="btn">验证</div>
       </div>
     </div>
     <div v-transfer-dom>
@@ -62,16 +81,6 @@
           <span class="vux-close"></span>
         </div>
       </x-dialog>
-    </div>
-    <div class="protocal-area">
-      <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
-    </div>
-    <div class="flex_center btnin">
-      <div class="inputs">
-        <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
-      </div>
-      <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
-      <div v-else disabled="true" class="btn">验证</div>
     </div>
     <!-- <forminputplate class="required">
       <span slot="title">验证密钥</span>
@@ -108,6 +117,9 @@ export default {
     }
   },
   methods: {
+    toStart () {
+      this.$router.push('/RoomStart')
+    },
     wxContact () {
       this.wxCardShow = true
     },
@@ -168,10 +180,21 @@ export default {
 }
 </script>
 <style lang="less">
+.containerarea{
+  width:100%;height:100%;
+  .top-content{
+    width:85%;background-color:#fff;border:1px solid #e5e5e5;border-radius:5px;
+    padding:10px 15px;box-sizing:border-box;margin:0 auto;margin-top:50px;box-shadow: 0 0 5px 2px #e0e0e0;
+  }
+  .litem{
+    width:10px;height:30px;border:1px solid #e5e5e5;border-radius:20px;background-color:#fff;
+    position:absolute;bottom:-20px;
+  }
+}
 .rgba09red{background-color:#FB5657 !important;}
 .btnin{
   .inputs{
-    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:50px;
+    border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:20px;
   }
   input{outline:none;margin-top:9px;width:120px;}
   .btn{
@@ -182,7 +205,7 @@ export default {
 .weui-icon-circle{font-size:16px !important;}
 .weui-icon-success{font-size:16px !important;}
 #room-apply {
-  background-color: #ffffff;
+  background-color:#F2F2F2;
 }
 #room-apply .protocal-area {
   padding: 20px 0 16px 0;
@@ -194,7 +217,7 @@ export default {
   text-align: center;
 }
 #room-apply .step {
-  padding: 0 40px;margin-top:120px;
+  padding: 20px 15px;box-sizing:border-box;margin-top:10px;
 }
 #room-apply .step .step-item {
   position: relative;

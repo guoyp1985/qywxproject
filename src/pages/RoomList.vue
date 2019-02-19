@@ -41,7 +41,7 @@
       </template>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
-      <span>群密钥验证</span>
+      <span>微信群验证</span>
     </router-link>
     <router-link v-if="selectedIndex===1" :to="{ name: 'tUserRebateInfo'}" class="s-bottom submit-button color-white">
       <span>我的收入</span>
@@ -55,6 +55,31 @@
         <span class="color-white">提现</span>
       </div>
     </div> -->
+    <div v-if="showTip" class="start-layer flex_center">
+      <div class="auto-modal flex_center">
+        <div class="modal-inner border-box" style="width:80%;">
+          <div class="pic-outer" style="width:80%;margin:0 auto;">
+            <div class="pic-area">
+              <div class="pic-inner">
+                <img src="../assets/images/wxqbx.png" class="pic"/>
+              </div>
+            </div>
+          </div>
+          <div class="align_center txt padding10 font16">
+            <div>只要你是微信群主,</div>
+            <div class="mt10">动动手指就可赚钱,</div>
+            <div class="mt10">日赚千元更轻松!</div>
+            <div class="mt10">赶快了解怎么玩吧↓↓↓</div>
+          </div>
+          <div class="pt20 pb20">
+            <div class="bg-theme color-white btn-more flex_center" @click="clickMore">了解更多 ></div>
+          </div>
+          <div class="close-area flex_center" @click="closeTip">
+            <i class="al al-close"></i>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -79,7 +104,8 @@ export default {
       pageStart1: 0,
       pageStart2: 0,
       clickItem: null,
-      clickIndex: 0
+      clickIndex: 0,
+      showTip: true
     }
   },
   watch: {
@@ -88,6 +114,13 @@ export default {
     }
   },
   methods: {
+    closeTip () {
+      this.showTip = false
+    },
+    clickMore () {
+      this.showTip = false
+      this.$router.push('/roomStart')
+    },
     photoCallback (data) {
       if (data.flag === 1) {
         this.$vux.loading.show()
@@ -260,31 +293,45 @@ export default {
     .room:not(:last-child){margin-bottom:10px;}
     .room-order-consumer:not(:last-child){margin-bottom:10px;}
   }
-}
-#room-list .income-area {
-  background-color: #ffffff;
-}
-#room-list .income-area .income-info {
-  line-height: 45px;
-  padding-left: 10px;
-  text-align: left;
-}
-#room-list .cashed-btn {
-  line-height: 45px;
-  width: 120px;
-  background-color: @boka-red;
-  text-align: center;
-}
-#room-list .submit-button {
-  background-color: @boka-red;
-  line-height: 45px;
-  text-align: center;
-}
-#room-list .b-tab .vux-tab .vux-tab-item.vux-tab-selected {
-  color: @boka-red;
-  border-bottom: 3px solid @boka-red;
-}
-#room-list .b-tab .vux-tab-ink-bar {
-  background-color: @boka-red;
+  .income-area {
+    background-color: #ffffff;
+  }
+  .income-area .income-info {
+    line-height: 45px;
+    padding-left: 10px;
+    text-align: left;
+  }
+  .cashed-btn {
+    line-height: 45px;
+    width: 120px;
+    background-color: @boka-red;
+    text-align: center;
+  }
+  .submit-button {
+    background-color: @boka-red;
+    line-height: 45px;
+    text-align: center;
+  }
+  .b-tab .vux-tab .vux-tab-item.vux-tab-selected {
+    color: @boka-red;
+    border-bottom: 3px solid @boka-red;
+  }
+  .b-tab .vux-tab-ink-bar {
+    background-color: @boka-red;
+  }
+  .start-layer{
+    .modal-inner{padding-top:25%;}
+    .pic-outer{
+      position:absolute;left:10%;top:-25%;right:10%;
+      .pic-area{
+        width:100%;padding-bottom:75%;position:relative;
+        .pic-inner{
+          text-align:center;position:absolute;left:0;top:0;right:0;bottom:0;
+          .pic{max-width:100%;}
+        }
+      }
+    }
+    .btn-more{width:160px;height:35px;border-radius:30px;margin:0 auto;}
+  }
 }
 </style>

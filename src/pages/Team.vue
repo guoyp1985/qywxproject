@@ -1,5 +1,5 @@
 <template>
-  <scroll-view ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
+  <scroll-view class="team-page" ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
     <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
 
       <!-- 背景图 -->
@@ -29,13 +29,6 @@
               </div>
             </div>
             <div class="title">{{teamInfo.content}}</div>
-          </div>
-        </div>
-        <div class="modalshow" v-if="showModal" @click="closeShow">
-          <div class="modaInfo">
-            <div class="al al-feiji color-white"></div>
-            <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
-            <div class="btnknow" @click="closeShow">知道了</div>
           </div>
         </div>
       </div>
@@ -73,6 +66,13 @@
       <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
       <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
         <button @click="importAll">导入全部{{moduleTransfer}}</button>
+      </div>
+    </div>
+    <div class="modalshow" v-if="showModal" @click="closeShow" slot="ope-btns">
+      <div class="modaInfo">
+        <div class="al al-feiji color-white"></div>
+        <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
+        <div class="btnknow" @click="closeShow">知道了</div>
       </div>
     </div>
   </scroll-view>
@@ -342,16 +342,17 @@ export default {
 </script>
 
 <style lang="less">
+.team-page{
+  .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.8);box-sizing: border-box;}
+  .modaInfo{
+    display:flex;flex-direction:column;margin-top: 60px;
+    .al{font-size:80px;margin-left:auto;margin-right: 100px;}
+  }
   .team{
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     padding-bottom: 70px;
-    .modalshow{position:absolute;left:0;right:0;bottom:0;top:0;z-index:10;background-color:rgba(0,0,0,0.8);box-sizing: border-box;}
-    .modaInfo{
-      display:flex;flex-direction:column;margin-top: 60px;
-      .al{font-size:80px;margin-left:auto;margin-right: 100px;}
-    }
     .btnknow{padding:3px 25px;border:1px solid #fff;color:#fff;margin: 0 auto;border-radius:20px;font-size:14px;margin-top: 20px;}
     .team-bg{
       flex: 0 0 30%;
@@ -497,4 +498,5 @@ export default {
       border-bottom: 2px solid #ff6a61;
     }
   }
+}
 </style>
