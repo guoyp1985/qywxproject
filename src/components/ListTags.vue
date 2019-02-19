@@ -195,7 +195,7 @@ export default {
       border-top: 1px solid #e4e4e4;
       border-bottom: 1px solid #e4e4e4;
       background-color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
       .avatar{
         width: 50px;
         height: 50px;

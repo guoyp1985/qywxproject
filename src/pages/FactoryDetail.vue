@@ -1,83 +1,110 @@
 /*
-* @description: 厂商介绍页
+* @description: 厂家介绍页
 * @auther: gyp
 * @created_date: 2019-02-12
 */
 <template>
   <div class="containerarea font14 fd-page bg-white">
-    <div class="pagetop flex_center">
-      <div class="box-area bg-theme flex_center">
-        <div class="flex_cell flex_center btn" v-if="isJoin">已加盟</div>
-        <div class="flex_cell flex_center btn" @click="toJoin" v-else>申请加盟</div>
-        <!-- <div class="flex_cell flex_center btn" @click="toChat">联系客服</div> -->
+    <div class="pagetop flex_center b_bottom_after">
+      <div class="flex_cell flex_left">
+        <div class="flex_left" style="width:45px;" v-if="factoryInfo.photo && factoryInfo.photo != ''">
+          <img :src="factoryInfo.photo" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+        </div>
+        <div class="flex_cell flex_left">
+          <div class="w_100 clamp1 font16">{{factoryInfo.title}}</div>
+        </div>
+      </div>
+      <div class="w100 flex_center">
+        <div class="box-area bg-theme color-white flex_center" v-if="isJoin">已加盟</div>
+        <div class="box-area bg-theme color-white flex_center" @click="toJoin" v-else>申请加盟</div>
       </div>
     </div>
     <div class="pagemiddle">
       <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
         <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
           <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
-            <div v-for="(item,index1) in contentArr" :key="index1">
-              <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
-                <img :src="photo" />
+            <template v-if="factoryInfo.id">
+              <div v-if="!contentArr.length" class="flex_empty">
+                <div>
+                  <div class="align_center">品牌介绍，正在路上</div>
+                  <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="align_center mt10 color-blue db">设置品牌介绍</router-link>
+                </div>
               </div>
-              <div class="padding10">{{item.content}}</div>
-            </div>
+              <div v-else v-for="(item,index1) in contentArr" :key="index1">
+                <div class="padding10">{{item.content}}</div>
+                <div class="flex_center" v-for="(photo,index2) in item.photoarr" :key="index2">
+                  <img :src="photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" @click="viewBigImg(index2,index1)"/>
+                </div>
+              </div>
+            </template>
           </div>
           <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
-            <div v-if="disProductData" :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
-              <div v-if="productData.length == 0" class="emptyitem flex_center">暂无商品</div>
-              <router-link v-else :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: fid}}" class="bk-productitem scroll_item font14">
-            		<div class="inner list-shadow">
-            			<div class="picarea">
-            				<div class="pic">
-                      <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                      <div class="t-icon color-theme">佣金: {{item.levelagent}}</div>
-            				</div>
-            			</div>
-            			<div class="desbox" style="overflow:hidden;">
-            				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">
-                      <span style="word-break:break-all;">{{ item.title }}</span>
-                    </div>
-                    <div class="clamp1">
-            					<div class="flex_table padding5 pro-desc">
-            						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+            <template v-if="disProductData">
+              <div v-if="!productData.length" class="flex_empty">
+                <div>
+                  <div class="align_center">上等好货，敬请期待</div>
+                  <router-link v-if="showEdit" :to="{path: '/addFactoryProduct', query: {fid: fid}}" class="align_center mt10 color-blue db">添加商品信息</router-link>
+                </div>
+              </div>
+              <div v-else :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
+                <router-link :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: fid}}" class="bk-productitem scroll_item font14">
+              		<div class="inner list-shadow">
+              			<div class="picarea">
+              				<div class="pic">
+                        <img class="imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                        <div class="t-icon color-theme">佣金: {{$t('RMB')}}{{item.levelagent}}</div>
+              				</div>
+              			</div>
+              			<div class="desbox" style="overflow:hidden;">
+              				<div class="align_left pl5 pr5 clamp2 distitle" style="line-height:18px;height:36px;">
+                        <span style="word-break:break-all;">{{ item.title }}</span>
                       </div>
-            				</div>
-            			</div>
-            		</div>
-              </router-link>
-            </div>
+                      <div class="clamp1">
+              					<div class="flex_table padding5 pro-desc">
+              						<span class="color-red font14 flex_cell" style="overflow: hidden;margin-right: 10px;white-space: nowrap;text-overflow: ellipsis;">{{ $t('RMB') }} <span style="margin-left:1px;">{{ item.price }}</span></span>
+                        </div>
+              				</div>
+              			</div>
+              		</div>
+                </router-link>
+              </div>
+            </template>
           </div>
           <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
-            <div v-if="disNewsData" class="scroll_list ">
-              <div v-if="!newsData.length" class="scroll_item padding10 color-gray align_center">
-                  <div class="t-table">
-                    <div class="t-cell v_middle">暂无数据</div>
-                  </div>
+            <template v-if="disNewsData">
+              <div v-if="!newsData.length" class="flex_empty">
+                <div>
+                  <div class="align_center">品牌资讯，码字中...</div>
+                  <router-link v-if="showEdit" :to="{path: '/addFactoryNews', query: {fid: fid}}" class="align_center mt10 color-blue db">创建品牌资讯</router-link>
+                </div>
               </div>
-              <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
-                <div class="t-table">
-                  <div class="t-cell v_middle w70">
-                    <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  </div>
-                  <div class="t-cell v_middle">
-                    <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
-                    <div class="clamp1 font14 color-gray v_middle mt5">
-                        <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
-                        <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+              <div v-else class="scroll_list ">
+                <div v-if="!newsData.length" class="scroll_item padding10 color-gray align_center">
+                    <div class="t-table">
+                      <div class="t-cell v_middle">暂无数据</div>
+                    </div>
+                </div>
+                <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+                  <div class="t-table">
+                    <div class="t-cell v_middle w70">
+                      <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                    </div>
+                    <div class="t-cell v_middle">
+                      <div class="clamp1 font14 color-lightgray"><span :class="getDateClass(item.dateline)">{{ getDateState(item.dateline) }}</span>{{item.title}}</div>
+                      <div class="clamp1 font14 color-gray v_middle mt5">
+                          <span class="v_middle"><i class="al al-chakan font18 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.views}}</span>
+                          <span class="v_middle"><i class="al al-ai-share font14 middle-cell pl5 pr5" style="color: #bbbbbb"></i>{{item.shares}}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </router-link>
-            </div>
+                </router-link>
+              </div>
+            </template>
           </div>
         </swiper-item>
       </swiper>
     </div>
     <div class="pagebottom db-flex bg-page">
-      <div class="flex_center f_logo">
-        <img :src="factoryInfo.photo" />
-      </div>
       <div class="flex_cell">
         <tab v-model="selectedIndex" class="v-tab">
           <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
@@ -85,18 +112,24 @@
       </div>
     </div>
     <router-link v-if="showEdit" :to="{path: '/factorySetting', query: {fid: fid}}" class="fixed-layer flex_center">编辑</router-link>
+    <div v-transfer-dom>
+      <previewer :list="previewerPhotoarr" ref="previewer"></previewer>
+    </div>
   </div>
 </template>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg } from 'vux'
+import { Previewer, TransferDom, Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg } from 'vux'
 import Productitemplate from '@/components/Productitemplate'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg, Productitemplate
+    Previewer, Tab, TabItem, Swiper, SwiperItem, Group, GroupTitle, Cell, XImg, Productitemplate
   },
   data () {
     return {
@@ -117,7 +150,9 @@ export default {
       newsData: [],
       fid: 0,
       showEdit: false,
-      isJoin: false
+      isJoin: false,
+      previewerPhotoarr: [],
+      wxPhotoArr: []
     }
   },
   filters: {
@@ -129,6 +164,27 @@ export default {
     }
   },
   methods: {
+    viewBigImg (index2, index1) {
+      const self = this
+      let index = -1
+      for (let i = 0; i < this.contentArr.length; i++) {
+        let cur = this.contentArr[i]
+        if (index1 === i) {
+          index = index + index2 + 1
+          break
+        } else if (cur.photoarr.length) {
+          index = index + cur.photoarr.length
+        }
+      }
+      if (self.$util.isPC()) {
+        self.$refs.previewer.show(index)
+      } else {
+        window.WeixinJSBridge.invoke('imagePreview', {
+          current: self.wxPhotoArr[index],
+          urls: self.wxPhotoArr
+        })
+      }
+    },
     toJoin () {
       const self = this
       if (!this.loginUser.isretailer) {
@@ -148,7 +204,13 @@ export default {
               const data = res.data
               self.$vux.toast.show({
                 text: data.error,
-                time: self.$util.delay(data.error)
+                type: data.flag === 1 ? 'success' : 'warn',
+                time: self.$util.delay(data.error),
+                onHide: () => {
+                  if (data.flag === 1) {
+                    self.$router.push({path: '/factory', query: {id: self.fid}})
+                  }
+                }
               })
             })
           }
@@ -198,7 +260,7 @@ export default {
     },
     getProduct () {
       const self = this
-      const params = { fid: self.fid, from: 'factory', pagestart: self.pagestart1, limit: self.limit }
+      const params = { fid: self.fid, pagestart: self.pagestart1, limit: self.limit }
       this.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
         params: params
       })
@@ -223,8 +285,11 @@ export default {
         self.disNewsData = true
       })
     },
-    swiperChange () {
+    swiperChange (index) {
       const self = this
+      if (index !== undefined) {
+        this.selectedIndex = index
+      }
       switch (this.selectedIndex) {
         case 0:
           break
@@ -286,14 +351,19 @@ export default {
         this.showEdit = false
       }
       this.isJoin = false
-      for (let i = 0; i < this.loginUser.whoseagent.length; i++) {
-        if (this.loginUser.whoseagent[i] === this.fid) {
-          this.isJoin = true
-          break
+      this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+        const data = res.data
+        this.loginUser = data
+        User.set(data)
+        for (let i = 0; i < this.loginUser.whoseagent.length; i++) {
+          if (this.loginUser.whoseagent[i] === this.fid) {
+            this.isJoin = true
+            break
+          }
         }
-      }
-      this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
-        params: {fid: this.fid}
+        return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
+          params: {fid: this.fid}
+        })
       }).then(res => {
         const data = res.data
         this.factoryInfo = data.data
@@ -301,6 +371,16 @@ export default {
         let content = this.factoryInfo.content
         if (content && content !== '') {
           this.contentArr = JSON.parse(content)
+        }
+        for (let i = 0; i < this.contentArr.length; i++) {
+          let cur = this.contentArr[i]
+          if (cur.photoarr.length) {
+            this.previewerPhotoarr = this.previewerPhotoarr.concat(cur.photoarr)
+            this.wxPhotoArr = this.wxPhotoArr.concat(cur.photoarr)
+          }
+        }
+        if (this.previewerPhotoarr.length) {
+          this.previewerPhotoarr = this.$util.previewerImgdata(this.previewerPhotoarr)
         }
         let shareParams = {
           data: this.factoryInfo,
@@ -328,13 +408,9 @@ export default {
 <style lang="less">
 .fd-page{
   .pagetop{
-    height:60px;
+    height:60px;padding-left:10px;box-sizing: border-box;box-shadow: 0 1px 5px 0px #e4e4e4;
     .box-area{
-      width:200px;border-radius:30px;height:40px;
-      .btn{color:#fff;position:relative;}
-      .btn:nth-child(1):after{
-        content:"";position:absolute;top:0px;bottom:0px;right:0;width:1px;background-color:#fff;
-      }
+      width:80px;border-radius:30px;height:30px;
     }
   }
   .pagemiddle{top:60px;}

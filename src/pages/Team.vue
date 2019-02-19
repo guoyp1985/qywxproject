@@ -171,6 +171,7 @@ export default {
       console.log(index)
       this.currentTab = index
       this.$refs.wraper.refresh()
+      this.fixedTop = false
       switch (index) {
         case 0:
           this.$nextTick(() => {
@@ -250,24 +251,30 @@ export default {
     },
     joinTeam () {
       let _this = this
-      this.$http({
-        url: `${Env.BokaApi}/api/team/teamset`,
-        method: 'post',
-        data: {
-          id: this.id,
-          type: 'addMember'
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$vux.toast.show({
-            text: '加入团队成功!',
-            onHide () {
-              _this.teamInfo.join = 1
-            }
-          })
-        }
-      })
+      if (this.teamInfo.fid === 0) {
+        this.$vux.toast.show({
+          text: '你还没有申请为卖家，暂时无法加入团队！'
+        })
+      } else {
+        this.$http({
+          url: `${Env.BokaApi}/api/team/teamset`,
+          method: 'post',
+          data: {
+            id: this.id,
+            type: 'addMember'
+          }
+        }).then(res => {
+          console.log(res)
+          if (res.data.flag) {
+            this.$vux.toast.show({
+              text: '加入团队成功!',
+              onHide () {
+                _this.teamInfo.join = 1
+              }
+            })
+          }
+        })
+      }
     },
     outTeam () {
       let _this = this
@@ -393,6 +400,7 @@ export default {
             font-size: 16px;
           }
           .counts, .title{
+            white-space: pre-wrap;
             color: #7a7a7a;
             font-size: 14px;
           }

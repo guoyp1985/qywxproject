@@ -63,22 +63,20 @@
         </div>
       </x-dialog>
     </div>
-    <form>
-      <div class="protocal-area">
-        <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+    <div class="protocal-area">
+      <check-icon :value.sync="isAccept">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+    </div>
+    <div class="flex_center btnin">
+      <div class="inputs">
+        <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
       </div>
-      <div class="flex_center btnin">
-        <div class="inputs">
-          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
-        </div>
-        <button v-if="isAccept == true" @click="submitHandle" :class="`${rgbred}`">验证</button>
-        <button v-else disabled="true">验证</button>
-      </div>
-      <!-- <forminputplate class="required">
-        <span slot="title">验证密钥</span>
-        <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
-      </forminputplate> -->
-    </form>
+      <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
+      <div v-else disabled="true" class="btn">验证</div>
+    </div>
+    <!-- <forminputplate class="required">
+      <span slot="title">验证密钥</span>
+      <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
+    </forminputplate> -->
   </div>
 </template>
 <script>
@@ -117,6 +115,7 @@ export default {
       this.showDialog = true
     },
     submitHandle () {
+      const _this = this
       if (!this.isSubmiting) {
         // const self = this
         const data = {
@@ -141,28 +140,19 @@ export default {
           .then(res => {
             const data = res.data
             this.$vux.loading.hide()
-            // this.$vux.toast.text(res.data.error, 'middle')
             this.$vux.toast.show({
               text: data.error,
               type: 'text',
-              time: this.$util.delay(data.error),
+              time: _this.$util.delay(data.error),
               onHide: () => {
-                this.isSubmiting = false
+                _this.isSubmiting = false
                 if (data.flag) {
-                  this.$router.push('/roomList')
+                  _this.$router.push('/roomList')
                 } else {
-                  this.reset()
+                  _this.reset()
                 }
               }
             })
-            // setTimeout(() => {
-            //   this.isSubmiting = false
-            //   if (data.flag) {
-            //     this.$router.push('/roomList')
-            //   } else {
-            //     this.reset()
-            //   }
-            // }, 1000)
           })
         }
       }
@@ -184,7 +174,7 @@ export default {
     border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:50px;
   }
   input{outline:none;margin-top:9px;width:120px;}
-  button{
+  .btn{
     width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
     margin-left:-1px;
   }

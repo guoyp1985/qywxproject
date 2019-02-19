@@ -6,7 +6,7 @@
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
         <template v-if="disTabData1">
           <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
-            <div>暂无加盟厂商</div>
+            <div>暂无加盟厂家</div>
           </div>
           <div v-else class="scroll_list ">
             <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
@@ -17,7 +17,7 @@
                 </div>
           			<div class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                  <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div>
+                  <!-- <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div> -->
           			</div>
           		</div>
             </router-link>
@@ -53,7 +53,7 @@
 
 <i18n>
 Add factory:
-  zh-CN: 添加厂商
+  zh-CN: 添加厂家
 </i18n>
 
 <script>
