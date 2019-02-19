@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     toStart () {
-      this.$router.push('/roomStart')
+      this.$router.push('/RoomStart')
     },
     wxContact () {
       this.wxCardShow = true
