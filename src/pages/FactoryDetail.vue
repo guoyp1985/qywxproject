@@ -191,7 +191,11 @@ export default {
         this.$vux.confirm.show({
           content: '您还不是卖家，要申请成为卖家吗？',
           onConfirm: () => {
-            self.$router.push({path: '/centerSales', query: {fid: self.fid}})
+            let params = {fid: self.fid}
+            if (self.query.uploader) {
+              params.uploader = self.query.uploader
+            }
+            self.$router.push({path: '/centerSales', query: params})
           }
         })
       } else {
@@ -382,11 +386,15 @@ export default {
         if (this.previewerPhotoarr.length) {
           this.previewerPhotoarr = this.$util.previewerImgdata(this.previewerPhotoarr)
         }
+        let shareUrl = `${ENV.Host}/#/factoryDetail?fid=${this.fid}&wid=${this.fid}&share_uid=${this.loginUser.uid}`
+        if (this.loginUser.isretailer) {
+          shareUrl = `${shareUrl}&uploader=${this.loginUser.uid}`
+        }
         let shareParams = {
           data: this.factoryInfo,
           module: 'factory',
           moduleid: this.fid,
-          link: `${ENV.Host}/#/factoryDetail?fid=${this.fid}&wid=${this.fid}&share_uid=${this.loginUser.uid}`
+          link: shareUrl
         }
         if (this.query.share_uid) {
           shareParams.link = `${shareParams.link}&lastshareuid=${this.query.share_uid}`
