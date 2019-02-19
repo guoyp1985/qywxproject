@@ -6,9 +6,11 @@
         <span class="title">{{item.title}}</span>
         <span class="price" v-if="module === 'product'">¥ {{item.price}}</span>
       </div>
-      <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
-      <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
-    </div>
+      <div class="ope-all">
+        <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
+        <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
+      </div>
+  </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
   </div>
 </template>
@@ -220,7 +222,7 @@ export default {
         object-fit: cover;
       }
       .info{
-        flex: 1;
+        flex: 2;
         width: 50%;
         display: flex;
         flex-direction: column;
@@ -237,14 +239,18 @@ export default {
           margin-top: 10px;
         }
       }
-      .ope-btn{
-        margin-right: 5px;
-        padding: 5px 8px;
-        border-radius: 10px;
-        background-color: #ff6a61;
-        color: #fff;
-        flex: 0 0 50px;
-        border: none;
+      .ope-all{
+        display: flex;
+        .ope-btn{
+          flex-direction: row;
+          margin-right: 5px;
+          padding: 5px 8px;
+          border-radius: 10px;
+          background-color: #ff6a61;
+          color: #fff;
+          flex: 0 0 50px;
+          border: none;
+        }
       }
     }
     .item:first-child{
