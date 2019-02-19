@@ -21,7 +21,7 @@
           <div v-if="manager.checked">
             <div class="flex_center bg-white h40">
               <div class="t-table align_center color-gray2 font14">
-                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delMember(manager.uid, index)">从团队中移除</div>
+                <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="delManager(manager.uid, index)">从团队中移除</div>
                 <div class="t-cell v_middle b_right_after" v-if="ismanager === 1" @click="disManger(manager.uid, index)">取消管理员</div>
                 <div class="t-cell v_middle" @click="toChat(manager.uid)">联系TA</div>
               </div>
@@ -65,7 +65,7 @@ export default {
       managers: [],
       members: [],
       pagestart: 0,
-      limit: 10,
+      limit: 5,
       creater: {},
       countManager: null,
       countNormal: null,
@@ -90,7 +90,7 @@ export default {
     getMembers () {
       if (this.members.length === this.pagestart * this.limit) {
         this.$http({
-          url: `${Env.BokaApi}/api/team/members?id=${this.id}`,
+          url: `${Env.BokaApi}/api/team/members?id=${this.id}&pagestart=${this.pagestart}&limit=${this.limit}`,
           method: 'get'
         }).then(res => {
           console.log(res)
@@ -117,16 +117,26 @@ export default {
               this.members = retdata
               this.managers = retdatamanager
             } else {
-              this.members.push(...res.data.data.normal)
-              this.managers.push(...res.data.data.managers)
-              for (var n = 0; n < this.managers.length; n++) {
-                this.managers[n].checked = false
+              const retdata1 = res.data.data.normal
+              if (retdata1 && retdata1 !== '') {
+                if (retdata1.length !== 0) {
+                  this.members.push(...res.data.data.normal)
+                  for (var k = 0; i < this.members.length; k++) {
+                    this.members[k].checked = false
+                  }
+                }
               }
-              for (var k = 0; i < this.members.length; k++) {
-                this.members[k].checked = false
+              const retdata2 = res.data.data.managers
+              if (retdata2 && retdata2 !== '') {
+                if (retdata2.length !== 0) {
+                  this.managers.push(...res.data.data.managers)
+                  for (var n = 0; n < this.managers.length; n++) {
+                    this.managers[n].checked = false
+                  }
+                }
               }
             }
-            this.pagestart++
+            this.pagestart = this.pagestart + 1
           }
         })
       }
@@ -210,6 +220,30 @@ export default {
               _this.members.splice(index, 1)
               _this.count--
               _this.countNormal--
+            }
+          })
+        }
+      })
+    },
+    delManager (deluid, index) {
+      let _this = this
+      _this.$vux.confirm.show({
+        title: `确定删除该团员吗？`,
+        onConfirm () {
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/teamset`,
+            method: 'post',
+            data: {
+              type: 'delMember',
+              id: _this.id,
+              deluid: deluid
+            }
+          }).then(res => {
+            console.log(res)
+            if (res.data.flag) {
+              _this.managers.splice(index, 1)
+              _this.count--
+              _this.countManager--
             }
           })
         }
