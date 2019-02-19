@@ -184,7 +184,7 @@ export default {
   width:100%;height:100%;
   .top-content{
     width:85%;background-color:#fff;border:1px solid #e5e5e5;border-radius:5px;
-    padding:10px 15px;box-sizing:border-box;margin:0 auto;margin-top:50px;
+    padding:10px 15px;box-sizing:border-box;margin:0 auto;margin-top:50px;box-shadow: 0 0 5px 2px #e0e0e0;
   }
   .litem{
     width:10px;height:30px;border:1px solid #e5e5e5;border-radius:20px;background-color:#fff;
