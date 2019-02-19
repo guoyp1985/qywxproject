@@ -239,6 +239,7 @@ export default {
       }
     },
     actionData (id, status) {
+      const _this = this
       this.$http.post(`${ENV.BokaApi}/api/groups/moderate`, {id: id, moderate: status})
       .then(res => {
         if (res.data.flag === 1) {
@@ -247,6 +248,9 @@ export default {
             room.moderate = moderate
             return room
           })
+          if (status === 2) {
+            _this.$vux.toast.text('成功开放，正在接单中...', 'middle')
+          }
         }
       })
     },
