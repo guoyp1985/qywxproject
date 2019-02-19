@@ -331,7 +331,7 @@ export default {
         }
       }
     }
-    .btn-more{width:160px;height:45px;font-size:16px;border-radius:30px;margin:0 auto;}
+    .btn-more{width:160px;height:35px;border-radius:30px;margin:0 auto;}
   }
 }
 </style>
