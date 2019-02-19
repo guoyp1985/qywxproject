@@ -11,8 +11,8 @@
           <div class="order-avatar flex_cell">
             <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             <div class="order-details">
-              <div class="font14 clamp1" style="width:180px">{{item.product_title}}</div>
-              <div class="font14 clamp1" style="width:180px">店主: {{item.retailer}}</div>
+              <div class="font16 clamp1" style="width:180px">{{item.product_title}}</div>
+              <!-- <div class="font14 clamp1" style="width:180px">店主: {{item.retailer}}</div> -->
               <div class="font14">
                 <span>售价: <span class="color-red">￥{{item.product_price}}</span></span>
                 <span>佣金: <span class="color-red">￥{{item.product_rebate}}/件</span></span>
