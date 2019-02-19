@@ -13,7 +13,7 @@
         <span :class="{'asc': sortTime === true, 'desc': sortTime === false}">时间</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 2}" @click="sortHandle(2)">
-        <span :class="{'asc': sortSales === true, 'desc': sortSales === false}">单数</span>
+        <span :class="{'asc': sortSales === true, 'desc': sortSales === false}">接单量</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 3}" @click="sortHandle(3)">
         <span :class="{'asc': sortPrice === true, 'desc': sortPrice === false}">价格</span>
@@ -43,7 +43,7 @@
       </template>
     </div>
     <router-link class="s-bottom submit-button color-white" :to="{ name: 'tRoomOrders' }">
-      <span>订单列表</span>
+      <span>我的订单</span>
     </router-link>
   </div>
 </template>
