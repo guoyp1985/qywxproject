@@ -42,9 +42,9 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <x-input v-model="submitData.shortcode" type="text" class="input" :max="3"></x-input>
+                <x-input v-model="submitData.shortcode" type="text" class="input font14 align_right" :max="3" placeholder="必须为三位大写字母"></x-input>
               </div>
-              <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div>
+              <!-- <div class="t-cell title-cell color-red v_middle font12 align_right" style="width:130px;">(必须为三位大写字母)</div> -->
             </div>
           </div>
           <!--
@@ -69,7 +69,7 @@
                       </div>
                     </div>
                   </template>
-                  <div v-if="photoarr.length < maxnum" class="photoitem add" @click="uploadPhoto('fileInput1')">
+                  <!-- <div class="photoitem add">
                     <div class="inner">
                       <div class="innerlist">
                         <div class="flex_center h_100">
@@ -80,6 +80,9 @@
                         </div>
                       </div>
                     </div>
+                  </div> -->
+                  <div v-if="photoarr.length < maxnum" @click="uploadPhoto('fileInput1')" class="align_right">
+                    <span class="color-red">添加logo ></span>
                   </div>
                 </div>
               </div>
@@ -88,17 +91,16 @@
 
           <!-- 分润比例设置 -->
           <div class="form-item bg-white">
-            <div class=""><span>分润比例设置（输入百分比，例如10%则填写10）</span><span @click="clickTip"><i class="al al-wenhao color-red" style="vertical-align:-4px;"></i></span></div>
+            <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
             <div class="profit-level b_bottom_after">
               <span>推荐人佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入分润比例" ></x-input>
+              <x-input class="input" type="tel" v-model="submitData.superiorrate" placeholder="输入百分比，例如10%则填写10" ></x-input>
             </div>
             <div class="profit-level">
               <span>销售佣金</span>
-              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入分润比例" ></x-input>
+              <x-input class="input" type="tel" v-model="submitData.salesrate" placeholder="输入百分比，例如10%则填写10" ></x-input>
             </div>
           </div>
-
           <template v-if="disClassData">
             <div class="form-item required border-box padding10" v-if="classData.length > 0">
               <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
@@ -169,7 +171,8 @@ export default {
       disClassData: false,
       photoarr: [],
       maxnum: 1,
-      showTip: false
+      showTip: false,
+      fid: 0
     }
   },
   watch: {
@@ -322,9 +325,9 @@ export default {
     getData () {
       const self = this
       self.$vux.loading.show()
-      if (self.query.id) {
+      if (self.fid) {
         self.$http.get(`${ENV.BokaApi}/api/factory/info`,
-          { params: { fid: self.query.id } }
+          { params: { fid: self.fid } }
         ).then(function (res) {
           self.$vux.loading.hide()
           let data = res.data
@@ -384,28 +387,29 @@ export default {
       const self = this
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser) {
-        self.initData()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            self.disClassData = true
-            self.requireddata.productclass = ''
-            break
-          }
-        }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.id)) && !isAdmin) {
-          this.$vux.loading.hide()
-          self.showSos = true
-          self.showContainer = false
-        } else {
-          self.showSos = false
-          self.showContainer = true
-          this.$vux.loading.hide()
-          self.query = self.$route.query
-          self.getData()
-        }
+      self.query = self.$route.query
+      self.initData()
+      if (this.loginUser.ismanager) {
+        self.disClassData = true
+        self.requireddata.productclass = ''
+      }
+      let isEdit = false
+      if (this.query.id) {
+        isEdit = true
+        this.fid = parseInt(this.query.id)
+      } else if (this.query.fid) {
+        isEdit = true
+        this.fid = parseInt(this.query.fid)
+      }
+      if (this.loginUser.ismanager || (isEdit && this.fid === this.loginUser.fid)) {
+        self.showSos = false
+        self.showContainer = true
+        this.$vux.loading.hide()
+        self.getData()
+      } else {
+        this.$vux.loading.hide()
+        self.showSos = true
+        self.showContainer = false
       }
     }
   },
@@ -420,9 +424,12 @@ export default {
 </script>
 
 <style lang="less">
+.photoitem{float:right !important;}
+.weui-input{text-align:right;}
+.weui-textarea{text-align:right;}
 .profit-level{
   box-sizing: border-box;
-  padding: 20px 0 20px 10px;
+  padding: 20px 10px 20px 10px;
   display: flex;
   span{
     flex: 0 0 80px;
@@ -430,6 +437,7 @@ export default {
   input{
     padding-left: 10px;
     flex: 1;
+    text-align:left;
   }
   .weui-cell:before{display:none;}
 }
