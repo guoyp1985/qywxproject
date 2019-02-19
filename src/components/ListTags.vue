@@ -212,6 +212,7 @@ export default {
           margin-bottom:6px;
           align-items: center;
           .username{
+            color: #5b6a92;
             width:70px;
             font-size: 16px;
           }

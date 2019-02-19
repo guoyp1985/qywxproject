@@ -93,9 +93,9 @@ export default {
           url: `${Env.BokaApi}/api/team/members?id=${this.id}&pagestart=${this.pagestart}&limit=${this.limit}`,
           method: 'get'
         }).then(res => {
-          console.log(res)
           if (res.data.flag) {
             if (!this.pagestart) {
+              console.log('111111111')
               this.countManager = res.data.count.manager
               this.countNormal = res.data.count.normal
               this.ismanager = res.data.data.ismanager
@@ -117,22 +117,23 @@ export default {
               this.members = retdata
               this.managers = retdatamanager
             } else {
+              console.log('2222222222')
               const retdata1 = res.data.data.normal
               if (retdata1 && retdata1 !== '') {
                 if (retdata1.length !== 0) {
-                  this.members.push(...res.data.data.normal)
-                  for (var k = 0; i < this.members.length; k++) {
-                    this.members[k].checked = false
+                  for (var k = 0; k < retdata1.length; k++) {
+                    retdata1[k].checked = false
                   }
+                  this.members.push(...retdata1)
                 }
               }
               const retdata2 = res.data.data.managers
               if (retdata2 && retdata2 !== '') {
                 if (retdata2.length !== 0) {
-                  this.managers.push(...res.data.data.managers)
-                  for (var n = 0; n < this.managers.length; n++) {
-                    this.managers[n].checked = false
+                  for (var n = 0; n < retdata2.length; n++) {
+                    retdata2[k].checked = false
                   }
+                  this.managers.push(...retdata2)
                 }
               }
             }
