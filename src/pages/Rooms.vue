@@ -26,7 +26,7 @@
             <div class="font13" slot="sort-key">
               <span v-if="selectIndex === 0">评分: {{item.score}}</span>
               <span v-if="selectIndex === 1">时间: {{item.dateline | formatDate}}</span>
-              <span v-if="selectIndex === 2">单数: {{item.sales}}</span>
+              <span v-if="selectIndex === 2">接单数: {{item.sales}}</span>
               <span v-if="selectIndex === 3">价格: ￥{{item.viewmoney}}/人点击</span>
             </div>
             <div slot="operation-area" class="room-operate-area db-flex">
