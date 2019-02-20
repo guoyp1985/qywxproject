@@ -22,7 +22,7 @@
           </template>
           <template v-else>
             <div class="flex_empty">
-              <span>还没有群信息，点击底部按钮前去验证</span>
+              <router-link :to="{name: 'tRoomApply'}">你还没有添加微信群，点击此处添加></router-link>
             </div>
           </template>
         </template>

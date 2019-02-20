@@ -426,7 +426,8 @@ export default {
       this.isshowpopup = false
     },
     withdrawClick () {
-      this.$router.push({path: '/userRebateInfo'})
+      // this.$router.push({path: '/userRebateInfo'})
+      this.$router.push({path: '/userRevenue'})
     },
     bringCustomerClick (type) {
       this.$router.push({path: '/bringCustomer'})
