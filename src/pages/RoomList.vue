@@ -22,7 +22,10 @@
           </template>
           <template v-else>
             <div class="flex_empty">
-              <router-link :to="{name: 'tRoomApply'}">你还没有添加微信群，点击此处添加></router-link>
+              <div>
+                <div class="align_center">你还没有添加微信群</div>
+                <router-link class="db align_center mt10 color-theme" :to="{name: 'tRoomApply'}">点击添加微信群 ></router-link>
+              </div>
             </div>
           </template>
         </template>
