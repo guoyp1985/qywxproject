@@ -255,7 +255,7 @@ export default {
         this.$vux.confirm.show({
           title: `申请卖家后才可加入团队,确定申请？`,
           onConfirm () {
-            _this.$router.push('/centerSales')
+            _this.$wechat.miniProgram.navigateTo({url: `/pages/vip`})
           }
         })
       } else {
