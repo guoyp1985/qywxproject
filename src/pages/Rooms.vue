@@ -140,7 +140,6 @@ export default {
         this.$vux.loading.hide()
         if (res.data.flag === 1) {
           const data = res.data.data
-          data.length && this.pageStart++
           this.rooms = this.rooms.concat(data)
           this.loadCompleted = true
         }
