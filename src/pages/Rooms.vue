@@ -59,7 +59,7 @@ export default {
   data () {
     return {
       selectIndex: -1,
-      sortTotal: null,
+      sortTotal: true,
       sortTime: null,
       sortSales: null,
       sortPrice: null,
@@ -143,8 +143,7 @@ export default {
       })
     },
     refresh () {
-      // this.loadData()
-      this.sortHandle(0)
+      this.loadData('score', true)
     },
     loadData (sortKey, isAsc) {
       const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'desc' : 'asc', limit: this.limit, pagestart: this.pageStart}
