@@ -423,8 +423,10 @@ export default {
         } else {
           this.showMoneyPopup = false
           let cashstr = '微信'
+          let cashtype = 'lingqian'
           if (this.bankCash) {
             cashstr = '银行卡'
+            cashtype = 'yinhang'
           }
           if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
             self.$vux.confirm.show({
@@ -441,11 +443,11 @@ export default {
             onConfirm: () => {
               self.eventIng = true
               self.$vux.loading.show()
-              let postData = {}
+              let postData = {type: cashtype, money: self.summoney}
               if (self.query.appid) {
                 postData.appid = self.query.appid
               }
-              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, postData).then(function (res) {
+              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(function (res) {
                 let data = res.data
                 self.$vux.loading.hide()
                 self.$vux.toast.show({

@@ -252,8 +252,14 @@ export default {
     joinTeam () {
       let _this = this
       if (this.teamInfo.fid === 0) {
-        this.$vux.toast.show({
-          text: '你还没有申请为卖家，暂时无法加入团队！'
+        // this.$vux.toast.show({
+        //   text: '你还没有申请为卖家，暂时无法加入团队！'
+        // })
+        this.$vux.confirm.show({
+          title: `申请卖家后才可加入团队,确定申请？`,
+          onConfirm () {
+            _this.$router.push('/CenterSeller')
+          }
         })
       } else {
         this.$http({
