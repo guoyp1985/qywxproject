@@ -373,7 +373,7 @@ export default {
           },
           onConfirm () {
             self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, {fid: self.loginUser.fid}).then(function (res) {
+            self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, {fid: self.loginUser.fid}).then(function (res) {
               let data = res.data
               self.$vux.loading.hide()
               self.$vux.toast.show({

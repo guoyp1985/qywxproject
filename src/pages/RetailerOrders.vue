@@ -1,9 +1,17 @@
 <template>
-  <div class="containerarea bg-page font14 retailerordes">
+  <div :class="`containerarea bg-page font14 retailerordes ${showTip ? 'show-tip-page' : ''}`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
-      <div class="s-topbanner s-topbanner1" style="height:99px;">
+      <div v-if="showTip" class="pagetop border-box db-flex top-subscribe-tip">
+        <div class="flex_cell h_100 flex_left">
+          <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
+        </div>
+        <div class="w80 h_100 flex_right">
+          <div class="btn flex_center">立即关注</div>
+        </div>
+      </div>
+      <div class="s-topbanner s-topbanner1">
         <div class="row">
           <search
             class="v-search bg-white"
@@ -19,7 +27,7 @@
           </tab>
         </div>
       </div>
-      <div class="s-container s-container1" style="top:99px;">
+      <div class="s-container s-container1">
         <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
           <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
             <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
@@ -286,7 +294,8 @@ export default {
       delivercompany: [],
       deliverdata: { delivercompany: '-1', delivercode: '' },
       autofixed: false,
-      searchword1: ''
+      searchword1: '',
+      showTip: false,
     }
   },
   methods: {
@@ -563,6 +572,10 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      if (this.$route.query.from && this.loginUser.subscribe !== 1) {
+        this.showTip = true
+      }
+      this.showTip = true
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
@@ -601,4 +614,12 @@ export default {
 
 <style lang="less" scoped>
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
+.retailerordes{
+  .s-topbanner{height:99px;}
+  .s-container{top:99px;}
+}
+.retailerordes.show-tip-page{
+  .s-topbanner{top:48px;}
+  .s-container{top:147px;}
+}
 </style>

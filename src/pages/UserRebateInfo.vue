@@ -354,7 +354,7 @@ export default {
             onConfirm () {
               self.$vux.loading.show()
               let subdata = { identity: 'seller' }
-              self.$http.post(`${ENV.BokaApi}/api/accounting/getCash`, subdata).then(function (res) {
+              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, subdata).then(function (res) {
                 let data = res.data
                 self.$vux.loading.hide()
                 self.$vux.toast.show({
