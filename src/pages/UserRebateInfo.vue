@@ -31,7 +31,7 @@
                       <div class="clamp1 color-999">{{item.username}}</div>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateFormat }}</div>
                     </div>
                   </div>
                 </div>
@@ -60,7 +60,7 @@
                       <div class="clamp1 color-999">{{item.username}}</div>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateFormat }}</div>
                     </div>
                   </div>
                 </div>
