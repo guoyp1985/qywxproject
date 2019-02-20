@@ -65,7 +65,7 @@ export default {
       managers: [],
       members: [],
       pagestart: 0,
-      limit: 5,
+      limit: 10,
       creater: {},
       countManager: null,
       countNormal: null,
