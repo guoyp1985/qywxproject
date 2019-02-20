@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea s-havebottom bg-white font14 addFactory">
+  <div class="containerarea s-havebottom font14 addFactory">
     <template v-if="showSos">
       <Sos :title="sosTitle"></Sos>
     </template>
@@ -9,7 +9,7 @@
           <input ref="fileInput1" class="hide" type="file" name="files" @change="fileChange('photo')" />
         </form>
         <form class="addForm">
-          <div class="form-item">
+          <div class="form-item fg bg-white b-top b-bottom">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Fatory name') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -17,7 +17,7 @@
               </div>
             </div>
           </div>
-          <div class="form-item bg-white">
+          <div class="form-item bg-white fg b-top">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product summary') }}</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -38,7 +38,7 @@
               </div>
             </div>
           </div>
-          <div class="form-item">
+          <div class="form-item bg-white fg b-top">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">缩写码<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;display:inline-block;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -57,7 +57,7 @@
             </div>
           </div>
         -->
-          <div class="form-item bg-white">
+          <div class="form-item bg-white fg b-top">
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">logo</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
@@ -90,7 +90,7 @@
           </div>
 
           <!-- 分润比例设置 -->
-          <div class="form-item bg-white">
+          <div class="form-item bg-white fg b-top">
             <div class=""><span>分润比例设置</span><span @click="clickTip"><i class="al al-wenhao color-red ml5 font24" style="vertical-align:-4px;"></i></span></div>
             <div class="profit-level b_bottom_after">
               <span>推荐人佣金</span>
@@ -102,7 +102,7 @@
             </div>
           </div>
           <template v-if="disClassData">
-            <div class="form-item required border-box padding10" v-if="classData.length > 0">
+            <div class="form-item required border-box bg-white padding10 fg b-top" v-if="classData.length > 0">
               <div class="pb10">经营产品<span class="color-gray">(最多三项)</span><span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <checker
               class="x-checker"
@@ -440,6 +440,12 @@ export default {
     text-align:left;
   }
   .weui-cell:before{display:none;}
+}
+.addFactory{
+  background-color:#EFF2F3;
+  .fg{margin-top:5px;}
+  .b-border{border-bottom:1px solid #e5e5e5;}
+  .b-top{border-top:1px solid #e5e5e5;}
 }
 .addFactory .x-checker .ck-item{
   font-size:13px;

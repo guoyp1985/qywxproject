@@ -221,21 +221,25 @@ export default {
           conCon = '<div style="font-size:12px;text-align:center;">重新评估过程中，正常接单</div><div style="font-size:12px;text-align:center;margin-top:5px;">如不需要，请手动关闭</div>'
           break
         case 2:
-          confirmTitle = '确认开放?'
           break
         case 3:
-          confirmTitle = '确认关闭?'
+          confirmTitle = '是否要暂停接单?'
           break
       }
-      this.$vux.confirm.show({
-        title: confirmTitle,
-        content: conCon,
-        onConfirm () {
-          _this.actionData(room.id, status)
-        }
-      })
+      if (status === 2) {
+        _this.actionData(room.id, status)
+      } else {
+        this.$vux.confirm.show({
+          title: confirmTitle,
+          content: conCon,
+          onConfirm () {
+            _this.actionData(room.id, status)
+          }
+        })
+      }
     },
     actionData (id, status) {
+      const _this = this
       this.$http.post(`${ENV.BokaApi}/api/groups/moderate`, {id: id, moderate: status})
       .then(res => {
         if (res.data.flag === 1) {
@@ -244,6 +248,9 @@ export default {
             room.moderate = moderate
             return room
           })
+          if (status === 2) {
+            _this.$vux.toast.text('成功开放，正在接单中...', 'middle')
+          }
         }
       })
     },

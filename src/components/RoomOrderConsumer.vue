@@ -11,11 +11,11 @@
           <div class="order-avatar flex_cell">
             <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             <div class="order-details">
-              <div class="font14 clamp1" style="width:180px">{{item.product_title}}</div>
-              <div class="font14 clamp1" style="width:180px">店主: {{item.retailer}}</div>
+              <div class="font16 clamp1" style="width:180px">{{item.product_title}}</div>
+              <!-- <div class="font14 clamp1" style="width:180px">店主: {{item.retailer}}</div> -->
               <div class="font14">
-                <span>售价: ￥{{item.product_price}}</span>
-                <span>佣金: ￥{{item.product_rebate}}/件</span>
+                <span>售价: <span class="color-red">￥{{item.product_price}}</span></span>
+                <span>佣金: <span class="color-red">￥{{item.product_rebate}}/件</span></span>
               </div>
             </div>
           </div>
@@ -56,13 +56,13 @@
       <div class="flex_cell">
         <div>
           <span>订单点击收入:</span>
-          <span>￥{{item.viewmoney}}</span>
+          <span><span class="color-red">￥{{item.viewmoney}}</span></span>
         </div>
       </div>
       <div class="flex_cell">
         <div>
           <span>订单佣金收入:</span>
-          <span>￥{{item.buytotal}}</span>
+          <span><span class="color-red">￥{{item.buytotal}}</span></span>
         </div>
       </div>
     </div>

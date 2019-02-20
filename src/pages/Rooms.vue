@@ -7,16 +7,16 @@
   <div id="rooms" class="containerarea font14 s-havebottom">
     <div class="s-topbanner s-topbanner1 sort-header db-flex">
       <div class="flex_cell sort-cell" :class="{'sorted': selectIndex === 0}" @click="sortHandle(0)">
-        <span :class="{'asc': sortTotal === true, 'desc': sortTotal === false}">综合</span>
+        <span :class="{'desc': sortTotal === true, 'asc': sortTotal === false}">综合</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 1}" @click="sortHandle(1)">
-        <span :class="{'asc': sortTime === true, 'desc': sortTime === false}">时间</span>
+        <span :class="{'desc': sortTime === true, 'asc': sortTime === false}">时间</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 2}" @click="sortHandle(2)">
-        <span :class="{'asc': sortSales === true, 'desc': sortSales === false}">单数</span>
+        <span :class="{'desc': sortSales === true, 'asc': sortSales === false}">接单量</span>
       </div>
       <div class="flex_cell sort-cell" :class="{'sorted':  selectIndex === 3}" @click="sortHandle(3)">
-        <span :class="{'asc': sortPrice === true, 'desc': sortPrice === false}">价格</span>
+        <span :class="{'desc': sortPrice === true, 'asc': sortPrice === false}">价格</span>
       </div>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
@@ -26,7 +26,7 @@
             <div class="font13" slot="sort-key">
               <span v-if="selectIndex === 0">评分: {{item.score}}</span>
               <span v-if="selectIndex === 1">时间: {{item.dateline | formatDate}}</span>
-              <span v-if="selectIndex === 2">单数: {{item.sales}}</span>
+              <span v-if="selectIndex === 2">接单数: {{item.sales}}</span>
               <span v-if="selectIndex === 3">价格: ￥{{item.viewmoney}}/人点击</span>
             </div>
             <div slot="operation-area" class="room-operate-area db-flex">
@@ -43,7 +43,7 @@
       </template>
     </div>
     <router-link class="s-bottom submit-button color-white" :to="{ name: 'tRoomOrders' }">
-      <span>订单列表</span>
+      <span>我的订单</span>
     </router-link>
   </div>
 </template>
@@ -93,6 +93,7 @@ export default {
           this.sortTime = !this.sortTime
           this.sortSales = null
           this.sortPrice = null
+          console.log(this.sortTime)
           this.loadData('dateline', this.sortTime)
           break
         case 2:
@@ -132,7 +133,7 @@ export default {
       this.sortHandle(0)
     },
     loadData (sortKey, isAsc) {
-      const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'asc' : 'desc', limit: this.limit, pagestart: this.pageStart}
+      const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'desc' : 'asc', limit: this.limit, pagestart: this.pageStart}
       this.$vux.loading.show()
       this.$http.post(`${ENV.BokaApi}/api/groups/myGroups`, params)
       .then(res => {
