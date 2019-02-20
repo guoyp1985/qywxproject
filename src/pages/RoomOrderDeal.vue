@@ -38,7 +38,7 @@
     <div class="s-bottom submit-button color-white" @click="makeDeal">
       <span>支付保证金 ￥{{room.deposit}}</span>
     </div>
-    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" rebate="1"></append-product>
+    <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" :rebate="propRebate"></append-product>
     <div v-transfer-dom>
       <x-dialog v-model="showDialog" hide-on-blur :dialog-style="{width: '100%', height: '50%', 'background-color': '#ffffff'}">
         <div style="text-align:center;padding-top:10px;" @click="showDialog = false">
@@ -74,7 +74,8 @@ export default {
       product: {},
       room: {},
       isSubmiting: false,
-      showDialog: false
+      showDialog: false,
+      propRebate: true
     }
   },
   methods: {
