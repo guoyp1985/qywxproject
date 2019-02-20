@@ -123,7 +123,21 @@ export default {
         callback: () => {
           if (_this.rooms.length === (_this.pageStart + 1) * _this.limit) {
             _this.pageStart++
-            _this.loadData()
+            switch (_this.selectIndex) {
+              case 0:
+                this.loadData('score', this.sortTotal)
+                break
+              case 1:
+                this.loadData('dateline', this.sortTime)
+                break
+              case 2:
+                this.loadData('sales', this.sortSales)
+                break
+              case 3:
+                this.loadData('viewmoney', this.sortPrice)
+                break
+            }
+            // _this.loadData()
           }
         }
       })
