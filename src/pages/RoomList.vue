@@ -41,7 +41,7 @@
       </template>
     </div>
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
-      <span>微信群验证</span>
+      <span>添加微信群</span>
     </router-link>
     <router-link v-if="selectedIndex===1" :to="{ name: 'tUserRebateInfo'}" class="s-bottom submit-button color-white">
       <span>我的收入</span>
