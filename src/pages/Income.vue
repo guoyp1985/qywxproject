@@ -443,7 +443,7 @@ export default {
             onConfirm: () => {
               self.eventIng = true
               self.$vux.loading.show()
-              let postData = {type: cashtype}
+              let postData = {type: cashtype, money: self.summoney}
               if (self.query.appid) {
                 postData.appid = self.query.appid
               }

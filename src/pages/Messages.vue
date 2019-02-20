@@ -5,7 +5,7 @@
         <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
       </div>
       <div class="w80 h_100 flex_right">
-        <div class="btn flex_center">立即关注</div>
+        <div class="btn flex_center" @click="toSubscribe">立即关注</div>
       </div>
     </div>
     <div v-else class="pagetop flex_left pl10 border-box font16">{{$t('Message')}}</div>
@@ -56,6 +56,9 @@ export default {
     }
   },
   methods: {
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
     getDateState (dt) {
       return this.$util.getDateState(dt)
     },
@@ -80,7 +83,6 @@ export default {
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
-      console.log(this.loginUser)
       this.query = this.$route.query
       this.$vux.loading.show()
       this.getData()

@@ -355,7 +355,7 @@ export default {
             content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现到${cashstr}吗？`,
             onConfirm () {
               self.$vux.loading.show()
-              let postData = {type: cashtype}
+              let postData = {type: cashtype, money: self.summoney}
               if (self.query.appid) {
                 postData.appid = self.query.appid
               }
