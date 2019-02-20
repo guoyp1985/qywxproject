@@ -8,7 +8,7 @@
           <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
         </div>
         <div class="w80 h_100 flex_right">
-          <div class="btn flex_center">立即关注</div>
+          <div class="btn flex_center" @click="toSubscribe">立即关注</div>
         </div>
       </div>
       <div class="s-topbanner s-topbanner1">
@@ -299,6 +299,9 @@ export default {
     }
   },
   methods: {
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
     onChange1 (val) {
       this.searchword1 = val
     },
@@ -575,7 +578,6 @@ export default {
       if (this.$route.query.from && this.loginUser.subscribe !== 1) {
         this.showTip = true
       }
-      this.showTip = true
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
