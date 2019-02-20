@@ -3,7 +3,7 @@
     <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
 
       <!-- 背景图 -->
-      <div class="team-bg"><img src="../assets/images/team.png" ref="teamBg"></div>
+      <div class="team-bg"><img src="https://tossharingsales.boka.cn/minigxk/team_bg.png" ref="teamBg"></div>
 
       <!-- 团队信息 -->
       <div class="team-info" ref="teamInfo">
@@ -255,7 +255,7 @@ export default {
         this.$vux.confirm.show({
           title: `申请卖家后才可加入团队,确定申请？`,
           onConfirm () {
-            _this.$router.push('/centerSales')
+            _this.$wechat.miniProgram.navigateTo({url: `/pages/vip`})
           }
         })
       } else {
