@@ -72,15 +72,6 @@ export default {
     }
   },
   methods: {
-    // scrollEnd (y) {
-    //   const wraperHeight = this.$refs.wraper.$el.offsetHeight
-    //   const contentHeight = this.$refs.content.offsetHeight
-    //   let height = contentHeight - wraperHeight
-    //   if (Math.abs(y) >= height) {
-    //     console.log('滑动到底部了！')
-    //     this.getMembers()
-    //   }
-    // },
     handleScroll: function (refname) {
       const self = this
       console.log('handleScroll')
