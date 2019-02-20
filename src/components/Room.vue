@@ -21,7 +21,7 @@
             <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
             <div class="font13">
               <span v-if="item.moderate === 1">单数: {{item.sales}}</span>
-              <span v-if="item.moderate === 2" class="color-orange">正在接单中，请注意手机通知</span>
+              <span v-if="item.moderate === 2" class="color-orange">正在接单中</span>
             </div>
           </div>
         </div>

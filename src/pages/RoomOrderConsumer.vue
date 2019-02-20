@@ -7,7 +7,7 @@
   <div id="room-order-consumer">
     <div class="order-title db-flex font14">
       <div class="flex_cell flex_left">
-        <span class="font14 clamp1" style="width:220px">客户: {{item.retailer}}</span>
+        <span class="font14 clamp1" style="width:220px">卖家: {{item.retailer}}</span>
       </div>
       <div class="flex_cell flex_right color-red">
         <span>{{statusName}}</span>
