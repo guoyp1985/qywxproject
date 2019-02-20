@@ -218,7 +218,7 @@ export default {
       switch (status) {
         case 0:
           confirmTitle = '是否重新评估?'
-          conCon = '<div style="font-size:12px;text-align:center;">重新评估过程中，正常接单</div><div style="font-size:12px;text-align:center;margin-top:5px;">如不需要，请手动关闭</div>'
+          conCon = '<div style="font-size:12px;text-align:center;">重新评估过程中，不可改变群状态</div><div style="font-size:12px;text-align:center;margin-top:5px;">如不需要接单，请先暂停接单再重新评估</div>'
           break
         case 2:
           break
