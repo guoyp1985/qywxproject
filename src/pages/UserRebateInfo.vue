@@ -139,7 +139,7 @@ export default {
   data () {
     return {
       query: {},
-      tabtxts: [ '待结算', '已结算', '提现明细' ],
+      tabtxts: [ '待返点', '已返点', '提现明细' ],
       rebateInfo: {},
       total: '0.00',
       selectedIndex: 0,
