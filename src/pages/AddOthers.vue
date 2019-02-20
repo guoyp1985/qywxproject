@@ -195,6 +195,7 @@ export default {
   .data{
     width: 100vw;
     padding-bottom: 45px;
+    touch-action: pan-y;
     .item{
       display: flex;
       width: 100%;
