@@ -3,7 +3,7 @@
     <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
 
       <!-- 背景图 -->
-      <div class="team-bg"><img src="https://tossharingsales.boka.cn/minigxk/team_bg1.png" ref="teamBg"></div>
+      <div class="team-bg"><img src="https://tossharingsales.boka.cn/minigxk/team_bg.png" ref="teamBg"></div>
 
       <!-- 团队信息 -->
       <div class="team-info" ref="teamInfo">
