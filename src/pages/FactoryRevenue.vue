@@ -84,14 +84,6 @@
                   </div>
                 </template>
               </div>
-              <!--
-              <div class="toolbar_bg bg-white list-shadow flex_center" style="position:absolute;left:0;bottom:0;right:0;height:45px; ">
-                <div class="flex_cell pl10 flex_left">
-                  <div class="clamp1">总计: <span class="color-red4">{{ $t('RMB') }}{{ summoney }}</span></div>
-                </div>
-                <div class="flex_center h_100 font16 bg-red color-white w100" @click="getcash">全部提现</div>
-              </div>
-            -->
             </template>
             <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
               <template v-if="disData2">
@@ -361,37 +353,6 @@ export default {
         self.tabdata3 = self.tabdata3.concat(retdata)
         self.disData3 = true
       })
-    },
-    getcash () {
-      const self = this
-      if (!self.eventIng) {
-        self.eventIng = true
-        self.$vux.confirm.show({
-          content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现吗？`,
-          onCancel () {
-            self.eventIng = false
-          },
-          onConfirm () {
-            self.$vux.loading.show()
-            self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, {fid: self.loginUser.fid}).then(function (res) {
-              let data = res.data
-              self.$vux.loading.hide()
-              self.$vux.toast.show({
-                text: data.error,
-                time: self.$util.delay(data.error),
-                onHide: function () {
-                  if (data.flag === 1) {
-                    self.totalPrice = '0.00'
-                    self.tabdata1 = []
-                    self.summoney = '0.00'
-                  }
-                  self.eventIng = false
-                }
-              })
-            })
-          }
-        })
-      }
     },
     popupexplain () {
       this.showpopup = !this.showpopup

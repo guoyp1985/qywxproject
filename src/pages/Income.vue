@@ -423,8 +423,10 @@ export default {
         } else {
           this.showMoneyPopup = false
           let cashstr = '微信'
+          let cashtype = 'lingqian'
           if (this.bankCash) {
             cashstr = '银行卡'
+            cashtype = 'yinhang'
           }
           if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
             self.$vux.confirm.show({
@@ -441,7 +443,7 @@ export default {
             onConfirm: () => {
               self.eventIng = true
               self.$vux.loading.show()
-              let postData = {}
+              let postData = {type: cashtype}
               if (self.query.appid) {
                 postData.appid = self.query.appid
               }

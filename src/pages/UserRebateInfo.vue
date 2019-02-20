@@ -335,8 +335,10 @@ export default {
         } else {
           this.showMoneyPopup = false
           let cashstr = '微信'
+          let cashtype = 'lingqian'
           if (this.bankCash) {
             cashstr = '银行卡'
+            cashtype = 'yinhang'
           }
           if (this.bankCash && (!this.loginUser.bankcardno || this.loginUser.bankcardno === '')) {
             self.eventIng = false
@@ -353,8 +355,11 @@ export default {
             content: `本次提现金额为<span class='color-orange'>${self.summoney}元</span>，确认提现到${cashstr}吗？`,
             onConfirm () {
               self.$vux.loading.show()
-              let subdata = { identity: 'seller' }
-              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, subdata).then(function (res) {
+              let postData = {type: cashtype}
+              if (self.query.appid) {
+                postData.appid = self.query.appid
+              }
+              self.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(function (res) {
                 let data = res.data
                 self.$vux.loading.hide()
                 self.$vux.toast.show({

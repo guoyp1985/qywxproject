@@ -295,7 +295,7 @@ export default {
       deliverdata: { delivercompany: '-1', delivercode: '' },
       autofixed: false,
       searchword1: '',
-      showTip: false,
+      showTip: false
     }
   },
   methods: {
