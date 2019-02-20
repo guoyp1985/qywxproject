@@ -1,7 +1,7 @@
 <template>
   <scroll-view ref="wraper" @scrollEnd="scrollEnd">
     <div slot="content" ref="content" class="data">
-        <div v-for="item in data" :key="item.id" class="item" @click="onCheck(item)">
+        <div v-for="(item, index) in data" :key="item.id" class="item" @click="onCheck(item)">
           <div :class="{'selected' : item.isChecked}" class="icon">
             <span class="al al-gou" v-if="item.isChecked"></span>
           </div>
@@ -75,7 +75,9 @@ export default {
       let height = contentHeight - wraperHeight
       if (Math.abs(y) >= height) {
         console.log('滑动到底部了！')
-        this.getData(this.module)
+        if (this.loaded) {
+          this.getData(this.module)
+        }
       }
     },
     getData (module) {
@@ -195,6 +197,7 @@ export default {
   .data{
     width: 100vw;
     padding-bottom: 45px;
+    touch-action: pan-y;
     .item{
       display: flex;
       width: 100%;
