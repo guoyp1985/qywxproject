@@ -8,7 +8,7 @@
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">正在进行</tab-item>
-        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">我的订单</tab-item>
+        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">已完成</tab-item>
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
