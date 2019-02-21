@@ -20,7 +20,7 @@
     </div>
     <div class="pagebottom db-flex b_top_after">
       <div class="flex_cell flex_center">
-        <router-link class="btn flex_center bg-theme color-white" to="/roomApply">我要赚钱</router-link>
+        <div class="btn flex_center bg-theme color-white" @click="toMoney">我要赚钱</div>
       </div>
       <div class="flex_cell flex_center">
         <router-link class="btn flex_center bg-orange color-white" to="/rooms">我要推广</router-link>
@@ -42,6 +42,13 @@ export default {
     }
   },
   methods: {
+    toMoney () {
+      if (this.query.frompage === 'rooms') {
+        this.$router.push('/roomList')
+      } else {
+        this.$router.push('/roomApply')
+      }
+    },
     closeTip () {
       this.showTip = false
       this.showMore = false
@@ -53,7 +60,7 @@ export default {
     },
     refresh () {
       this.loginUser = User.get()
-      this.query = this.$router.query
+      this.query = this.$route.query
     }
   },
   activated () {
