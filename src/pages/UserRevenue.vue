@@ -267,7 +267,11 @@ export default {
     }
   },
   activated () {
-    this.loginUser = User.get()
+    this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      const data = res.data
+      this.loginUser = data
+      User.set(this.loginUser)
+    })
     this.query = this.$route.query
     console.log(this.loginUser)
     if (this.query.appid) {
