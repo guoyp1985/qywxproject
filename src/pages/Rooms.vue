@@ -173,7 +173,7 @@ export default {
 }
 </script>
 <style lang="less">
-#rooms .s-container.s-container1{top:214px;}
+#rooms .s-container.s-container1{top:209px;}
 // #rooms .s-topbanner{top:170px !important;}
 #rooms .imgitem{
   position:relative;width:100%;padding-bottom:43%;box-shadow: 0px 0px 3px 1px #e6ebed;
@@ -186,7 +186,7 @@ export default {
   line-height: 44px;
   background: #ffffff;
   box-shadow: 0px 0px 3px 1px #e6ebed;
-  top:170px;
+  top:165px;
 }
 #rooms .sort-header span {
   position: relative;
