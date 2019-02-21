@@ -69,6 +69,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       isAccept: false,
       popupShow: false,
       product: {},
@@ -151,6 +152,7 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
     this.loadData()
   }
 }
