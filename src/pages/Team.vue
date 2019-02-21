@@ -256,9 +256,10 @@ export default {
           title: `申请卖家后才可加入团队,确定申请？`,
           onConfirm () {
             let url = '/pages/vip'
-            if (_this.query.applyback) {
-              let applyback = encodeURIComponent(_this.query.applyback)
-              url = `${url}?applyback=${applyback}`
+            if (_this.query.weburl) {
+              let weburl = encodeURIComponent(_this.query.weburl)
+              let webquery = encodeURIComponent(_this.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
             }
             _this.$wechat.miniProgram.navigateTo({url: url})
           }
