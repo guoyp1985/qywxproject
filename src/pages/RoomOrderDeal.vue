@@ -136,9 +136,13 @@ export default {
             this.$vux.toast.text(data.error, 'middle')
             if (data.flag === 1) {
               setTimeout(() => {
-                // this.$router.push({path: '/pay', query: {id: data.data, module: data.ordermodule}})
-                let backurl = encodeURIComponent(`/roomOrders`)
-                location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
+                if (this.query.from) {
+                  let url = '/pages/pay'
+                  this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.data}&module=${data.ordermodule}`})
+                } else {
+                  let backurl = encodeURIComponent(`/roomOrders`)
+                  location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
+                }
               }, 1000)
             }
           })
