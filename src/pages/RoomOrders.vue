@@ -8,13 +8,13 @@
     <div class="s-topbanner s-topbanner1">
       <tab class="b-tab" v-model="selectedIndex">
         <tab-item :selected="selectedIndex==0" @on-item-click="toggleTab">正在进行</tab-item>
-        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">已完成</tab-item>
+        <tab-item :selected="selectedIndex==1" @on-item-click="toggleTab">我的订单</tab-item>
       </tab>
     </div>
     <div ref="scrollContainer" class="s-container s-container1 scroll-container" @scroll="handleScroll">
       <div v-show="selectedIndex===0">
         <template v-if="showTab1">
-          <template v-if="!orders.length">
+          <template v-if="orders.length">
             <room-order-business v-for="(item, index) in orders" :key="index" :item="item"></room-order-business>
           </template>
           <template v-else>
