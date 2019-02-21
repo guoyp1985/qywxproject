@@ -38,7 +38,7 @@
       </div>
       <div class="traffic-price db-flex font14">
         <div class="flex_cell flex_left">
-          <span>共购买</span>
+          <span>已销售</span>
         </div>
         <div class="flex_cell flex_right">
           <span>{{item.saled}}件</span>
