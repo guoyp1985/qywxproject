@@ -22,10 +22,10 @@
     <group>
       <cell title="群人数" :value="room.members"></cell>
       <cell title="男/女/未知" :value="room.sexrate"></cell>
-      <cell title="地域分析" value="无"></cell>
+      <!-- <cell title="地域分析" value="无"></cell> -->
       <cell title="接单数" :value="room.sales"></cell>
       <cell title="群信用度" value="无"></cell>
-      <cell title="群属性" value="无"></cell>
+      <!-- <cell title="群属性" value="无"></cell> -->
       <cell title="群活跃度" :value="`${room.liveness}%`"></cell>
       <cell title="单次点击价格" :value="`${room.viewmoney}￥`"></cell>
       <cell title="更新时间" :value="room.dateline | formatDate"></cell>
