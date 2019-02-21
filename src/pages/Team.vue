@@ -19,8 +19,6 @@
               {{teamInfo.title}}
               <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
             </div>
-            <div style="word-break:break-word;">{{query}}</div>
-            <div>{{query.applyback}}</div>
             <div class="counts">
               <span>商品 {{teamInfo.product}}</span>
               <span>文章 {{teamInfo.news}}</span>
@@ -259,7 +257,8 @@ export default {
           onConfirm () {
             let url = '/pages/vip'
             if (_this.query.applyback) {
-              url = `${url}?applyback=${_this.query.applyback}`
+              let applyback = encodeURIComponent(_this.query.applyback)
+              url = `${url}?applyback=${applyback}`
             }
             _this.$wechat.miniProgram.navigateTo({url: url})
           }
