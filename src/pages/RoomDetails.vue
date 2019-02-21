@@ -6,14 +6,14 @@
 <template>
   <div id="room-details">
     <div class="room-profile db-flex">
-      <div class="room-avatar flex_cell flex-3 color-white">
+      <div class="room-avatar flex_cell flex-3 clamp1 color-white">
         <img class="v_middle imgcover" :src="room.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         <div class="room-topic">
-          <div class="font16">{{room.title}}</div>
+          <div class="font15">{{room.title}}</div>
           <div class="font13">综合评分: {{room.score}}分</div>
         </div>
       </div>
-      <div class="operation-area flex_cell flex_right">
+      <div class="operation-area flex_right" style="width:65px;">
         <router-link :to="{ name: 'tRoomOrderDeal', query: {id: room.id} }">
           <span class="font13">交易</span>
         </router-link>
