@@ -20,7 +20,7 @@
           <div class="room-topic">
             <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
             <div class="font13">
-              <div v-if="item.moderate !== 0">单数: {{item.sales}}</div>
+              <div v-if="item.moderate !== 0">接单数: {{item.sales}}</div>
               <div v-if="item.moderate === 2" class="color-orange">正在接单中</div>
             </div>
           </div>
