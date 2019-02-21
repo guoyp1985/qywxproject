@@ -85,35 +85,12 @@ import ListTags from '@/components/ListTags'
 import ListOthers from '@/components/ListOthers'
 import { User } from '#/storage'
 export default {
-  created () {
-    this.userInfo = User.get()
-    this.id = this.$route.query.id
-    this.getTeamInfo(this.id).then(res => {
-      console.log(res)
-      this.teamInfo = res.data.data
-    })
-  },
-  activated () {
-    console.log('in team activated')
-    if (!this.currentTab) {
-      this.$refs.listTags.tags = []
-      this.$refs.listTags.pagestart = 0
-      this.$refs.listTags.getTags()
-      this.getTeamInfo(this.id).then(res => {
-        this.teamInfo = res.data.data
-      })
-    } else {
-      this.$refs.listOthers.data = []
-      this.$refs.listOthers.pagestart = 0
-      this.$refs.listOthers.getData()
-      this.getTeamInfo(this.id).then(res => {
-        console.log(res)
-        this.teamInfo = res.data.data
-      })
-    }
+  components: {
+    ScrollView, ListTags, ListOthers
   },
   data () {
     return {
+      query: {},
       navs: ['素材', '商品', '活动', '文章', '培训'],
       teamInfo: {},
       currentTab: 0,
@@ -146,10 +123,33 @@ export default {
       return ret
     }
   },
-  components: {
-    ScrollView,
-    ListTags,
-    ListOthers
+  created () {
+    this.userInfo = User.get()
+    this.id = this.$route.query.id
+    this.getTeamInfo(this.id).then(res => {
+      console.log(res)
+      this.teamInfo = res.data.data
+    })
+  },
+  activated () {
+    console.log('in team activated')
+    this.query = this.$route.query
+    if (!this.currentTab) {
+      this.$refs.listTags.tags = []
+      this.$refs.listTags.pagestart = 0
+      this.$refs.listTags.getTags()
+      this.getTeamInfo(this.id).then(res => {
+        this.teamInfo = res.data.data
+      })
+    } else {
+      this.$refs.listOthers.data = []
+      this.$refs.listOthers.pagestart = 0
+      this.$refs.listOthers.getData()
+      this.getTeamInfo(this.id).then(res => {
+        console.log(res)
+        this.teamInfo = res.data.data
+      })
+    }
   },
   methods: {
     tabModal () {
@@ -255,8 +255,12 @@ export default {
         this.$vux.confirm.show({
           title: `申请卖家后才可加入团队,确定申请？`,
           onConfirm () {
-            let minibackurl = encodeURIComponent(`team?id=${_this.id}`)
-            _this.$wechat.miniProgram.navigateTo({url: `/pages/vip?minibackurl=${minibackurl}`})
+            let url = '/pages/vip'
+            if (_this.query.applyback) {
+              let applyback = encodeURIComponent(_this.query.applyback)
+              url = `${url}?applyback=${applyback}`
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
           }
         })
       } else {
