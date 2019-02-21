@@ -116,7 +116,9 @@ export default {
 .room-view {
   background-color: #ffffff;
   border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0px 0px 3px 1px #e6ebed;
 }
+.room-view:not(:first-child){margin-top:10px;}
 .room-view .room-info, .room-view .room-stats {
   padding: 10px;
   position: relative;
