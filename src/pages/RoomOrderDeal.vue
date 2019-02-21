@@ -138,8 +138,7 @@ export default {
             if (data.flag === 1) {
               setTimeout(() => {
                 if (this.query.from) {
-                  let url = '/pages/pay'
-                  this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.data}&module=${data.ordermodule}`})
+                  this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${data.data}&module=${data.ordermodule}&weburl=rooms`})
                 } else {
                   let backurl = encodeURIComponent(`/roomOrders`)
                   location.replace(`${ENV.Host}/#/pay?id=${data.data}&module=${data.ordermodule}&backurl=${backurl}`)
