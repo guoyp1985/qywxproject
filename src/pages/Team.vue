@@ -19,6 +19,7 @@
               {{teamInfo.title}}
               <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
             </div>
+            <div>{{query.applyback}}</div>
             <div class="counts">
               <span>商品 {{teamInfo.product}}</span>
               <span>文章 {{teamInfo.news}}</span>
