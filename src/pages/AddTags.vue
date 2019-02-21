@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div style="height:70px;"></div>
+    <!-- <div style="height:70px;"></div> -->
     <div class="submit-btn flex_center">
       <button @click="submit">发布</button>
     </div>
@@ -106,6 +106,7 @@ export default{
 
 <style lang="less" scoped="">
 .add-tags{
+  touch-action: none;
   position: relative;
   width: 100%;
   height: 110%;

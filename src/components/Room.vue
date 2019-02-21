@@ -41,20 +41,20 @@
             <span>男/女/未知:</span>
             <span>{{item.sexrate}}</span>
           </div>
-          <div>
+          <!-- <div>
             <span>地域分析:</span>
             <span>无</span>
-          </div>
+          </div> -->
         </div>
         <div class="flex_cell">
           <div>
             <span>群活跃度:</span>
             <span>{{item.liveness}}%</span>
           </div>
-          <div>
+          <!-- <div>
             <span>鉴定类型:</span>
             <span>无</span>
-          </div>
+          </div> -->
           <div>
             <span>综合评分:</span>
             <span>{{item.score}}分</span>
