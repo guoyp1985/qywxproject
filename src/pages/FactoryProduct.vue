@@ -104,7 +104,7 @@
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
       </div>
-      <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.uid > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
           <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
