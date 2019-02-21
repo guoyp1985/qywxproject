@@ -89,7 +89,7 @@ export default {
       this.$router.push({path: '/roomOrderDeal', query: params})
     },
     toStart () {
-      this.$router.push('/roomStart')
+      this.$router.push('/roomList')
     },
     sortHandle (i) {
       this.selectIndex = i
