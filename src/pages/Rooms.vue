@@ -63,7 +63,7 @@ export default {
   },
   data () {
     return {
-      selectIndex: -1,
+      selectIndex: 0,
       sortTotal: true,
       sortTime: null,
       sortSales: null,

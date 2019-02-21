@@ -18,7 +18,7 @@
             <room-order-business v-for="(item, index) in orders" :key="index" :item="item"></room-order-business>
           </template>
           <template v-else>
-            <div class="no-related-x color-gray">
+            <div class="color-gray align_center font16" style="padding:200px 20px;">
               <span>还没有订单信息</span>
             </div>
           </template>
@@ -30,7 +30,7 @@
             <room-order-business v-for="(item, index) in completedOrders" :key="index" :item="item"></room-order-business>
           </template>
           <template v-else>
-            <div class="no-related-x color-gray">
+            <div class="color-gray align_center font16" style="padding:200px 20px;">
               <span>还没有订单信息</span>
             </div>
           </template>

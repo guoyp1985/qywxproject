@@ -38,7 +38,7 @@
       </div>
       <div class="traffic-price db-flex font14">
         <div class="flex_cell flex_left">
-          <span>共购买</span>
+          <span>已销售</span>
         </div>
         <div class="flex_cell flex_right">
           <span>{{item.saled}}件</span>
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="operation-area">
-      <span v-if="item.flag === 1">当前总支出: <span class="color-red">￥{{item.alltotal}}</span></span>
+      <span v-if="item.flag === 1 || item.flag === 100">当前总支出: <span class="color-red">￥{{item.alltotal}}</span></span>
       <div v-if="item.flag === 0" @click="toPay">
         <x-button type="warn" mini>支付</x-button>
       </div>

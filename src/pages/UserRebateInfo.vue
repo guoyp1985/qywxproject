@@ -7,13 +7,13 @@
   <div id="user-rebate" class="containerarea font14">
     <div class="s-topbanner s-topbanner1">
       <tab v-model="selectedIndex" class="v-tab">
-        <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index">{{item}}</tab-item>
+        <tab-item v-for="(item,index) in tabtxts" :selected="index == selectedIndex" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
       </tab>
     </div>
     <div class="s-container s-container1">
-      <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-          <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+      <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+        <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+          <div v-show="(selectedIndex == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',0)">
             <template v-if="distabdata1">
               <div v-if="!tabdata1.length" class="flex_empty">
                 <div>
@@ -31,7 +31,7 @@
                       <div class="clamp1 color-999">{{item.username}}</div>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateFormat }}</div>
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
                     </div>
                   </div>
                 </div>
@@ -42,7 +42,7 @@
               </div>
             </template>
           </div>
-          <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+          <div v-show="(selectedIndex == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',1)">
             <template v-if="distabdata2">
               <div v-if="!tabdata2.length" class="flex_empty">
                 <div>
@@ -60,7 +60,7 @@
                       <div class="clamp1 color-999">{{item.username}}</div>
                     </div>
                     <div class="t-cell v_middle" style="color:inherit;">
-                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateFormat }}</div>
+                      <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline }}</div>
                     </div>
                   </div>
                 </div>
@@ -71,7 +71,7 @@
               </div>
             </template>
           </div>
-          <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
+          <div v-show="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',2)">
             <template v-if="distabdata3">
               <div v-if="!tabdata3.length" class="flex_empty">
                 <div>
@@ -98,8 +98,8 @@
               </div>
             </template>
           </div>
-        </swiper-item>
-      </swiper>
+        <!-- </swiper-item>
+      </swiper> -->
     </div>
     <div v-transfer-dom>
       <popup class="bg-white" v-model="showMoneyPopup" position="bottom">
@@ -257,6 +257,7 @@ export default {
       })
     },
     swiperChange (index) {
+      console.log('in swiperchange')
       if (index !== undefined) {
         this.selectedIndex = index
       }
@@ -400,6 +401,7 @@ export default {
       } else if (this.query.flag === '2' || this.query.flag === 2) {
         this.selectedIndex = 2
       }
+      console.log(this.selectedIndex)
       this.getData()
     }
   },

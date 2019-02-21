@@ -104,12 +104,12 @@
         </div>
         <div class="productarea scrollendarea scrollend" style="background-color:#f6f6f6;"></div>
       </div>
-      <div v-if="productdata.identity == 'retailer' || productdata.retailerinfo.id > 0" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
+      <div v-if="loginUser.isretailer" class="pagebottom list-shadow flex_center bg-white pl12 pr12 border-box">
         <div class="align_center flex_center flex_cell">
           <div class="btn-bottom-red flex_center" style="width:80%;" v-if="productdata.haveimport">已上架</div>
           <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
         </div>
-        <div class="align_center flex_center flex_cell" v-if="loginUser.isretailer">
+        <div class="align_center flex_center flex_cell">
           <router-link :to="{path: '/store', query:{wid: loginUser.uid}}" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</router-link>
         </div>
       </div>
@@ -428,7 +428,7 @@ export default {
               self.previewerPhotoarr = self.$util.previewerImgdata(self.contentphotoarr)
             }
             self.handelShare()
-            if (self.productdata.identity !== 'retailer') {
+            if (!self.loginUser.isretailer) {
               self.topcss = 'nobottom'
             }
             self.feeData = self.productdata.agentfee ? self.productdata.agentfee : []
