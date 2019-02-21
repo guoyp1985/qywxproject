@@ -18,7 +18,7 @@
               <div v-if="!tabdata1.length" class="flex_empty">
                 <div>
                   <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5 align_center">暂无待提现记录！</div>
+                  <div class="mt5 align_center">暂无待返点记录！</div>
                 </div>
               </div>
               <div v-else v-for="(item,index1) in tabdata1" :key="index1" class="scroll_item bg-white mt10 list-shadow">
@@ -47,7 +47,7 @@
               <div v-if="!tabdata2.length" class="flex_empty">
                 <div>
                   <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5 align_center">暂无待返点记录！</div>
+                  <div class="mt5 align_center">暂无已返点记录！</div>
                 </div>
               </div>
               <div v-else v-for="(item,index1) in tabdata2" :key="index1" class="scroll_item bg-white mt10 list-shadow">
@@ -76,7 +76,7 @@
               <div v-if="!tabdata3.length" class="flex_empty">
                 <div>
                   <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                  <div class="mt5 align_center">暂无已提现记录！</div>
+                  <div class="mt5 align_center">暂无提现记录！</div>
                 </div>
               </div>
               <div v-else v-for="(item,index1) in tabdata3" :key="index1" class="scroll_item bg-white mt10 list-shadow">
@@ -139,7 +139,7 @@ export default {
   data () {
     return {
       query: {},
-      tabtxts: [ '待结算', '已结算', '提现明细' ],
+      tabtxts: [ '待返点', '已返点', '提现明细' ],
       rebateInfo: {},
       total: '0.00',
       selectedIndex: 0,

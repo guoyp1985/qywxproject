@@ -59,7 +59,7 @@ export default {
   data () {
     return {
       selectIndex: -1,
-      sortTotal: null,
+      sortTotal: true,
       sortTime: null,
       sortSales: null,
       sortPrice: null,
@@ -123,14 +123,27 @@ export default {
         callback: () => {
           if (_this.rooms.length === (_this.pageStart + 1) * _this.limit) {
             _this.pageStart++
-            _this.loadData()
+            switch (_this.selectIndex) {
+              case 0:
+                this.loadData('score', this.sortTotal)
+                break
+              case 1:
+                this.loadData('dateline', this.sortTime)
+                break
+              case 2:
+                this.loadData('sales', this.sortSales)
+                break
+              case 3:
+                this.loadData('viewmoney', this.sortPrice)
+                break
+            }
+            // _this.loadData()
           }
         }
       })
     },
     refresh () {
-      // this.loadData()
-      this.sortHandle(0)
+      this.loadData('score', true)
     },
     loadData (sortKey, isAsc) {
       const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'desc' : 'asc', limit: this.limit, pagestart: this.pageStart}
@@ -140,7 +153,6 @@ export default {
         this.$vux.loading.hide()
         if (res.data.flag === 1) {
           const data = res.data.data
-          data.length && this.pageStart++
           this.rooms = this.rooms.concat(data)
           this.loadCompleted = true
         }

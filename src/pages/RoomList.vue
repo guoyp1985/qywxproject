@@ -22,7 +22,10 @@
           </template>
           <template v-else>
             <div class="flex_empty">
-              <router-link :to="{name: 'tRoomApply'}">你还没有添加微信群，点击此处添加></router-link>
+              <div>
+                <div class="align_center">你还没有添加微信群</div>
+                <router-link class="db align_center mt10 color-theme" :to="{name: 'tRoomApply'}">点击添加微信群 ></router-link>
+              </div>
             </div>
           </template>
         </template>
@@ -43,7 +46,7 @@
     <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
       <span>添加微信群</span>
     </router-link>
-    <router-link v-if="selectedIndex===1" :to="{ name: 'tUserRebateInfo'}" class="s-bottom submit-button color-white">
+    <router-link v-if="selectedIndex===1" to="/userRevenue" class="s-bottom submit-button color-white">
       <span>我的收入</span>
     </router-link>
     <!-- <div v-if="selectedIndex===1" class="s-bottom db-flex income-area">
@@ -218,7 +221,7 @@ export default {
       switch (status) {
         case 0:
           confirmTitle = '是否重新评估?'
-          conCon = '<div style="font-size:12px;text-align:center;">重新评估过程中，正常接单</div><div style="font-size:12px;text-align:center;margin-top:5px;">如不需要，请手动关闭</div>'
+          conCon = '<div style="font-size:12px;text-align:center;">重新评估过程中，不可改变群状态</div><div style="font-size:12px;text-align:center;margin-top:5px;">如不需要接单，请先暂停接单再重新评估</div>'
           break
         case 2:
           break

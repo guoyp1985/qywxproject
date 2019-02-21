@@ -16,7 +16,7 @@
     </div>
     <div class="btom-content">
       <div class="list flex_table mt20" @click="toIncome">
-        <div class="align_left">待结算金额</div>
+        <div class="align_left">待返点金额</div>
         <div class="moneyNum">{{loginUser.pendingmoney}}元<span class="color-gray pl10">></span></div>
       </div>
       <div class="pl20 pt10 pb10 color-gray font12">等待订单确认收货后方可结算并提现</div>
@@ -269,6 +269,7 @@ export default {
   activated () {
     this.loginUser = User.get()
     this.query = this.$route.query
+    console.log(this.loginUser)
     if (this.query.appid) {
       this.fromPage = encodeURIComponent(`/userRevenue?appid=${this.query.appid}`)
     } else {
