@@ -5,7 +5,7 @@
 */
 <template>
   <div id="rooms" class="containerarea font14 s-havebottom">
-    <div class="imgitem">
+    <div class="imgitem" @click="toStart">
       <div class="inner">
         <img src="../assets/images/quntui.png" />
       </div>
@@ -80,6 +80,9 @@ export default {
     }
   },
   methods: {
+    toStart () {
+      this.$router.push('/roomStart')
+    },
     sortHandle (i) {
       this.selectIndex = i
       this.loadCompleted = false
