@@ -38,10 +38,10 @@
               <span>男/女/未知:</span>
               <span>{{item.sexrate}}</span>
             </div>
-            <div>
+            <!-- <div>
               <span>地域分析:</span>
               <span>无</span>
-            </div>
+            </div> -->
             <div>
               <span>接单数:</span>
               <span>{{item.sales}}</span>
@@ -52,10 +52,10 @@
               <span>群活跃度:</span>
               <span>{{item.liveness}}%</span>
             </div>
-            <div>
+            <!-- <div>
               <span>鉴定类型:</span>
               <span>无</span>
-            </div>
+            </div> -->
             <div>
               <span>综合评分:</span>
               <span>{{item.score}}分</span>
@@ -116,7 +116,9 @@ export default {
 .room-view {
   background-color: #ffffff;
   border-bottom: 1px solid #f0f0f0;
+  box-shadow: 0px 0px 3px 1px #e6ebed;
 }
+.room-view:not(:first-child){margin-top:10px;}
 .room-view .room-info, .room-view .room-stats {
   padding: 10px;
   position: relative;
