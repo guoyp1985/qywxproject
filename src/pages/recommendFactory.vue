@@ -32,48 +32,25 @@
             <div v-if="!tabData1.length" class="emptyitem flex_center">
               <div>暂无推荐</div>
             </div>
-            <div v-else class="scroll_list ">
-              <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
-                <div class="t-table bg-white pt10 pb10">
-          				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
-                    <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-                  </div>
-            			<div class="t-cell v_middle">
-                    <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                    <!-- <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div> -->
-            			</div>
-                  <div class="t-cell v_middle w100">
-                    <div class="btnicon bg-theme color-white font12">推荐好友加盟</div>
-                  </div>
-            		</div>
-              </router-link>
-            </div>
+            <template v-else>
+              <div class="flex_left color-gray font12">我的推荐（共<span class="color-theme">{{count}}</span>人）</div>
+              <div class="scroll_list ">
+                <div v-for="(item,index) in tabData1" :key="item.id" class="scroll_item pl10 pr10 border-box font14 bg-white db b_bottom_after " style="color:inherit;">
+                  <div class="t-table bg-white pt10 pb10">
+            				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                      <img class="v_middle imgcover" style="width:60px;height:60px;" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
+                    </div>
+              			<div class="t-cell v_middle">
+                      <div class="clamp1 font16 pr10 color-lightgray">{{item.linkman}}</div>
+                      <div class="color-gray font12 mt5">{{item.dateline | dateFormat}}</div>
+              			</div>
+              		</div>
+                </div>
+              </div>
+            </template>
           </template>
         </div>
       </div>
-    </div>
-    <div v-transfer-dom>
-      <popup class="menuwrap" v-model="showPopup1">
-        <div class="popup0">
-          <div class="list" v-if="clickData">
-            <div class="item">
-              <div class="inner" @click="clickPopup('push')">设置管理员</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('set')">设置</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('edit')">编辑</div>
-            </div>
-            <div class="item">
-              <div class="inner" @click="clickPopup('retailer')">卖家</div>
-            </div>
-            <div class="item close mt10" @click="clickPopup('row.key')">
-              <div class="inner">{{ $t('Cancel txt') }}</div>
-            </div>
-          </div>
-        </div>
-      </popup>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="showQrcode" height="100%">
@@ -100,14 +77,11 @@ Add factory:
 </i18n>
 
 <script>
-import { TransferDom, Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import {TransferDom, Popup} from 'vux'
 import ENV from 'env'
+import Time from '#/time'
 import { User } from '#/storage'
-import Subscribe from '@/components/Subscribe'
-import ApplyTip from '@/components/ApplyTip'
 
-let pageStart1 = 0
-let pageStart2 = 0
 const limit = 10
 
 export default {
@@ -115,7 +89,12 @@ export default {
     TransferDom
   },
   components: {
-    Popup, Confirm, CheckIcon, XImg, Tab, TabItem, Swiper, SwiperItem, Subscribe, ApplyTip
+    Popup
+  },
+  filters: {
+    dateFormat (value) {
+      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
+    }
   },
   data () {
     return {
@@ -124,17 +103,12 @@ export default {
       query: {},
       loginUser: {},
       factoryInfo: {},
-      tabtxts: [ '已分销', '未分销' ],
-      selectedIndex: 0,
+      pageStart1: 0,
       tabData1: [],
-      tabData2: [],
       disTabData1: false,
-      disTabData2: false,
-      showPopup1: false,
-      clickData: {},
-      clickIndex: 0,
       showQrcode: false,
-      recommendQrcode: null
+      recommendQrcode: null,
+      count: 0
     }
   },
   methods: {
@@ -173,48 +147,17 @@ export default {
       self.$util.scrollEvent({
         element: scrollarea,
         callback: function () {
-          if (index === 0) {
-            if (self.tabData1.length === (pageStart1 + 1) * limit) {
-              pageStart1++
-              self.$vux.loading.show()
-              self.getData1()
-            }
-          } else if (index === 1) {
-            if (self.tabData2.length === (pageStart2 + 1) * limit) {
-              pageStart2++
-              self.$vux.loading.show()
-              self.getData2()
-            }
+          if (self.tabData1.length === (this.pageStart1 + 1) * limit) {
+            self.pageStart1++
+            self.$vux.loading.show()
+            self.getData1()
           }
         }
       })
     },
-    swiperChange (index) {
-      if (index !== undefined) {
-        this.selectedIndex = index
-      }
-      switch (this.selectedIndex) {
-        case 0:
-          if (this.tabData1.length < limit) {
-            pageStart1 = 0
-            this.disTabData1 = false
-            this.tabData1 = []
-            this.getData1()
-          }
-          break
-        case 1:
-          if (this.tabData2.length < limit) {
-            pageStart2 = 0
-            this.disTabData2 = false
-            this.tabData2 = []
-            this.getData2()
-          }
-          break
-      }
-    },
     getData1 () {
       const self = this
-      const params = { pagestart: pageStart1, limit: limit }
+      const params = { pagestart: this.pageStart1, limit: limit }
       this.$http.post(`${ENV.BokaApi}/api/retailer/factoryList`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -224,26 +167,19 @@ export default {
         self.disTabData1 = true
       })
     },
-    getData2 () {
-      const self = this
-      const params = { params: { pagestart: pageStart2, limit: limit } }
-      this.$http.get(`${ENV.BokaApi}/api/factory/list`, params)
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.tabData2 = self.tabData2.concat(retdata)
-        self.disTabData2 = true
-      })
-    },
-    initContainer () {
+    initData () {
+      this.recommendQrcode = null
+      this.disTabData1 = false
+      this.pageStart1 = 0
+      this.tabData1 = []
     },
     refresh () {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
-      this.recommendQrcode = null
+      this.initData()
+      this.getData1()
       self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
         params: { fid: self.query.id }
       }).then(res => {
