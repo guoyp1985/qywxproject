@@ -33,7 +33,7 @@
               <div>暂无推荐</div>
             </div>
             <template v-else>
-              <div class="flex_left color-gray font12">我的推荐（共<span class="color-theme">{{count}}</span>人）</div>
+              <div class="flex_left color-gray font12">我的推荐（共<span class="color-theme">{{countdata}}</span>人）</div>
               <div class="scroll_list ">
                 <div v-for="(item,index) in tabData1" :key="item.id" class="scroll_item pl10 pr10 border-box font14 bg-white db b_bottom_after " style="color:inherit;">
                   <div class="t-table bg-white pt10 pb10">
@@ -108,7 +108,7 @@ export default {
       disTabData1: false,
       showQrcode: false,
       recommendQrcode: null,
-      count: 0
+      countdata: 0
     }
   },
   methods: {
@@ -163,6 +163,7 @@ export default {
         self.$vux.loading.hide()
         const data = res.data
         const retdata = data.data ? data.data : data
+        this.countdata = data.countdata
         self.tabData1 = self.tabData1.concat(retdata)
         self.disTabData1 = true
       })
