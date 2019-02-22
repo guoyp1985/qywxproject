@@ -24,7 +24,7 @@
             <div class="flex_empty">
               <div>
                 <div class="align_center">你还没有添加微信群</div>
-                <router-link class="db align_center mt10 color-theme" :to="{name: 'tRoomApply'}">点击添加微信群 ></router-link>
+                <div class="db align_center mt10 color-theme" @click="toAdd">点击添加微信群 ></div>
               </div>
             </div>
           </template>
@@ -43,7 +43,7 @@
         </template>
       </template>
     </div>
-    <div v-if="selectedIndex===0" @click="toAdd" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
+    <div v-if="selectedIndex===0" @click="toAdd" class="s-bottom submit-button color-white">
       <span>添加微信群</span>
     </div>
     <router-link v-if="selectedIndex===1" to="/userRevenue" class="s-bottom submit-button color-white">
