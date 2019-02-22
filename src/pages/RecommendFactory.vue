@@ -37,7 +37,7 @@
               <div class="scroll_list ">
                 <div v-for="(item,index) in tabData1" :key="item.id" class="scroll_item pl10 pr10 border-box font14 bg-white db b_bottom_after " style="color:inherit;">
                   <div class="t-table bg-white pt10 pb10">
-            				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+            				<div class="t-cell v_middle w70" v-if="item.avatar && item.avatar != ''">
                       <img class="v_middle imgcover" style="width:60px;height:60px;" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </div>
               			<div class="t-cell v_middle">
