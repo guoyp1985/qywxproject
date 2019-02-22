@@ -190,7 +190,6 @@ export default {
 </script>
 <style lang="less">
 // #rooms .s-container.s-container1{top:209px;}
-// #rooms .s-topbanner{top:170px !important;}
 #rooms .imgitem{
   position:relative;width:100%;padding-bottom:43%;box-shadow: 0px 0px 3px 1px #e6ebed;
   .inner{position:absolute;top:0;bottom:0;left:0;right:0;}
