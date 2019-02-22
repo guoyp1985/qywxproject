@@ -47,9 +47,9 @@
         </template>
       </template>
     </div>
-    <router-link class="s-bottom submit-button color-white" :to="{ name: 'tRoomOrders' }">
+    <div class="s-bottom submit-button color-white" @click="toMyOrder">
       <span>我的订单</span>
-    </router-link>
+    </div>
   </div>
 </template>
 <script>
@@ -81,6 +81,13 @@ export default {
     }
   },
   methods: {
+    toMyOrder () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomOrders', query: params})
+    },
     toOrderDeal (item) {
       let params = {id: item.id}
       if (this.query.from) {

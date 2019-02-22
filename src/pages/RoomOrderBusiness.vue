@@ -95,6 +95,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       item: {}
     }
   },
@@ -110,8 +111,12 @@ export default {
   },
   methods: {
     toPay () {
-      console.log('fjty')
-      location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders`)
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
+      } else {
+        let backurl = encodeURIComponent(`/roomOrders`)
+        location.replace(`${ENV.Host}/#/pay?id=${this.item.orderid}&module=payorders&backurl=${backurl}`)
+      }
     },
     loadData () {
       const id = this.$route.query.id
@@ -127,6 +132,7 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
     this.loadData()
   }
 }
