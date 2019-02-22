@@ -1,7 +1,7 @@
 <template>
   <div class="containerarea bg-page font14 factory-list-page nobottom notop">
     <apply-tip v-if="showApply"></apply-tip>
-    <subscribe v-if="loginUser.subscribe != 1"></subscribe>
+    <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <template v-if="showContainer">
       <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
         <template v-if="disTabData1">
@@ -184,14 +184,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
-      if (this.loginUser && this.loginUser.subscribe === 1) {
-        // if (self.loginUser.isretailer === 2) {
-        //   this.$vux.loading.hide()
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // }
+      if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
         if (!this.loginUser.isretailer) {
           this.$vux.loading.hide()
           self.initContainer()
