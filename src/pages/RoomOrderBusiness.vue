@@ -13,7 +13,7 @@
         <span>{{statusName}}</span>
       </div>
     </div>
-    <router-link class="order-desc db-flex" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid} }">
+    <div class="order-desc db-flex" @click="toProduct">
       <div class="flex_cell">
         <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         <div class="order-info">
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-    </router-link>
+    </div>
     <template v-if="item.flag === 1 || item.flag === 100">
       <div class="traffic-price db-flex font14">
         <div class="flex_cell flex_left">
@@ -110,6 +110,13 @@ export default {
     }
   },
   methods: {
+    toProduct () {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${this.item.pid}&wid=${this.item.wid}`})
+      } else {
+        this.$router.push({path: '/product', query: {id: this.item.pid, wid: this.item.wid}})
+      }
+    },
     toPay () {
       if (this.query.from) {
         this.$wechat.miniProgram.navigateTo({url: `/packageB/pages/pay?id=${this.item.orderid}&module=payorders&weburl=roomOrders`})
