@@ -21,7 +21,7 @@
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
           <div v-if="tabData1.length == 0" class="emptyitem flex_center flex_cell">暂无商品</div>
-          <router-link v-else v-for="(item,index) in tabData1" :key="index" :to="{path: '/factoryProduct', query: {id: item.id, fid: query.id}}" class="bk-productitem scroll_item font14 db ">
+          <div v-else v-for="(item,index) in tabData1" :key="index" @click="toProduct"  class="bk-productitem scroll_item font14 db ">
         		<div class="inner list-shadow">
         			<div class="picarea">
         				<div class="pic">
@@ -38,7 +38,7 @@
         				</div>
         			</div>
         		</div>
-          </router-link>
+          </div>
         </div>
       </template>
       <template v-if="selectedIndex == 1">
@@ -143,9 +143,16 @@ export default {
       this.disTabData2 = false
       this.showBottom = false
     },
+    toProduct (item) {
+      let params = {id: item.id, fid: this.query.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/factoryProduct', query: params})
+    },
     toStore () {
       if (this.query.from) {
-        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?id=${this.loginUser.uid}`})
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
       } else {
         this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
       }
