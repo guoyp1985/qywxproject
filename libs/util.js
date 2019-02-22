@@ -529,7 +529,6 @@ Util.install = function (Vue, options) {
                     })
                   },
                   fail: function (res2) {
-                    alert(JSON.stringify(res2))
                     Vue.$vux.toast.show({
                       text: '上传失败'
                     })
