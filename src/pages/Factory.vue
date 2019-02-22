@@ -69,7 +69,7 @@
             <div class="flex_center btn-bottom-red" style="width:85%;" @click="upAll('product')">一键上架商品</div>
           </div>
           <div class="align_center flex_center flex_cell">
-            <router-link :to="{path: '/store', query:{wid: loginUser.uid}}" class="flex_center btn-bottom-orange" style="width:85%;">我的店铺</router-link>
+            <div class="flex_center btn-bottom-orange" style="width:85%;" @click="toStore">我的店铺</div>
           </div>
         </template>
         <div v-if="tabData2 && tabData2.length > 0 && selectedIndex == 1" class="align_center flex_center flex_cell">
@@ -142,6 +142,13 @@ export default {
       this.disTabData1 = false
       this.disTabData2 = false
       this.showBottom = false
+    },
+    toStore () {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?id=${this.loginUser.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
+      }
     },
     joinEvent () {
       const self = this
