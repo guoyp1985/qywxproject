@@ -23,7 +23,7 @@
         <div class="btn flex_center bg-theme color-white" @click="toMoney">我要赚钱</div>
       </div>
       <div class="flex_cell flex_center">
-        <router-link class="btn flex_center bg-orange color-white" to="/rooms">我要推广</router-link>
+        <div class="btn flex_center bg-orange color-white" @click="toRooms">我要推广</div>
       </div>
     </div> -->
   </div>
@@ -42,11 +42,22 @@ export default {
     }
   },
   methods: {
+    toRooms () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/rooms', query: params})
+    },
     toMoney () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
       if (this.query.frompage === 'rooms') {
-        this.$router.push('/roomList')
+        this.$router.push({path: '/roomList', query: params})
       } else {
-        this.$router.push('/roomApply')
+        this.$router.push({path: '/roomApply', query: params})
       }
     },
     closeTip () {
