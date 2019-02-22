@@ -60,6 +60,15 @@ export default {
     }
   },
   methods: {
+    initData () {
+      this.selectedIndex = 0
+      this.showTab1 = false
+      this.showTab2 = false
+      this.pageStart1 = 0
+      this.pageStart2 = 0
+      this.orders = []
+      this.completedOrders = []
+    },
     toggleTab () {
       switch (this.selectedIndex) {
         case 0:
@@ -132,6 +141,7 @@ export default {
     }
   },
   activated () {
+    this.initData()
     this.refresh()
   }
 }
