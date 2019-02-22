@@ -13,7 +13,7 @@
         <div class="flex_cell flex_left">
           <div class="w_100">
             <div class="w_100 clamp1 font16">{{factoryInfo.title}}</div>
-            <div v-if="shareUser.uid" class="w_100 clamp1 color-theme font12">推荐人: {{shareUser.linkman}}</div>
+            <div v-if="shareUser.uid && !isJoin && disShareUser" class="w_100 clamp1 color-theme font12">推荐人: {{shareUser.linkman}}</div>
           </div>
         </div>
       </div>
@@ -156,7 +156,8 @@ export default {
       isJoin: false,
       previewerPhotoarr: [],
       wxPhotoArr: [],
-      shareUser: {}
+      shareUser: {},
+      disShareUser: false
     }
   },
   filters: {
@@ -380,6 +381,7 @@ export default {
             break
           }
         }
+        this.disShareUser = true
         return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
           params: {fid: this.fid}
         })

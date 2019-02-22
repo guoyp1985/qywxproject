@@ -130,7 +130,11 @@ export default {
     },
     clickMore () {
       this.showTip = false
-      this.$router.push('/roomStart')
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomStart', query: params})
     },
     photoCallback (data) {
       if (data.flag === 1) {
