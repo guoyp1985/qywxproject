@@ -5,7 +5,7 @@
 */
 <template>
   <div class="containerarea font14 room-start-page bg-white">
-    <div class="pagemiddle padding10" style="top:0;color:#666;">
+    <div class="pagemiddle padding10" style="top:0;color:#666;bottom:0;">
       <div class="color-theme font16">1、群群推是什么？</div>
       <div class="mt10">答：1个群做销售，能力有限；多个群帮你做销售，能力无限！群群推通过微信群价值评估，将群主与需要推广的卖家建立联系，最终达到双方受益，合作共赢的目的。</div>
       <div class="color-theme mt10 font16">我是群主：</div>
@@ -81,8 +81,8 @@ export default {
 </script>
 <style lang="less">
 .room-start-page{
-  .pagebottom{
-    .btn{width:80%;margin:0 auto;height:35px;border-radius:30px;}
-  }
+  // .pagebottom{
+  //   .btn{width:80%;margin:0 auto;height:35px;border-radius:30px;}
+  // }
 }
 </style>
