@@ -52,21 +52,13 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showQrcode" height="100%">
-        <div class="popup1 font14">
-          <div class="popup-top flex_center">厂家推荐码</div>
-          <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
-            <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
-          </div>
-          <div class="flex_center border-box pl10 pr10 color-red font12" style="position:absolute;left:0;right:0;bottom:46px;height:40px;">
-            <div>保存图片发送给好友，邀请加盟</div>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell h_100 flex_center bg-gray color-white" @click="closeQrcode">{{ $t('Close') }}</div>
-          </div>
+    <div v-if="showQrcode" class="auto-modal flex_center">
+      <div class="modal-inner border-box" style="width:80%;">
+        <img ref="joinQrcode" class="qrcode" :src="recommendQrcode" style="max-width:100%;max-height:100%;display:block;" />
+        <div class="close-area flex_center" @click="closeQrcode">
+          <i class="al al-close"></i>
         </div>
-      </popup>
+      </div>
     </div>
   </div>
 </template>
@@ -117,7 +109,6 @@ export default {
     },
     createQrcode () {
       const self = this
-      self.showQrcode = true
       if (!this.recommendQrcode) {
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/retailer/createFactoryPoster`, {
@@ -127,8 +118,9 @@ export default {
           self.$vux.loading.hide()
           if (data.flag === 1) {
             this.recommendQrcode = data.data
-            let img = self.$refs.joinQrcode[0] ? self.$refs.joinQrcode[0] : self.$refs.joinQrcode
-            img.src = this.recommendQrcode
+            // let img = self.$refs.joinQrcode[0] ? self.$refs.joinQrcode[0] : self.$refs.joinQrcode
+            // img.src = this.recommendQrcode
+            self.showQrcode = true
           } else {
             self.$vux.toast.show({
               text: data.error,
@@ -136,6 +128,8 @@ export default {
             })
           }
         })
+      } else {
+        self.showQrcode = true
       }
     },
     closeQrcode () {
