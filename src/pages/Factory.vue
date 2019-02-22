@@ -21,7 +21,7 @@
       <template v-if="selectedIndex == 0">
         <div v-if="disTabData1" class="productlist squarepic pb10">
           <div v-if="tabData1.length == 0" class="emptyitem flex_center flex_cell">暂无商品</div>
-          <div v-else v-for="(item,index) in tabData1" :key="index" @click="toProduct"  class="bk-productitem scroll_item font14 db ">
+          <div v-else v-for="(item,index) in tabData1" :key="index" @click="toProduct(item)"  class="bk-productitem scroll_item font14 db ">
         		<div class="inner list-shadow">
         			<div class="picarea">
         				<div class="pic">
