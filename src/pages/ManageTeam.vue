@@ -159,7 +159,7 @@ export default {
     disManger (setuid, index) {
       let _this = this
       _this.$vux.confirm.show({
-        title: `确定设置为管理员吗？`,
+        title: `确定取消管理员吗？`,
         onConfirm: () => {
           _this.$http({
             url: `${Env.BokaApi}/api/team/teamset`,
@@ -170,6 +170,8 @@ export default {
               uploade: setuid
             }
           }).then(res => {
+            this.tipMessageShow1 = true
+            this.tipMessageShow2 = true
             this.pagestart = 0
             this.members = []
             this.getMembers()
@@ -193,6 +195,8 @@ export default {
           }).then(res => {
             this.pagestart = 0
             this.members = []
+            this.tipMessageShow1 = true
+            this.tipMessageShow2 = true
             this.getMembers()
           })
         }
