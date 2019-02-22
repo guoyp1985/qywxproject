@@ -157,8 +157,8 @@ export default {
     },
     getData1 () {
       const self = this
-      const params = { pagestart: this.pageStart1, limit: limit }
-      this.$http.post(`${ENV.BokaApi}/api/retailer/factoryList`, params)
+      const params = {fid: this.query.id, pagestart: this.pageStart1, limit: limit}
+      this.$http.post(`${ENV.BokaApi}/api/factory/myRecommend`, params)
       .then(res => {
         self.$vux.loading.hide()
         const data = res.data
