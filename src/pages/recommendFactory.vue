@@ -115,7 +115,8 @@ export default {
       showPopup1: false,
       clickData: {},
       clickIndex: 0,
-      showQrcode: false
+      showQrcode: false,
+      recommendQrcode: null
     }
   },
   methods: {
@@ -125,22 +126,25 @@ export default {
     createQrcode () {
       const self = this
       self.showQrcode = true
-      self.$vux.loading.show()
-      self.$http.post(`${ENV.BokaApi}/api/retailer/createFactoryPoster`, {
-        fid: self.query.id
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        if (data.flag === 1) {
-          let img = self.$refs.joinQrcode[0] ? self.$refs.joinQrcode[0] : self.$refs.joinQrcode
-          img.src = data.data
-        } else {
-          self.$vux.toast.show({
-            text: data.error,
-            time: self.$util.delay(data.error)
-          })
-        }
-      })
+      if (!this.recommendQrcode) {
+        self.$vux.loading.show()
+        self.$http.post(`${ENV.BokaApi}/api/retailer/createFactoryPoster`, {
+          fid: self.query.id
+        }).then(function (res) {
+          let data = res.data
+          self.$vux.loading.hide()
+          if (data.flag === 1) {
+            this.recommendQrcode = data.data
+            let img = self.$refs.joinQrcode[0] ? self.$refs.joinQrcode[0] : self.$refs.joinQrcode
+            img.src = this.recommendQrcode
+          } else {
+            self.$vux.toast.show({
+              text: data.error,
+              time: self.$util.delay(data.error)
+            })
+          }
+        })
+      }
     },
     closeQrcode () {
       this.showQrcode = false
@@ -221,6 +225,7 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.recommendQrcode = null
       self.$http.get(`${ENV.BokaApi}/api/factory/info`, {
         params: { fid: self.query.id }
       }).then(res => {
