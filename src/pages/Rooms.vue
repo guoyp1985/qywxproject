@@ -5,11 +5,11 @@
 */
 <template>
   <div id="rooms" class="containerarea font14 s-havebottom">
-    <div class="imgitem" @click="toStart">
+    <!-- <div class="imgitem" @click="toStart">
       <div class="inner">
         <img src="../assets/images/quntui.png" />
       </div>
-    </div>
+    </div> -->
     <div class="s-topbanner s-topbanner1 sort-header db-flex"><!-- s-topbanner -->
       <div class="flex_cell sort-cell" :class="{'sorted': selectIndex === 0}" @click="sortHandle(0)">
         <span :class="{'desc': sortTotal === true, 'asc': sortTotal === false}">综合</span>
@@ -189,7 +189,7 @@ export default {
 }
 </script>
 <style lang="less">
-#rooms .s-container.s-container1{top:209px;}
+// #rooms .s-container.s-container1{top:209px;}
 // #rooms .s-topbanner{top:170px !important;}
 #rooms .imgitem{
   position:relative;width:100%;padding-bottom:43%;box-shadow: 0px 0px 3px 1px #e6ebed;
@@ -201,8 +201,8 @@ export default {
   text-align: center;
   line-height: 44px;
   background: #ffffff;
-  box-shadow: 0px 0px 3px 1px #e6ebed;
-  top:165px;
+  // box-shadow: 0px 0px 3px 1px #e6ebed;
+  // top:165px;
 }
 #rooms .sort-header span {
   position: relative;

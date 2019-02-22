@@ -221,6 +221,9 @@ export default {
               _this.members.splice(index, 1)
               _this.count--
               _this.countNormal--
+              if (_this.countNormal === 0) {
+                _this.tipMessageShow2 = true
+              }
             }
           })
         }
@@ -245,6 +248,9 @@ export default {
               _this.managers.splice(index, 1)
               _this.count--
               _this.countManager--
+              if (_this.countNormal === 0) {
+                _this.tipMessageShow1 = true
+              }
             }
           })
         }

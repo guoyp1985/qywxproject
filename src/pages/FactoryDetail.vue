@@ -195,6 +195,9 @@ export default {
             if (self.query.uploader) {
               params.uploader = self.query.uploader
             }
+            if (self.query.wid) {
+              params.wid = self.query.wid
+            }
             self.$router.push({path: '/centerSales', query: params})
           }
         })

@@ -13,7 +13,7 @@
         <span>{{statusName}}</span>
       </div>
     </div>
-    <router-link class="order-desc db-flex w_100" :to="{ name: 'tProduct', query: {id: item.pid, wid: item.wid, wechatorderid: item.id} }">
+    <div class="order-desc db-flex w_100" @click="toProduct(item)">
       <div class="pic flex_left">
         <img class="v_middle imgcover" :src="item.product_photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
       </div>
@@ -31,7 +31,7 @@
       <div class="w100 flex_center">
         <div class="qbtn bg-theme color-white font12">分享到群</div>
       </div>
-    </router-link>
+    </div>
     <template v-if="item.flag === 1 || item.flag === 100">
       <div class="traffic-price db-flex font14">
         <div class="flex_cell flex_left">
@@ -109,6 +109,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       item: {}
     }
   },
@@ -123,6 +124,13 @@ export default {
     }
   },
   methods: {
+    toProduct (item) {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.pid}&wid=${item.wid}&wechatorderid=${item.id}`})
+      } else {
+        this.$router.push({path: '/product', query: {id: item.pid, wid: item.wid, wechatorderid: item.id}})
+      }
+    },
     loadData () {
       const id = this.$route.query.id
       this.$vux.loading.show()
@@ -137,6 +145,7 @@ export default {
     }
   },
   activated () {
+    this.query = this.$route.query
     this.loadData()
   }
 }
