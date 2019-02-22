@@ -43,10 +43,14 @@ export default {
   },
   methods: {
     toMoney () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
       if (this.query.frompage === 'rooms') {
-        this.$router.push('/roomList')
+        this.$router.push({path: '/roomList', query: params})
       } else {
-        this.$router.push('/roomApply')
+        this.$router.push({path: '/roomApply', query: params})
       }
     },
     closeTip () {
