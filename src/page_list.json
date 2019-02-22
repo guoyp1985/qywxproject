@@ -82,6 +82,7 @@
   "RetailerReport",
   "RetailerRevenue",
   "Recommend",
+  "RecommendFactory",
   "RecommendProducts",
   "RetailerSetting",
   "RetailerGoodeazy",
