@@ -43,9 +43,9 @@
         </template>
       </template>
     </div>
-    <router-link v-if="selectedIndex===0" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
+    <div v-if="selectedIndex===0" @click="toAdd" :to="{ name: 'tRoomApply'}" class="s-bottom submit-button color-white">
       <span>添加微信群</span>
-    </router-link>
+    </div>
     <router-link v-if="selectedIndex===1" to="/userRevenue" class="s-bottom submit-button color-white">
       <span>我的收入</span>
     </router-link>
@@ -97,6 +97,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       selectedIndex: 0,
       showTab1: false,
       showTab2: false,
@@ -117,6 +118,13 @@ export default {
     }
   },
   methods: {
+    toAdd () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/roomApply', query: params})
+    },
     closeTip () {
       this.showTip = false
     },
@@ -286,6 +294,7 @@ export default {
       })
     },
     refresh () {
+      this.query = this.$route.query
       this.selectedIndex = 0
       this.showTab1 = false
       this.rooms = []

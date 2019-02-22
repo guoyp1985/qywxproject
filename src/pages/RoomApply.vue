@@ -101,6 +101,7 @@ export default {
   },
   data () {
     return {
+      query: {},
       rgbred: 'rgba09red',
       crypto: '',
       isAccept: false,
@@ -121,7 +122,11 @@ export default {
       this.$router.push('/RoomStart')
     },
     wxContact () {
-      this.wxCardShow = true
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe?type=addkefu'})
+      } else {
+        this.wxCardShow = true
+      }
     },
     showProtocol () {
       this.showDialog = true
@@ -175,7 +180,7 @@ export default {
     }
   },
   activated () {
-    console.log(this.$router)
+    this.query = this.$route.query
   }
 }
 </script>
