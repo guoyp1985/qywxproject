@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-page font14 rproductlist nobottom notop">
+  <div class="containerarea bg-page font14 factory-list-page nobottom notop">
     <apply-tip v-if="showApply"></apply-tip>
     <subscribe v-if="loginUser.subscribe != 1"></subscribe>
     <template v-if="showContainer">
@@ -9,18 +9,20 @@
             <div>暂无加盟厂家</div>
           </div>
           <div v-else class="scroll_list ">
-            <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
-              <div v-if="item.moderate == 0" class="ico down"></div>
-          		<div class="t-table bg-white pt10 pb10">
-        				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+            <div v-for="(item,index) in tabData1" :key="item.id" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
+              <div class="t-table bg-white pt10 pb10">
+        				<div @click="toDetail(item)" class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
                   <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
                 </div>
-          			<div class="t-cell v_middle">
+          			<div @click="toDetail(item)" class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
                   <!-- <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div> -->
           			</div>
+                <div class="t-cell v_middle w100" @click="toRecommend(item)">
+                  <div class="btnicon bg-theme color-white font12">推荐好友加盟</div>
+                </div>
           		</div>
-            </router-link>
+            </div>
           </div>
         </template>
       </div>
@@ -94,6 +96,12 @@ export default {
   methods: {
     getPhoto (src) {
       return this.$util.getPhoto(src)
+    },
+    toDetail (item) {
+      this.$router.push({path: '/factory', query: {id: item.id, wid: this.loginUser.uid}})
+    },
+    toRecommend (item) {
+      this.$router.push({path: '/recommendFactory', query: {id: item.id}})
     },
     handleScroll: function (refname, index) {
       const self = this
@@ -206,42 +214,17 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.rproductlist .scroll_item{overflow:hidden;position:relative;}
-.rproductlist .scroll_item .ico{display:none;}
-.rproductlist .scroll_item .down.ico{
-  display:block;
-  position:absolute;right:0;top:0;width:96px;height:25px;line-height:25px;
-  background-color:#8a8a8a;color:#fff;text-align:center;font-size: 12px;
-  -webkit-transform: translate(30px,5px) rotate(45deg);
-  transform: translate(30px,5px) rotate(45deg);
-}
-.rproductlist .scroll_item .down.ico:after{content:"已下架";}
-.rproductlist .btnicon{
-  display: inline-block;
-  color: #ea3a3a;
-  border: 1px solid #ea3a3a;
-  text-align: center;
-  border-radius: 30px;
-  letter-spacing: 0px;
-  height: 21px;
-  width: 41px;
-  line-height: 21px;
-}
-.rproductlist .l-line{
-  width:100%;
-  height:8px;
-  background:#fff;
-}
-.rproductlist .s-container{bottom:50px;}
-.rproductlist .s-bottom{height: 50px;}
-.rproductlist .addproduct{border-radius: 50px;height: 36px;width: 100%;}
-.rproductlist .pro_list_top{
-  background: url(../assets/images/product_list_top.png);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-size: 100%;
-  height: 20px;
+.factory-list-page{
+  .scroll_item{overflow:hidden;position:relative;}
+  .btnicon{
+    display: inline-block;
+    text-align: center;
+    border-radius: 30px;
+    letter-spacing: 0px;
+    height: 25px;
+    line-height: 25px;
+    padding:0 10px;
+  }
 }
 
 </style>
