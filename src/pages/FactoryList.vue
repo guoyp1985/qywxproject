@@ -17,7 +17,7 @@
           			<div @click="toDetail(item)" class="t-cell v_middle">
                   <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
           			</div>
-                <div class="t-cell v_middle w100" @click="toRecommend(item)">
+                <div @click="toRecommend(item)" class="t-cell v_middle w100">
                   <div class="btnicon bg-theme color-white font12">推荐好友加盟</div>
                 </div>
           		</div>
