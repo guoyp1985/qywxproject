@@ -1,6 +1,6 @@
 <template>
   <div class="containerarea bg-page font14 recommend-factory-page nobottom">
-    <div class="pagetop db-flex">
+    <div class="pagetop db-flex b_bottom_after">
       <div class="pic flex_left">
         <img :src="factoryInfo.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
       </div>
@@ -12,27 +12,45 @@
       </div>
     </div>
     <div class="pagemiddle" ref="scrollContainer" @scroll="handleScroll('scrollContainer', 0)">
-      <template v-if="disTabData1">
-        <div v-if="!tabData1 || tabData1.length == 0" class="emptyitem flex_center">
-          <div>暂无加盟厂家</div>
+      <div class="bg-white b_bottom_after padding10">
+        <div class="line-area">
+          <div class="lineone line"></div>
+          <div class="line-txt">如何推荐</div>
         </div>
-        <div v-else class="scroll_list ">
-          <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
-            <div class="t-table bg-white pt10 pb10">
-      				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
-                <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
-              </div>
-        			<div class="t-cell v_middle">
-                <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
-                <!-- <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div> -->
-        			</div>
-              <div class="t-cell v_middle w100">
-                <div class="btnicon bg-theme color-white font12">推荐好友加盟</div>
-              </div>
-        		</div>
-          </router-link>
+        <div class="mt5 mb10">
+          <div><span class="color-theme">第1步: </span><span>点击【厂家推荐码】，生成厂家海报，长按保存至手机后，发送给微信好友。</span></div>
+          <div class="mt10"><span class="color-theme">第2步: </span><span>微信好友扫码并加盟该厂家后，你即可成为该微信好友的推荐人，微信好友自己购买以及推荐他人购买，你都可以获得推荐人佣金。</span></div>
         </div>
-      </template>
+      </div>
+      <div class="bg-white b_bottom_after padding10 mt10">
+        <div class="line-area">
+          <div class="lineone line"></div>
+          <div class="line-txt">推荐记录</div>
+        </div>
+        <div class="mt5">
+          <template v-if="disTabData1">
+            <div v-if="!tabData1.length" class="emptyitem flex_center">
+              <div>暂无推荐</div>
+            </div>
+            <div v-else class="scroll_list ">
+              <router-link v-for="(item,index) in tabData1" :key="item.id" :to="{path:'/factory',query:{id:item.id, wid: loginUser.uid}}" class="scroll_item pl10 pr10 border-box mb10 font14 bg-white db list-shadow " style="color:inherit;">
+                <div class="t-table bg-white pt10 pb10">
+          				<div class="t-cell v_middle w70" v-if="item.photo && item.photo != ''">
+                    <img class="v_middle imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
+                  </div>
+            			<div class="t-cell v_middle">
+                    <div class="clamp1 font16 pr10 color-lightgray">{{item.title}}</div>
+                    <!-- <div class="clamp1 color-999">当前等级: {{ item.levelname }}</span></div> -->
+            			</div>
+                  <div class="t-cell v_middle w100">
+                    <div class="btnicon bg-theme color-white font12">推荐好友加盟</div>
+                  </div>
+            		</div>
+              </router-link>
+            </div>
+          </template>
+        </div>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup class="menuwrap" v-model="showPopup1">
@@ -251,6 +269,12 @@ export default {
       img{width:30px;height:30px;border-radius:50%;}
     }
     .btn{width:75px;height:25px;border-radius:30px;font-size:12px;}
+  }
+  .line-area{
+    width:100%;padding-top:10px;padding-bottom:10px;font-size:16px;position:relative;
+    display:flex !important;justify-content: center; align-items: center;
+    .line{width:80%;height:2px;background-color:#FF6B63;position:absolute;}
+    .line-txt{width:100px;background-color:#fff;color:#FF6B63;position:relative;z-index:1;text-align:center}
   }
   .scroll_item{overflow:hidden;position:relative;}
   .btnicon{
