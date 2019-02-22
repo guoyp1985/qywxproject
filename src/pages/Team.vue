@@ -79,7 +79,7 @@
 </template>
 
 <script type="text/javascript">
-import Env from 'env'
+import ENV from 'env'
 import ScrollView from '@/components/ScrollView'
 import ListTags from '@/components/ListTags'
 import ListOthers from '@/components/ListOthers'
@@ -132,7 +132,11 @@ export default {
     })
   },
   activated () {
-    console.log('in team activated')
+    this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
+      const data = res.data
+      this.loginUser = data
+      User.set(this.loginUser)
+    })
     this.query = this.$route.query
     if (!this.currentTab) {
       this.$refs.listTags.tags = []
@@ -160,7 +164,7 @@ export default {
     },
     getTeamInfo (id) {
       return this.$http({
-        url: `${Env.BokaApi}/api/team/info`,
+        url: `${ENV.BokaApi}/api/team/info`,
         method: 'post',
         data: {
           id: id
@@ -266,7 +270,7 @@ export default {
         })
       } else {
         this.$http({
-          url: `${Env.BokaApi}/api/team/teamset`,
+          url: `${ENV.BokaApi}/api/team/teamset`,
           method: 'post',
           data: {
             id: this.id,
@@ -291,7 +295,7 @@ export default {
         title: `确定退出该团队吗？`,
         onConfirm () {
           _this.$http({
-            url: `${Env.BokaApi}/api/team/teamset`,
+            url: `${ENV.BokaApi}/api/team/teamset`,
             method: 'post',
             data: {
               id: _this.id,
@@ -319,7 +323,7 @@ export default {
           title: `确定要导入全部${this.moduleTransfer}吗？`,
           onConfirm () {
             _this.$http({
-              url: `${Env.BokaApi}/api/team/copy`,
+              url: `${ENV.BokaApi}/api/team/copy`,
               method: 'post',
               data: {
                 teamid: _this.id,
