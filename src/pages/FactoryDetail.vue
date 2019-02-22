@@ -202,9 +202,11 @@ export default {
         this.$vux.confirm.show({
           content: '确定要加盟吗？',
           onConfirm: () => {
-            self.$http.post(`${ENV.BokaApi}/api/factory/join`, {
-              fid: self.fid
-            }).then(function (res) {
+            let params = {fid: self.fid}
+            if (self.query.wid) {
+              params.wid = self.query.wid
+            }
+            self.$http.post(`${ENV.BokaApi}/api/factory/join`, params).then(function (res) {
               const data = res.data
               self.$vux.toast.show({
                 text: data.error,
@@ -386,7 +388,10 @@ export default {
         if (this.previewerPhotoarr.length) {
           this.previewerPhotoarr = this.$util.previewerImgdata(this.previewerPhotoarr)
         }
-        let shareUrl = `${ENV.Host}/#/factoryDetail?fid=${this.fid}&wid=${this.fid}&share_uid=${this.loginUser.uid}`
+        let shareUrl = `${ENV.Host}/#/factoryDetail?fid=${this.fid}&share_uid=${this.loginUser.uid}`
+        if (this.query.wid) {
+          shareUrl = `${shareUrl}&wid=${this.query.wid}`
+        }
         if (this.loginUser.isretailer) {
           shareUrl = `${shareUrl}&uploader=${this.loginUser.uid}`
         }

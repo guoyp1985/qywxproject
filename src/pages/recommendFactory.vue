@@ -122,7 +122,7 @@ export default {
         self.$vux.loading.show()
         self.$http.post(`${ENV.BokaApi}/api/retailer/createFactoryPoster`, {
           fid: self.query.id
-        }).then(function (res) {
+        }).then(res => {
           let data = res.data
           self.$vux.loading.hide()
           if (data.flag === 1) {
