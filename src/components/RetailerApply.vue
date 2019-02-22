@@ -689,7 +689,12 @@ export default {
         }
         self.$vux.loading.show()
         self.submitdata.mobile = self.$util.trim(self.submitdata.mobile)
-        self.submitdata.fid = self.$route.query.fid
+        if (self.$route.query.fid) {
+          self.submitdata.fid = self.$route.query.fid
+        }
+        if (self.$route.query.wid) {
+          self.submitdata.wid = self.$route.query.wid
+        }
         if (self.query.share_uid) {
           self.submitdata.share_uid = self.query.share_uid
         }
