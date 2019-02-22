@@ -35,7 +35,7 @@
             <template v-else>
               <div class="flex_left color-gray font12">我的推荐（共<span class="color-theme">{{countdata}}</span>人）</div>
               <div class="scroll_list ">
-                <div v-for="(item,index) in tabData1" :key="item.id" class="scroll_item pl10 pr10 border-box font14 bg-white db b_bottom_after " style="color:inherit;">
+                <div v-for="(item,index) in tabData1" :key="item.id" class="scroll_item pl10 pr10 border-box font14 bg-white db " style="color:inherit;">
                   <div class="t-table bg-white pt10 pb10">
             				<div class="t-cell v_middle w70" v-if="item.avatar && item.avatar != ''">
                       <img class="v_middle imgcover" style="width:60px;height:60px;" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
