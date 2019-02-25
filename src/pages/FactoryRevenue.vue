@@ -1,358 +1,195 @@
 <template>
-  <div class="containerarea font14 frevenue bg-page">
-    <template v-if="showSos">
-      <Sos :title="sosTitle"></Sos>
-    </template>
-    <template v-if="showContainer">
-      <div class="s-topbanner bg-white">
-        <div class="s-topbanner s-topbanner1 flex_center toprow pl20 pr20">
-          <div class="flex_cell color-white font16">{{$t('Myrevenue')}}</div>
-          <!--
-          <div class="align_right" style="width:150px;">
-            <div class="qbtn font12 color-white" style="border:#fff 1px solid;" @click="popupexplain">{{$t('Get cash explain')}}</div>
+  <div class="containerarea font14 income" ref="revenueContainer">
+    <div class="inhead">
+      <div class="in-item flex_center pr20 pl20 pt20">
+        <div class="item mr10 flex_center" @click="toBank">我的银行卡</div>
+        <div class="item ml10 flex_center" @click="popupexplain">提现说明</div>
+      </div>
+    </div>
+    <div class="middle-content">
+      <div class="align_center color-gray pt10 pb10">可提现金额（元）</div>
+      <div class="align_center pb10 font30 bold" style="color:#FF6B63;">{{retailerInfo.waitcash}}</div>
+      <div class="flex_center pt20">
+        <div class="item flex_center mr10" @click="clickwechat">提现至零钱</div>
+        <div class="item flex_center ml10" @click="clickbank">提现至银行卡</div>
+      </div>
+    </div>
+    <div class="btom-content">
+      <div class="list flex_table mt20" @click="toIncome">
+        <div class="align_left">待结算金额</div>
+        <div class="moneyNum">{{retailerInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
+      </div>
+      <div class="pl20 pt10 pb10 color-gray font12">等待订单确认收货后方可结算并提现</div>
+      <div class="list flex_table" @click="toDetail">
+        <div class="align_left">提现明细</div>
+        <div class="moneyNum"><span class="color-gray pl10">></span></div>
+      </div>
+    </div>
+    <!-- 提现至微信零钱 -->
+    <div class="mceng" v-if="wechatShow">
+      <div class="flex_center">
+        <div class="wechatShow" v-if="wechatShow">
+          <div class="align_center b_bottom_after pb10">提现至微信零钱</div>
+          <div class="pt10 pb10 pr10 pl10">
+            <div class="flex_table">
+              <div class="align_left color-gray2">到账时间</div>
+              <div class="pl10">实时到账 (无手续费)</div>
+            </div>
+            <div class="flex_table mt10">
+              <div class="align_left color-gray2">提现金额</div>
+              <div class="pl10">(最低提现1元)</div>
+            </div>
+            <div class="flex_table mt10 b_bottom_after">
+              <div class="align_left font24 pb10 bold">￥</div>
+              <input v-model="cashMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
+            </div>
+            <div class="mt5 db-flex">
+              <div class="flex_cell color-gray">可提现金额￥{{retailerInfo.waitcash}}</div>
+              <div class="flex_right w80 color-theme" @click="clickAll">全部提现</div>
+            </div>
+            <div class="btnSubmit" @click="getWechatCash">确认提现</div>
           </div>
-        -->
         </div>
-        <tab v-model="selectedIndex" class="v-tab">
-          <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-        </tab>
       </div>
-      <div class="s-container" style="top:88px;">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <template v-if="(index == 0)">
-              <div class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1', index)">
-                <template v-if="disData1">
-                  <div v-if="!tabdata1.length" class="flex_empty">
-                    <div>
-                      <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                      <div class="mt5 align_center">暂无待提现记录！</div>
-                    </div>
-                  </div>
-                  <div v-else class="scroll_list listarea">
-                    <div v-for="(item,index) in tabdata1" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
-                      <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                        <div class="pl12 pr12 pt10 pb10">
-                          <div class="t-table">
-                            <div class="t-cell pic v_middle w45">
-                              <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                            </div>
-                            <div class="t-cell v_middle" style="color:inherit;">
-                              <div class="clamp1 font14 color-999">{{item.buyername}}</div>
-                            </div>
-                            <div class="t-cell v_middle" style="color:inherit;">
-                              <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                          <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                          <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
-                          <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                        </div>
-                        <div class="pl12 pr12 pt10 pb10 flex_right">
-                          <div class="font14 color-999">实际收入：</div>
-                          <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                        </div>
-                      </template>
-                      <template v-else>
-                        <div class="pl12 pr12 pt10 pb10">
-                          <div class="t-table">
-                            <div class="t-cell pic v_middle w45">
-                              <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                            </div>
-                            <div class="t-cell v_middle" style="color:inherit;">
-                              <div class="clamp1 color-999">{{item.buyername}}</div>
-                            </div>
-                            <div class="t-cell v_middle" style="color:inherit;">
-                              <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                          <div class="clamp1 font14 color-999">
-                            <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                            <span class="v_middle">{{ item.products }}</span>
-                          </div>
-                        </div>
-                        <div class="pl12 pr12 pt10 pb10 flex_right">
-                          <div class="font14 color-999">实际收入：</div>
-                          <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                </template>
-              </div>
-            </template>
-            <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2', index)">
-              <template v-if="disData2">
-                <div v-if="!tabdata2.length" class="flex_empty">
-                  <div>
-                    <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                    <div class="mt5 align_center">暂无待结算记录！</div>
-                  </div>
-                </div>
-                <div v-else class="scroll_list listarea">
-                  <div v-for="(item,index) in tabdata2" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
-                    <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                      <div class="pl12 pr12 pt10 pb10">
-                        <div class="t-table">
-                          <div class="t-cell pic v_middle w45 pr10 border-box">
-                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                          </div>
-                          <div class="t-cell v_middle" style="color:inherit;">
-                            <div class="clamp1 color-999">{{item.buyername}}</div>
-                          </div>
-                          <div class="t-cell v_middle" style="color:inherit;">
-                            <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                        <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span>{{ item.products }}</span></div>
-                        <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
-                        <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 flex_right">
-                        <div class="font14 color-999">实际收入：</div>
-                        <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div class="pl12 pr12 pt10 pb10">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w45 pr10 border-box">
-                          <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 color-999">{{item.buyername}}</div>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                        </div>
-                      </div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                        <div class="clamp1 font14 color-999">
-                          <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                          <span class="v_middle">{{ item.products }}</span>
-                        </div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 flex_right">
-                        <div class="font14 color-999">实际收入：</div>
-                        <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                      </div>
-                    </template>
-                  </div>
-                </div>
-              </template>
-            </div>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3', index)">
-              <template v-if="disData3">
-                <div v-if="!tabdata3.length" class="flex_empty">
-                  <div>
-                    <div class="align_center"><i class="al al-wushuju font60" ></i></div>
-                    <div class="mt5 align_center">暂无已提现记录！</div>
-                  </div>
-                </div>
-                <div v-else class="scroll_list">
-                  <div v-for="(item,index) in tabdata3" :key="item.id" class="scroll_item bg-white mt10 list-shadow">
-                    <template v-if="item.content.indexOf('平台奖励基金') < 0">
-                      <div class="pl12 pr12 pt10 pb10">
-                        <div class="t-table">
-                          <div class="t-cell pic v_middle w45 pr10 border-box">
-                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                          </div>
-                          <div class="t-cell v_middle" style="color:inherit;">
-                            <div class="clamp1 color-999">{{item.buyername}}</div>
-                          </div>
-                          <div class="t-cell v_middle" style="color:inherit;">
-                            <div class="clamp1 font12 color-999 disdate align_right">{{ item.dateline | dateformat }}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                        <div class="clamp1 font14 color-999"><span class="color-orange7 mr5">{{item.content}}</span><span class="color-999">{{ item.products }}</span></div>
-                        <div class="clamp1 font14 color-gray">订单金额: ￥{{ item.special }}</div>
-                        <div class="clamp1 font14 color-gray"><span class="db-in">佣金: -￥{{ item.income }}</span><span class="db-in ml20">手续费: -￥{{ item.commission }}</span></div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 flex_right">
-                        <div class="font14 color-999">实际收入：</div>
-                        <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div class="pl12 pr12 pt10 pb10">
-                        <div class="t-table">
-                          <div class="t-cell pic v_middle w45 pr10 border-box">
-                            <img class="avatarimg6 imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                          </div>
-                          <div class="t-cell v_middle" style="color:inherit;">
-                            <div class="clamp1 color-999">{{item.buyername}}</div>
-                          </div>
-                          <div class="t-cell v_middle" style="color:inherit;">
-                            <div class="clamp1 font12 color-gray disdate align_right">{{ item.dateline | dateformat }}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 border-box bg-page-product">
-                        <div class="clamp1 font14 color-999">
-                          <span class="v_middle color-orange7 mr5">{{ item.content }}</span>
-                          <span class="v_middle">{{ item.products }}</span>
-                        </div>
-                      </div>
-                      <div class="pl12 pr12 pt10 pb10 flex_right">
-                        <div class="font14 color-999">实际收入：</div>
-                        <div class="clamp1 color-red4">{{ $t('RMB') }}{{item.money}}</div>
-                      </div>
-                    </template>
-                  </div>
-                </div>
-              </template>
-            </div>
-          </swiper-item>
-        </swiper>
+      <div class="flex_center close-area">
+        <span class="al al-close font40 bold color-white" @click="closeWechat"></span>
       </div>
-      <div v-transfer-dom class="x-popup">
-        <popup v-model="showpopup" height="100%">
-          <div class="popup1">
-            <div class="popup-top flex_center">{{ $t('Get cash explain') }}</div>
-            <div class="popup-middle font14">
-              <div class="padding10">
-                <div class="bold">第一条 手续费</div>
-                <div class="">聚客365卖家需按订单交易额（含运费）的1%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
-                <div class="bold mt5">第二条 提现规则</div>
-                <div>线上交易的订单，需待买家确认收货后，才可以通过“我的收入”查看并提现收益，未提现金额不足1元时无法进行提现。</div>
-                <div class="bold mt5">第三条 退款订单处理规则</div>
-                <div>（1）当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
-                <div>（2）当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可通过“申请维权”与卖家互加好友，线下协商解决，手续费不予退还。</div>
-                <div class="bold mt5">第四条 确认收货规则</div>
-                <div>线上交易的订单，若买家没有主动确认收货，系统将在卖家发货后的第七天自动确认收货。</div>
-                <div class="bold mt5">第五条 奖励金规则</div>
-                <div>（1）线上交易的订单，卖家有机会获得平台奖励金，奖励金将在买家确认收货后，与订单金额一起提现。</div>
-                <div>（2）若买家对获得奖励金的订单进行了退款，该订单所获得的奖励金将失效。</div>
-              </div>
+    </div>
+    <!-- 提现至银行卡 -->
+    <div class="mceng" v-if="bankShow">
+      <div class="flex_center">
+        <div class="wechatShow" v-if="bankShow">
+          <div class="align_center b_bottom_after pb10">提现至银行卡</div>
+          <div class="pt10 pb10 pr10 pl10">
+            <div class="flex_table">
+              <div class="align_left color-gray2">到账时间</div>
+              <div class="pl10"> 1-3天(1%手续费)</div>
             </div>
-            <div class="popup-bottom flex_center">
-              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Know txt') }}</div>
+            <div class="flex_table mt10">
+              <div class="align_left color-gray2">提现金额</div>
+              <div class="pl10">(最低提现1元)</div>
+            </div>
+            <div class="flex_table mt10 b_bottom_after">
+              <div class="align_left font24 pb10 bold">￥</div>
+              <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
+            </div>
+            <div class="mt5 db-flex">
+              <div class="flex_cell color-gray">可提现金额￥{{retailerInfo.waitcash}}</div>
+              <div class="flex_right w80 color-theme" @click="clickAll('bank')">全部提现</div>
+            </div>
+            <div class="btnSubmit" @click="getBankCash">确认提现</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex_center close-area">
+        <span class="al al-close font40 bold color-white" @click="closeWechat"></span>
+      </div>
+    </div>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="showpopup" height="100%">
+        <div class="popup1">
+          <div class="popup-top flex_center">{{ $t('Get cash explain') }}</div>
+          <div class="popup-middle font14">
+            <div class="padding10">
+              <div class="bold">第一条 手续费</div>
+              <div>1. 交易手续费：聚客365卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
+              <div>2. 提现手续费：</div>
+              <div>提现至微信零钱：无需支付手续费。</div>
+              <div>提现至银行卡：每笔提现扣除提现金额的0.1%，最低1元，最高25元。</div>
+              <div class="bold mt5">第二条 提现规则</div>
+              <div>1. 线上交易的订单，需待买家确认收货后，才可以通过“我的收入”查看并提现收益。</div>
+              <div>2. 待提现金额不足1元时无法进行提现。</div>
+              <div>3. 微信规定每日提现至微信零钱的额度为5千元，每日提现至银行卡的额度为2万元。</div>
+              <div>4. 提现至银行卡的到账时间为1-3日内，具体以银行到账时间为准。</div>
+              <div class="bold mt5">第三条 退款订单处理规则</div>
+              <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，聚客365将整单全额退款，不收取手续费。</div>
+              <div>2. 当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可与卖家互加好友，线下协商解决，手续费不予退还。</div>
+              <div class="bold mt5">第四条 确认收货规则</div>
+              <div>线上交易的订单，若买家没有主动确认收货，系统将在卖家发货后的第7天自动确认收货。</div>
             </div>
           </div>
-        </popup>
-      </div>
-    </template>
+          <div class="popup-bottom flex_center">
+            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Know txt') }}</div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
-
-<i18n>
-</i18n>
-
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, TransferDom, Popup, CheckIcon, XImg } from 'vux'
-import Time from '#/time'
-import ENV from 'env'
+import { Popup, TransferDom } from 'vux'
 import { User } from '#/storage'
-import Sos from '@/components/Sos'
-
-const limit = 10
-let pageStart1 = 0
-let pageStart2 = 0
-let pageStart3 = 0
-
+import ENV from 'env'
 export default {
   directives: {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Popup, CheckIcon, XImg, Sos
-  },
-  filters: {
-    dateformat: function (value) {
-      return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
-    }
+    Popup
   },
   data () {
     return {
-      showSos: false,
-      sosTitle: '抱歉，您暂无权限访问此页面！',
-      showContainer: false,
-      query: {},
       loginUser: {},
-      tabtxts: [ '待提现', '待结算', '已提现' ],
-      selectedIndex: 0,
-      tabdata1: [],
-      tabdata2: [],
-      tabdata3: [],
-      disData1: false,
-      disData2: false,
-      disData3: false,
+      query: {},
+      retailerInfo: {waitcash: '0.00'},
+      wechatShow: false,
+      bankShow: false,
       showpopup: false,
-      eventIng: false,
-      summoney: '0.00'
+      cashMoney: '',
+      cashBankMoney: '',
+      fromPage: '',
+      fid: 0
     }
   },
   methods: {
-    handleScroll (refname, index) {
-      const self = this
-      let scrollarea = self.$refs[refname][0] ? self.$refs[refname][0] : self.$refs[refname]
-      self.$util.scrollEvent({
-        element: scrollarea,
-        callback: function () {
-          if (index === 0 && self.tabdata1.length === (pageStart1 + 1) * limit) {
-            self.$vux.loading.show()
-            pageStart1++
-            self.getData1()
-          } else if (index === 1 && self.tabdata2.length === (pageStart2 + 1) * limit) {
-            self.$vux.loading.show()
-            pageStart2++
-            self.getData2()
-          } else if (index === 2 && self.tabdata3.length === (pageStart3 + 1) * limit) {
-            self.$vux.loading.show()
-            pageStart3 += limit
-            self.getData3()
-          }
+    onBlur () {
+      console.log('进入到了失焦页面')
+      let revenueContainer = this.$refs.revenueContainer[0] ? this.$refs.revenueContainer[0] : this.$refs.revenueContainer
+      setTimeout(() => {
+        document.body.scrollTop = document.body.scrollHeight
+        revenueContainer.scrollTop = revenueContainer.scrollHeight
+      }, 100)
+    },
+    toBank () {
+      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+    },
+    toIncome () {
+      let params = {}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      this.$router.push({path: '/income', query: params})
+    },
+    toDetail () {
+      let params = {flag: 2}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      this.$router.push({path: '/income', query: params})
+    },
+    clickwechat () {
+      if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
+        this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
+      } else {
+        this.wechatShow = true
+      }
+    },
+    clickbank () {
+      if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
+        this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
+      } else {
+        if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '') {
+          this.$vux.confirm.show({
+            content: `您还没有绑定银行卡`,
+            confirmText: '去绑定',
+            onConfirm: () => {
+              this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+            }
+          })
+          return false
         }
-      })
-    },
-    getData1 () {
-      this.$vux.loading.show()
-      const self = this
-      const params = { params: { from: 'factory', pagestart: pageStart1, limit: limit, cashed: 0 } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.summoney = data.summoney ? data.summoney : '0.00'
-        self.tabdata1 = self.tabdata1.concat(retdata)
-        self.disData1 = true
-      })
-    },
-    getData2 () {
-      this.$vux.loading.show()
-      const self = this
-      const params = { params: { from: 'factory', pagestart: pageStart2, limit: limit, cashed: 2 } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.tabdata2 = self.tabdata2.concat(retdata)
-        self.disData2 = true
-      })
-    },
-    getData3 () {
-      this.$vux.loading.show()
-      const self = this
-      const params = { params: { from: 'factory', pagestart: pageStart3, limit: limit, cashed: 1 } }
-      self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
-      .then(res => {
-        self.$vux.loading.hide()
-        const data = res.data
-        const retdata = data.data ? data.data : data
-        self.tabdata3 = self.tabdata3.concat(retdata)
-        self.disData3 = true
-      })
+        this.bankShow = true
+      }
     },
     popupexplain () {
       this.showpopup = !this.showpopup
@@ -360,74 +197,133 @@ export default {
     closepopup () {
       this.showpopup = false
     },
-    swiperChange (index) {
-      if (index !== undefined) {
-        this.selectedIndex = index
-      }
-      switch (this.selectedIndex) {
-        case 0:
-          if (this.tabdata1.length < limit) {
-            pageStart1 = 0
-            this.distabdata1 = false
-            this.totalPrice = '0.00'
-            this.tabdata1 = []
-            this.getData1()
+    closeWechat () {
+      this.wechatShow = false
+      this.bankShow = false
+      this.cashMoney = ''
+      this.cashBankMoney = ''
+      this.submitIng = false
+    },
+    cashEvent (inputMoney, type) {
+      if (!this.submitIng) {
+        if (!inputMoney || inputMoney === '' || isNaN(inputMoney)) {
+          this.$vux.toast.show({
+            text: '请输入正确的提现金额',
+            width: '200px',
+            type: 'text'
+          })
+          return false
+        }
+        let money = parseFloat(inputMoney)
+        let waitcash = parseFloat(this.retailerInfo.waitcash.replace(/,/g, ''))
+        if (money > waitcash) {
+          this.$vux.toast.show({
+            text: '提现金额不能超过可提现金额',
+            width: '220px',
+            type: 'text'
+          })
+          return false
+        }
+        if (money < 1) {
+          this.$vux.toast.show({
+            text: '提现金额最低为1元',
+            width: '200px',
+            type: 'text'
+          })
+          return false
+        }
+        this.submitIng = true
+        let postData = {money: inputMoney, type: type, fid: this.fid}
+        if (this.query.appid) {
+          postData.appid = this.query.appid
+        }
+        this.$vux.loading.show()
+        this.$http.post(`${ENV.BokaApi}/api/accounting/cashMoney`, postData).then(res => {
+          this.$vux.loading.hide()
+          const data = res.data
+          this.$vux.toast.show({
+            text: data.error,
+            type: data.flag ? 'success' : 'warn',
+            time: this.$util.delay(data.error)
+          })
+          if (data.flag) {
+            this.retailerInfo.waitcash = data.waitcash
+            this.loginUser.retailerinfo = this.retailerInfo
+            User.set(this.loginUser)
           }
-          break
-        case 1:
-          if (this.tabdata2.length < limit) {
-            pageStart2 = 0
-            this.distabdata2 = false
-            this.tabdata2 = []
-            this.getData2()
-          }
-          break
-        case 2:
-          if (this.tabdata3.length < limit) {
-            pageStart3 = 0
-            this.distabdata3 = false
-            this.tabdata3 = []
-            this.getData3()
-          }
-          break
+          this.closeWechat()
+        })
       }
     },
-    refresh () {
-      const self = this
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.loginUser = User.get()
-      if (this.loginUser) {
-        this.$vux.loading.show()
-        let isAdmin = false
-        for (let i = 0; i < self.loginUser.usergroup.length; i++) {
-          if (self.loginUser.usergroup[i] === 1) {
-            isAdmin = true
-            break
-          }
-        }
-        if (!self.loginUser.fid && !isAdmin) {
-          this.$vux.loading.hide()
-          self.showSos = true
-          self.showContainer = false
-        } else {
-          self.showSos = false
-          self.showContainer = true
-          this.$vux.loading.hide()
-          this.query = this.$route.query
-          this.swiperChange()
-        }
+    getWechatCash () {
+      this.cashEvent(this.cashMoney, 'lingqian')
+    },
+    getBankCash () {
+      this.cashEvent(this.cashBankMoney, 'yinhang')
+    },
+    clickAll (type) {
+      if (type === 'bank') {
+        this.cashBankMoney = this.retailerInfo.waitcash
+      } else {
+        this.cashMoney = this.retailerInfo.waitcash
       }
     }
   },
   activated () {
-    this.refresh()
+    this.loginUser = User.get()
+    this.query = this.$route.query
+    if (this.query.appid) {
+      this.fromPage = encodeURIComponent(`/retailerRevenue?appid=${this.query.appid}`)
+    } else {
+      this.fromPage = encodeURIComponent('/retailerRevenue')
+    }
+    if (this.query.fid) {
+      this.fid = this.query.fid
+    } else {
+      this.fid = this.loginUser.fid
+    }
+    // this.$http.get(`${ENV.BokaApi}/api/factory/info`,
+    //   { params: { fid: this.fid } }
+    // ).then(function (res) {
+    // })
+    this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+      const data = res.data
+      if (data.flag) {
+        this.retailerInfo = data.data
+        this.loginUser.retailerinfo = this.retailerInfo
+        User.set(this.loginUser)
+      }
+    })
   }
 }
 </script>
-
 <style lang="less">
-.frevenue .scroll_list .scroll_item:after{display:none;}
-.frevenue .scroll_list .scroll_item{margin-bottom:10px;}
-.frevenue .weui-icon-success{color: #ea3a3a;}
-.frevenue .vux-check-icon > .weui-icon-success:before, .vux-check-icon > .weui-icon-success-circle:before{color: #ea3a3a;}
+  .income{
+    background-color:#F2F2F2;height:100%;
+    .inhead{
+      width:100%;height:100px;background-color:#FF6B63;
+      .mr20{margin-right:10px;}
+      .item{width:100px;height:25px;background-color:#FF6B63;color:#fff;border-radius:20px;border:1px solid #fff;font-size:12px;box-sizing:border-box;}
+    }
+    .middle-content{
+      width:90%;height:180px;background-color:#fff;border-radius:10px;border:1px solid #e5e5e5;margin: 0 auto;margin-top:-30px;
+      .item{width:100px;height:25px;background-color:#fff;border-radius:20px;border:1px solid #FF6B63;font-size:12px;color:#FF6B63;box-sizing:border-box;}
+    }
+    .btom-content{
+      .list{
+        width:100%;padding:10px 20px;background-color:#fff;box-sizing:border-box;
+        .moneyNum{margin-left:auto;}
+      }
+    }
+    .mceng{position:fixed;top:0;bottom:0;left:0;right:0;background-color:rgba(0, 0, 0, 0.3);overflow:hidden;z-index:0;}
+    .wechatShow{
+      width:75%;padding:10px 0;background-color:#fff;border-radius:10px;margin:0 auto;box-sizing:border-box;margin-top:40%;
+      input {color:#FF6B63;}
+    }
+    .btnSubmit{
+      width:90%;padding:10px 0;background-color:#FF6B63;color:#fff;text-align:center;
+      border-radius:5px;margin:0 auto;margin-top:50px;
+    }
+    .close-area{text-align:center;}
+  }
 </style>
