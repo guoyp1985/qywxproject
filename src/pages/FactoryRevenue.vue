@@ -151,17 +151,17 @@ export default {
       }, 100)
     },
     toBank () {
-      this.$router.push({path: '/factoryBank', query: {id: this.id, fromPage: this.fromPage}})
+      this.$router.push({path: '/factoryBank', query: {fid: this.fid, fromPage: this.fromPage}})
     },
     toIncome () {
-      let params = {}
+      let params = {fid: this.fid}
       if (this.query.appid) {
         params.appid = this.query.appid
       }
       this.$router.push({path: '/factoryIncome', query: params})
     },
     toDetail () {
-      let params = {flag: 2}
+      let params = {flag: 2, fid: this.fid}
       if (this.query.appid) {
         params.appid = this.query.appid
       }
@@ -272,15 +272,15 @@ export default {
   activated () {
     this.loginUser = User.get()
     this.query = this.$route.query
-    if (this.query.appid) {
-      this.fromPage = encodeURIComponent(`/factoryRevenue?appid=${this.query.appid}`)
-    } else {
-      this.fromPage = encodeURIComponent('/factoryRevenue')
-    }
     if (this.query.fid) {
       this.fid = this.query.fid
     } else {
       this.fid = this.loginUser.fid
+    }
+    if (this.query.appid) {
+      this.fromPage = encodeURIComponent(`/factoryRevenue?fid=${this.fid}&appid=${this.query.appid}`)
+    } else {
+      this.fromPage = encodeURIComponent(`/factoryRevenue?fid=${this.fid}`)
     }
     this.$http.get(`${ENV.BokaApi}/api/factory/info`,
       { params: { fid: this.fid } }

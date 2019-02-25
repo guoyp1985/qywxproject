@@ -309,12 +309,13 @@ export default {
       wechatCash: true,
       bankCash: false,
       fromPage: '',
-      showContainer: false
+      showContainer: false,
+      fid: 0
     }
   },
   methods: {
     toBank () {
-      this.$router.push({path: '/factoryBank', query: {fromPage: this.fromPage}})
+      this.$router.push({path: '/factoryBank', query: {fid: this.fid, fromPage: this.fromPage}})
     },
     setCashType (type) {
       if (type === 'bank') {
@@ -511,10 +512,15 @@ export default {
       this.initData()
       this.query = this.$route.query
       this.loginUser = User.get()
-      if (this.query.appid) {
-        this.fromPage = encodeURIComponent(`/income?appid=${this.query.appid}`)
+      if (this.query.fid) {
+        this.fid = this.query.fid
       } else {
-        this.fromPage = encodeURIComponent('/income')
+        this.fid = this.loginUser.fid
+      }
+      if (this.query.appid) {
+        this.fromPage = encodeURIComponent(`/factoryIncome?fid=${this.fid}&appid=${this.query.appid}`)
+      } else {
+        this.fromPage = encodeURIComponent(`/factoryIncome?fid=${this.fid}`)
       }
       this.showContainer = true
       if (this.query.flag === '1' || this.query.flag === 1) {

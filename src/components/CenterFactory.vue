@@ -29,10 +29,10 @@
           <span class="nav_icon bg-blue11 al al-a166 font16"></span>
           <span class="ml10 font15">{{$t('Join qrcode')}}</span>
         </div>
-        <router-link class="flex_cell flex_center color-gray2" to="/factoryRevenue">
+        <div class="flex_cell flex_center color-gray2" to="/factoryRevenue" @click="toRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
           <span class="ml10 font15">{{$t('Myrevenue')}}</span>
-        </router-link>
+        </div>
       </div>
     </div>
     <div class="bg-white" style="height:40px;"></div>
@@ -248,6 +248,9 @@ export default {
           urls: [self.factoryInfo.photo]
         })
       }
+    },
+    toRevenue () {
+      this.$router.push({path: 'factoryRevenue', query: {fid: this.loginUser.fid}})
     }
   }
 }
