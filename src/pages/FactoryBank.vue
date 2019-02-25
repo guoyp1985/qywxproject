@@ -43,7 +43,8 @@
         </div>
       </div>
     </div>
-    <div class="flex_center color-white btn-bottom-red mt20" @click="bindEvent">绑定</div>
+    <div class="flex_center color-white btn-bottom-red mt20" @click="bindEvent" v-if="loginUser.ismanager">绑定</div>
+    <div class="flex_center mt20 color-theme" v-else>请联系管理员修改银行卡信息</div>
     <div class="mt20 padding20">
       <div class="bold">*注意事项</div>
       <div>1. 请确保持卡人姓名为本人姓名</div>
@@ -140,90 +141,82 @@ export default {
     },
     bindEvent () {
       if (!this.submitIng) {
-        if (!this.loginUser.ismanager) {
+        let postData = this.submitData
+        let repeatNo = this.repeatNo
+        postData.id = this.query.id
+        if (!this.showRepeat) {
+          if (postData.bankuser === '' || postData.bankcardno === '' || !postData.bankcode || postData.bankcode === '0') {
+            this.$vux.toast.show({
+              text: '请完善信息',
+              type: 'text'
+            })
+            return false
+          }
+        } else {
+          if (postData.bankuser === '' || postData.bankcardno === '' || repeatNo === '' || !postData.bankcode || postData.bankcode === '0') {
+            this.$vux.toast.show({
+              text: '请完善信息',
+              type: 'text'
+            })
+            return false
+          }
+        }
+        postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
+        repeatNo = repeatNo.replace(/\s/g, '')
+        if (postData.bankcardno !== this.viewData.bankcardno && !Reg.rBankId.test(postData.bankcardno)) {
           this.$vux.toast.show({
-            text: '请联系管理员修改银行卡信息',
-            width: '220px',
+            text: '请输入正确的银行卡号',
+            width: '200px',
             type: 'text'
           })
-        } else {
-          let postData = this.submitData
-          let repeatNo = this.repeatNo
-          postData.id = this.query.id
-          if (!this.showRepeat) {
-            if (postData.bankuser === '' || postData.bankcardno === '' || !postData.bankcode || postData.bankcode === '0') {
-              this.$vux.toast.show({
-                text: '请完善信息',
-                type: 'text'
-              })
-              return false
-            }
-          } else {
-            if (postData.bankuser === '' || postData.bankcardno === '' || repeatNo === '' || !postData.bankcode || postData.bankcode === '0') {
-              this.$vux.toast.show({
-                text: '请完善信息',
-                type: 'text'
-              })
-              return false
-            }
-          }
-          postData.bankcardno = postData.bankcardno.replace(/\s/g, '')
-          repeatNo = repeatNo.replace(/\s/g, '')
-          if (postData.bankcardno !== this.viewData.bankcardno && !Reg.rBankId.test(postData.bankcardno)) {
-            this.$vux.toast.show({
-              text: '请输入正确的银行卡号',
-              width: '200px',
-              type: 'text'
-            })
-            return false
-          }
-          if (this.showRepeat && repeatNo !== postData.bankcardno) {
-            this.$vux.toast.show({
-              text: '两次输入的银行卡号不同',
-              width: '200px',
-              type: 'text'
-            })
-            return false
-          }
-          this.$vux.confirm.show({
-            content: '请确保信息填写无误',
-            confirmText: '确定',
-            onConfirm: () => {
-              this.submitIng = true
-              if (!this.showRepeat && postData.bankuser === this.viewData.bankuser && postData.bankcardno === this.viewData.bankcardno && postData.bankcode === this.viewData.bankcode) {
-                this.submitIng = false
-                this.$vux.toast.show({
-                  text: '绑定成功',
-                  type: 'success'
-                })
-                setTimeout(() => {
-                  if (this.query.fromPage) {
-                    this.$router.push({path: decodeURIComponent(this.query.fromPage)})
-                  }
-                }, 1000)
-              } else {
-                this.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(res => {
-                  this.submitIng = false
-                  const data = res.data
-                  let error = (data.flag === 1) ? '绑定成功' : data.error
-                  const timeout = this.$util.delay(error)
-                  this.$vux.toast.show({
-                    text: error,
-                    type: data.flag ? 'success' : 'warn',
-                    time: timeout
-                  })
-                  if (data.flag) {
-                    setTimeout(() => {
-                      if (this.query.fromPage) {
-                        this.$router.push({path: decodeURIComponent(this.query.fromPage)})
-                      }
-                    }, timeout)
-                  }
-                })
-              }
-            }
-          })
+          return false
         }
+        if (this.showRepeat && repeatNo !== postData.bankcardno) {
+          this.$vux.toast.show({
+            text: '两次输入的银行卡号不同',
+            width: '200px',
+            type: 'text'
+          })
+          return false
+        }
+        this.$vux.confirm.show({
+          content: '请确保信息填写无误',
+          confirmText: '确定',
+          onConfirm: () => {
+            this.submitIng = true
+            if (!this.showRepeat && postData.bankuser === this.viewData.bankuser && postData.bankcardno === this.viewData.bankcardno && postData.bankcode === this.viewData.bankcode) {
+              this.submitIng = false
+              this.$vux.toast.show({
+                text: '绑定成功',
+                type: 'success'
+              })
+              setTimeout(() => {
+                if (this.query.fromPage) {
+                  this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+                }
+              }, 1000)
+            } else {
+              this.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(res => {
+                this.submitIng = false
+                const data = res.data
+                let error = (data.flag === 1) ? '绑定成功' : data.error
+                const timeout = this.$util.delay(error)
+                this.$vux.toast.show({
+                  text: error,
+                  type: data.flag ? 'success' : 'warn',
+                  time: timeout
+                })
+                if (data.flag) {
+                  setTimeout(() => {
+                    if (this.query.fromPage) {
+                      this.$router.push({path: decodeURIComponent(this.query.fromPage)})
+                    }
+                  }, timeout)
+                }
+              })
+            }
+          }
+        })
       }
     },
     init () {
