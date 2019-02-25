@@ -78,11 +78,17 @@
                     <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle " style="width: 70px;">
                       <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
                     </router-link>
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
-                      <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                      <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
-                      <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div>
-                    </router-link>
+                    <div class="t-cell v_middle">
+                      <router-link :to="{ path: '/membersView', query: { uid: item.uid } }">
+                        <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
+                        <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                        <!-- <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div> -->
+                      </router-link>
+                      <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
+                        <span class="color-red4">{{item.yingxiangli}}</span>
+                        <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                      </div>
+                    </div>
                     <div class="t-cell v_middle align_right w60">
                       <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
                     </div>
@@ -114,6 +120,33 @@
         </swiper>
       </div>
     </template>
+    <div v-transfer-dom class="x-popup">
+      <popup v-model="isshowfluence" height="100%">
+        <div class="popup1 font14">
+          <div class="percentlayer">
+            <div class="bg"></div>
+            <div class="w_100 h_100 flex_center">
+              <div class="layerinner align_left probability">
+                <div class="inner">
+                  <div class="pro" >
+                    <div class="pro-sucess">
+                      <div class="flex_left">
+                        <img class="v_middle" src="https://tossharingsales.boka.cn/images/infor.png"/>
+                        <div class="color-blue">什么是影响力</div>
+                      </div>
+                      <div class="font12" >影响力是指客户通过分享动作所带来的访问量，影响力数值越大，表示该客户越受朋友欢迎，所分享的内容打开率越高，可将影响力高的客户发展成代理，通过他的资源为你带来更多销量！</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pro-know">
+                  <span class="close" @click="closepopup">知道了</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </popup>
+    </div>
   </div>
 </template>
 
@@ -121,7 +154,7 @@
 </i18n>
 
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, TransferDom, Popup, Group, XImg } from 'vux'
 import Time from '#/time'
 import ENV from 'env'
 import { User } from '#/storage'
@@ -129,8 +162,11 @@ import Subscribe from '@/components/Subscribe'
 import ApplyTip from '@/components/ApplyTip'
 
 export default {
+  directives: {
+    TransferDom
+  },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, ApplyTip
+    Tab, TabItem, Swiper, SwiperItem, Search, XTextarea, Group, XImg, Subscribe, Popup, ApplyTip
   },
   filters: {
     dateformat: function (value) {
@@ -161,10 +197,17 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       salesCount: 0,
-      isFirst: true
+      isFirst: true,
+      isshowfluence: false
     }
   },
   methods: {
+    influence () {
+      this.isshowfluence = true
+    },
+    closepopup () {
+      this.isshowfluence = false
+    },
     openVip () {
       const self = this
       self.$vux.confirm.show({
