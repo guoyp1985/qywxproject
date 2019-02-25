@@ -158,14 +158,14 @@ export default {
       if (this.query.appid) {
         params.appid = this.query.appid
       }
-      this.$router.push({path: '/income', query: params})
+      this.$router.push({path: '/factoryIncome', query: params})
     },
     toDetail () {
       let params = {flag: 2}
       if (this.query.appid) {
         params.appid = this.query.appid
       }
-      this.$router.push({path: '/income', query: params})
+      this.$router.push({path: '/factoryIncome', query: params})
     },
     clickwechat () {
       if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
@@ -273,9 +273,9 @@ export default {
     this.loginUser = User.get()
     this.query = this.$route.query
     if (this.query.appid) {
-      this.fromPage = encodeURIComponent(`/retailerRevenue?appid=${this.query.appid}`)
+      this.fromPage = encodeURIComponent(`/factoryRevenue?appid=${this.query.appid}`)
     } else {
-      this.fromPage = encodeURIComponent('/retailerRevenue')
+      this.fromPage = encodeURIComponent('/factoryRevenue')
     }
     if (this.query.fid) {
       this.fid = this.query.fid
