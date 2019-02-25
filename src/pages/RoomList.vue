@@ -15,6 +15,14 @@
       <form enctype="multipart/form-data">
         <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange" />
       </form>
+      <div v-if="query.from && loginUser.subscribe != 1" class="border-box db-flex top-subscribe-tip">
+        <div class="flex_cell h_100 flex_left">
+          <i class="al al-gantanhaozhong font20"></i><span>关注公众号可及时接收私信提醒</span>
+        </div>
+        <div class="w80 h_100 flex_right">
+          <div class="btn flex_center" @click="toSubscribe">立即关注</div>
+        </div>
+      </div>
       <template v-if="selectedIndex===0">
         <template v-if="showTab1">
           <template v-if="rooms.length">
@@ -118,6 +126,9 @@ export default {
     }
   },
   methods: {
+    toSubscribe () {
+      this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
+    },
     toAdd () {
       let params = {}
       if (this.query.from) {
