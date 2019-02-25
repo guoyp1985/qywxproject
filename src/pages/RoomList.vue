@@ -98,6 +98,7 @@ import { Tab, TabItem, XButton } from 'vux'
 import Room from '@/components/Room'
 import RoomOrderConsumer from '@/components/RoomOrderConsumer'
 import ENV from 'env'
+import { User } from '#/storage'
 
 export default {
   components: {
@@ -106,6 +107,7 @@ export default {
   data () {
     return {
       query: {},
+      loginUser: {},
       selectedIndex: 0,
       showTab1: false,
       showTab2: false,
@@ -310,6 +312,7 @@ export default {
     },
     refresh () {
       this.query = this.$route.query
+      this.loginUser = User.get()
       this.selectedIndex = 0
       this.showTab1 = false
       this.rooms = []
