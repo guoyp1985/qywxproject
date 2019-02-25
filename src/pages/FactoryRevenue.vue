@@ -8,7 +8,7 @@
     </div>
     <div class="middle-content">
       <div class="align_center color-gray pt10 pb10">可提现金额（元）</div>
-      <div class="align_center pb10 font30 bold" style="color:#FF6B63;">{{retailerInfo.waitcash}}</div>
+      <div class="align_center pb10 font30 bold" style="color:#FF6B63;">{{factoryInfo.waitcash}}</div>
       <div class="flex_center pt20">
         <div class="item flex_center mr10" @click="clickwechat">提现至零钱</div>
         <div class="item flex_center ml10" @click="clickbank">提现至银行卡</div>
@@ -17,7 +17,7 @@
     <div class="btom-content">
       <div class="list flex_table mt20" @click="toIncome">
         <div class="align_left">待结算金额</div>
-        <div class="moneyNum">{{retailerInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
+        <div class="moneyNum">{{factoryInfo.pendingmoney}}元<span class="color-gray pl10">></span></div>
       </div>
       <div class="pl20 pt10 pb10 color-gray font12">等待订单确认收货后方可结算并提现</div>
       <div class="list flex_table" @click="toDetail">
@@ -44,7 +44,7 @@
               <input v-model="cashMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="mt5 db-flex">
-              <div class="flex_cell color-gray">可提现金额￥{{retailerInfo.waitcash}}</div>
+              <div class="flex_cell color-gray">可提现金额￥{{factoryInfo.waitcash}}</div>
               <div class="flex_right w80 color-theme" @click="clickAll">全部提现</div>
             </div>
             <div class="btnSubmit" @click="getWechatCash">确认提现</div>
@@ -74,7 +74,7 @@
               <input v-model="cashBankMoney" class="font20 pb10 pl10 w_100" @blur="onBlur" type="text" placeholder="输入提现金额"/>
             </div>
             <div class="mt5 db-flex">
-              <div class="flex_cell color-gray">可提现金额￥{{retailerInfo.waitcash}}</div>
+              <div class="flex_cell color-gray">可提现金额￥{{factoryInfo.waitcash}}</div>
               <div class="flex_right w80 color-theme" @click="clickAll('bank')">全部提现</div>
             </div>
             <div class="btnSubmit" @click="getBankCash">确认提现</div>
@@ -131,7 +131,7 @@ export default {
     return {
       loginUser: {},
       query: {},
-      retailerInfo: {waitcash: '0.00'},
+      factoryInfo: {waitcash: '0.00', pendingmoney: '0.00'},
       wechatShow: false,
       bankShow: false,
       showpopup: false,
@@ -151,7 +151,7 @@ export default {
       }, 100)
     },
     toBank () {
-      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
+      this.$router.push({path: '/factoryBank', query: {id: this.id, fromPage: this.fromPage}})
     },
     toIncome () {
       let params = {}
@@ -215,7 +215,7 @@ export default {
           return false
         }
         let money = parseFloat(inputMoney)
-        let waitcash = parseFloat(this.retailerInfo.waitcash.replace(/,/g, ''))
+        let waitcash = parseFloat(this.factoryInfo.waitcash.replace(/,/g, ''))
         if (money > waitcash) {
           this.$vux.toast.show({
             text: '提现金额不能超过可提现金额',
@@ -247,8 +247,8 @@ export default {
             time: this.$util.delay(data.error)
           })
           if (data.flag) {
-            this.retailerInfo.waitcash = data.waitcash
-            this.loginUser.retailerinfo = this.retailerInfo
+            this.factoryInfo.waitcash = data.waitcash
+            this.loginUser.factoryInfo = this.factoryInfo
             User.set(this.loginUser)
           }
           this.closeWechat()
@@ -263,9 +263,9 @@ export default {
     },
     clickAll (type) {
       if (type === 'bank') {
-        this.cashBankMoney = this.retailerInfo.waitcash
+        this.cashBankMoney = this.factoryInfo.waitcash
       } else {
-        this.cashMoney = this.retailerInfo.waitcash
+        this.cashMoney = this.factoryInfo.waitcash
       }
     }
   },
@@ -282,17 +282,13 @@ export default {
     } else {
       this.fid = this.loginUser.fid
     }
-    // this.$http.get(`${ENV.BokaApi}/api/factory/info`,
-    //   { params: { fid: this.fid } }
-    // ).then(function (res) {
-    // })
-    this.$http.get(`${ENV.BokaApi}/api/retailer/info`).then(res => {
+    this.$http.get(`${ENV.BokaApi}/api/factory/info`,
+      { params: { fid: this.fid } }
+    ).then(res => {
       const data = res.data
-      if (data.flag) {
-        this.retailerInfo = data.data
-        this.loginUser.retailerinfo = this.retailerInfo
-        User.set(this.loginUser)
-      }
+      const retdata = data.data ? data.data : data
+      this.factoryInfo = retdata
+      this.factoryInfo.waitcash = this.factoryInfo.waitcashmoney
     })
   }
 }

@@ -257,21 +257,6 @@
           </div>
         </popup>
       </div>
-      <div v-transfer-dom>
-        <popup class="bg-white" v-model="showMoneyPopup" position="bottom">
-          <div class="">
-            <div class="padding10">本次提现金额为 <span class='color-red'>{{summoney}} 元</span></div>
-            <div class="pb20">
-              <check-icon class="red-check" :value.sync="wechatCash" @click.native.stop="setCashType()">提现到微信</check-icon>
-              <check-icon class="red-check" :value.sync="bankCash" @click.native.stop="setCashType('bank')">提现到银行卡</check-icon>
-            </div>
-          </div>
-          <div class="flex_center" style="width:100%;height:45px;">
-            <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeMoneyPopup">取消</div>
-            <div class="flex_cell bg-red color-white h_100 flex_center" @click="getcash">确认提现</div>
-          </div>
-        </popup>
-      </div>
     </template>
   </div>
 </template>
@@ -329,13 +314,7 @@ export default {
   },
   methods: {
     toBank () {
-      this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
-    },
-    clickCash () {
-      this.showMoneyPopup = true
-    },
-    closeMoneyPopup () {
-      this.showMoneyPopup = false
+      this.$router.push({path: '/factoryBank', query: {fromPage: this.fromPage}})
     },
     setCashType (type) {
       if (type === 'bank') {
@@ -373,7 +352,7 @@ export default {
     getData1 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart1, limit: limit, cashed: 2 } }
+      const params = { params: { from: 'factory', pagestart: pageStart1, limit: limit, cashed: 2 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()
@@ -386,7 +365,7 @@ export default {
     getData2 () {
       this.$vux.loading.show()
       const self = this
-      const params = { params: { from: 'retailerrevenue', pagestart: pageStart2, limit: limit, cashed: 0 } }
+      const params = { params: { from: 'factory', pagestart: pageStart2, limit: limit, cashed: 0 } }
       self.$http.get(`${ENV.BokaApi}/api/accounting/list`, params)
       .then(res => {
         self.$vux.loading.hide()

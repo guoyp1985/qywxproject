@@ -224,6 +224,11 @@ export default {
       this.query = this.$route.query
       console.log('当前登录用户')
       console.log(this.loginUser)
+      if (this.query.id) {
+        this.fid = this.query.id
+      } else {
+        this.fid = this.loginUser.fid
+      }
       this.$http.post(`${ENV.BokaApi}/api/common/getBankNames`).then(res => {
         const data = res.data
         self.cardList = data.data ? data.data : data
