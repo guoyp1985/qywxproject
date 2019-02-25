@@ -85,10 +85,10 @@
                       </router-link>
                       <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
                         <span class="color-red4">{{item.yingxiangli}}</span>
-                        <span class="al al-wenhao font20 ml5" style="position:absolute;top:26px;"></span>
+                        <span class="al al-wenhao font20 ml5 v_middle"></span>
                       </div>
                       <router-link :to="{ path: '/membersView', query: { uid: item.uid } }">
-                        <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                        <div class="clamp1 font14 color-gray">返点客: {{item.uploadname}}</div>
                       </router-link>
                     </div>
                     <div class="t-cell v_middle align_right w60">
