@@ -143,7 +143,7 @@ export default {
         if (!this.loginUser.ismanager) {
           this.$vux.toast.show({
             text: '请联系管理员修改银行卡信息',
-            width: '200px',
+            width: '220px',
             type: 'text'
           })
         } else {
