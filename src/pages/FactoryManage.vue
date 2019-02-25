@@ -64,6 +64,9 @@
               <div class="item">
                 <div class="inner" @click="clickPopup('stat')">统计</div>
               </div>
+              <div class="item">
+                <div class="inner" @click="clickPopup('bank')">结算银行卡</div>
+              </div>
               <div class="item close mt10" @click="clickPopup('row.key')">
                 <div class="inner">{{ $t('Cancel txt') }}</div>
               </div>
@@ -222,6 +225,9 @@ export default {
         self.$router.push(`/sellerList?id=${self.clickData.id}`)
       } else if (key === 'stat') {
         self.$router.push(`/stat?id=${self.clickData.id}&module=factory`)
+      } else if (key === 'bank') {
+        let fromPage = encodeURIComponent('/factoryManage')
+        self.$router.push(`/factoryBank?id=${self.clickData.id}&fromPage=${fromPage}`)
       } else {
         self.showPopup1 = false
       }
