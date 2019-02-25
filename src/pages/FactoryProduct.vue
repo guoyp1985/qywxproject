@@ -110,7 +110,7 @@
           <div class="btn-bottom-red flex_center" style="width:80%;" v-else @click="importEvent">上架到店铺</div>
         </div>
         <div class="align_center flex_center flex_cell">
-          <router-link :to="{path: '/store', query:{wid: loginUser.uid}}" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</router-link>
+          <div @click="toStore" class="btn-bottom-orange flex_center" style="width:80%;">我的店铺</div>
         </div>
       </div>
       <div v-transfer-dom>
@@ -266,6 +266,13 @@ export default {
     },
     filterEmot (text) {
       return this.$util.emotPrase(text)
+    },
+    toStore () {
+      if (this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.store}?wid=${this.loginUser.uid}`})
+      } else {
+        this.$router.push({path: '/store', query: {wid: this.loginUser.uid}})
+      }
     },
     clickPlay (refname) {
       this.playVideo = true

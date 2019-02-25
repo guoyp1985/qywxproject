@@ -256,7 +256,7 @@ export default {
     },
     joinTeam () {
       let _this = this
-      if (this.teamInfo.fid === 0) {
+      if (!this.loginUser.isretailer) {
         this.$vux.confirm.show({
           title: `申请卖家后才可加入团队,确定申请？`,
           onConfirm () {

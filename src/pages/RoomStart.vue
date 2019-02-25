@@ -5,7 +5,7 @@
 */
 <template>
   <div class="containerarea font14 room-start-page bg-white">
-    <div class="pagemiddle padding10" style="top:0;color:#666;">
+    <div class="pagemiddle padding10" style="top:0;color:#666;bottom:0;">
       <div class="color-theme font16">1、群群推是什么？</div>
       <div class="mt10">答：1个群做销售，能力有限；多个群帮你做销售，能力无限！群群推通过微信群价值评估，将群主与需要推广的卖家建立联系，最终达到双方受益，合作共赢的目的。</div>
       <div class="color-theme mt10 font16">我是群主：</div>
@@ -18,14 +18,14 @@
       <div class="color-theme mt10 font16">3、群群推的优势是什么？</div>
       <div class="mt10">在微信生态中，卖家总是被获客难、转化难、无法提高交易量等诸多问题所困扰，而群群推正是解决这些问题的纽带，每个卖家都会拥有自己的微信群，通过帮助其他卖家推广产品信息不仅可以获得推广费用，还可以丰富自己的微信群，不让群内产品过于单调。而对于其他卖家而言，通过群群推可有效提高产品的曝光度、获得群内客户，且凭借群成员对群主的信任度还可有效提高产品销量，通过群群推功能，产品的销售成功率高达80%。</div>
     </div>
-    <div class="pagebottom db-flex b_top_after">
+    <!-- <div class="pagebottom db-flex b_top_after">
       <div class="flex_cell flex_center">
         <div class="btn flex_center bg-theme color-white" @click="toMoney">我要赚钱</div>
       </div>
       <div class="flex_cell flex_center">
-        <router-link class="btn flex_center bg-orange color-white" to="/rooms">我要推广</router-link>
+        <div class="btn flex_center bg-orange color-white" @click="toRooms">我要推广</div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -42,11 +42,22 @@ export default {
     }
   },
   methods: {
+    toRooms () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/rooms', query: params})
+    },
     toMoney () {
+      let params = {}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
       if (this.query.frompage === 'rooms') {
-        this.$router.push('/roomList')
+        this.$router.push({path: '/roomList', query: params})
       } else {
-        this.$router.push('/roomApply')
+        this.$router.push({path: '/roomApply', query: params})
       }
     },
     closeTip () {
@@ -70,8 +81,8 @@ export default {
 </script>
 <style lang="less">
 .room-start-page{
-  .pagebottom{
-    .btn{width:80%;margin:0 auto;height:35px;border-radius:30px;}
-  }
+  // .pagebottom{
+  //   .btn{width:80%;margin:0 auto;height:35px;border-radius:30px;}
+  // }
 }
 </style>

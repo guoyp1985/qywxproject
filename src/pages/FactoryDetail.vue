@@ -11,7 +11,10 @@
           <img :src="factoryInfo.photo" style="width:40px;height:40px;border-radius:50%;object-fit:cover;" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
         </div>
         <div class="flex_cell flex_left">
-          <div class="w_100 clamp1 font16">{{factoryInfo.title}}</div>
+          <div class="w_100">
+            <div class="w_100 clamp1 font16">{{factoryInfo.title}}</div>
+            <div v-if="shareUser.uid && !isJoin && disShareUser" class="w_100 clamp1 color-theme font12">推荐人: {{shareUser.linkman}}</div>
+          </div>
         </div>
       </div>
       <div class="w100 flex_center">
@@ -152,7 +155,9 @@ export default {
       showEdit: false,
       isJoin: false,
       previewerPhotoarr: [],
-      wxPhotoArr: []
+      wxPhotoArr: [],
+      shareUser: {},
+      disShareUser: false
     }
   },
   filters: {
@@ -360,6 +365,12 @@ export default {
         this.showEdit = false
       }
       this.isJoin = false
+      if (this.query.wid) {
+        console.log(111)
+        this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.wid}`).then(res => {
+          this.shareUser = res.data
+        })
+      }
       this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
         const data = res.data
         this.loginUser = data
@@ -370,6 +381,7 @@ export default {
             break
           }
         }
+        this.disShareUser = true
         return this.$http.get(`${ENV.BokaApi}/api/factory/info`, {
           params: {fid: this.fid}
         })

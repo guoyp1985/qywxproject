@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="room-stats" v-if="item.members">
+    <div class="room-stats" v-if="item.members && item.moderate != 0">
       <div class="db-flex font13 color-gray">
         <div class="flex_cell">
           <div>
