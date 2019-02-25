@@ -81,13 +81,15 @@
                     <div class="t-cell v_middle">
                       <router-link :to="{ path: '/membersView', query: { uid: item.uid } }">
                         <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
-                        <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
                         <!-- <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div> -->
                       </router-link>
                       <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
                         <span class="color-red4">{{item.yingxiangli}}</span>
-                        <span class="al al-wenhao font20 ml5" style="position:absolute;bottom:5px;"></span>
+                        <span class="al al-wenhao font20 ml5" style="position:absolute;top:26px;"></span>
                       </div>
+                      <router-link :to="{ path: '/membersView', query: { uid: item.uid } }">
+                        <div class="clamp1 mt5 font14 color-gray">返点客: {{item.uploadname}}</div>
+                      </router-link>
                     </div>
                     <div class="t-cell v_middle align_right w60">
                       <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
