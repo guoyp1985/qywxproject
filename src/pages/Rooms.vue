@@ -166,6 +166,14 @@ export default {
       })
     },
     refresh () {
+      this.selectIndex = 0
+      this.loadCompleted = false
+      this.pageStart = 0
+      this.rooms = []
+      this.sortTotal = null
+      this.sortTime = null
+      this.sortSales = null
+      this.sortPrice = null
       this.loadData('score', true)
     },
     loadData (sortKey, isAsc) {

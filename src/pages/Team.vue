@@ -132,6 +132,7 @@ export default {
     })
   },
   activated () {
+    this.fixedTop = false
     this.$http.get(`${ENV.BokaApi}/api/user/show`).then(res => {
       const data = res.data
       this.loginUser = data
