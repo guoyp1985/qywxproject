@@ -309,14 +309,17 @@ export default {
           self.$http.post(`${ENV.BokaApi}/api/factory/add`, postData).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
+            let error = data.flag ? '设置成功' : data.error
+            let timeout = self.$util.delay(error)
+            self.$vux.toast.show({
+              text: error,
+              type: data.flag ? 'success' : 'warn',
+              time: timeout
+            })
             if (data.flag === 1) {
-              self.$router.go(-1)
-            } else {
-              self.$vux.toast.show({
-                text: data.error,
-                type: 'warn',
-                time: self.$util.delay(data.error)
-              })
+              setTimeout(() => {
+                self.$router.go(-1)
+              }, timeout)
             }
           })
         }
