@@ -43,9 +43,8 @@
         </div>
       </div>
     </div>
-    <div class="flex_center mt20 color-theme">请联系管理员修改银行卡信息</div>
-    <!-- <div class="flex_center color-white btn-bottom-red mt20" @click="bindEvent" v-if="loginUser.ismanager">绑定</div>
-    <div class="flex_center mt20 color-theme" v-else>请联系管理员修改银行卡信息</div> -->
+    <div class="flex_center color-white btn-bottom-red mt20" @click="bindEvent" v-if="query.control === 'manage'">绑定</div>
+    <div class="flex_center mt20 color-theme" v-else>请联系管理员修改银行卡信息</div>
     <div class="mt20 padding20">
       <div class="bold">*注意事项</div>
       <div>1. 请确保持卡人姓名为本人姓名</div>
