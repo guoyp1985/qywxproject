@@ -13,7 +13,7 @@
           </router-link>
           <div class="name disusername">{{item.linkman}}</div>
           <div class="msg">
-            <template v-if="item.type == 'image'">
+            <template v-if="item.type == 'photo'">
               <div class="main message-text" @click="showBigimg(item,`previewer${index}`)">
                 <img :src="item.picurl"/>
               </div>
@@ -41,7 +41,7 @@
                 <div class="tr" v-for="(item,index) in orderData" :key="index">
                   <div class="td flex_center" v-html="item.title"></div>
                   <div class="td flex_left">
-                    <template v-if="item.type === 'image' && item.photoarr && item.photoarr.length">
+                    <template v-if="item.type === 'photo' && item.photoarr && item.photoarr.length">
                       <template v-for="(photo,index1) in item.photoarr">
                         <img :src="photo"/>
                       </template>
@@ -73,7 +73,7 @@
             <x-textarea v-model='message' ref="text" @on-change="inputText" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
         </div>
-        <div v-if="askData[askIndex].msgtype != 'image'" class="send-cell flex_center">
+        <div v-if="askData[askIndex].msgtype != 'photo'" class="send-cell flex_center">
           <div v-if="showSendBtn" class="btn-send" @click="sendMessage">发送</div>
           <div v-else class="btn-send disabled">发送</div>
         </div>
@@ -114,7 +114,7 @@ export default {
       askData: [
         {type: 'ask', content: '请问您的收货地址是哪里？', asktype: 'address'},
         {type: 'ask', content: '请问您的手机号码是多少？', asktype: 'telephone'},
-        {type: 'ask', content: '请将您要购买的商品图片发送给我', msgtype: 'image', asktype: 'image'},
+        {type: 'ask', content: '请将您要购买的商品图片发送给我', msgtype: 'photo', asktype: 'photo'},
         {type: 'ask', content: '您要购买几件？<br>想要购买的型号或颜色是什么呢？', asktype: 'options'},
         {type: 'ask', content: '好的，正在为您生成订单，如有其它备注请留言？', asktype: 'content'}
       ],
@@ -127,8 +127,9 @@ export default {
       chatUser: {},
       answerData: [],
       showOrder: false,
-      orderKey: {'address': '收货地址', 'telephone': '联系电话', 'image': '购买商品', 'options': '购买件数<br>型号/颜色', 'content': '其它备注'},
-      orderData: []
+      orderKey: {'address': '收货地址', 'telephone': '联系电话', 'photo': '购买商品', 'options': '购买件数<br>型号/颜色', 'content': '其它备注'},
+      orderData: [],
+      postOrderData: {'address': '', 'telephone': '', 'photo': '', 'options': '', 'content': ''}
     }
   },
   methods: {
@@ -220,17 +221,19 @@ export default {
             curarr.push(cur.content)
           }
         }
-        let pushData = {title: this.orderKey[key], type: key}
+        let pushData = {title: this.orderKey[key], type: key, content: ''}
         if (curarr.length > 0) {
           pushData.content = curarr.join(',')
-          if (key === 'image') {
+          if (key === 'photo') {
             pushData.photoarr = curarr
           }
         }
         this.orderData.push(pushData)
+        this.postOrderData[key] = pushData.content
       }
       this.showOrder = true
       this.setScrollToBottom(false)
+      console.log(this.postOrderData)
     },
     disNextAsk () {
       if (this.askIndex + 1 < this.askData.length) {
@@ -245,7 +248,7 @@ export default {
     },
     uploadPhotoCallback (data) {
       if (data.flag === 1 && data.data) {
-        let pushData = {picurl: data.data, content: data.data, type: 'image', asktype: 'image', ...this.currentUser}
+        let pushData = {picurl: data.data, content: data.data, type: 'photo', asktype: 'photo', ...this.currentUser}
         this.answerData.push(pushData)
         this.messageList.push(pushData)
         setTimeout(() => {
@@ -314,12 +317,15 @@ export default {
     },
     confirmOrder () {
       console.log(this.answerData)
+      this.$router.push({path: '/simpleOrderDetail'})
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
       this.currentUser = {avatar: this.loginUser.avatar, uid: this.loginUser.uid, linkman: this.loginUser.linkman}
+      this.postOrderData.linkman = this.loginUser.linkman
+      this.postOrderData.uid = this.loginUser.uid
       this.$http.get(`${BokaApi}/api/retailer/info`, {
         params: {uid: this.query.uid}
       }).then(res => {
