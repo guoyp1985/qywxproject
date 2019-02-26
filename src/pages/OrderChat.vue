@@ -246,6 +246,17 @@ export default {
         }, 2000)
       }
     },
+    uploadPhotoCallback (data) {
+      if (data.flag === 1 && data.data) {
+        let pushData = {picurl: data.data, content: data.data, type: 'image', asktype: 'image', ...this.currentUser}
+        this.answerData.push(pushData)
+        this.messageList.push(pushData)
+        console.log(this.answerData)
+        setTimeout(() => {
+          this.disNextAsk()
+        }, 500)
+      }
+    },
     pcUploadImg (event) {
       const uploadFiles = event.target.files
       if (uploadFiles.length > 0) {
@@ -257,15 +268,7 @@ export default {
           self.$vux.loading.hide()
           if (res) {
             const data = res.data
-            if (data.flag === 1 && data.data) {
-              let pushData = {picurl: data.data, content: data.data, type: 'image', asktype: 'image', ...this.currentUser}
-              this.answerData.push(pushData)
-              this.messageList.push(pushData)
-              console.log(this.answerData)
-              setTimeout(() => {
-                this.disNextAsk()
-              }, 500)
-            }
+            this.uploadPhotoCallback(data)
           } else {
             self.$vux.toast.show({
               text: '请求超时，请刷新重试'
@@ -280,15 +283,7 @@ export default {
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
-            if (data.flag === 1 && data.data) {
-              let pushData = {picurl: data.data, content: data.data, type: 'image', asktype: 'image', ...this.currentUser}
-              this.answerData.push(pushData)
-              this.messageList.push(pushData)
-              console.log(this.answerData)
-              setTimeout(() => {
-                this.disNextAsk()
-              }, 500)
-            }
+            this.uploadPhotoCallback(data)
           }
         })
       } else {
