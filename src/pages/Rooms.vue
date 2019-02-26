@@ -29,10 +29,24 @@
         <template v-if="rooms.length">
           <room-view v-for="(item, index) in rooms" :key="index" :item="item">
             <div class="font13" slot="sort-key">
-              <span v-if="selectIndex === 0">评分: {{item.score}}</span>
-              <span v-if="selectIndex === 1">时间: {{item.dateline | formatDate}}</span>
-              <span v-if="selectIndex === 2">接单数: {{item.sales}}</span>
-              <span v-if="selectIndex === 3">价格: ￥{{item.viewmoney}}/人点击</span>
+              <span v-if="selectIndex === 0">
+                评分: {{item.score}}<span class="ml10">群人数: {{item.members}}</span>
+                <div>点击价值: {{item.viewmoney}}</div>
+              </span>
+              <span v-if="selectIndex === 1">
+                时间: {{item.dateline | formatDate}}
+                <div>评分: {{item.score}}<span class="ml10">群人数: {{item.members}}</span></div>
+                <div>点击价值: {{item.viewmoney}}</div>
+              </span>
+              <span v-if="selectIndex === 2">
+                接单数: {{item.sales}}<span class="ml10">群人数: {{item.members}}</span>
+                <div>评分: {{item.score}}<span class="ml10">点击价值: {{item.viewmoney}}</span></div>
+              </span>
+              <span v-if="selectIndex === 3">
+                价格: ￥{{item.viewmoney}}/人点击
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: {{item.viewmoney}}</span></div>
+                <div>评分: {{item.score}}</div>
+              </span>
             </div>
             <div slot="operation-area" class="room-operate-area db-flex">
               <router-link class="flex_cell font13 button" :to="{ name: 'tRoomDetails', query: {id: item.id} }">了解更多</router-link>
