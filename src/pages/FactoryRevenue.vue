@@ -288,7 +288,7 @@ export default {
       const data = res.data
       const retdata = data.data ? data.data : data
       this.factoryInfo = retdata
-      this.factoryInfo.waitcash = this.factoryInfo.waitcashmoney
+      this.factoryInfo.waitcash = `${this.factoryInfo.waitcashmoney}`
     })
   }
 }
