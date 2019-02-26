@@ -64,6 +64,7 @@
   "OrderChat",
   "OrderSearch",
   "OrderDetail",
+  "OrderManagement",
   "Profile",
   "Product",
   "Pay",

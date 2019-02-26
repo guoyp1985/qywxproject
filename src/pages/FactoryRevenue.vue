@@ -11,7 +11,7 @@
       <div class="align_center pb10 font30 bold" style="color:#FF6B63;">{{factoryInfo.waitcash}}</div>
       <div class="flex_center pt20">
         <!-- <div class="item flex_center mr10" @click="clickwechat">提现至零钱</div> -->
-        <div class="item flex_center ml10" @click="clickbank">提现至银行卡</div>
+        <div class="item flex_center" @click="clickbank">提现至银行卡</div>
       </div>
     </div>
     <div class="btom-content">
