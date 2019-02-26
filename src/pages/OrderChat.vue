@@ -283,7 +283,7 @@ export default {
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
-            this.uploadPhotoCallback(data)
+            self.uploadPhotoCallback(data)
           }
         })
       } else {
