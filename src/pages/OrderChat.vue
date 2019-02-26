@@ -5,8 +5,8 @@
 */
 <template>
   <div class="font14 containerarea order-chat-page notop">
-    <div class="pagemiddle" ref="scrollContainer">
-      <div class="chatlist">
+    <scroller class="pagemiddle" ref="scrollContainer">
+      <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
           <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
             <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
@@ -58,14 +58,14 @@
                   <div class="color-theme font12 flex_center" style="border:#ff6a61 1px solid;width:100px;" @click="rewriteOrder">有误，重新填写</div>
                 </div>
                 <div class="flex_cell flex_right">
-                  <div class="font12 flex_center" style="color:#00d449;border:#00d449 1px solid;width:100px;">正确，立即购买</div>
+                  <div class="font12 flex_center" style="color:#00d449;border:#00d449 1px solid;width:100px;" @click="confirmOrder">正确，立即购买</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </scroller>
     <div class="bottom-area" ref="bottomArea" :style="{'bottom': `${bottomPos}px`}">
       <div class="input-box">
         <div class="input-cell">
@@ -179,7 +179,8 @@ export default {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
-          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          let scrollContainer = self.$refs.scrollContainer.$el ? self.$refs.scrollContainer.$el : self.$refs.scrollContainer
+          const top = self.$refs.scrollContent.clientHeight - scrollContainer.clientHeight
           const clientH = parseInt(self.$refs.bottomArea.clientHeight)
           self.$refs.scrollContainer.reset({ top: top + clientH })
         }
@@ -196,16 +197,14 @@ export default {
     },
     setScrollToBottom (isTouch) {
       this.isUserTouch = typeof isTouch !== 'undefined' ? isTouch : this.isUserTouch
-      console.log(isTouch)
-      console.log(this.isUserTouch)
       if (this.isUserTouch) return
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
-          if (this.$refs.scrollContent.clientHeight < this.$refs.scrollContainer.$el.clientHeight) return
+          let scrollContainer = this.$refs.scrollContainer.$el ? this.$refs.scrollContainer.$el : this.$refs.scrollContainer
+          if (this.$refs.scrollContent.clientHeight < scrollContainer.clientHeight) return
           setTimeout(() => {
-            const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
-            console.log(top)
+            const top = self.$refs.scrollContent.clientHeight - scrollContainer.clientHeight
             self.$refs.scrollContainer.reset({ top: top })
           }, 100)
         }
@@ -231,8 +230,7 @@ export default {
         this.orderData.push(pushData)
       }
       this.showOrder = true
-      console.log('生成订单')
-      console.log(this.orderData)
+      this.setScrollToBottom(false)
     },
     disNextAsk () {
       if (this.askIndex + 1 < this.askData.length) {
@@ -240,7 +238,6 @@ export default {
         this.messageList.push({...this.chatUser, ...this.askData[this.askIndex]})
       }
       if (this.askIndex + 1 === this.askData.length) {
-        console.log('进入到了最后一条')
         setTimeout(() => {
           this.createOrder()
         }, 2000)
@@ -251,10 +248,10 @@ export default {
         let pushData = {picurl: data.data, content: data.data, type: 'image', asktype: 'image', ...this.currentUser}
         this.answerData.push(pushData)
         this.messageList.push(pushData)
-        console.log(this.answerData)
         setTimeout(() => {
           this.disNextAsk()
         }, 500)
+        this.setScrollToBottom(false)
       }
     },
     pcUploadImg (event) {
@@ -292,9 +289,6 @@ export default {
     },
     sendMessage () {
       let postContent = this.message
-      // if (!this.$util.isNull(postContent)) {
-      //   postContent = postContent.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r')
-      // }
       if (this.$util.trim(postContent) === '') {
         return false
       }
@@ -306,7 +300,7 @@ export default {
       setTimeout(() => {
         this.disNextAsk()
       }, 500)
-      console.log(this.answerData)
+      this.setScrollToBottom(false)
     },
     rewriteOrder () {
       this.askIndex = 0
@@ -317,6 +311,9 @@ export default {
       this.answerData = []
       let msg = {...this.chatUser, ...this.askData[0]}
       this.messageList.push(msg)
+    },
+    confirmOrder () {
+      console.log(this.answerData)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
