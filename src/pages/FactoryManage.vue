@@ -227,7 +227,7 @@ export default {
         self.$router.push(`/stat?id=${self.clickData.id}&module=factory`)
       } else if (key === 'bank') {
         let fromPage = encodeURIComponent('/factoryManage')
-        self.$router.push(`/factoryBank?id=${self.clickData.id}&fromPage=${fromPage}`)
+        self.$router.push(`/factoryBank?id=${self.clickData.id}&control=manage&fromPage=${fromPage}`)
       } else {
         self.showPopup1 = false
       }

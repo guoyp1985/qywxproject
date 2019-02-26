@@ -178,13 +178,11 @@ export default {
       if (!this.loginUser.idcardno || this.loginUser.idcardno === '') {
         this.$router.push({path: '/authPhoto', query: {fromPage: this.fromPage}})
       } else {
-        if (!this.loginUser.bankcardno || this.loginUser.bankcardno === '') {
-          this.$vux.confirm.show({
-            content: `您还没有绑定银行卡`,
-            confirmText: '去绑定',
-            onConfirm: () => {
-              this.$router.push({path: '/bindingBank', query: {fromPage: this.fromPage}})
-            }
+        if (!this.factoryInfo.bankcardno || this.factoryInfo.bankcardno === '') {
+          this.$vux.toast.show({
+            text: '请联系管理员绑定银行卡信息',
+            type: 'text',
+            width: '220px'
           })
           return false
         }
