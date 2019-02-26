@@ -77,7 +77,7 @@
         </group>
       </div>
       <div class="mt20 flex_center pl12 pr12">
-        <div class="flex_cell flex_center btn-bottom-red" @click="save">{{ $t('Save') }}</div>
+        <div class="flex_cell flex_center btn-bottom-red" @click="save">下一步，编辑内容</div>
       </div>
       <clip-popup :show="popupShow" :img="cutImg" :after-submit="popupSubmit" @on-cancel="popupCancel"></clip-popup>
     </template>

@@ -228,6 +228,9 @@
         </popup>
       </div>
     </template>
+    <div class="modalarea flex_center" v-if="showSure">
+      <div></div>
+    </div>
   </div>
 </template>
 <i18n>
@@ -260,6 +263,7 @@ export default {
   },
   data () {
     return {
+      showSure: false,
       showApply: false,
       showContainer: false,
       query: {},
@@ -290,6 +294,10 @@ export default {
     }
   },
   methods: {
+    btnshow () {
+      console.log('111111111')
+      this.showSure = true
+    },
     toSubscribe () {
       this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
     },

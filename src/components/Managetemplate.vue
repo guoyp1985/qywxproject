@@ -16,11 +16,10 @@
     <slot name="productlist"></slot>
     <div class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
         <div class="btn canle">取消</div>
-        <div class="btn sure">确认收款</div>
+        <div class="btn sure" @click="btnSure">确认收款</div>
     </div>
   </router-link>
 </template>
-
 <script>
 export default {
   name: 'Managetemplate',
@@ -34,12 +33,18 @@ export default {
       type: String,
       default: ''
     }
+  },
+  methods: {
+    btnSure () {
+       this.$emit('btnshow')
+    }
   }
 }
 </script>
 
 <style lang="less">
 .bk-managetemplate{
+  height:100%;
   .inner{
     width:40px;height:30px;border-radius:50%;
     img{width:30px;height:30px;border-radius:50%;border:1px solid #e5e5e5}
