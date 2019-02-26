@@ -86,6 +86,7 @@
       <span slot="title">验证密钥</span>
       <input v-model="crypto" type="text" name="key" class="input border-box" placeholder="请输入密钥" />
     </forminputplate> -->
+    <div class="font12 color-red4 align_center mt10" style="padding:0 15px;box-sizing:border-box;">注意：请勿将官方客服踢出微信群，否则影响微信群接收订单！</div>
   </div>
 </template>
 <script>
