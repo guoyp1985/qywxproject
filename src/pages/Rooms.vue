@@ -30,19 +30,19 @@
           <room-view v-for="(item, index) in rooms" :key="index" :item="item">
             <div class="font13" slot="sort-key">
               <span v-if="selectIndex === 0">
-                <div>群人数: {{item.members}}<span class="ml10">点击价值: {{item.viewmoney}}</span></div>
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
                 评分: {{item.score}}
               </span>
               <span v-if="selectIndex === 1">
-                <div>群人数: {{item.members}}<span class="ml10">点击价值: {{item.viewmoney}}</span></div>
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
                 时间: {{item.dateline | formatDate}}
               </span>
               <span v-if="selectIndex === 2">
-                <div>群人数: {{item.members}}<span class="ml10">点击价值: {{item.viewmoney}}</span></div>
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
                 接单数: {{item.sales}}
               </span>
               <span v-if="selectIndex === 3">
-                <div>群人数: {{item.members}}<span class="ml10">点击价值: {{item.viewmoney}}</span></div>
+                <div>群人数: {{item.members}}<span class="ml10">点击价值: ￥{{item.viewmoney}}</span></div>
               </span>
             </div>
             <div slot="operation-area" class="room-operate-area db-flex">
