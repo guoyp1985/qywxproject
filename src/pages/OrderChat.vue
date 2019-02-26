@@ -55,7 +55,7 @@
               <div class="align_center mt10 color-theme">请核对订单信息是否有误？</div>
               <div class="mt10 db-flex">
                 <div class="flex_cell flex_left">
-                  <div class="color-theme font12 flex_center" style="border:#ff6a61 1px solid;width:100px;">有误，重新填写</div>
+                  <div class="color-theme font12 flex_center" style="border:#ff6a61 1px solid;width:100px;" @click="rewriteOrder">有误，重新填写</div>
                 </div>
                 <div class="flex_cell flex_right">
                   <div class="font12 flex_center" style="color:#00d449;border:#00d449 1px solid;width:100px;">正确，立即购买</div>
@@ -217,7 +217,7 @@ export default {
         let curarr = []
         for (let i = 0; i < this.answerData.length; i++) {
           let cur = this.answerData[i]
-          if (cur.asktype === key) {
+          if (cur.status !== 0 && cur.asktype === key) {
             curarr.push(cur.content)
           }
         }
@@ -307,6 +307,16 @@ export default {
         this.disNextAsk()
       }, 500)
       console.log(this.answerData)
+    },
+    rewriteOrder () {
+      this.askIndex = 0
+      for (let i = 0; i < this.messageList.length; i++) {
+        this.messageList[i].status = 0
+      }
+      this.showOrder = false
+      this.answerData = []
+      let msg = {...this.chatUser, ...this.askData[0]}
+      this.messageList.push(msg)
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
