@@ -181,11 +181,11 @@ export default {
       this.loadCompleted = false
       this.pageStart = 0
       this.rooms = []
-      this.sortTotal = null
+      this.sortTotal = true
       this.sortTime = null
       this.sortSales = null
       this.sortPrice = null
-      this.loadData('score', true)
+      this.loadData('score', this.sortTotal)
     },
     loadData (sortKey, isAsc) {
       const params = {from: 'other', orderby: sortKey, ascdesc: isAsc ? 'desc' : 'asc', limit: this.limit, pagestart: this.pageStart}
