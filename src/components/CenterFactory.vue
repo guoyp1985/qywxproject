@@ -63,13 +63,13 @@
             </div>
           </grid-item>
         </div>
-        <div class="gridlist">
+        <!-- <div class="gridlist">
           <grid-item :label="$t('Level')" :link="{path:`/factoryLevel?id=${factoryInfo.id}`}" style="position:relative;">
             <div slot="icon">
               <i class="al al-dengji"></i>
             </div>
           </grid-item>
-        </div>
+        </div> -->
         <!--
         <div class="gridlist">
           <grid-item :label="$t('Stat')" :link="{path:`/stat?module=factory&id=${factoryInfo.id}`}" style="position:relative;">
