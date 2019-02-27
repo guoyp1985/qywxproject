@@ -22,11 +22,11 @@
               <div class="flex_center" style="height:80px;">暂无搜索结果</div>
             </template>
             <template v-else>
-              <div class="t-table">
+              <div class="t-table" style="padding-top:20%;">
                 <div class="t-cell v_middle">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">空空如也~</div>
-                  <div class="align_left mt5">赶快<router-link :to="{path: '/addFactoryNews', query: {fid: query.fid}}" class="color-blue">创建文章</router-link>，为卖家提供素材可有效提高销量哦</div>
+                  <div class="align_center mt5">赶快<router-link :to="{path: '/addFactoryNews', query: {fid: query.fid}}" class="color-blue">创建文章</router-link>，为卖家提供素材可有效提高销量哦</div>
                 </div>
               </div>
             </template>
