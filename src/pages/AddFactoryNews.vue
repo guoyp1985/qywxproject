@@ -151,9 +151,10 @@ export default {
       if (self.$util.isPC()) {
         fileInput.click()
       } else {
+        let curmax = 1
         self.$wechat.ready(function () {
           self.$util.wxUploadImage({
-            maxnum: 9 - self.photoarr.length,
+            maxnum: curmax,
             handleCallback: function (data) {
               self.photoCallback(data)
             }
