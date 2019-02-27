@@ -201,8 +201,9 @@ export default {
 .btnin{
   .inputs{
     border:1px solid #C3C3C3;height:31px;padding-left:10px;width:150px;margin-left:20px;
+    .weui-cell{padding:0;width:100%;height:100%;box-sizing:border-box;}
   }
-  input{outline:none;margin-top:9px;width:120px;}
+  input{outline:none;width:100%;height:100%;}
   .btn{
     width:60px;height:33px;text-align:center;line-height:33px;color:#fff;background-color:#C3C3C3;border:0;
     margin-left:-1px;
