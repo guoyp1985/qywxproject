@@ -320,6 +320,7 @@ export default {
       console.log(this.answerData)
       this.$vux.loading.show()
       this.$http.post(`${BokaApi}/api/ordersoffline/add`, this.postOrderData).then(res => {
+        this.$vux.loading.hide()
         const data = res.data
         this.$vux.toast.show({
           text: data.error,

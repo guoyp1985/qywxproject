@@ -54,8 +54,11 @@
 </template>
 <script>
 import { TransferDom, Popup } from 'vux'
+import ENV from 'env'
 import Time from '#/time'
 import { User } from '#/storage'
+
+const BokaApi = ENV.BokaApi
 
 export default {
   directives: {
@@ -93,10 +96,20 @@ export default {
   computed: {
   },
   methods: {
+    getData () {
+      this.$http.get(`${BokaApi}/api/moduleInfo`, {
+        params: {module: 'ordersoffline', id: this.query.id}
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        this.orderData = retdata
+      })
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
+      this.getData()
     }
   },
   activated () {
