@@ -204,6 +204,9 @@ export default {
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
+        if (inputMoney) {
+          inputMoney = `${inputMoney}`
+        }
         if (inputMoney && inputMoney.indexOf(',') > -1) {
           inputMoney = inputMoney.replace(/,/g, '')
         }
