@@ -1,5 +1,5 @@
 <template>
-  <div :class="`containerarea bg-page font14 ordermanagement ${showTip ? 'show-tip-page' : ''}`">
+  <div id="order-management-page" :class="`containerarea bg-page font14 ordermanagement ${showTip ? 'show-tip-page' : ''}`">
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <apply-tip v-if="showApply"></apply-tip>
     <template v-if="showContainer">
@@ -37,7 +37,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else @btnshow="btnmodal" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
+                <managetemplate v-else @clickConfirm="clickConfirm" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :dataIndex="index1">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <div slot="receivearea">
@@ -75,12 +75,12 @@
             </div>
             <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
               <div v-if="distabdata2" class="scroll_list">
-                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
+                <div v-if="!tabdata2 || tabdata2.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else @btnshow="btnmodal" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
+                <managetemplate v-else @clickConfirm="clickConfirm" v-for="(item,index1) in tabdata2" :key="item.id" :data="item" :dataIndex="index1">
                   <!-- <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span> -->
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -122,7 +122,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
+                <managetemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :dataIndex="index1">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -149,13 +149,13 @@
               </div>
             </div>
             <div v-if="(index == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',index)">
-              <div v-if="distabdata1" class="scroll_list">
-                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div v-if="distabdata4" class="scroll_list">
+                <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
+                <managetemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" :dataIndex="index1">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -221,15 +221,19 @@
         </popup>
       </div>
     </template>
-    <div class="modalarea flex_center" v-if="showSure">
+    <div class="modalarea flex_center" v-if="showConfirm">
       <div class="modalSure font14">
         <div class="align_center font16">请确认是否收到买家的付款</div>
         <div class="flex_table flex_center" style="margin-top:50px;">
-          <div>备注付款金额<input type="text" placeholder="输入金额"></input>元</div>
+          <div class="flex_left">
+            <div style="width:100px;">备注付款金额</div>
+            <x-input v-model="price" class="input" type="text" placeholder="输入金额" maxlength="10" size="10"></x-input>
+            <div class="flex_right" style="width:30px;">元</div>
+          </div>
         </div>
         <div class="flex_table flex_center" style="margin-top:50px;">
           <div @click="closeModal" class="btns canle align_center mr10">取消</div>
-          <div class="btns sure align_center ml10">确认收款</div>
+          <div class="btns sure align_center ml10" @click="confirmOrder">确认收款</div>
         </div>
       </div>
     </div>
@@ -242,7 +246,7 @@ My orders:
   zh-CN: 我的订单
 </i18n>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg, Search } from 'vux'
+import { Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, TransferDom, Popup, XImg, Search, XInput } from 'vux'
 import Managetemplate from '@/components/Managetemplate'
 import Manageproducttemplate from '@/components/Manageproducttemplate'
 import Time from '#/time'
@@ -256,7 +260,7 @@ export default {
     TransferDom
   },
   components: {
-    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Managetemplate, Manageproducttemplate, XImg, Subscribe, ApplyTip, Search
+    Tab, TabItem, Swiper, SwiperItem, XTextarea, Group, XButton, Popup, Managetemplate, Manageproducttemplate, XImg, Subscribe, ApplyTip, Search, XInput
   },
   filters: {
     dateformat: function (value) {
@@ -265,7 +269,7 @@ export default {
   },
   data () {
     return {
-      showSure: false,
+      showConfirm: false,
       showApply: false,
       showContainer: false,
       query: {},
@@ -292,15 +296,22 @@ export default {
       deliverdata: { delivercompany: '-1', delivercode: '' },
       autofixed: false,
       searchword1: '',
-      showTip: false
+      showTip: false,
+      price: '',
+      clickData: null,
+      clickIndex: 0
     }
   },
   methods: {
-    btnmodal () {
-      this.showSure = true
+    clickConfirm (item, index) {
+      this.clickData = item
+      this.clickIndex = index
+      console.log(item)
+      console.log(index)
+      this.showConfirm = true
     },
     closeModal () {
-      this.showSure = false
+      this.showConfirm = false
     },
     toSubscribe () {
       this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
@@ -315,6 +326,46 @@ export default {
       const kw = this.searchword1
       this.searchword1 = ''
       this.$router.push({path: '/RetailerOrderSearch', query: {keyword: kw}})
+    },
+    confirmOrder () {
+      let inputMoney = `${this.price}`
+      if (inputMoney.indexOf(',') > -1) {
+        inputMoney = inputMoney.replace(/,/g, '')
+      }
+      if (inputMoney === '' || isNaN(inputMoney) || parseFloat(inputMoney) < 0) {
+        this.$vux.toast.show({
+          text: '请输入正确的付款金额',
+          width: '200px',
+          type: 'text'
+        })
+        return false
+      }
+      this.$vux.loading.show()
+      this.$http.post(`${ENV.BokaApi}/api/ordersoffline/state`, {
+        id: this.clickData.id, type: 'confirm', price: inputMoney
+      }).then(res => {
+        const data = res.data
+        this.$vux.loading.hide()
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              const retdata = data.data
+              switch (this.clickIndex) {
+                case 0:
+                  this.tabdata1[this.clickIndex] = retdata
+                  break
+                case 1:
+                  this.tabdata2[this.clickIndex] = retdata
+                  break
+              }
+              this.showConfirm = false
+            }
+          }
+        })
+      })
     },
     handleScroll: function (refname, index) {
       const self = this
@@ -518,7 +569,6 @@ export default {
               self.deliveritem.delivercode = self.deliverdata.delivercode
               self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
               self.tabdata4.push(self.deliveritem)
-
               self.showpopup = false
               self.deliveritem = null
               self.deliverindex = 0
@@ -617,17 +667,18 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .popup-deliver .fileinput{position:absolute;left:0;right:0;top:0;bottom:0;z-index:1;background-color:transparent;opacity:0;}
 .ordermanagement{
   .s-topbanner{height:99px;}
   .s-container{top:99px;}
   .modalSure{
     width:70%;background-color:#ffffff;padding:20px 10px;box-sizing:border-box;border-radius:10px;
-    input{border:1px solid #e5e5e5;width:80px;height:25px;margin-left:10px;margin-right:10px;padding-left:5px;}
+    input{border:1px solid #e5e5e5;width:100%;height:30px;line-height:30px;padding:0 5px;}
     .btns{width:100px;height:35px;line-height:35px;border-radius:5px;}
     .canle{background-color:#e0e0e0;}
     .sure{background-color:#fc6863;color:#ffffff;}
+    .weui-cell{padding:0;}
   }
 }
 .ordermanagement.show-tip-page{
