@@ -48,14 +48,14 @@
           <div class="padding10">
             <div class="q_photolist align_left">
               <template v-if="item.photoarr.length > 0">
-                <div v-for="(photo,index1) in item.photoarr" :key="index1" class="photoitem">
+                <div v-for="(photo,index1) in item.photoarr" :key="index1" class="photoitem ml10">
                   <div class="inner photo imgcover" :photo="photo" :style="`background-image: url('${photo}');`">
                     <div class="close" @click="deletephoto(photo,index1,'contentphoto',index)">×</div>
                     <div class="clip"><i class="al al-set"></i></div>
                   </div>
                 </div>
               </template>
-              <div v-if="item.photoarr.length < maxnum1" class="photoitem add" @click="uploadPhoto(`fileInput${index}`,'contentphoto',index)">
+              <div v-if="item.photoarr.length < maxnum1" class="photoitem add ml10" @click="uploadPhoto(`fileInput${index}`,'contentphoto',index)">
                 <div class="inner">
                   <div class="innerlist">
                     <div class="flex_center h_100">

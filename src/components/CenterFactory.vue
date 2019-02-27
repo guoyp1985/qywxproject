@@ -27,7 +27,7 @@
       <div class="header-nav flex_table list-shadow02">
         <div class="flex_cell flex_center color-gray2" @click="disJoinQrcode">
           <span class="nav_icon bg-blue11 al al-a166 font16"></span>
-          <span class="ml10 font15">{{$t('Join qrcode')}}</span>
+          <span class="ml10 font15">全职加盟码</span>
         </div>
         <div class="flex_cell flex_center color-gray2" to="/factoryRevenue" @click="toRevenue">
           <span class="nav_icon bg-red al al-qitashouru font16"></span>
@@ -128,7 +128,7 @@
     <div v-transfer-dom class="x-popup">
       <popup v-model="showQrcode" height="100%">
         <div class="popup1 font14">
-          <div class="popup-top flex_center">{{$t('Join qrcode')}}</div>
+          <div class="popup-top flex_center">全职加盟码</div>
           <div class="popup-middle padding10 border-box flex_center" style="bottom:86px;">
             <img ref="joinQrcode" class="qrcode" style="max-width:100%;max-height:100%;" />
           </div>
