@@ -66,7 +66,7 @@
         <span class="color-white">提现</span>
       </div>
     </div> -->
-    <div v-if="showTip" class="start-layer flex_center">
+    <!-- <div v-if="showTip" class="start-layer flex_center">
       <div class="auto-modal flex_center">
         <div class="modal-inner border-box" style="width:80%;">
           <div class="pic-outer" style="width:80%;margin:0 auto;">
@@ -90,7 +90,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
