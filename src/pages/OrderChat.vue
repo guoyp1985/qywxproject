@@ -231,6 +231,7 @@ export default {
         this.orderData.push(pushData)
         this.postOrderData[key] = pushData.content
       }
+      this.postOrderData = {linkman: this.loginUser.linkman, uid: this.loginUser.uid, wid: this.chatUser.uid, ...this.postOrderData}
       this.showOrder = true
       this.setScrollToBottom(false)
       console.log(this.postOrderData)
@@ -317,15 +318,27 @@ export default {
     },
     confirmOrder () {
       console.log(this.answerData)
-      this.$router.push({path: '/simpleOrderDetail'})
+      this.$vux.loading.show()
+      this.$http.post(`${BokaApi}/api/ordersoffline/add`, this.postOrderData).then(res => {
+        this.$vux.loading.hide()
+        const data = res.data
+        this.$vux.toast.show({
+          text: data.error,
+          type: (data.flag !== 1 ? 'warn' : 'success'),
+          time: this.$util.delay(data.error),
+          onHide: () => {
+            if (data.flag === 1) {
+              this.$router.push({path: '/simpleOrderDetail', query: {id: data.data}})
+            }
+          }
+        })
+      })
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
       this.query = this.$route.query
       this.currentUser = {avatar: this.loginUser.avatar, uid: this.loginUser.uid, linkman: this.loginUser.linkman}
-      this.postOrderData.linkman = this.loginUser.linkman
-      this.postOrderData.uid = this.loginUser.uid
       this.$http.get(`${BokaApi}/api/retailer/info`, {
         params: {uid: this.query.uid}
       }).then(res => {
