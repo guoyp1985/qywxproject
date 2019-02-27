@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     btnSure () {
-       this.$emit('btnshow')
+      this.$emit('btnshow')
     }
   }
 }

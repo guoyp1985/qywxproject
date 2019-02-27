@@ -50,7 +50,7 @@
       </div>
       <div class="flex_center btnin">
         <div class="inputs">
-          <input type="text" v-model="crypto" placeholder="请输入密钥"></input>
+          <x-input type="text" v-model="crypto" placeholder="请输入密钥"></x-input>
         </div>
         <div v-if="isAccept == true" @click="submitHandle" :class="`${rgbred} btn`">验证</div>
         <div v-else disabled="true" class="btn">验证</div>
@@ -90,7 +90,7 @@
   </div>
 </template>
 <script>
-import { CheckIcon, XButton, XDialog, TransferDom } from 'vux'
+import { CheckIcon, XButton, XDialog, TransferDom, XInput } from 'vux'
 import ENV from 'env'
 import forminputplate from '@/components/Forminputplate'
 export default {
@@ -98,7 +98,7 @@ export default {
     TransferDom
   },
   components: {
-    CheckIcon, XButton, XDialog, forminputplate
+    CheckIcon, XButton, XDialog, forminputplate, XInput
   },
   data () {
     return {
