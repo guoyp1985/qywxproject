@@ -14,20 +14,29 @@
         </div>
     </div>
     <slot name="productlist"></slot>
-    <div class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
-        <div class="btn canle">取消</div>
-        <div class="btn sure" @click="btnSure">确认收款</div>
-    </div>
+      <div>
+        <div v-if="submsg === 1" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+            <div class="btn canle">取消</div>
+            <div class="btn sure" @click="btnSure">确认收款</div>
+        </div>
+        <div v-if="submsg === 2" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+            <div class="btn sure" @click="btnSure">立即发货</div>
+        </div>
+        <div v-if="submsg === 3" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+            <div class="btn sure" @click="btnSure">查看物流</div>
+        </div>
+      </div>
   </router-link>
 </template>
 <script>
 export default {
   name: 'Managetemplate',
   props: {
+    submsg: Number,
     data: Object,
     orderLink: {
       type: String,
-      default: '/retailerOrderDetail'
+      default: ''
     },
     from: {
       type: String,

@@ -37,7 +37,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from">
+                <managetemplate v-else @btnshow="btnmodal" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -87,7 +87,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from">
+                <managetemplate v-else @btnshow="btnmodal" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
                   <!-- <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span> -->
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -129,7 +129,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :from="query.from">
+                <managetemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -156,13 +156,13 @@
               </div>
             </div>
             <div v-if="(index == 3)" class="swiper-inner scroll-container4" ref="scrollContainer4" @scroll="handleScroll('scrollContainer4',index)">
-              <div v-if="distabdata4" class="scroll_list">
-                <div v-if="!tabdata4 || tabdata4.length === 0" class="scroll_item padding10 align_center color-gray">
+              <div v-if="distabdata1" class="scroll_list">
+                <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 align_center color-gray">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" :from="query.from">
+                <managetemplate v-else v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :from="query.from" :submsg="selectedIndex">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -229,7 +229,16 @@
       </div>
     </template>
     <div class="modalarea flex_center" v-if="showSure">
-      <div></div>
+      <div class="modalSure font14">
+        <div class="align_center font16">请确认是否收到买家的付款</div>
+        <div class="flex_table flex_center" style="margin-top:50px;">
+          <div>备注付款金额<input type="text" placeholder="输入金额"></input>元</div>
+        </div>
+        <div class="flex_table flex_center" style="margin-top:50px;">
+          <div @click="closeModal" class="btns canle align_center mr10">取消</div>
+          <div class="btns sure align_center ml10">确认收款</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -294,9 +303,11 @@ export default {
     }
   },
   methods: {
-    btnshow () {
-      console.log('111111111')
+    btnmodal () {
       this.showSure = true
+    },
+    closeModal () {
+      this.showSure = false
     },
     toSubscribe () {
       this.$wechat.miniProgram.navigateTo({url: '/pages/subscribe'})
@@ -618,6 +629,13 @@ export default {
 .ordermanagement{
   .s-topbanner{height:99px;}
   .s-container{top:99px;}
+  .modalSure{
+    width:70%;background-color:#ffffff;padding:20px 10px;box-sizing:border-box;border-radius:10px;
+    input{border:1px solid #e5e5e5;width:80px;height:25px;margin-left:10px;margin-right:10px;padding-left:5px;}
+    .btns{width:100px;height:35px;line-height:35px;border-radius:5px;}
+    .canle{background-color:#e0e0e0;}
+    .sure{background-color:#fc6863;color:#ffffff;}
+  }
 }
 .ordermanagement.show-tip-page{
   .s-topbanner{top:48px;}
