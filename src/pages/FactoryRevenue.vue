@@ -204,6 +204,9 @@ export default {
     },
     cashEvent (inputMoney, type) {
       if (!this.submitIng) {
+        if (inputMoney && inputMoney.indexOf(',') > -1) {
+          inputMoney = inputMoney.replace(/,/g, '')
+        }
         if (!inputMoney || inputMoney === '' || isNaN(inputMoney)) {
           this.$vux.toast.show({
             text: '请输入正确的提现金额',
