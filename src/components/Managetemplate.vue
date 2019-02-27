@@ -14,18 +14,31 @@
         </div>
     </div>
     <slot name="productlist"></slot>
-      <div>
-        <div v-if="submsg === 1" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
-            <div class="btn canle">取消</div>
-            <div class="btn sure" @click="btnSure">确认收款</div>
+    <div class="db pt10 pb10 pl12 pr12 bg-white" style="color:inherit;">
+      <div class="t-table">
+        <div class="t-cell pic ">
+          <img slot="photo" class="imgcover" :src="data.photo" @error="`javascript:'this.src=${ENV.ImageHostUri}/nopic.jpg';`" style="width:80px;height:80px;" />
         </div>
-        <div v-if="submsg === 2" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
-            <div class="btn sure" @click="btnSure">立即发货</div>
-        </div>
-        <div v-if="submsg === 3" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
-            <div class="btn sure" @click="btnSure">查看物流</div>
+        <div class="t-cell v_top">
+          <div class="clamp1 font14"><span class="color-lightgray">手机号码: </span>{{data.telephone}}</div>
+          <div class="mt5 font14"><span class="color-lightgray">收货地址: </span>{{data.address}}</div>
+          <div class="mt5 font14"><span class="color-lightgray">型号数量: </span>{{data.options}}</slot>
+          </div>
         </div>
       </div>
+    </div>
+    <div>
+      <div v-if="submsg === 1" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+          <div class="btn canle">取消</div>
+          <div class="btn sure" @click="btnSure">确认收款</div>
+      </div>
+      <div v-if="submsg === 2" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+          <div class="btn sure" @click="btnSure">立即发货</div>
+      </div>
+      <div v-if="submsg === 3" class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+          <div class="btn sure" @click="btnSure">查看物流</div>
+      </div>
+    </div>
   </router-link>
 </template>
 <script>

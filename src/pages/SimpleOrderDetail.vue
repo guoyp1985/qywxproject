@@ -46,7 +46,7 @@
       </div>
       <div class="mt10 bg-white padding10 b_bottom_after">
         <div class="t-table">
-          <div class="t-cell">创建时间: {{ data.dateline | dateformat }}</div>
+          <div class="t-cell">创建时间: {{ orderData.dateline | dateFormat }}</div>
         </div>
       </div>
     </div>
@@ -68,7 +68,7 @@ export default {
     Popup
   },
   filters: {
-    dateformat: function (value) {
+    dateFormat: function (value) {
       return new Time(value * 1000).dateFormat('yyyy-MM-dd hh:mm')
     }
   },
@@ -76,16 +76,16 @@ export default {
     return {
       loginUser: {},
       query: {},
-      data: {dateline: 1544786026},
-      orderData: {
-        uid: 8,
-        linkman: '买家姓名',
-        address: '北京丰台区',
-        content: '发货快一点',
-        options: '小号，红色',
-        photo: 'https://tossqzx.boka.cn/month_201902/15511754252365.png',
-        telephone: '18812341234'
-      }
+      orderData: {}
+      // orderData: {
+      //   uid: 8,
+      //   linkman: '买家姓名',
+      //   address: '北京丰台区',
+      //   content: '发货快一点',
+      //   options: '小号，红色',
+      //   photo: 'https://tossqzx.boka.cn/month_201902/15511754252365.png',
+      //   telephone: '18812341234'
+      // }
     }
   },
   watch: {
@@ -97,8 +97,8 @@ export default {
   },
   methods: {
     getData () {
-      this.$http.get(`${BokaApi}/api/moduleInfo`, {
-        params: {module: 'ordersoffline', id: this.query.id}
+      this.$http.get(`${BokaApi}/api/ordersoffline/info`, {
+        params: {id: this.query.id}
       }).then(res => {
         const data = res.data
         const retdata = data.data ? data.data : data
