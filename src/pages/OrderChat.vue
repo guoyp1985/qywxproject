@@ -5,7 +5,7 @@
 */
 <template>
   <div class="font14 containerarea order-chat-page notop">
-    <scroller ref="scrollContainer" :height="viewHeight">
+    <scroller ref="scrollContainer" lock-x scrollbar-y :height="viewHeight">
       <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
           <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
