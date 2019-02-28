@@ -130,7 +130,7 @@ export default {
       orderKey: {'address': '收货地址', 'telephone': '联系电话', 'photo': '购买商品', 'options': '购买件数<br>型号/颜色', 'content': '其它备注'},
       orderData: [],
       postOrderData: {'address': '', 'telephone': '', 'photo': '', 'options': '', 'content': ''},
-      viewHeight: `${-132}`
+      viewHeight: `${-55}`
     }
   },
   methods: {
@@ -348,7 +348,7 @@ export default {
       })
     },
     initData () {
-      this.viewHeight = `${-132}`
+      this.viewHeight = `${-55}`
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
