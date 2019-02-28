@@ -5,8 +5,8 @@
 */
 <template>
   <div class="font14 containerarea order-chat-page notop">
-    <scroller ref="scrollContainer" lock-x scrollbar-y :height="viewHeight" style="border:red 1px solid;">
-      <div class="chatlist" ref="scrollContent" style="border:#000 1px solid;">
+    <scroller ref="scrollContainer" lock-x scrollbar-y :height="viewHeight">
+      <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
           <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
             <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
@@ -130,7 +130,7 @@ export default {
       orderKey: {'address': '收货地址', 'telephone': '联系电话', 'photo': '购买商品', 'options': '购买件数<br>型号/颜色', 'content': '其它备注'},
       orderData: [],
       postOrderData: {'address': '', 'telephone': '', 'photo': '', 'options': '', 'content': ''},
-      viewHeight: `${-132}`
+      viewHeight: `${-55}`
     }
   },
   methods: {
@@ -348,7 +348,7 @@ export default {
       })
     },
     initData () {
-      this.viewHeight = `${-132}`
+      this.viewHeight = `${-55}`
     },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
