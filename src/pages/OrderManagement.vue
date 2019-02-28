@@ -304,6 +304,7 @@ export default {
   },
   methods: {
     clickCancel (item, index) {
+      console.log(this.tabdata1[index])
       this.$vux.confirm.show({
         content: '确定要取消该订单吗？',
         onConfirm: () => {
@@ -319,7 +320,7 @@ export default {
               time: this.$util.delay(data.error),
               onHide: () => {
                 if (data.flag === 1) {
-                  this.tabdata1[index] = data.data
+                  this.tabdata1[index].flag = 0
                   console.log(this.tabdata1[index])
                 }
               }

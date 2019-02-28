@@ -25,7 +25,7 @@
       <div class="clamp1 font14"><span class="color-lightgray">手机号码: </span>{{data.telephone}}</div>
       <div class="mt5 font14"><span class="color-lightgray">收货地址: </span>{{data.address}}</div>
     </div>
-    <div class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
+    <div class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right" v-if="data.flag == 1 || data.flag == 2 || data.flag == 3">
       <template v-if="data.flag == 1">
         <div class="btn canle" @click="clickCancel">取消</div>
         <div class="btn sure" @click="clickConfirm">确认收款</div>

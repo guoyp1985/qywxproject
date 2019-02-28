@@ -96,7 +96,9 @@ export default {
       this.$http.get(`${ENV.BokaApi}/api/ordersoffline/info`, { params: params }).then(function (res) {
         const data = res.data
         self.deliverinfo = data.data ? data.data : data
-        return self.$http.post(`${ENV.BokaApi}/api/order/deliverInfo`, params)
+        return self.$http.get(`${ENV.BokaApi}/api/ordersoffline/deliverInfo`, {
+          params: params
+        })
       }).then(function (res) {
         const data = res.data
         const retdata = data.data
