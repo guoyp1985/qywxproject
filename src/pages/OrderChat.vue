@@ -5,7 +5,7 @@
 */
 <template>
   <div class="font14 containerarea order-chat-page notop">
-    <scroller ref="scrollContainer" lock-x scrollbar-y :height="viewHeight">
+    <scroller id="order-chat-scoller" lock-x scrollbar-y :pulldown-config="{downContent: '', upContent: ''}" @touchend.native="touchContainer" :height="viewHeight" class="chat-area bg-white" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
           <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
@@ -15,7 +15,7 @@
           <div class="msg">
             <template v-if="item.type == 'photo'">
               <div class="main message-text" @click="showBigimg(item,`previewer${index}`)">
-                <img :src="item.picurl"/>
+                <img :src="item.picurl" @load="imageLoad(item)" container="#order-chat-scoller"/>
               </div>
               <template v-if="item.previewerPhoto">
                 <div v-transfer-dom>
@@ -94,7 +94,9 @@
 import { Scroller, Group, XTextarea, Popup, TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import {User} from '#/storage'
+import Reg from '#/reg'
 
+const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
 const BokaApi = ENV.BokaApi
 let intervalId = null
 
@@ -134,6 +136,26 @@ export default {
     }
   },
   methods: {
+    touchContainer () {
+      this.isUserTouch = this.isUserScroll()
+    },
+    isUserScroll () {
+      console.log('in scroller')
+      const transform = this.$refs.scrollContainer.$el.children[0].style[`${prefix}Transform`]
+      const matches = transform.match(Reg.rTranslateY)
+      if (matches && matches[1]) {
+        const tTop = parseInt(matches[1])
+        const dTop = this.$refs.scrollContainer.$el.clientHeight - this.$refs.scrollContent.clientHeight
+        console.log(`${tTop} ${dTop}`)
+        if (tTop === dTop) {
+          return false
+        }
+      }
+      return true
+    },
+    imageLoad (item) {
+      this.setScrollToBottom()
+    },
     setViewHeight () {
       if (this.$util.isAndroid()) return
       this.$nextTick(() => {
@@ -380,6 +402,7 @@ export default {
 
 <style lang="less">
 .order-chat-page{
+  .chat-area *{box-sizing: border-box;}
   .chatlist{
     padding: 10px;line-height: 1.1;
     .chatitem {
