@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14 order-chat-page">
-    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown @touchend.native="touchContainer" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in messages">
           <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
@@ -356,14 +356,6 @@ export default {
         ret = `${ret}right`
       }
       return ret
-    },
-    loadingHistory () {
-      const self = this
-      setTimeout(() => {
-        const minId = this.messages[0].id
-        // minIdFlag = minId
-        self.getMessages(minId)
-      }, 200)
     },
     sendData (postData) {
       const self = this
