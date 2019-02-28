@@ -176,7 +176,7 @@ export default {
             resetValue = 0
           }
           self.message = `top=${top},clienH=${clientH}`
-          self.$refs.scrollContainer.reset({ top: resetValue })
+          // self.$refs.scrollContainer.reset({ top: resetValue })
         }
       }, 100)
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
