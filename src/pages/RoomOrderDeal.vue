@@ -35,7 +35,7 @@
     <div class="protocal-area">
       <check-icon :value.sync="isAccept" type="plain">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
     </div>
-    <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生产，微信将收取0.6%的手续费</div>
+    <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生成，微信将收取0.6%的手续费</div>
     <div class="s-bottom submit-button color-white" @click="makeDeal">
       <span>支付保证金 ￥{{room.deposit}}</span>
     </div>
