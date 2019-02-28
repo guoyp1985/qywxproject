@@ -5,8 +5,8 @@
 */
 <template>
   <div class="font14 containerarea order-chat-page notop">
-    <scroller ref="scrollContainer" lock-x scrollbar-y :height="viewHeight" style="border:red 1px solid;box-sizing:border-box;">
-      <div class="chatlist" ref="scrollContent" style="border:#000 1px solid;box-sizing:border-box;">
+    <scroller ref="scrollContainer" lock-x scrollbar-y :height="viewHeight">
+      <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
           <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
             <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>

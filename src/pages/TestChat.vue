@@ -70,105 +70,14 @@
           </a>
         </div>
       </div>
-      <emotion-box v-show="showEmotBox" bind-textarea="#chat-textarea" @input="inputEmot">
-      </emotion-box>
       <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
         <input style="opacity:0;" type="file" name="files" @change="pcUploadImg" ref="uploadInput"/>
       </form>
-      <grid :cols="4" :show-lr-borders="false" :show-vertical-dividers="false" v-show="showFeatureBox" class="bg-white">
-        <grid-item @click.native="sendPhoto">
-          <span slot="icon" class="feature-icon al al-zhaopian color-gray"></span>
-          <span slot="label" class="color-gray">{{$t('Photo')}}</span>
-        </grid-item>
-        <grid-item @click.native="showImgTxtPopup" v-if="loginUser.isretailer">
-          <span slot="icon" class="feature-icon al al-tuwen color-gray"></span>
-          <span slot="label" class="color-gray">{{$t('Image Text')}}</span>
-        </grid-item>
-      </grid>
-    </div>
-    <div v-transfer-dom class="x-popup">
-      <popup v-model="showImgTxt" height="100%">
-        <div class="popup1 popup-imgTxt">
-          <div class="popup-top flex_center">图文</div>
-          <div class="flex_center" style="position:absolute;left:0;top:45px;right:0;height:50px;">
-            <search
-              class="v-search"
-              v-model="searchword"
-              :auto-fixed="autofixed"
-              @on-submit="onSearchSubmit"
-              @on-change="onSearchChange"
-              @on-cancel="onSearchCancel"
-              ref="search">
-            </search>
-          </div>
-          <div class="b_top_after" style="position:absolute;left:0;top:95px;right:0;height:54px;">
-            <tab v-model="tabmodel" class="v-tab">
-              <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
-            </tab>
-          </div>
-          <div class="popup-middle font14" style="top:149px;">
-            <swiper v-model="tabmodel" class="x-swiper no-indicator" @on-index-change="swiperChange">
-              <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-                <div v-if="(index == 0)" class="swiper-inner scroll-container1" ref="scrollContainer1" @scroll="handleScroll1">
-                  <div v-if="disNewsData" class="scroll_list">
-                    <div v-if="!newsData || newsData.length === 0" class="scroll_item padding10 color-gray align_center">
-                      <template v-if="searchresult1">
-                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                      </template>
-                      <template v-else>
-                        <div class="flex_center" style="height:80px;">暂无文章</div>
-                      </template>
-                    </div>
-                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in newsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickNews(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container1" ></x-img>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1">{{item.title}}</div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  </div>
-                </div>
-                <div v-if="(index == 1)" class="swiper-inner scroll-container2" ref="scrollContainer2" @scroll="handleScroll2">
-                  <div v-if="disProductsData" class="scroll_list">
-                    <div v-if="!productsData || productsData.length === 0" class="scroll_item padding10 color-gray align_center">
-                      <template v-if="searchresult2">
-                        <div class="flex_center" style="height:80px;">暂无搜索结果</div>
-                      </template>
-                      <template v-else>
-                        <div class="flex_center" style="height:80px;">暂无商品</div>
-                      </template>
-                    </div>
-                    <check-icon v-else class="x-check-icon scroll_item" v-for="(item,index) in productsData" :key="item.id" :value.sync="item.checked" @click.native.stop="clickProduct(item,index)">
-                      <div class="t-table">
-                        <div class="t-cell pic v_middle w50">
-                          <x-img class="v_middle imgcover" :src="item.photo" default-src="https://tossharingsales.boka.cn/images/nopic.jpg" style="width:40px;height:40px;" :offset="0" container=".scroll-container2" ></x-img>
-                        </div>
-                        <div class="t-cell v_middle" style="color:inherit;">
-                          <div class="clamp1">{{item.title}}</div>
-                          <div class="mt5 font12 clamp1"><span class="color-orange">¥{{ item.price }}</span><span class="ml10 color-gray">{{ $t('Storage') }} {{ item.storage }}</span></div>
-                        </div>
-                      </div>
-                    </check-icon>
-                  </div>
-                </div>
-              </swiper-item>
-            </swiper>
-          </div>
-          <div class="popup-bottom flex_center">
-            <div class="flex_cell flex_center h_100 bg-gray color-white" @click="closeImgTxtPopup">{{ $t('Close') }}</div>
-            <div class="flex_cell flex_center h_100 bg-green color-white" @click="sendImgTxt">{{ $t('Confirm txt') }}</div>
-          </div>
-        </div>
-      </popup>
     </div>
   </div>
 </template>
 <script>
 import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, Previewer } from 'vux'
-import EmotionBox from '@/components/EmotionBox'
 import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
 import {User} from '#/storage'
@@ -176,7 +85,6 @@ import Time from '#/time'
 import Socket from '#/socket'
 import Voice from '#/voice'
 import Reg from '#/reg'
-import jQuery from 'jquery'
 
 const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
 let room = ''
@@ -188,40 +96,21 @@ export default {
     TransferDom
   },
   components: {
-    Scroller, Group, XTextarea, Grid, GridItem, XButton, EmotionBox, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, OpenVip, Previewer
+    Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, OpenVip, Previewer
   },
   data () {
     return {
       module: 'message',
       loginUser: {},
       message: '',
-      showEmotBox: false,
-      showFeatureBox: false,
       showVoiceCom: false,
       showSendBtn: false,
-      showImgTxt: false,
       isUserTouch: false,
       query: {},
       messages: [],
       viewHeight: `${-55}`,
       diffSeconds: 300,
       msgType: 'text',
-      tabmodel: 0,
-      tabtxts: [ '文章', '产品' ],
-      autofixed: false,
-      searchword: '',
-      showSearchEmpty: false,
-      searchresult1: false,
-      searchresult2: false,
-      newsData: [],
-      disNewsData: false,
-      productsData: [],
-      disProductsData: false,
-      pagestart1: 0,
-      pagestart2: 0,
-      limit1: 10,
-      selectNewsData: null,
-      selectProductsData: null,
       recordCheck: false,
       retailerInfo: {},
       bottomPos: 0,
@@ -237,12 +126,6 @@ export default {
     }
   },
   watch: {
-    showEmotBox () {
-      this.setViewHeight()
-    },
-    showFeatureBox () {
-      this.setViewHeight()
-    }
   },
   methods: {
     filterEmot (text) {
@@ -268,9 +151,6 @@ export default {
     },
     touchContainer () {
       this.isUserTouch = this.isUserScroll()
-      // console.log(this.isUserTouch)
-      this.showEmotBox = false
-      this.showFeatureBox = false
     },
     isUserScroll () {
       console.log('in scroller')
@@ -299,17 +179,12 @@ export default {
         text.updateAutosize()
       }, 50)
     },
-    inputEmot (value) {
-      this.message = value
-      this.inputText(value)
-    },
     onTextClick () {
       this.showEmotBox = false
     },
     onFocus () {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
-      this.showFeatureBox = false
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
@@ -322,13 +197,6 @@ export default {
       let text = this.$refs.text[0] ? this.$refs.text[0] : this.$refs.text
       text.updateAutosize()
       this.setScrollToBottom(false)
-      // setTimeout(function() {
-      //   if (self.$util.isAndroid()) {
-      //     globalContianer.scrollTop = globalContianer.scrollHeight
-      //     const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
-      //     self.$refs.scrollContainer.reset({ top: top + 52 })
-      //   }
-      // }, 100)
     },
     onBlur () {
       clearInterval(intervalId)
@@ -604,15 +472,6 @@ export default {
     viewUserInfo () {
       this.$router.push({path: 'membersView', query: {uid: this.query.uid}})
     },
-    showImgTxtPopup () {
-      const self = this
-      this.showImgTxt = true
-      this.showFeatureBox = false
-      if (!self.newsData.length) {
-        self.$vux.loading.show()
-        self.getNewsData()
-      }
-    },
     clearSelectData () {
       const self = this
       if (self.selectNewsData) {
@@ -633,96 +492,6 @@ export default {
           }
         }
       }
-    },
-    closeImgTxtPopup () {
-      this.showImgTxt = false
-      this.clearSelectData()
-    },
-    sendImgTxt () {
-      const self = this
-      let postdata = {
-        touid: self.query.uid,
-        sendtype: 'news',
-        picurl: '',
-        thumb: ''
-      }
-      if (self.tabmodel === 0) {
-        postdata.content = `news_${self.selectNewsData.id}`
-      } else if (self.tabmodel === 1) {
-        postdata.content = `product_${self.selectProductsData.id}`
-      }
-      self.sendData(postdata)
-      self.showImgTxt = false
-      self.clearSelectData()
-    },
-    onSearchChange (val) {
-      this.searchword = val
-    },
-    onSearchCancel () {
-      const self = this
-      self.searchword = ''
-      if (self.tabmodel === 0) {
-        self.$vux.loading.show()
-        self.newsData = []
-        self.pagestart1 = 0
-        self.getNewsData()
-      } else if (self.tabmodel === 1) {
-        self.$vux.loading.show()
-        self.productsData = []
-        self.pagestart2 = 0
-        self.getProductData()
-      }
-    },
-    onSearchSubmit () {
-      const self = this
-      if (self.tabmodel === 0) {
-        self.$vux.loading.show()
-        self.newsData = []
-        self.pagestart1 = 0
-        self.getNewsData()
-      } else if (self.tabmodel === 1) {
-        self.$vux.loading.show()
-        self.productsData = []
-        self.pagestart2 = 0
-        self.getProductData()
-      }
-    },
-    swiperChange (index) {
-      const self = this
-      this.clearSelectData()
-      if (index === 0 && self.newsData.length === 0) {
-        self.$vux.loading.show()
-        self.getNewsData()
-      } else if (index === 1 && self.productsData.length === 0) {
-        self.$vux.loading.show()
-        self.getProductData()
-      }
-    },
-    handleScroll1 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer1[0],
-        callback: function () {
-          if (self.newsData.length === (self.pagestart1 + 1) * self.limit1) {
-            self.pagestart1++
-            self.$vux.loading.show()
-            self.getNewsData()
-          }
-        }
-      })
-    },
-    handleScroll2 () {
-      const self = this
-      self.$util.scrollEvent({
-        element: self.$refs.scrollContainer2[0],
-        callback: function () {
-          if (self.productsData.length === (self.pagestart2 + 1) * self.limit1) {
-            self.pagestart2++
-            self.$vux.loading.show()
-            self.getProductData()
-          }
-        }
-      })
     },
     setScrollToTop () {
       this.$nextTick(() => {
@@ -886,8 +655,6 @@ export default {
       minIdFlag = 0
       this.message = ''
       this.messages = []
-      this.showEmotBox = false
-      this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
       this.viewHeight = `${-55}`
