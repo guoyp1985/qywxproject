@@ -6,12 +6,8 @@
 <template>
   <div id="chat-room" class="font14 order-chat-page">
     <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown :pulldown-config="{downContent: '查看历史消息', upContent: '查看历史消息'}" @touchend.native="touchContainer" @on-pulldown-loading="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
-    <!-- <scroller :on-refresh="loadingHistory" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer"> -->
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in messages">
-          <div v-if="index == 0" class="messages-date">{{item.dateline | dateFormat}}</div>
-          <div v-else-if="index + 1 < messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
-          <div v-else-if="index + 1 == messages.length && messages[index].dateline - messages[index - 1].dateline > diffSeconds" class="messages-date">{{messages[index].dateline | dateFormat}}</div>
           <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
@@ -28,34 +24,8 @@
                   </div>
                 </template>
               </template>
-              <template v-else-if="item.msgtype == 'news'">
-                <div class="main message-text">
-                  <div class="scroll_item">
-                    <div class="con">
-                      <div v-for="(news, index1) in item.newsdata" :key="index1">
-                        <div class="pic" @click="toNews(news)">
-                          <div class="img_background v_bottom" :style="`background-image: url(${getPhoto(news.photo)});`"></div>
-                          <span class="title">{{news.title}}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else-if="item.msgtype == 'voice'">
-                <div :style="`width: ${40 + Math.round(5 * parseInt(item.content))}px`" :class="`main message-text${item.voiceClass||''}`" @click="clickMessageItem(item)">
-                  <div class="audio_play_area">
-                    <i class="icon_audio_default"></i>
-                    <i class="icon_audio_playing"></i>
-                  </div>
-                  <div v-if="item.unread" class="new-voice-tips"></div>
-                  <div class="min">
-                    <span class="discontent">{{item.content | secondsFormat}}</span>
-                  </div>
-                </div>
-              </template>
               <template v-else>
-                <div class="main message-text" @click="copyTxt(item)">
+                <div class="main message-text">
                   <div v-html="filterEmot(item.content)"></div>
                 </div>
               </template>
@@ -64,7 +34,6 @@
         </template>
       </div>
     </scroller>
-    <div v-show="isUserTouch && hasNewMessage" class="message-tips">你有新消息</div>
     <div class="bottom-area" ref="bottomArea" :style="{'bottom': `${bottomPos}px`}">
       <div class="input-box">
         <div class="voice-cell">
@@ -232,10 +201,9 @@ export default {
       showSendBtn: false,
       showImgTxt: false,
       isUserTouch: false,
-      hasNewMessage: false,
       query: {},
       messages: [],
-      viewHeight: `${-132}`,
+      viewHeight: `${-212}`,
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -277,44 +245,6 @@ export default {
     }
   },
   methods: {
-    copyTxt (item) {
-      console.log('拷贝方法')
-      console.log(this)
-      const self = this
-      self.clickMsgItem = item
-      const className = `#chat-room .copy_txt`
-      const eleobj = jQuery(className)[0]
-      console.log(eleobj)
-      let range = null
-      let save = function (e) {
-        // e.clipboardData.setData('text/plain', eleobj.innerHTML)
-        e.clipboardData.setData('text/plain', item.content)
-        e.preventDefault()
-      }
-      if (self.$util.isIOS()) { // ios设备
-        setTimeout(() => {
-          console.log('进入到了ios设备')
-          window.getSelection().removeAllRanges()
-          range = document.createRange()
-          range.selectNode(eleobj)
-          console.log(range)
-          window.getSelection().addRange(range)
-          document.execCommand('copy')
-          window.getSelection().removeAllRanges()
-        }, 100)
-      } else { // 安卓设备
-        console.log('in android')
-        document.addEventListener('copy', save)
-        document.execCommand('copy')
-        document.removeEventListener('copy', save)
-      }
-      setTimeout(function () {
-        self.$vux.toast.show({
-          text: '复制成功',
-          time: 1500
-        })
-      }, 200)
-    },
     filterEmot (text) {
       return this.$util.emotPrase(text)
     },
@@ -351,7 +281,6 @@ export default {
         const dTop = this.$refs.scrollContainer.$el.clientHeight - this.$refs.scrollContent.clientHeight
         console.log(`${tTop} ${dTop}`)
         if (tTop === dTop) {
-          this.hasNewMessage = false
           return false
         }
       }
@@ -961,9 +890,8 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = `${-132}`
+      this.viewHeight = `${-212}`
       this.isUserTouch = false
-      this.hasNewMessage = false
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.query = this.$route.query
