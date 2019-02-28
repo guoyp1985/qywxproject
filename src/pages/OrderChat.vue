@@ -5,7 +5,7 @@
 */
 <template>
   <div class="font14 containerarea order-chat-page notop">
-    <scroller class="pagemiddle" ref="scrollContainer">
+    <scroller ref="scrollContainer" :height="viewHeight">
       <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
           <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
@@ -129,10 +129,24 @@ export default {
       showOrder: false,
       orderKey: {'address': '收货地址', 'telephone': '联系电话', 'photo': '购买商品', 'options': '购买件数<br>型号/颜色', 'content': '其它备注'},
       orderData: [],
-      postOrderData: {'address': '', 'telephone': '', 'photo': '', 'options': '', 'content': ''}
+      postOrderData: {'address': '', 'telephone': '', 'photo': '', 'options': '', 'content': ''},
+      viewHeight: `${-132}`
     }
   },
   methods: {
+    setViewHeight () {
+      if (this.$util.isAndroid()) return
+      this.$nextTick(() => {
+        let clientH = parseInt(this.$refs.bottomArea.clientHeight)
+        if (this.retailerInfo.uid && this.showTip) {
+          // clientH = clientH + parseInt(this.$refs.topTipArea.clientHeight)
+          clientH += 80
+        }
+        this.viewHeight = `${-clientH}`
+        console.log(this.viewHeight)
+        this.setScrollToBottom()
+      })
+    },
     getItemClass (item) {
       const self = this
       let ret = ''
@@ -334,8 +348,12 @@ export default {
         })
       })
     },
+    initData () {
+      this.viewHeight = `${-132}`
+    },
     refresh () {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.initData()
       this.loginUser = User.get()
       this.query = this.$route.query
       this.currentUser = {avatar: this.loginUser.avatar, uid: this.loginUser.uid, linkman: this.loginUser.linkman}
@@ -351,6 +369,7 @@ export default {
           let msg = {...this.chatUser, ...this.askData[0]}
           this.messageList.push(msg)
         }
+        this.setViewHeight()
       })
     }
   },
