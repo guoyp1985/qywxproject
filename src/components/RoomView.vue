@@ -67,7 +67,7 @@
           </div>
         </div>
         <div class="stats-result">
-          <span>评估结果: ￥</span>
+          <span>点击价值: ￥</span>
           <span>{{item.viewmoney}}/人点击</span>
         </div>
       </div>
