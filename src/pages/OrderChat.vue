@@ -328,7 +328,7 @@ export default {
           time: this.$util.delay(data.error),
           onHide: () => {
             if (data.flag === 1) {
-              // this.$router.push({path: '/simpleOrderDetail', query: {id: data.data}})
+              this.$router.push({path: '/simpleOrderDetail', query: {id: data.data}})
             }
           }
         })

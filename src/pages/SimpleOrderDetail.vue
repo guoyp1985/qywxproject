@@ -76,13 +76,15 @@
           </div>
         </div>
       </template>
-      <div class="mt10 flex_right padding10" v-if="orderData.flag == 1">
-        <div class="qbtn2 font12" @click="cancelOrder">取消订单</div>
-        <div class="qbtn2 font12 ml10 color-theme" style="border:#ff6a61 1px solid;" @click="clickConfirm">确认订单</div>
-      </div>
-      <div class="mt10 flex_right padding10" v-if="orderData.flag == 2">
-        <div class="qbtn2 font12 ml10 color-theme" style="border:#ff6a61 1px solid;" @click="clickDeliver">去发货</div>
-      </div>
+      <template v-if="loginUser.uid == orderData.wid">
+        <div class="mt10 flex_right padding10" v-if="orderData.flag == 1">
+          <div class="qbtn2 font12" @click="cancelOrder">取消订单</div>
+          <div class="qbtn2 font12 ml10 color-theme" style="border:#ff6a61 1px solid;" @click="clickConfirm">确认订单</div>
+        </div>
+        <div class="mt10 flex_right padding10" v-if="orderData.flag == 2">
+          <div class="qbtn2 font12 ml10 color-theme" style="border:#ff6a61 1px solid;" @click="clickDeliver">去发货</div>
+        </div>
+      </template>
     </div>
     <div class="modalarea flex_center" v-if="showConfirm">
       <div class="modalSure font14">

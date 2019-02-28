@@ -37,7 +37,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else @clickConfirm="clickConfirm" @uploadDeliver="uploadDeliver" @viewDeliver="viewDeliver" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :dataIndex="index1">
+                <managetemplate v-else @clickCancel="clickCancel" @clickConfirm="clickConfirm" @uploadDeliver="uploadDeliver" @viewDeliver="viewDeliver" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :dataIndex="index1">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <div slot="receivearea">
@@ -303,6 +303,31 @@ export default {
     }
   },
   methods: {
+    clickCancel (item, index) {
+      this.$vux.confirm.show({
+        content: '确定要取消该订单吗？',
+        onConfirm: () => {
+          this.$vux.loading.show()
+          this.$http.post(`${ENV.BokaApi}/api/ordersoffline/state`, {
+            id: item.id, type: 'cancel'
+          }).then(res => {
+            const data = res.data
+            this.$vux.loading.hide()
+            this.$vux.toast.show({
+              text: data.error,
+              type: (data.flag !== 1 ? 'warn' : 'success'),
+              time: this.$util.delay(data.error),
+              onHide: () => {
+                if (data.flag === 1) {
+                  this.tabdata1[index] = data.data
+                  console.log(this.tabdata1[index])
+                }
+              }
+            })
+          })
+        }
+      })
+    },
     clickConfirm (item, index) {
       this.clickData = item
       this.clickIndex = index

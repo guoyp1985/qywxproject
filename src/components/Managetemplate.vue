@@ -27,7 +27,7 @@
     </div>
     <div class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
       <template v-if="data.flag == 1">
-        <div class="btn canle">取消</div>
+        <div class="btn canle" @click="clickCancel">取消</div>
         <div class="btn sure" @click="clickConfirm">确认收款</div>
       </template>
       <template v-if="data.flag == 2">
@@ -96,6 +96,9 @@ export default {
           time: 1500
         })
       }, 200)
+    },
+    clickCancel () {
+      this.$emit('clickCancel', this.data, this.dataIndex)
     },
     clickConfirm () {
       this.$emit('clickConfirm', this.data, this.dataIndex)
