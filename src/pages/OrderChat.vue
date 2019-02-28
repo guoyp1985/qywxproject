@@ -275,6 +275,7 @@ export default {
       if (this.askIndex + 1 < this.askData.length) {
         this.askIndex++
         this.messageList.push({...this.chatUser, ...this.askData[this.askIndex]})
+        this.setScrollToBottom(false)
       }
       if (this.askIndex + 1 === this.askData.length) {
         setTimeout(() => {
