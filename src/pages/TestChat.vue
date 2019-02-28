@@ -36,14 +36,6 @@
     </scroller>
     <div class="bottom-area" ref="bottomArea" :style="{'bottom': `${bottomPos}px`}">
       <div class="input-box">
-        <div class="voice-cell">
-          <a class="voice-btn" @click.stop="toggleVoice" v-if="!showVoiceCom">
-            <img src="https://tossharingsales.boka.cn/images/icon-voice.png"/>
-          </a>
-          <a v-else class="emotion-btn" @click="toggleKeyboard">
-            <img src="https://tossharingsales.boka.cn/images/icon-keyboard.png"/>
-          </a>
-        </div>
         <div class="input-cell">
           <group class="textarea-box">
             <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
@@ -52,14 +44,6 @@
             <x-button class="talk-btn no-select" v-if="recordCheck" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
             <x-button class="talk-btn no-select" v-else @click.native.prevent="checkRecordApi">{{$t('Check Record API')}}</x-button>
           </template>
-        </div>
-        <div class="emotion-cell">
-          <a v-if="!showEmotBox" class="emotion-btn" @click="toggleEmotion">
-            <img src="https://tossharingsales.boka.cn/images/icon-face.png"/>
-          </a>
-          <a v-else class="emotion-btn" @click="toggleKeyboard">
-            <img src="https://tossharingsales.boka.cn/images/icon-keyboard.png"/>
-          </a>
         </div>
         <div v-if="showSendBtn" class="send-cell flex_center">
           <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
@@ -103,7 +87,6 @@ export default {
       module: 'message',
       loginUser: {},
       message: '',
-      showVoiceCom: false,
       showSendBtn: false,
       isUserTouch: false,
       query: {},
@@ -180,7 +163,6 @@ export default {
       }, 50)
     },
     onTextClick () {
-      this.showEmotBox = false
     },
     onFocus () {
       const self = this
@@ -203,43 +185,6 @@ export default {
       setTimeout(() => {
         document.body.scrollTop = document.body.scrollHeight
       }, 100)
-    },
-    toggleVoice () {
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      } else {
-        this.checkRecordApi()
-        this.showVoiceCom = true
-      }
-      this.setScrollToBottom(false)
-    },
-    toggleEmotion () {
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      this.showEmotBox = true
-      this.setScrollToBottom(false)
-    },
-    toggleKeyboard () {
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (this.showFeatureBox) {
-        this.showFeatureBox = false
-      }
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      this.$refs.text.$refs.textarea.focus()
     },
     toggleFeatureBoard () {
       if (this.showVoiceCom) {
@@ -655,7 +600,6 @@ export default {
       minIdFlag = 0
       this.message = ''
       this.messages = []
-      this.showVoiceCom = false
       this.showSendBtn = false
       this.viewHeight = `${-55}`
       this.isUserTouch = false
