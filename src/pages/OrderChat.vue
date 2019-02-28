@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, TransferDom, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, Previewer } from 'vux'
+import { Scroller, Group, XTextarea, Popup, TransferDom, Previewer } from 'vux'
 import ENV from 'env'
 import {User} from '#/storage'
 
@@ -103,7 +103,7 @@ export default {
     TransferDom
   },
   components: {
-    Scroller, Group, XTextarea, Grid, GridItem, XButton, Popup, Tab, TabItem, Swiper, SwiperItem, Search, XImg, CheckIcon, Previewer
+    Scroller, Group, XTextarea, Popup, Previewer
   },
   data () {
     return {
@@ -190,6 +190,8 @@ export default {
     onFocus () {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
+      console.log(globalContianer.scrollHeight)
+      this.message = `${globalContianer.scrollHeight}`
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {

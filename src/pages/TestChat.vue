@@ -62,8 +62,6 @@ import OpenVip from '@/components/OpenVip'
 import ENV from 'env'
 import {User} from '#/storage'
 import Time from '#/time'
-import Socket from '#/socket'
-import Voice from '#/voice'
 import Reg from '#/reg'
 
 const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
@@ -194,38 +192,6 @@ export default {
         console.log(this.viewHeight)
         this.setScrollToBottom()
       })
-    },
-    clickMessageItem (item) {
-      const self = this
-      if (item.msgtype === 'voice') {
-        if (item.mediaLid) { // stop voice
-          this.messages = this.$util.changeItem(this.messages, item.id, match => {
-            match.voiceClass = ''
-            match.voicePlaying = false
-            return match
-          })
-          Voice.playStop(item.mediaLid)
-          item.mediaLid = null
-        } else { // play voice
-          this.messages = this.$util.changeItem(this.messages, item.id, match => {
-            match.voiceClass = ' playing'
-            match.unread = false
-            return match
-          })
-          Voice.play(item.mediaid,
-            localId => { // donwload voice
-              item.mediaLid = localId
-            },
-            localId => { // voice playing end
-              self.messages = self.$util.changeItem(self.messages, item.id, match => {
-                match.voiceClass = ''
-                item.mediaLid = null
-                return match
-              })
-            }
-          )
-        }
-      }
     },
     imageLoad (item) {
       if (item.id > minIdFlag) {
