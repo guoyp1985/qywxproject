@@ -169,8 +169,11 @@ export default {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
-          const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
+          let top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
           const clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          if (top < 0) {
+            top = 0
+          }
           self.message = `top=${top},clienH=${clientH}`
           self.$refs.scrollContainer.reset({ top: top + clientH })
         }
