@@ -190,8 +190,6 @@ export default {
     onFocus () {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
-      console.log(globalContianer.scrollHeight)
-      this.message = `${globalContianer.scrollHeight}`
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
