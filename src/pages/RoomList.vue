@@ -25,6 +25,16 @@
       </div>
       <template v-if="selectedIndex===0">
         <template v-if="showTab1">
+          <div class="pro_box bg-page list_shadow pl12 pr12 pb15  border-box">
+            <div class="pro_list_top"></div>
+            <div class="rule pb12 pt12 pl12 pr12 border color-lightgray b_bottom_after list-shadow bg-white font12" style="margin-top: -4px;">
+              <div>首次添加微信群可根据群人数获得<span class="color-theme">现金红包奖励</span></div>
+              <div>群人数在<span class="color-theme">50-150</span>人，赏现金红包<span class="color-theme">5</span>元</div>
+              <div>群人数在<span class="color-theme">151-250</span>人，赏现金红包<span class="color-theme">10</span>元</div>
+              <div>群人数在<span class="color-theme">251-500</span>人，赏现金红包<span class="color-theme">15</span>元</div>
+              <div>群评估完成后红包会自动发送到微信余额</div>
+            </div>
+          </div>
           <template v-if="rooms.length">
             <room v-for="(item, index) in rooms" :key="index" :item="item" :index="index" @action="handleAction" @click-photo="clickPhoto"></room>
           </template>
@@ -326,6 +336,13 @@ export default {
 </script>
 <style lang="less">
 #room-list{
+  .pro_list_top{
+    width:100%;padding-bottom:9%;
+    background: url(../assets/images/product_list_top.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+  }
   .list-area{
     .room:not(:last-child){margin-bottom:10px;}
     .room-order-consumer:not(:last-child){margin-bottom:10px;}
