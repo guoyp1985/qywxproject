@@ -273,7 +273,7 @@ export default {
     uploaddeliver () {
       const self = this
       if (!self.delivercompany.length) {
-        self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(function (res) {
+        self.$http.post(`${ENV.BokaApi}/api/order/delivercompany`).then(res => {
           let data = res.data
           self.delivercompany = data.data ? data.data : data
         })
