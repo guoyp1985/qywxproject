@@ -203,7 +203,7 @@ export default {
       isUserTouch: false,
       query: {},
       messages: [],
-      viewHeight: `${-212}`,
+      viewHeight: `${-55}`,
       diffSeconds: 300,
       msgType: 'text',
       tabmodel: 0,
@@ -890,7 +890,7 @@ export default {
       this.showFeatureBox = false
       this.showVoiceCom = false
       this.showSendBtn = false
-      this.viewHeight = `${-212}`
+      this.viewHeight = `${-55}`
       this.isUserTouch = false
       this.loginUser = User.get()
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
