@@ -4,7 +4,7 @@
 * @created_date: 2019-02-26
 */
 <template>
-  <div class="font14 containerarea order-chat-page notop">
+  <div class="font14 order-chat-page">
     <scroller id="order-chat-scoller" lock-x scrollbar-y :pulldown-config="{downContent: '', upContent: ''}" @touchend.native="touchContainer" :height="viewHeight" class="chat-area bg-white" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <div v-for="(item,index) in messageList" :key="index" :class="`chatitem ${getItemClass(item)}`">
