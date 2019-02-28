@@ -33,7 +33,7 @@
         <div class="pl10 pr20 pt25 pb25">
           <div class="color-red font14">提示</div>
           <div class="color-gray2 font12 mt5">1. 订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金。</div>
-          <div class="color-gray2 font12 mt5">2. 订单支付时，微信将收取0.6%的手续费</div>
+          <div class="color-gray2 font12 mt5">2. 订单支付时，微信将收取0.6%的手续费。</div>
         </div>
       </form>
     </div>
