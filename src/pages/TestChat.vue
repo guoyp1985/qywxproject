@@ -7,7 +7,7 @@
   <div id="chat-room" class="font14 order-chat-page">
     <scroller id="chat-scoller" lock-x scrollbar-y :pulldown-config="{downContent: '', upContent: ''}" @touchend.native="touchContainer" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
-        <template v-for="(item,index) in messages">
+        <template v-for="(item,index) in messageList">
           <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
             <router-link class="head" :to="{path: '/membersView', query: {uid: item.uid}}">
               <img :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
@@ -26,7 +26,7 @@
               </template>
               <template v-else>
                 <div class="main message-text">
-                  <div v-html="filterEmot(item.content)"></div>
+                  <div v-html="item.content"></div>
                 </div>
               </template>
             </div>
@@ -38,20 +38,16 @@
       <div class="input-box">
         <div class="input-cell">
           <group class="textarea-box">
-            <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @touchstart.native="onTextClick" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
+            <x-textarea v-model='message' ref="text" id="chat-textarea" @on-change="inputText" @on-focus="onFocus" @on-blur="onBlur" :max="2000" :rows="1" :autosize="true" :show-counter="false"></x-textarea>
           </group>
-          <template v-if="showVoiceCom">
-            <x-button class="talk-btn no-select" v-if="recordCheck" @touchstart.native.prevent="onTalkRecord" @touchend.native="onTalkRecordStop">{{$t('Press And Talk')}}</x-button>
-            <x-button class="talk-btn no-select" v-else @click.native.prevent="checkRecordApi">{{$t('Check Record API')}}</x-button>
-          </template>
         </div>
         <div v-if="showSendBtn" class="send-cell flex_center">
           <div class="bg-green color-white w40 align_center font13" style="line-height:35px;border-radius:5px;" @click="sendMessage">发送</div>
         </div>
         <div v-else class="feature-cell">
-          <a class="feature-btn" @click.prevent.stop="toggleFeatureBoard">
+          <div class="feature-btn">
             <img src="https://tossharingsales.boka.cn/images/icon-add.png"/>
-          </a>
+          </div>
         </div>
       </div>
       <form class="uploadImageForm hide" enctype="multipart/form-data" ref="uploadForm">
@@ -71,7 +67,6 @@ import Voice from '#/voice'
 import Reg from '#/reg'
 
 const prefix = (/webkit/i).test(navigator.appVersion) ? 'webkit' : (/firefox/i).test(navigator.userAgent) ? 'Moz' : 'opera' in window ? 'O' : ''
-let room = ''
 let minIdFlag = 0
 let intervalId = null
 
@@ -84,26 +79,36 @@ export default {
   },
   data () {
     return {
-      module: 'message',
-      loginUser: {},
-      message: '',
-      showSendBtn: false,
-      isUserTouch: false,
       query: {},
-      messages: [],
-      viewHeight: `${-55}`,
-      diffSeconds: 300,
-      msgType: 'text',
-      recordCheck: false,
+      loginUser: {},
       retailerInfo: {},
+      messages: [],
+      messageList: [],
+      module: 'message',
+      message: '',
+      showSendBtn: true,
+      isUserTouch: false,
+      viewHeight: `${-55}`,
+      msgType: 'text',
       bottomPos: 0,
-      clickMsgItem: {}
+      askIndex: 0,
+      askData: [
+        {type: 'ask', content: '请问您的收货地址是哪里？', asktype: 'address'},
+        {type: 'ask', content: '请问您的手机号码是多少？', asktype: 'telephone'},
+        {type: 'ask', content: '请将您要购买的商品图片发送给我', msgtype: 'photo', asktype: 'photo'},
+        {type: 'ask', content: '您要购买几件？<br>想要购买的型号或颜色是什么呢？', asktype: 'options'},
+        {type: 'ask', content: '好的，正在为您生成订单，如有其它备注请留言？', asktype: 'content'}
+      ],
+      currentUser: {},
+      chatUser: {},
+      answerData: [],
+      showOrder: false,
+      orderKey: {'address': '收货地址', 'telephone': '联系电话', 'photo': '购买商品', 'options': '购买件数<br>型号/颜色', 'content': '其它备注'},
+      orderData: [],
+      postOrderData: {'address': '', 'telephone': '', 'photo': '', 'options': '', 'content': ''}
     }
   },
   filters: {
-    secondsFormat (seconds) {
-      return Time.seconds(seconds)
-    },
     dateFormat (seconds) {
       return new Time(seconds * 1000).format2()
     }
@@ -111,9 +116,6 @@ export default {
   watch: {
   },
   methods: {
-    filterEmot (text) {
-      return this.$util.emotPrase(text)
-    },
     getPhoto (src) {
       return this.$util.getPhoto(src)
     },
@@ -162,8 +164,6 @@ export default {
         text.updateAutosize()
       }, 50)
     },
-    onTextClick () {
-    },
     onFocus () {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
@@ -185,21 +185,6 @@ export default {
       setTimeout(() => {
         document.body.scrollTop = document.body.scrollHeight
       }, 100)
-    },
-    toggleFeatureBoard () {
-      if (this.showVoiceCom) {
-        this.showVoiceCom = false
-      }
-      if (this.showEmotBox) {
-        this.showEmotBox = false
-      }
-      if (!this.showFeatureBox) {
-        this.showFeatureBox = true
-        this.setScrollToBottom(false)
-      } else {
-        this.showFeatureBox = false
-        this.$refs.text.$refs.textarea.focus()
-      }
     },
     setViewHeight () {
       if (this.$util.isAndroid()) return
@@ -243,7 +228,6 @@ export default {
       }
     },
     imageLoad (item) {
-      // console.log(item.id +'>'+ minIdFlag)
       if (item.id > minIdFlag) {
         this.setScrollToBottom()
       } else {
@@ -256,7 +240,6 @@ export default {
         let formData = new FormData(this.$refs.uploadForm)
         const self = this
         this.$vux.loading.show()
-        this.toggleFeatureBoard()
         this.$http.post(`${ENV.BokaApi}/api/upload/files`, formData)
         .then(res => {
           self.$vux.loading.hide()
@@ -283,7 +266,6 @@ export default {
     sendPhoto () {
       const self = this
       if (window.WeixinJSBridge) {
-        self.toggleFeatureBoard()
         self.$util.wxUploadImage({
           maxnum: 1,
           handleCallback: function (data) {
@@ -302,47 +284,6 @@ export default {
       } else {
         this.$refs.uploadInput.click()
       }
-    },
-    sendVoice (data) {
-      const params = {
-        touid: this.query.uid,
-        content: data.time,
-        module: this.module,
-        sendtype: 'voice',
-        mediaid: data.vid
-      }
-      // console.log(params)
-      this.sendData(params)
-    },
-    onTalkRecord () {
-      const self = this
-      this.$vux.loading.show({text: '开始讲话'})
-      Voice.record(res => {
-        self.sendVoice({vid: res.serverId, time: res.time})
-      })
-    },
-    onTalkRecordStop () {
-      const self = this
-      this.$vux.loading.hide()
-      Voice.recordStop(
-      res => {
-        self.sendVoice({vid: res.serverId, time: res.time})
-      },
-      res => {
-        self.$vux.toast.text('录音时间过短', 'middle')
-      })
-    },
-    checkRecordApi () {
-      const self = this
-      Voice.recordCheck(
-        res => {
-          self.recordCheck = true
-        },
-        () => {
-          self.recordCheck = false
-          self.$vux.toast.text('录音设备不可用', 'middle')
-        }
-      )
     },
     getItemClass (item) {
       const self = this
@@ -372,18 +313,6 @@ export default {
       .then(res => {
         if (res.data.flag === 1) {
           const data = res.data.data
-          let sendData = {
-            module: postData.module,
-            type: 'say',
-            from_uid: self.loginUser.uid,
-            to_client_id: self.query.uid,
-            messageid: data.id,
-            room_id: room,
-            ...data
-          }
-          Socket.send(sendData)
-          self.message = ''
-          self.isUserTouch = false
         }
       })
     },
@@ -406,34 +335,9 @@ export default {
       }
       this.sendData(postData)
     },
-    viewUserInfo () {
-      this.$router.push({path: 'membersView', query: {uid: this.query.uid}})
-    },
-    clearSelectData () {
-      const self = this
-      if (self.selectNewsData) {
-        for (let d of self.newsData) {
-          if (d.id === self.selectNewsData.id) {
-            delete d.checked
-            self.selectNewsData = null
-            break
-          }
-        }
-      }
-      if (self.selectProductsData) {
-        for (let d of self.productsData) {
-          if (d.id === self.selectProductsData.id) {
-            delete d.checked
-            self.selectProductsData = null
-            break
-          }
-        }
-      }
-    },
     setScrollToTop () {
       this.$nextTick(() => {
         this.$refs.scrollContainer.reset({ top: 0 })
-        // this.$refs.scrollContainer.scrollTo(0, 0, false)
       })
     },
     setScrollToBottom (isTouch) {
@@ -441,10 +345,6 @@ export default {
       console.log(isTouch)
       console.log(this.isUserTouch)
       if (this.isUserTouch) return
-      // if (this.$util.isAndroid()) {
-      //   document.getElementById('chat-room').scrollTop = 1000000
-      //   document.body.scrollTop = document.body.scrollHeight
-      // }
       this.$nextTick(() => {
         const self = this
         if (this.$refs.scrollContent) {
@@ -453,82 +353,9 @@ export default {
             const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
             console.log(top)
             self.$refs.scrollContainer.reset({ top: top })
-            // this.$refs.scrollContainer.scrollTo(0, top, false)
-            // if (self.$util.isAndroid()) {
-            //    document.body.scrollTop = document.body.scrollHeight
-            //    document.documentElement.scrollTop = document.documentElement.scrollHeight
-            // }
           }, 100)
         }
       })
-    },
-    getNewsData () {
-      const self = this
-      let params = { from: 'retailer', pagestart: self.pagestart1, limit: self.limit1 }
-      let keyword = self.searchword
-      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
-        self.searchresult1 = true
-        params.keyword = keyword
-      } else {
-        self.searchresult1 = false
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/news`, {
-        params: params
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.newsData = self.newsData.concat(retdata)
-        self.disNewsData = true
-      })
-    },
-    getProductData () {
-      const self = this
-      let keyword = self.searchword
-      let params = { pagestart: self.pagestart2, limit: self.limit1 }
-      if (typeof keyword !== 'undefined' && keyword && self.$util.trim(keyword) !== '') {
-        self.searchresult2 = true
-        params.keyword = keyword
-      } else {
-        self.searchresult2 = false
-      }
-      self.$http.get(`${ENV.BokaApi}/api/list/product?from=retailer`, {
-        params: params
-      }).then(function (res) {
-        let data = res.data
-        self.$vux.loading.hide()
-        let retdata = data.data ? data.data : data
-        self.productsData = self.productsData.concat(retdata)
-        self.disProductsData = true
-      })
-    },
-    clickNews (data, index) {
-      const self = this
-      if (data.checked) {
-        self.selectNewsData = data
-      } else {
-        self.selectNewsData = null
-      }
-      for (let d of self.newsData) {
-        if (d.id !== data.id && d.checked) {
-          delete d.checked
-          break
-        }
-      }
-    },
-    clickProduct (data, index) {
-      const self = this
-      if (data.checked) {
-        self.selectProductsData = data
-      } else {
-        self.selectProductsData = null
-      }
-      for (let d of self.productsData) {
-        if (d.id !== data.id && d.checked) {
-          delete d.checked
-          break
-        }
-      }
     },
     getMessages (minId, callback) {
       let params = { uid: this.query.uid }
@@ -558,37 +385,10 @@ export default {
         }
       })
     },
-    getData () {
-      const self = this
-      self.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
-        params: { uid: self.query.uid }
-      }).then(function (res) {
-        if (res && res.status === 200) {
-          const data = res.data
-          if (data.flag) {
-            self.retailerInfo = data.data
-            document.title = self.retailerInfo.linkman
-          }
-        }
-      })
-    },
-    toNews (news) {
-      console.log('in toNews')
-      console.log(news)
-      if (this.query.from === 'miniprogram') {
-        // console.log('i am from miniprogram')
-        this.$wechat.miniProgram.redirectTo({url: `/packageB/pages${news.link}`})
-      } else {
-        this.$router.push({path: news.link})
-      }
-    },
-    setContactUser () {
-      return this.$http.get(`${ENV.BokaApi}/api/getUser/${this.query.uid}`)
-    },
     refresh () {
       const self = this
-      self.retailerInfo = {}
-      room = ''
+      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
+      this.query = this.$route.query
       minIdFlag = 0
       this.message = ''
       this.messages = []
@@ -596,10 +396,21 @@ export default {
       this.viewHeight = `${-55}`
       this.isUserTouch = false
       this.loginUser = User.get()
-      this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
-      this.query = this.$route.query
       this.setViewHeight()
-      this.getData()
+      this.currentUser = {avatar: this.loginUser.avatar, uid: this.loginUser.uid, linkman: this.loginUser.linkman}
+      this.$http.get(`${ENV.BokaApi}/api/retailer/info`, {
+        params: {uid: this.query.uid}
+      }).then(res => {
+        const data = res.data
+        const retdata = data.data ? data.data : data
+        if (data.flag) {
+          this.retailerInfo = retdata
+          document.title = this.retailerInfo.linkman
+          this.chatUser = {avatar: this.retailerInfo.avatar, uid: this.retailerInfo.uid, linkman: this.retailerInfo.linkman}
+          let msg = {...this.chatUser, ...this.askData[0]}
+          this.messageList.push(msg)
+        }
+      })
     }
   },
   activated () {
