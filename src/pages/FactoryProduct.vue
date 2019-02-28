@@ -338,9 +338,11 @@ export default {
         content: '确定将该商品上架到店铺并进行出售吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, {
-            id: self.query.id
-          }).then(function (res) {
+          let params = {id: self.query.id}
+          if (self.query.wid) {
+            params.wid = self.query.wid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryProduct`, params).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
             let error = data.error

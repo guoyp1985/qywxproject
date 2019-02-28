@@ -166,9 +166,11 @@ export default {
         content: '确定要引入到我的文章吗？',
         onConfirm () {
           self.$vux.loading.show()
-          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, {
-            id: self.query.id
-          }).then(function (res) {
+          let params = {id: self.query.id}
+          if (self.query.wid) {
+            params.wid = self.query.wid
+          }
+          self.$http.post(`${ENV.BokaApi}/api/factory/importFactoryNews`, params).then(function (res) {
             let data = res.data
             self.$vux.loading.hide()
             self.$vux.toast.show({
