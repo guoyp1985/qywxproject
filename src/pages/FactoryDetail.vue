@@ -50,7 +50,7 @@
                 </div>
               </div>
               <div v-else :class="`productlist ${productData.length == 0 ? '' : 'squarepic'}`">
-                <router-link :data="item" v-for="(item,index) in productData" :key="item.id" :to="{path: '/factoryProduct', query: {id: item.id, fid: fid}}" class="bk-productitem scroll_item font14">
+                <div @click="toFactoryProduct(item)" :data="item" v-for="(item,index) in productData" :key="item.id" class="bk-productitem scroll_item font14">
               		<div class="inner list-shadow">
               			<div class="picarea">
               				<div class="pic">
@@ -69,7 +69,7 @@
               				</div>
               			</div>
               		</div>
-                </router-link>
+                </div>
               </div>
             </template>
           </div>
@@ -87,7 +87,7 @@
                       <div class="t-cell v_middle">暂无数据</div>
                     </div>
                 </div>
-                <router-link v-else :to="{path: '/factoryNews', query: {id: item.id, fid: fid}}" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
+                <div v-else @click="toFactoryNews(item)" v-for="(item,index1) in newsData" :key="item.id" class="list-shadow scroll_item db pt10 pb10 pl12 pr12 bg-white mb10">
                   <div class="t-table">
                     <div class="t-cell v_middle w70">
                       <img class="imgcover" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';" />
@@ -100,7 +100,7 @@
                       </div>
                     </div>
                   </div>
-                </router-link>
+                </div>
               </div>
             </template>
           </div>
@@ -169,6 +169,26 @@ export default {
     }
   },
   methods: {
+    toFactoryProduct (item) {
+      let params = {id: item.id, fid: this.fid}
+      if (this.query.wid) {
+        params.wid = this.query.wid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/factoryProduct', query: params})
+    },
+    toFactoryNews (item) {
+      let params = {id: item.id, fid: this.fid}
+      if (this.query.wid) {
+        params.wid = this.query.wid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/factoryNews', query: params})
+    },
     viewBigImg (index2, index1) {
       const self = this
       let index = -1
