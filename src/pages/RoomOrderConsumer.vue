@@ -32,9 +32,17 @@
         <div class="qbtn bg-theme color-white font12">分享到群</div>
       </div>
     </div>
+    <div class="traffic-price db-flex font14">
+      <div class="flex_left w100">
+        <span>群名称</span>
+      </div>
+      <div class="flex_cell flex_right">
+        <span>{{item.grouptitle}}</span>
+      </div>
+    </div>
     <template v-if="item.flag === 1 || item.flag === 100">
       <div class="traffic-price db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>点击次数</span>
         </div>
         <div class="flex_cell flex_right">
@@ -42,7 +50,7 @@
         </div>
       </div>
       <div class="traffic-price db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>已销售</span>
         </div>
         <div class="flex_cell flex_right">
@@ -52,7 +60,7 @@
     </template>
     <template v-if="item.flag > -1">
       <div class="traffic-price db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>点击价格</span>
         </div>
         <div class="flex_cell flex_right">
@@ -60,7 +68,7 @@
         </div>
       </div>
       <div class="order-id db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>订单编号</span>
         </div>
         <div class="flex_cell flex_right">
@@ -69,7 +77,7 @@
       </div>
     </template>
     <div class="create-time db-flex font14">
-      <div class="flex_cell flex_left">
+      <div class="flex_left w100">
         <span>创建时间</span>
       </div>
       <div class="flex_cell flex_right">
@@ -78,7 +86,7 @@
     </div>
     <template v-if="item.flag === 100">
       <div class="create-time db-flex font14">
-        <div class="flex_cell flex_left">
+        <div class="flex_left w100">
           <span>结束时间</span>
         </div>
         <div class="flex_cell flex_right">
