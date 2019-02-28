@@ -5,7 +5,7 @@
 */
 <template>
   <div id="chat-room" class="font14 order-chat-page">
-    <scroller id="chat-scoller" lock-x scrollbar-y use-pulldown @touchend.native="touchContainer" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
+    <scroller id="chat-scoller" lock-x scrollbar-y :pulldown-config="{downContent: '', upContent: ''}" @touchend.native="touchContainer" :height="viewHeight" class="chat-area bg-white scroll-container" ref="scrollContainer">
       <div class="chatlist" ref="scrollContent">
         <template v-for="(item,index) in messages">
           <div :class="`chatitem chatitem-${item.id} ${getItemClass(item)}`">
