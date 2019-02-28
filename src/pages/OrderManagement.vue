@@ -37,7 +37,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else @clickConfirm="clickConfirm" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :dataIndex="index1">
+                <managetemplate v-else @clickConfirm="clickConfirm" @uploadDeliver="uploadDeliver" @viewDeliver="viewDeliver" v-for="(item,index1) in tabdata1" :key="item.id" :data="item" :dataIndex="index1">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <div slot="receivearea">
@@ -63,7 +63,7 @@
                         </div>
                       </template>
                       <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 2 && item.candeliver">
-                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploadDeliver(item,index)">{{ $t('Deliver goods') }}</div>
                       </div>
                       <div class="t-cell v_middle appendcontrol align_right w80" v-if="item.flag == 3">
                         <router-link :to="{path: '/deliverinfo', query: {id: item.id}}" class="qbtn4 color-orange7 font12" style="border:1px solid #ee9f25;padding:1px 8px">{{ $t('View deliver') }}</router-link>
@@ -122,7 +122,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :dataIndex="index1">
+                <managetemplate v-else v-for="(item,index1) in tabdata3" :key="item.id" :data="item" :dataIndex="index1" @uploadDeliver="uploadDeliver">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -141,7 +141,7 @@
                     </div>
                     <div v-if="item.candeliver" class="t-table pt5 color-lightgray font13 deliverarea">
                       <div class="t-cell middle-cell appendcontrol align_right w80">
-                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploaddeliver(item,index)">{{ $t('Deliver goods') }}</div>
+                        <div class="qbtn4 font12" style="padding:1px 14px;" @click="uploadDeliver(item,index)">{{ $t('Deliver goods') }}</div>
                       </div>
                     </div>
                   </div>
@@ -155,7 +155,7 @@
                   <div class="mt5">暂无相关订单！</div>
                   <div>积极分享商品或活动，客户才会购买哦~</div>
                 </div>
-                <managetemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" :dataIndex="index1">
+                <managetemplate v-else v-for="(item,index1) in tabdata4" :key="item.id" :data="item" :dataIndex="index1" @viewDeliver="viewDeliver">
                   <span slot="orderno">{{ item.orderno }}</span>
                   <span slot="flagstr">{{ item.flagstr }}</span>
                   <manageproducttemplate slot="productlist" v-for="(product,pindex) in item.orderlist" :key="product.id" :order-data="item">
@@ -185,7 +185,7 @@
         </swiper>
       </div>
       <div v-transfer-dom class="x-popup popup-deliver">
-        <popup v-model="showpopup" height="100%">
+        <popup v-model="showDeliver" height="100%">
           <div class="popup1 font14">
             <div class="popup-top flex_center">发货</div>
             <div class="popup-middle">
@@ -214,8 +214,8 @@
               </div>
             </div>
             <div class="popup-bottom flex_center">
-              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closepopup">{{ $t('Close') }}</div>
-              <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmpopup">{{ $t('Confirm txt') }}</div>
+              <div class="flex_cell bg-gray color-white h_100 flex_center" @click="closeDeliver">{{ $t('Close') }}</div>
+              <div class="flex_cell bg-green color-white h_100 flex_center" @click="confirmDeliver">{{ $t('Confirm txt') }}</div>
             </div>
           </div>
         </popup>
@@ -289,7 +289,7 @@ export default {
       pagestart2: 0,
       pagestart3: 0,
       pagestart4: 0,
-      showpopup: false,
+      showDeliver: false,
       deliveritem: null,
       deliverindex: 0,
       delivercompany: [],
@@ -306,9 +306,16 @@ export default {
     clickConfirm (item, index) {
       this.clickData = item
       this.clickIndex = index
-      console.log(item)
-      console.log(index)
       this.showConfirm = true
+    },
+    viewDeliver (item, index) {
+      this.clickData = item
+      this.clickIndex = index
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/simpleDeliverinfo', query: params})
     },
     closeModal () {
       this.showConfirm = false
@@ -529,11 +536,13 @@ export default {
         }
       })
     },
-    uploaddeliver (item, index) {
-      event.preventDefault()
+    uploadDeliver (item, index) {
+      console.log('click deliver')
       const self = this
       self.deliveritem = item
       self.deliverindex = index
+      this.clickIndex = index
+      this.clickData = item
       for (let key in self.deliverdata) {
         if (self.deliveritem[key] && self.$util.trim(self.deliveritem[key] !== '')) {
           self.deliverdata[key] = self.deliveritem[key]
@@ -545,44 +554,47 @@ export default {
           self.delivercompany = data.data ? data.data : data
         })
       }
-      this.showpopup = true
+      this.showDeliver = true
     },
-    confirmpopup () {
+    confirmDeliver () {
       const self = this
-      // if (self.deliverdata.delivercompany.toString() !== '-1' && (!self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '')) {
       if (self.deliverdata.delivercompany.toString() === '' || self.deliverdata.delivercompany.toString() === '-1' || !self.deliverdata.delivercode || self.$util.trim(self.deliverdata.delivercode) === '') {
         self.$vux.toast.text('请输入物流单号', 'middle')
         return false
       }
       self.$vux.loading.show()
-      self.deliverdata.id = self.deliveritem.id
-      self.$http.post(`${ENV.BokaApi}/api/order/deliver`, self.deliverdata).then(function (res) {
+      self.$http.post(`${ENV.BokaApi}/api/ordersoffline/state`, {
+        ...self.deliverdata, id: this.clickData.id, type: 'deliver'
+      }).then(res => {
         let data = res.data
         self.$vux.loading.hide()
         self.$vux.toast.show({
           text: data.error,
           time: self.$util.delay(data.error),
-          onHide: function () {
+          onHide: () => {
             if (data.flag === 1) {
-              self.deliveritem.flag = 3
-              self.deliveritem.delivercompany = self.deliverdata.delivercompany
-              self.deliveritem.delivercode = self.deliverdata.delivercode
-              self.$util.deleteItem(self.tabdata3, self.deliveritem.id)
-              self.tabdata4.push(self.deliveritem)
-              self.showpopup = false
-              self.deliveritem = null
-              self.deliverindex = 0
-              self.deliverdata = { delivercompany: '-1', delivercode: '' }
+              const retdata = data.data
+              switch (this.clickIndex) {
+                case 0:
+                  this.tabdata1[this.clickIndex] = retdata
+                  break
+                case 2:
+                  this.tabdata3[this.clickIndex] = retdata
+                  break
+              }
+              this.closeDeliver()
             }
           }
         })
       })
     },
-    closepopup () {
-      this.showpopup = false
-      self.deliveritem = null
-      self.deliverindex = 0
-      self.deliverdata = { delivercompany: '-1', delivercode: '' }
+    closeDeliver () {
+      this.clickData = null
+      this.clickIndex = 0
+      this.showDeliver = false
+      this.deliveritem = null
+      this.deliverindex = 0
+      this.deliverdata = { delivercompany: '-1', delivercode: '' }
     },
     scanClick () {
       const self = this

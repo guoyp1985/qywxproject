@@ -28,13 +28,13 @@
     <div class="bg-white padding10 b_top_after b_bottom_after color-gray5 flex_right">
       <template v-if="data.flag == 1">
         <div class="btn canle">取消</div>
-        <div class="btn sure" @click="btnSure">确认收款</div>
+        <div class="btn sure" @click="clickConfirm">确认收款</div>
       </template>
       <template v-if="data.flag == 2">
-        <div class="btn sure" @click="btnSure">立即发货</div>
+        <div class="btn sure" @click="clickDeliver">立即发货</div>
       </template>
       <template v-if="data.flag == 3">
-        <div class="btn sure" @click="btnSure">查看物流</div>
+        <div class="btn sure" @click="viewDeliver">查看物流</div>
       </template>
     </div>
   </div>
@@ -97,8 +97,14 @@ export default {
         })
       }, 200)
     },
-    btnSure () {
+    clickConfirm () {
       this.$emit('clickConfirm', this.data, this.dataIndex)
+    },
+    clickDeliver () {
+      this.$emit('uploadDeliver', this.data, this.dataIndex)
+    },
+    viewDeliver () {
+      this.$emit('viewDeliver', this.data, this.dataIndex)
     }
   }
 }
