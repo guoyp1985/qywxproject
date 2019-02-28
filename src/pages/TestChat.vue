@@ -165,14 +165,13 @@ export default {
     onFocus () {
       const self = this
       const globalContianer = document.getElementById('vux_view_box_body')
-      console.log(globalContianer.scrollHeight)
-      this.message = `${globalContianer.scrollHeight}`
       intervalId = setInterval(function () {
         document.body.scrollTop = document.body.scrollHeight
         if (self.$util.isAndroid()) {
           globalContianer.scrollTop = globalContianer.scrollHeight
           const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
           const clientH = parseInt(self.$refs.bottomArea.clientHeight)
+          this.message = `top=${top},clienH=${clientH}`
           self.$refs.scrollContainer.reset({ top: top + clientH })
         }
       }, 100)
