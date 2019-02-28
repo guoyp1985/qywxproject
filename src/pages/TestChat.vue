@@ -171,7 +171,7 @@ export default {
           globalContianer.scrollTop = globalContianer.scrollHeight
           const top = self.$refs.scrollContent.clientHeight - self.$refs.scrollContainer.$el.clientHeight
           const clientH = parseInt(self.$refs.bottomArea.clientHeight)
-          this.message = `top=${top},clienH=${clientH}`
+          self.message = `top=${top},clienH=${clientH}`
           self.$refs.scrollContainer.reset({ top: top + clientH })
         }
       }, 100)
