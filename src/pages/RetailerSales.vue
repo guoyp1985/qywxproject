@@ -6,14 +6,14 @@
       <div class="s-topbanner s-topbanner1">
         <div class="row">
           <tab v-model="selectedIndex" class="v-tab">
-            <tab-item v-for="(item,index) in tabtxts" :selected="index == 0" :key="index">{{item}}</tab-item>
+            <tab-item v-for="(item,index) in tabtxts" :selected="selectedIndex == index" :key="index" @on-item-click="swiperChange">{{item}}</tab-item>
           </tab>
         </div>
       </div>
       <div class="s-container s-container1">
-        <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
-          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index">
-            <template v-if="(index == 0)">
+        <!-- <swiper v-model="selectedIndex" class="x-swiper no-indicator" @on-index-change="swiperChange">
+          <swiper-item v-for="(tabitem, index) in tabtxts" :key="index"> -->
+            <template v-if="(selectedIndex == 0)">
               <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
                 <search
                   class="v-search bg-white"
@@ -25,7 +25,7 @@
                   ref="search">
                 </search>
               </div>
-              <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',index)">
+              <div v-if="distabdata1" class="scroll_list swiper-inner scroll-container1" style="top:55px;" ref="scrollContainer1" @scroll="handleScroll('scrollContainer1',selectedIndex)">
                 <div v-if="!tabdata1 || tabdata1.length === 0" class="scroll_item padding10 color-gray align_center">
                   <template v-if="searchresult1">
                     <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -51,7 +51,7 @@
                 </div>
               </div>
             </template>
-            <template v-if="(index == 1)">
+            <template v-if="(selectedIndex == 1)">
               <div class="flex_center bg-white" style="height:55px;position:absolute;left:0;top:0;right:0;">
                 <search
                   class="v-search bg-white"
@@ -63,7 +63,7 @@
                   ref="search">
                 </search>
               </div>
-              <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',index)">
+              <div v-if="distabdata2" class="scroll_list swiper-inner scroll-container2" style="top:55px;" ref="scrollContainer2" @scroll="handleScroll('scrollContainer2',selectedIndex)">
                 <div v-if="!tabdata2 || tabdata2.length == 0" class="scroll_item color-gray padding10 align_center">
                   <template v-if="searchresult2">
                     <div class="flex_center" style="height:80px;">暂无搜索结果</div>
@@ -98,7 +98,7 @@
                 </div>
               </div>
             </template>
-            <div v-if="(index == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',index)">
+            <div v-if="(selectedIndex == 2)" class="swiper-inner scroll-container3" ref="scrollContainer3" @scroll="handleScroll('scrollContainer3',selectedIndex)">
               <div v-if="distabdata3" class="scroll_list cols-2">
                 <div v-if="!tabdata3 || tabdata3.length == 0" class="scroll_item color-gray padding10 align_center">
                   <div><i class="al al-wushuju font60 pt20"></i></div>
@@ -118,8 +118,8 @@
                 </router-link>
               </div>
             </div>
-          </swiper-item>
-        </swiper>
+          <!-- </swiper-item>
+        </swiper> -->
       </div>
     </template>
     <div v-transfer-dom class="x-popup">
@@ -425,13 +425,8 @@ export default {
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.$vux.loading.show()
       this.loginUser = User.get()
+      this.query = this.$route.query
       if (this.loginUser && (this.loginUser.subscribe === 1 || this.loginUser.isretailer)) {
-        // if (self.loginUser.isretailer === 2) {
-        //   self.initContainer()
-        //   self.$vux.loading.hide()
-        //   let backUrl = encodeURIComponent(location.href)
-        //   location.replace(`${ENV.Host}/#/pay?id=${self.loginUser.payorderid}&module=payorders&lasturl=${backUrl}`)
-        // } else {
         self.initContainer()
         self.$vux.loading.hide()
         if (!self.loginUser.isretailer) {
@@ -440,9 +435,13 @@ export default {
         } else {
           self.initContainer()
           this.showContainer = true
+          if (this.query.flag === '1' || this.query.flag === 1) {
+            this.selectedIndex = 1
+          } else if (this.query.flag === '2' || this.query.flag === 2) {
+            this.selectedIndex = 2
+          }
           this.swiperChange()
         }
-        // }
       }
     }
   },
