@@ -30,7 +30,7 @@
             <div class="flex_cell flex_left">厂家介绍 {{index+1}}</div>
             <div v-if="index > 0" class="flex_right color-red w80" @click="deleteContent(index)">删除</div>
           </div>
-          <div class="padding10">
+          <group class="textarea-outer textarea-text bg-white">
             <x-textarea
               :name="`content${index+1}`"
               :ref="`contentTextarea${index+1}`"
@@ -44,7 +44,7 @@
               @on-focus="textareaFocus(`contentTextarea${index+1}`,index)"
               autosize>
             </x-textarea>
-          </div>
+          </group>
           <div class="padding10">
             <div class="q_photolist align_left">
               <template v-if="item.photoarr.length > 0">
@@ -84,8 +84,7 @@
 </template>
 
 <script>
-import { XTextarea, XInput, TransferDom, Popup, CheckIcon, Checker, CheckerItem } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
+import { XTextarea, XInput, TransferDom, Popup, Group } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -94,7 +93,7 @@ export default {
     TransferDom
   },
   components: {
-    XTextarea, XInput, Popup, CheckIcon, Forminputplate, Checker, CheckerItem
+    XTextarea, XInput, Popup, Group
   },
   data () {
     return {
@@ -369,22 +368,6 @@ export default {
       }
     }
   }
-  .x-checker .ck-item{
-    font-size:13px;
-    display: inline-block;
-    padding: 0 15px;
-    height: 30px;
-    line-height: 30px;
-    border:0px;
-    text-align: center;
-    border-radius: 3px;
-    background-color: #fff;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
-  }
-  .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
   .s-havebottom .s-container{bottom:50px;}
   .s-bottom{height:50px;}
 
