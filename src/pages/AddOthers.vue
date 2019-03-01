@@ -258,6 +258,7 @@ export default {
     }
   }
   .tip-message{
+    padding-top:20%;
     text-align: center;
     color: #c9c9c9;
     margin-top: 30px;
