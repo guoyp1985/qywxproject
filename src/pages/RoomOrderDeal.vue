@@ -6,7 +6,11 @@
 <template>
   <div id="room-order-deal" class="containerarea font14 s-havebottom">
     <div class="room-details">
-      <RoomViewDeal :item="room" :show-details="true"></RoomViewDeal>
+      <room-view :item="room" :show-details="true" :routerPath="routePath">
+        <div slot="sort-key">
+          <div class="font12 mt5 color-gray">综合评分：{{room.score}}分</div>
+        </div>
+      </room-view>
     </div>
     <!-- <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金</div> -->
     <div class="operation-area">
@@ -62,7 +66,7 @@
 </template>
 <script>
 import { CheckIcon, XDialog, TransferDom } from 'vux'
-import RoomViewDeal from '@/components/RoomViewDeal'
+import RoomView from '@/components/RoomView'
 import forminputplate from '@/components/Forminputplate'
 import AppendProduct from '@/components/AppendProduct'
 import ENV from 'env'
@@ -71,7 +75,7 @@ export default {
     TransferDom
   },
   components: {
-    CheckIcon, RoomViewDeal, forminputplate, AppendProduct, XDialog
+    CheckIcon, RoomView, forminputplate, AppendProduct, XDialog
   },
   data () {
     return {
@@ -82,7 +86,8 @@ export default {
       room: {},
       isSubmiting: false,
       showDialog: false,
-      propRebate: true
+      propRebate: true,
+      routePath: ''
     }
   },
   methods: {
@@ -158,6 +163,7 @@ export default {
   },
   activated () {
     this.query = this.$route.query
+    this.routePath = this.$route.path
     this.loadData()
   }
 }
