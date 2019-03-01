@@ -83,7 +83,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品原价</div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" />
+                <x-input v-model="submitdata.oriprice" @keyup="priceChange('oriprice')" maxlength="7" size="7" type="text" class="input priceInput" name="oriprice" placeholder="商品原价" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -92,7 +92,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品现价<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" />
+                <x-input v-model="submitdata.price" @keyup="priceChange('price')" maxlength="7" size="7" type="text" class="input priceInput" name="price" :placeholder="$t('User final purchase price')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -103,7 +103,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">商品利润<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.profit" @keyup="priceChange('profit')" type="text" class="input priceInput" name="profit" :placeholder="$t('Saled profit')" />
+                <x-input v-model="submitdata.profit" @keyup="priceChange('profit')" type="text" class="input priceInput" name="profit" :placeholder="$t('Saled profit')" ></x-input>
               </div>
               <div class="t-cell v_middle align_center" style="width:30px;" @click="clickTip">
                 <i class="al al-wenhao color-red"></i>
@@ -118,7 +118,7 @@
                 <div class="t-table">
                   <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Product') }}{{ $t('Storage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell input-cell v_middle" style="position:relative;">
-                    <input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" />
+                    <x-input v-model="submitdata.storage" type="tel" class="input" name="storage" :placeholder="$t('Storage')" maxlength="5" size="5" ></x-input>
                   </div>
                 </div>
               </div>
@@ -126,7 +126,7 @@
                 <div class="t-table">
                   <div class="t-cell title-cell font14 v_middle">{{ $t('Storage unit') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
                   <div class="t-cell input-cell v_middle align_right" style="position:relative;">
-                    <input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" />
+                    <x-input v-model="submitdata.unit" type="text" class="input align_right" name="unit" size="1" maxlength="1" :placeholder="$t('Storage unit')" ></x-input>
                   </div>
                 </div>
               </div>
@@ -136,7 +136,7 @@
             <div class="t-table">
               <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Postage') }}<span class="al al-xing color-red font12 ricon" style="vertical-align: 3px;"></span></div>
               <div class="t-cell input-cell v_middle" style="position:relative;">
-                <input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" />
+                <x-input v-model="submitdata.postage" @keyup="priceChange('postage')" type="text" class="input priceInput" name="postage" :placeholder="$t('Postage')" ></x-input>
               </div>
               <div class="t-cell v_middle align_right font12" style="width:20px;">元</div>
             </div>
@@ -219,7 +219,7 @@
               <div class="t-table">
                 <div class="t-cell title-cell w80 font14 v_middle">{{ $t('Share title') }}</div>
                 <div class="t-cell input-cell v_middle" style="position:relative;">
-                  <input v-model="submitdata.seotitle" type="text" class="input" name="seotitle" :placeholder="$t('Product share title placeholder')" />
+                  <x-input v-model="submitdata.seotitle" type="text" class="input" name="seotitle" :placeholder="$t('Product share title placeholder')" ></x-input>
                 </div>
               </div>
             </div>
