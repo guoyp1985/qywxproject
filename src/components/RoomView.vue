@@ -51,6 +51,10 @@
               <span>接单数:</span>
               <span>{{item.sales}}</span>
             </div>
+            <div class="mt5">
+              <span>更新时间:</span>
+              <span>{{item.dateline | formatDate}}</span>
+            </div>
           </div>
           <div class="flex_cell">
             <div>
@@ -65,12 +69,12 @@
               <span>综合评分:</span>
               <span>{{item.score}}分</span>
             </div>
-            <div class="mt5">
-              <span>更新时间:</span>
-              <span>{{item.dateline | formatDate}}</span>
-            </div>
           </div>
         </div>
+        <!-- <div class="flex_left font13 color-gray mt5">
+          <span>更新时间:</span>
+          <span>{{item.dateline | formatDate}}</span>
+        </div> -->
         <div v-if="routerPath === '/roomOrderDeal'" class="stats-result color-red">
           <span>点击价值: ￥</span>
           <span>{{item.viewmoney}}/人点击</span>
