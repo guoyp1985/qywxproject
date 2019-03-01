@@ -81,7 +81,7 @@ export default {
           time: 1500
         })
       }, 200)
-    },
+    }
   },
   activated () {
     this.loginUser = User.get()
