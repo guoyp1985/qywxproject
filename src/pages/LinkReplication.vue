@@ -41,7 +41,7 @@
 export default {
   data () {
     return {
-      isChoose:false
+      isChoose: false
     }
   },
   methods: {
@@ -62,8 +62,8 @@ export default {
       .txt{color:#fd6a61;position:absolute;width:200px;left:50%;transform: translate(-50%, -50%);background-color:#fff;text-align:center;}
       .first{padding:10px;box-sizing:border-box;background-color:#f2f2f2;border-radius:5px;}
       .img1{
-        width:100%;height:150px;
-        img{width:100%;height:100%;border-radius:5px;}
+        width:100%;
+        img{width:100%;border-radius:5px;max-width:100%;}
         img.active {
           transform: scale(3);
           position: absolute;
