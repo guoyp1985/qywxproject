@@ -1,0 +1,75 @@
+<template>
+  <div class="containerarea font14 linkreplication">
+    <div class="toplink">
+      <div class="flex_table flex_center font12">
+        <div class="frame pl5 pr5" style="">
+          /packageB/pages/store?wid=1
+        </div>
+        <div class="btnCopy">复制小程序路径</div>
+      </div>
+      <div class="flex_table flex_center font12 mt20">
+        <div class="frame pl5 pr5">
+          http://www.sharingsales.cn/#/shop?wid=1
+        </div>
+        <div class="btnCopy">复制备用网页</div>
+      </div>
+    </div>
+    <div class="imgContent mt20">
+      <div class="flex_table" style="position:relative;height:40px;">
+        <div class="line"></div>
+        <div class="txt">如何在公众号设置小程序店铺</div>
+      </div>
+      <div class="first">
+        <div><span style="color:#fd6a61;">第一步：</span> 登录微信公众平台 (mp.weixin.qq.com)点击【自定义菜单】按钮。</div>
+      </div>
+      <div class="img1 mt20">
+        <img src="../assets/images/link3.png" />
+      </div>
+      <div class="first mt20">
+        <div><span style="color:#fd6a61;">第二步：</span> 在菜单中选择【小程序】，并搜索小程序名称【共销客】，搜索完成后，将复制的“小程序路径”及“备用网页”粘贴在相应位置，即可完成设置，点击【保存】并发布即可。</div>
+      </div>
+      <div class="img1 mt20">
+        <img src="../assets/images/link1.png" />
+      </div>
+      <div class="img1 mt10 pb20">
+        <img src="../assets/images/link2.png" />
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+      isChoose:false
+    }
+  },
+  methods: {
+  }
+}
+</script>
+<style lang="less">
+  .linkreplication{
+    background-color:#f2f2f2;
+    .toplink{
+      padding:20px 10px;background-color:#ffffff;box-sizing:border-box;
+      .frame{border:1px solid #cccccc;border-right:0;height:35px;width:100%;line-height:35px;}
+      .btnCopy{width:130px;height:35px;text-align:center;line-height:35px;background-color:#fd6a61;color:#fff;border:1px solid #fd6a61;}
+    }
+    .imgContent{
+      padding:20px;box-sizing:border-box;background-color:#fff;
+      .line{width:80%;height:1px;background-color:#fd6a61;margin:0 auto;}
+      .txt{color:#fd6a61;position:absolute;width:200px;left:50%;transform: translate(-50%, -50%);background-color:#fff;text-align:center;}
+      .first{padding:10px;box-sizing:border-box;background-color:#f2f2f2;border-radius:5px;}
+      .img1{
+        width:100%;height:150px;
+        img{width:100%;height:100%;border-radius:5px;}
+        img.active {
+          transform: scale(3);
+          position: absolute;
+          z-index: 100;
+        }
+      }
+    }
+  }
+</style>
