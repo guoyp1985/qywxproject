@@ -20,7 +20,7 @@
         <div class="txt">如何在公众号设置小程序店铺</div>
       </div>
       <div class="first">
-        <div><span class="bold" style="color:#fd6a61;">第一步：</span> 登录微信公众平台 (mp.weixin.qq.com)点击【自定义菜单】按钮。</div>
+        <div><span class="bold" style="color:#fd6a61;">第一步：</span> 登录微信公众平台 (mp.weixin.qq.com)点击【自定义菜单】按钮。（仅限已申请过公众号的卖家，若没有申请过公众号请先申请）</div>
       </div>
       <div class="img1 mt20">
         <img src="../assets/images/link3.png" />
