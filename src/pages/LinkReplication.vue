@@ -2,13 +2,13 @@
   <div id="link-web-page" class="containerarea font14 linkreplication">
     <div class="toplink">
       <div class="flex_table flex_center font12">
-        <div class="frame pl5 pr5" style="">{{appPath}}</div>
+        <div class="frame pl5 pr5 flex_left" style="">{{appPath}}</div>
         <div class="btnCopy" style="position:relative;" @click="copyTxt('app', 'copy_app_txt')">复制小程序路径
           <div class="copy_app_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{appPath}}</div>
         </div>
       </div>
       <div class="flex_table flex_center font12 mt20">
-        <div class="frame pl5 pr5">{{webPath}}</div>
+        <div class="frame pl5 pr5 flex_left">{{webPath}}</div>
         <div class="btnCopy" style="position:relative;" @click="copyTxt('web', 'copy_web_txt')">复制备用网页
           <div class="copy_web_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{appPath}}</div>
         </div>
