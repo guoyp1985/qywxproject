@@ -46,7 +46,7 @@
     </div>
     <!-- <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生成，微信将收取0.6%的手续费</div> -->
     <div class="s-bottom submit-button color-white" @click="makeDeal">
-      <span>支付保证金 ￥{{room.deposit}} + 0.6%手续费</span>
+      <span>支付保证金 ￥{{room.deposit}} + 手续费￥{{fee}}</span>
     </div>
     <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" :rebate="propRebate"></append-product>
     <div v-transfer-dom>
@@ -87,7 +87,8 @@ export default {
       isSubmiting: false,
       showDialog: false,
       propRebate: true,
-      routePath: ''
+      routePath: '',
+      fee: '0.00'
     }
   },
   methods: {
@@ -102,6 +103,12 @@ export default {
         this.$vux.loading.hide()
         if (res.data.flag === 1) {
           this.room = res.data.data
+          let fee = parseFloat(this.room.deposit) * 0.006
+          if (fee < 0.01) {
+            this.fee = '0.01'
+          } else {
+            this.fee = fee.toFixed(2)
+          }
         }
       })
     },
