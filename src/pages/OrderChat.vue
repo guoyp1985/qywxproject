@@ -114,7 +114,7 @@ export default {
       retailerInfo: {},
       askIndex: 0,
       askData: [
-        {type: 'ask', content: '请问您的收货地址是哪里？', asktype: 'address'},
+        {type: 'ask', content: '请问您的收货地址是哪里？<br>收货人姓名是什么？', asktype: 'address'},
         {type: 'ask', content: '请问您的手机号码是多少？', asktype: 'telephone'},
         {type: 'ask', content: '请将您要购买的商品图片发送给我', msgtype: 'photo', asktype: 'photo'},
         {type: 'ask', content: '您要购买几件？<br>想要购买的型号或颜色是什么呢？', asktype: 'options'},
