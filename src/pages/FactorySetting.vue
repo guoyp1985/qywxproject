@@ -84,8 +84,7 @@
 </template>
 
 <script>
-import { XTextarea, XInput, TransferDom, Popup, CheckIcon, Checker, CheckerItem, Group } from 'vux'
-import Forminputplate from '@/components/Forminputplate'
+import { XTextarea, XInput, TransferDom, Popup, Group } from 'vux'
 import ENV from 'env'
 import { User } from '#/storage'
 
@@ -94,7 +93,7 @@ export default {
     TransferDom
   },
   components: {
-    XTextarea, XInput, Popup, CheckIcon, Forminputplate, Checker, CheckerItem, Group
+    XTextarea, XInput, Popup, Group
   },
   data () {
     return {
@@ -369,22 +368,6 @@ export default {
       }
     }
   }
-  .x-checker .ck-item{
-    font-size:13px;
-    display: inline-block;
-    padding: 0 15px;
-    height: 30px;
-    line-height: 30px;
-    border:0px;
-    text-align: center;
-    border-radius: 3px;
-    background-color: #fff;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    box-sizing: border-box;
-  }
-  .x-checker .border1px.ck-item-selected:after{border:1px solid #ea3a3a;}
   .s-havebottom .s-container{bottom:50px;}
   .s-bottom{height:50px;}
 
