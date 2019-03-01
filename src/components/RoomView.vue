@@ -14,7 +14,12 @@
             <slot name="sort-key"></slot>
           </div>
         </div>
-        <div class="more-area flex_cell flex_right">
+        <div v-if="routerPath === '/roomOrderDeal'" class="more-area flex_cell flex_right">
+          <div class="font13 color-white more-btns" @click.stop="toggleDetails">
+            <span class="al al-asmkticon0165"></span>
+          </div>
+        </div>
+        <div v-else class="more-area flex_cell flex_right">
           <span class="more-btn font13 color-white" @click.stop="toggleDetails">
             <template v-if="openDetails">
               简约
@@ -34,7 +39,7 @@
               <span>群人数:</span>
               <span>{{item.members}}</span>
             </div>
-            <div>
+            <div class="mt5">
               <span>男/女/未知:</span>
               <span>{{item.sexrate}}</span>
             </div>
@@ -42,7 +47,7 @@
               <span>地域分析:</span>
               <span>无</span>
             </div> -->
-            <div>
+            <div class="mt5">
               <span>接单数:</span>
               <span>{{item.sales}}</span>
             </div>
@@ -56,17 +61,21 @@
               <span>鉴定类型:</span>
               <span>无</span>
             </div> -->
-            <div>
+            <div class="mt5">
               <span>综合评分:</span>
               <span>{{item.score}}分</span>
             </div>
-            <div>
+            <div class="mt5">
               <span>更新时间:</span>
               <span>{{item.dateline | formatDate}}</span>
             </div>
           </div>
         </div>
-        <div class="stats-result">
+        <div v-if="routerPath === '/roomOrderDeal'" class="stats-result color-red">
+          <span>点击价值: ￥</span>
+          <span>{{item.viewmoney}}/人点击</span>
+        </div>
+        <div v-else class="stats-result">
           <span>点击价值: ￥</span>
           <span>{{item.viewmoney}}/人点击</span>
         </div>
@@ -80,6 +89,7 @@ import Time from '#/time'
 export default {
   name: 'RoomView',
   props: {
+    routerPath: String,
     item: {
       type: Object,
       default: () => {
@@ -154,7 +164,7 @@ export default {
   background-color: @boka-red;
 }
 .room-view .stats-result {
-  margin-top: 10px;
+  margin-top: 20px;
   text-align: center;
 }
 .room-view .more-btn {
@@ -162,5 +172,13 @@ export default {
   padding: 2px 18px;
   border: 1px solid @boka-red;
   background-color: @boka-red;
+}
+.room-view .more-btns{
+  background-color:#EA3A3A;
+  height: 25px;
+  line-height: 25px;
+  width: 60px;
+  text-align: center;
+  border-radius: 20px;
 }
 </style>
