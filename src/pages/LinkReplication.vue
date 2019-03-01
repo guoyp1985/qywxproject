@@ -1,17 +1,17 @@
 <template>
-  <div class="containerarea font14 linkreplication">
+  <div id="link-web-page" class="containerarea font14 linkreplication">
     <div class="toplink">
       <div class="flex_table flex_center font12">
-        <div class="frame pl5 pr5" style="">
-          /packageB/pages/store?wid=1
+        <div class="frame pl5 pr5" style="">{{appPath}}</div>
+        <div class="btnCopy" style="position:relative;" @click="copyTxt('app', 'copy_app_txt')">复制小程序路径
+          <div class="copy_app_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{appPath}}</div>
         </div>
-        <div class="btnCopy">复制小程序路径</div>
       </div>
       <div class="flex_table flex_center font12 mt20">
-        <div class="frame pl5 pr5">
-          http://www.sharingsales.cn/#/shop?wid=1
+        <div class="frame pl5 pr5">{{webPath}}</div>
+        <div class="btnCopy" style="position:relative;" @click="copyTxt('web', 'copy_web_txt')">复制备用网页
+          <div class="copy_web_txt" style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:0;z-index:1;overflow:hidden;">{{appPath}}</div>
         </div>
-        <div class="btnCopy">复制备用网页</div>
       </div>
     </div>
     <div class="imgContent mt20">
@@ -38,13 +38,55 @@
   </div>
 </template>
 <script>
+import ENV from 'env'
+import {User} from '#/storage'
+import jQuery from 'jquery'
 export default {
   data () {
     return {
-      isChoose: false
+      loginUser: {},
+      appPath: '/packageB/pages/store',
+      webPath: `${ENV.Host}/#/shop`
     }
   },
   methods: {
+    copyTxt (type, css) {
+      const self = this
+      let eleobj = jQuery(`#link-web-page ${css}`)[0]
+      let txt = this.appPath
+      if (type === 'web') {
+        txt = this.webPath
+      }
+      let range = null
+      let save = function (e) {
+        e.clipboardData.setData('text/plain', txt)
+        e.preventDefault()
+      }
+      if (self.$util.isIOS()) { // ios设备
+        window.getSelection().removeAllRanges()
+        range = document.createRange()
+        range.selectNode(eleobj)
+        window.getSelection().addRange(range)
+        document.execCommand('copy')
+        window.getSelection().removeAllRanges()
+      } else { // 安卓设备
+        console.log('in android')
+        document.addEventListener('copy', save)
+        document.execCommand('copy')
+        document.removeEventListener('copy', save)
+      }
+      setTimeout(function () {
+        self.$vux.toast.show({
+          text: '复制成功',
+          time: 1500
+        })
+      }, 200)
+    },
+  },
+  activated () {
+    this.loginUser = User.get()
+    this.appPath = `${this.appPath}?wid=${this.loginUser.uid}`
+    this.webPath = `${this.webPath}?wid=${this.loginUser.uid}`
   }
 }
 </script>
