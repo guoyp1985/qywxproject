@@ -45,6 +45,10 @@
             <span>地域分析:</span>
             <span>无</span>
           </div> -->
+          <div>
+            <span>综合评分:</span>
+            <span>{{item.score}}分</span>
+          </div>
         </div>
         <div class="flex_cell">
           <div>
@@ -55,10 +59,6 @@
             <span>鉴定类型:</span>
             <span>无</span>
           </div> -->
-          <div>
-            <span>综合评分:</span>
-            <span>{{item.score}}分</span>
-          </div>
         </div>
       </div>
       <div class="stats-result" v-if="item.viewmoney > 0">
