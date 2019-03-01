@@ -39,7 +39,7 @@
             <room v-for="(item, index) in rooms" :key="index" :item="item" :index="index" @action="handleAction" @click-photo="clickPhoto"></room>
           </template>
           <template v-else>
-            <div class="flex_empty">
+            <div class="font16 color-gray2" style="padding-top:20%;">
               <div>
                 <div class="align_center">你还没有添加微信群</div>
                 <div class="db align_center mt10 color-theme" @click="toAdd">点击添加微信群 ></div>
@@ -54,7 +54,7 @@
             <room-order-consumer v-for="(item, index) in roomOrders" :key="index" :item="item"></room-order-consumer>
           </template>
           <template v-else>
-            <div class="flex_empty">
+            <div class="font16 color-gray2 align_center" style="padding-top:20%;">
               <span>还没有群订单信息</span>
             </div>
           </template>
