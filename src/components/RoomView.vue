@@ -39,10 +39,10 @@
               <span>群人数:</span>
               <span>{{item.members}}</span>
             </div>
-            <div class="mt5">
+            <!-- <div class="mt5">
               <span>男/女/未知:</span>
               <span>{{item.sexrate}}</span>
-            </div>
+            </div> -->
             <!-- <div>
               <span>地域分析:</span>
               <span>无</span>

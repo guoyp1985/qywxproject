@@ -21,7 +21,7 @@
     </div>
     <group>
       <cell title="群人数" :value="room.members"></cell>
-      <cell title="男/女/未知" :value="room.sexrate"></cell>
+      <!-- <cell title="男/女/未知" :value="room.sexrate"></cell> -->
       <!-- <cell title="地域分析" value="无"></cell> -->
       <cell title="接单数" :value="room.sales"></cell>
       <!-- <cell title="群信用度" value="无"></cell> -->
