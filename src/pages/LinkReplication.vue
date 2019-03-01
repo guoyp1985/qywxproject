@@ -63,12 +63,7 @@ export default {
       .first{padding:10px;box-sizing:border-box;background-color:#f2f2f2;border-radius:5px;}
       .img1{
         width:100%;
-        img{width:100%;border-radius:5px;max-width:100%;}
-        img.active {
-          transform: scale(3);
-          position: absolute;
-          z-index: 100;
-        }
+        img{width:100%;max-width:100%;border: 1px solid #cccccc;}
       }
     }
   }
