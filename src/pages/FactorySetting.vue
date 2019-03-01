@@ -1,6 +1,6 @@
 <template>
-  <div class="containerarea bg-page font14 factory-setting">
-    <div class="pagemiddle" style="top:0px;">
+  <div class="containerarea s-havebottom bg-page font14 factory-setting">
+    <div class="s-container" style="top:0px;">
       <form enctype="multipart/form-data">
         <input ref="fileInput" class="hide" type="file" name="files" @change="fileChange('logo','fileInput')" />
       </form>
