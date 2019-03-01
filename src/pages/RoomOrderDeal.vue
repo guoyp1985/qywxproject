@@ -6,13 +6,13 @@
 <template>
   <div id="room-order-deal" class="containerarea font14 s-havebottom">
     <div class="room-details">
-      <room-view :item="room" :show-details="true"></room-view>
+      <RoomViewDeal :item="room" :show-details="true"></RoomViewDeal>
     </div>
-    <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金</div>
+    <!-- <div class="mt10 bg-white padding10 color-red">订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金</div> -->
     <div class="operation-area">
       <form>
         <forminputplate class="required">
-          <span slot="title">商品</span>
+          <span slot="title">选择推广商品</span>
           <div class="pr10 color-gray" @click="handleAppend">
             <div v-if="product.id" class="select-area">
               <div class="t-table">
@@ -26,16 +26,21 @@
               </div>
             </div>
             <div v-else class="align_right select-area">
-              <span class="text">选择商品</span>
+              <span class="text color-red">点击选择推广商品</span>
             </div>
           </div>
         </forminputplate>
+        <div class="pl10 pr20 pt25 pb25">
+          <div class="color-red font14">提示</div>
+          <div class="color-gray2 font12 mt5">1. 订单发起后，群主将成为您的返点客，商品出售成功后会向返点客支付返点佣金。</div>
+          <div class="color-gray2 font12 mt5">2. 订单支付时，微信将收取0.6%的手续费。</div>
+        </div>
       </form>
     </div>
     <div class="protocal-area">
-      <check-icon :value.sync="isAccept" type="plain">同意<a class="color-red" @click.stop="showProtocol">群群推协议</a></check-icon>
+      <check-icon :value.sync="isAccept" type="plain"><a class="color-gray2" @click.stop="showProtocol">同意群群推协议</a></check-icon>
     </div>
-    <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生成，微信将收取0.6%的手续费</div>
+    <!-- <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生成，微信将收取0.6%的手续费</div> -->
     <div class="s-bottom submit-button color-white" @click="makeDeal">
       <span>支付保证金 ￥{{room.deposit}}</span>
     </div>
@@ -57,7 +62,7 @@
 </template>
 <script>
 import { CheckIcon, XDialog, TransferDom } from 'vux'
-import RoomView from '@/components/RoomView'
+import RoomViewDeal from '@/components/RoomViewDeal'
 import forminputplate from '@/components/Forminputplate'
 import AppendProduct from '@/components/AppendProduct'
 import ENV from 'env'
@@ -66,7 +71,7 @@ export default {
     TransferDom
   },
   components: {
-    CheckIcon, RoomView, forminputplate, AppendProduct, XDialog
+    CheckIcon, RoomViewDeal, forminputplate, AppendProduct, XDialog
   },
   data () {
     return {
@@ -193,5 +198,7 @@ export default {
 #room-order-deal .protocal-area {
   padding: 20px 0;
   text-align: center;
+  position:absolute;bottom:40px;width:100%;
+  a{text-decoration:underline;}
 }
 </style>
