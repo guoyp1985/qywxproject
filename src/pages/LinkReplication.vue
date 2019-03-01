@@ -52,7 +52,7 @@ export default {
   methods: {
     copyTxt (type, css) {
       const self = this
-      let eleobj = jQuery(`#link-web-page ${css}`)[0]
+      let eleobj = jQuery(`#link-web-page .${css}`)[0]
       let txt = this.appPath
       if (type === 'web') {
         txt = this.webPath
