@@ -15,18 +15,18 @@
       </div>
     </div>
     <div class="imgContent mt20">
-      <div class="flex_table" style="position:relative;height:40px;">
+      <div class="flex_table" style="position:relative;height:30px;margin-top:10px;">
         <div class="line"></div>
         <div class="txt">如何在公众号设置小程序店铺</div>
       </div>
       <div class="first">
-        <div><span style="color:#fd6a61;">第一步：</span> 登录微信公众平台 (mp.weixin.qq.com)点击【自定义菜单】按钮。</div>
+        <div><span class="bold" style="color:#fd6a61;">第一步：</span> 登录微信公众平台 (mp.weixin.qq.com)点击【自定义菜单】按钮。</div>
       </div>
       <div class="img1 mt20">
         <img src="../assets/images/link3.png" />
       </div>
       <div class="first mt20">
-        <div><span style="color:#fd6a61;">第二步：</span> 在菜单中选择【小程序】，并搜索小程序名称【共销客】，搜索完成后，将复制的“小程序路径”及“备用网页”粘贴在相应位置，即可完成设置，点击【保存】并发布即可。</div>
+        <div><span class="bold" style="color:#fd6a61;">第二步：</span> 在菜单中选择【小程序】，并搜索小程序名称【共销客】，搜索完成后，将复制的“小程序路径”及“备用网页”粘贴在相应位置，即可完成设置，点击【保存】并发布即可。</div>
       </div>
       <div class="img1 mt20">
         <img src="../assets/images/link1.png" />
@@ -95,7 +95,7 @@ export default {
     background-color:#f2f2f2;
     .toplink{
       padding:20px 10px;background-color:#ffffff;box-sizing:border-box;
-      .frame{border:1px solid #cccccc;border-right:0;height:35px;width:100%;line-height:35px;}
+      .frame{border:1px solid #cccccc;border-right:0;height:35px;width:100%;}
       .btnCopy{width:130px;height:35px;text-align:center;line-height:35px;background-color:#fd6a61;color:#fff;border:1px solid #fd6a61;}
     }
     .imgContent{
@@ -105,12 +105,7 @@ export default {
       .first{padding:10px;box-sizing:border-box;background-color:#f2f2f2;border-radius:5px;}
       .img1{
         width:100%;
-        img{width:100%;border-radius:5px;max-width:100%;}
-        img.active {
-          transform: scale(3);
-          position: absolute;
-          z-index: 100;
-        }
+        img{width:100%;max-width:100%;border: 1px solid #cccccc;}
       }
     }
   }
