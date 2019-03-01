@@ -46,7 +46,7 @@
     </div>
     <!-- <div class="align_center font14 color-red w_100" style="position:absolute;bottom:50px;">订单生成，微信将收取0.6%的手续费</div> -->
     <div class="s-bottom submit-button color-white" @click="makeDeal">
-      <span>支付保证金 ￥{{room.deposit}}</span>
+      <span>支付保证金 ￥{{room.deposit}} + 0.6%手续费</span>
     </div>
     <append-product v-model="popupShow" @close="popupClose" @confirm="popupConfirm" from="myshop" :rebate="propRebate"></append-product>
     <div v-transfer-dom>
