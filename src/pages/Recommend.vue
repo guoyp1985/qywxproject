@@ -257,7 +257,6 @@ export default {
     },
     toProduct1 (item) {
       if (this.query.from) {
-        params.from = this.query.from
         if (item.type === 'groupbuy') {
           this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}`})
         } else {
