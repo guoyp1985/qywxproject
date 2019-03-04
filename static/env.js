@@ -21,6 +21,7 @@ var ENV = {
     {id: 100, status: '已完成'}
   ],
   MiniRouter: {
+    activity: '/packageB/pages/activity',
     contentsNews: '/pages/contentsNews',
     knowledgeList: '/package/pages/contentsKnowledge',
     news: '/packageB/pages/news',

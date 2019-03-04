@@ -87,7 +87,7 @@
           <div v-if="!tabData2.length" class="scroll_item emptyitem flex_center">
             <span>{{$t('No relevant data')}}</span>
           </div>
-          <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData2" :key="index">
+          <div v-else @click="toProduct(item)" class="scroll_item flex_left pt10 pb10" v-for="(item, index) in tabData2" :key="index">
             <div class="w80 align_center">
               <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             </div>
@@ -98,7 +98,7 @@
                 <div class="flex_cell align_right color-red">佣金：{{$t('RMB')}}{{item.rebate}}</div>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </view-box>
       <view-box v-show="selectedIndex1===2">
@@ -107,7 +107,7 @@
             <span>{{$t('No relevant data')}}</span>
           </div>
           <template v-else v-for="(item, index) in tabData3">
-            <router-link v-if="item.type == 'groupbuy'" class="scroll_item flex_left pt10 pb10" :to="{path: '/product', query: {id: item.productid, wid: item.uploader}}">
+            <div v-if="item.type == 'groupbuy'" @click="toProduct(item)" class="scroll_item flex_left pt10 pb10">
               <div class="w80 align_center">
                 <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
               </div>
@@ -115,8 +115,8 @@
                   <div class="clamp2">{{ item.title }}</div>
                   <div class="clamp1 mt10 font12 color-gray">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
               </div>
-            </router-link>
-            <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/activity', query: {id: item.id}}">
+            </div>
+            <div v-else @click="toActivity(item)" class="scroll_item flex_left pt10 pb10">
               <div class="w80 align_center">
                 <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
               </div>
@@ -124,7 +124,7 @@
                   <div class="clamp2">{{ item.title }}</div>
                   <div class="clamp1 mt10 font12 color-gray">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
               </div>
-            </router-link>
+            </div>
           </template>
         </div>
       </view-box>
@@ -133,7 +133,7 @@
           <div v-if="!tabData4.length" class="scroll_item emptyitem flex_center">
             <span>{{$t('No relevant data')}}</span>
           </div>
-          <router-link v-else class="scroll_item flex_left pt10 pb10" :to="{path: '/news', query: {id: item.id, wid: item.uploader}}" v-for="(item, index) in tabData4" :key="index">
+          <div v-else @click="toNews(item)" class="scroll_item flex_left pt10 pb10" v-for="(item, index) in tabData4" :key="index">
             <div class="w80 align_center">
               <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
             </div>
@@ -145,7 +145,7 @@
                 <span class="v_middle"><i class="al al-ai-share font13 middle-cell pl5 pr5 color-b8b8b8"></i>{{item.shares}}</span>
               </div>
             </div>
-          </router-link>
+          </div>
         </div>
       </view-box>
     </div>
@@ -249,6 +249,33 @@ export default {
     }
   },
   methods: {
+    toProduct (item) {
+      let params = {id: item.id, wid: item.uploader}
+      if (this.query.from) {
+        params.from = this.query.from
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/product', query: params})
+      }
+    },
+    toActivity (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/activity', query: params})
+      }
+    },
+    toNews (item) {
+      let params = {id: item.id, wid: item.uploader}
+      if (this.query.from) {
+        params.from = this.query.from
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/news', query: params})
+      }
+    },
     applyClick (id) {
       this.$router.push({name: 'tRebateApply'})
     },
@@ -426,13 +453,31 @@ export default {
       this.isshowpopup = false
     },
     withdrawClick () {
-      this.$router.push({path: '/userRevenue'})
+      let params = {}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      this.$router.push({path: '/userRevenue', query: params})
     },
     bringCustomerClick (type) {
-      this.$router.push({path: '/bringCustomer'})
+      let params = {}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/bringCustomer', query: params})
     },
     bringCustomerClick1 (type) {
-      this.$router.push({path: '/bringCustomer', query: {type: 'buy'}})
+      let params = {type: 'buy'}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/bringCustomer', query: params})
     },
     getData () {
       const self = this
