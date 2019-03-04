@@ -132,6 +132,15 @@ export default {
       console.log(res)
       this.teamInfo = res.data.data
     })
+    let url = '/pages/vip'
+    if (this.query.weburl) {
+      let weburl = encodeURIComponent(this.query.weburl)
+      let webquery = encodeURIComponent(this.query.webquery)
+      url = `${url}?weburl=${weburl}&webquery=${webquery}`
+      this.backurl = url
+    }
+    console.log('this.backurl')
+    console.log(this.backurl)
   },
   activated () {
     this.fixedTop = false
