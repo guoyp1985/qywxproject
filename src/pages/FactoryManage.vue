@@ -52,9 +52,9 @@
               <div class="item">
                 <div class="inner" @click="clickPopup('manager')">管理员列表</div>
               </div>
-              <div class="item">
+              <!-- <div class="item">
                 <div class="inner" @click="clickPopup('set')">设置佣金</div>
-              </div>
+              </div> -->
               <div class="item">
                 <div class="inner" @click="clickPopup('edit')">编辑</div>
               </div>
