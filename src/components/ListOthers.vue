@@ -150,8 +150,8 @@ export default {
       let _this = this
       if (!this.loginUser.isretailer) {
         this.$vux.confirm.show({
-          // title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
-          title: _this.backurl,
+          title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+          // title: _this.backurl,
           onConfirm () {
             console.log(_this.backurl)
             _this.$wechat.miniProgram.navigateTo({url: _this.backurl})
