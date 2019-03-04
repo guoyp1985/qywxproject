@@ -62,25 +62,24 @@
         <tab-item @on-item-click="swiperChange">{{$t('Article')}}</tab-item>
       </tab>
       <view-box v-show="selectedIndex1===0">
-        <template v-if="disTabData1">
+        <div class="scroll_list" v-if="disTabData1">
           <template v-if="!tabData1.length">
             <div class="no-related-x color-gray">
               <span>{{$t('No relevant data')}}</span>
             </div>
           </template>
-          <group v-else>
-            <cell-box v-for="(item, index) in list" :key="item.id" :link="{name: 'tRebateStore', query: {wid: item.uploader}}">
-              <div class="store-img">
-                <img class="imgcover" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-              </div>
-              <div class="store-info font14">
-                <div class="store-name">
-                  {{item.title}}
-                </div>
-              </div>
-            </cell-box>
-          </group>
-        </template>
+          <div v-else @click="toRebateStore(item)" class="scroll_item flex_left pt10 pb10" v-for="(item, index) in tabData1" :key="index">
+            <div class="w80 align_center">
+              <img class="imgcover v_middle" style="width:60px;height:60px;" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';"/>
+            </div>
+            <div class="pr10 flex_cell border-box">
+              <div class="clamp2">{{ item.title }}</div>
+            </div>
+            <div class="flex_center w40">
+              <i class="al al-mjiantou-copy color-gray font20"></i>
+            </div>
+          </div>
+        </div>
       </view-box>
       <view-box v-show="selectedIndex1===1">
         <div class="scroll_list" v-if="disTabData2">
@@ -249,6 +248,13 @@ export default {
     }
   },
   methods: {
+    toRebateStore (item) {
+      let params = {wid: item.uploader}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/rebateStore', query: params})
+    },
     toProduct (item) {
       let params = {id: item.id, wid: item.uploader}
       if (this.query.from) {

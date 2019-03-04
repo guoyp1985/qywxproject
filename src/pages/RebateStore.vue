@@ -21,7 +21,7 @@
           <a @click="onShareCard" class="qbtn4"><i class="al al-a166 font12" style="line-height:12px"></i> {{$t('To Recommend Store')}}</a>
         </div>
         <div class="flex_cell align_left pl20">
-          <router-link :to="{path: '/bringCustomer', query: {wid: query.wid}}" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</router-link>
+          <div @click="toCustomer" class="qbtn4">{{$t('Bring Customer')}}：{{rebateInfo.bringCustomers}}</div>
         </div>
       </div>
     </div>
@@ -55,7 +55,7 @@
         <template v-if="distabdata1">
           <template v-if="tabdata1.length">
             <group v-for="(item, index) in tabdata1" :key="index">
-              <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.id}&wid=${item.uploader}`">
+              <cell :title="item.title" class="list-item font14 clamp2" @click.native="toProduct(item)">
                 <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <span class="info-cell">
@@ -80,7 +80,7 @@
           <template v-if="tabdata2.length">
             <group v-for="(item, index) in tabdata2" :key="index">
               <template v-if="item.type == 'groupbuy'">
-                <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/product?id=${item.productid}&wid=${item.uploader}`">
+                <cell :title="item.title" class="list-item font14 clamp2" @click.native="toProduct(item)">
                   <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
@@ -88,7 +88,7 @@
                 </cell>
               </template>
               <template v-else>
-                <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/activity?id=${item.id}`">
+                <cell :title="item.title" class="list-item font14 clamp2" @click.native="toActivity(item)">
                   <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                   <div slot="inline-desc" class="inline-desc font12 color-gray">
                     <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
@@ -108,7 +108,7 @@
         <template v-if="distabdata3">
           <template v-if="tabdata3.length">
             <group v-for="(item, index) in tabdata3" :key="index">
-              <cell :title="item.title" class="list-item font14 clamp2" is-link :link="`/news?id=${item.id}&wid=${item.uploader}`">
+              <cell :title="item.title" class="list-item font14 clamp2" @click.native="toNews(item)">
                 <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
                 <div slot="inline-desc" class="inline-desc font12 color-gray">
                   <div class="clamp1">
@@ -194,6 +194,43 @@ export default {
     },
     getPhoto: function (photo) {
       return this.$util.getPhoto(photo)
+    },
+    toCustomer () {
+      let params = {wid: this.query.wid}
+      if (this.query.appid) {
+        params.appid = this.query.appid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/bringCustomer', query: params})
+    },
+    toProduct (item) {
+      let params = {id: item.id, wid: item.uploader}
+      if (this.query.from) {
+        params.from = this.query.from
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/product', query: params})
+      }
+    },
+    toActivity (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/activity', query: params})
+      }
+    },
+    toNews (item) {
+      let params = {id: item.id, wid: item.uploader}
+      if (this.query.from) {
+        params.from = this.query.from
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
+      } else {
+        this.$router.push({path: '/news', query: params})
+      }
     },
     handleScroll: function () {
       const self = this
