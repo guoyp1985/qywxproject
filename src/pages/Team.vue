@@ -133,10 +133,12 @@ export default {
       this.teamInfo = res.data.data
     })
     let url = '/pages/vip'
-    if (this.query.weburl) {
-      let weburl = encodeURIComponent(this.query.weburl)
-      let webquery = encodeURIComponent(this.query.webquery)
+    if (this.$route.query.weburl) {
+      let weburl = encodeURIComponent(this.$route.query.weburl)
+      let webquery = encodeURIComponent(this.$route.query.webquery)
       url = `${url}?weburl=${weburl}&webquery=${webquery}`
+      this.backurl = url
+    } else {
       this.backurl = url
     }
     console.log('this.backurl')
