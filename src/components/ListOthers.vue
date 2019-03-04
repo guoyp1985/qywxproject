@@ -8,7 +8,7 @@
       </div>
       <div class="ope-all">
         <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
-        <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader && teamInfo.join" @click.stop="onImport(item.id)">导入</button>
+        <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader" @click.stop="onImport(item.id)">导入</button>
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
