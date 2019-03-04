@@ -333,35 +333,58 @@ export default {
         }
       })
     },
+    importAllData () {
+      const _this = this
+      _this.$http({
+        url: `${ENV.BokaApi}/api/team/copy`,
+        method: 'post',
+        data: {
+          teamid: _this.id,
+          type: 'all',
+          module: _this.module
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag === 1) {
+          _this.$vux.toast.show({
+            text: `导入全部${_this.moduleTransfer}成功!`
+          })
+        } else if (res.data.flag === 3) {
+          _this.$vux.toast.show({
+            text: `没有内容可导入!`
+          })
+        }
+      })
+    },
     importAll () {
       let _this = this
       console.log(this.teamInfo[this.module])
       if (this.teamInfo[this.module] > 0) {
-        this.$vux.confirm.show({
-          title: `确定要导入全部${this.moduleTransfer}吗？`,
-          onConfirm () {
-            _this.$http({
-              url: `${ENV.BokaApi}/api/team/copy`,
-              method: 'post',
-              data: {
-                teamid: _this.id,
-                type: 'all',
-                module: _this.module
-              }
-            }).then(res => {
-              console.log(res)
-              if (res.data.flag === 1) {
-                _this.$vux.toast.show({
-                  text: `导入全部${_this.moduleTransfer}成功!`
-                })
-              } else if (res.data.flag === 3) {
-                _this.$vux.toast.show({
-                  text: `没有内容可导入!`
-                })
-              }
-            })
-          }
-        })
+        if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+          this.$vux.confirm.show({
+            // title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+            title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+            // title: _this.backurl,
+            onConfirm () {
+              console.log(_this.backurl)
+              _this.$wechat.miniProgram.navigateTo({url: _this.query.backurl})
+            }
+          })
+        }else if (!this.teamInfo.join) {
+          this.$vux.confirm.show({
+            title: `您还没有加入团队，确定加入该团队并导入吗？`,
+            onConfirm () {
+              _this.importAllData()
+            }
+          })
+        } else {
+          this.$vux.confirm.show({
+            title: `确定要导入全部${this.moduleTransfer}吗？`,
+            onConfirm () {
+              _this.importAllData()
+            }
+          })
+        }
       } else {
         this.$vux.toast.show({
           text: `没有内容可导入!`

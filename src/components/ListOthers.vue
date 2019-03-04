@@ -146,6 +146,37 @@ export default {
         }
       })
     },
+    importData (moduleid) {
+      const _this = this
+      _this.$http({
+        url: `${Env.BokaApi}/api/team/teamset`,
+        method: 'post',
+        data: {
+          id: _this.id,
+          type: 'addMember'
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          _this.teamInfo.join = 1
+          _this.$http({
+            url: `${Env.BokaApi}/api/team/copy`,
+            method: 'POST',
+            data: {
+              id: moduleid,
+              module: _this.module
+            }
+          }).then(res => {
+            console.log(res)
+            if (res.data.flag) {
+              _this.$vux.toast.show({
+                text: `导入${_this.moduleTransfer}成功！`
+              })
+            }
+          })
+        }
+      })
+    },
     onImport (moduleid) {
       let _this = this
       if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
@@ -162,36 +193,11 @@ export default {
         this.$vux.confirm.show({
           title: `您还没有加入团队，确定加入该团队并导入吗？`,
           onConfirm () {
-            _this.$http({
-              url: `${Env.BokaApi}/api/team/teamset`,
-              method: 'post',
-              data: {
-                id: _this.id,
-                type: 'addMember'
-              }
-            }).then(res => {
-              console.log(res)
-              if (res.data.flag) {
-                _this.teamInfo.join = 1
-                _this.$http({
-                  url: `${Env.BokaApi}/api/team/copy`,
-                  method: 'POST',
-                  data: {
-                    id: moduleid,
-                    module: _this.module
-                  }
-                }).then(res => {
-                  console.log(res)
-                  if (res.data.flag) {
-                    _this.$vux.toast.show({
-                      text: `导入${_this.moduleTransfer}成功！`
-                    })
-                  }
-                })
-              }
-            })
+            _this.importData(moduleid)
           }
         })
+      } else {
+        _this.importData(moduleid)
       }
     },
     toItem (item) {
