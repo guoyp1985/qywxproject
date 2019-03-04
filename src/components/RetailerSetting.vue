@@ -708,7 +708,10 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
+.retailersetting{
+  .title-cell{width:80px;}
+}
 .retailersetting .x-checker .ck-item{
   font-size:13px;
   display: inline-block;

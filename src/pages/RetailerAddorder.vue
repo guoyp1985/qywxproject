@@ -359,7 +359,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.form-item{position:relative;padding:10px;}
+.form-item{
+  position:relative;padding:10px;
+  .title-cell{width:80px;}
+}
 .form-item:after{
   content:"";display:block;
 	background-color:@list-border-color;height:1px;overflow:hidden;

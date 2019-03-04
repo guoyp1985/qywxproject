@@ -176,6 +176,9 @@ export default {
 }
 </script>
 <style lang="less">
+#room-order-deal{
+  .title-cell{width:110px;}
+}
 #room-order-deal .operation-area {
   margin-top: 10px;
   background-color: #ffffff;
