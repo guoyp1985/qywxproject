@@ -37,16 +37,16 @@
                 </div>
                 <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata1" :key="item.id">
                   <div class="t-table">
-                    <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle" style="width:70px;">
+                    <div @click="toSaleview(item)" class="t-cell v_middle" style="width:70px;">
                       <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{ path: '/retailerSaleview', query: { uid: item.uid } }" class="t-cell v_middle">
+                    </div>
+                    <div @click="toSaleview(item)" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.username}}({{item.linkman}})</div>
                       <div class="clamp1 mt5 font14 color-gray">带来消费: ￥{{item.sales}}</div>
-                    </router-link>
-                    <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="t-cell w60 align_right v_middle">
+                    </div>
+                    <div @click="toChat(item)" class="t-cell w60 align_right v_middle">
                       <div class="qbtn bg-red color-white">联系</div>
-                    </router-link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -75,21 +75,21 @@
                 </div>
                 <div v-else class="scroll_item pt10 pb10  pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata2" :key="item.id">
                   <div class="t-table">
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle " style="width: 70px;">
+                    <div @click="toMemberView(item)" class="t-cell v_middle " style="width: 70px;">
                       <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
+                    </div>
                     <div class="t-cell v_middle">
-                      <router-link :to="{ path: '/membersView', query: { uid: item.uid } }">
+                      <div @click="toMemberView(item)">
                         <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
                         <!-- <div class="clamp1 font14 color-gray">成为客户时间: {{ item.dateline | dateformat }}</div> -->
-                      </router-link>
+                      </div>
                       <div class="clamp1 font14 color-gray" style="width:120px;" @click="influence">影响力:
                         <span class="color-red4">{{item.yingxiangli}}</span>
                         <span class="al al-wenhao font20 ml5 v_middle"></span>
                       </div>
-                      <router-link :to="{ path: '/membersView', query: { uid: item.uid } }">
+                      <div @click="toMemberView(item)">
                         <div class="clamp1 font14 color-gray">返点客: {{item.uploadname}}</div>
-                      </router-link>
+                      </div>
                     </div>
                     <div class="t-cell v_middle align_right w60">
                       <div class="qbtn bg-red color-white" @click="inviteevent(item,index1)">邀请</div>
@@ -104,7 +104,7 @@
                   <div><i class="al al-wushuju font60 pt20"></i></div>
                   <div class="mt5">暂无返点记录，返点客帮你带来消费后，系统即可自动返点并记录！</div>
                 </div>
-                <router-link :to="{ path: '/accountDetail', query: { id: item.id } }" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
+                <div @click="toDetail(item)" v-else class="scroll_item db pt10 pb10 pl12 pr12 bg-white mt10 list-shadow" v-for="(item,index1) in tabdata3" :key="item.id">
                   <div class="t-table">
                     <div class="t-cell v_middle" style="width:70px;">
                       <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
@@ -115,7 +115,7 @@
                       <div class="clamp1 font14 color-gray">返点时间: {{ item.dateline | dateformat }} </div>
                     </div>
                   </div>
-                </router-link>
+                </div>
               </div>
             </div>
           <!-- </swiper-item>
@@ -204,6 +204,34 @@ export default {
     }
   },
   methods: {
+    toSaleview (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/retailerSaleview', query: params})
+    },
+    toChat (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/chat', query: params})
+    },
+    toMemberView (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/membersView', query: params})
+    },
+    toDetail (item) {
+      let params = {id: item.id}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/accountDetail', query: params})
+    },
     influence () {
       this.isshowfluence = true
     },

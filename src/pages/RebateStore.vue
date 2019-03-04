@@ -224,7 +224,6 @@ export default {
     toActivity (item) {
       let params = {id: item.id}
       if (this.query.from) {
-        params.from = this.query.from
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
       } else {
         this.$router.push({path: '/activity', query: params})
@@ -233,7 +232,6 @@ export default {
     toNews (item) {
       let params = {id: item.id, wid: item.uploader}
       if (this.query.from) {
-        params.from = this.query.from
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.uploader}`})
       } else {
         this.$router.push({path: '/news', query: params})
