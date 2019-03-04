@@ -185,8 +185,14 @@ export default {
           title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
           // title: _this.backurl,
           onConfirm () {
-            console.log(_this.backurl)
-            _this.$wechat.miniProgram.navigateTo({url: _this.backurl})
+            let url = '/pages/vip'
+            if (_this.query.weburl) {
+              let weburl = encodeURIComponent(_this.query.weburl)
+              let webquery = encodeURIComponent(_this.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
           }
         })
       } else if (!this.teamInfo.join) {
