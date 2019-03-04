@@ -79,22 +79,12 @@
         <template v-if="distabdata2">
           <template v-if="tabdata2.length">
             <group v-for="(item, index) in tabdata2" :key="index">
-              <template v-if="item.type == 'groupbuy'">
-                <cell :title="item.title" class="list-item font14 clamp2" @click.native="toProduct(item)">
-                  <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                  <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
-                  </div>
-                </cell>
-              </template>
-              <template v-else>
-                <cell :title="item.title" class="list-item font14 clamp2" @click.native="toActivity(item)">
-                  <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-                  <div slot="inline-desc" class="inline-desc font12 color-gray">
-                    <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
-                  </div>
-                </cell>
-              </template>
+              <cell :title="item.title" class="list-item font14 clamp2" @click.native="toProduct1(item)">
+                <img slot="icon" class="product-img imgcover" :src="getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
+                <div slot="inline-desc" class="inline-desc font12 color-gray">
+                  <div class="clamp1">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
+                </div>
+              </cell>
             </group>
           </template>
           <template v-else>
@@ -212,6 +202,23 @@ export default {
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
       } else {
         this.$router.push({path: '/product', query: params})
+      }
+    },
+    toProduct1 (item) {
+      if (this.query.from) {
+        if (item.type === 'groupbuy') {
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}`})
+        } else {
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+        }
+      } else {
+        if (item.type === 'groupbuy') {
+          let params = {id: item.productid, wid: item.uploader}
+          this.$router.push({path: '/product', query: params})
+        } else {
+          let params = {id: item.id, wid: item.uploader}
+          this.$router.push({path: '/activity', query: params})
+        }
       }
     },
     toActivity (item) {

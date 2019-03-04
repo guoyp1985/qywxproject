@@ -106,16 +106,7 @@
             <span>{{$t('No relevant data')}}</span>
           </div>
           <template v-else v-for="(item, index) in tabData3">
-            <div v-if="item.type == 'groupbuy'" @click="toProduct(item)" class="scroll_item flex_left pt10 pb10">
-              <div class="w80 align_center">
-                <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
-              </div>
-              <div class="pr10 flex_cell border-box">
-                  <div class="clamp2">{{ item.title }}</div>
-                  <div class="clamp1 mt10 font12 color-gray">{{item.starttime | dateFormat}} 至 {{item.endtime | dateFormat}}</div>
-              </div>
-            </div>
-            <div v-else @click="toActivity(item)" class="scroll_item flex_left pt10 pb10">
+            <div @click="toProduct1(item)" class="scroll_item flex_left pt10 pb10">
               <div class="w80 align_center">
                 <img class="imgcover v_middle" style="width:60px;height:60px;" :src="$util.getPhoto(item.photo)" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
               </div>
@@ -262,6 +253,23 @@ export default {
         this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.uploader}`})
       } else {
         this.$router.push({path: '/product', query: params})
+      }
+    },
+    toProduct1 (item) {
+      if (this.query.from) {
+        if (item.type === 'groupbuy') {
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.productid}&wid=${item.uploader}`})
+        } else {
+          this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.uploader}`})
+        }
+      } else {
+        if (item.type === 'groupbuy') {
+          let params = {id: item.productid, wid: item.uploader}
+          this.$router.push({path: '/product', query: params})
+        } else {
+          let params = {id: item.id, wid: item.uploader}
+          this.$router.push({path: '/activity', query: params})
+        }
       }
     },
     toActivity (item) {
