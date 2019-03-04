@@ -46,6 +46,14 @@ export default {
     teamInfo: {
       type: Object,
       default: null
+    },
+    backurl: {
+      type: String,
+      default: ''
+    },
+    loginUser: {
+      type: Object,
+      default: null
     }
   },
   computed: {
@@ -139,21 +147,49 @@ export default {
       })
     },
     onImport (moduleid) {
-      this.$http({
-        url: `${Env.BokaApi}/api/team/copy`,
-        method: 'POST',
-        data: {
-          id: moduleid,
-          module: this.module
-        }
-      }).then(res => {
-        console.log(res)
-        if (res.data.flag) {
-          this.$vux.toast.show({
-            text: `导入${this.moduleTransfer}成功！`
-          })
-        }
-      })
+      let _this = this
+      if (!this.loginUser.isretailer) {
+        this.$vux.confirm.show({
+          title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+          onConfirm () {
+            _this.$wechat.miniProgram.navigateTo({url: _this.backurl})
+          }
+        })
+      } else if (!this.teamInfo.join) {
+        this.$vux.confirm.show({
+          title: `您还没有加入团队，确定加入该团队并导入吗？`,
+          onConfirm () {
+            _this.$http({
+              url: `${Env.BokaApi}/api/team/teamset`,
+              method: 'post',
+              data: {
+                id: _this.id,
+                type: 'addMember'
+              }
+            }).then(res => {
+              console.log(res)
+              if (res.data.flag) {
+                _this.teamInfo.join = 1
+                _this.$http({
+                  url: `${Env.BokaApi}/api/team/copy`,
+                  method: 'POST',
+                  data: {
+                    id: moduleid,
+                    module: _this.module
+                  }
+                }).then(res => {
+                  console.log(res)
+                  if (res.data.flag) {
+                    _this.$vux.toast.show({
+                      text: `导入${_this.moduleTransfer}成功！`
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+      }
     },
     toItem (item) {
       console.log('toItem')

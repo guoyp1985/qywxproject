@@ -49,7 +49,7 @@
           <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
 
           <!-- 商品、活动、文章、培训 -->
-          <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" :module="module" v-else></list-others>
+          <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :loginUser="loginUser" :backurl="backurl" :id="id" :module="module" v-else></list-others>
 
         </div>
 
@@ -96,9 +96,11 @@ export default {
       currentTab: 0,
       id: null,
       userInfo: {},
+      loginUser: {},
       module: '',
       fixedTop: false,
-      showModal: false
+      showModal: false,
+      backurl: ''
     }
   },
   computed: {
@@ -265,6 +267,7 @@ export default {
               let weburl = encodeURIComponent(_this.query.weburl)
               let webquery = encodeURIComponent(_this.query.webquery)
               url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
             }
             _this.$wechat.miniProgram.navigateTo({url: url})
           }
