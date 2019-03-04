@@ -379,7 +379,7 @@ export default {
             title: `您还没有加入团队，确定加入该团队并导入吗？`,
             onConfirm () {
               _this.$http({
-                url: `${Env.BokaApi}/api/team/teamset`,
+                url: `${ENV.BokaApi}/api/team/teamset`,
                 method: 'post',
                 data: {
                   id: _this.id,
