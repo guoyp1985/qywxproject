@@ -1,5 +1,5 @@
 <template>
-  <div class="containerarea bg-white font14 rsaleview s-havebottom">
+  <div class="containerarea bg-white font14 rsaleview">
     <apply-tip v-if="showApply"></apply-tip>
     <subscribe v-if="loginUser.subscribe != 1 && !loginUser.isretailer"></subscribe>
     <Sos v-if="showSos" :title="sosTitle"></Sos>
@@ -14,7 +14,7 @@
             <div class="align_left db-in" @click="createQrcode"><i class="al al-a166 font12" style="line-height: 12px;"></i> 返点客推荐码</div>
           </div>
           <div class="align_center w100">
-            <router-link :to="{path: '/chat', query: {uid: query.uid, from: query.from}}" class=""><i class="al al-liaotian font16"><span class="ml5">联系</span></i></router-link>
+            <div @click="toChat" class=""><i class="al al-liaotian font16"><span class="ml5">联系</span></i></div>
             <a class="db mt5" v-if="sellerUser.mobile && sellerUser.mobile != ''" :href="`tel:${sellerUser.mobile}`"><i class="al al-fuwuzhongxin font16"><span class="ml5">电话</span></i></a>
           </div>
         </div>
@@ -45,16 +45,16 @@
                 </div>
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata1" :key="item.id">
                   <div class="t-table">
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
+                    <div @click="toMemberView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
+                    </div>
+                    <div @click="toMemberView(item)" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
                       <div class="clamp1 font14 color-gray">订单金额:{{ $t('RMB') }}{{item.special}}</div>
                       <div class="clamp1 font14 color-gray">时间:{{ item.dateline | dateformat }}</div>
-                    </router-link>
+                    </div>
                     <div class="t-cell v_middle align_right w60">
-                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="qbtn bg-red color-white">联系</router-link>
+                      <div @click="toChat(item)" class="qbtn bg-red color-white">联系</div>
                     </div>
                   </div>
                 </div>
@@ -98,13 +98,13 @@
                 </div>
                 <div v-else class="scroll_item pt10 pb10" v-for="(item,index1) in tabdata3" :key="item.id">
                   <div class="t-table">
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle w70">
+                    <div @click="toMemberView(item)" class="t-cell v_middle w70">
                       <img class="avatarimg3 imgcover v_middle" :src="item.avatar" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/user.jpg';" />
-                    </router-link>
-                    <router-link :to="{ path: '/membersView', query: { uid: item.uid } }" class="t-cell v_middle">
+                    </div>
+                    <div @click="toMemberView(item)" class="t-cell v_middle">
                       <div class="clamp1 font14 color-lightgray">{{item.linkman}}</div>
                       <div class="clamp1 font14 color-gray">{{ item.dateline | dateformat }}</div>
-                    </router-link>
+                    </div>
                     <div class="t-cell v_middle w60 h_100 align_right">
                         <div class="percentarea db-in v_middle" @click="percentclick">
                           <div class="inner" :style="`width:${item.percent}%`"></div>
@@ -112,7 +112,7 @@
                         </div>
                     </div>
                     <div class="t-cell v_middle align_right w60">
-                      <router-link :to="{path: '/chat', query: {uid: item.uid, from: query.from}}" class="qbtn bg-red color-white">联系</router-link>
+                        <div @click="toChat(item)" class="qbtn bg-red color-white">联系</div>
                     </div>
                   </div>
                 </div>
@@ -120,13 +120,6 @@
             </div>
           </swiper-item>
         </swiper>
-      </div>
-      <div class="s-bottom bottomnaviarea b_top_after">
-        <div class="t-table bottomnavi">
-          <router-link class="t-cell item" :to="{path: '/store', query: {wid: loginUser.uid}}">{{ $t('My shop') }}</router-link>
-          <router-link class="t-cell item" to="/centerSales">{{ $t('Sales center') }}</router-link>
-          <router-link class="t-cell item" to="/retailerOrders">{{ $t('My orders') }}</router-link>
-        </div>
       </div>
       <div v-transfer-dom class="x-popup">
         <popup v-model="isshowpopup" height="100%">
@@ -245,6 +238,23 @@ export default {
       this.pagestart3 = 0
       this.storeCardShow = false
       this.storeQrcode = null
+    },
+    toChat (item) {
+      let params = {uid: this.query.uid}
+      if (item && item.uid) {
+        params.uid = item.uid
+      }
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/chat', query: params})
+    },
+    toMemberView (item) {
+      let params = {uid: item.uid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      this.$router.push({path: '/membersView', query: params})
     },
     createQrcode: function () {
       const self = this
@@ -372,8 +382,19 @@ export default {
       this.isshowpopup = false
     },
     clickItem (item) {
-      const self = this
-      self.$router.push(`/${item.module}?id=${item.moduleid}&wid=${item.kefuid}`)
+      let params = {id: item.moduleid, wid: item.kefuid}
+      if (this.query.from) {
+        params.from = this.query.from
+      }
+      if (item.module === 'news' && this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.news}?id=${item.id}&wid=${item.kefuid}`})
+      } else if (item.module === 'product' && this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.product}?id=${item.id}&wid=${item.kefuid}`})
+      } else if (item.module === 'activity' && this.query.from) {
+        this.$wechat.miniProgram.navigateTo({url: `${ENV.MiniRouter.activity}?id=${item.id}&wid=${item.kefuid}`})
+      } else {
+        this.$router.push({path: `/${item.module}`, query: params})
+      }
     },
     getData () {
       const self = this
