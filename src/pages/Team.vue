@@ -378,7 +378,20 @@ export default {
           this.$vux.confirm.show({
             title: `您还没有加入团队，确定加入该团队并导入吗？`,
             onConfirm () {
-              _this.importAllData()
+              _this.$http({
+                url: `${Env.BokaApi}/api/team/teamset`,
+                method: 'post',
+                data: {
+                  id: _this.id,
+                  type: 'addMember'
+                }
+              }).then(res => {
+                console.log(res)
+                if (res.data.flag) {
+                  _this.teamInfo.join = 1
+                  _this.importAllData()
+                }
+              })
             }
           })
         } else {
