@@ -61,7 +61,7 @@
         <tab-item @on-item-click="swiperChange">{{$t('Activity')}}</tab-item>
         <tab-item @on-item-click="swiperChange">{{$t('Article')}}</tab-item>
       </tab>
-      <view-box v-show="selectedIndex1===0">
+      <div v-show="selectedIndex1===0">
         <div class="scroll_list" v-if="disTabData1">
           <template v-if="!tabData1.length">
             <div class="no-related-x color-gray">
@@ -80,8 +80,8 @@
             </div>
           </div>
         </div>
-      </view-box>
-      <view-box v-show="selectedIndex1===1">
+      </div>
+      <div v-show="selectedIndex1===1">
         <div class="scroll_list" v-if="disTabData2">
           <div v-if="!tabData2.length" class="scroll_item emptyitem flex_center">
             <span>{{$t('No relevant data')}}</span>
@@ -99,8 +99,8 @@
             </div>
           </div>
         </div>
-      </view-box>
-      <view-box v-show="selectedIndex1===2">
+      </div>
+      <div v-show="selectedIndex1===2">
         <div v-if="disTabData3" class="scroll_list">
           <div v-if="!tabData3.length" class="scroll_item emptyitem flex_center">
             <span>{{$t('No relevant data')}}</span>
@@ -117,8 +117,8 @@
             </div>
           </template>
         </div>
-      </view-box>
-      <view-box v-show="selectedIndex1===3">
+      </div>
+      <div v-show="selectedIndex1===3">
         <div class="scroll_list" v-if="disTabData4">
           <div v-if="!tabData4.length" class="scroll_item emptyitem flex_center">
             <span>{{$t('No relevant data')}}</span>
@@ -137,7 +137,7 @@
             </div>
           </div>
         </div>
-      </view-box>
+      </div>
     </div>
     <div v-transfer-dom class="x-popup">
       <popup v-model="isshowpopup" height="100%">
