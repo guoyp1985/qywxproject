@@ -247,21 +247,37 @@ export default {
       console.log(this.fixedTop)
     },
     onAdd () {
-      if (this.currentTab) {
-        this.$router.push({
-          path: '/addOthers',
-          query: {
-            module: this.module,
-            id: this.id
+      if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+        this.$vux.confirm.show({
+          title: `申请卖家后才可操作,确定申请？`,
+          onConfirm () {
+            let url = '/pages/vip'
+            if (_this.query.weburl) {
+              let weburl = encodeURIComponent(_this.query.weburl)
+              let webquery = encodeURIComponent(_this.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
           }
         })
       } else {
-        this.$router.push({
-          path: '/addTags',
-          query: {
-            id: this.id
-          }
-        })
+        if (this.currentTab) {
+          this.$router.push({
+            path: '/addOthers',
+            query: {
+              module: this.module,
+              id: this.id
+            }
+          })
+        } else {
+          this.$router.push({
+            path: '/addTags',
+            query: {
+              id: this.id
+            }
+          })
+        }
       }
     },
     manageTeam () {
