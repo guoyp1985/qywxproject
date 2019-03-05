@@ -91,21 +91,7 @@
           <div class="popup-top flex_center">{{ $t('Get cash explain') }}</div>
           <div class="popup-middle font14">
             <div class="padding10">
-              <div class="bold">第一条 手续费</div>
-              <div>1. 交易手续费：卖家需按订单交易额（含运费）的0.6%承担交易手续费，最低收费金额0.01元，不足0.01元按照0.01元收取。</div>
-              <div>2. 提现手续费：</div>
-              <div>提现至微信零钱：无需支付手续费。</div>
-              <div>提现至银行卡：每笔提现扣除提现金额的0.1%，最低1元，最高25元。</div>
-              <div class="bold mt5">第二条 提现规则</div>
-              <div>1. 线上交易的订单，需待买家确认收货后，才可以通过“我的收入”查看并提现收益。</div>
-              <div>2. 待提现金额不足1元时无法进行提现。</div>
-              <div>3. 微信规定每日提现至微信零钱的额度为5千元，每日提现至银行卡的额度为2万元。</div>
-              <div>4. 提现至银行卡的到账时间为1-3日内，具体以银行到账时间为准。</div>
-              <div class="bold mt5">第三条 退款订单处理规则</div>
-              <div>1. 当订单为“待发货”状态时，买家可主动发起交易退款，系统将整单全额退款，不收取手续费。</div>
-              <div>2. 当订单为“已发货或已收货”状态时，线上无法申请及处理交易退款，买家可与卖家互加好友，线下协商解决，手续费不予退还。</div>
-              <div class="bold mt5">第四条 确认收货规则</div>
-              <div>线上交易的订单，若买家没有主动确认收货，系统将在卖家发货后的第7天自动确认收货。</div>
+              <cash-txt></cash-txt>
             </div>
           </div>
           <div class="popup-bottom flex_center">
@@ -118,6 +104,7 @@
 </template>
 <script>
 import { Popup, TransferDom } from 'vux'
+import CashTxt from '@/components/CashTxt'
 import { User } from '#/storage'
 import ENV from 'env'
 export default {
@@ -125,7 +112,7 @@ export default {
     TransferDom
   },
   components: {
-    Popup
+    Popup, CashTxt
   },
   data () {
     return {
