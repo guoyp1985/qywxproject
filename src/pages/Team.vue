@@ -67,9 +67,11 @@
       <!-- <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
         <button @click="importAll">导入全部{{moduleTransfer}}</button>
       </div> -->
-      <div class="import" v-if="currentTab !== 0">
-        <button @click="importAll">导入全部{{moduleTransfer}}</button>
-      </div>
+      <template v-else>
+        <div class="import" v-if="currentTab !== 0">
+          <button @click="importAll">导入全部{{moduleTransfer}}</button>
+        </div>
+      </template>
     </div>
     <div class="modalshow" v-if="showModal" @click="closeShow" slot="ope-btns">
       <div class="modaInfo">
