@@ -272,40 +272,58 @@ export default {
     },
     joinTeam () {
       let _this = this
-      if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
-        this.$vux.confirm.show({
-          title: `申请卖家后才可加入团队,确定申请？`,
-          onConfirm () {
-            let url = '/pages/vip'
-            if (_this.query.weburl) {
-              let weburl = encodeURIComponent(_this.query.weburl)
-              let webquery = encodeURIComponent(_this.query.webquery)
-              url = `${url}?weburl=${weburl}&webquery=${webquery}`
-              _this.backurl = url
+      this.$http({
+        url: `${ENV.BokaApi}/api/team/teamset`,
+        method: 'post',
+        data: {
+          id: this.id,
+          type: 'addMember'
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$vux.toast.show({
+            text: '加入团队成功!',
+            onHide () {
+              _this.teamInfo.join = 1
             }
-            _this.$wechat.miniProgram.navigateTo({url: url})
-          }
-        })
-      } else {
-        this.$http({
-          url: `${ENV.BokaApi}/api/team/teamset`,
-          method: 'post',
-          data: {
-            id: this.id,
-            type: 'addMember'
-          }
-        }).then(res => {
-          console.log(res)
-          if (res.data.flag) {
-            this.$vux.toast.show({
-              text: '加入团队成功!',
-              onHide () {
-                _this.teamInfo.join = 1
-              }
-            })
-          }
-        })
-      }
+          })
+        }
+      })
+      // if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+      //   this.$vux.confirm.show({
+      //     title: `申请卖家后才可加入团队,确定申请？`,
+      //     onConfirm () {
+      //       let url = '/pages/vip'
+      //       if (_this.query.weburl) {
+      //         let weburl = encodeURIComponent(_this.query.weburl)
+      //         let webquery = encodeURIComponent(_this.query.webquery)
+      //         url = `${url}?weburl=${weburl}&webquery=${webquery}`
+      //         _this.backurl = url
+      //       }
+      //       _this.$wechat.miniProgram.navigateTo({url: url})
+      //     }
+      //   })
+      // } else {
+      //   this.$http({
+      //     url: `${ENV.BokaApi}/api/team/teamset`,
+      //     method: 'post',
+      //     data: {
+      //       id: this.id,
+      //       type: 'addMember'
+      //     }
+      //   }).then(res => {
+      //     console.log(res)
+      //     if (res.data.flag) {
+      //       this.$vux.toast.show({
+      //         text: '加入团队成功!',
+      //         onHide () {
+      //           _this.teamInfo.join = 1
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
     },
     outTeam () {
       let _this = this
