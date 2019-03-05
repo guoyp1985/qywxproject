@@ -231,7 +231,7 @@ export default {
       tabData2: [],
       tabData3: [],
       tabData4: [],
-      platform: '聚客365'
+      platform: '共销客'
     }
   },
   filters: {
