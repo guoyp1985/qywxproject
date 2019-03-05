@@ -247,6 +247,7 @@ export default {
       console.log(this.fixedTop)
     },
     onAdd () {
+      const _this = this
       if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
         this.$vux.confirm.show({
           title: `申请卖家后才可操作,确定申请？`,
