@@ -57,7 +57,8 @@ export default {
       loginUser: {},
       feeData: [],
       disFeeData: false,
-      levelpolicy: []
+      levelpolicy: [],
+      fid: 0
     }
   },
   methods: {
@@ -151,6 +152,11 @@ export default {
       const self = this
       this.$store.commit('updateToggleTabbar', {toggleTabbar: false})
       this.loginUser = User.get()
+      if (this.$router.query.fid) {
+        this.fid = this.$router.query.fid
+      } else {
+        this.fid = this.loginUser.fid
+      }
       if (this.loginUser) {
         this.$vux.loading.show()
         let isAdmin = false
@@ -160,7 +166,7 @@ export default {
             break
           }
         }
-        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.$route.query.fid)) && !isAdmin) {
+        if (!(self.loginUser.fid && parseInt(self.loginUser.fid) === parseInt(self.fid)) && !isAdmin) {
           this.$vux.loading.hide()
           self.showSos = true
           self.showContainer = false

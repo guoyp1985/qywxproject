@@ -8,7 +8,7 @@
       </div>
       <div class="ope-all">
         <button class="ope-btn" v-if="teamInfo.manager > 0" @click.stop="onDelete(item.id, index)">删除</button>
-        <button class="ope-btn" v-if="userInfo.uid !== teamInfo.uploader" @click.stop="onImport(item.id)">导入</button>
+        <button class="ope-btn" @click.stop="onImport(item.id)">导入</button>
       </div>
   </div>
     <div class="tip-message" v-if="!data.length && loaded"><span>暂无{{moduleTransfer}}</span></div>
@@ -148,9 +148,10 @@ export default {
     },
     onImport (moduleid) {
       let _this = this
-      if (!this.loginUser.isretailer) {
+      if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
         this.$vux.confirm.show({
-          title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+          // title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+          title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
           // title: _this.backurl,
           onConfirm () {
             console.log(_this.backurl)

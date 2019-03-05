@@ -64,6 +64,12 @@
 
     <div class="add-import" slot="ope-btns">
       <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
+<<<<<<< HEAD
+=======
+      <!-- <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
+        <button @click="importAll">导入全部{{moduleTransfer}}</button>
+      </div> -->
+>>>>>>> 3a1c6c3159291725e6189996174b8ac86f02755b
       <div class="import" v-if="currentTab !== 0">
         <button @click="importAll">导入全部{{moduleTransfer}}</button>
       </div>
