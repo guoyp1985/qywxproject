@@ -155,24 +155,24 @@ export default {
       const data = res.data
       this.loginUser = data
       User.set(this.loginUser)
+      this.query = this.$route.query
+      if (!this.currentTab) {
+        this.$refs.listTags.tags = []
+        this.$refs.listTags.pagestart = 0
+        this.$refs.listTags.getTags()
+        this.getTeamInfo(this.id).then(res => {
+          this.teamInfo = res.data.data
+        })
+      } else {
+        this.$refs.listOthers.data = []
+        this.$refs.listOthers.pagestart = 0
+        this.$refs.listOthers.getData()
+        this.getTeamInfo(this.id).then(res => {
+          console.log(res)
+          this.teamInfo = res.data.data
+        })
+      }
     })
-    this.query = this.$route.query
-    if (!this.currentTab) {
-      this.$refs.listTags.tags = []
-      this.$refs.listTags.pagestart = 0
-      this.$refs.listTags.getTags()
-      this.getTeamInfo(this.id).then(res => {
-        this.teamInfo = res.data.data
-      })
-    } else {
-      this.$refs.listOthers.data = []
-      this.$refs.listOthers.pagestart = 0
-      this.$refs.listOthers.getData()
-      this.getTeamInfo(this.id).then(res => {
-        console.log(res)
-        this.teamInfo = res.data.data
-      })
-    }
   },
   methods: {
     tabModal () {
