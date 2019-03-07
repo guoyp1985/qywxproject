@@ -1,86 +1,96 @@
 <template>
-  <scroll-view class="team-page" ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
-    <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
+  <div class="containerarea">
+    <scroll-view class="team-page" ref="wraper" @scrollEnd="scrollEnd" @scroll="scroll">
+      <div class="team" :class="{'pd30' : fixedTop}" slot="content" ref="content">
 
-      <!-- 背景图 -->
-      <div class="team-bg"><img src="https://tossharingsales.boka.cn/minigxk/team_bg.png" ref="teamBg"></div>
+        <!-- 背景图 -->
+        <div class="team-bg"><img src="https://tossharingsales.boka.cn/minigxk/team_bg.png" ref="teamBg"></div>
 
-      <!-- 团队信息 -->
-      <div class="team-info" ref="teamInfo">
-        <div class="team-info-inner">
-          <div class="inner-item inner-item-left">
-            <img class="avatar" :src="teamInfo.avatar"/>
-            <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
-            <button class="btn" v-if="!teamInfo.join" @click="joinTeam">加入团队</button>
-            <button class="btn" v-if="teamInfo.join && teamInfo.manager === 0" @click="outTeam">退出团队</button>
-          </div>
-          <div class="inner-item inner-item-right">
-            <div class="leader">
-              {{teamInfo.title}}
-              <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
+        <!-- 团队信息 -->
+        <div class="team-info" ref="teamInfo">
+          <div class="team-info-inner">
+            <div class="inner-item inner-item-left">
+              <img class="avatar" :src="teamInfo.avatar"/>
+              <button class="btn" v-if="teamInfo.manager > 0" @click="manageTeam">管理团队</button>
+              <button class="btn" v-if="!teamInfo.join" @click="joinTeam">加入团队</button>
+              <button class="btn" v-if="teamInfo.join && teamInfo.manager === 0" @click="outTeam">退出团队</button>
             </div>
-            <div class="counts">
-              <span>商品 {{teamInfo.product}}</span>
-              <span>文章 {{teamInfo.news}}</span>
-              <div>
-                <span>活动 {{teamInfo.activity}}</span>
-                <span>素材 {{teamInfo.teamsource}}</span>
-                <span>培训 {{teamInfo.courseclass}}</span>
+            <div class="inner-item inner-item-right">
+              <div class="leader">
+                {{teamInfo.title}}
+                <div class="al al-fenxiang1 font20" style="position:absolute;right:20px;top:16px;color:#ff6a61;" @click="tabModal"></div>
               </div>
+              <div class="counts">
+                <span>商品 {{teamInfo.product}}</span>
+                <span>文章 {{teamInfo.news}}</span>
+                <div>
+                  <span>活动 {{teamInfo.activity}}</span>
+                  <span>素材 {{teamInfo.teamsource}}</span>
+                  <span>培训 {{teamInfo.courseclass}}</span>
+                </div>
+              </div>
+              <div class="title">{{teamInfo.content}}</div>
             </div>
-            <div class="title">{{teamInfo.content}}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 团队内容 -->
-      <div class="team-content">
-
-        <!-- 导航 -->
-        <div class="team-content-nav" v-if="!fixedTop">
-          <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
-              <span>{{nav}}</span>
           </div>
         </div>
 
-        <div class="content-list">
+        <!-- 团队内容 -->
+        <div class="team-content">
 
-          <!-- 素材 -->
-          <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
+          <!-- 导航 -->
+          <div class="team-content-nav" v-if="!fixedTop">
+            <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
+                <span>{{nav}}</span>
+            </div>
+          </div>
 
-          <!-- 商品、活动、文章、培训 -->
-          <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :loginUser="loginUser" :backurl="backurl" :id="id" :module="module" v-else></list-others>
+          <div class="content-list">
+
+            <!-- 素材 -->
+            <list-tags ref="listTags" :userInfo="userInfo" :teamInfo="teamInfo" :id="id" v-if="currentTab === 0"></list-tags>
+
+            <!-- 商品、活动、文章、培训 -->
+            <list-others ref="listOthers" :userInfo="userInfo" :teamInfo="teamInfo" :loginUser="loginUser" :backurl="backurl" :id="id" :module="module" v-else></list-others>
+
+          </div>
 
         </div>
-
       </div>
-    </div>
 
-    <div class="team-content-nav fixed-top" slot="team-content-nav" v-if="fixedTop">
-      <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
-          <span>{{nav}}</span>
+      <div class="team-content-nav fixed-top" slot="team-content-nav" v-if="fixedTop">
+        <div tag="div" v-for="(nav, index) in navs" :key="nav.id" class="nav-item" :class="{'nav-item-active' : currentTab === index}" @click="changeTab(index)">
+            <span>{{nav}}</span>
+        </div>
       </div>
-    </div>
 
-    <div class="add-import" slot="ope-btns">
-      <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
-      <!-- <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
-        <button @click="importAll">导入全部{{moduleTransfer}}</button>
-      </div> -->
-      <template v-else>
-        <div class="import" v-if="currentTab !== 0">
+      <div class="add-import" slot="ope-btns">
+        <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
+        <!-- <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
           <button @click="importAll">导入全部{{moduleTransfer}}</button>
-        </div>
-      </template>
-    </div>
-    <div class="modalshow" v-if="showModal" @click="closeShow" slot="ope-btns">
-      <div class="modaInfo">
-        <div class="al al-feiji color-white"></div>
-        <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
-        <div class="btnknow" @click="closeShow">知道了</div>
+        </div> -->
+        <template v-else>
+          <div class="import" v-if="currentTab !== 0">
+            <button @click="importAll">导入全部{{moduleTransfer}}</button>
+          </div>
+        </template>
       </div>
-    </div>
-  </scroll-view>
+      <div class="modalshow" v-if="showModal" @click="closeShow" slot="ope-btns">
+        <div class="modaInfo">
+          <div class="al al-feiji color-white"></div>
+          <div class="align_center color-white bold">点击" ··· "，" 转发 " 给队员邀请加入</div>
+          <div class="btnknow" @click="closeShow">知道了</div>
+        </div>
+      </div>
+    </scroll-view>
+    <template v-if="showTip">
+      <tip-layer
+        @clickButton="joinTeam"
+        title="邀请加入"
+        content="加入团队即可免费导入商品、活动、文章、培训等信息到自己的账号内，一键导入便可马上使用，赶快加入吧"
+        buttonTxt="立即加入团队">
+      </tip-layer>
+    </template>
+  </div>
 </template>
 
 <script type="text/javascript">
@@ -88,10 +98,11 @@ import ENV from 'env'
 import ScrollView from '@/components/ScrollView'
 import ListTags from '@/components/ListTags'
 import ListOthers from '@/components/ListOthers'
+import TipLayer from '@/components/TipLayer'
 import { User } from '#/storage'
 export default {
   components: {
-    ScrollView, ListTags, ListOthers
+    ScrollView, ListTags, ListOthers, TipLayer
   },
   data () {
     return {
@@ -105,7 +116,8 @@ export default {
       module: '',
       fixedTop: false,
       showModal: false,
-      backurl: ''
+      backurl: '',
+      showTip: false
     }
   },
   computed: {
@@ -136,6 +148,9 @@ export default {
     this.getTeamInfo(this.id).then(res => {
       console.log(res)
       this.teamInfo = res.data.data
+      if (!this.teamInfo.join) {
+        this.showTip = true
+      }
     })
     let url = '/pages/vip'
     if (this.$route.query.weburl) {
@@ -291,6 +306,8 @@ export default {
     },
     joinTeam () {
       let _this = this
+      this.$vux.loading.show()
+      this.showTip = false
       this.$http({
         url: `${ENV.BokaApi}/api/team/teamset`,
         method: 'post',
@@ -300,6 +317,7 @@ export default {
         }
       }).then(res => {
         console.log(res)
+        this.$vux.loading.hide()
         if (res.data.flag) {
           this.$vux.toast.show({
             text: '加入团队成功!',
