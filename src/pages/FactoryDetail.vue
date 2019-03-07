@@ -212,7 +212,7 @@ export default {
     },
     toJoin () {
       const self = this
-      if (!this.loginUser.isretailer) {
+      if (!this.loginUser.isretailer || !this.loginUser.retailerinfo.moderate) {
         this.$vux.confirm.show({
           content: '您还不是卖家，要申请成为卖家吗？',
           onConfirm: () => {
