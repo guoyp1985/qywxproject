@@ -7,7 +7,7 @@
   <div class="room">
     <div class="room-info">
       <div class="room-desc db-flex">
-        <div class="room-avatar flex_cell flex-3">
+        <div class="room-avatar flex_left">
           <div class="pic" @click="clickPhoto">
             <div v-if="!item.photo || item.photo == ''" class="w_100 h_100 flex_center color-gray" style="border:#ccc 1px solid;box-sizing:border-box;">
               <div>
@@ -17,8 +17,10 @@
             </div>
             <img v-else class="v_middle imgcover" :src="item.photo" onerror="javascript:this.src='https://tossharingsales.boka.cn/images/nopic.jpg';"/>
           </div>
-          <div class="room-topic">
-            <div class="font16 clamp1" style="width:140px">{{item.title}}</div>
+        </div>
+        <div class="room-topic flex_cell flex_left">
+          <div class="w_100">
+            <div class="font16 clamp1">{{item.title}}</div>
             <div class="font13">
               <div v-if="item.moderate !== 0">接单数: {{item.sales}}</div>
               <div v-if="item.moderate === 2" class="color-orange">正在接单中</div>
@@ -26,7 +28,7 @@
             </div>
           </div>
         </div>
-        <div class="room-status flex_cell flex_right">
+        <div class="room-status flex_right">
           <span class="font13 color-white">{{statusName}}</span>
         </div>
       </div>
@@ -134,52 +136,52 @@ export default {
 .room {
   background-color: #ffffff;
   border-bottom: 1px solid #f0f0f0;
-}
-.room .room-info, .room .room-stats {
-  padding: 10px;
-  position: relative;
-}
-.room .room-info:after,
-.room .room-stats:after {
-  content: ' ';
-  position: absolute;
-  height: 1px;
-  left: 10px;
-  right: 10px;
-  bottom: 0px;
-  background-color: #f0f0f0;
-}
-.room .room-info .room-avatar{
-  .pic{
-    width:64px;height:64px;display:inline-block;
-    img{width:64px;height:64px;}
+  .room-info,.room-stats {
+    padding: 10px;
+    position: relative;
   }
-}
-.room .room-info .room-topic {
-  margin-left: 10px;
-  vertical-align: middle;
-  display: inline-block;
-}
-.room .room-status span {
-  border-radius: 20px;
-  padding: 3px 6px;
-  border: 1px solid @boka-red;
-  background-color: @boka-red;
-}
-.room .stats-result {
-  margin-top: 10px;
-  text-align: center;
-}
-.room .button {
-  padding: 10px 0;
-  text-align: center;
-  position: relative;
-}
-.room .button:first-child:after {
-  content: ' ';
-  height: 20px;
-  border-left: 1px solid #f0f0f0;
-  position: absolute;
-  right: 0;
+  .room-info:after,.room-stats:after {
+    content: ' ';
+    position: absolute;
+    height: 1px;
+    left: 10px;
+    right: 10px;
+    bottom: 0px;
+    background-color: #f0f0f0;
+  }
+  .room-info{
+    .room-avatar{
+      width:74px;
+      .pic{
+        width:64px;height:64px;
+        img{width:64px;height:64px;}
+      }
+    }
+    .room-status {
+      width:80px;
+      span {
+        border-radius: 20px;
+        padding: 3px 6px;
+        border: 1px solid @boka-red;
+        background-color: @boka-red;
+      }
+    }
+  }
+  .stats-result {
+    margin-top: 10px;
+    text-align: center;
+  }
+  .button {
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+  }
+  .button:first-child:after {
+    content: ' ';
+    height: 20px;
+    border-left: 1px solid #f0f0f0;
+    position: absolute;
+    right: 0;
+  }
 }
 </style>
