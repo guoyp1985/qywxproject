@@ -22,6 +22,7 @@
             <div class="font13">
               <div v-if="item.moderate !== 0">接单数: {{item.sales}}</div>
               <div v-if="item.moderate === 2" class="color-orange">正在接单中</div>
+              <div v-if="item.moderate === 0" class="color-orange">点击价值: {{$t('RMB')}}{{item.viewmoney}}</div>
             </div>
           </div>
         </div>
@@ -55,19 +56,19 @@
             <span>群活跃度:</span>
             <span>{{item.liveness}}%</span>
           </div>
-          <!-- <div>
-            <span>鉴定类型:</span>
-            <span>无</span>
-          </div> -->
+          <div>
+            <span>点击价值:</span>
+            <span>{{$t('RMB')}}{{item.viewmoney}}</span>
+          </div>
         </div>
       </div>
-      <div class="stats-result" v-if="item.viewmoney > 0">
+      <div class="stats-result" v-if="item.viewmoney > 0 && !item.isnew">
         <span>评估结果: ￥</span>
         <span>{{item.viewmoney}}/人点击</span>
       </div>
     </div>
     <div v-if="item.moderate === 0" class="room-operate-area db-flex">
-      <div class="flex_cell font13 button color-red">正在评估（预计24小时）</div>
+      <div class="flex_cell font13 button color-red">正在评估（预计72小时）</div>
       <!-- <div class="flex_cell font13 button" @click="action(3)">暂停接单</div> -->
     </div>
     <div v-if="item.moderate === 1" class="room-operate-area db-flex">
@@ -75,8 +76,9 @@
       <div class="flex_cell font13 button" @click="action(2)">立即开放</div>
     </div>
     <div v-if="item.moderate === 2" class="room-operate-area db-flex">
-      <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
-      <div class="flex_cell font13 button" @click="action(3)">暂停接单</div>
+      <div class="flex_cell font13 button color-red" v-if="item.isnew">正在评估（预计72小时）</div>
+      <div class="flex_cell font13 button" @click="action(0)" v-else>重新评估</div>
+      <div class="flex_cell font13 button" @click="action(3)" v-if="!item.isnew">暂停接单</div>
     </div>
     <div v-if="item.moderate === 3" class="room-operate-area db-flex">
       <div class="flex_cell font13 button" @click="action(0)">重新评估</div>
@@ -106,7 +108,11 @@ export default {
   },
   computed: {
     statusName () {
-      return STATUS_NAME[this.item.moderate]
+      let ret = STATUS_NAME[this.item.moderate]
+      if (this.item.isnew) {
+        ret = '正在评估'
+      }
+      return ret
     }
   },
   watch: {
