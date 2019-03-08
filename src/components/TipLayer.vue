@@ -28,7 +28,7 @@
     <div class="modal-inner border-box">
       <div class="pic-outer">
         <div class="pic">
-          <img src="/src/assets/images/tip_bg.png" />
+          <img src="https://tossharingsales.boka.cn/images/tip_bg.png" />
         </div>
       </div>
       <div class="top-con flex_center">{{title}}</div>
