@@ -48,10 +48,10 @@
       		</div>
         </template>
         <template v-if="showSuggest && suggestData.length">
-          <div class="bg-white mt5 padding10 b_top_after db-flex">
+          <div class="bg-white mt5 padding10 b_top_after db-flex suggest-area">
             <div class="flex_left flex_cell pl5 font16 vline">超值优惠</div>
-            <div class="w100 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
-              <div class="qbtn4 font12">不再显示</div>
+            <div class="w80 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
+              <div class="btn flex_center">不再显示</div>
             </div>
       		</div>
           <div class="b_top_after"></div>
@@ -314,15 +314,20 @@ export default {
       this.haveMoreNews = false
     },
     clickSuggest () {
-      this.showSuggest = false
-      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
-        params: {suggest_open: 0}
-      }).then(res => {
-        const data = res.data
-        if (data.flag) {
-          this.loginUser.retailerinfo.params = data.data
-          this.retailerInfo.params = data.data
-          User.set(this.loginUser)
+      this.$vux.confirm.show({
+        content: '确认关闭超值优惠商品？关闭后可在卖家设置中开启',
+        onConfirm: () => {
+          this.showSuggest = false
+          this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+            params: {suggest_open: 0}
+          }).then(res => {
+            const data = res.data
+            if (data.flag) {
+              this.loginUser.retailerinfo.params = data.data
+              this.retailerInfo.params = data.data
+              User.set(this.loginUser)
+            }
+          })
         }
       })
     },
@@ -434,8 +439,8 @@ export default {
     },
     getSuggestData () {
       const self = this
-      self.$http.get(`${ENV.BokaApi}/api/list/factoryproduct`, {
-        params: {pagestart: 0, limit: 2, fid: ENV.SuggestFid}
+      self.$http.get(`${ENV.BokaApi}/api/list/product?uploader=-1`, {
+        params: {pagestart: 0, limit: 2}
       }).then(function (res) {
         const data = res.data
         const retdata = data.data ? data.data : data
@@ -539,7 +544,6 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           this.$util.miniPost({type: 'store', data: self.retailerInfo})
           document.title = self.retailerInfo.title
-          // console.log(parseInt(this.retailerInfo.params.suggest_open))
           if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
             this.showSuggest = true
             this.getSuggestData()
@@ -622,6 +626,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.store{
+  .suggest-area{
+    .btn{border:#ff6a61 1px solid;color:#ff6a61;width:70px;height:25px;border-radius:30px;font-size:12px;}
+  }
+}
 .store .adbg{position:relative;padding-bottom: 55.555%;}
 .store .adbg .inner{position:absolute;left:0;top:0;right:0;bottom:0;}
 .store .adbg .inner img{vertical-align:middle;width:100%;height:100%;object-fit: cover;}
