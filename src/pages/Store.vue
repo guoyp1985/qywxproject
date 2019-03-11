@@ -315,7 +315,7 @@ export default {
     },
     clickSuggest () {
       this.$vux.confirm.show({
-        content: '确认关闭超值优惠商品？关闭后可在卖家设置中开启',
+        content: '确认关闭超值优惠商品？关闭后可在卖家设置中开启。',
         onConfirm: () => {
           this.showSuggest = false
           this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
