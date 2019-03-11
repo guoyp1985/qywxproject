@@ -547,6 +547,8 @@ export default {
           if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
             this.showSuggest = true
             this.getSuggestData()
+          } else {
+            this.showSuggest = false
           }
           const wid = self.retailerInfo.uid
           let shareParams = {
