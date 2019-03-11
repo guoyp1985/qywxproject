@@ -57,7 +57,8 @@ var ENV = {
   giveUpVipText: '放弃=错失良机',
   allowVipFee: true,
   UidArr: [1, 2, 9],
-  FactoryManagerUid: 9
+  FactoryManagerUid: 9,
+  SuggestFid: 2
 }
 
 ENV.NoAccessUrls = [
