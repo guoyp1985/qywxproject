@@ -400,7 +400,9 @@ export default {
       suggestOpen: true,
       suggestClose: false,
       isFirst2: true,
-      isFirst3: true
+      isFirst3: true,
+      oldSuggestOpen: true,
+      oldSuggestClose: false
     }
   },
   watch: {
@@ -450,6 +452,8 @@ export default {
         this.suggestOpen = false
         this.suggestClose = true
       }
+      this.oldSuggestOpen = this.suggestOpen
+      this.oldSuggestClose = this.suggestClose
     },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
@@ -543,8 +547,6 @@ export default {
     clickSuggest (val) {
       console.log(val)
       let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
-      let oldOpen = this.suggestOpen
-      let oldClose = this.suggestClose
       if (val === 1) {
         this.suggestOpen = true
         this.suggestClose = false
@@ -555,11 +557,14 @@ export default {
       this.$vux.confirm.show({
         content: con,
         onCancel: () => {
-          this.suggestOpen = oldOpen
-          this.suggestClose = oldClose
+          this.suggestOpen = this.oldSuggestOpen
+          this.suggestClose = this.oldSuggestClose
         },
         onConfirm: () => {
-          this.$emit('clickSuggest', val)
+          this.$emit('clickSuggest', val, () => {
+            this.oldSuggestOpen = this.suggestOpen
+            this.oldSuggestClose = this.suggestClose
+          })
         }
       })
     },

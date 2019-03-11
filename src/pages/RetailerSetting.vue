@@ -115,7 +115,7 @@ export default {
         }
       })
     },
-    clickSuggest (val) {
+    clickSuggest (val, callback) {
       console.log(val)
       this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
         params: {suggest_open: val}
@@ -125,6 +125,9 @@ export default {
           this.loginUser.retailerinfo.params = data.data
           this.retailerInfo.params = data.data
           User.set(this.loginUser)
+          if (callback) {
+            callback()
+          }
         }
       })
     },
