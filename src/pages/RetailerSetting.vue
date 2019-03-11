@@ -69,7 +69,7 @@ export default {
     getData () {
       const self = this
       self.loginUser = User.get()
-      self.$http.get(`${ENV.BokaApi}/api/retailer/home`)
+      self.$http.get(`${ENV.BokaApi}/api/retailer/info`)
       .then(res => {
         self.$vux.loading.hide()
         if (res) {
