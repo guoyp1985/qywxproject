@@ -73,6 +73,8 @@
               <forminputplate class="required">
                 <span slot="title">超值优惠</span>
                 <div>
+                  <!-- <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon> -->
                   <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
                   <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
                 </div>
@@ -367,13 +369,9 @@ export default {
       type: Boolean,
       default: false
     },
-    openSuggest: {
+    submitSuggest: {
       type: Boolean,
       default: true
-    },
-    closeSuggest: {
-      type: Boolean,
-      default: false
     }
   },
   directives: {
@@ -434,19 +432,16 @@ export default {
       }
       return this.buyoffline
     },
-    openSuggest: function () {
-      if (this.isFirst2) {
-        this.suggestOpen = this.openSuggest
-        this.isFirst2 = false
+    submitSuggest: function () {
+      console.log('in watch submitSuggest')
+      if (this.submitSuggest) {
+        this.suggestOpen = true
+        this.suggestClose = false
+      } else {
+        this.suggestOpen = false
+        this.suggestClose = true
       }
-      return this.openSuggest
-    },
-    closeSuggest: function () {
-      if (this.isFirst3) {
-        this.suggestClose = this.closeSuggest
-        this.isFirst3 = false
-      }
-      return this.closeSuggest
+      return this.submitSuggest
     }
   },
   methods: {
@@ -760,6 +755,16 @@ export default {
           })
         }
       })
+    }
+  },
+  mounted () {
+    console.log('in mounted')
+    if (this.submitSuggest) {
+      this.suggestOpen = true
+      this.suggestClose = false
+    } else {
+      this.suggestOpen = false
+      this.suggestClose = true
     }
   }
 }
