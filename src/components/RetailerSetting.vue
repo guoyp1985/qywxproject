@@ -409,13 +409,7 @@ export default {
     },
     submitdata: function () {
       console.log('in watch sumitdata')
-      if (this.submitdata.buyonline) {
-        this.online = true
-        this.offline = false
-      } else {
-        this.online = false
-        this.offline = true
-      }
+      this.watchBuyline()
       return this.submitdata
     },
     buyonline: function () {
@@ -434,6 +428,21 @@ export default {
     },
     submitSuggest: function () {
       console.log('in watch submitSuggest')
+      this.watchSuggest()
+      return this.submitSuggest
+    }
+  },
+  methods: {
+    watchBuyline () {
+      if (this.submitdata.buyonline) {
+        this.online = true
+        this.offline = false
+      } else {
+        this.online = false
+        this.offline = true
+      }
+    },
+    watchSuggest () {
       if (this.submitSuggest) {
         this.suggestOpen = true
         this.suggestClose = false
@@ -441,10 +450,7 @@ export default {
         this.suggestOpen = false
         this.suggestClose = true
       }
-      return this.submitSuggest
-    }
-  },
-  methods: {
+    },
     textareaChange (refname) {
       let curArea = this.$refs[refname][0] ? this.$refs[refname][0] : this.$refs[refname]
       curArea.updateAutosize()
@@ -759,13 +765,8 @@ export default {
   },
   mounted () {
     console.log('in mounted')
-    if (this.submitSuggest) {
-      this.suggestOpen = true
-      this.suggestClose = false
-    } else {
-      this.suggestOpen = false
-      this.suggestClose = true
-    }
+    this.watchBuyline()
+    this.watchSuggest()
   }
 }
 </script>
