@@ -70,6 +70,13 @@
                   <check-icon class="red-check" :value.sync="offline" @click.native.stop="setbuyonline(0)">线下支付</check-icon>
                 </div>
               </forminputplate>
+              <forminputplate class="required">
+                <span slot="title">超值优惠</span>
+                <div>
+                  <check-icon class="red-check" :value.sync="suggestOpen" @click.native.stop="clickSuggest(1)">开启</check-icon>
+                  <check-icon class="red-check" :value.sync="suggestClose" @click.native.stop="clickSuggest(0)">关闭</check-icon>
+                </div>
+              </forminputplate>
               <div v-show="showmore">
                 <forminputplate>
                   <span slot="title">{{ $t('Shop description') }}</span>
@@ -359,6 +366,14 @@ export default {
     buyoffline: {
       type: Boolean,
       default: false
+    },
+    openSuggest: {
+      type: Boolean,
+      default: true
+    },
+    closeSuggest: {
+      type: Boolean,
+      default: false
     }
   },
   directives: {
@@ -383,7 +398,11 @@ export default {
       online: true,
       offline: false,
       isFirst: true,
-      isFirst1: true
+      isFirst1: true,
+      suggestOpen: true,
+      suggestClose: false,
+      isFirst2: true,
+      isFirst3: true
     }
   },
   watch: {
@@ -402,7 +421,6 @@ export default {
       return this.submitdata
     },
     buyonline: function () {
-      console.log('in watch bunonline')
       if (this.isFirst) {
         this.online = this.buyonline
         this.isFirst = false
@@ -410,12 +428,25 @@ export default {
       return this.buyonline
     },
     buyoffline: function () {
-      console.log('in watch buyoffline')
       if (this.isFirst1) {
         this.offline = this.buyoffline
         this.isFirst1 = false
       }
       return this.buyoffline
+    },
+    openSuggest: function () {
+      if (this.isFirst2) {
+        this.suggestOpen = this.openSuggest
+        this.isFirst2 = false
+      }
+      return this.openSuggest
+    },
+    closeSuggest: function () {
+      if (this.isFirst3) {
+        this.suggestClose = this.closeSuggest
+        this.isFirst3 = false
+      }
+      return this.closeSuggest
     }
   },
   methods: {
@@ -507,6 +538,17 @@ export default {
         this.online = false
         this.offline = true
       }
+    },
+    clickSuggest (val) {
+      console.log(val)
+      if (val === 1) {
+        this.suggestOpen = true
+        this.suggestClose = false
+      } else {
+        this.suggestOpen = false
+        this.suggestClose = true
+      }
+      this.$emit('clickSuggest', val)
     },
     closeOnPopup () {
       this.showonline = false

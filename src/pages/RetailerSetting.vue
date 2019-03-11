@@ -14,7 +14,10 @@
         :class-data="classData"
         :productClass="productClass"
         :buyonline="buyonline"
-        :buyoffline="buyoffline">
+        :buyoffline="buyoffline"
+        :openSuggest="openSuggest"
+        :closeSuggest="closeSuggest"
+        @clickSuggest="clickSuggest">
       </retailer-setting>
     </template>
     <template v-if="showApply">
@@ -51,7 +54,9 @@ export default {
       classData: [],
       productClass: [],
       buyonline: true,
-      buyoffline: false
+      buyoffline: false,
+      openSuggest: true,
+      closeSuggest: false
     }
   },
   methods: {
@@ -71,6 +76,13 @@ export default {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
+          if (this.retailerInfo.params.suggest_open && parseInt(this.retailerInfo.params.suggest_open) === 1) {
+            this.openSuggest = true
+            this.closeSuggest = false
+          } else {
+            this.openSuggest = false
+            this.closeSuggest = true
+          }
           for (let key in self.submitdata) {
             self.submitdata[key] = self.retailerInfo[key]
           }
@@ -102,6 +114,18 @@ export default {
           if (showphoto && self.$util.trim(showphoto) !== '') {
             self.showphotoArr = showphoto.split(',')
           }
+        }
+      })
+    },
+    clickSuggest (val) {
+      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+        params: {suggest_open: val}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.loginUser.retailerinfo.params = data.data
+          this.retailerInfo.params = data.data
+          User.set(this.loginUser)
         }
       })
     },
