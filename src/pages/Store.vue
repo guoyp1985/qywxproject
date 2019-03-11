@@ -48,8 +48,11 @@
       		</div>
         </template>
         <template v-if="showSuggest && suggestData.length">
-          <div class="bg-white mt5 padding10 b_top_after">
-      			<span class="db-in pl5 font16 vline">超值优惠</span>
+          <div class="bg-white mt5 padding10 b_top_after db-flex">
+            <div class="flex_left flex_cell pl5 font16 vline">超值优惠</div>
+            <div class="w100 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
+              <div class="qbtn4 font12">不再显示</div>
+            </div>
       		</div>
           <div class="b_top_after"></div>
           <div class="activitylist">
@@ -309,6 +312,19 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+    },
+    clickSuggest () {
+      this.showSuggest = false
+      this.$http.post(`${ENV.BokaApi}/api/card/setParas`, {
+        params: {suggest_open: 0}
+      }).then(res => {
+        const data = res.data
+        if (data.flag) {
+          this.loginUser.retailerinfo.params = data.data
+          this.retailerInfo.params = data.data
+          User.set(this.loginUser)
+        }
+      })
     },
     toChat () {
       const self = this
