@@ -539,7 +539,8 @@ export default {
           self.retailerInfo = data.data ? data.data : data
           this.$util.miniPost({type: 'store', data: self.retailerInfo})
           document.title = self.retailerInfo.title
-          if (parseInt(this.retailerInfo.params.suggest_open)) {
+          // console.log(parseInt(this.retailerInfo.params.suggest_open))
+          if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
             this.showSuggest = true
             this.getSuggestData()
           }
