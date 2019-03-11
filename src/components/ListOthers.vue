@@ -146,16 +146,38 @@ export default {
         }
       })
     },
+    importData (moduleid) {
+      const _this = this
+      _this.$http({
+        url: `${Env.BokaApi}/api/team/copy`,
+        method: 'POST',
+        data: {
+          id: moduleid,
+          module: _this.module
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          _this.$vux.toast.show({
+            text: `导入${_this.moduleTransfer}成功！`
+          })
+        }
+      })
+    },
     onImport (moduleid) {
       let _this = this
       if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
         this.$vux.confirm.show({
-          // title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
           title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
-          // title: _this.backurl,
           onConfirm () {
-            console.log(_this.backurl)
-            _this.$wechat.miniProgram.navigateTo({url: _this.backurl})
+            let url = '/pages/vip'
+            if (_this.$route.query.weburl) {
+              let weburl = encodeURIComponent(_this.$route.query.weburl)
+              let webquery = encodeURIComponent(_this.$route.query.webquery)
+              url = `${url}?weburl=${weburl}&webquery=${webquery}`
+              _this.backurl = url
+            }
+            _this.$wechat.miniProgram.navigateTo({url: url})
           }
         })
       } else if (!this.teamInfo.join) {
@@ -173,25 +195,13 @@ export default {
               console.log(res)
               if (res.data.flag) {
                 _this.teamInfo.join = 1
-                _this.$http({
-                  url: `${Env.BokaApi}/api/team/copy`,
-                  method: 'POST',
-                  data: {
-                    id: moduleid,
-                    module: _this.module
-                  }
-                }).then(res => {
-                  console.log(res)
-                  if (res.data.flag) {
-                    _this.$vux.toast.show({
-                      text: `导入${_this.moduleTransfer}成功！`
-                    })
-                  }
-                })
+                _this.importData(moduleid)
               }
             })
           }
         })
+      } else {
+        _this.importData(moduleid)
       }
     },
     toItem (item) {

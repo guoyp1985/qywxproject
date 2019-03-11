@@ -64,15 +64,14 @@
 
     <div class="add-import" slot="ope-btns">
       <span class="add al al-add" v-if="teamInfo.manager > 0" @click="onAdd"></span>
-<<<<<<< HEAD
-=======
       <!-- <div class="import" v-if="teamInfo.manager === 0 && teamInfo.join && currentTab !== 0">
         <button @click="importAll">导入全部{{moduleTransfer}}</button>
       </div> -->
->>>>>>> 3a1c6c3159291725e6189996174b8ac86f02755b
-      <div class="import" v-if="currentTab !== 0">
-        <button @click="importAll">导入全部{{moduleTransfer}}</button>
-      </div>
+      <template v-else>
+        <div class="import" v-if="currentTab !== 0">
+          <button @click="importAll">导入全部{{moduleTransfer}}</button>
+        </div>
+      </template>
     </div>
     <div class="modalshow" v-if="showModal" @click="closeShow" slot="ope-btns">
       <div class="modaInfo">
@@ -275,40 +274,58 @@ export default {
     },
     joinTeam () {
       let _this = this
-      if (!this.loginUser.isretailer) {
-        this.$vux.confirm.show({
-          title: `申请卖家后才可加入团队,确定申请？`,
-          onConfirm () {
-            let url = '/pages/vip'
-            if (_this.query.weburl) {
-              let weburl = encodeURIComponent(_this.query.weburl)
-              let webquery = encodeURIComponent(_this.query.webquery)
-              url = `${url}?weburl=${weburl}&webquery=${webquery}`
-              _this.backurl = url
+      this.$http({
+        url: `${ENV.BokaApi}/api/team/teamset`,
+        method: 'post',
+        data: {
+          id: this.id,
+          type: 'addMember'
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag) {
+          this.$vux.toast.show({
+            text: '加入团队成功!',
+            onHide () {
+              _this.teamInfo.join = 1
             }
-            _this.$wechat.miniProgram.navigateTo({url: url})
-          }
-        })
-      } else {
-        this.$http({
-          url: `${ENV.BokaApi}/api/team/teamset`,
-          method: 'post',
-          data: {
-            id: this.id,
-            type: 'addMember'
-          }
-        }).then(res => {
-          console.log(res)
-          if (res.data.flag) {
-            this.$vux.toast.show({
-              text: '加入团队成功!',
-              onHide () {
-                _this.teamInfo.join = 1
-              }
-            })
-          }
-        })
-      }
+          })
+        }
+      })
+      // if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
+      //   this.$vux.confirm.show({
+      //     title: `申请卖家后才可加入团队,确定申请？`,
+      //     onConfirm () {
+      //       let url = '/pages/vip'
+      //       if (_this.query.weburl) {
+      //         let weburl = encodeURIComponent(_this.query.weburl)
+      //         let webquery = encodeURIComponent(_this.query.webquery)
+      //         url = `${url}?weburl=${weburl}&webquery=${webquery}`
+      //         _this.backurl = url
+      //       }
+      //       _this.$wechat.miniProgram.navigateTo({url: url})
+      //     }
+      //   })
+      // } else {
+      //   this.$http({
+      //     url: `${ENV.BokaApi}/api/team/teamset`,
+      //     method: 'post',
+      //     data: {
+      //       id: this.id,
+      //       type: 'addMember'
+      //     }
+      //   }).then(res => {
+      //     console.log(res)
+      //     if (res.data.flag) {
+      //       this.$vux.toast.show({
+      //         text: '加入团队成功!',
+      //         onHide () {
+      //           _this.teamInfo.join = 1
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
     },
     outTeam () {
       let _this = this
@@ -336,57 +353,74 @@ export default {
         }
       })
     },
+    importAllData () {
+      const _this = this
+      _this.$http({
+        url: `${ENV.BokaApi}/api/team/copy`,
+        method: 'post',
+        data: {
+          teamid: _this.id,
+          type: 'all',
+          module: _this.module
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.flag === 1) {
+          _this.$vux.toast.show({
+            text: `导入全部${_this.moduleTransfer}成功!`
+          })
+        } else if (res.data.flag === 3) {
+          _this.$vux.toast.show({
+            text: `没有内容可导入!`
+          })
+        }
+      })
+    },
     importAll () {
       let _this = this
       console.log(this.teamInfo[this.module])
       if (this.teamInfo[this.module] > 0) {
-        if (Number(this.loginUser.retailerinfo.moderate === 0 ) || this.loginUser.retailerinfo.moderate === '') {
+        if (!this.loginUser.isretailer || this.loginUser.retailerinfo.moderate !== 1) {
           this.$vux.confirm.show({
-            title: `你还不是卖家哦，成为卖家可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
+            title: `你还没有注册卖家哦，注册成功可免费导入该团队的所有信息哦，一键导入便可快速使用！`,
             onConfirm () {
-              console.log(_this.backurl)
-              _this.$wechat.miniProgram.navigateTo({url: _this.backurl})
+              let url = '/pages/vip'
+              if (_this.query.weburl) {
+                let weburl = encodeURIComponent(_this.query.weburl)
+                let webquery = encodeURIComponent(_this.query.webquery)
+                url = `${url}?weburl=${weburl}&webquery=${webquery}`
+                _this.backurl = url
+              }
+              _this.$wechat.miniProgram.navigateTo({url: url})
             }
           })
         } else if (!this.teamInfo.join) {
-              this.$vux.confirm.show({
-                title: `您还没有加入团队，确定加入该团队并导入吗？`,
-                onConfirm () {
-                  _this.$http({
-                    url: `${ENV.BokaApi}/api/team/teamset`,
-                    method: 'post',
-                    data: {
-                      id: _this.id,
-                      type: 'addMember'
-                    }
-                  }).then(res => {
-                    console.log(res)
-                    if (res.data.flag) {
-                      _this.teamInfo.join = 1
-                      _this.$http({
-                        url: `${ENV.BokaApi}/api/team/copy`,
-                        method: 'post',
-                        data: {
-                          teamid: _this.id,
-                          type: 'all',
-                          module: _this.module
-                        }
-                      }).then(res => {
-                        console.log(res)
-                        if (res.data.flag === 1) {
-                          _this.$vux.toast.show({
-                            text: `导入全部${_this.moduleTransfer}成功!`
-                          })
-                        } else if (res.data.flag === 3) {
-                          _this.$vux.toast.show({
-                            text: `没有内容可导入!`
-                          })
-                        }
-                      })
-                    }
-                  })
+          this.$vux.confirm.show({
+            title: `您还没有加入团队，确定加入该团队并导入吗？`,
+            onConfirm () {
+              _this.$http({
+                url: `${ENV.BokaApi}/api/team/teamset`,
+                method: 'post',
+                data: {
+                  id: _this.id,
+                  type: 'addMember'
+                }
+              }).then(res => {
+                console.log(res)
+                if (res.data.flag) {
+                  _this.teamInfo.join = 1
+                  _this.importAllData()
                 }
               })
+            }
+          })
+        } else {
+          this.$vux.confirm.show({
+            title: `确定要导入全部${this.moduleTransfer}吗？`,
+            onConfirm () {
+              _this.importAllData()
+            }
+          })
         }
       } else {
         this.$vux.toast.show({
