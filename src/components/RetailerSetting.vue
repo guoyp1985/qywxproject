@@ -541,6 +541,7 @@ export default {
     },
     clickSuggest (val) {
       console.log(val)
+      let con = (val === 1 ? '确认要展示超值优惠商品？' : '确认要取消展示超值优惠商品？')
       if (val === 1) {
         this.suggestOpen = true
         this.suggestClose = false
@@ -548,7 +549,21 @@ export default {
         this.suggestOpen = false
         this.suggestClose = true
       }
-      this.$emit('clickSuggest', val)
+      this.$vux.confirm.show({
+        content: con,
+        onCancel: () => {
+          if (val === 1) {
+            this.suggestOpen = false
+            this.suggestClose = true
+          } else {
+            this.suggestOpen = true
+            this.suggestClose = false
+          }
+        },
+        onConfirm: () => {
+          this.$emit('clickSuggest', val)
+        }
+      })
     },
     closeOnPopup () {
       this.showonline = false
