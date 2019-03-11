@@ -76,7 +76,7 @@ export default {
           let data = res.data
           self.$vux.loading.hide()
           self.retailerInfo = data.data ? data.data : data
-          if (this.retailerInfo.params.suggest_open && parseInt(this.retailerInfo.params.suggest_open) === 1) {
+          if (this.retailerInfo.params.suggest_open === '1' || this.retailerInfo.params.suggest_open === 1) {
             this.openSuggest = true
             this.closeSuggest = false
           } else {
