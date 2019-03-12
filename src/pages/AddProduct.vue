@@ -481,7 +481,8 @@ export default {
           self.$vux.toast.text('请输入正确的价格', 'middle')
           return false
         }
-        if (postdata.unit !== '' && !isNaN(parseInt(postdata.unit))) {
+        let reg = new RegExp('[0-9]+')
+        if (postdata.unit !== '' && reg.test(postdata.unit)) {
           self.$vux.toast.text('请输入正确的单位', 'middle')
           return false
         }
