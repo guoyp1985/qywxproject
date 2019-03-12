@@ -49,7 +49,7 @@
         </template>
         <template v-if="showSuggest && suggestData.length">
           <div class="bg-white mt5 padding10 b_top_after db-flex suggest-area">
-            <div class="flex_left flex_cell pl5 font16 vline">超值优惠</div>
+            <div class="flex_left flex_cell pl5 font16 vline"><span>超值优惠</span><i class="al al-wenhao font20 color-theme ml5" @click="clickHelp"></i></div>
             <div class="w80 flex_right" v-if="retailerInfo.uid == loginUser.uid" @click="clickSuggest">
               <div class="btn flex_center">不再显示</div>
             </div>
@@ -186,6 +186,14 @@
         module="store"
         :on-close="closeShareSuccess">
       </share-success>
+      <div class="auto-modal flex_center help-modal" v-if="showHelpModal">
+        <div class="modal-inner border-box">
+          <div class="padding10">如何使用超值商品</div>
+          <div class="close-area flex_center" @click="closeHelpModal">
+            <i class="al al-close"></i>
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -261,7 +269,8 @@ export default {
       haveMoreNews: false,
       scrollEnd: false,
       showSuggest: false,
-      suggestData: []
+      suggestData: [],
+      showHelpModal: false
     }
   },
   watch: {
@@ -313,6 +322,12 @@ export default {
       this.hideloading = false
       this.isNextNews = true
       this.haveMoreNews = false
+    },
+    clickHelp () {
+      this.showHelpModal = true
+    },
+    closeHelpModal () {
+      this.showHelpModal = false
     },
     clickSuggest () {
       this.$vux.confirm.show({
